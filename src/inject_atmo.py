@@ -68,8 +68,21 @@ def inject(path, src):
 
     base = os.path.basename(path)
     key = PAGE_KEY.get(base)
-    if key and re.search(r"<body(?![^>]*data-page)", html):
-        html = re.sub(r"<body(\s|>)", '<body data-page="%s"\\1' % key, html, count=1)
+    if key:
+        # Operate on the REAL <body> tag — the first one — and test that same tag.
+        # The earlier version searched the whole document for any "<body" lacking a
+        # data-page (finding one inside a script string) and then substituted the
+        # FIRST "<body" regardless, so it re-added the attribute on every run and
+        # built up "<body data-page=... data-page=... data-page=...>". HTML keeps
+        # the first attribute and drops the rest, so it half-worked and hid itself.
+        m = re.search(r"<body\b[^>]*>", html)
+        if m:
+            tag = m.group(0)
+            # Repair any duplicates a previous run left behind, then set it once.
+            clean = re.sub(r'\s*data-page="[^"]*"', "", tag)
+            fixed = clean.replace("<body", '<body data-page="%s"' % key, 1)
+            if fixed != tag:
+                html = html[:m.start()] + fixed + html[m.end():]
 
     if BLOCK_RE.search(html):
         html = BLOCK_RE.sub(lambda _m: block, html, count=1)

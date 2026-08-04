@@ -99,7 +99,7 @@
       regulated: { q: "What variable is being defended?", o: ["The amount of insulin", "Blood-glucose concentration", "The size of the meal", "Stomach acidity"], a: 1,
         why: "The regulated variable is BLOOD-GLUCOSE CONCENTRATION (~5 mmol/L). Insulin is just the effector signal used to defend it — don't confuse the lever with the thing being held steady." },
       form: { q: "Which cells sense and respond?", o: ["Liver cells sense glucose and make insulin", "β-cells in the pancreas sense high glucose and secrete insulin, which tells liver & muscle to take glucose up and store it as glycogen", "Red blood cells absorb the excess", "The brain burns it off"], a: 1,
-        why: "Pancreatic β-cells are the glucose SENSOR and insulin SOURCE. Insulin's targets — liver and muscle — have the structure (GLUT4 transporters, glycogen machinery) to pull glucose out of the blood. Sensor, signal, effector again." },
+        why: "Pancreatic β-cells are the glucose SENSOR and insulin SOURCE. Insulin's targets have the structure to pull glucose out of the blood — muscle and fat push GLUT4 transporters into the membrane so uptake itself rises, while the liver (whose GLUT2 is open either way) responds by switching on glucokinase and glycogen synthase, trapping glucose as glycogen. Sensor, signal, effector again." },
       strategy: { q: "Best reasoning approach?", o: [
         { t: "Follow the negative-feedback loop: high glucose → insulin → uptake → glucose falls → insulin stops", ok: true },
         { t: "Assume glucose just gets 'used up' by activity", ok: false, why: "At rest, with no exercise, the fall is driven by regulated STORAGE (glycogenesis), not by burning it off. Consumption alone can't explain the precise return to set point." },

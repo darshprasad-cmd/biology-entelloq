@@ -213,9 +213,6 @@
       g.appendChild(card);
     });
     app.appendChild(grid);
-    // a "coming soon" note so we're honest about depth
-    const more = el("div", "wrap band reveal", `<div class="les-more">More lessons — DNA Replication, The Cardiac Cycle, Natural Selection, Photosynthesis, the Action Potential — are being authored to this same six-lens depth.</div>`);
-    app.appendChild(more);
   }
 
   // ── lesson view ──────────────────────────────────────────────────────────────
@@ -496,9 +493,21 @@
         const v = rate(light, co2, temp);
         const mx = pad + (light / 100) * gw, my = H - pad - (v / 100) * gh;
         ctx.fillStyle = "#f6c667"; ctx.beginPath(); ctx.arc(mx, my, 6, 0, 6.28); ctx.fill();
-        const lim = temp > 42 ? "temperature (enzymes denaturing)"
-          : (light * 1.35 <= co2 * 1.35 && light < 74) ? "light"
-          : (co2 * 1.35 < 100) ? "CO₂" : "temperature";
+        // The limiting factor is whichever input is furthest below its OWN ceiling.
+        // Temperature has to be measured the same way as the other two, not merely
+        // checked at the hot end: near freezing the enzymes are just as throttled as
+        // they are when denaturing, and the old hot-only test blamed light or CO₂ for
+        // a rate that cold was setting. Ties fall to the earlier entry, so light is
+        // still named first when light and CO₂ are matched.
+        const tLabel = temp > 42 ? "temperature (enzymes denaturing)"
+          : temp < 20 ? "temperature (too cold for the enzymes)" : "temperature";
+        const caps = [
+          [Math.min(light * 1.35, 100) / 100, "light"],
+          [Math.min(co2 * 1.35, 100) / 100, "CO₂"],
+          [tempF(temp), tLabel],
+        ];
+        const worst = caps.reduce((a, b) => (b[0] < a[0] ? b : a));
+        const lim = worst[0] > 0.995 ? "none — all three are at their ceiling" : worst[1];
         read.innerHTML = `Rate <b>${v.toFixed(0)}</b> · limiting factor: <b>${lim}</b>`;
       }
       draw(); return () => cv.off();
@@ -756,7 +765,11 @@
       function ventricle(p) {
         if (p < 0.06) return 8 + p / 0.06 * 4;
         if (p < 0.34) return 12 + Math.sin((p - 0.06) / 0.28 * Math.PI) * 108;   // systole
-        if (p < 0.46) return 40 - (p - 0.34) / 0.12 * 36;
+        // The sine has already carried the pressure back down to 12 by p = 0.34, so
+        // relaxation has to CONTINUE from 12. The old branch restarted at 40, which
+        // made the trace leap back up in the middle of relaxing. Ends at 4, where
+        // passive filling picks it up.
+        if (p < 0.46) return 12 - (p - 0.34) / 0.12 * 8;
         return 4 + (p - 0.46) / 0.54 * 8;                                        // filling
       }
       // Aortic pressure. This curve is NOT drawn independently of the ventricle —
@@ -785,7 +798,25 @@
         if (p < AO_PK) return ventricle(p) - 4;              // valve open
         return aoRunoff((p - AO_PK) / (1 - AO_PK));
       }
-      function atrium(p) { return p < 0.08 ? 8 + Math.sin(p / 0.08 * Math.PI) * 7 : 3 + p * 5; }
+      // Atrial pressure. The valve states below are read off the pressure crossings,
+      // so this curve is what decides them — and the invariant it has to respect is
+      // that once the AV valves open, atrium and ventricle are ONE connected space:
+      // the atrium rides just above the ventricle for the rest of the beat. An
+      // independent line here gets overtaken by the filling ventricle within a few
+      // percent of the beat and reads out as "AV valves shut" through nearly all of
+      // diastole, when in life they are open for nearly all of it.
+      const AV_GRAD = 1.2;   // mmHg the atrium leads the ventricle by — the gradient that drives filling
+      // The instant the falling ventricle drops below the atrium and the valves open.
+      // Scanned rather than hard-coded so it stays correct if either curve is retuned.
+      const AV_OPEN = (() => {
+        for (let i = 68; i <= 200; i++) { const p = i / 200; if (ventricle(p) + AV_GRAD < 3 + p * 5) return p; }
+        return 0.46;
+      })();
+      function atrium(p) {
+        if (p < 0.08) return 8 + Math.sin(p / 0.08 * Math.PI) * 7;   // a-wave — atrial systole
+        if (p < AV_OPEN) return 3 + p * 5;                            // v-wave — filling against a shut valve
+        return ventricle(p) + AV_GRAD;                                // valve open — the two curves run together
+      }
       function draw() {
         t += reduced ? 0.02 : 0.0042 * (hr / 70);
         if (t > 1) t -= 1;

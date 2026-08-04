@@ -136,6 +136,91 @@ const HND_PINCH_ENTER = 0.42;
 const HND_PINCH_RELEASE = 0.6;
 const HND_PINCH_CLOSED = 0.12;
 
+// ── Depth-aware pinch ────────────────────────────────────────────────────────
+// The plain 2D ratio measures the thumb-index gap AS PROJECTED. Tilt the hand
+// away from the camera and that gap foreshortens while its denominator (wrist →
+// middle-MCP, which lies across the tilt axis for the commonest hand poses)
+// barely moves — so a hand that is plainly open reads as pinched, and the student
+// gets a phantom grip in the middle of a dissection.
+//
+// MediaPipe already carries the fix and the module was throwing it away: every
+// result has worldLandmarks, the same skeleton in METRIC 3D with its origin at the
+// hand's geometric centre. That is NOT the per-landmark z on the normalised set —
+// the noise the 2.5D law refuses to steer with — it is a model-fitted
+// reconstruction, and the same wrist-normalised ratio built in it is invariant to
+// both hand tilt and camera distance. It is used for the pinch APERTURE only. No
+// depth becomes a control axis: the cursor is still the projected fingertip, and
+// when worldLandmarks are absent the old 2D ratio is used unchanged.
+//
+// The thresholds above are tuned and other code compares against them, so the
+// world ratio has to land in the SAME range rather than merely correlate with it.
+// It is rescaled by a factor learned from the student's own hand: while the palm
+// faces the camera (nothing is foreshortened, so both measures are describing the
+// same segment) AND the fingers are well clear of the pinch band (so a wrong
+// calibration can never be what drags the latch across a threshold), the running
+// ratio-of-ratios is folded into a slow EMA. It starts at 1 — the two measures
+// agree by construction on a flat-on hand — and is clamped, so a camera with an
+// unusual field of view can nudge the mapping without ever inverting it.
+const HND_CAL_ALPHA = 0.02; // steady-state learning rate of the 2D↔3D rescale
+const HND_CAL_ALPHA_FAST = 0.25; // ...while it is still finding its feet
+const HND_CAL_WARM = 12; // samples before dropping to the slow rate
+const HND_CAL_MIN = 0.7;
+const HND_CAL_MAX = 1.45;
+const HND_CAL_FACE_COS = 0.86; // |palm normal · camera axis| that counts as flat-on
+const HND_CAL_CLEAR = 1.35; // ...and the multiple of RELEASE the gap must exceed
+const HND_WORLD_SPAN_MIN = 0.004; // metres; a smaller world hand is degenerate
+const HND_WORLD_SPAN_MAX = 0.5; // ...and a larger one is not a hand
+
+// ── Landmark sanity gating ───────────────────────────────────────────────────
+// A detector that is 99% reliable still hands back a garbage frame every few
+// seconds, and one garbage frame is enough to snap the cursor across the table
+// mid-cut. Two cheap tests catch nearly all of it before anything is published.
+//
+// Landmarks may legitimately sit OUTSIDE [0,1] — MediaPipe extrapolates joints
+// that have run off the frame edge, and a hand half out of shot is a normal thing
+// to track — so the bound is generous. What is never legitimate is a coordinate
+// far outside it, or a NaN.
+const HND_LM_OOB = 0.4;
+// Apparent hand size, as an absolute plausibility band: wrist → middle-MCP is
+// about 0.06–0.25 of the frame at any workable seating distance.
+const HND_HS_MIN = 0.015;
+const HND_HS_MAX = 0.75;
+// ...and as a RATE. Hand size is inverse camera distance, so it moves smoothly:
+// leaning in fast doubles it over a few hundred milliseconds. A single frame that
+// changes it by more than this much per second of elapsed time is not a hand that
+// moved, it is the detector having latched onto something else (a face, the other
+// hand, a reflection). exp(6.4 · dt) ⇒ ×1.24 at 30 fps, ×1.53 at 15 — an order of
+// magnitude above landmark noise, well below any real mis-latch.
+const HND_HS_LOG_RATE = 6.4;
+const HND_HS_DT_MIN_MS = 8;
+const HND_HS_DT_MAX_MS = 250;
+// A gate that can never be wrong is a gate that can deadlock: if the hand really
+// did change size (a new hand entered where the old one left), rejecting forever
+// would kill tracking outright. After this many consecutive rejections the gate
+// concedes, re-baselines, and re-primes the spike guard.
+const HND_SANITY_MAX_REJECT = 6;
+
+// ── Slot assignment ──────────────────────────────────────────────────────────
+// Handedness alone is not enough to decide which hand is which. MediaPipe's label
+// flips for a frame or two when the hands cross, when one is seen edge-on, or when
+// a palm faces away — and a flipped label used to move the scalpel to the other
+// hand mid-dissection. So a detection is matched to a slot by handedness AND
+// spatial continuity, with the handedness term FADED OUT in proportion to how
+// confidently the detection sits on an existing track: right on top of one, the
+// label is ignored; nowhere near one (a hand that has just appeared), the label
+// decides on its own, which is exactly the old behaviour.
+const HND_MATCH_RANGE = 0.34; // screen fraction beyond which proximity says nothing
+const HND_MATCH_MEM_MS = 450; // how long a vacated slot keeps its spatial claim
+const HND_MATCH_W_SPACE = 1;
+const HND_MATCH_W_HAND = 0.6;
+// Hysteresis. The spatially-consistent pairing is the incumbent; anything else has
+// to beat it by this margin. Sized so that a full-confidence handedness flip on a
+// tracked hand (worth at most HND_MATCH_W_HAND) cannot on its own force a swap.
+const HND_MATCH_MARGIN = 0.5;
+// MediaPipe is configured for two hands; the pool is oversized so a model that
+// ever returns more cannot walk off the end of it.
+const HND_MAX_DETECTIONS = 4;
+
 // Open-hand spread test (from the reference classifier): the MINIMUM gap
 // between adjacent fingertips, as a fraction of hand size. Minimum rather than
 // mean, because a "duck" shape keeps the outer pair far apart while adjacent
@@ -584,6 +669,122 @@ function hndPinchRatio(lm) {
   return hndDist2(lm[HND_LM.THUMB_TIP], lm[HND_LM.INDEX_TIP]) / hs;
 }
 
+// ── World-landmark (metric 3D) geometry. Pinch aperture only — see the depth-aware
+// pinch note above for why this is not a violation of the 2.5D law.
+
+/** True 3D distance between two metric world landmarks. */
+function hndDist3(a, b) {
+  const dx = a.x - b.x;
+  const dy = a.y - b.y;
+  const dz = a.z - b.z;
+  return Math.sqrt(dx * dx + dy * dy + dz * dz);
+}
+
+/** Every component of a world point must be a real number before we divide by it. */
+function hndFinite3(p) {
+  return !!p && Number.isFinite(p.x) && Number.isFinite(p.y) && Number.isFinite(p.z);
+}
+
+/**
+ * Metric hand size, wrist → middle-MCP, in metres. Returns 0 when the world set is
+ * missing, non-finite, or an implausible size — every caller treats 0 as "no
+ * world measurement available" and falls back to the 2D path.
+ */
+function hndWorldSpan(w) {
+  const a = w[HND_LM.WRIST];
+  const b = w[HND_LM.MIDDLE_MCP];
+  if (!hndFinite3(a) || !hndFinite3(b)) return 0;
+  const d = hndDist3(a, b);
+  return d >= HND_WORLD_SPAN_MIN && d <= HND_WORLD_SPAN_MAX ? d : 0;
+}
+
+/**
+ * Pinch aperture from the metric skeleton, normalised by metric hand size — the
+ * same quantity hndPinchRatio measures, but taken in 3D so it does not shrink when
+ * the hand tilts away from the camera. Returns -1 when it cannot be computed.
+ */
+function hndWorldPinchRatio(w) {
+  const span = hndWorldSpan(w);
+  if (span === 0) return -1;
+  const t = w[HND_LM.THUMB_TIP];
+  const i = w[HND_LM.INDEX_TIP];
+  if (!hndFinite3(t) || !hndFinite3(i)) return -1;
+  return hndDist3(t, i) / span;
+}
+
+/**
+ * |cos| of the angle between the palm normal and the camera axis, in the metric
+ * frame: 1 = palm square to the camera, 0 = palm edge-on. Used ONLY to decide when
+ * the 2D and 3D pinch measures are comparable enough to calibrate one against the
+ * other. It is never published and never steers anything — the tool dial's roll
+ * still comes from the 2D knuckle line, deliberately (see hndPalmRollRaw).
+ */
+function hndWorldFacingCos(w) {
+  const o = w[HND_LM.WRIST];
+  const a = w[HND_LM.INDEX_MCP];
+  const b = w[HND_LM.PINKY_MCP];
+  if (!hndFinite3(o) || !hndFinite3(a) || !hndFinite3(b)) return 0;
+  const ax = a.x - o.x, ay = a.y - o.y, az = a.z - o.z;
+  const bx = b.x - o.x, by = b.y - o.y, bz = b.z - o.z;
+  const nx = ay * bz - az * by;
+  const ny = az * bx - ax * bz;
+  const nz = ax * by - ay * bx;
+  const m = Math.sqrt(nx * nx + ny * ny + nz * nz);
+  if (!(m > 1e-9)) return 0;
+  return Math.abs(nz) / m;
+}
+
+// ── Sanity gating. Both tests run BEFORE a detection is allowed to touch a slot.
+
+/**
+ * Structural plausibility of a normalised landmark set: 21 real points, none of
+ * them absurdly far outside the frame. NaN fails every comparison, so the
+ * negated-range form catches it without a separate isFinite pass.
+ */
+function hndLandmarksSane(lm) {
+  for (let i = 0; i < 21; i++) {
+    const p = lm[i];
+    if (!p) return false;
+    if (!(p.x >= -HND_LM_OOB && p.x <= 1 + HND_LM_OOB)) return false;
+    if (!(p.y >= -HND_LM_OOB && p.y <= 1 + HND_LM_OOB)) return false;
+  }
+  return true;
+}
+
+/**
+ * Rate gate on apparent hand size for one slot, and the slot's size baseline.
+ * True ⇒ publish this detection; false ⇒ hold the slot's previous state.
+ *
+ * `slot.lastSize` of 0 means "no baseline" (a fresh acquisition, or the slot was
+ * reset by a dropout), and primes rather than judges. The consecutive-rejection
+ * escape hatch is what keeps the gate from deadlocking on a hand that genuinely is
+ * a different size now; conceding also re-primes the median spike guard, whose
+ * stored history is by then two hands old.
+ */
+function hndSizeGate(slot, size, now) {
+  if (!(size > HND_HS_MIN && size < HND_HS_MAX)) return false;
+  if (!slot.lastSize) {
+    slot.lastSize = size;
+    slot.lastSizeT = now;
+    slot.rejectRun = 0;
+    return true;
+  }
+  let dt = now - slot.lastSizeT;
+  if (!(dt >= HND_HS_DT_MIN_MS)) dt = HND_HS_DT_MIN_MS;
+  if (dt > HND_HS_DT_MAX_MS) dt = HND_HS_DT_MAX_MS;
+  const lim = Math.exp((HND_HS_LOG_RATE * dt) / 1000);
+  const r = size / slot.lastSize;
+  if (r > lim || r < 1 / lim) {
+    slot.rejectRun++;
+    if (slot.rejectRun < HND_SANITY_MAX_REJECT) return false;
+    slot.medN = 0;
+  }
+  slot.rejectRun = 0;
+  slot.lastSize = size;
+  slot.lastSizeT = now;
+  return true;
+}
+
 /** A finger is extended when its tip sits farther from the wrist than its MCP. */
 function hndIsFingerExtended(lm, tipIdx, mcpIdx, slack) {
   const s = slack === undefined ? 0.9 : slack;
@@ -599,7 +800,6 @@ function hndExtendedFingerCount(lm) {
   return n;
 }
 
-/** Roll across the palm, index-MCP → pinky-MCP, in radians. */
 /**
  * The image-plane angle of the knuckle line. Deliberately 2D — do not "upgrade"
  * this to a palm-normal computed from 3D landmarks.
@@ -662,6 +862,11 @@ function hndIsOpenShape(lm) {
  */
 function hndCreateClassifier() {
   let pinching = false;
+  // 2D↔3D rescale for the depth-aware pinch, learned per hand. 1 is the correct
+  // prior: on a palm square to the camera neither segment is foreshortened, so the
+  // projected ratio and the metric one are measuring the same thing.
+  let cal = 1;
+  let calN = 0;
   const out = {
     gesture: "none",
     pinchStrength: 0,
@@ -672,11 +877,60 @@ function hndCreateClassifier() {
     indexY: 0,
     rollRaw: 0,
     handSize: 0,
+    // Diagnostics for the perf getter. Numbers only, as everything here is.
+    pinchRatio: 1,
+    depthAware: false,
   };
 
-  function classify(lm) {
+  /**
+   * @param {Array} lm  normalised landmarks (required)
+   * @param {Array} [wlm] metric world landmarks, when the result carried them
+   */
+  function classify(lm, wlm) {
     const hs = hndHandSize(lm);
-    const ratio = hndPinchRatio(lm);
+    const r2 = hndPinchRatio(lm);
+
+    // Depth-aware aperture, rescaled into the 2D ratio's range. Any failure here —
+    // no world landmarks, a degenerate metric hand, a non-finite point — falls
+    // straight through to `r2`, which is byte-for-byte the previous behaviour.
+    let ratio = r2;
+    let depthAware = false;
+    if (wlm) {
+      const r3 = hndWorldPinchRatio(wlm);
+      if (r3 >= 0) {
+        // Only learn the rescale where the two measures are directly comparable
+        // (palm flat-on) and where being wrong cannot cost a latch (fingers well
+        // outside the hysteresis band).
+        if (r2 > 0) {
+          const k = hndClamp(r2 / r3, HND_CAL_MIN, HND_CAL_MAX);
+          if (calN === 0) {
+            // SEED, do not ease. cal starts at 1, but 1 is not a neutral value —
+            // it is a specific wrong one. r2 divides an anisotropic image-plane
+            // distance (x normalised by frame width, y by frame height) by another,
+            // so the two measures differ by a pose-dependent factor that was ~1.37
+            // at 16:9. Easing toward the truth from 1 means every threshold is
+            // tens of percent out until the gate below happens to open — and for a
+            // student whose hand is already pinched, or held at an angle, it never
+            // opens at all and the error is permanent. One honest sample beats an
+            // arbitrary constant, whatever the pose it came from; the EMA still
+            // refines it from there.
+            cal = k;
+            calN = 1;
+          } else if (
+            // Refine only where the two measures are directly comparable (palm
+            // flat-on) and where being wrong cannot cost a latch (fingers well
+            // outside the hysteresis band).
+            r3 > HND_PINCH_RELEASE * HND_CAL_CLEAR &&
+            hndWorldFacingCos(wlm) >= HND_CAL_FACE_COS
+          ) {
+            cal += (k - cal) * (calN < HND_CAL_WARM ? HND_CAL_ALPHA_FAST : HND_CAL_ALPHA);
+            if (calN < HND_CAL_WARM) calN++;
+          }
+        }
+        ratio = r3 * cal;
+        depthAware = true;
+      }
+    }
 
     // Hysteresis: a looser bar to stay pinched than to become pinched.
     if (pinching) {
@@ -719,11 +973,16 @@ function hndCreateClassifier() {
     out.indexY = i.y;
     out.rollRaw = hndPalmRollRaw(lm);
     out.handSize = hs;
+    out.pinchRatio = ratio;
+    out.depthAware = depthAware;
     return out;
   }
 
   classify.reset = function reset() {
     pinching = false;
+    // `cal` deliberately survives: it describes this camera and this student's
+    // hand proportions, not the current gesture, and re-learning it from 1 after
+    // every dropout would put a slow drift back into the pinch threshold.
   };
   return classify;
 }
@@ -893,10 +1152,34 @@ function createHands(options) {
       // The pre-gain (raw mirrored) cursor, kept so recenter() can put the comfort
       // box wherever the hand actually is right now.
       rawX: 0.5, rawY: 0.5,
+      // Sanity gate: last ACCEPTED apparent hand size and when it was accepted,
+      // plus the run of consecutive rejections (see hndSizeGate).
+      lastSize: 0,
+      lastSizeT: 0,
+      rejectRun: 0,
+      // Where this slot's hand was last matched, in screen space, and when. Kept
+      // separately from view.cursor because it must OUTLIVE a dropout: a hand that
+      // blinks out for a few frames has to come back to the same slot even if the
+      // handedness label flipped while it was gone.
+      matchX: 0.5, matchY: 0.5, matchMs: 0,
     };
   }
   const slots = [hndMakeSlot(), hndMakeSlot()];
   const spanF = new HndEMA(0.3);
+
+  // ── Detection scratch pool. Reused every detect frame so the new two-pass path
+  // allocates nothing. `lm`/`wlm` hold MediaPipe's arrays for the duration of ONE
+  // pass and are nulled at the end of it, so no raw landmark outlives the frame it
+  // arrived on — the privacy note at the top of the file still holds exactly.
+  const dets = [];
+  for (let i = 0; i < HND_MAX_DETECTIONS; i++) {
+    dets.push({
+      lm: null, wlm: null,
+      label: "Right", conf: 0.5, size: 0,
+      rmx: 0, rmy: 0, mx: 0, my: 0,
+      sp0: 0, sp1: 0, slot: -1,
+    });
+  }
 
   // ── Reach mapping. `region.cx/cy` is the TARGET centre of the comfort box in
   // raw (mirrored) camera space; `cxS/cyS` is the smoothed centre actually applied,
@@ -937,6 +1220,11 @@ function createHands(options) {
   let lastDetectTs = -1;
   let lastAnySeenMs = 0;
   let wasHidden = false;
+  // Diagnostics for the perf getter: how many detections the sanity gates have
+  // thrown away this session, and whether the pinch is currently being measured in
+  // metric 3D or has fallen back to the projected ratio.
+  let sanityRejects = 0;
+  let worldPinch = false;
 
   // ── Measured cadence. The camera is asked for 30 fps and gives whatever the
   // exposure allows, so the true interval is the only thing worth tuning against.
@@ -988,6 +1276,13 @@ function createHands(options) {
     slot.frozen = false;
     slot.hasCursor = false;
     slot.medN = 0; // re-prime the spike guard; stale samples across a dropout lie
+    // A size measured before a dropout is not a claim about the hand that comes
+    // back, so the rate gate re-baselines on the first frame it sees instead of
+    // judging against a stale one. matchX/matchY/matchMs are NOT cleared here —
+    // that spatial claim is exactly what has to survive a dropout.
+    slot.lastSize = 0;
+    slot.lastSizeT = 0;
+    slot.rejectRun = 0;
     view.present = false;
     view.gesture = "none";
     view.pinchStrength = 0;
@@ -1147,6 +1442,10 @@ function createHands(options) {
       hndResetWindow();
       hndResetSlot(slots[0], snapshot.hands[0]);
       hndResetSlot(slots[1], snapshot.hands[1]);
+      // A spatial claim survives a dropout but not a session: whoever sat down last
+      // has nothing to do with where this student's hands are.
+      slots[0].matchMs = 0;
+      slots[1].matchMs = 0;
       spanF.reset();
       cxS = region.cx; cyS = region.cy; // honour a persisted recenter without a glide
       running = true;
@@ -1185,6 +1484,8 @@ function createHands(options) {
     snapshot.health = 3;
     hndResetSlot(slots[0], snapshot.hands[0]);
     hndResetSlot(slots[1], snapshot.hands[1]);
+    slots[0].matchMs = 0;
+    slots[1].matchMs = 0;
     spanF.reset();
     hndResetWindow();
     lastVideoTime = -1;
@@ -1198,6 +1499,8 @@ function createHands(options) {
     snapshot.detectMs = 0;
     snapshot.latencyMs = 0;
     snapshot.leadMs = 0;
+    sanityRejects = 0;
+    worldPinch = false;
     // The landmarker is kept alive so a restart is instant. dispose() frees it.
   }
 
@@ -1211,6 +1514,103 @@ function createHands(options) {
       }
     }
     landmarker = null;
+  }
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // Slot assignment — which detection is whose hand
+  // ───────────────────────────────────────────────────────────────────────────
+
+  /**
+   * How strongly a detection looks like the continuation of slot k's track: 1 sitting
+   * right on it, 0 at HND_MATCH_RANGE away or once the claim has aged out. Faded
+   * linearly with staleness so a slot's grip on its identity weakens rather than
+   * expiring on a cliff edge.
+   */
+  function hndSpatialScore(d, k, now) {
+    const slot = slots[k];
+    if (!slot.matchMs) return 0;
+    const age = now - slot.matchMs;
+    if (!(age >= 0) || age >= HND_MATCH_MEM_MS) return 0;
+    const dist = Math.hypot(d.mx - slot.matchX, d.my - slot.matchY);
+    const s = 1 - dist / HND_MATCH_RANGE;
+    // `!(s > 0)` rather than `s <= 0`: every comparison against NaN is false, so
+    // the negative form lets a NaN through as a score, and a NaN score wins no
+    // comparison — the slot would silently stop matching for the rest of the session.
+    if (!(s > 0)) return 0;
+    return s * (1 - age / HND_MATCH_MEM_MS);
+  }
+
+  /**
+   * Total score for putting detection `d` in slot `k`. The handedness term is
+   * scaled by (1 − the best spatial score this detection has anywhere): a detection
+   * sitting on top of an existing track gives the label no vote at all, while one
+   * that has just appeared out of nowhere is decided by the label alone — which is
+   * precisely the old behaviour, preserved for the case it was right about.
+   */
+  function hndMatchScore(d, k) {
+    const sp = k === 0 ? d.sp0 : d.sp1;
+    const best = d.sp0 > d.sp1 ? d.sp0 : d.sp1;
+    const agree = d.label === (k === 0 ? "Left" : "Right") ? 1 : -1;
+    return HND_MATCH_W_SPACE * sp + HND_MATCH_W_HAND * agree * d.conf * (1 - best);
+  }
+
+  /**
+   * Places up to two detections into the two slots, writing `slot` on each (-1 =
+   * dropped). Both pairings are scored as a whole rather than each hand greedily,
+   * because the question is which ASSIGNMENT is right, not which hand is closest.
+   *
+   * The hysteresis: the spatially-consistent pairing is the incumbent — it is by
+   * construction the one that agrees with last frame, since a slot's claim IS where
+   * that slot's hand was last seen — and a challenger has to beat it by
+   * HND_MATCH_MARGIN. A one-frame handedness flip is worth less than the margin, so
+   * two hands crossing over each other cannot trade tools.
+   */
+  function hndAssignSlots(n, now) {
+    for (let i = 0; i < n; i++) {
+      const d = dets[i];
+      d.sp0 = hndSpatialScore(d, 0, now);
+      d.sp1 = hndSpatialScore(d, 1, now);
+      d.slot = -1;
+    }
+    if (n <= 0) return;
+
+    if (n === 1) {
+      const d = dets[0];
+      const t0 = hndMatchScore(d, 0);
+      const t1 = hndMatchScore(d, 1);
+      let pick = t1 > t0 ? 1 : 0;
+      if (d.sp0 > 0 || d.sp1 > 0) {
+        const inc = d.sp1 > d.sp0 ? 1 : 0;
+        if (pick !== inc) {
+          const tPick = pick === 0 ? t0 : t1;
+          const tInc = inc === 0 ? t0 : t1;
+          if (tPick < tInc + HND_MATCH_MARGIN) pick = inc;
+        }
+      }
+      d.slot = pick;
+      return;
+    }
+
+    // Two hands is the model's ceiling, so the first two sane detections are the
+    // pair to place; anything beyond that is dropped rather than left free to steal
+    // a slot from a hand that is actually being tracked.
+    const a = dets[0];
+    const b = dets[1];
+    const straight = hndMatchScore(a, 0) + hndMatchScore(b, 1);
+    const crossed = hndMatchScore(a, 1) + hndMatchScore(b, 0);
+    let cross = crossed > straight;
+    const spStraight = a.sp0 + b.sp1;
+    const spCrossed = a.sp1 + b.sp0;
+    if (spStraight > 0 || spCrossed > 0) {
+      const incCross = spCrossed > spStraight;
+      if (cross !== incCross) {
+        const tPick = cross ? crossed : straight;
+        const tInc = incCross ? crossed : straight;
+        if (tPick < tInc + HND_MATCH_MARGIN) cross = incCross;
+      }
+    }
+    a.slot = cross ? 1 : 0;
+    b.slot = cross ? 0 : 1;
   }
 
   // ───────────────────────────────────────────────────────────────────────────
@@ -1326,24 +1726,75 @@ function createHands(options) {
     slots[0].seenThisFrame = false;
     slots[1].seenThisFrame = false;
 
-    const count = result.landmarks.length;
-    for (let i = 0; i < count; i++) {
-      const lm = result.landmarks[i]; // ← raw landmarks; scoped to this loop only
+    // ── Pass 1: read the detections and drop the physically impossible ones.
+    // Nothing is published here. A detection that fails these tests never reaches a
+    // slot at all, so the slot keeps whatever it had — a live grip stays frozen by
+    // the loss path further down — instead of one bad frame teleporting the cursor.
+    const world = result.worldLandmarks || null;
+    const rawCount = result.landmarks.length;
+    let nDet = 0;
+    for (let i = 0; i < rawCount && nDet < HND_MAX_DETECTIONS; i++) {
+      const lm = result.landmarks[i]; // ← raw landmarks; scoped to this pass only
       if (!lm || lm.length < 21) continue;
+      if (!hndLandmarksSane(lm)) { sanityRejects++; continue; }
+      const hs = hndHandSize(lm);
+      if (!(hs > HND_HS_MIN && hs < HND_HS_MAX)) { sanityRejects++; continue; }
+
+      const d = dets[nDet++];
+      d.lm = lm;
+      // worldLandmarks are optional in every sense — an older runtime may not carry
+      // them, and a short entry is no more usable than a missing one. Everything
+      // downstream falls back to the 2D measure when this is null.
+      const w = world && world[i];
+      d.wlm = w && w.length >= 21 ? w : null;
 
       // MediaPipe labels handedness assuming a MIRRORED (selfie-flipped) image.
       // We feed the raw camera frame, so its "Left" is the student's right hand.
       // Swap it here, once, and everything downstream is in the student's frame.
-      const raw = result.handedness && result.handedness[i] && result.handedness[i][0];
-      const rawLabel = raw && raw.categoryName ? raw.categoryName : "Right";
-      const slotIdx = rawLabel === "Left" ? 1 : 0;
+      const cat = result.handedness && result.handedness[i] && result.handedness[i][0];
+      const rawLabel = cat && cat.categoryName ? cat.categoryName : "Right";
+      d.label = rawLabel === "Left" ? "Right" : "Left";
+      d.conf = cat && typeof cat.score === "number" ? hndClamp(cat.score, 0, 1) : 0.5;
+      d.size = hs;
+
+      // Where this hand points, in the SAME screen space the slots' cursors live in,
+      // so the proximity test compares like with like: mirrored and gain-mapped
+      // exactly as the published cursor is. The median spike guard is deliberately
+      // not applied yet — it is per-slot state, and no slot has been chosen.
+      const tip = lm[HND_LM.INDEX_TIP];
+      d.rmx = 1 - tip.x;
+      d.rmy = tip.y;
+      d.mx = hndGainAxis(d.rmx, cxS);
+      d.my = hndGainAxis(d.rmy, cyS);
+    }
+
+    // ── Pass 2: decide which detection is whose hand.
+    hndAssignSlots(nDet, now);
+
+    // ── Pass 3: publish.
+    for (let n = 0; n < nDet; n++) {
+      const d = dets[n];
+      const slotIdx = d.slot;
+      if (slotIdx < 0) continue;
 
       const slot = slots[slotIdx];
       if (slot.seenThisFrame) continue; // two blobs claimed the same hand; keep the first
+      const lm = d.lm;
+      // Rate gate on apparent hand size, judged against THIS slot's own history: a
+      // hand cannot double in size between two camera frames, so a detection that
+      // does is the detector having latched onto something else. Rejecting holds the
+      // slot's previous state; the escape hatch inside keeps it from deadlocking.
+      if (!hndSizeGate(slot, d.size, sampleT)) { sanityRejects++; continue; }
       slot.seenThisFrame = true;
+      // Record the match position for the next frame's assignment, before any
+      // filtering — this is evidence about where the hand WAS, not where we draw it.
+      slot.matchX = d.mx;
+      slot.matchY = d.my;
+      slot.matchMs = now;
 
       const view = snapshot.hands[slotIdx];
-      const pose = slot.classify(lm);
+      const pose = slot.classify(lm, d.wlm);
+      worldPinch = pose.depthAware;
 
       // Mirror x so the cursor moves the way the student's hand moves. y is not
       // mirrored: normalised image y already runs top-down like screen space.
@@ -1447,6 +1898,13 @@ function createHands(options) {
       }
       slot.hasCursor = true;
       slot.lastSeenMs = now;
+    }
+
+    // Drop every reference to MediaPipe's arrays the moment the pass is over, so
+    // nothing in this module holds a landmark set past the frame it belongs to.
+    for (let n = 0; n < nDet; n++) {
+      dets[n].lm = null;
+      dets[n].wlm = null;
     }
 
     // ── Slots with no detection this frame: freeze a live grip, else release.
@@ -1703,6 +2161,13 @@ function createHands(options) {
         latencyMs: hndMeasuredLatencyMs(),
         leadMs: snapshot.leadMs,
         smoothingScale: hndRateScale(),
+        // Robustness, for a HUD or a support conversation. `worldPinch` false on a
+        // machine where it should be true means the runtime is not returning world
+        // landmarks and the pinch has quietly fallen back to the projected ratio;
+        // `sanityRejects` climbing steadily means the detector is being fed
+        // something it keeps mis-reading (backlight, a second person in frame).
+        worldPinch,
+        sanityRejects,
       };
     },
     // Debug/regression hooks — the reach map and the spike guard are otherwise only
@@ -1711,6 +2176,31 @@ function createHands(options) {
       return { x: hndGainAxis(x, cxS), y: hndGainAxis(y, cyS) };
     },
     _med3: hndMed3,
+    // Slot matching is otherwise only exercised with two live hands in front of a
+    // webcam. `_assign` runs the REAL matcher over plain {label, conf, mx, my}
+    // stand-ins and returns the slot each was given; `_track` plants a slot's
+    // spatial claim, so a crossing-hands scenario can be set up deterministically.
+    _assign(list, now) {
+      const n = Math.min(list.length, HND_MAX_DETECTIONS);
+      for (let i = 0; i < n; i++) {
+        const s = list[i];
+        const d = dets[i];
+        d.label = s.label;
+        d.conf = typeof s.conf === "number" ? s.conf : 1;
+        d.mx = s.mx;
+        d.my = s.my;
+        d.slot = -1;
+      }
+      hndAssignSlots(n, typeof now === "number" ? now : performance.now());
+      const out = [];
+      for (let i = 0; i < n; i++) out.push(dets[i].slot);
+      return out;
+    },
+    _track(k, x, y, ms) {
+      slots[k].matchX = x;
+      slots[k].matchY = y;
+      slots[k].matchMs = ms;
+    },
     get isRunning() {
       return running;
     },

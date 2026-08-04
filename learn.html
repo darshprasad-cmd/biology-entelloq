@@ -157,6 +157,10 @@ header.nav.scrolled{background:var(--glass);backdrop-filter:blur(18px) saturate(
   transition:transform .14s var(--ease-out),box-shadow .3s var(--ease-out),background .3s}
 .btn:active{transform:scale(.97)}
 .btn.primary{color:#03110c;background:var(--grad-life);box-shadow:var(--shadow-glow)}
+/* Light theme darkens --em/--cy, so the near-black label drops to ~3.75:1 over the green
+   stop. No single ink clears 4.5:1 across both stops of the light gradient, so the CTA
+   gets its own darker gradient and a white label (5.1:1 green, 5.7:1 teal). */
+:root[data-theme="light"] .btn.primary{color:#fff;background:linear-gradient(120deg,var(--em),#0a6f8c)}
 .btn.primary:hover{box-shadow:0 0 0 1px rgba(52,211,153,.3),0 26px 70px -18px rgba(16,185,129,.55)}
 .btn.ghost{color:var(--ink);border:1px solid var(--hair);background:color-mix(in srgb,var(--ink) 4%,transparent)}
 .btn.ghost:hover{border-color:color-mix(in srgb,var(--em) 40%,var(--hair))}
@@ -399,6 +403,8 @@ a.exp{cursor:pointer}
   box-shadow:inset 0 0 90px 20px rgba(0,0,0,.85);z-index:4}
 .scope-field{position:absolute;inset:0;display:grid;place-items:center;overflow:hidden;border-radius:50%}
 .scope-field svg{width:130%;height:130%;transition:filter .35s var(--ease-out),transform .5s var(--ease-out)}
+/* While a knob is being dragged the field must track the thumb exactly — see wireMicroscope. */
+.scope-field.tracking svg{transition:none}
 .scope-cross{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:.5}
 .scope-cross line{stroke:color-mix(in srgb,var(--em) 60%,transparent);stroke-width:1}
 .scope-cross circle{fill:none;stroke:color-mix(in srgb,var(--em) 40%,transparent);stroke-width:1}
@@ -860,7 +866,7 @@ function startFX(){
 
 /* ---- command palette -------------------------------------------------- */
 const cmdk=$("#cmdk"),cmdkInput=$("#cmdkInput"),cmdkList=$("#cmdkList"),openCmdk=$("#openCmdk");
-let cmdkSel=0,cmdkFlat=[];
+let cmdkSel=0,cmdkFlat=[],cmdkPrevFocus=null;
 const CMDK_ITEMS=[
   {g:"Live experiences",t:"Virtual Dissection Theatre",s:"Open a real specimen on the table",href:"./lab.html",kind:"Live"},
   {g:"Live experiences",t:"The Biology Universe",s:"Zoom from the universe to a single atom",href:"./universe.html",kind:"Live"},
@@ -872,28 +878,39 @@ const CMDK_ITEMS=[
   {g:"Pillars",t:"Learn",s:"You are here",href:"./learn.html",kind:"Page"}
 ];
 const SEARCH_ICO='<svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M20 20l-3-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
-function openPalette(){if(!cmdk)return;cmdk.classList.add("open");cmdkInput.value="";renderCmdk("");
+function openPalette(){if(!cmdk)return;
+  // Remember where the user was so closing puts them back — ⌘K can fire from anywhere.
+  cmdkPrevFocus=document.activeElement;
+  cmdk.classList.add("open");cmdkInput.value="";renderCmdk("");
   cmdkInput.setAttribute("aria-expanded","true");setTimeout(()=>cmdkInput.focus(),30);}
-function closePalette(){if(!cmdk)return;cmdk.classList.remove("open");cmdkInput.setAttribute("aria-expanded","false");}
+function closePalette(){if(!cmdk)return;cmdk.classList.remove("open");cmdkInput.setAttribute("aria-expanded","false");
+  cmdkInput.removeAttribute("aria-activedescendant");
+  const back=cmdkPrevFocus;cmdkPrevFocus=null;
+  if(back&&back.focus&&document.contains(back))back.focus();}
 function renderCmdk(q){
   q=q.trim().toLowerCase();
   const items=CMDK_ITEMS.filter(it=>!q||(it.t+" "+it.s+" "+it.g).toLowerCase().includes(q));
   cmdkFlat=items;cmdkSel=0;
-  if(!items.length){cmdkList.innerHTML='<div class="cmdk-empty">No matches. Try “cell”, “microscope” or “universe”.</div>';return;}
+  if(!items.length){cmdkList.innerHTML='<div class="cmdk-empty">No matches. Try “cell”, “microscope” or “universe”.</div>';
+    cmdkInput.removeAttribute("aria-activedescendant");return;}
   let html="",lastG="";
   items.forEach((it,i)=>{
     if(it.g!==lastG){html+='<div class="cmdk-group">'+it.g+'</div>';lastG=it.g;}
-    html+='<div class="cmdk-item'+(i===0?' sel':'')+'" role="option" data-i="'+i+'">'
+    html+='<div class="cmdk-item'+(i===0?' sel':'')+'" role="option" id="cmdkOpt'+i+'" aria-selected="'+(i===0)+'" data-i="'+i+'">'
       +'<span class="ci">'+SEARCH_ICO+'</span><span class="cm"><b>'+it.t+'</b><span>'+it.s+'</span></span>'
       +'<span class="kind">'+it.kind+'</span></div>';
   });
   cmdkList.innerHTML=html;
+  cmdkInput.setAttribute("aria-activedescendant","cmdkOpt0");
   $$(".cmdk-item",cmdkList).forEach(el=>{
     el.addEventListener("click",()=>go(+el.dataset.i));
     el.addEventListener("pointermove",()=>setSel(+el.dataset.i));
   });
 }
-function setSel(i){cmdkSel=i;$$(".cmdk-item",cmdkList).forEach(el=>el.classList.toggle("sel",+el.dataset.i===i));}
+function setSel(i){cmdkSel=i;$$(".cmdk-item",cmdkList).forEach(el=>{const on=+el.dataset.i===i;
+  el.classList.toggle("sel",on);el.setAttribute("aria-selected",on);});
+  // Focus never leaves the input, so the highlight is only announced via activedescendant.
+  cmdkInput.setAttribute("aria-activedescendant","cmdkOpt"+i);}
 function go(i){const it=cmdkFlat[i];if(!it)return;closePalette();
   if(it.href.startsWith("#")){const t=$(it.href);if(t)t.scrollIntoView({behavior:REDUCED?"auto":"smooth"});}
   else location.href=it.href;}
@@ -904,8 +921,15 @@ if(cmdkInput){
     if(e.key==="ArrowDown"){e.preventDefault();setSel(Math.min(cmdkSel+1,cmdkFlat.length-1));scrollSel();}
     else if(e.key==="ArrowUp"){e.preventDefault();setSel(Math.max(cmdkSel-1,0));scrollSel();}
     else if(e.key==="Enter"){e.preventDefault();go(cmdkSel);}
+    // aria-modal means the page behind is hidden from AT — Tab must not walk into it.
+    else if(e.key==="Tab")e.preventDefault();
   });
 }
+// The input is the palette's only focusable child, so holding focus there IS the trap.
+// Clicking the box chrome or the list drops focus to <body>; pull it straight back.
+if(cmdk)cmdk.addEventListener("focusout",e=>{
+  if(cmdk.classList.contains("open")&&!cmdk.contains(e.relatedTarget))cmdkInput.focus();
+});
 function scrollSel(){const el=$$(".cmdk-item",cmdkList)[cmdkSel];if(el)el.scrollIntoView({block:"nearest"});}
 if(cmdk)cmdk.addEventListener("click",e=>{if(e.target===cmdk)closePalette();});
 addEventListener("keydown",e=>{
@@ -1019,7 +1043,9 @@ function buildCatalog(){
           +'<div class="foot"><span class="chip live"><span class="d"></span>Live</span>'
           +'<span class="open">Open '+I.arr+'</span></div></a>';
       }else{
-        html+='<article class="card lift exp'+dcls+'" tabindex="0" aria-label="'+it.t+'">'
+        // No href and no handler — so it stays out of the tab order. A focus stop
+        // that does nothing is worse than no focus stop.
+        html+='<article class="card lift exp'+dcls+'" aria-label="'+it.t+'">'
           +'<div class="glow"></div><div class="ico">'+I[it.ic]+'</div>'
           +'<h4>'+it.t+'</h4><p>'+it.d+'</p>'
           +'<div class="foot"><span class="chip live"><span class="d"></span>Open bench</span></div></article>';
@@ -1161,6 +1187,12 @@ function wireMicroscope(){
   }));
   magR.addEventListener("input",render);
   focR.addEventListener("input",render);
+  // A drag fires "input" continuously, and every one of those rewrites transform+filter,
+  // restarting the .5s/.35s eases — the field rubber-bands behind the thumb. Kill the ease
+  // for the duration of the drag; discrete changes (keyboard, tab switch) still ease.
+  [magR,focR].forEach(r=>r.addEventListener("pointerdown",()=>field.classList.add("tracking")));
+  addEventListener("pointerup",()=>field.classList.remove("tracking"));
+  addEventListener("pointercancel",()=>field.classList.remove("tracking"));
   drawSpec(current);render();
 }
 

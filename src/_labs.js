@@ -8,7 +8,18 @@
 const LABS = (function () {
   const list = [];
   return {
-    register(id, def) { list.push(Object.assign({ id }, def)); },
+    // FIRST registration wins. The bench modules are concatenated in a fixed order
+    // and several ids exist in more than one of them — _lab_bench.js holds the
+    // canonical, maintained copy of microscope / gel-electrophoresis /
+    // predator-prey / enzyme-kinetics, while the later, larger modules carry their
+    // own variants of those alongside benches that exist nowhere else. Pushing
+    // blindly would render duplicate cards; letting the LAST win would silently
+    // replace the maintained copies with unmaintained ones. So the earlier file
+    // keeps the id and the later files contribute only what is genuinely new.
+    register(id, def) {
+      if (list.some((l) => l.id === id)) return;
+      list.push(Object.assign({ id }, def));
+    },
     all() { return list; },
     get(id) { return list.find((l) => l.id === id); },
   };

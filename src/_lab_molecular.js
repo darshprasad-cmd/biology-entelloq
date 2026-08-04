@@ -449,7 +449,7 @@
             '<div class="mlx-cell"><div class="k">Yield</div><div class="v">' + y.toFixed(1) + " µg</div></div>" +
             '<div class="mlx-cell"><div class="k">In 200 µL TE</div><div class="v">' + Math.round(conc) + " ng/µL</div></div>" +
             '<div class="mlx-cell"><div class="k">A₂₆₀/A₂₈₀</div><div class="v">' + smp.a260.toFixed(2) + "</div></div>" +
-            '<div class="mlx-cell"><div class="k">Fragment size</div><div class="v">&gt;50 kb</div></div>" +
+            '<div class="mlx-cell"><div class="k">Fragment size</div><div class="v">&gt;50 kb</div></div>' +
             "</div>" +
             '<p class="bx-note" style="margin-top:10px">Ethanol at ' + EX_ETH[S.eth].t + " recovers " +
             Math.round(EX_ETH[S.eth].f * 100) + "% of what a −20 °C precipitation would give. " +

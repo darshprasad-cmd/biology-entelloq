@@ -385,16 +385,6 @@ main{position:relative;z-index:1;padding-top:70px}
   color:var(--faint);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
 .tl-item p{color:var(--dim);font-size:14.5px}
 
-/* testimonials */
-.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.quote{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);padding:26px}
-.quote p{font-size:15.5px;line-height:1.65;margin-bottom:20px}
-.quote .who{display:flex;align-items:center;gap:12px}
-.quote .who .av{width:38px;height:38px;border-radius:50%;background:var(--grad-mind);flex:none}
-.quote .who b{font-size:14px;display:block}.quote .who span{font-size:12.5px;color:var(--faint)}
-.placeholder-note{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--faint);border:1px dashed var(--line);border-radius:8px;padding:4px 9px;display:inline-block}
-
 /* future vision */
 .vision{position:relative;border-radius:var(--r-xl);overflow:hidden;border:1px solid var(--hair);
   padding:clamp(40px,7vw,90px);text-align:center;background:
@@ -408,7 +398,9 @@ main{position:relative;z-index:1;padding-top:70px}
 .eco-card .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
 .eco-card .mk{width:44px;height:44px;border-radius:12px;display:grid;place-items:center}
 .eco-card h3{margin-bottom:8px}.eco-card p{color:var(--dim);font-size:14px;line-height:1.6}
-@media(hover:hover){.eco-card:hover{transform:translateY(-5px);border-color:var(--hair);box-shadow:var(--shadow-2)}}
+/* only the cards that actually go somewhere are anchors — a card with nowhere to
+   go must not lift and shadow, or it reads as clickable and then does nothing */
+@media(hover:hover){a.eco-card:hover{transform:translateY(-5px);border-color:var(--hair);box-shadow:var(--shadow-2)}}
 .eco-card.wide{grid-column:span 3;display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center}
 
 /* footer */
@@ -501,7 +493,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);margin-top:4
 }
 @media (max-width:940px){
   .split,.ai-shell,.cell-lab,.lab-hero,.founder-hero{grid-template-columns:1fr}
-  .g3,.g4,.eco,.quotes{grid-template-columns:1fr 1fr}
+  .g3,.g4,.eco{grid-template-columns:1fr 1fr}
   .foot-in{grid-template-columns:1fr 1fr}
   .eco-card.wide{grid-column:span 2;grid-template-columns:1fr}
 }
@@ -513,7 +505,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);margin-top:4
 }
 @media (max-width:680px){
   .search-pill span{display:none}
-  .g3,.g4,.g2,.eco,.quotes,.values,.founder-facts{grid-template-columns:1fr}
+  .g3,.g4,.g2,.eco,.values,.founder-facts{grid-template-columns:1fr}
   .foot-in{grid-template-columns:1fr}
   .hero-meta{gap:20px}
   .eco-card.wide{grid-column:span 1}
@@ -615,6 +607,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);margin-top:4
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const LAB = "./lab.html";
+const PHYSICS = "https://physics.entelloq.com";   // sibling product, shipped — badged Live because it is
 
 /* ---- icon set (inline SVG strings) ------------------------------------- */
 const I = {
@@ -658,7 +651,7 @@ const SUBJECTS=[
 ];
 const ECO=[
   {t:"Biology Entelloq",st:"live",i:"dna",g:"var(--grad-life)",d:"A living platform for learning life — labs, an AI tutor, a virtual dissection theatre.",href:LAB},
-  {t:"Physics Entelloq",st:"live",i:"atom",g:"linear-gradient(120deg,#60a5fa,#38e0d8)",d:"The same philosophy for physics — sandboxes, six lenses, seamless scale."},
+  {t:"Physics Entelloq",st:"live",i:"atom",g:"linear-gradient(120deg,#60a5fa,#38e0d8)",d:"The same philosophy for physics — sandboxes, six lenses, seamless scale.",href:PHYSICS},
   {t:"Quant Entelloq",st:"live",i:"chart",g:"linear-gradient(120deg,#f6c667,#fb7185)",d:"An AI-native financial research terminal for the markets."},
   {t:"LexVault",st:"live",i:"scale",g:"linear-gradient(120deg,#a78bfa,#7c8cf8)",d:"Privacy-first AI infrastructure and the Insaaf legal navigator."},
   {t:"Chemistry Entelloq",st:"soon",i:"chem",g:"linear-gradient(120deg,#f472b6,#f6c667)",d:"Reactions you can run, orbitals you can see, bonds you can feel."},
@@ -670,7 +663,7 @@ const FUTURE=[
   {t:"Educator Dashboard",i:"chart"},{t:"Institutional Partnerships",i:"globe"},
 ];
 const ROADMAP=[
-  {when:"Shipped",t:"The Dissection Lab",done:1,d:"Six specimens, hand tracking, living physiology, and a seamless zoom from organ to atom — running in your browser."},
+  {when:"Shipped",t:"The Dissection Lab",done:1,d:"Five specimens, hand tracking, living physiology, and a seamless zoom from organ to atom — running in your browser."},
   {when:"Shipped",t:"Interactive anatomy & imaging",done:1,d:"Layered dissection, histology, X-ray / CT / MRI, and a procedural operating theatre."},
   {when:"Now",t:"The learning platform",done:0,d:"This launch — the cinematic front door, subject universe, AI tutor and knowledge graph."},
   {when:"Next",t:"Full curriculum & AI tutor",done:0,d:"Every chapter with visuals, practice, spaced recall and an AI that questions you as you learn."},
@@ -685,28 +678,33 @@ const ORGANELLES={
   ribo:{t:"Ribosomes",d:"Molecular factories that read messenger RNA and assemble amino acids into proteins — the physical act of translation."},
 };
 const KG=[
-  {id:"dna",t:"DNA",d:"The molecule of heredity — a double helix of four bases.",x:.12,y:.5},
-  {id:"gene",t:"Genes",d:"Stretches of DNA that code for functional products.",x:.31,y:.28},
-  {id:"protein",t:"Proteins",d:"The workers of the cell, folded from amino acids.",x:.5,y:.5},
-  {id:"evo",t:"Evolution",d:"Change in heritable traits across generations.",x:.31,y:.74},
-  {id:"disease",t:"Disease",d:"When biology breaks — mutation, infection, dysfunction.",x:.69,y:.28},
-  {id:"med",t:"Medicine",d:"Understanding biology in order to heal it.",x:.69,y:.74},
-  {id:"biotech",t:"Biotechnology",d:"Engineering living systems on purpose.",x:.88,y:.5},
+  // A concept web, not a diagram. Each node carries its own hue because a graph
+  // where everything is the same green reads as decoration; colour is what lets
+  // you follow a thread across the picture. Positions are hand-placed to spread
+  // the hubs apart and leave the periphery breathing room.
+  {id:"dna",     t:"DNA",           c:"#38e0d8", d:"The molecule of heredity — a double helix of four bases.",            x:.07, y:.50},
+  {id:"rna",     t:"RNA",           c:"#22d3ee", d:"The working copy: transcribed, edited, and read by the ribosome.",    x:.20, y:.16},
+  {id:"gene",    t:"Genes",         c:"#34d399", d:"Stretches of DNA that code for functional products.",                 x:.24, y:.72},
+  {id:"protein", t:"Proteins",      c:"#8b5cf6", d:"The workers of the cell, folded from a sequence of amino acids.",     x:.45, y:.46},
+  {id:"enzyme",  t:"Enzymes",       c:"#a78bfa", d:"Proteins that make a reaction fast enough for life to use.",          x:.52, y:.12},
+  {id:"cell",    t:"Cells",         c:"#4ade80", d:"The smallest thing that is unambiguously alive.",                     x:.44, y:.84},
+  {id:"evo",     t:"Evolution",     c:"#f6c667", d:"Change in heritable traits across generations.",                      x:.20, y:.94},
+  {id:"disease", t:"Disease",       c:"#fb7185", d:"When biology breaks — mutation, infection, dysfunction.",             x:.72, y:.24},
+  {id:"med",     t:"Medicine",      c:"#7c8cf8", d:"Understanding biology precisely enough to intervene in it.",          x:.74, y:.72},
+  {id:"biotech", t:"Biotechnology", c:"#2dd4bf", d:"Engineering living systems on purpose.",                              x:.92, y:.48},
 ];
-const KGE=[["dna","gene"],["gene","protein"],["dna","protein"],["gene","evo"],["protein","evo"],["protein","disease"],["disease","med"],["gene","disease"],["med","biotech"],["protein","biotech"],["dna","biotech"]];
+const KGE=[["dna","rna"],["rna","protein"],["dna","gene"],["gene","protein"],["dna","protein"],
+  ["gene","rna"],["protein","enzyme"],["enzyme","disease"],["enzyme","cell"],["gene","evo"],
+  ["protein","evo"],["cell","evo"],["cell","protein"],["cell","med"],["protein","disease"],
+  ["disease","med"],["gene","disease"],["med","biotech"],["protein","biotech"],["dna","biotech"]];
 const AIP=[
   {q:"Explain the Krebs cycle like I'm 12.",a:"Think of a tiny recycling loop inside your cells. It takes a scrap of fuel, spins it around eight steps, and at each turn snips off high-energy electrons — like sparks. Those sparks get carried off to make ATP, your body's battery. One loop, lots of little sparks, and carbon dioxide breathed out as exhaust."},
   {q:"Quiz me on the nephron.",a:"Let's go. ① Where does filtration happen — glomerulus or loop of Henle? ② Which hormone tells the collecting duct to reabsorb water? ③ Name the process that actively pumps sodium out of the ascending limb. Answer any one and I'll follow the thread deeper."},
   {q:"Why does DNA use a double helix?",a:"Two reasons, both elegant. First, complementary base pairing means each strand is a backup of the other — perfect for copying. Second, tucking the bases inside the twisted backbone shields the genetic message from chemical damage while keeping it readable. Redundancy and protection, in one shape."},
 ];
-const TESTI=[
-  {p:"It's the first time a screen made a cell feel alive. My students stopped asking 'will this be on the test' and started asking 'what happens if I cut here'.",n:"Biology Teacher",r:"placeholder"},
-  {p:"I revised the whole cardiac cycle in one sitting — not by reading it, but by taking a heart apart and watching it beat back.",n:"A-Level Student",r:"placeholder"},
-  {p:"This is what we imagined ed-tech would be a decade ago. It finally looks like software, not a worksheet.",n:"Curriculum Lead",r:"placeholder"},
-];
 const CMDK_DATA=[
   {g:"Labs",k:"lab",items:[
-    {t:"Virtual Dissection Lab",s:"Frog · heart · fish · earthworm · cockroach · human",kind:"Lab",href:LAB},
+    {t:"Virtual Dissection Lab",s:"Frog · heart · fish · earthworm · cockroach",kind:"Lab",href:LAB},
     {t:"Microscope & Histology",s:"Zoom from tissue to a single cell",kind:"Lab",go:"labs"},
     {t:"Seamless scale journey",s:"Organ → cell → DNA → atom",kind:"Lab",href:LAB},
   ]},
@@ -725,7 +723,7 @@ const CMDK_DATA=[
   {g:"Ecosystem",k:"atom",items:[
     {t:"About Entelloq",s:"The mission and the ecosystem",kind:"Page",nav:"about"},
     {t:"Founder",s:"The person behind Entelloq",kind:"Page",nav:"founder"},
-    {t:"Physics Entelloq",s:"Coming to the ecosystem",kind:"Product",nav:"about"},
+    {t:"Physics Entelloq",s:"Physics the same way — live at physics.entelloq.com",kind:"Product",href:PHYSICS},
   ]},
 ];
 
@@ -752,8 +750,6 @@ function homeHTML(){
   ].map(l=>`<div class="lab-item"><div class="li">${I[l.i]}</div><div><b>${l.t}</b><span>${l.s}</span></div></div>`).join("");
   const road=ROADMAP.map(r=>`<div class="tl-item ${r.done?'done':''} reveal"><div class="node">${r.done?I.check:'○'}</div>
     <div><div class="when">${r.when}</div><h3 class="h3">${r.t}</h3><p>${r.d}</p></div></div>`).join("");
-  const quotes=TESTI.map((q,i)=>`<div class="quote reveal d${i+1}"><p class="serif" style="font-size:19px">“${q.p}”</p>
-    <div class="who"><div class="av"></div><div><b>${q.n}</b><span>Early note</span></div></div></div>`).join("");
   const org=Object.entries(ORGANELLES).map(([k,o])=>`<button class="cell-tab" data-org="${k}">${o.t}</button>`).join("");
   const prompts=AIP.map((p,i)=>`<button class="ai-prompt" data-ai="${i}"><span class="pi">${I.spark}</span>${p.q}</button>`).join("");
 
@@ -904,14 +900,14 @@ function homeHTML(){
   <section class="band wrap" id="labs">
     <div class="sec-head reveal"><div class="eyebrow">The virtual lab</div>
       <h2 class="h2">A biology lab that fits in a tab.</h2>
-      <p class="lead">The dissection theatre is live today. A full bench of experiments is coming — no glassware, no risk, no cleanup.</p></div>
+      <p class="lead">The dissection theatre and the benches are both live today — no glassware, no risk, no cleanup.</p></div>
     <div class="lab-hero">
       <a class="lab-feature reveal" href="${LAB}">
         <canvas class="scene" id="labScene" aria-hidden="true"></canvas>
         <div class="body">
           <span class="chip live"><span class="d"></span> Live now</span>
           <h3 class="h2" style="margin-top:14px">The Dissection Lab</h3>
-          <p class="lead" style="max-width:440px">Six specimens, hand tracking, living physiology, histology, medical imaging and a seamless zoom to the atom. Open it in your browser.</p>
+          <p class="lead" style="max-width:440px">Five specimens, hand tracking, living physiology, histology, medical imaging and a seamless zoom to the atom. Open it in your browser.</p>
           <div class="btn primary" style="margin-top:20px;align-self:flex-start">Enter the Lab ${I.arrow}</div>
         </div>
       </a>
@@ -924,14 +920,6 @@ function homeHTML(){
     <div class="sec-head reveal"><div class="eyebrow">Roadmap</div>
       <h2 class="h2">Shipped, shipping, and next.</h2></div>
     <div class="timeline">${road}</div>
-  </section>
-
-  <!-- TESTIMONIALS -->
-  <section class="band wrap" id="testimonials">
-    <div class="sec-head reveal"><div class="eyebrow">Voices</div>
-      <h2 class="h2">What it feels like.</h2>
-      <p class="lead">Early notes from the people we build for. </p></div>
-    <div class="quotes">${quotes}</div>
   </section>
 
   <!-- FUTURE VISION -->
@@ -954,7 +942,10 @@ function aboutHTML(){
     const chip=e.st==="live"?'<span class="chip live"><span class="d"></span> Live</span>':'';
     const inner=`<div class="top"><div class="mk" style="background:${e.g}">${I[e.i]}</div>${chip}</div>
       <h3 class="h3">${e.t}</h3><p>${e.d}</p>`;
-    return e.href?`<a class="eco-card reveal d${(i%3)+1}" href="${e.href}" style="color:inherit;display:block">${inner}<div style="margin-top:16px;color:var(--em);font-size:13px;font-weight:600">Open →</div></a>`
+    // A sibling product lives on its own domain; inside the app shell this page is
+    // an iframe, so an in-place jump would swallow the whole app. Open it beside us.
+    const ext=/^https?:/i.test(e.href||"")?' target="_blank" rel="noopener"':'';
+    return e.href?`<a class="eco-card reveal d${(i%3)+1}" href="${e.href}"${ext} style="color:inherit;display:block">${inner}<div style="margin-top:16px;color:var(--em);font-size:13px;font-weight:600">Open →</div></a>`
       :`<div class="eco-card reveal d${(i%3)+1}">${inner}</div>`;
   }).join("");
   const future=FUTURE.map((f,i)=>`<div class="card lift reveal d${(i%4)+1}" style="text-align:center;padding:22px">
@@ -1260,7 +1251,9 @@ function highlight(){const items=$$(".cmdk-item",cmdkList);
   if(sel){sel.scrollIntoView({block:"nearest"});cmdkInput.setAttribute("aria-activedescendant",sel.id);}
   else cmdkInput.removeAttribute("aria-activedescendant");}
 function runCmdk(it){if(!it)return;closeCmdk();
-  if(it.href){window.location.href=it.href;return;}
+  // Same reason the ecosystem cards do it: an off-domain result must not replace
+  // the app shell that is framing this page.
+  if(it.href){if(/^https?:/i.test(it.href))window.open(it.href,"_blank","noopener");else window.location.href=it.href;return;}
   if(it.nav){go(it.nav,{push:true});return;} if(it.go){scrollTo(it.go);return;}}
 cmdkInput&&cmdkInput.addEventListener("input",e=>renderCmdk(e.target.value));
 cmdkList.addEventListener("click",e=>{const it=e.target.closest(".cmdk-item");if(it)runCmdk(cmdkFlat[+it.dataset.i]);});
@@ -1342,44 +1335,117 @@ function startKG(){
   function size(){dpr=Math.min(devicePixelRatio||1,2);const r=cv.getBoundingClientRect();
     W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
   size();
-  const nodes=KG.map(n=>({...n,ph:Math.random()*6.28}));
-  function pos(n){return{x:n.x*W,y:n.y*H+(REDUCED?0:Math.sin(t/1000+n.ph)*4)};}
+  // Degree decides size: Proteins and DNA really are the hubs of this web, so the
+  // picture should say so before you read a single label.
+  const deg={};KGE.forEach(([x,y])=>{deg[x]=(deg[x]||0)+1;deg[y]=(deg[y]||0)+1;});
+  const dMax=Math.max(...Object.values(deg));
+  const nodes=KG.map((n,i)=>({...n,ph:i*1.37,deg:deg[n.id]||1,
+    r:8+5*Math.sqrt((deg[n.id]||1)/dMax)}));
+  const byId={};nodes.forEach((n,i)=>{byId[n.id]=i;});
+  // Precompute each edge's neighbour sets once — used to dim everything that is
+  // not part of the thread you are tracing.
+  const adj=nodes.map(()=>new Set());
+  KGE.forEach(([x,y])=>{adj[byId[x]].add(byId[y]);adj[byId[y]].add(byId[x]);});
+  function pos(n){return{x:n.x*W,y:n.y*H+(REDUCED?0:Math.sin(t/1400+n.ph)*5)};}
   const css=getComputedStyle(document.documentElement);
   function col(v){return css.getPropertyValue(v).trim()||v;}
+  function withA(hex,a){const c=hex.replace("#","");
+    return "rgba("+parseInt(c.slice(0,2),16)+","+parseInt(c.slice(2,4),16)+","+parseInt(c.slice(4,6),16)+","+a+")";}
+
+  // Pointer, touch AND keyboard. The graph used to be hover-only, which meant its
+  // definitions simply did not exist for anyone on a phone or a keyboard.
+  let focusIdx=-1;
+  cv.setAttribute("tabindex","0");
+  cv.setAttribute("role","application");
+  function nearest(x,y){let best=-1,bd=1e9;
+    nodes.forEach((n,i)=>{const p=pos(n),d=Math.hypot(x-p.x,y-p.y);if(d<bd&&d<34){bd=d;best=i;}});return best;}
   cv.onmousemove=e=>{const r=cv.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top;};
-  cv.onmouseleave=()=>{mx=my=-1;hover=-1;tip.classList.remove("show");};
+  cv.onmouseleave=()=>{mx=my=-1;};
+  cv.addEventListener("pointerdown",e=>{
+    if(e.pointerType==="mouse")return;               // mouse already tracks by hover
+    const r=cv.getBoundingClientRect();
+    const i=nearest(e.clientX-r.left,e.clientY-r.top);
+    focusIdx=i;cv.focus();
+  },{passive:true});
+  cv.addEventListener("focus",()=>{if(focusIdx<0)focusIdx=byId.protein;});
+  cv.addEventListener("blur",()=>{focusIdx=-1;});
+  cv.addEventListener("keydown",e=>{
+    if(e.key==="ArrowRight"||e.key==="ArrowDown"||(e.key==="Tab"&&!e.shiftKey&&focusIdx<nodes.length-1)){
+      focusIdx=(focusIdx+1)%nodes.length;e.preventDefault();
+    }else if(e.key==="ArrowLeft"||e.key==="ArrowUp"||(e.key==="Tab"&&e.shiftKey&&focusIdx>0)){
+      focusIdx=(focusIdx-1+nodes.length)%nodes.length;e.preventDefault();
+    }else if(e.key==="Enter"||e.key===" "){scrollTo("subjects");e.preventDefault();}
+    else if(e.key==="Escape"){cv.blur();}
+  });
   cv.onclick=()=>{if(hover>=0)scrollTo("subjects");};
+
   function draw(){
     t+=16;ctx.clearRect(0,0,W,H);
-    // Colours resolve from the live CSS tokens every frame, so the graph recolours
-    // itself the instant the theme toggles instead of staying dark-on-white.
-    const cEm=col("--em"),cInk=col("--ink"),cRaise=col("--raise"),cLine=col("--line"),cCy=col("--cy");
-    hover=-1;
-    nodes.forEach((n,i)=>{const p=pos(n);if(mx>=0&&Math.hypot(mx-p.x,my-p.y)<26)hover=i;});
-    // edges
-    KGE.forEach(([a,b])=>{const na=nodes.find(n=>n.id===a),nb=nodes.find(n=>n.id===b);
-      const pa=pos(na),pb=pos(nb);const on=hover>=0&&(nodes[hover].id===a||nodes[hover].id===b);
-      ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);
-      ctx.strokeStyle=on?cEm:cLine;ctx.globalAlpha=on?0.7:1;ctx.lineWidth=on?2:1;ctx.stroke();ctx.globalAlpha=1;
-      if(on&&!REDUCED){const f=(t/900)%1;const px=pa.x+(pb.x-pa.x)*f,py=pa.y+(pb.y-pa.y)*f;
-        ctx.beginPath();ctx.arc(px,py,2.6,0,6.28);ctx.fillStyle=cCy;ctx.fill();}
+    const cInk=col("--ink"),cLine=col("--line"),cPanel=col("--bg");
+    hover=focusIdx;
+    if(mx>=0){const i=nearest(mx,my);if(i>=0)hover=i;}
+    const act=hover>=0;
+
+    // Edges as gentle arcs bowing away from the centre. Straight lines read as a
+    // wireframe; a curve reads as a connection.
+    KGE.forEach(([a,b])=>{
+      const ia=byId[a],ib=byId[b];const na=nodes[ia],nb=nodes[ib];
+      const pa=pos(na),pb=pos(nb);
+      const on=act&&(ia===hover||ib===hover);
+      const dim=act&&!on;
+      const mxp=(pa.x+pb.x)/2,myp=(pa.y+pb.y)/2;
+      const dx=pb.x-pa.x,dy=pb.y-pa.y,len=Math.hypot(dx,dy)||1;
+      // bow perpendicular, away from the canvas centre
+      const nx=-dy/len,ny=dx/len;
+      const sgn=((mxp-W/2)*nx+(myp-H/2)*ny)>=0?1:-1;
+      const cx=mxp+nx*sgn*len*0.10, cy=myp+ny*sgn*len*0.10;
+      const g=ctx.createLinearGradient(pa.x,pa.y,pb.x,pb.y);
+      g.addColorStop(0,withA(na.c,on?0.85:dim?0.05:0.26));
+      g.addColorStop(1,withA(nb.c,on?0.85:dim?0.05:0.26));
+      ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.quadraticCurveTo(cx,cy,pb.x,pb.y);
+      ctx.strokeStyle=g;ctx.lineWidth=on?2.2:1.1;ctx.stroke();
+      // Traffic. Always flowing, faintly — a living web, not a static map — and
+      // brighter along whatever thread is being traced.
+      if(!REDUCED){
+        const beads=on?3:1;
+        for(let k=0;k<beads;k++){
+          const f=((t/(on?1100:2600))+k/beads+ia*0.13)%1;
+          const u=1-f;
+          const px=u*u*pa.x+2*u*f*cx+f*f*pb.x, py=u*u*pa.y+2*u*f*cy+f*f*pb.y;
+          ctx.beginPath();ctx.arc(px,py,on?2.6:1.5,0,6.28);
+          ctx.fillStyle=withA(on?nb.c:na.c,on?0.95:dim?0.06:0.34);ctx.fill();
+        }
+      }
     });
-    // nodes
-    nodes.forEach((n,i)=>{const p=pos(n);const on=i===hover;const r=on?15:11;
-      const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,r*2.4);
-      g.addColorStop(0,on?"rgba(52,211,153,.5)":"rgba(52,211,153,.22)");g.addColorStop(1,"rgba(52,211,153,0)");
-      ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,r*2.4,0,6.28);ctx.fill();
+
+    // Nodes
+    nodes.forEach((n,i)=>{
+      const p=pos(n);const on=i===hover;const near=act&&adj[hover]&&adj[hover].has(i);
+      const dim=act&&!on&&!near;
+      const r=n.r*(on?1.35:1);
+      const halo=r*(on?3.4:2.6);
+      const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,halo);
+      g.addColorStop(0,withA(n.c,on?0.42:dim?0.05:0.18));
+      g.addColorStop(1,withA(n.c,0));
+      ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,halo,0,6.28);ctx.fill();
       ctx.beginPath();ctx.arc(p.x,p.y,r,0,6.28);
-      ctx.fillStyle=on?cEm:cRaise;ctx.fill();
-      ctx.lineWidth=2;ctx.strokeStyle=cEm;ctx.stroke();
-      ctx.fillStyle=cInk;ctx.font="600 12px Inter,sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";
-      // Clamp the label so the outermost node's text never clips the canvas edge.
+      ctx.fillStyle=on?n.c:cPanel;ctx.fill();
+      ctx.lineWidth=on?2.6:1.8;ctx.strokeStyle=withA(n.c,dim?0.25:1);ctx.stroke();
+      ctx.globalAlpha=dim?0.3:1;
+      ctx.fillStyle=cInk;ctx.font=(on?"700 13px ":"600 12px ")+"Inter,sans-serif";
+      ctx.textAlign="center";ctx.textBaseline="middle";
       const tw=ctx.measureText(n.t).width, lx=Math.max(tw/2+4,Math.min(W-tw/2-4,p.x));
-      ctx.fillText(n.t,lx,p.y+r+13);
+      ctx.fillText(n.t,lx,p.y+r+14);
+      ctx.globalAlpha=1;
+      if(i===focusIdx&&document.activeElement===cv){
+        ctx.beginPath();ctx.arc(p.x,p.y,r+7,0,6.28);
+        ctx.setLineDash([3,3]);ctx.lineWidth=1.5;ctx.strokeStyle=cInk;ctx.stroke();ctx.setLineDash([]);
+      }
     });
+
     if(hover>=0){const n=nodes[hover];const p=pos(n);
       if(hover!==lastHover){tip.innerHTML="<b>"+n.t+"</b><span>"+n.d+"</span>";lastHover=hover;}
-      tip.style.left=Math.min(W-230,p.x+16)+"px";tip.style.top=Math.max(6,p.y-10)+"px";
+      tip.style.left=Math.min(W-230,Math.max(6,p.x+16))+"px";tip.style.top=Math.max(6,p.y-10)+"px";
       tip.classList.add("show");cv.style.cursor="pointer";}
     else{tip.classList.remove("show");cv.style.cursor="default";lastHover=-2;}
     kgRaf=requestAnimationFrame(draw);

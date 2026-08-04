@@ -7,8 +7,6 @@
 .les-lensdot{width:22px;height:22px;border-radius:7px;display:grid;place-items:center;font-family:var(--mono);
   font-size:11px;font-weight:600;color:var(--dc);border:1px solid color-mix(in srgb,var(--dc) 40%,transparent);
   background:color-mix(in srgb,var(--dc) 12%,transparent)}
-.les-more{text-align:center;color:var(--faint);font-size:14px;max-width:600px;margin-inline:auto;
-  border:1px dashed var(--line);border-radius:14px;padding:16px 22px}
 
 /* lesson view */
 .les-lesson{--lc:var(--em)}
@@ -54,6 +52,16 @@
 .les-read{margin-top:14px;font-size:14px;color:var(--dim);font-family:var(--mono);
   background:color-mix(in srgb,var(--ink) 4%,transparent);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
 .les-read b{color:var(--ink)}
+/* push-buttons that sit in an interactive's control row (oxygen, restart, stimulate).
+   Shaped like .les-tab so every control on the page reads as one family; --dc is set
+   on the enclosing .les-lens, so each button picks up its own lens colour. */
+.cell-tab{align-self:center;padding:9px 16px;border-radius:12px;border:1px solid var(--line);
+  background:var(--panel);cursor:pointer;color:var(--dim);font-size:13.5px;font-weight:600;
+  transition:color .2s,border-color .2s,background .2s,transform .12s var(--ease-out)}
+.cell-tab:hover{color:var(--ink)}
+.cell-tab:active{transform:scale(.97)}
+.cell-tab.on{color:var(--ink);border-color:color-mix(in srgb,var(--dc,var(--em)) 50%,transparent);
+  background:color-mix(in srgb,var(--dc,var(--em)) 12%,transparent)}
 .les-fickbar{height:12px;border-radius:6px;background:var(--line);overflow:hidden;margin-top:18px}
 .les-fickbar i{display:block;height:100%;width:0;background:var(--grad-life);transition:width .3s var(--ease-out)}
 

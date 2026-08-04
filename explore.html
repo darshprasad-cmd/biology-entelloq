@@ -23,6 +23,10 @@ button,input,select,textarea{font:inherit;color:inherit;background:none;border:n
 a{color:inherit;text-decoration:none}
 :focus-visible{outline:2px solid var(--em);outline-offset:3px;border-radius:6px}
 ::selection{background:color-mix(in srgb,var(--em) 45%,transparent);color:var(--ink)}
+.skiplink{position:fixed;top:10px;left:10px;z-index:200;background:var(--panel);color:var(--ink);
+  border:1px solid var(--hair);border-radius:10px;padding:10px 16px;font-weight:600;font-size:14px;
+  transform:translateY(-180%);transition:transform .2s var(--ease-out)}
+.skiplink:focus-visible{transform:none;outline-offset:2px}
 
 :root{
   --em:#34d399; --em-2:#10b981; --cy:#38e0d8; --cy-2:#22d3ee;
@@ -49,6 +53,9 @@ a{color:inherit;text-decoration:none}
   --line:rgba(6,20,26,.10); --line-2:rgba(6,20,26,.06);
   --glass:rgba(255,255,255,.72); --glass-strong:rgba(255,255,255,.86); --hair:rgba(6,20,26,.12);
   --em:#0a7d57; --em-2:#0a7d57; --cy:#0891b2; --indigo:#5b63e6;
+  /* the dark-theme amber is only legible on near-black; on the white light-theme
+     card it lands at ~1.6:1, so darken it the same way --em is darkened above */
+  --amber:#8a5a00;
   --shadow-2:0 14px 44px -16px rgba(20,40,50,.28);
   --shadow-glow:0 0 0 1px rgba(14,163,113,.18),0 22px 60px -20px rgba(14,163,113,.28);
   --spot:rgba(14,163,113,.12);
@@ -151,6 +158,9 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);background:v
 @media (max-width:900px){.g4{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr}}
 @media (max-width:1024px){.nav-links{display:none}.navtoggle{display:grid}}
 @media (max-width:680px){.g4,.g3,.g2{grid-template-columns:1fr}}
+/* below this the brand + theme + CTA + menu no longer fit one row; the CTA is
+   still reachable from the mobile menu (matches Learn and Solve) */
+@media (max-width:560px){.nav-right .btn.primary{display:none}}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.12s!important}
   .reveal{opacity:1!important;transform:none!important}}
 </style>
@@ -295,6 +305,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);background:v
 .kg-stage{position:relative;height:clamp(320px,44vw,420px);border-radius:var(--r);overflow:hidden;
   border:1px solid var(--line-2);background:radial-gradient(120% 90% at 50% 0%,color-mix(in srgb,var(--em) 6%,transparent),transparent 60%)}
 .kg-stage canvas{width:100%;height:100%;cursor:grab}
+/* the stage clips its overflow, so pull the focus ring inside the canvas */
+.kg-stage canvas:focus-visible{outline-offset:-3px}
 .kg-tip{position:absolute;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .2s,transform .2s;
   max-width:230px;background:var(--glass-strong);backdrop-filter:blur(12px);border:1px solid var(--hair);
   border-radius:12px;padding:11px 13px;z-index:3;box-shadow:var(--shadow-2)}
@@ -328,6 +340,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);background:v
 <body data-page="explore">
 <div class="bg-veil" aria-hidden="true"></div>
 
+<a href="#page" class="skiplink">Skip to content</a>
 <header class="nav" id="nav">
   <div class="nav-in">
     <a class="brand" href="./index.html" aria-label="Biology Entelloq home">
@@ -448,15 +461,15 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);background:v
     <div class="sec-head reveal">
       <div class="eyebrow">The knowledge graph</div>
       <h2 class="h2">Biology is one connected story.</h2>
-      <p class="lead">DNA to genes to proteins to disease to medicine — every concept in Biology Entelloq lives on a graph. Hover a node to see how it links to the rest.</p>
+      <p class="lead">DNA to genes to proteins to disease to medicine — every concept in Biology Entelloq lives on a graph. Hover, tap or arrow-key a node to see how it links to the rest.</p>
     </div>
     <div class="ex-frame reveal">
       <div class="kg-stage">
-        <canvas id="kgCanvas" role="img" aria-label="Knowledge graph connecting DNA, RNA, genes, proteins, mutations, disease and medicine"></canvas>
-        <div class="kg-tip" id="kgTip"></div>
+        <canvas id="kgCanvas" tabindex="0" role="img" aria-label="Knowledge graph connecting DNA, RNA, genes, proteins, mutations, disease and medicine. Press the arrow keys to step through the nodes."></canvas>
+        <div class="kg-tip" id="kgTip" role="status" aria-live="polite"></div>
       </div>
       <div class="kg-legend">
-        <span><i></i> Hover any node for its definition</span>
+        <span><i></i> Hover, tap or arrow-key any node for its definition</span>
         <span><i style="background:var(--cy)"></i> Glowing edges trace an active pathway</span>
       </div>
     </div>
@@ -771,20 +784,38 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);background:v
   (function buildKG(){
     const cv=$("#kgCanvas"); if(!cv) return;
     const tip=$("#kgTip"), ctx=cv.getContext("2d");
-    let W,H,dpr,t=0,hover=-1,mx=-1,my=-1,lastHover=-2,raf=null;
+    let W,H,dpr,t=0,hover=-1,mx=-1,my=-1,lastHover=-2,raf=null,kbd=-1;
     function size(){dpr=Math.min(devicePixelRatio||1,2);const r=cv.getBoundingClientRect();
       W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
     const nodes=KG.map(n=>({...n,ph:Math.random()*6.28}));
     function pos(n){return{x:n.x*W,y:n.y*H+(REDUCED?0:Math.sin(t/1000+n.ph)*3.5)};}
     const cssv=getComputedStyle(document.documentElement);
     const col=v=>cssv.getPropertyValue(v).trim()||v;
-    cv.onmousemove=e=>{const r=cv.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top;};
-    cv.onmouseleave=()=>{mx=my=-1;hover=-1;tip.classList.remove("show");};
+    // Under reduced motion the loop is stopped, so every input has to ask for the
+    // one repaint that reflects it. With the loop running this is a no-op.
+    function repaint(){if(REDUCED&&W)draw();}
+    function probe(e){const r=cv.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top;kbd=-1;repaint();}
+    cv.onmousemove=probe;
+    cv.onmouseleave=()=>{mx=my=-1;if(kbd<0){hover=-1;tip.classList.remove("show");}repaint();};
+    // Touch and pen have no hover, so a tap plants the same probe a mouse would.
+    cv.onpointerdown=e=>{if(e.pointerType!=="mouse")probe(e);};
+    cv.onkeydown=e=>{
+      let d=0;
+      if(e.key==="ArrowRight"||e.key==="ArrowDown")d=1;
+      else if(e.key==="ArrowLeft"||e.key==="ArrowUp")d=-1;
+      else if(e.key==="Escape"){kbd=-1;mx=my=-1;repaint();return;}
+      else return;
+      e.preventDefault(); // arrows would otherwise scroll the page out from under the graph
+      mx=my=-1;           // a keyboard pick outranks wherever the pointer was left
+      kbd=kbd<0?(d>0?0:nodes.length-1):(kbd+d+nodes.length)%nodes.length;
+      repaint();
+    };
+    cv.onblur=()=>{kbd=-1;mx=my=-1;repaint();};
     function draw(){
       t+=16;ctx.clearRect(0,0,W,H);
       const cEm=col("--em"),cInk=col("--ink"),cRaise=col("--raise"),cLine=col("--line"),cCy=col("--cy");
-      hover=-1;
-      nodes.forEach((n,i)=>{const p=pos(n);if(mx>=0&&Math.hypot(mx-p.x,my-p.y)<26)hover=i;});
+      hover=kbd; // a keyboard selection stands in for a hover until the pointer moves
+      if(hover<0)nodes.forEach((n,i)=>{const p=pos(n);if(mx>=0&&Math.hypot(mx-p.x,my-p.y)<26)hover=i;});
       KGE.forEach(([a,b])=>{const na=nodes.find(n=>n.id===a),nb=nodes.find(n=>n.id===b);
         const pa=pos(na),pb=pos(nb);const on=hover>=0&&(nodes[hover].id===a||nodes[hover].id===b);
         ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);
@@ -807,9 +838,13 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);background:v
         tip.style.left=Math.min(W-236,Math.max(6,p.x+16))+"px";tip.style.top=Math.max(6,p.y-10)+"px";
         tip.classList.add("show");cv.style.cursor="pointer";}
       else{tip.classList.remove("show");cv.style.cursor="grab";lastHover=-2;}
-      raf=requestAnimationFrame(draw);
+      // With motion reduced every frame is identical, so one render is the whole
+      // animation — repaint() covers the only thing that can still change it.
+      raf=REDUCED?null:requestAnimationFrame(draw);
     }
-    window.addEventListener("resize",size);
+    // resizing the backing store blanks it, so redraw — the loop is not running
+    // to do it for us when motion is reduced
+    window.addEventListener("resize",()=>{size();repaint();});
     const io=new IntersectionObserver(es=>{es.forEach(en=>{
       if(en.isIntersecting){if(!raf){size();draw();}}else{cancelAnimationFrame(raf);raf=null;}
     })},{threshold:.05});

@@ -46,6 +46,9 @@ LABS.register("microscope", {
       stomata: { n: "Leaf stomata", stain: "none", need: 100 },
       bacteria: { n: "Bacteria (mixed)", stain: "methylene blue", need: 1000 },
     };
+    // TOTAL magnification (objective × the 10x eyepiece). The chips print the
+    // objective itself — 4x/10x/40x/100x are the lenses that exist on a turret;
+    // a "1000x objective" does not.
     const MAGS = [40, 100, 400, 1000];
     let slide = "onion", mag = 100, focus = 50, light = 70, stained = false, raf, t = 0;
 
@@ -71,7 +74,7 @@ LABS.register("microscope", {
     mg.innerHTML = "<label>Objective</label>";
     const mchips = LB_el("div", "bx-chips");
     MAGS.forEach((m) => {
-      const b = LB_el("button", "bx-btn" + (m === mag ? " on" : ""), m + "x");
+      const b = LB_el("button", "bx-btn" + (m === mag ? " on" : ""), m / 10 + "x");
       b.addEventListener("click", () => {
         mag = m; [...mchips.children].forEach((c) => c.classList.remove("on")); b.classList.add("on"); read();
       });
@@ -92,16 +95,21 @@ LABS.register("microscope", {
 
     // real optics: field of view is inversely proportional to magnification.
     function fovMicrons() { return 4000 / (mag / 40); }   // ~4mm field at 40x
+    // A fine-focus knob moves the stage 1 µm per division, so how far the specimen
+    // sits out of the focal plane is |focus − 50| µm. blur() is only the PICTURE of
+    // that error, in CSS pixels — it is not a distance and must not be printed as one.
+    function focusErrUm() { return Math.abs(focus - 50); }
     function blur() { return Math.min(9, Math.abs(focus - 50) / 5.2); }
 
     function read() {
       const s = SLIDES[slide];
       const fov = fovMicrons();
       const resolved = mag >= s.need;
+      const df = focusErrUm();
       readout.innerHTML = `Field of view <b>${fov >= 1000 ? (fov / 1000).toFixed(2) + " mm" : Math.round(fov) + " µm"}</b> · `
-        + `magnification <b>${mag}x</b> · focus <b>${blur() < 1 ? "sharp" : blur().toFixed(1) + " µm off"}</b>`;
+        + `objective <b>${mag / 10}x</b>, total <b>${mag}x</b> · focus <b>${df < 6 ? "sharp" : df + " µm off"}</b>`;
       note.textContent = !resolved
-        ? `At ${mag}x this specimen is not resolved — step up the objective to at least ${s.need}x to see its structure.`
+        ? `At ${mag}x this specimen is not resolved — step up to at least the ${s.need / 10}x objective to see its structure.`
         : (s.stain !== "none" && !stained)
           ? `Structure is visible but low-contrast. ${s.stain[0].toUpperCase() + s.stain.slice(1)} would stain it.`
           : `Well resolved. Total magnification is objective x10 eyepiece; the scale bar below is measured, not decorative.`;
@@ -123,10 +131,13 @@ LABS.register("microscope", {
       ctx.filter = `blur(${blur()}px)`;
       const s = SLIDES[slide], resolved = mag >= s.need;
       const zoom = mag / 100;
+      // Pixels per micron, straight off the same field of view the scale bar is
+      // drawn from. Anything sized through u is measurable against that bar.
+      const u = (R * 2) / fovMicrons();
       if (slide === "onion") drawOnion(ctx, cx, cy, R, zoom, stained);
-      else if (slide === "blood") drawBlood(ctx, cx, cy, R, zoom, stained, resolved);
+      else if (slide === "blood") drawBlood(ctx, cx, cy, R, u, stained, resolved);
       else if (slide === "stomata") drawStomata(ctx, cx, cy, R, zoom);
-      else drawBacteria(ctx, cx, cy, R, zoom, stained, resolved);
+      else drawBacteria(ctx, cx, cy, R, u, stained, resolved);
       ctx.filter = "none";
       ctx.restore();
       // eyepiece surround + scale bar
@@ -158,11 +169,15 @@ LABS.register("microscope", {
         }
       }
     }
-    function drawBlood(ctx, cx, cy, R, z, st, resolved) {
-      for (let i = 0; i < 90; i++) {
-        const a = i * 2.39, r = Math.sqrt(i / 90) * R * 1.1;
+    // u = pixels per micron. A human RBC is 7.5 µm across, so it is a speck at the
+    // 10x objective and only becomes a disc at 40x — which is exactly why the slide
+    // needs 400x total. The count is what fills the field of a monolayer smear;
+    // sizing is the scale bar's job, not the sprite count's.
+    function drawBlood(ctx, cx, cy, R, u, st, resolved) {
+      const N = 240, rad = 3.75 * u;
+      for (let i = 0; i < N; i++) {
+        const a = i * 2.39, r = Math.sqrt(i / N) * R * 1.1;
         const x = cx + Math.cos(a) * r, y = cy + Math.sin(a) * r;
-        const rad = 7 * z;
         ctx.fillStyle = st ? "rgba(190,70,90,.75)" : "rgba(205,110,110,.55)";
         ctx.beginPath(); ctx.arc(x, y, rad, 0, 6.28); ctx.fill();
         if (resolved) {  // the biconcave pale centre only resolves at 400x+
@@ -170,12 +185,12 @@ LABS.register("microscope", {
           ctx.beginPath(); ctx.arc(x, y, rad * 0.45, 0, 6.28); ctx.fill();
         }
       }
-      if (resolved) {   // one white cell with a lobed nucleus
+      if (resolved) {   // one white cell with a lobed nucleus — ~12 µm across
         ctx.fillStyle = st ? "rgba(70,60,170,.85)" : "rgba(150,150,190,.6)";
-        ctx.beginPath(); ctx.arc(cx + 20 * z, cy - 14 * z, 12 * z, 0, 6.28); ctx.fill();
+        ctx.beginPath(); ctx.arc(cx + 20 * u, cy - 14 * u, 6 * u, 0, 6.28); ctx.fill();
         ctx.fillStyle = st ? "rgba(40,30,120,.95)" : "rgba(110,110,160,.8)";
         for (let k = 0; k < 3; k++) {
-          ctx.beginPath(); ctx.arc(cx + 20 * z + Math.cos(k * 2) * 5 * z, cy - 14 * z + Math.sin(k * 2) * 5 * z, 5 * z, 0, 6.28); ctx.fill();
+          ctx.beginPath(); ctx.arc(cx + 20 * u + Math.cos(k * 2) * 2.5 * u, cy - 14 * u + Math.sin(k * 2) * 2.5 * u, 2.5 * u, 0, 6.28); ctx.fill();
         }
       }
     }
@@ -198,17 +213,21 @@ LABS.register("microscope", {
         ctx.beginPath(); ctx.ellipse(cx + dx + 11 * z * open, cy + dy, 9 * z, 22 * z, 0, 0, 6.28); ctx.fill();
       });
     }
-    function drawBacteria(ctx, cx, cy, R, z, st, resolved) {
+    // Same micron units: a coccus is ~0.8 µm across and a bacillus ~2.5 µm long by
+    // ~0.8 µm wide. Being that small is the whole reason this slide needs the 100x
+    // oil objective — draw them any bigger and the scale bar becomes a lie.
+    function drawBacteria(ctx, cx, cy, R, u, st, resolved) {
       const col = st ? "rgba(60,70,170,.9)" : "rgba(150,160,180,.4)";
       ctx.fillStyle = col; ctx.strokeStyle = col;
-      for (let i = 0; i < 150; i++) {
-        const a = i * 2.39, r = Math.sqrt(i / 150) * R * 1.15;
+      const N = 320;
+      for (let i = 0; i < N; i++) {
+        const a = i * 2.39, r = Math.sqrt(i / N) * R * 1.15;
         const x = cx + Math.cos(a) * r, y = cy + Math.sin(a) * r;
         const s = resolved ? 1 : 0.4;
-        if (i % 3 === 0) { ctx.beginPath(); ctx.arc(x, y, 3.2 * z * s, 0, 6.28); ctx.fill(); }
+        if (i % 3 === 0) { ctx.beginPath(); ctx.arc(x, y, 0.4 * u * s, 0, 6.28); ctx.fill(); }
         else {
           ctx.save(); ctx.translate(x, y); ctx.rotate(a);
-          ctx.beginPath(); ctx.ellipse(0, 0, 7 * z * s, 2.6 * z * s, 0, 0, 6.28); ctx.fill(); ctx.restore();
+          ctx.beginPath(); ctx.ellipse(0, 0, 1.25 * u * s, 0.4 * u * s, 0, 0, 6.28); ctx.fill(); ctx.restore();
         }
       }
     }
@@ -346,10 +365,14 @@ LABS.register("predator-prey", {
 
     function step(dt) {
       // dPrey/dt = a·N − b·N·P ; dPred/dt = d·b·N·P − c·P
-      const dN = (a * prey - b * prey * pred * 0.02) * dt;
-      const dP = (d * b * prey * pred * 0.02 * 0.35 - c * pred) * dt;
-      prey = Math.max(0.4, Math.min(400, prey + dN));
-      pred = Math.max(0.2, Math.min(400, pred + dP));
+      // No ceiling: the plot already rescales to the data (maxV), so capping the
+      // populations only flattened every peak into a plateau. Prey is advanced first
+      // and the NEW prey feeds the predator equation — semi-implicit Euler is
+      // symplectic for Lotka–Volterra, so the cycle holds its amplitude instead of
+      // spiralling outward the way the plain explicit step did. Only the extinction
+      // floors remain.
+      prey = Math.max(0.4, prey + (a * prey - b * prey * pred * 0.02) * dt);
+      pred = Math.max(0.2, pred + (d * b * prey * pred * 0.02 * 0.35 - c * pred) * dt);
       hist.push([prey, pred]); if (hist.length > 460) hist.shift();
     }
     function draw() {
@@ -405,7 +428,10 @@ LABS.register("enzyme-kinetics", {
     LB_slider(side, "pH", 1, 14, 7, 1, (v) => "pH " + v, (v) => { pH = v; });
     LB_slider(side, "Substrate concentration", 0, 100, 50, 1, (v) => v + " mM", (v) => { sub = v; });
     const resetBtn = LB_el("button", "bx-btn", "Fresh enzyme sample");
-    resetBtn.addEventListener("click", () => { denatured = false; });
+    // Fresh enzyme goes into whatever buffer is already in the water bath, so if the
+    // tube is still above 55 °C it denatures on the way in. Clearing the flag without
+    // re-reading the temperature would report a healthy rate for enzyme in hot buffer.
+    resetBtn.addEventListener("click", () => { denatured = temp > 55; });
     side.appendChild(resetBtn);
     const readout = LB_el("div", "bx-read"); side.appendChild(readout);
     const note = LB_el("div", "bx-note"); side.appendChild(note);

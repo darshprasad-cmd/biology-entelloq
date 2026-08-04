@@ -62,6 +62,8 @@ a{color:inherit;text-decoration:none}
   --glass:rgba(255,255,255,.72); --glass-strong:rgba(255,255,255,.86);
   --hair:rgba(6,20,26,.12);
   --em:#0a7d57; --em-2:#0a7d57; --cy:#0891b2; --indigo:#5b63e6;
+  /* the dark-theme amber/rose sit at ~1.5:1 and ~2.5:1 on a white panel — darken for AA */
+  --amber:#a16207; --rose:#be123c;
   --shadow-2:0 14px 44px -16px rgba(20,40,50,.28);
   --shadow-glow:0 0 0 1px rgba(14,163,113,.18),0 22px 60px -20px rgba(14,163,113,.28);
   --spot:rgba(14,163,113,.12);
@@ -115,7 +117,7 @@ section.band{padding-block:clamp(72px,11vw,150px);position:relative}
 .launch-sub{font-family:var(--mono);font-size:12.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--cy);opacity:0;animation:fadeUp .8s var(--ease-out) 1.5s forwards}
 .launch-bar{width:min(240px,60vw);height:2px;border-radius:2px;overflow:hidden;background:rgba(255,255,255,.08);opacity:0;animation:fadeUp .8s var(--ease-out) 1.7s forwards}
 .launch-bar i{display:block;height:100%;width:0;background:var(--grad-life);box-shadow:0 0 12px var(--em)}
-.launch-skip{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);opacity:0;animation:fadeUp .8s var(--ease-out) 2.4s forwards;padding:8px 14px;border-radius:999px;border:1px solid var(--line);cursor:pointer;transition:color .2s,border-color .2s,transform .12s var(--ease-out)}
+.launch-skip{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);opacity:0;animation:fadeUp .8s var(--ease-out) .5s forwards;padding:8px 14px;border-radius:999px;border:1px solid var(--line);cursor:pointer;transition:color .2s,border-color .2s,transform .12s var(--ease-out)}
 .launch-skip:hover{color:var(--ink);border-color:var(--hair)}
 .launch-skip:active{transform:translateX(-50%) scale(.96)}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -207,6 +209,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);margin-top:4
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.12s!important}
   .reveal{opacity:1!important;transform:none!important;filter:none!important}
+  /* the reduced-motion splash lasts 300ms — the skip button must not wait out its delay */
+  .launch-skip{animation-delay:0s}
   #fx{display:none}
 }
 </style>
@@ -1218,7 +1222,19 @@ function renderRunner(){
   window.__observeReveals&&window.__observeReveals();
 }
 function updateProg(){const b=$("#svBar");if(b)b.style.width=(S.records.length/S.total*100)+"%";const c=$("#svCounter");if(c)c.textContent=S.idx+1;}
-function paintQuestion(){const a=$("#svQArea");if(!a)return;const q=currentQ();a.innerHTML=renderInteractive(q);wireInteractive(q);}
+/* The answer area is rebuilt wholesale on every interaction, which drops keyboard
+   focus to <body>. Identify the focused control by its data attributes — those
+   survive the repaint — and hand focus back to its replacement. */
+const FOCUS_KEYS=["choice","sub","i","ri","side","label","hi"];
+function focusSel(el){
+  if(!el||!el.dataset)return null;
+  const s=FOCUS_KEYS.filter(k=>el.dataset[k]!=null).map(k=>`[data-${k}="${CSS.escape(el.dataset[k])}"]`).join("");
+  return s||null;
+}
+function paintQuestion(){const a=$("#svQArea");if(!a)return;const q=currentQ();
+  const sel=a.contains(document.activeElement)?focusSel(document.activeElement):null;
+  a.innerHTML=renderInteractive(q);wireInteractive(q);
+  if(sel){const el=a.querySelector(sel);if(el&&el.focus){try{el.focus({preventScroll:true});}catch(e){el.focus();}}}}
 
 function renderStemBlock(q){
   if(q.type==="ar"){
