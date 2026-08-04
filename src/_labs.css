@@ -1,0 +1,48 @@
+/* The Labs — index + bench chrome. Shared tokens only. */
+.lb-tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase}
+.lb-go{margin-top:16px;font-size:13.5px;font-weight:600;transition:transform .2s var(--ease-out)}
+.card:hover .lb-go{transform:translateX(3px)}
+.lb-page{--lc:var(--em)}
+.lb-back{display:inline-flex;font-size:13.5px;color:var(--dim);font-weight:600;margin-bottom:20px;transition:color .2s}
+.lb-back:hover{color:var(--ink)}
+.lb-hd{max-width:760px;margin-bottom:26px}
+.lb-stage{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:clamp(20px,3vw,30px);min-height:380px}
+.lb-err{color:var(--dim);font-size:15px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+
+/* ── shared bench furniture every lab module can use ─────────────────────── */
+.bx{display:grid;grid-template-columns:1.25fr .75fr;gap:clamp(18px,3vw,30px);align-items:start}
+@media (max-width:900px){.bx{grid-template-columns:1fr}}
+.bx-view{background:var(--bg-2);border:1px solid var(--line);border-radius:16px;overflow:hidden;position:relative;min-height:300px}
+.bx-view canvas,.bx-view svg{display:block;width:100%}
+.bx-side{display:flex;flex-direction:column;gap:16px}
+.bx-grp{display:flex;flex-direction:column;gap:9px}
+.bx-grp>label,.bx-lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--faint)}
+.bx-row{display:flex;align-items:center;gap:10px}
+.bx-slider{width:100%;accent-color:var(--lc,var(--em))}
+.bx-val{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--ink);min-width:56px;text-align:right}
+.bx-btn{padding:10px 16px;border-radius:11px;border:1px solid var(--line);background:var(--panel);color:var(--dim);
+  cursor:pointer;font-size:13.5px;font-weight:600;transition:color .2s,border-color .2s,background .2s,transform .12s var(--ease-out)}
+.bx-btn:hover:not(:disabled){color:var(--ink);border-color:var(--hair)}
+.bx-btn:active:not(:disabled){transform:scale(.97)}
+.bx-btn.on{color:var(--lc,var(--em));border-color:color-mix(in srgb,var(--lc,var(--em)) 45%,transparent);
+  background:color-mix(in srgb,var(--lc,var(--em)) 12%,transparent)}
+.bx-btn.pri{background:var(--grad-life);color:#04140e;border-color:transparent}
+.bx-btn:disabled{opacity:.45;cursor:not-allowed}
+.bx-chips{display:flex;flex-wrap:wrap;gap:8px}
+.bx-read{font-family:var(--mono);font-size:13px;color:var(--dim);background:color-mix(in srgb,var(--ink) 4%,transparent);
+  border:1px solid var(--line);border-radius:10px;padding:11px 14px;line-height:1.55}
+.bx-read b{color:var(--ink)}
+.bx-note{font-size:13.5px;color:var(--dim);line-height:1.6}
+.bx-steps{display:flex;flex-direction:column;gap:8px}
+.bx-step{display:flex;gap:11px;align-items:flex-start;padding:11px 13px;border-radius:11px;border:1px solid var(--line);
+  font-size:13.5px;color:var(--dim);transition:border-color .25s,color .25s,background .25s}
+.bx-step .n{width:20px;height:20px;border-radius:50%;flex:none;display:grid;place-items:center;font-family:var(--mono);
+  font-size:10px;font-weight:700;background:var(--line);color:var(--dim)}
+.bx-step.done{color:var(--ink);border-color:color-mix(in srgb,var(--em) 35%,transparent)}
+.bx-step.done .n{background:var(--em);color:#04140e}
+.bx-step.now{color:var(--ink);border-color:color-mix(in srgb,var(--lc,var(--em)) 50%,transparent);
+  background:color-mix(in srgb,var(--lc,var(--em)) 9%,transparent)}
+.bx-verdict{margin-top:14px;padding:14px 16px;border-radius:12px;border-left:3px solid var(--lc,var(--em));
+  background:color-mix(in srgb,var(--ink) 4%,transparent);font-size:14px;line-height:1.6;color:var(--dim)}
+.bx-verdict b{color:var(--ink)}

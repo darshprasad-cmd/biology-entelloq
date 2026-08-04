@@ -1,0 +1,7 @@
+# build output — the site at the repo root IS the build output and is committed,
+# but nothing else transient should be
+*.pyc
+__pycache__/
+.DS_Store
+Thumbs.db
+node_modules/

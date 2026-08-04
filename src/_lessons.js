@@ -1,0 +1,835 @@
+/* ============================================================================
+   Biology Entelloq — the 6-LENS lesson system.
+   The signature scaffold, translated from Physics Entelloq: every concept is
+   seen through six lenses — A Experience · B Predict · C Visual · D Math ·
+   E Frontier · F Real World — so a single idea is felt, tested, drawn, quantified,
+   pushed to the research edge, and grounded in the real world. The engine is
+   generic; the LESSONS data drives it, exactly as the reference does.
+   ========================================================================== */
+(function () {
+  "use strict";
+  const $ = (s, r = document) => r.querySelector(s);
+  const el = (t, c, h) => { const e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; };
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // The six lenses — glyphs/colours echo the reference's A–F rail.
+  const LENSES = [
+    { k: "experience", n: "Experience", g: "A", c: "var(--em)", ic: "●" },
+    { k: "predict", n: "Predict", g: "B", c: "#7dd3fc", ic: "Ψ" },
+    { k: "visual", n: "Visual", g: "C", c: "var(--cy)", ic: "◳" },
+    { k: "math", n: "Math", g: "D", c: "var(--indigo)", ic: "∑" },
+    { k: "frontier", n: "Frontier", g: "E", c: "#f472b6", ic: "◆" },
+    { k: "realworld", n: "Real World", g: "F", c: "var(--amber)", ic: "⊕" },
+  ];
+
+  // ── content ────────────────────────────────────────────────────────────────
+  const LESSONS = [
+    {
+      id: "diffusion", domain: "Cell Biology", color: "#34d399", diff: "Foundation",
+      title: "Diffusion & Osmosis", chips: ["Passive transport", "Concentration gradient", "Equilibrium"],
+      intuition: "Molecules are in ceaseless random motion. With no energy spent, that jiggling alone spreads them from where they are crowded to where they are sparse — until, statistically, both sides are even. Osmosis is just this, for water across a membrane.",
+      lenses: {
+        experience: { mount: "diffusion", blurb: "Watch random motion alone even out a difference. Every particle wanders blindly — yet the crowd flows from full to empty. Turn up the temperature and the same equilibrium arrives faster." },
+        predict: { q: "You drop a red blood cell into a beaker of pure (distilled) water. What happens?", o: ["Nothing — the membrane blocks water", "Water rushes IN; the cell swells and can burst", "Water rushes OUT; the cell shrivels", "Salt leaves the cell to balance"], a: 1, why: "Pure water is hypotonic to the cell's salty interior, so water moves IN down its own concentration gradient (osmosis). With no cell wall to resist, the cell swells and can lyse. In salt water the opposite — crenation — happens." },
+        visual: { title: "A selectively permeable barrier", pts: ["The phospholipid bilayer lets small, non-polar molecules (O₂, CO₂) slip through freely.", "Water crosses slowly through the bilayer — and fast through protein channels called aquaporins.", "Net movement is always high → low concentration, until the gradient is gone.", "'Selectively permeable' = some things pass, others don't. That selectivity is what makes a cell a cell."] },
+        math: { mount: "fick", equation: "Rate ∝ (Area × ΔConcentration) / Distance", blurb: "Fick's Law. The rate of diffusion rises with more surface area and a steeper gradient, and falls as the distance to cross grows — which is exactly why lungs and gut are folded into vast thin sheets." },
+        frontier: { experiment: "In 1992 Peter Agre isolated the first water channel, aquaporin — proving water doesn't just seep through the bilayer but has dedicated pores (Nobel 2003).", research: "Engineers now build artificial aquaporin membranes for ultra-efficient desalination.", question: "How does a cell dial its water permeability up and down in seconds — and could we borrow that control for medicine?" },
+        realworld: { title: "Why your IV drip is salty", blurb: "A hospital drip must be isotonic — the same concentration as blood — or osmosis would burst or shrivel your cells. Kidney dialysis runs your blood past a membrane so wastes diffuse out while blood cells stay in. Diffusion is quietly keeping you alive right now, in every alveolus of your lungs." },
+      },
+      facts: ["Diffusion needs no ATP — it is powered entirely by the molecules' own thermal motion.", "Surface-area-to-volume ratio is why cells stay small: too big, and the centre starves before diffusion can reach it.", "Osmosis is the diffusion of WATER specifically, across a selectively permeable membrane."],
+      exam: "Define isotonic, hypotonic and hypertonic from the SOLUTION's point of view, and state what happens to an animal cell in each. A classic NEET/CBSE trap is mixing up the direction of water movement.",
+      connections: ["Cell Membrane", "Active Transport", "Kidney Function", "Gas Exchange"],
+    },
+    {
+      id: "enzyme", domain: "Molecular Biology", color: "#7c8cf8", diff: "Core",
+      title: "Enzyme Action", chips: ["Catalysis", "Active site", "Induced fit"],
+      intuition: "An enzyme is a protein folded into a precise pocket — the active site — shaped to grip one kind of molecule and lower the energy needed to change it. It speeds a reaction millions of times, then lets go, unchanged, to do it again.",
+      lenses: {
+        experience: { mount: "enzyme", blurb: "Substrates drift in; only the right shape docks in the active site, snaps into product, and releases. Slide the temperature: too cold and it crawls; at the optimum it races; too hot and the fold unravels — denatured, and dead." },
+        predict: { q: "You heat an enzyme far above its optimum temperature. The reaction rate…", o: ["keeps rising — more heat, more speed", "rises, then crashes as the enzyme denatures", "stays exactly constant", "reverses direction"], a: 1, why: "Up to the optimum, heat gives molecules more energy and more collisions, so rate rises. Past it, the heat shakes apart the delicate folds holding the active site's shape — the enzyme DENATURES, the pocket is lost, and rate collapses. The shape IS the function." },
+        visual: { title: "Lock, key — and a handshake", pts: ["Old model: 'lock and key' — the substrate fits the active site exactly.", "Better model: 'induced fit' — the site moulds around the substrate like a handshake, straining its bonds.", "That strain is the trick: it lowers the activation energy the reaction must climb.", "The enzyme emerges unchanged — a true catalyst, reused thousands of times a second."] },
+        math: { mount: "michaelis", equation: "v = Vₘₐₓ[S] / (Kₘ + [S])", blurb: "Michaelis–Menten kinetics. As substrate [S] rises, rate climbs then plateaus at Vₘₐₓ — every active site is busy (saturated). Kₘ is the [S] giving half-max rate: a low Kₘ means the enzyme grabs its substrate avidly." },
+        frontier: { experiment: "Frances Arnold won the 2018 Nobel for 'directed evolution' — breeding enzymes in the lab across generations to do jobs nature never asked of them.", research: "Designer enzymes now digest PET plastic, hinting at engineered organisms that eat pollution.", question: "Can we compute a brand-new enzyme for any reaction from scratch — the inverse of protein folding?" },
+        realworld: { title: "In your detergent and your gut", blurb: "The proteases and lipases in laundry powder are enzymes that chew stains apart in cold water — saving energy. Lactase pills give lactose-intolerant people the enzyme their gut lacks. Every meal you digest is an enzyme cascade, and every cell runs thousands of them at once." },
+      },
+      facts: ["Enzymes can accelerate reactions by factors of 10¹⁰ or more — a reaction taking millions of years happens in milliseconds.", "They are NOT used up: one enzyme molecule turns over thousands of substrate molecules per second.", "pH matters as much as temperature — pepsin loves the stomach's acid; most enzymes hate it."],
+      exam: "Draw and label a rate-vs-temperature and rate-vs-pH graph, and explain the FALL after the optimum in terms of denaturation (broken hydrogen/ionic bonds, lost tertiary structure). Distinguish competitive vs non-competitive inhibition.",
+      connections: ["Proteins", "Metabolism", "Cellular Respiration", "DNA Replication"],
+    },
+    {
+      id: "population", domain: "Ecology", color: "#38e0d8", diff: "Core",
+      title: "Population Growth", chips: ["Exponential", "Logistic", "Carrying capacity"],
+      intuition: "Give a population unlimited food and space and it explodes — exponentially, each generation multiplying the last. But no world is unlimited. As numbers rise, resources thin, and growth bends over into an S-shaped curve that levels at the carrying capacity, K.",
+      lenses: {
+        experience: { mount: "logistic", blurb: "Set the growth rate r and the carrying capacity K, then watch the population climb. Start it small and it looks exponential (the J); let it near K and competition brakes it into the S-curve. This is the same interactive as the Math lens — because here, the maths IS the experience." },
+        predict: { q: "A population is far below its carrying capacity K. Its growth is…", o: ["near zero — too few to breed", "nearly exponential — resources are abundant", "already levelling off", "declining"], a: 1, why: "Well below K, the (1 − N/K) brake is close to 1, so growth is almost unrestricted — nearly exponential. The slowdown only bites as N approaches K and the term shrinks toward zero. Fastest ABSOLUTE growth actually occurs at N = K/2." },
+        visual: { title: "The J and the S", pts: ["Exponential (J-curve): dN/dt = rN. Growth with no limits — a bacterial colony's first hours, an invasive species in a new land.", "Logistic (S-curve): the same, braked by (1 − N/K) as crowding sets in.", "Carrying capacity K: the ceiling a habitat can sustain — set by food, space, predators, disease.", "Real populations often OVERSHOOT K, then crash and oscillate around it."] },
+        math: { mount: "logistic", equation: "dN/dt = rN(1 − N/K)", blurb: "The logistic equation. r is the intrinsic growth rate; K the carrying capacity. The bracket is the 'environmental brake' — full open at low N, closed at N = K. Deceptively simple, it hides chaos: push r high enough and the population never settles." },
+        frontier: { experiment: "In 1976 Robert May showed this tidy equation, iterated, produces deterministic CHAOS — launching a whole field from one line of ecology.", research: "Modern ecology fits these curves to real data to forecast fishery collapses and disease outbreaks.", question: "Can we predict — and prevent — the tipping point where a population crashes rather than settles?" },
+        realworld: { title: "Fisheries, pandemics, and you", blurb: "Sustainable fishing harvests a stock at N = K/2, where growth is fastest — the 'maximum sustainable yield'. The same S-curve describes a virus spreading through a population until it runs out of susceptible hosts. And humanity's own 8-billion curve is the biggest open question in ecology." },
+      },
+      facts: ["Maximum growth RATE occurs at N = K/2, not at low N — a fact fisheries live and die by.", "Exponential growth is unsustainable by definition: nothing grows forever in a finite world.", "r-strategists (many cheap offspring) boom and bust; K-strategists (few, well-tended) hug the ceiling."],
+      exam: "Sketch and label both curves, mark K and K/2, and explain the biological meaning of every term in dN/dt = rN(1 − N/K). Be ready to explain WHY the fastest growth is at K/2.",
+      connections: ["Ecosystems", "Natural Selection", "Predator–Prey Cycles", "Conservation"],
+    },
+
+    {
+      id: "photosynthesis", domain: "Plant Biology", color: "#34d399", diff: "Core",
+      title: "Photosynthesis", chips: ["Light reactions", "Calvin cycle", "Limiting factors"],
+      intuition: "A leaf takes light, water and thin air and builds sugar out of them. Light knocks electrons off water in the thylakoid membrane; the energy carried away is spent, in the stroma, fixing carbon dioxide into a molecule the plant can eat. Almost every calorie you have ever eaten started here.",
+      lenses: {
+        experience: { mount: "photo", blurb: "Push light, carbon dioxide and temperature. Watch the rate climb, then flatten — the plateau is the signature of a LIMITING FACTOR: whichever input is scarcest sets the ceiling, and raising the others does nothing until you fix it." },
+        predict: { q: "A plant is in bright light at 25 °C but CO₂ is very low. You double the light intensity. The rate of photosynthesis…", o: ["doubles too", "barely changes — CO₂ is the limiting factor", "falls, because the leaf overheats", "stops entirely"], a: 1, why: "Rate is capped by whichever factor is in shortest supply. With CO₂ scarce, the light reactions can already supply more ATP and NADPH than the Calvin cycle can use, so extra photons have nothing to do. Add CO₂ and the ceiling lifts — that is the whole logic of limiting factors, and why commercial glasshouses enrich CO₂." },
+        visual: { title: "Two linked reactions, two locations", pts: ["LIGHT REACTIONS — in the thylakoid membranes. Photons split water (photolysis), releasing O₂ as waste and driving a proton gradient that makes ATP and NADPH.", "CALVIN CYCLE — in the stroma. ATP and NADPH are spent fixing CO₂ onto RuBP via the enzyme rubisco, building the sugar G3P.", "The oxygen you breathe is a by-product: it comes from splitting WATER, not from CO₂.", "Light-dependent and light-independent — the second still needs the products of the first, so it stops in the dark once they run out."] },
+        math: { mount: "photo", equation: "6CO₂ + 6H₂O + light → C₆H₁₂O₆ + 6O₂", blurb: "The balanced summary. Note what it hides: this is two coupled reactions, not one, and the rate you measure is set by whichever input is limiting — the same interactive above is the honest picture of that equation in practice." },
+        frontier: { experiment: "In the 1940s Calvin's team fed algae radioactive ¹⁴CO₂ and killed the cells at intervals in hot alcohol, mapping exactly which molecule the carbon reached first — the 'lollipop' experiment that traced the cycle.", research: "Rubisco is famously slow and wastefully grabs O₂ instead of CO₂; teams are engineering faster variants and installing algal carbon-concentrating machinery into crops.", question: "Could we redesign photosynthesis to be more efficient than evolution managed — and feed a warmer, more crowded planet with it?" },
+        realworld: { title: "Every meal, and the air itself", blurb: "The oxygen in this breath was released by splitting water inside a chloroplast, most likely in the ocean. Crop yields are photosynthesis totals; glasshouses pump in CO₂ precisely because it is usually limiting. And the fossil fuels we burn are ancient photosynthesis, returning its carbon to the sky." },
+      },
+      facts: ["The O₂ released comes from water, not carbon dioxide — proved with heavy-oxygen isotope labelling.", "Rubisco is thought to be the most abundant protein on Earth, and it is strikingly inefficient.", "Only about 1–2% of the light energy hitting a leaf ends up as plant biomass."],
+      exam: "Be able to sketch rate against light intensity, CO₂ and temperature, identify the limiting factor from the shape of each plateau, and explain WHY the temperature curve falls at high values (enzyme denaturation) while the light curve simply flattens.",
+      connections: ["Cellular Respiration", "Enzyme Action", "Ecosystems", "The Cell"],
+    },
+
+    {
+      id: "respiration", domain: "Cell Biology", color: "#f6c667", diff: "Core",
+      title: "Cellular Respiration", chips: ["Glycolysis", "Krebs cycle", "Electron transport"],
+      intuition: "Respiration is controlled burning. Instead of releasing a sugar's energy as a single flash of heat, the cell strips its electrons away in small steps, banks the energy as a proton gradient, and lets it trickle back through a turbine that makes ATP. Oxygen's only job is to sit at the end and catch the spent electrons.",
+      lenses: {
+        experience: { mount: "resp", blurb: "Run glucose through the three stages and watch the ATP tally build. Then cut the oxygen: the electron transport chain backs up, the Krebs cycle stalls, and yield collapses from around 30 ATP to just 2 — the difference between breathing and holding your breath." },
+        predict: { q: "You remove all oxygen from a working muscle cell. What happens to ATP production?", o: ["It stops completely and instantly", "It drops to a small trickle from glycolysis alone", "It continues unchanged — oxygen isn't needed", "It doubles as the cell compensates"], a: 1, why: "Glycolysis does NOT need oxygen and keeps running, yielding a net 2 ATP per glucose. But without oxygen to accept electrons at the end of the chain, the chain backs up, NADH cannot be re-oxidised, and the Krebs cycle stops. The cell survives on that small anaerobic trickle — converting pyruvate to lactate to keep glycolysis supplied with NAD⁺." },
+        visual: { title: "Three stages, three places", pts: ["GLYCOLYSIS — in the cytoplasm. Glucose splits into two pyruvate. Net 2 ATP, no oxygen required.", "KREBS CYCLE — in the mitochondrial matrix. Pyruvate is fully stripped, releasing CO₂ and loading electron carriers NADH and FADH₂.", "ELECTRON TRANSPORT CHAIN — on the inner membrane (cristae). Electrons fall through the chain, pumping protons; they flood back through ATP synthase, which spins and makes most of the ATP.", "Oxygen is the FINAL electron acceptor — it becomes the water you exhale."] },
+        math: { mount: "resp", equation: "C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O  (≈30–32 ATP)", blurb: "Respiration is the near-exact reverse of photosynthesis. Textbooks once said 38 ATP; measured values are lower (~30–32) because moving the carriers and the ATP itself across membranes costs energy." },
+        frontier: { experiment: "Peter Mitchell's chemiosmotic hypothesis (1961) — that energy is stored as a proton GRADIENT rather than a chemical intermediate — was ridiculed for a decade, then won the 1978 Nobel Prize.", research: "Mitochondrial dysfunction is now implicated in ageing, neurodegeneration and metabolic disease; drugs that deliberately 'uncouple' the gradient are being studied for obesity.", question: "If ATP synthase is a rotary motor evolved once, billions of years ago, how much of its design could we borrow for nanomachines?" },
+        realworld: { title: "Why sprinting burns", blurb: "Sprint hard and your muscles outrun the oxygen supply. Glycolysis keeps going anaerobically, pyruvate becomes lactate, and the burn you feel is that shift. Cyanide kills so fast because it blocks the final complex of the electron transport chain — the cell has oxygen, and still cannot use it." },
+      },
+      facts: ["You make roughly your own body weight in ATP each day — and recycle each molecule thousands of times.", "ATP synthase is a genuine rotary motor, spinning at over 100 revolutions per second.", "Anaerobic respiration yields about 2 ATP per glucose against roughly 30 aerobically — a 15-fold difference."],
+      exam: "Know WHERE each stage happens, the net ATP of each, and that oxygen's role is solely as the terminal electron acceptor. A very common trap: stating that glycolysis needs oxygen. It does not.",
+      connections: ["Photosynthesis", "The Mitochondrion", "Enzyme Action", "The Cell"],
+    },
+
+    {
+      id: "replication", domain: "Genetics & DNA", color: "#38e0d8", diff: "Core",
+      title: "DNA Replication", chips: ["Semiconservative", "Leading & lagging", "Okazaki fragments"],
+      intuition: "To copy itself, DNA unzips. Each old strand becomes a template for a new partner, so every daughter molecule is half old and half new — semiconservative. The awkward part is that the copying enzyme can only build in one direction, so one strand is made smoothly and the other in backwards-running fragments.",
+      lenses: {
+        experience: { mount: "fork", blurb: "Watch a replication fork run. Helicase unzips the helix; on the leading strand polymerase follows continuously, while on the lagging strand it must keep jumping back to start a new Okazaki fragment — which ligase then stitches together. The awkwardness is real, not a teaching simplification." },
+        predict: { q: "Why is the lagging strand built in short fragments instead of continuously?", o: ["The template there is damaged", "DNA polymerase can only build in the 5'→3' direction, and that strand runs the wrong way", "It runs out of nucleotides", "Ligase forces it to pause"], a: 1, why: "DNA polymerase can only ADD to a 3' end, so it only ever builds 5'→3'. The two template strands are antiparallel, so as the fork opens, one template allows smooth continuous synthesis while the other points the wrong way — polymerase must repeatedly hop back toward the fork and build a short Okazaki fragment, which DNA ligase then seals." },
+        visual: { title: "One fork, two very different strands", pts: ["HELICASE unwinds the double helix, breaking the hydrogen bonds between base pairs.", "PRIMASE lays down a short RNA primer — polymerase cannot start from nothing.", "LEADING STRAND — template runs 3'→5' into the fork, so synthesis is smooth and continuous.", "LAGGING STRAND — template runs the wrong way, so synthesis happens in Okazaki fragments, later joined by DNA LIGASE.", "Base pairing (A–T, G–C) means each new strand is dictated exactly by its template — that is why the copy is faithful."] },
+        math: { mount: "fork", equation: "each daughter = 1 old strand + 1 new strand", blurb: "Semiconservative replication. Meselson and Stahl proved it by growing bacteria on heavy nitrogen then switching to light: after one round every molecule was intermediate in density — impossible if replication were conservative." },
+        frontier: { experiment: "Meselson and Stahl (1958), often called 'the most beautiful experiment in biology', settled semiconservative replication with nothing but isotopes and a centrifuge.", research: "Replication errors and the shortening of telomeres at chromosome ends are central to both ageing and cancer; telomerase is a live drug target.", question: "Human DNA is copied at about 50 bases per second with roughly one error per billion — how is such speed reconciled with such accuracy?" },
+        realworld: { title: "PCR, and why cancer starts", blurb: "PCR — the reaction behind every DNA test and COVID swab — is replication run deliberately in a tube, using a heat-proof polymerase from a hot-spring bacterium. And when replication's proofreading fails in the wrong gene, the uncorrected mutation is exactly how a cancer begins." },
+      },
+      facts: ["Replication is semiconservative: each daughter molecule keeps one parental strand.", "DNA polymerase proofreads as it goes, cutting the error rate to roughly one in a billion bases.", "A human cell copies about 3 billion base pairs in a few hours, working from thousands of origins at once."],
+      exam: "Name the enzymes and their jobs (helicase, primase, DNA polymerase, ligase) and be able to explain the leading/lagging asymmetry from the 5'→3' rule. Also be ready to interpret the Meselson–Stahl density bands.",
+      connections: ["DNA", "The Cell", "Natural Selection", "Biotechnology"],
+    },
+
+    {
+      id: "selection", domain: "Evolution", color: "#fb7185", diff: "Foundation",
+      title: "Natural Selection", chips: ["Variation", "Heredity", "Differential survival"],
+      intuition: "Natural selection needs only three things to be true: individuals differ, some of that difference is inherited, and not everyone survives to breed equally. Given those, the population MUST shift over generations. Nothing tries to change — the frequencies just move.",
+      lenses: {
+        experience: { mount: "selection", blurb: "A population of light and dark beetles on a background you control. Set the predation pressure and run the generations: the allele frequency curve shifts, fast under strong selection, slowly under weak. Notice selection only ever edits variation that already exists." },
+        predict: { q: "A population of beetles has no colour variation at all — every beetle is identical. Predators hunt by colour. What happens over generations?", o: ["The beetles gradually change colour to hide", "Nothing evolves — with no variation, selection has nothing to act on", "They evolve faster because pressure is higher", "They become immune to predation"], a: 1, why: "Selection is a FILTER, not a designer. With no heritable variation there is nothing for it to favour, so no evolutionary change occurs no matter how intense the pressure — the population simply declines. New variation must arrive by mutation (or gene flow) first. This is exactly why low-diversity populations are so vulnerable." },
+        visual: { title: "Three conditions, one inevitable result", pts: ["VARIATION — individuals in a population differ, ultimately because of mutation.", "HEREDITY — some of that variation is passed to offspring.", "DIFFERENTIAL SURVIVAL & REPRODUCTION — some variants leave more offspring in this environment.", "→ The frequency of the favoured allele rises. That is all evolution by natural selection is.", "Fitness means reproductive success in a particular environment — not strength, and not 'better' in any absolute sense."] },
+        math: { mount: "selection", equation: "Δp ∝ p(1 − p) × s", blurb: "The change in allele frequency per generation depends on the selection coefficient s and on p(1−p) — which peaks at p = 0.5. Selection is fastest when an allele is at middling frequency and slows to a crawl as it becomes very rare or nearly universal." },
+        frontier: { experiment: "Peppered moths in industrial Britain: as soot darkened the trees, the dark form went from rare to dominant, then reversed after clean-air laws — selection observed in real time.", research: "Richard Lenski's Long-Term Evolution Experiment has followed E. coli for over 75,000 generations and caught the evolution of an entirely new metabolic ability.", question: "How repeatable is evolution? Re-run the tape of life and would you get the same answers, or completely different ones?" },
+        realworld: { title: "Antibiotic resistance is this, happening now", blurb: "Every course of antibiotics is a selection event: the susceptible die, the resistant survive and multiply. The same logic drives pesticide resistance, drug-resistant malaria, and how quickly a virus evolves around immunity. Understanding selection is now a public-health necessity." },
+      },
+      facts: ["Selection acts on existing variation — it cannot create the mutation it needs on demand.", "Fitness is context-dependent: an allele favoured in one environment can be lethal in another.", "Sickle-cell carriers are protected against malaria — the same allele is harmful in one dose and helpful in another context."],
+      exam: "Be able to state the conditions for natural selection and apply them to an unseen example, explicitly avoiding teleological wording ('the animal wanted to…'). Distinguish directional, stabilising and disruptive selection.",
+      connections: ["Evolution", "Population Growth", "DNA Replication", "Ecosystems"],
+    },
+
+    {
+      id: "actionpotential", domain: "Neuroscience", color: "#7c8cf8", diff: "Advanced",
+      title: "The Action Potential", chips: ["All-or-nothing", "Depolarisation", "Refractory period"],
+      intuition: "A neuron holds itself at about −70 mV, like a loaded spring. Poke it hard enough to reach threshold and voltage-gated sodium channels fly open, the inside briefly goes POSITIVE, then potassium channels restore order. The signal does not get bigger with a bigger stimulus — it either fires fully, or not at all.",
+      lenses: {
+        experience: { mount: "spike", blurb: "Set a stimulus strength and fire. Below threshold nothing happens at all; cross it and you get the same full-height spike every time. Fire again immediately and it refuses — the refractory period is why signals travel one way and why there is a ceiling on firing rate." },
+        predict: { q: "You stimulate a neuron at twice the strength needed to reach threshold. The action potential is…", o: ["twice as tall", "exactly the same height as before", "twice as fast but the same height", "smaller, because the channels are overwhelmed"], a: 1, why: "The action potential is ALL-OR-NOTHING. Once threshold (~−55 mV) is crossed, the positive feedback of voltage-gated sodium channels runs to completion and always produces the same amplitude. A stronger stimulus does not make a bigger spike — it makes MORE spikes per second. Intensity is coded by frequency, not size." },
+        visual: { title: "One spike, four phases", pts: ["RESTING (−70 mV) — held by the sodium–potassium pump and leak channels.", "DEPOLARISATION — threshold (~−55 mV) opens voltage-gated Na⁺ channels; Na⁺ floods in and the inside shoots to about +40 mV.", "REPOLARISATION — Na⁺ channels inactivate, K⁺ channels open, K⁺ leaves and the voltage plunges back down.", "HYPERPOLARISATION & REFRACTORY PERIOD — K⁺ channels close slowly, overshooting below rest; during this window another spike is impossible or much harder.", "Myelin makes the impulse jump between nodes of Ranvier — saltatory conduction, far faster than a bare axon."] },
+        math: { mount: "spike", equation: "threshold ≈ −55 mV · peak ≈ +40 mV · rest ≈ −70 mV", blurb: "Hodgkin and Huxley described this quantitatively with equations for voltage-gated conductances, using the giant axon of the squid — big enough to push an electrode into. Their model still underpins computational neuroscience." },
+        frontier: { experiment: "Hodgkin and Huxley (1952) recorded from the squid giant axon and built a mathematical model of the spike that won the 1963 Nobel Prize and remains in use.", research: "Optogenetics now lets researchers fire specific neurons with light, turning correlation into causation in living brains.", question: "How do spike patterns across billions of neurons become a thought, a memory, or the feeling of reading this sentence?" },
+        realworld: { title: "Anaesthetics, and why MS is disabling", blurb: "Local anaesthetics block voltage-gated sodium channels, so the pain spike can never start. Multiple sclerosis destroys myelin, so saltatory conduction fails and signals slow or die. And nerve agents work by wrecking the synapse at the far end of this same journey." },
+      },
+      facts: ["The action potential is all-or-nothing: stimulus intensity is coded by FREQUENCY, not amplitude.", "Myelinated human axons conduct at up to ~120 m/s — around 430 km/h.", "The refractory period is what forces the impulse to travel in one direction only."],
+      exam: "Be able to label every phase on a voltage-vs-time trace, state which ion moves and through which gated channel at each stage, and explain all-or-nothing plus the function of the refractory period. Do not confuse repolarisation with hyperpolarisation.",
+      connections: ["The Nervous System", "Diffusion & Osmosis", "Proteins", "The Cell"],
+    },
+
+    {
+      id: "cardiac", domain: "Human Physiology", color: "#e8735e", diff: "Core",
+      title: "The Cardiac Cycle", chips: ["Systole & diastole", "Valves", "Pressure gradients"],
+      intuition: "One heartbeat is a pressure story. Chambers fill while relaxed, then contract; blood moves only ever from higher pressure to lower, and the valves are passive doors that slam shut the moment the gradient reverses. The 'lub-dub' you hear is not the muscle — it is those doors closing.",
+      lenses: {
+        experience: { mount: "cardiac", blurb: "Watch pressure in the atrium, ventricle and aorta over one beat, with the valves opening and closing exactly when the curves cross. Change the heart rate: diastole shortens far more than systole does, which is why a racing heart eventually fills less well." },
+        predict: { q: "The aortic valve snaps shut at the moment when…", o: ["the ventricle starts to contract", "ventricular pressure falls below aortic pressure", "the atria contract", "the ventricle is completely empty"], a: 1, why: "Valves are entirely passive — they are pushed by pressure differences, never actively operated. While the ventricle's pressure exceeds the aorta's, blood is ejected and the valve stays open. The instant ventricular pressure drops BELOW aortic pressure, backflow starts and immediately forces the cusps shut — producing the second heart sound, the 'dub'." },
+        visual: { title: "One beat, three acts", pts: ["ATRIAL SYSTOLE — atria contract, topping up ventricles that are already ~80% full from passive filling.", "VENTRICULAR SYSTOLE — ventricles contract; pressure rises, AV valves slam shut ('lub'), then semilunar valves open and blood is ejected.", "DIASTOLE — ventricles relax, pressure falls below the arteries, semilunar valves shut ('dub'), and passive filling begins again.", "The left ventricle generates far higher pressure than the right — it supplies the whole body, not just the lungs, which is why its wall is thickest.", "The SA node sets the rhythm; the AV node delays the signal so atria finish emptying before ventricles fire."] },
+        math: { mount: "cardiac", equation: "Cardiac output = heart rate × stroke volume", blurb: "About 70 beats/min × 70 mL ≈ 5 L/min at rest — roughly your entire blood volume every minute. Under exercise both terms rise and output can exceed 20 L/min; past a very high rate, though, diastole gets too short to fill properly and output falls again." },
+        frontier: { experiment: "William Harvey (1628) worked out that blood must CIRCULATE simply by measuring how much the heart pumps — far more per hour than the body could possibly manufacture.", research: "Engineered heart tissue and patient-specific 'digital twin' heart models are being used to rehearse surgery and predict arrhythmia.", question: "The heart barely regenerates after a heart attack — can we persuade adult cardiac muscle to divide again?" },
+        realworld: { title: "What a stethoscope and an ECG actually hear", blurb: "'Lub-dub' is the AV then semilunar valves closing; a murmur is turbulence through a valve that no longer seals. An ECG traces the electrical wave — not the pressure — which is why the P wave, QRS complex and T wave sit slightly ahead of the mechanical events you feel as a pulse." },
+      },
+      facts: ["Heart valves are passive: they are opened and closed purely by pressure gradients.", "Around 80% of ventricular filling happens passively, before the atria contract at all.", "At rest the heart pumps roughly 5 litres a minute — about your whole blood volume."],
+      exam: "Be able to read a cardiac pressure-volume or pressure-time graph and state exactly WHERE each valve opens and closes, justifying it by the crossing of the pressure curves. Also know cardiac output = HR × SV.",
+      connections: ["The Heart", "Cardiac Tissue", "The Action Potential", "Circulation"],
+    },
+  ];
+
+  // ── shell chrome ────────────────────────────────────────────────────────────
+  const app = document.getElementById("lessonApp");
+  let animStop = null;              // cancel fn for the active lens animation
+  function clearAnim() { if (animStop) { try { animStop(); } catch (e) {} animStop = null; } }
+
+  // hash router: #<lessonId> opens a lesson; empty shows the list
+  function route() {
+    const id = location.hash.replace(/^#/, "");
+    const lesson = LESSONS.find((l) => l.id === id);
+    clearAnim();
+    if (lesson) renderLesson(lesson); else renderList();
+    scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
+    if (window.__observeReveals) window.__observeReveals();
+  }
+  addEventListener("hashchange", route);
+
+  // ── list view ────────────────────────────────────────────────────────────────
+  function renderList() {
+    app.innerHTML = "";
+    const head = el("div", "wrap band les-listhead reveal", `
+      <div class="eyebrow">The 6-Lens lessons</div>
+      <h1 class="h1" style="margin:16px 0 16px">See every concept from<br><span class="grad">story to frontier.</span></h1>
+      <p class="lead" style="max-width:640px">Every idea, through six lenses — felt, tested, drawn, quantified, pushed to the research edge, and grounded in your life. Pick one and step in.</p>`);
+    app.appendChild(head);
+    const grid = el("div", "wrap"); const g = el("div", "grid g3"); grid.appendChild(g);
+    LESSONS.forEach((l, i) => {
+      const card = el("a", "card lift les-card reveal d" + ((i % 3) + 1));
+      card.href = "#" + l.id;
+      card.style.setProperty("--lc", l.color);
+      card.innerHTML = `<div class="glow"></div>
+        <div class="les-dom" style="color:${l.color}">${l.domain} · ${l.diff}</div>
+        <h3 class="h3" style="margin:6px 0 10px">${l.title}</h3>
+        <p>${l.intuition}</p>
+        <div class="les-lensrow">${LENSES.map((x) => `<span class="les-lensdot" style="--dc:${x.c}" title="${x.n}">${x.g}</span>`).join("")}</div>`;
+      g.appendChild(card);
+    });
+    app.appendChild(grid);
+    // a "coming soon" note so we're honest about depth
+    const more = el("div", "wrap band reveal", `<div class="les-more">More lessons — DNA Replication, The Cardiac Cycle, Natural Selection, Photosynthesis, the Action Potential — are being authored to this same six-lens depth.</div>`);
+    app.appendChild(more);
+  }
+
+  // ── lesson view ──────────────────────────────────────────────────────────────
+  function renderLesson(l) {
+    app.innerHTML = "";
+    let active = "experience";
+    const root = el("div", "wrap band les-lesson");
+    root.style.setProperty("--lc", l.color);
+    root.innerHTML = `
+      <a class="les-back" href="#">← All lessons</a>
+      <div class="les-head reveal">
+        <div class="les-dom" style="color:${l.color}">${l.domain} · ${l.diff}</div>
+        <h1 class="h1" style="margin:10px 0 14px">${l.title}</h1>
+        <div class="les-chips">${l.chips.map((c) => `<span class="chip">${c}</span>`).join("")}</div>
+        <p class="lead les-intu">${l.intuition}</p>
+      </div>
+      <div class="les-rail" role="tablist" aria-label="Lenses">
+        ${LENSES.map((x) => `<button class="les-tab" role="tab" data-lens="${x.k}" style="--dc:${x.c}">
+          <span class="les-g">${x.g}</span><span class="les-ic">${x.ic}</span><span class="les-nm">${x.n}</span></button>`).join("")}
+      </div>
+      <div class="les-stage" id="lensStage"></div>
+      <div class="les-foot reveal">
+        <div class="les-sec"><h4>Key facts</h4><ul>${l.facts.map((f) => `<li>${f}</li>`).join("")}</ul></div>
+        <div class="les-sec les-exam"><h4>★ Exam focus</h4><p>${l.exam}</p></div>
+        <div class="les-sec"><h4>Connects to</h4><div class="les-conn">${l.connections.map((c) => `<span class="chip">${c}</span>`).join("")}</div></div>
+        <div class="les-next">
+          <a class="btn ghost" href="./Biology Entelloq - Solve.html">Practise this →</a>
+          <a class="btn ghost" href="./Biology Universe.html">See it in the Universe →</a>
+          <a class="btn primary" href="./Biology Entelloq - Dissection Lab.html">Open the Lab →</a>
+        </div>
+      </div>`;
+    app.appendChild(root);
+    const stage = $("#lensStage", root);
+    const tabs = [...root.querySelectorAll(".les-tab")];
+    function show(k) {
+      active = k; clearAnim();
+      tabs.forEach((t) => t.classList.toggle("on", t.dataset.lens === k));
+      stage.innerHTML = ""; stage.appendChild(renderLens(l, k));
+      if (window.__observeReveals) window.__observeReveals();
+    }
+    tabs.forEach((t) => t.addEventListener("click", () => show(t.dataset.lens)));
+    // keyboard: A-F or arrows across lenses
+    root.addEventListener("keydown", (e) => {
+      const i = LENSES.findIndex((x) => x.k === active);
+      if (e.key === "ArrowRight") { e.preventDefault(); show(LENSES[(i + 1) % LENSES.length].k); tabs[(i + 1) % LENSES.length].focus(); }
+      else if (e.key === "ArrowLeft") { e.preventDefault(); show(LENSES[(i + LENSES.length - 1) % LENSES.length].k); tabs[(i + LENSES.length - 1) % LENSES.length].focus(); }
+    });
+    show("experience");
+  }
+
+  // ── per-lens content ─────────────────────────────────────────────────────────
+  function renderLens(l, k) {
+    const d = l.lenses[k];
+    const meta = LENSES.find((x) => x.k === k);
+    const box = el("div", "les-lens");
+    box.style.setProperty("--dc", meta.c);
+    const headHTML = `<div class="les-lenshd"><span class="les-lg" style="background:${meta.c}">${meta.g}</span>
+      <div><div class="les-ln">${meta.n}</div><div class="les-lsub" style="color:${meta.c}">${lensTag(k)}</div></div></div>`;
+
+    if (k === "experience") {
+      box.innerHTML = headHTML + `<p class="les-blurb">${d.blurb}</p><div class="les-mount" id="mnt"></div>`;
+      queueMicrotask(() => { const host = $("#mnt", box); animStop = (BUILD[d.mount] || (() => {}))(host, l); });
+    } else if (k === "predict") {
+      box.innerHTML = headHTML + `<div class="les-q">${d.q}</div><div class="les-opts">${d.o.map((o, i) => `<button class="les-opt" data-i="${i}">${o}</button>`).join("")}</div><div class="les-why" id="why"></div>`;
+      const opts = [...box.querySelectorAll(".les-opt")]; let done = false;
+      opts.forEach((b) => b.addEventListener("click", () => {
+        if (done) return; done = true; const i = +b.dataset.i;
+        opts.forEach((o, j) => { o.classList.add(j === d.a ? "right" : (j === i ? "wrong" : "muted")); o.disabled = true; });
+        const why = $("#why", box); why.innerHTML = `<div class="les-verdict ${i === d.a ? "ok" : "no"}">${i === d.a ? "✓ Exactly." : "✗ Not quite."}</div><p>${d.why}</p>`;
+        why.classList.add("show");
+      }));
+    } else if (k === "visual") {
+      box.innerHTML = headHTML + `<h3 class="h3" style="margin-bottom:14px">${d.title}</h3><ul class="les-vis">${d.pts.map((p) => `<li>${p}</li>`).join("")}</ul>`;
+    } else if (k === "math") {
+      box.innerHTML = headHTML + `<div class="les-eq">${d.equation}</div><p class="les-blurb">${d.blurb}</p><div class="les-mount" id="mnt"></div>`;
+      queueMicrotask(() => { const host = $("#mnt", box); animStop = (BUILD[d.mount] || (() => {}))(host, l); });
+    } else if (k === "frontier") {
+      box.innerHTML = headHTML + `
+        <div class="les-fr"><span class="les-frtag">Landmark</span><p>${d.experiment}</p></div>
+        <div class="les-fr"><span class="les-frtag">Frontier</span><p>${d.research}</p></div>
+        <div class="les-fr open"><span class="les-frtag">Open question</span><p>${d.question}</p></div>`;
+    } else if (k === "realworld") {
+      box.innerHTML = headHTML + `<h3 class="h3" style="margin-bottom:12px">${d.title}</h3><p class="les-blurb" style="font-size:16px">${d.blurb}</p>`;
+    }
+    return box;
+  }
+  function lensTag(k) {
+    return { experience: "Feel it first", predict: "Test your intuition", visual: "See the structure",
+      math: "Quantify it", frontier: "The research edge", realworld: "Why it matters" }[k];
+  }
+
+  // ── interactive builders (each returns a cancel fn) ──────────────────────────
+  function canvasHost(host, ratio) {
+    const c = el("canvas", "les-canvas"); host.appendChild(c);
+    const ctx = c.getContext("2d"); let W, H, dpr;
+    function size() { dpr = Math.min(devicePixelRatio || 1, 2); const r = host.getBoundingClientRect(); W = r.width; H = Math.min(360, r.width * (ratio || 0.55)); c.style.height = H + "px"; c.width = W * dpr; c.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+    size(); addEventListener("resize", size);
+    return { c, ctx, get W() { return W; }, get H() { return H; }, size, off: () => removeEventListener("resize", size) };
+  }
+  function control(host, label, min, max, val, step, fmt, on) {
+    const row = el("div", "les-ctl");
+    row.innerHTML = `<label>${label}</label><input type="range" min="${min}" max="${max}" value="${val}" step="${step || 1}"><output></output>`;
+    const inp = row.querySelector("input"), out = row.querySelector("output");
+    const upd = () => { out.textContent = fmt ? fmt(+inp.value) : inp.value; on(+inp.value); };
+    inp.addEventListener("input", upd); host.appendChild(row); upd(); return inp;
+  }
+
+  const BUILD = {
+    diffusion(host) {
+      const cv = canvasHost(host, 0.5); let temp = 1.2, raf;
+      const N = 260, P = []; for (let i = 0; i < N; i++) P.push({ x: Math.random() * 0.45, y: Math.random(), a: Math.random() * 6.28 });
+      const ctrls = el("div", "les-ctls"); host.appendChild(ctrls);
+      control(ctrls, "Temperature", 3, 30, 12, 1, (v) => (v < 12 ? "cool" : v < 22 ? "warm" : "hot"), (v) => temp = v / 10);
+      const read = el("div", "les-read"); host.appendChild(read);
+      function frame() {
+        const { ctx, W, H } = cv; ctx.clearRect(0, 0, W, H);
+        // membrane line down the middle with pores
+        ctx.strokeStyle = "rgba(52,211,153,.35)"; ctx.lineWidth = 2; ctx.setLineDash([6, 10]); ctx.beginPath(); ctx.moveTo(W / 2, 0); ctx.lineTo(W / 2, H); ctx.stroke(); ctx.setLineDash([]);
+        let left = 0;
+        for (const p of P) {
+          p.a += (Math.random() - 0.5) * 1.2; p.x += Math.cos(p.a) * 0.004 * temp; p.y += Math.sin(p.a) * 0.008 * temp;
+          if (p.x < 0) { p.x = 0; p.a = Math.PI - p.a; } if (p.x > 1) { p.x = 1; p.a = Math.PI - p.a; }
+          if (p.y < 0) { p.y = 0; p.a = -p.a; } if (p.y > 1) { p.y = 1; p.a = -p.a; }
+          if (p.x < 0.5) left++;
+          ctx.beginPath(); ctx.arc(p.x * W, p.y * H, 2.6, 0, 6.28); ctx.fillStyle = p.x < 0.5 ? "#34d399" : "#38e0d8"; ctx.fill();
+        }
+        const pct = Math.round(left / N * 100);
+        read.innerHTML = `Left of membrane: <b>${pct}%</b> · Right: <b>${100 - pct}%</b> ${pct > 55 ? "— net diffusion →" : Math.abs(pct - 50) <= 5 ? "— equilibrium reached ✓" : ""}`;
+        raf = requestAnimationFrame(frame);
+      }
+      if (!reduced) raf = requestAnimationFrame(frame); else frame();
+      return () => { cancelAnimationFrame(raf); cv.off(); };
+    },
+
+    enzyme(host) {
+      const cv = canvasHost(host, 0.5); let temp = 37, raf, count = 0, t = 0;
+      const subs = []; for (let i = 0; i < 6; i++) subs.push(mk());
+      function mk() { return { x: Math.random(), y: Math.random(), state: "free", prog: 0, prod: false }; }
+      const ctrls = el("div", "les-ctls"); host.appendChild(ctrls);
+      control(ctrls, "Temperature (°C)", 5, 70, 37, 1, (v) => v + "°", (v) => temp = v);
+      const read = el("div", "les-read"); host.appendChild(read);
+      function activity() { const opt = 37; return Math.max(0, temp > 55 ? 0 : 1 - Math.abs(temp - opt) / 30); }
+      function frame() {
+        t += 0.016; const { ctx, W, H } = cv; ctx.clearRect(0, 0, W, H);
+        const cx = W / 2, cy = H / 2, denat = temp > 55;
+        // enzyme body with a notch (active site) that distorts when denatured
+        ctx.save(); ctx.translate(cx, cy);
+        ctx.fillStyle = denat ? "rgba(232,115,94,.35)" : "rgba(124,140,248,.35)";
+        ctx.strokeStyle = denat ? "#e8735e" : "#7c8cf8"; ctx.lineWidth = 2; ctx.beginPath();
+        for (let a = 0; a <= 6.29; a += 0.3) { const notch = (a > 5.4 && a < 6.1) ? (denat ? 0.5 + Math.sin(t * 8 + a) * 0.2 : 0.55) : 1; const r = 46 * notch * (denat ? 1 + Math.sin(a * 5 + t * 6) * 0.12 : 1); const x = Math.cos(a) * r, y = Math.sin(a) * r; a === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); }
+        ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore();
+        const act = activity();
+        for (const s of subs) {
+          if (s.state === "free") {
+            const tx = cx + 52, ty = cy; s.x += (tx / W - s.x) * 0.02 * (0.4 + act); s.y += (ty / H - s.y) * 0.02 * (0.4 + act);
+            if (act > 0.05 && Math.hypot(s.x * W - tx, s.y * H - ty) < 14) s.state = "docked";
+          } else if (s.state === "docked") { s.prog += 0.02 * (act + 0.05); if (s.prog >= 1) { s.state = "free"; s.prog = 0; s.prod = true; count++; Object.assign(s, mk()); } }
+          const px = s.x * W, py = s.y * H;
+          ctx.beginPath(); ctx.arc(px, py, 7, 0, 6.28); ctx.fillStyle = s.state === "docked" ? "#f6c667" : "#34d399"; ctx.fill();
+        }
+        read.innerHTML = denat ? `<b style="color:#e8735e">Denatured</b> — the active site's shape is lost. Reactions: <b>${count}</b>` : `Activity: <b>${Math.round(act * 100)}%</b> · Products made: <b>${count}</b> ${temp > 30 && temp < 44 ? "— near optimum ✓" : ""}`;
+        raf = requestAnimationFrame(frame);
+      }
+      if (!reduced) raf = requestAnimationFrame(frame); else frame();
+      return () => { cancelAnimationFrame(raf); cv.off(); };
+    },
+
+    michaelis(host) {
+      const cv = canvasHost(host, 0.5); let Vmax = 100, Km = 20, S = 30;
+      // Declared BEFORE the sliders on purpose: each slider fires its callback
+      // immediately to show its starting value, and those callbacks call draw(),
+      // which writes into `read`. Declaring it below would be a dead-zone crash.
+      const read = el("div", "les-read");
+      const ctrls = el("div", "les-ctls"); host.appendChild(ctrls);
+      control(ctrls, "Vₘₐₓ", 40, 100, 100, 1, null, (v) => { Vmax = v; draw(); });
+      control(ctrls, "Kₘ", 5, 60, 20, 1, null, (v) => { Km = v; draw(); });
+      control(ctrls, "[Substrate]", 0, 120, 30, 1, null, (v) => { S = v; draw(); });
+      host.appendChild(read);
+      function draw() {
+        const { ctx, W, H } = cv; ctx.clearRect(0, 0, W, H); const pad = 34;
+        ctx.strokeStyle = "rgba(255,255,255,.12)"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(pad, 8); ctx.lineTo(pad, H - pad); ctx.lineTo(W - 8, H - pad); ctx.stroke();
+        // Vmax asymptote
+        const yV = 8 + (1 - Vmax / 100) * (H - pad - 8);
+        ctx.strokeStyle = "rgba(124,140,248,.35)"; ctx.setLineDash([5, 6]); ctx.beginPath(); ctx.moveTo(pad, yV); ctx.lineTo(W - 8, yV); ctx.stroke(); ctx.setLineDash([]);
+        ctx.strokeStyle = "#7c8cf8"; ctx.lineWidth = 2.4; ctx.beginPath();
+        for (let i = 0; i <= 120; i++) { const s = i; const v = Vmax * s / (Km + s); const x = pad + (s / 120) * (W - 8 - pad); const y = 8 + (1 - v / 100) * (H - pad - 8); i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); }
+        ctx.stroke();
+        const v = Vmax * S / (Km + S); const mx = pad + (S / 120) * (W - 8 - pad); const my = 8 + (1 - v / 100) * (H - pad - 8);
+        ctx.fillStyle = "#f6c667"; ctx.beginPath(); ctx.arc(mx, my, 5, 0, 6.28); ctx.fill();
+        read.innerHTML = `At [S] = <b>${S}</b>, rate v = <b>${v.toFixed(1)}</b> (of Vₘₐₓ ${Vmax}). Half-max at [S] = Kₘ = <b>${Km}</b>.`;
+      }
+      draw(); return () => cv.off();
+    },
+
+    fick(host) {
+      let A = 5, dC = 6, dist = 3;
+      const ctrls = el("div", "les-ctls"); host.appendChild(ctrls);
+      const bar = el("div", "les-fickbar", `<i></i>`); const read = el("div", "les-read");
+      control(ctrls, "Surface area", 1, 10, 5, 1, null, (v) => { A = v; upd(); });
+      control(ctrls, "Δ Concentration", 1, 10, 6, 1, null, (v) => { dC = v; upd(); });
+      control(ctrls, "Distance to cross", 1, 10, 3, 1, null, (v) => { dist = v; upd(); });
+      host.appendChild(bar); host.appendChild(read);
+      function upd() { const rate = (A * dC) / dist; const pct = Math.min(100, rate / 10 * 100); bar.querySelector("i").style.width = pct + "%"; read.innerHTML = `Diffusion rate ∝ (${A} × ${dC}) / ${dist} = <b>${rate.toFixed(1)}</b> — ${rate > 12 ? "fast (big thin surface, steep gradient)" : rate < 3 ? "slow (small area or long path)" : "moderate"}`; }
+      upd(); return () => {};
+    },
+
+    logistic(host) {
+      const cv = canvasHost(host, 0.52); let r = 0.5, K = 80, N0 = 5, raf, t0 = 0, playing = true;
+      const ctrls = el("div", "les-ctls"); host.appendChild(ctrls);
+      control(ctrls, "Growth rate r", 5, 130, 50, 1, (v) => (v / 100).toFixed(2), (v) => { r = v / 100; t0 = 0; });
+      control(ctrls, "Carrying capacity K", 30, 100, 80, 1, null, (v) => { K = v; t0 = 0; });
+      control(ctrls, "Start N₀", 1, 40, 5, 1, null, (v) => { N0 = v; t0 = 0; });
+      const read = el("div", "les-read"); host.appendChild(read);
+      const series = [];
+      function frame() {
+        t0 += reduced ? 60 : 0.6; const { ctx, W, H } = cv; ctx.clearRect(0, 0, W, H); const pad = 30;
+        // axes
+        ctx.strokeStyle = "rgba(255,255,255,.12)"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(pad, 8); ctx.lineTo(pad, H - pad); ctx.lineTo(W - 8, H - pad); ctx.stroke();
+        // K line
+        const yK = 8 + (1 - K / 100) * (H - pad - 8); ctx.strokeStyle = "rgba(56,224,216,.35)"; ctx.setLineDash([5, 6]); ctx.beginPath(); ctx.moveTo(pad, yK); ctx.lineTo(W - 8, yK); ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle = "rgba(56,224,216,.7)"; ctx.font = "11px ui-monospace"; ctx.fillText("K = " + K, pad + 6, yK - 5);
+        // integrate logistic over a fixed window, animate a sweeping reveal
+        const STEPS = 200, dt = 0.12; let N = N0; series.length = 0; series.push(N);
+        for (let i = 1; i < STEPS; i++) { N += r * N * (1 - N / K) * dt; series.push(N); }
+        const reveal = Math.min(STEPS, Math.floor(t0 / 60 * STEPS) % (STEPS + 40));
+        ctx.strokeStyle = "#38e0d8"; ctx.lineWidth = 2.6; ctx.beginPath();
+        for (let i = 0; i < Math.min(reveal, STEPS); i++) { const x = pad + (i / STEPS) * (W - 8 - pad); const y = 8 + (1 - series[i] / 100) * (H - pad - 8); i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); }
+        ctx.stroke();
+        const shown = Math.min(reveal, STEPS - 1); const cur = series[shown] || N0;
+        read.innerHTML = `r = <b>${r.toFixed(2)}</b> · K = <b>${K}</b> · N ≈ <b>${cur.toFixed(0)}</b> ${cur > K * 0.92 ? "— levelling at carrying capacity" : cur < K * 0.4 ? "— near-exponential (J)" : "— fastest growth (≈K/2)"}`;
+        raf = requestAnimationFrame(frame);
+      }
+      raf = requestAnimationFrame(frame);
+      return () => { cancelAnimationFrame(raf); cv.off(); };
+    },
+
+    /* ---- PHOTOSYNTHESIS: limiting factors ------------------------------- */
+    photo(host) {
+      const cv = canvasHost(host, 0.5);
+      let light = 50, co2 = 50, temp = 25;
+      // `read` MUST exist before the sliders: control() fires its callback straight
+      // away to show the starting value, and those callbacks call draw(), which
+      // writes into read — declaring it afterwards is a temporal-dead-zone crash.
+      const read = el("div", "les-read");
+      // rate is capped by the scarcest input; temperature acts as an enzyme bell
+      // curve. These are FUNCTION DECLARATIONS on purpose: they are hoisted, so the
+      // sliders below can fire draw() immediately without hitting a dead zone.
+      function tempF(t) { return Math.exp(-Math.pow(t - 30, 2) / 210) * (t > 45 ? 0.15 : 1); }
+      function rate(l, c, t) { return Math.min(l * 1.35, c * 1.35, 100) * tempF(t) / 100 * 100; }
+      const ctrls = el("div", "les-ctls"); host.appendChild(ctrls);
+      control(ctrls, "Light intensity", 0, 100, 50, 1, (v) => v + "%", (v) => { light = v; draw(); });
+      control(ctrls, "CO₂ concentration", 0, 100, 50, 1, (v) => v + "%", (v) => { co2 = v; draw(); });
+      control(ctrls, "Temperature", 0, 50, 25, 1, (v) => v + " °C", (v) => { temp = v; draw(); });
+      host.appendChild(read);
+      function draw() {
+        const { ctx, W, H } = cv; ctx.clearRect(0, 0, W, H);
+        const pad = 34, gw = W - pad * 2, gh = H - pad * 2;
+        ctx.strokeStyle = "rgba(255,255,255,.10)"; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(pad, 10); ctx.lineTo(pad, H - pad); ctx.lineTo(W - 10, H - pad); ctx.stroke();
+        ctx.fillStyle = "#63757f"; ctx.font = "600 10.5px ui-monospace,monospace";
+        ctx.textAlign = "center"; ctx.fillText("light intensity →", W / 2, H - 10);
+        // the curve of rate against light, at the CURRENT co2 + temperature
+        ctx.strokeStyle = "#34d399"; ctx.lineWidth = 2.6; ctx.beginPath();
+        for (let l = 0; l <= 100; l++) {
+          const v = rate(l, co2, temp);
+          const x = pad + (l / 100) * gw, y = H - pad - (v / 100) * gh;
+          l ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+        }
+        ctx.stroke();
+        // where the plateau begins = the limiting factor kicks in
+        const capV = rate(100, co2, temp);
+        const plateauL = Math.min(100, (co2 * 1.35) / 1.35);
+        if (plateauL < 99) {
+          const px = pad + (plateauL / 100) * gw;
+          ctx.strokeStyle = "rgba(246,198,103,.5)"; ctx.setLineDash([4, 5]);
+          ctx.beginPath(); ctx.moveTo(px, 10); ctx.lineTo(px, H - pad); ctx.stroke(); ctx.setLineDash([]);
+        }
+        const v = rate(light, co2, temp);
+        const mx = pad + (light / 100) * gw, my = H - pad - (v / 100) * gh;
+        ctx.fillStyle = "#f6c667"; ctx.beginPath(); ctx.arc(mx, my, 6, 0, 6.28); ctx.fill();
+        const lim = temp > 42 ? "temperature (enzymes denaturing)"
+          : (light * 1.35 <= co2 * 1.35 && light < 74) ? "light"
+          : (co2 * 1.35 < 100) ? "CO₂" : "temperature";
+        read.innerHTML = `Rate <b>${v.toFixed(0)}</b> · limiting factor: <b>${lim}</b>`;
+      }
+      draw(); return () => cv.off();
+    },
+
+    /* ---- RESPIRATION: three stages, ATP tally, O2 toggle ---------------- */
+    resp(host) {
+      const cv = canvasHost(host, 0.46);
+      let oxygen = true, t = 0, raf;
+      const ctrls = el("div", "les-ctls"); host.appendChild(ctrls);
+      const btn = el("button", "cell-tab on", "Oxygen: present");
+      btn.addEventListener("click", () => {
+        oxygen = !oxygen; btn.classList.toggle("on", oxygen);
+        btn.textContent = oxygen ? "Oxygen: present" : "Oxygen: absent";
+      });
+      ctrls.appendChild(btn);
+      const read = el("div", "les-read"); host.appendChild(read);
+      const STAGES = [
+        { n: "Glycolysis", where: "cytoplasm", atp: 2, needsO2: false, col: "#34d399" },
+        { n: "Krebs cycle", where: "matrix", atp: 2, needsO2: true, col: "#f6c667" },
+        { n: "Electron transport", where: "cristae", atp: 28, needsO2: true, col: "#fb7185" },
+      ];
+      function draw() {
+        t += reduced ? 0 : 0.016;
+        const { ctx, W, H } = cv; ctx.clearRect(0, 0, W, H);
+        const bw = (W - 60) / 3, by = 34, bh = H - 96;
+        let total = 0;
+        STAGES.forEach((s, i) => {
+          const on = !s.needsO2 || oxygen;
+          const x = 20 + i * (bw + 10);
+          ctx.fillStyle = on ? "rgba(255,255,255,.05)" : "rgba(232,115,94,.07)";
+          ctx.strokeStyle = on ? s.col : "rgba(232,115,94,.4)"; ctx.lineWidth = 1.6;
+          ctx.beginPath(); ctx.roundRect(x, by, bw, bh, 12); ctx.fill(); ctx.stroke();
+          ctx.fillStyle = on ? "#eaf2f5" : "#8a6a66";
+          ctx.font = "600 12.5px Inter,sans-serif"; ctx.textAlign = "center";
+          ctx.fillText(s.n, x + bw / 2, by + 24);
+          ctx.fillStyle = "#63757f"; ctx.font = "500 10.5px ui-monospace,monospace";
+          ctx.fillText(s.where, x + bw / 2, by + 42);
+          ctx.fillStyle = on ? s.col : "#8a6a66"; ctx.font = "700 20px Inter,sans-serif";
+          ctx.fillText(on ? "+" + s.atp : "stalled", x + bw / 2, by + bh / 2 + 16);
+          ctx.fillStyle = "#63757f"; ctx.font = "500 10px ui-monospace,monospace";
+          if (on) ctx.fillText("ATP", x + bw / 2, by + bh / 2 + 32);
+          if (on) total += s.atp;
+          // electrons flowing between stages
+          if (on && i < 2 && !reduced) {
+            const p = (t * 0.5 + i * 0.3) % 1;
+            ctx.beginPath(); ctx.arc(x + bw + 5, by + bh / 2 + Math.sin(p * 6.28) * 6, 3, 0, 6.28);
+            ctx.fillStyle = s.col; ctx.fill();
+          }
+        });
+        ctx.fillStyle = "#eaf2f5"; ctx.font = "700 15px Inter,sans-serif"; ctx.textAlign = "center";
+        ctx.fillText(`Net yield: ${total} ATP per glucose`, W / 2, H - 22);
+        read.innerHTML = oxygen
+          ? `Aerobic — all three stages run. <b>~${total} ATP</b> per glucose.`
+          : `Anaerobic — the chain has no final electron acceptor, so Krebs and ETC stall. Only glycolysis runs: <b>${total} ATP</b>, and pyruvate becomes lactate.`;
+        raf = requestAnimationFrame(draw);
+      }
+      draw(); return () => { cancelAnimationFrame(raf); cv.off(); };
+    },
+
+    /* ---- DNA REPLICATION: a running fork -------------------------------- */
+    fork(host) {
+      const cv = canvasHost(host, 0.52);
+      let speed = 50, raf, t = 0;
+      const ctrls = el("div", "les-ctls"); host.appendChild(ctrls);
+      control(ctrls, "Fork speed", 10, 100, 50, 1, (v) => v + "%", (v) => { speed = v; });
+      const read = el("div", "les-read"); host.appendChild(read);
+      function draw() {
+        t += reduced ? 0.004 : 0.016 * (speed / 50);
+        const { ctx, W, H } = cv; ctx.clearRect(0, 0, W, H);
+        const cy = H / 2, forkX = 60 + ((t * 40) % (W - 140));
+        // parent duplex, still zipped, ahead of the fork
+        ctx.strokeStyle = "#9fb2bc"; ctx.lineWidth = 2.4;
+        for (const s of [-1, 1]) {
+          ctx.beginPath();
+          for (let x = forkX; x <= W - 16; x += 4) {
+            const y = cy + s * (10 + Math.sin(x * 0.09 + t) * 6);
+            x === forkX ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+          }
+          ctx.stroke();
+        }
+        // base pairs in the unopened duplex
+        ctx.strokeStyle = "rgba(159,178,188,.4)"; ctx.lineWidth = 1.2;
+        for (let x = forkX + 6; x < W - 16; x += 12) {
+          ctx.beginPath();
+          ctx.moveTo(x, cy - (10 + Math.sin(x * 0.09 + t) * 6));
+          ctx.lineTo(x, cy + (10 + Math.sin(x * 0.09 + t) * 6));
+          ctx.stroke();
+        }
+        // the two separated templates behind the fork
+        for (const s of [-1, 1]) {
+          ctx.strokeStyle = "#9fb2bc"; ctx.lineWidth = 2.4; ctx.beginPath();
+          for (let x = 16; x <= forkX; x += 4) {
+            const spread = (forkX - x) * 0.30;
+            ctx.lineTo(x, cy + s * (10 + spread));
+          }
+          ctx.stroke();
+        }
+        // LEADING strand — one continuous new strand
+        ctx.strokeStyle = "#34d399"; ctx.lineWidth = 3; ctx.beginPath();
+        for (let x = 16; x <= forkX - 4; x += 4) {
+          const spread = (forkX - x) * 0.30;
+          ctx.lineTo(x, cy - (10 + spread) + 5);
+        }
+        ctx.stroke();
+        // LAGGING strand — discrete Okazaki fragments with visible gaps
+        ctx.strokeStyle = "#38e0d8"; ctx.lineWidth = 3;
+        const FRAG = 46;
+        for (let f = 0; f * FRAG < forkX - 30; f++) {
+          const x0 = 16 + f * FRAG, x1 = Math.min(forkX - 10, x0 + FRAG - 12);
+          if (x1 <= x0) continue;
+          ctx.beginPath();
+          for (let x = x0; x <= x1; x += 4) {
+            const spread = (forkX - x) * 0.30;
+            ctx.lineTo(x, cy + (10 + spread) - 5);
+          }
+          ctx.stroke();
+        }
+        // helicase at the fork
+        ctx.fillStyle = "#f6c667";
+        ctx.beginPath(); ctx.arc(forkX, cy, 9, 0, 6.28); ctx.fill();
+        ctx.fillStyle = "#04120c"; ctx.font = "700 9px ui-monospace,monospace"; ctx.textAlign = "center";
+        ctx.fillText("H", forkX, cy + 3);
+        ctx.fillStyle = "#34d399"; ctx.font = "600 11px ui-monospace,monospace"; ctx.textAlign = "left";
+        ctx.fillText("leading — continuous", 18, cy - 52);
+        ctx.fillStyle = "#38e0d8";
+        ctx.fillText("lagging — Okazaki fragments", 18, H - 14);
+        read.innerHTML = `Helicase unzips at the fork. The <b>leading</b> strand is built in one piece; the <b>lagging</b> strand is built backwards in fragments, later sealed by <b>ligase</b>.`;
+        raf = requestAnimationFrame(draw);
+      }
+      draw(); return () => { cancelAnimationFrame(raf); cv.off(); };
+    },
+
+    /* ---- NATURAL SELECTION: allele frequency over generations ----------- */
+    selection(host) {
+      const cv = canvasHost(host, 0.5);
+      let pressure = 50, dark = 0.5, gen = 0, hist = [0.5], raf, acc = 0;
+      const ctrls = el("div", "les-ctls"); host.appendChild(ctrls);
+      control(ctrls, "Predation pressure", 0, 100, 50, 1,
+        (v) => (v < 20 ? "weak" : v < 60 ? "moderate" : "strong"), (v) => { pressure = v; });
+      const reset = el("button", "cell-tab", "Restart population");
+      reset.addEventListener("click", () => { dark = 0.5; gen = 0; hist = [0.5]; });
+      ctrls.appendChild(reset);
+      const read = el("div", "les-read"); host.appendChild(read);
+      function step() {
+        // dark morph favoured on a dark background: Δp ∝ s·p(1−p)
+        const s = pressure / 100 * 0.55;
+        dark = Math.max(0.001, Math.min(0.999, dark + s * dark * (1 - dark)));
+        gen++; hist.push(dark); if (hist.length > 120) hist.shift();
+      }
+      function draw() {
+        acc += reduced ? 1 : 0.55;
+        if (acc >= 1) { acc = 0; if (gen < 400) step(); }
+        const { ctx, W, H } = cv; ctx.clearRect(0, 0, W, H);
+        const half = W * 0.42, pad = 30;
+        // left: the population itself, visibly shifting colour
+        ctx.fillStyle = "rgba(40,50,45,.5)"; ctx.fillRect(0, 0, half, H);
+        for (let i = 0; i < 60; i++) {
+          const isDark = (i / 60) < dark;
+          const x = 16 + (i % 10) * (half - 32) / 9, y = 22 + Math.floor(i / 10) * (H - 44) / 5;
+          ctx.fillStyle = isDark ? "#2b2f36" : "#d8cfae";
+          ctx.beginPath(); ctx.ellipse(x, y, 7, 5, 0, 0, 6.28); ctx.fill();
+          ctx.strokeStyle = "rgba(255,255,255,.14)"; ctx.lineWidth = 0.8; ctx.stroke();
+        }
+        ctx.fillStyle = "#9fb2bc"; ctx.font = "600 10.5px ui-monospace,monospace"; ctx.textAlign = "left";
+        ctx.fillText("population on a dark background", 14, H - 8);
+        // right: allele frequency curve
+        const gx = half + pad, gw = W - gx - 14, gh = H - pad * 2;
+        ctx.strokeStyle = "rgba(255,255,255,.10)"; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(gx, pad); ctx.lineTo(gx, H - pad); ctx.lineTo(W - 10, H - pad); ctx.stroke();
+        ctx.strokeStyle = "#fb7185"; ctx.lineWidth = 2.4; ctx.beginPath();
+        hist.forEach((p, i) => {
+          const x = gx + (i / 120) * gw, y = H - pad - p * gh;
+          i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+        });
+        ctx.stroke();
+        ctx.fillStyle = "#63757f"; ctx.font = "600 10px ui-monospace,monospace"; ctx.textAlign = "left";
+        ctx.fillText("dark allele frequency", gx + 4, pad - 6);
+        read.innerHTML = `Generation <b>${gen}</b> · dark allele <b>${(dark * 100).toFixed(0)}%</b>` +
+          (pressure < 8 ? " — almost no selection, so frequency barely moves." :
+            dark > 0.95 ? " — near fixation; change slows because p(1−p) is tiny." : "");
+        raf = requestAnimationFrame(draw);
+      }
+      draw(); return () => { cancelAnimationFrame(raf); cv.off(); };
+    },
+
+    /* ---- ACTION POTENTIAL: all-or-nothing spike ------------------------- */
+    spike(host) {
+      const cv = canvasHost(host, 0.52);
+      let strength = 60, raf, t = 0;
+      const trace = []; const DUR = 260;
+      let firedAt = -999, lastFire = -999;
+      const ctrls = el("div", "les-ctls"); host.appendChild(ctrls);
+      control(ctrls, "Stimulus strength", 0, 100, 60, 1,
+        (v) => v + "%" + (v >= 45 ? " (above threshold)" : " (sub-threshold)"), (v) => { strength = v; });
+      const fire = el("button", "cell-tab on", "Stimulate ⚡");
+      fire.addEventListener("click", () => {
+        const refractory = (t - lastFire) < 42;
+        if (strength < 45) { msg = "Sub-threshold — the membrane depolarised a little and leaked straight back. No spike."; return; }
+        if (refractory) { msg = "Refractory period — sodium channels are still inactivated. It cannot fire again yet."; return; }
+        firedAt = t; lastFire = t; msg = "Threshold crossed — a full-height action potential, identical every time.";
+      });
+      ctrls.appendChild(fire);
+      const read = el("div", "les-read"); host.appendChild(read);
+      let msg = "Press Stimulate. Below about 45% nothing happens; above it you always get the same spike.";
+      // the canonical waveform, in mV, as a function of ms since firing
+      function mv(dt) {
+        if (dt < 0) return -70;
+        if (dt < 8) return -70 + (dt / 8) * 15;           // slow rise to threshold
+        if (dt < 20) return -55 + ((dt - 8) / 12) * 95;   // depolarisation to +40
+        if (dt < 40) return 40 - ((dt - 20) / 20) * 105;  // repolarisation
+        if (dt < 62) return -65 - Math.sin((dt - 40) / 22 * Math.PI) * 12;  // hyperpolarisation
+        return -70;
+      }
+      function draw() {
+        t += reduced ? 4 : 1.6;
+        trace.push(mv(t - firedAt)); if (trace.length > DUR) trace.shift();
+        const { ctx, W, H } = cv; ctx.clearRect(0, 0, W, H);
+        const pad = 40, gw = W - pad - 14, gh = H - pad * 2;
+        const toY = (v) => pad + gh - ((v + 90) / 140) * gh;
+        // reference lines
+        [[-70, "rest −70", "rgba(159,178,188,.35)"], [-55, "threshold −55", "rgba(246,198,103,.5)"], [0, "0 mV", "rgba(255,255,255,.10)"]]
+          .forEach(([v, label, col]) => {
+            ctx.strokeStyle = col; ctx.setLineDash([4, 5]); ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(pad, toY(v)); ctx.lineTo(W - 14, toY(v)); ctx.stroke(); ctx.setLineDash([]);
+            ctx.fillStyle = "#63757f"; ctx.font = "500 9.5px ui-monospace,monospace"; ctx.textAlign = "left";
+            ctx.fillText(label, pad + 2, toY(v) - 3);
+          });
+        ctx.strokeStyle = "rgba(255,255,255,.12)";
+        ctx.beginPath(); ctx.moveTo(pad, pad); ctx.lineTo(pad, H - pad); ctx.stroke();
+        // the trace
+        ctx.strokeStyle = "#7c8cf8"; ctx.lineWidth = 2.6; ctx.beginPath();
+        trace.forEach((v, i) => {
+          const x = pad + (i / DUR) * gw, y = toY(v);
+          i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+        });
+        ctx.stroke();
+        ctx.fillStyle = "#63757f"; ctx.font = "600 10px ui-monospace,monospace"; ctx.textAlign = "left";
+        ctx.fillText("membrane potential (mV) vs time", pad + 2, pad - 10);
+        const refr = (t - lastFire) < 42 && lastFire > -900;
+        read.innerHTML = msg + (refr ? " <b>Refractory.</b>" : "");
+        raf = requestAnimationFrame(draw);
+      }
+      draw(); return () => { cancelAnimationFrame(raf); cv.off(); };
+    },
+
+    /* ---- CARDIAC CYCLE: pressures + valves ------------------------------ */
+    cardiac(host) {
+      const cv = canvasHost(host, 0.52);
+      let hr = 70, raf, t = 0;
+      const ctrls = el("div", "les-ctls"); host.appendChild(ctrls);
+      control(ctrls, "Heart rate", 40, 180, 70, 1, (v) => v + " bpm", (v) => { hr = v; });
+      const read = el("div", "les-read"); host.appendChild(read);
+      // pressures in mmHg across one normalised beat (0..1)
+      function ventricle(p) {
+        if (p < 0.06) return 8 + p / 0.06 * 4;
+        if (p < 0.34) return 12 + Math.sin((p - 0.06) / 0.28 * Math.PI) * 108;   // systole
+        if (p < 0.46) return 40 - (p - 0.34) / 0.12 * 36;
+        return 4 + (p - 0.46) / 0.54 * 8;                                        // filling
+      }
+      // Aortic pressure. This curve is NOT drawn independently of the ventricle —
+      // it is built from it, because that is where its shape actually comes from:
+      //   · before EJ0 the aortic valve is shut and the aorta is still bleeding
+      //     down from the previous beat;
+      //   · from EJ0 to the peak the valve is open, so the aorta simply IS the
+      //     ventricle minus the small gradient across the open valve;
+      //   · after the peak the elastic aorta holds its own pressure and runs off —
+      //     the Windkessel effect. This is why the two traces separate at the
+      //     dicrotic notch instead of the aorta following the ventricle down.
+      // The runoff is a fast term (the incisura, as the valve snaps shut and blood
+      // rebounds) plus a slow one (diastolic runoff through the arterioles).
+      // EJ0 is chosen as the point where the ventricle crosses ~82 mmHg, so the
+      // aorta joins continuously; the constants below land the notch at ~100 mmHg
+      // and bring the runoff back to ~80 exactly where the next beat picks it up.
+      const AO_EJ0 = 0.123, AO_PK = 0.20, AO_FLOOR = 78, AO_AMP = 38;
+      function aoRunoff(q) {
+        return AO_FLOOR + AO_AMP * (0.72 * Math.exp(-q * 11) + 0.28 * Math.exp(-q * 1.4));
+      }
+      function aorta(p) {
+        // where the runoff has got to by the end of the beat — the value this
+        // curve must start the NEXT beat from, or the trace jumps at the wrap
+        const wrap = aoRunoff(1);
+        if (p < AO_EJ0) return wrap + (AO_FLOOR - wrap) * (p / AO_EJ0);
+        if (p < AO_PK) return ventricle(p) - 4;              // valve open
+        return aoRunoff((p - AO_PK) / (1 - AO_PK));
+      }
+      function atrium(p) { return p < 0.08 ? 8 + Math.sin(p / 0.08 * Math.PI) * 7 : 3 + p * 5; }
+      function draw() {
+        t += reduced ? 0.02 : 0.0042 * (hr / 70);
+        if (t > 1) t -= 1;
+        const { ctx, W, H } = cv; ctx.clearRect(0, 0, W, H);
+        const pad = 38, gw = W - pad - 14, gh = H - pad * 2;
+        const toY = (v) => pad + gh - (v / 130) * gh;
+        ctx.strokeStyle = "rgba(255,255,255,.10)"; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(pad, pad); ctx.lineTo(pad, H - pad); ctx.lineTo(W - 14, H - pad); ctx.stroke();
+        const series = [[ventricle, "#e8735e", "ventricle"], [aorta, "#f6c667", "aorta"], [atrium, "#38e0d8", "atrium"]];
+        series.forEach(([fn, col]) => {
+          ctx.strokeStyle = col; ctx.lineWidth = 2.4; ctx.beginPath();
+          for (let i = 0; i <= 200; i++) {
+            const p = i / 200, x = pad + p * gw, y = toY(fn(p));
+            i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+          }
+          ctx.stroke();
+        });
+        // the moving "now" marker
+        const nx = pad + t * gw;
+        ctx.strokeStyle = "rgba(255,255,255,.28)"; ctx.lineWidth = 1.4;
+        ctx.beginPath(); ctx.moveTo(nx, pad); ctx.lineTo(nx, H - pad); ctx.stroke();
+        series.forEach(([fn, col]) => {
+          ctx.fillStyle = col; ctx.beginPath(); ctx.arc(nx, toY(fn(t)), 4.5, 0, 6.28); ctx.fill();
+        });
+        // legend
+        ctx.font = "600 10px ui-monospace,monospace"; ctx.textAlign = "left";
+        series.forEach(([, col, label], i) => {
+          ctx.fillStyle = col; ctx.fillText(label, pad + 4 + i * 70, pad - 8);
+        });
+        // valve state, derived from the pressure crossings themselves
+        const v = ventricle(t), a = aorta(t), at = atrium(t);
+        const avOpen = at > v, semiOpen = v > a;
+        const phase = semiOpen ? "Ventricular systole — ejection"
+          : (v > 14 && !semiOpen) ? "Isovolumetric contraction / relaxation"
+          : avOpen ? "Diastole — ventricular filling" : "Diastole";
+        read.innerHTML = `<b>${phase}</b> · AV valves <b>${avOpen ? "open" : "shut"}</b> · semilunar <b>${semiOpen ? "open" : "shut"}</b>` +
+          ` · output ≈ <b>${(hr * 70 / 1000).toFixed(1)} L/min</b>` +
+          (hr > 150 ? " — diastole is now so short that filling suffers." : "");
+        raf = requestAnimationFrame(draw);
+      }
+      draw(); return () => { cancelAnimationFrame(raf); cv.off(); };
+    },
+  };
+
+  // ── go ────────────────────────────────────────────────────────────────────────
+  route();
+})();

@@ -1,0 +1,1630 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<title>Learn — Biology Entelloq</title>
+<meta name="description" content="Experience biology, don't just read it. Virtual dissection, a zoomable universe of life, an interactive cell, a working virtual microscope — the front door to the lab.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* ============================================================================
+   BIOLOGY ENTELLOQ — shared shell (design system → nav → components → footer)
+   BYTE-IDENTICAL across every pillar. Do not edit per-page — scoped page CSS
+   lives in <style id="page-css"> and page behaviour in <script id="page-js">.
+   Motion follows Emil Kowalski's rules: transform/opacity only, custom easings,
+   scale entrances, ease-out for enters, stagger, reduced-motion honoured.
+   ========================================================================== */
+
+/* ---- reset ---------------------------------------------------------------- */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{min-height:100%;overflow-x:hidden}
+img,svg,canvas{display:block;max-width:100%}
+button,input{font:inherit;color:inherit;background:none;border:none}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--em);outline-offset:3px;border-radius:6px}
+::selection{background:color-mix(in srgb,var(--em) 45%,transparent);color:var(--ink)}
+.skiplink{position:fixed;top:10px;left:10px;z-index:200;background:var(--panel);color:var(--ink);
+  border:1px solid var(--hair);border-radius:10px;padding:10px 16px;font-weight:600;font-size:14px;
+  transform:translateY(-180%);transition:transform .2s var(--ease-out)}
+.skiplink:focus-visible{transform:none;outline-offset:2px}
+
+/* ---- design tokens -------------------------------------------------------- */
+:root{
+  /* palette — biology: emerald→cyan life, indigo for intelligence, amber spark */
+  --em:#34d399; --em-2:#10b981; --cy:#38e0d8; --cy-2:#22d3ee;
+  --indigo:#7c8cf8; --indigo-2:#8b5cf6; --amber:#f6c667; --rose:#fb7185;
+  --grad-life:linear-gradient(120deg,var(--em),var(--cy));
+  --grad-mind:linear-gradient(120deg,var(--cy),var(--indigo));
+  --grad-spark:linear-gradient(120deg,var(--indigo-2),var(--em));
+
+  /* dark (default) */
+  --bg:#04070a; --bg-2:#070b10; --panel:#0b1117; --raise:#0e151c;
+  --ink:#eaf2f5; --dim:#9fb2bc; --faint:#7d8b93;
+  --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.05);
+  --glass:rgba(10,15,20,.62); --glass-strong:rgba(8,12,17,.82);
+  --hair:rgba(255,255,255,.10);
+  --shadow-1:0 1px 2px rgba(0,0,0,.4);
+  --shadow-2:0 12px 40px -12px rgba(0,0,0,.7);
+  --shadow-glow:0 0 0 1px rgba(52,211,153,.18),0 20px 60px -18px rgba(16,185,129,.35);
+  --spot:rgba(52,211,153,.16);
+
+  /* type */
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+
+  /* motion — Emil's strong curves */
+  --ease-out:cubic-bezier(.23,1,.32,1);
+  --ease-in-out:cubic-bezier(.77,0,.175,1);
+  --ease-drawer:cubic-bezier(.32,.72,0,1);
+  --ease-spring:cubic-bezier(.34,1.56,.64,1);
+
+  /* geometry */
+  --r-sm:10px; --r:16px; --r-lg:24px; --r-xl:34px;
+  --edge:clamp(20px,5vw,72px);
+  --maxw:1200px;
+}
+:root[data-theme="light"]{
+  --bg:#f6f8f9; --bg-2:#eef2f4; --panel:#ffffff; --raise:#ffffff;
+  --ink:#0c1418; --dim:#4a5a63; --faint:#5c6b74;
+  --line:rgba(6,20,26,.10); --line-2:rgba(6,20,26,.06);
+  --glass:rgba(255,255,255,.72); --glass-strong:rgba(255,255,255,.86);
+  --hair:rgba(6,20,26,.12);
+  --em:#0a7d57; --em-2:#0a7d57; --cy:#0891b2; --indigo:#5b63e6;
+  --shadow-2:0 14px 44px -16px rgba(20,40,50,.28);
+  --shadow-glow:0 0 0 1px rgba(14,163,113,.18),0 22px 60px -20px rgba(14,163,113,.28);
+  --spot:rgba(14,163,113,.12);
+}
+
+html,body{background:var(--bg);color:var(--ink);font-family:var(--sans);
+  font-feature-settings:"cv11","ss01";line-height:1.55;letter-spacing:-.011em;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+
+/* ---- shared type scale ---------------------------------------------------- */
+.eyebrow{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--em);display:inline-flex;align-items:center;gap:9px}
+.eyebrow::before{content:"";width:16px;height:1px;background:currentColor;opacity:.6}
+.display{font-weight:800;letter-spacing:-.03em;line-height:1.02;
+  font-size:clamp(2.6rem,7.5vw,5.6rem)}
+.h1{font-weight:800;letter-spacing:-.028em;line-height:1.05;font-size:clamp(2.1rem,5vw,3.6rem)}
+.h2{font-weight:700;letter-spacing:-.024em;line-height:1.1;font-size:clamp(1.7rem,3.6vw,2.6rem)}
+.h3{font-weight:600;letter-spacing:-.02em;line-height:1.2;font-size:clamp(1.15rem,2vw,1.4rem)}
+.lead{font-size:clamp(1.05rem,1.7vw,1.35rem);color:var(--dim);line-height:1.6;font-weight:400}
+.serif{font-family:var(--serif);font-weight:400;letter-spacing:0}
+.grad{background:var(--grad-life);-webkit-background-clip:text;background-clip:text;color:transparent}
+.grad-mind{background:var(--grad-mind);-webkit-background-clip:text;background-clip:text;color:transparent}
+.muted{color:var(--dim)} .faint{color:var(--faint)}
+
+/* ---- layout --------------------------------------------------------------- */
+.wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--edge);width:100%}
+section.band{padding-block:clamp(72px,11vw,150px);position:relative}
+.center{text-align:center}
+.stack-sm{display:flex;flex-direction:column;gap:14px}
+.grid{display:grid;gap:22px}
+
+/* ---- global ambient background canvas ------------------------------------- */
+#fx{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0;
+  transition:opacity 1.2s var(--ease-out)}
+#fx.on{opacity:1}
+.bg-veil{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(60% 45% at 78% -5%,color-mix(in srgb,var(--cy) 12%,transparent),transparent 60%),
+    radial-gradient(55% 45% at 8% 8%,color-mix(in srgb,var(--em) 12%,transparent),transparent 55%),
+    radial-gradient(50% 50% at 50% 108%,color-mix(in srgb,var(--indigo) 10%,transparent),transparent 60%);}
+
+/* ============================================================================
+   NAV
+   ========================================================================== */
+header.nav{position:fixed;top:0;left:0;right:0;z-index:60;
+  transition:background .3s var(--ease-out),border-color .3s,backdrop-filter .3s}
+.nav-in{max-width:var(--maxw);margin-inline:auto;padding:14px var(--edge);
+  display:flex;align-items:center;gap:20px}
+header.nav.scrolled{background:var(--glass);backdrop-filter:blur(18px) saturate(1.4);
+  -webkit-backdrop-filter:blur(18px) saturate(1.4);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:11px;font-weight:700;letter-spacing:-.02em;
+  font-size:16px;cursor:pointer;transition:opacity .2s}
+.brand:hover{opacity:.85}
+.brand .logo{width:30px;height:30px}
+.brand b{font-weight:800}
+.brand .tag{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--faint);border:1px solid var(--line);border-radius:5px;padding:2px 6px;margin-left:2px}
+.nav-links{display:flex;align-items:center;gap:4px;margin-left:8px}
+.nav-links a{padding:8px 14px;border-radius:10px;font-size:14px;font-weight:500;color:var(--dim);
+  transition:color .2s,background .2s;position:relative}
+.nav-links a:hover{color:var(--ink);background:color-mix(in srgb,var(--ink) 6%,transparent)}
+.nav-links a.active{color:var(--ink)}
+.nav-links a.active::after{content:"";position:absolute;left:14px;right:14px;bottom:3px;height:2px;
+  border-radius:2px;background:var(--grad-life)}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.iconbtn{width:38px;height:38px;border-radius:11px;border:1px solid var(--line);
+  display:grid;place-items:center;color:var(--dim);cursor:pointer;background:var(--panel);
+  transition:color .2s,border-color .2s,transform .12s var(--ease-out),background .2s}
+.iconbtn:hover{color:var(--ink);border-color:var(--hair)}
+.iconbtn:active{transform:scale(.94)}
+.iconbtn svg{width:17px;height:17px}
+.search-pill{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:11px;
+  border:1px solid var(--line);color:var(--faint);cursor:pointer;background:var(--panel);
+  font-size:13px;transition:border-color .2s,color .2s;min-width:0}
+.search-pill:hover{border-color:var(--hair);color:var(--dim)}
+.search-pill kbd{margin-left:auto;font-family:var(--mono);font-size:10px;padding:2px 6px;
+  border-radius:5px;background:color-mix(in srgb,var(--ink) 8%,transparent);border:1px solid var(--line)}
+.btn{display:inline-flex;align-items:center;gap:9px;padding:11px 20px;border-radius:12px;
+  font-weight:600;font-size:14.5px;cursor:pointer;position:relative;overflow:hidden;
+  transition:transform .14s var(--ease-out),box-shadow .3s var(--ease-out),background .3s}
+.btn:active{transform:scale(.97)}
+.btn.primary{color:#03110c;background:var(--grad-life);box-shadow:var(--shadow-glow)}
+.btn.primary:hover{box-shadow:0 0 0 1px rgba(52,211,153,.3),0 26px 70px -18px rgba(16,185,129,.55)}
+.btn.ghost{color:var(--ink);border:1px solid var(--hair);background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.btn.ghost:hover{border-color:color-mix(in srgb,var(--em) 40%,var(--hair))}
+.btn .arr{transition:transform .2s var(--ease-out)}
+.btn:hover .arr{transform:translateX(3px)}
+.navtoggle{display:none}
+
+/* ============================================================================
+   PAGE + reveal
+   ========================================================================== */
+main{position:relative;z-index:1;padding-top:70px}
+.reveal{opacity:0;transform:translateY(20px);
+  transition:opacity .5s var(--ease-out),transform .5s var(--ease-out)}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.06s}.reveal.d2{transition-delay:.12s}
+.reveal.d3{transition-delay:.18s}.reveal.d4{transition-delay:.24s}.reveal.d5{transition-delay:.3s}
+@keyframes pageIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* ============================================================================
+   CARDS / SECTIONS
+   ========================================================================== */
+.sec-head{max-width:720px;margin-bottom:clamp(34px,5vw,62px)}
+.sec-head.center{margin-inline:auto}
+.sec-head .eyebrow{margin-bottom:18px}
+.sec-head h2{margin-bottom:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:clamp(22px,3vw,32px);position:relative;overflow:hidden;
+  transition:transform .4s var(--ease-out),border-color .4s,box-shadow .4s var(--ease-out)}
+.card .glow{position:absolute;inset:-1px;border-radius:inherit;opacity:0;pointer-events:none;
+  background:radial-gradient(50% 60% at var(--mx,50%) 0%,var(--spot),transparent 70%);
+  transition:opacity .4s}
+@media (hover:hover) and (pointer:fine){
+  .card.lift:hover{transform:translateY(-6px);border-color:var(--hair);box-shadow:var(--shadow-2)}
+  .card.lift:hover .glow{opacity:1}
+}
+.card .ico{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;margin-bottom:20px;
+  background:color-mix(in srgb,var(--em) 12%,transparent);color:var(--em);
+  border:1px solid color-mix(in srgb,var(--em) 22%,transparent)}
+.card .ico svg{width:22px;height:22px}
+.card h3{margin-bottom:9px}
+.card p{color:var(--dim);font-size:15px;line-height:1.6}
+.chip{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10.5px;
+  letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border-radius:999px;
+  border:1px solid var(--line);color:var(--dim)}
+.chip.live{color:var(--em);border-color:color-mix(in srgb,var(--em) 30%,transparent);
+  background:color-mix(in srgb,var(--em) 10%,transparent)}
+.chip.soon{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 26%,transparent)}
+.chip .d{width:6px;height:6px;border-radius:50%;background:currentColor}
+
+/* grids */
+.g3{grid-template-columns:repeat(3,1fr)}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+
+/* footer */
+footer{position:relative;z-index:1;border-top:1px solid var(--line);margin-top:40px;
+  background:var(--bg-2)}
+.foot-in{max-width:var(--maxw);margin-inline:auto;padding:clamp(48px,7vw,84px) var(--edge) 40px;
+  display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:40px}
+.foot-brand p{color:var(--dim);font-size:14px;max-width:280px;margin-top:14px}
+.foot-brand .brand{cursor:default}
+.foot-col h4{font-size:12px;font-family:var(--mono);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--faint);margin-bottom:14px}
+.foot-col a{display:block;color:var(--dim);font-size:14px;padding:5px 0;transition:color .2s}
+.foot-col a:hover{color:var(--ink)}
+.foot-bottom{max-width:var(--maxw);margin-inline:auto;padding:22px var(--edge);border-top:1px solid var(--line);
+  display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;color:var(--faint);font-size:12.5px}
+
+/* ============================================================================
+   COMMAND PALETTE (⌘K)
+   ========================================================================== */
+#cmdk{position:fixed;inset:0;z-index:90;display:none;align-items:flex-start;justify-content:center;
+  padding-top:12vh;background:rgba(2,4,6,.5);backdrop-filter:blur(6px)}
+#cmdk.open{display:flex;animation:fadeIn .18s var(--ease-out)}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.cmdk-box{width:min(620px,92vw);background:var(--glass-strong);border:1px solid var(--hair);
+  border-radius:var(--r-lg);overflow:hidden;box-shadow:0 40px 120px -30px rgba(0,0,0,.7);
+  transform-origin:top center;animation:cmdkIn .22s var(--ease-out)}
+@keyframes cmdkIn{from{opacity:0;transform:scale(.96) translateY(-8px)}to{opacity:1;transform:none}}
+.cmdk-in{display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line)}
+.cmdk-in svg{width:18px;height:18px;color:var(--faint);flex:none}
+.cmdk-in input{width:100%;font-size:16px;letter-spacing:-.01em}
+.cmdk-in input::placeholder{color:var(--faint)}
+.cmdk-in .esc{font-family:var(--mono);font-size:10px;color:var(--faint);border:1px solid var(--line);
+  border-radius:5px;padding:3px 6px}
+.cmdk-list{max-height:52vh;overflow:auto;padding:8px}
+.cmdk-group{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--faint);padding:12px 12px 6px}
+.cmdk-item{display:flex;align-items:center;gap:13px;padding:11px 12px;border-radius:11px;cursor:pointer;
+  transition:background .12s}
+.cmdk-item .ci{width:32px;height:32px;border-radius:9px;flex:none;display:grid;place-items:center;
+  background:color-mix(in srgb,var(--ink) 6%,transparent);color:var(--em)}
+.cmdk-item .cm b{font-size:14px;font-weight:500;display:block}
+.cmdk-item .cm span{font-size:12px;color:var(--faint)}
+.cmdk-item .kind{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--faint);
+  border:1px solid var(--line);border-radius:5px;padding:2px 7px}
+.cmdk-item.sel,.cmdk-item:hover{background:color-mix(in srgb,var(--em) 12%,transparent)}
+.cmdk-empty{padding:30px;text-align:center;color:var(--faint);font-size:14px}
+
+/* ============================================================================
+   RESPONSIVE (shell)
+   ========================================================================== */
+@media (max-width:1024px){
+  .nav-links{display:none}
+  .navtoggle{display:grid}
+  .mobile-menu.open{display:block}
+}
+@media (max-width:940px){
+  .g3,.g4{grid-template-columns:1fr 1fr}
+  .foot-in{grid-template-columns:1fr 1fr}
+}
+@media (max-width:560px){
+  .search-pill{display:none}
+  .nav-right .btn.primary{display:none}
+}
+@media (max-width:680px){
+  .search-pill span{display:none}
+  .g3,.g4,.g2{grid-template-columns:1fr}
+  .foot-in{grid-template-columns:1fr}
+}
+.mobile-menu{display:none;position:fixed;inset:70px 0 0;z-index:55;background:var(--glass-strong);
+  backdrop-filter:blur(20px);padding:24px var(--edge);animation:pageIn .3s var(--ease-out)}
+.mobile-menu a{display:block;padding:16px 0;font-size:20px;font-weight:600;border-bottom:1px solid var(--line)}
+
+/* reduced motion */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;
+    transition-duration:.12s!important}
+  .reveal{opacity:1!important;transform:none!important;filter:none!important}
+  #fx{display:none}
+}
+</style>
+
+<style id="page-css">
+/* ============================================================================
+   LEARN — scoped page styles
+   ========================================================================== */
+
+/* ---- hero ----------------------------------------------------------------- */
+.lrn-hero{position:relative;min-height:calc(84svh - 70px);display:grid;align-items:center;
+  padding-block:clamp(48px,8vw,96px);overflow:hidden}
+.lrn-hero .badge{display:inline-flex;align-items:center;gap:10px;padding:7px 14px 7px 8px;border-radius:999px;
+  border:1px solid var(--line);background:var(--glass);backdrop-filter:blur(10px);font-size:13px;
+  color:var(--dim);margin-bottom:26px}
+.lrn-hero .badge .dot{width:8px;height:8px;border-radius:50%;background:var(--em);
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--em) 22%,transparent);animation:pulse 2.6s var(--ease-in-out) infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--em) 30%,transparent)}
+  50%{box-shadow:0 0 0 7px color-mix(in srgb,var(--em) 0%,transparent)}}
+.lrn-hero-content{position:relative;z-index:2;max-width:900px}
+.lrn-hero h1{margin:0 0 22px;font-size:clamp(2.7rem,7.4vw,5.4rem);font-weight:800;letter-spacing:-.035em;line-height:1.0}
+.lrn-hero h1 em{font-style:normal;background:var(--grad-life);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lrn-hero p.lead{max-width:640px;margin-bottom:34px}
+.lrn-cta{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.lrn-meta{display:flex;flex-wrap:wrap;gap:30px;margin-top:48px;padding-top:26px;border-top:1px solid var(--line-2)}
+.lrn-meta .stat b{font-size:clamp(1.5rem,3vw,2rem);font-weight:800;letter-spacing:-.02em;display:block}
+.lrn-meta .stat span{font-size:12.5px;color:var(--faint);font-family:var(--mono);letter-spacing:.04em}
+.lrn-hero-orb{position:absolute;right:-6%;top:50%;transform:translateY(-50%);width:min(46vw,540px);
+  aspect-ratio:1;z-index:1;pointer-events:none;opacity:.85}
+.lrn-hero-orb svg{width:100%;height:100%;animation:orbSpin 60s linear infinite}
+@keyframes orbSpin{to{transform:rotate(360deg)}}
+@media (max-width:1180px){.lrn-hero-orb{opacity:.4;right:-18%}}
+@media (max-width:860px){.lrn-hero-orb{display:none}}
+
+/* ---- experience categories ------------------------------------------------ */
+.cat{margin-bottom:clamp(46px,7vw,86px)}
+.cat:last-child{margin-bottom:0}
+.cat-head{display:flex;align-items:baseline;gap:16px;margin-bottom:24px;flex-wrap:wrap}
+.cat-head .kk{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex:none;
+  background:color-mix(in srgb,var(--cy) 12%,transparent);color:var(--cy);
+  border:1px solid color-mix(in srgb,var(--cy) 22%,transparent);align-self:center}
+.cat-head .kk svg{width:18px;height:18px}
+.cat-head h3{font-size:clamp(1.25rem,2.4vw,1.6rem);font-weight:700;letter-spacing:-.02em}
+.cat-head .cnt{font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.08em;
+  margin-left:auto;align-self:center}
+.exp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media (max-width:940px){.exp-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:680px){.exp-grid{grid-template-columns:1fr}}
+
+.exp{display:flex;flex-direction:column;min-height:238px;color:inherit}
+.exp .ico{margin-bottom:18px}
+.exp h4{font-size:1.12rem;font-weight:600;letter-spacing:-.02em;margin-bottom:8px;line-height:1.25}
+.exp p{color:var(--dim);font-size:14px;line-height:1.6;flex:1}
+.exp .foot{display:flex;align-items:center;gap:10px;margin-top:18px}
+.exp .open{margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;
+  color:var(--em);opacity:0;transform:translateX(-4px);transition:opacity .3s var(--ease-out),transform .3s var(--ease-out)}
+.exp .open .arr{transition:transform .2s var(--ease-out)}
+a.exp{cursor:pointer}
+@media (hover:hover){a.exp:hover .open{opacity:1;transform:none}a.exp:hover .open .arr{transform:translateX(3px)}}
+.exp.soon{cursor:default}
+.exp.soon .ico{background:color-mix(in srgb,var(--amber) 12%,transparent);color:var(--amber);
+  border-color:color-mix(in srgb,var(--amber) 22%,transparent)}
+.exp.soon h4{color:var(--dim)}
+/* live cards get a faint life-tint ring on hover already from .card.lift */
+.exp .liveband{position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--grad-life);opacity:.9;transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease-out)}
+@media (hover:hover){a.exp:hover .liveband{transform:none}}
+
+/* ---- interactive block scaffolding --------------------------------------- */
+.demo-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--em);margin-bottom:14px}
+.demo-tag .d{width:6px;height:6px;border-radius:50%;background:var(--em);
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--em) 20%,transparent)}
+.lab{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(24px,4vw,48px);align-items:center}
+@media (max-width:900px){.lab{grid-template-columns:1fr}}
+
+/* ---- interactive cell ----------------------------------------------------- */
+.cell-stage{aspect-ratio:1;position:relative;border-radius:var(--r-xl);border:1px solid var(--line);
+  overflow:hidden;background:radial-gradient(circle at 50% 44%,color-mix(in srgb,var(--em) 9%,transparent),transparent 70%),var(--panel)}
+.cell-stage svg{width:100%;height:100%;touch-action:manipulation}
+.organelle{cursor:pointer;transition:opacity .25s var(--ease-out),transform .25s var(--ease-out);transform-box:fill-box;transform-origin:center}
+.organelle:hover{opacity:.9}
+.organelle.dim{opacity:.26}
+.organelle.on{opacity:1}
+.organelle.on .hl{opacity:1}
+.organelle .hl{opacity:0;transition:opacity .25s}
+.organelle:focus-visible{outline:none}
+.organelle:focus-visible .ring{opacity:1}.organelle:focus-visible .hl{opacity:1}
+.organelle .ring{opacity:0}
+.cell-info h3{margin-bottom:6px;transition:opacity .26s var(--ease-out)}
+.cell-info .role{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--cy);margin-bottom:12px;display:inline-block}
+.cell-info p{color:var(--dim);font-size:15px;line-height:1.68;min-height:96px;transition:opacity .26s var(--ease-out)}
+.cell-info .hint{font-size:13px;color:var(--faint);margin-top:6px}
+.organelle-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.oleg{padding:7px 12px;border-radius:999px;border:1px solid var(--line);font-size:12.5px;font-weight:500;
+  color:var(--dim);cursor:pointer;display:inline-flex;align-items:center;gap:8px;
+  transition:border-color .2s,color .2s,background .2s,transform .12s var(--ease-out)}
+.oleg .sw{width:9px;height:9px;border-radius:50%;background:var(--k,var(--em))}
+.oleg:hover{color:var(--ink);border-color:var(--hair)}
+.oleg:active{transform:scale(.96)}
+.oleg.on{color:var(--ink);border-color:color-mix(in srgb,var(--em) 35%,transparent);
+  background:color-mix(in srgb,var(--em) 10%,transparent)}
+
+/* ---- virtual microscope --------------------------------------------------- */
+.scope{position:relative}
+.scope-frame{aspect-ratio:1;border-radius:50%;position:relative;overflow:hidden;
+  background:#02040a;border:1px solid var(--hair);
+  box-shadow:inset 0 0 60px rgba(0,0,0,.9),0 20px 60px -20px rgba(0,0,0,.7)}
+.scope-frame::after{content:"";position:absolute;inset:0;border-radius:50%;pointer-events:none;
+  box-shadow:inset 0 0 90px 20px rgba(0,0,0,.85);z-index:4}
+.scope-field{position:absolute;inset:0;display:grid;place-items:center;overflow:hidden;border-radius:50%}
+.scope-field svg{width:130%;height:130%;transition:filter .35s var(--ease-out),transform .5s var(--ease-out)}
+.scope-cross{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:.5}
+.scope-cross line{stroke:color-mix(in srgb,var(--em) 60%,transparent);stroke-width:1}
+.scope-cross circle{fill:none;stroke:color-mix(in srgb,var(--em) 40%,transparent);stroke-width:1}
+.scope-scale{position:absolute;left:16%;bottom:16%;z-index:5;display:flex;flex-direction:column;gap:4px;
+  font-family:var(--mono);font-size:10px;color:rgba(220,245,240,.85);pointer-events:none}
+.scope-scale .bar{height:3px;background:rgba(220,245,240,.85);border-radius:2px;
+  transition:width .4s var(--ease-out)}
+.scope-mag{position:absolute;right:14%;top:15%;z-index:5;font-family:var(--mono);font-size:12px;
+  color:rgba(220,245,240,.9);pointer-events:none;text-align:right}
+.scope-mag b{font-size:20px;font-weight:700;display:block;letter-spacing:-.02em}
+.scope-controls{margin-top:26px;display:flex;flex-direction:column;gap:22px}
+.ctl label{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:500;
+  margin-bottom:10px}
+.ctl label b{font-family:var(--mono);font-size:12px;color:var(--em);font-weight:600}
+input[type=range].rng{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:999px;
+  background:linear-gradient(90deg,var(--em) var(--fill,50%),var(--line) var(--fill,50%));cursor:pointer}
+input[type=range].rng::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;
+  border-radius:50%;background:var(--ink);border:3px solid var(--em);cursor:grab;
+  box-shadow:0 2px 10px rgba(0,0,0,.5);transition:transform .12s var(--ease-out)}
+input[type=range].rng::-webkit-slider-thumb:active{transform:scale(1.12);cursor:grabbing}
+input[type=range].rng::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--ink);
+  border:3px solid var(--em);cursor:grab}
+.spec-tabs{display:flex;flex-wrap:wrap;gap:8px}
+.spec-tab{padding:8px 13px;border-radius:10px;border:1px solid var(--line);font-size:13px;font-weight:500;
+  color:var(--dim);cursor:pointer;transition:border-color .2s,color .2s,background .2s,transform .12s var(--ease-out)}
+.spec-tab:hover{color:var(--ink);border-color:var(--hair)}
+.spec-tab:active{transform:scale(.96)}
+.spec-tab.on{color:var(--em);border-color:color-mix(in srgb,var(--em) 35%,transparent);
+  background:color-mix(in srgb,var(--em) 10%,transparent)}
+.scope-cap{font-size:13.5px;color:var(--dim);line-height:1.6;margin-top:4px}
+.scope-cap b{color:var(--ink);font-weight:600}
+
+/* ---- closing CTA ---------------------------------------------------------- */
+.cta-band{position:relative;border-radius:var(--r-xl);overflow:hidden;border:1px solid var(--hair);
+  padding:clamp(40px,7vw,84px);text-align:center;background:
+  radial-gradient(60% 100% at 50% 0%,color-mix(in srgb,var(--em) 16%,transparent),transparent 65%),
+  linear-gradient(180deg,var(--raise),var(--bg-2))}
+.cta-band h2{margin-bottom:16px}
+.cta-band p.lead{max-width:560px;margin:0 auto 30px}
+.cta-band .lrn-cta{justify-content:center}
+</style>
+</head>
+<body data-page="learn">
+<div class="bg-veil" aria-hidden="true"></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<!-- ===================== NAV ===================== -->
+<a href="#page" class="skiplink">Skip to content</a>
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="brand" href="./index.html" aria-label="Biology Entelloq home">
+      <svg class="logo" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+        <defs><linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#34d399"/><stop offset="1" stop-color="#38e0d8"/></linearGradient></defs>
+        <path d="M32 16c20 9 16 28 0 34 20 6 24 24 0 34" stroke="url(#bg1)" stroke-width="5" stroke-linecap="round"/>
+        <path d="M68 16C48 25 52 44 68 50 48 56 44 75 68 84" stroke="url(#bg1)" stroke-width="5" stroke-linecap="round"/>
+      </svg>
+      <span>Biology <b>Entelloq</b></span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="./index.html">Platform</a>
+      <a href="./learn.html" class="active" aria-current="page">Learn</a>
+      <a href="./universe.html">Universe</a>
+      <a href="./lab.html">Dissection Lab</a>
+    </nav>
+    <div class="nav-right">
+      <button class="search-pill" id="openCmdk" aria-label="Search experiences"><svg viewBox="0 0 24 24" fill="none" width="15" height="15"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20l-3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Search experiences</span><kbd>⌘K</kbd></button>
+      <button class="iconbtn" id="themeBtn" aria-label="Toggle light and dark theme" aria-pressed="false"><svg id="themeIcon" viewBox="0 0 24 24" fill="none"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></button>
+      <a class="btn primary" href="./lab.html">Enter the Lab <span class="arr">→</span></a>
+      <button class="iconbtn navtoggle" id="navToggle" aria-label="Menu" aria-controls="mobileMenu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="./index.html">Platform</a>
+  <a href="./learn.html">Learn</a>
+  <a href="./universe.html">Universe</a>
+  <a href="./lab.html">Enter the Lab →</a>
+</div>
+
+<main id="page">
+
+  <!-- ===================== HERO ===================== -->
+  <section class="lrn-hero wrap">
+    <div class="lrn-hero-orb" aria-hidden="true">
+      <svg viewBox="0 0 400 400" fill="none">
+        <defs>
+          <radialGradient id="ho1" cx="50%" cy="50%" r="50%">
+            <stop offset="0" stop-color="#34d399" stop-opacity=".28"/>
+            <stop offset="1" stop-color="#34d399" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="ho2" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#34d399"/><stop offset="1" stop-color="#38e0d8"/>
+          </linearGradient>
+        </defs>
+        <circle cx="200" cy="200" r="190" fill="url(#ho1)"/>
+        <g stroke="url(#ho2)" stroke-width="1.4" opacity=".5" fill="none">
+          <ellipse cx="200" cy="200" rx="150" ry="58"/>
+          <ellipse cx="200" cy="200" rx="150" ry="58" transform="rotate(60 200 200)"/>
+          <ellipse cx="200" cy="200" rx="150" ry="58" transform="rotate(120 200 200)"/>
+        </g>
+        <g stroke="url(#ho2)" stroke-width="2.4" stroke-linecap="round" fill="none">
+          <path d="M150 90c60 30 46 84 0 108 60 22 66 78 0 108"/>
+          <path d="M250 90c-60 30-46 84 0 108-60 22-66 78 0 108"/>
+          <g stroke-width="1.6" opacity=".7">
+            <line x1="158" y1="112" x2="242" y2="112"/><line x1="150" y1="150" x2="250" y2="150"/>
+            <line x1="150" y1="198" x2="250" y2="198"/><line x1="150" y1="246" x2="250" y2="246"/>
+            <line x1="158" y1="288" x2="242" y2="288"/>
+          </g>
+        </g>
+        <circle cx="200" cy="200" r="5" fill="url(#ho2)"/>
+      </svg>
+    </div>
+    <div class="lrn-hero-content">
+      <div class="badge reveal"><span class="dot"></span> Learn · Experiences that run in your browser</div>
+      <h1 class="reveal d1">Experience biology.<br><em>Don't just read it.</em></h1>
+      <p class="lead reveal d2">Textbooks freeze life on a page. Here you open a body on the dissection table, fall
+        from the edge of the universe down to a single atom, click through a living cell, and turn the focus
+        knob on a real virtual microscope. This is the front door to the lab.</p>
+      <div class="lrn-cta reveal d3">
+        <a class="btn primary" href="./lab.html">Enter the Dissection Theatre <span class="arr">→</span></a>
+        <a class="btn ghost" href="./universe.html">Explore the Universe <span class="arr">→</span></a>
+        <a class="btn ghost" href="#experiences" id="jumpExp">Browse all experiences</a>
+      </div>
+      <div class="lrn-meta reveal d4">
+        <div class="stat"><b>3</b><span>LIVE&nbsp;NOW</span></div>
+        <div class="stat"><b>14</b><span>EXPERIENCES</span></div>
+        <div class="stat"><b>4</b><span>CATEGORIES</span></div>
+        <div class="stat"><b>13</b><span>SCALES&nbsp;OF&nbsp;LIFE</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== EXPERIENCES ===================== -->
+  <section class="band wrap" id="experiences">
+    <div class="sec-head reveal">
+      <div class="eyebrow">The catalog</div>
+      <h2 class="h2">Pick something and <span class="grad">do it</span></h2>
+      <p class="lead">Every tile is an experience, not a chapter. Three are live today — the rest are in the
+        pipeline, each one a real interactive we're building, not a stock photo.</p>
+    </div>
+    <div id="catalog"><!-- categories injected by page-js, then reveals observed --></div>
+  </section>
+
+  <!-- ===================== INTERACTIVE: CELL ===================== -->
+  <section class="band wrap" id="cell">
+    <div class="lab">
+      <div class="cell-stage reveal" aria-hidden="false">
+        <svg viewBox="0 0 460 460" role="group" aria-label="Interactive animal cell — activate an organelle to read about it">
+          <defs>
+            <radialGradient id="cyto" cx="48%" cy="42%" r="62%">
+              <stop offset="0" stop-color="#0e2a24"/><stop offset="1" stop-color="#0a1a18"/>
+            </radialGradient>
+            <radialGradient id="nuc" cx="42%" cy="38%" r="65%">
+              <stop offset="0" stop-color="#3a4ea8"/><stop offset="1" stop-color="#232f6e"/>
+            </radialGradient>
+            <linearGradient id="mitoG" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#f6a35b"/><stop offset="1" stop-color="#e5704f"/>
+            </linearGradient>
+          </defs>
+
+          <!-- membrane + cytoplasm -->
+          <g class="organelle" data-key="membrane" tabindex="0" role="button" aria-label="Cell membrane">
+            <ellipse class="hit" cx="230" cy="230" rx="212" ry="196" fill="transparent"/>
+            <ellipse cx="230" cy="230" rx="212" ry="196" fill="none" stroke="#39e0d8" stroke-width="6"/>
+            <ellipse class="hl" cx="230" cy="230" rx="212" ry="196" fill="none" stroke="#39e0d8" stroke-width="12" opacity="0"/>
+            <ellipse class="ring" cx="230" cy="230" rx="220" ry="204" fill="none" stroke="var(--em)" stroke-width="2" stroke-dasharray="5 5"/>
+          </g>
+          <g class="organelle" data-key="cytoplasm" tabindex="0" role="button" aria-label="Cytoplasm">
+            <ellipse cx="230" cy="230" rx="206" ry="190" fill="url(#cyto)"/>
+            <ellipse class="hl" cx="230" cy="230" rx="206" ry="190" fill="#34d399" opacity="0"/>
+          </g>
+
+          <!-- ER (rough) -->
+          <g class="organelle" data-key="rer" tabindex="0" role="button" aria-label="Rough endoplasmic reticulum">
+            <path class="hl" d="M120 300c40-16 70-6 96 8 26 14 56 18 92 4" fill="none" stroke="#8b5cf6" stroke-width="16" opacity="0" stroke-linecap="round"/>
+            <path d="M120 300c40-16 70-6 96 8 26 14 56 18 92 4" fill="none" stroke="#a78bfa" stroke-width="6" stroke-linecap="round"/>
+            <path d="M126 316c40-16 70-6 96 8 26 14 56 18 92 4" fill="none" stroke="#a78bfa" stroke-width="6" stroke-linecap="round" opacity=".7"/>
+            <g fill="#c4b5fd"><circle cx="150" cy="298" r="3.4"/><circle cx="196" cy="304" r="3.4"/><circle cx="250" cy="314" r="3.4"/><circle cx="300" cy="308" r="3.4"/></g>
+          </g>
+          <!-- ER (smooth) -->
+          <g class="organelle" data-key="ser" tabindex="0" role="button" aria-label="Smooth endoplasmic reticulum">
+            <path class="hl" d="M300 150c22 4 40 20 34 44-6 24-34 26-40 46" fill="none" stroke="#38e0d8" stroke-width="16" opacity="0" stroke-linecap="round"/>
+            <path d="M300 150c22 4 40 20 34 44-6 24-34 26-40 46" fill="none" stroke="#5eead4" stroke-width="6" stroke-linecap="round"/>
+          </g>
+
+          <!-- Golgi -->
+          <g class="organelle" data-key="golgi" tabindex="0" role="button" aria-label="Golgi apparatus">
+            <g stroke="#f6c667" stroke-width="6" fill="none" stroke-linecap="round">
+              <path class="hl" d="M120 150q40-22 78 0" stroke-width="16" opacity="0"/>
+              <path d="M118 146q40-22 78 0"/><path d="M114 160q44-24 86 0"/><path d="M112 174q46-24 90 0"/>
+            </g>
+            <g fill="#fbe3a1"><circle cx="120" cy="132" r="4"/><circle cx="200" cy="134" r="4"/></g>
+          </g>
+
+          <!-- mitochondria (x2) -->
+          <g class="organelle" data-key="mito" tabindex="0" role="button" aria-label="Mitochondria">
+            <g>
+              <ellipse class="hl" cx="330" cy="300" rx="52" ry="26" fill="#e5704f" opacity="0" transform="rotate(-24 330 300)"/>
+              <ellipse cx="330" cy="300" rx="46" ry="22" fill="url(#mitoG)" transform="rotate(-24 330 300)"/>
+              <path d="M300 306c14-10 22 8 36-2 14-10 22 8 34-4" stroke="#7a2f1f" stroke-width="3" fill="none" transform="rotate(-24 330 300)"/>
+            </g>
+            <g>
+              <ellipse cx="132" cy="212" rx="38" ry="18" fill="url(#mitoG)" transform="rotate(20 132 212)"/>
+              <path d="M108 214c12-8 18 6 30-2 12-8 18 6 28-3" stroke="#7a2f1f" stroke-width="2.6" fill="none" transform="rotate(20 132 212)"/>
+            </g>
+          </g>
+
+          <!-- lysosome + vacuole -->
+          <g class="organelle" data-key="lysosome" tabindex="0" role="button" aria-label="Lysosome">
+            <circle class="hl" cx="308" cy="196" r="26" fill="#fb7185" opacity="0"/>
+            <circle cx="308" cy="196" r="20" fill="#fb7185"/>
+            <g fill="#7a1524"><circle cx="302" cy="192" r="2.4"/><circle cx="314" cy="198" r="2.4"/><circle cx="306" cy="204" r="2.4"/></g>
+          </g>
+          <g class="organelle" data-key="vacuole" tabindex="0" role="button" aria-label="Vacuole">
+            <circle class="hl" cx="160" cy="128" r="34" fill="#38e0d8" opacity="0"/>
+            <circle cx="160" cy="128" r="28" fill="#0e3b3a" stroke="#2bbfb6" stroke-width="3"/>
+          </g>
+
+          <!-- centrosome -->
+          <g class="organelle" data-key="centrosome" tabindex="0" role="button" aria-label="Centrosome">
+            <g transform="translate(150,332)">
+              <rect class="hl" x="-16" y="-10" width="32" height="20" rx="4" fill="#f6c667" opacity="0"/>
+              <rect x="-11" y="-4" width="22" height="8" rx="3" fill="#e2c069"/>
+              <rect x="-4" y="-11" width="8" height="22" rx="3" fill="#e2c069"/>
+            </g>
+          </g>
+
+          <!-- nucleus -->
+          <g class="organelle" data-key="nucleus" tabindex="0" role="button" aria-label="Nucleus">
+            <circle class="hl" cx="210" cy="214" r="82" fill="#3a4ea8" opacity="0"/>
+            <circle cx="210" cy="214" r="72" fill="url(#nuc)" stroke="#8b95e6" stroke-width="4"/>
+            <g fill="#9aa4ec" opacity=".55">
+              <circle cx="186" cy="196" r="3"/><circle cx="228" cy="188" r="3"/><circle cx="240" cy="228" r="3"/>
+              <circle cx="196" cy="240" r="3"/><circle cx="214" cy="214" r="3"/><circle cx="178" cy="224" r="3"/>
+            </g>
+          </g>
+          <!-- nucleolus (inside nucleus, separate target) -->
+          <g class="organelle" data-key="nucleolus" tabindex="0" role="button" aria-label="Nucleolus">
+            <circle class="hl" cx="224" cy="226" r="26" fill="#c9d0ff" opacity="0"/>
+            <circle cx="224" cy="226" r="19" fill="#1a2456" stroke="#c9d0ff" stroke-width="2.4"/>
+          </g>
+
+          <!-- free ribosomes -->
+          <g class="organelle" data-key="ribosome" tabindex="0" role="button" aria-label="Ribosomes">
+            <g fill="#34d399">
+              <circle cx="120" cy="240" r="4"/><circle cx="140" cy="268" r="4"/><circle cx="300" cy="130" r="4"/>
+              <circle cx="336" cy="238" r="4"/><circle cx="270" cy="356" r="4"/><circle cx="176" cy="300" r="4"/>
+              <circle cx="356" cy="176" r="4"/><circle cx="110" cy="176" r="4"/>
+            </g>
+            <g class="hl" fill="#34d399" opacity="0">
+              <circle cx="120" cy="240" r="9"/><circle cx="140" cy="268" r="9"/><circle cx="300" cy="130" r="9"/>
+              <circle cx="336" cy="238" r="9"/><circle cx="270" cy="356" r="9"/><circle cx="176" cy="300" r="9"/>
+              <circle cx="356" cy="176" r="9"/><circle cx="110" cy="176" r="9"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+
+      <div class="cell-info reveal d1">
+        <div class="demo-tag"><span class="d"></span> Live mini-experience</div>
+        <h2 class="h2" style="margin-bottom:14px">The interactive cell</h2>
+        <p class="lead" style="font-size:1.05rem;margin-bottom:22px">Tap any structure in the cell — or use the
+          chips below — to learn what it is and what it does. Keyboard friendly: focus a part and press Enter.</p>
+        <div class="card" style="padding:22px 24px">
+          <h3 id="cellName" class="h3">Start exploring</h3>
+          <span class="role" id="cellRole" hidden></span>
+          <p id="cellDesc">This is a eukaryotic animal cell. Every coloured structure is an organelle with a
+            job to do. Pick one to reveal its name and function — the rest fade so you can focus.</p>
+        </div>
+        <div class="organelle-legend" id="cellLegend" role="group" aria-label="Cell structures"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== INTERACTIVE: MICROSCOPE ===================== -->
+  <section class="band wrap" id="microscope">
+    <div class="lab">
+      <div class="scope-info reveal">
+        <div class="demo-tag"><span class="d"></span> Live mini-experience</div>
+        <h2 class="h2" style="margin-bottom:14px">The virtual microscope</h2>
+        <p class="lead" style="font-size:1.05rem;margin-bottom:24px">Drag the magnification up and the specimen
+          swells into view; nudge the focus knob and a blurred smear snaps into crisp cells. Swap the slide to
+          see a different kingdom of life.</p>
+
+        <div class="scope-controls" style="margin-top:0">
+          <div>
+            <div class="eyebrow" style="margin-bottom:12px">Specimen slide</div>
+            <div class="spec-tabs" id="specTabs" role="tablist" aria-label="Specimen slides"></div>
+            <p class="scope-cap" id="specCap" style="margin-top:14px"></p>
+          </div>
+          <div class="ctl">
+            <label for="magR">Magnification <b id="magVal">100×</b></label>
+            <input id="magR" class="rng" type="range" min="40" max="1000" step="10" value="100"
+              aria-label="Magnification" aria-valuetext="100 times">
+          </div>
+          <div class="ctl">
+            <label for="focR">Fine focus <b id="focVal">Sharp</b></label>
+            <input id="focR" class="rng" type="range" min="0" max="100" step="1" value="0"
+              aria-label="Fine focus" aria-valuetext="In focus">
+          </div>
+        </div>
+      </div>
+
+      <div class="scope reveal d1">
+        <div class="scope-frame">
+          <div class="scope-field" id="scopeField">
+            <svg id="specSVG" viewBox="0 0 300 300" role="img" aria-label="Specimen under the microscope"></svg>
+          </div>
+          <svg class="scope-cross" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <line x1="50" y1="0" x2="50" y2="100"/><line x1="0" y1="50" x2="100" y2="50"/>
+            <circle cx="50" cy="50" r="14"/>
+          </svg>
+          <div class="scope-mag" aria-hidden="true"><b id="magBig">100×</b>field of view</div>
+          <div class="scope-scale" aria-hidden="true">
+            <div class="bar" id="scaleBar" style="width:64px"></div>
+            <span id="scaleLbl">200 µm</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CLOSING CTA ===================== -->
+  <section class="band wrap">
+    <div class="cta-band reveal">
+      <div class="eyebrow center" style="justify-content:center;margin-bottom:18px">Ready when you are</div>
+      <h2 class="h2">The table is set. Pick up the scalpel.</h2>
+      <p class="lead">Three experiences are live right now, no sign-up, no wait. Start with the one that pulls you.</p>
+      <div class="lrn-cta">
+        <a class="btn primary" href="./lab.html">Virtual Dissection Theatre <span class="arr">→</span></a>
+        <a class="btn ghost" href="./universe.html">The Biology Universe <span class="arr">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer>
+    <div class="foot-in">
+      <div class="foot-brand">
+        <div class="brand">
+          <svg class="logo" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+            <defs><linearGradient id="fg1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#34d399"/><stop offset="1" stop-color="#38e0d8"/></linearGradient></defs>
+            <path d="M32 16c20 9 16 28 0 34 20 6 24 24 0 34" stroke="url(#fg1)" stroke-width="5" stroke-linecap="round"/>
+            <path d="M68 16C48 25 52 44 68 50 48 56 44 75 68 84" stroke="url(#fg1)" stroke-width="5" stroke-linecap="round"/>
+          </svg>
+          <span>Biology <b>Entelloq</b></span>
+        </div>
+        <p>The definitive way to learn life — cinematic, interactive, and honest about what a cell really does.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Experiences</h4>
+        <a href="./lab.html">Dissection Theatre</a>
+        <a href="./universe.html">The Biology Universe</a>
+        <a href="./universe.html">DNA &amp; Molecular Explorer</a>
+        <a href="#cell">Interactive cell</a>
+      </div>
+      <div class="foot-col">
+        <h4>Pillars</h4>
+        <a href="./index.html">Platform</a>
+        <a href="./learn.html">Learn</a>
+        <a href="./universe.html">Universe</a>
+        <a href="#experiences">All experiences</a>
+      </div>
+      <div class="foot-col">
+        <h4>Nearby</h4>
+        <a href="#microscope">Virtual microscope</a>
+        <a href="./labs.html">Benches</a>
+        <a href="./index.html">About</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Biology Entelloq. A living platform for learning life.</span>
+      <span>Experience it. Don't just read it.</span>
+    </div>
+  </footer>
+
+</main>
+
+<!-- ===================== COMMAND PALETTE ===================== -->
+<div id="cmdk" role="dialog" aria-modal="true" aria-label="Search Biology Entelloq">
+  <div class="cmdk-box">
+    <div class="cmdk-in">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20l-3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <input id="cmdkInput" placeholder="Search experiences, cells, scientists…" autocomplete="off" spellcheck="false"
+        role="combobox" aria-expanded="false" aria-controls="cmdkList" aria-autocomplete="list" aria-label="Search experiences and pages">
+      <span class="esc">ESC</span>
+    </div>
+    <div class="cmdk-list" id="cmdkList" role="listbox" aria-label="Search results"></div>
+  </div>
+</div>
+
+<!-- ============================================================================
+     SHARED SHELL SCRIPT — byte-identical across pillars.
+     Exposes window.__observeReveals() for pages that inject content dynamically.
+     ========================================================================= -->
+<script>
+(function(){
+"use strict";
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const root=document.documentElement;
+const REDUCED=matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---- reveal on scroll (exposed) --------------------------------------- */
+let revealObs;
+function observeReveals(){
+  if(REDUCED){$$(".reveal").forEach(el=>el.classList.add("in"));return;}
+  if(!revealObs)revealObs=new IntersectionObserver((es)=>{
+    es.forEach(en=>{if(en.isIntersecting){en.target.classList.add("in");revealObs.unobserve(en.target);}});
+  },{threshold:.12,rootMargin:"0px 0px -8% 0px"});
+  $$(".reveal:not(.in)").forEach(el=>revealObs.observe(el));
+}
+window.__observeReveals=observeReveals;
+
+/* ---- theme ------------------------------------------------------------ */
+function setTheme(t){root.setAttribute("data-theme",t);try{localStorage.setItem("bioq_theme",t);}catch(e){}
+  const b=$("#themeBtn");if(b)b.setAttribute("aria-pressed",t==="light"?"true":"false");
+  const i=$("#themeIcon");if(i)i.innerHTML=t==="light"
+    ?'<circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'
+    :'<path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>';}
+(function initTheme(){let t="dark";try{t=localStorage.getItem("bioq_theme")||"dark";}catch(e){}setTheme(t);})();
+const themeBtn=$("#themeBtn");
+if(themeBtn)themeBtn.addEventListener("click",()=>setTheme(root.getAttribute("data-theme")==="light"?"dark":"light"));
+
+/* ---- nav scroll state, mobile menu, card glow ------------------------- */
+const nav=$("#nav"),mobileMenu=$("#mobileMenu"),navToggle=$("#navToggle");
+addEventListener("scroll",()=>{if(nav)nav.classList.toggle("scrolled",scrollY>16);},{passive:true});
+if(navToggle&&mobileMenu){
+  navToggle.addEventListener("click",()=>{const open=mobileMenu.classList.toggle("open");
+    navToggle.setAttribute("aria-expanded",open?"true":"false");});
+  mobileMenu.addEventListener("click",e=>{if(e.target.closest("a"))mobileMenu.classList.remove("open");});
+}
+document.addEventListener("pointermove",e=>{const c=e.target.closest(".card");if(!c)return;
+  const r=c.getBoundingClientRect();c.style.setProperty("--mx",((e.clientX-r.left)/r.width*100)+"%");},{passive:true});
+
+/* ---- ambient FX canvas (subtle neural field) -------------------------- */
+function startFX(){
+  const cv=$("#fx");if(!cv||REDUCED)return;
+  const ctx=cv.getContext("2d");let W,H,dpr,pts,raf,running=true;
+  function size(){dpr=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;
+    cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    const n=Math.min(64,Math.round(W*H/26000));
+    pts=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,
+      vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22,r:Math.random()*1.6+.4}));}
+  size();addEventListener("resize",size);
+  function draw(){if(!running)return;ctx.clearRect(0,0,W,H);
+    for(const p of pts){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,6.283);ctx.fillStyle="rgba(56,224,216,.45)";ctx.fill();}
+    for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const a=pts[i],b=pts[j],
+      d=Math.hypot(a.x-b.x,a.y-b.y);if(d<128){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
+        ctx.strokeStyle="rgba(52,211,153,"+(.09*(1-d/128))+")";ctx.stroke();}}
+    raf=requestAnimationFrame(draw);}
+  raf=requestAnimationFrame(draw);cv.classList.add("on");
+  document.addEventListener("visibilitychange",()=>{
+    if(document.hidden){running=false;cancelAnimationFrame(raf);}
+    else if(!running){running=true;raf=requestAnimationFrame(draw);}});
+}
+
+/* ---- command palette -------------------------------------------------- */
+const cmdk=$("#cmdk"),cmdkInput=$("#cmdkInput"),cmdkList=$("#cmdkList"),openCmdk=$("#openCmdk");
+let cmdkSel=0,cmdkFlat=[];
+const CMDK_ITEMS=[
+  {g:"Live experiences",t:"Virtual Dissection Theatre",s:"Open a real specimen on the table",href:"./lab.html",kind:"Live"},
+  {g:"Live experiences",t:"The Biology Universe",s:"Zoom from the universe to a single atom",href:"./universe.html",kind:"Live"},
+  {g:"Live experiences",t:"DNA & Molecular Explorer",s:"Down to the molecules of life",href:"./universe.html",kind:"Live"},
+  {g:"On this page",t:"The interactive cell",s:"Click through an animal cell",href:"#cell",kind:"Demo"},
+  {g:"On this page",t:"The virtual microscope",s:"Magnify & focus a live specimen",href:"#microscope",kind:"Demo"},
+  {g:"On this page",t:"All experiences",s:"Browse the full catalog",href:"#experiences",kind:"Jump"},
+  {g:"Pillars",t:"Platform",s:"The Biology Entelloq home",href:"./index.html",kind:"Page"},
+  {g:"Pillars",t:"Learn",s:"You are here",href:"./learn.html",kind:"Page"}
+];
+const SEARCH_ICO='<svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M20 20l-3-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+function openPalette(){if(!cmdk)return;cmdk.classList.add("open");cmdkInput.value="";renderCmdk("");
+  cmdkInput.setAttribute("aria-expanded","true");setTimeout(()=>cmdkInput.focus(),30);}
+function closePalette(){if(!cmdk)return;cmdk.classList.remove("open");cmdkInput.setAttribute("aria-expanded","false");}
+function renderCmdk(q){
+  q=q.trim().toLowerCase();
+  const items=CMDK_ITEMS.filter(it=>!q||(it.t+" "+it.s+" "+it.g).toLowerCase().includes(q));
+  cmdkFlat=items;cmdkSel=0;
+  if(!items.length){cmdkList.innerHTML='<div class="cmdk-empty">No matches. Try “cell”, “microscope” or “universe”.</div>';return;}
+  let html="",lastG="";
+  items.forEach((it,i)=>{
+    if(it.g!==lastG){html+='<div class="cmdk-group">'+it.g+'</div>';lastG=it.g;}
+    html+='<div class="cmdk-item'+(i===0?' sel':'')+'" role="option" data-i="'+i+'">'
+      +'<span class="ci">'+SEARCH_ICO+'</span><span class="cm"><b>'+it.t+'</b><span>'+it.s+'</span></span>'
+      +'<span class="kind">'+it.kind+'</span></div>';
+  });
+  cmdkList.innerHTML=html;
+  $$(".cmdk-item",cmdkList).forEach(el=>{
+    el.addEventListener("click",()=>go(+el.dataset.i));
+    el.addEventListener("pointermove",()=>setSel(+el.dataset.i));
+  });
+}
+function setSel(i){cmdkSel=i;$$(".cmdk-item",cmdkList).forEach(el=>el.classList.toggle("sel",+el.dataset.i===i));}
+function go(i){const it=cmdkFlat[i];if(!it)return;closePalette();
+  if(it.href.startsWith("#")){const t=$(it.href);if(t)t.scrollIntoView({behavior:REDUCED?"auto":"smooth"});}
+  else location.href=it.href;}
+if(openCmdk)openCmdk.addEventListener("click",openPalette);
+if(cmdkInput){
+  cmdkInput.addEventListener("input",()=>renderCmdk(cmdkInput.value));
+  cmdkInput.addEventListener("keydown",e=>{
+    if(e.key==="ArrowDown"){e.preventDefault();setSel(Math.min(cmdkSel+1,cmdkFlat.length-1));scrollSel();}
+    else if(e.key==="ArrowUp"){e.preventDefault();setSel(Math.max(cmdkSel-1,0));scrollSel();}
+    else if(e.key==="Enter"){e.preventDefault();go(cmdkSel);}
+  });
+}
+function scrollSel(){const el=$$(".cmdk-item",cmdkList)[cmdkSel];if(el)el.scrollIntoView({block:"nearest"});}
+if(cmdk)cmdk.addEventListener("click",e=>{if(e.target===cmdk)closePalette();});
+addEventListener("keydown",e=>{
+  if((e.key==="k"||e.key==="K")&&(e.metaKey||e.ctrlKey)){e.preventDefault();cmdk&&cmdk.classList.contains("open")?closePalette():openPalette();}
+  else if(e.key==="Escape"&&cmdk&&cmdk.classList.contains("open"))closePalette();
+});
+
+/* ---- boot ------------------------------------------------------------- */
+function boot(){
+  startFX();
+  observeReveals();
+  if(nav)nav.classList.toggle("scrolled",scrollY>16);
+  // let the page module build its content, then observe fresh reveals
+  if(typeof window.__pageInit==="function"){try{window.__pageInit();}catch(e){console.error(e);}}
+  observeReveals();
+}
+if(document.readyState!=="loading")boot();
+else addEventListener("DOMContentLoaded",boot);
+})();
+</script>
+
+<!-- ============================================================================
+     PAGE BEHAVIOUR — LEARN. Builds the catalog, wires the interactive cell and
+     the virtual microscope. Exposes window.__pageInit for the shell to call.
+     ========================================================================= -->
+<script id="page-js">
+(function(){
+"use strict";
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const REDUCED=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const LAB="./lab.html";
+const UNIVERSE="./universe.html";
+
+/* ---- icon set --------------------------------------------------------- */
+const I={
+  dna:'<svg viewBox="0 0 24 24" fill="none"><path d="M7 3c8 4 6 10 0 12 8 3 8 9 0 12M17 3c-8 4-6 10 0 12-8 3-8 9 0 12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>',
+  cell:'<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><circle cx="10" cy="11" r="3" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="15" r="1.3" fill="currentColor"/><circle cx="8" cy="16" r="1.1" fill="currentColor"/></svg>',
+  tissue:'<svg viewBox="0 0 24 24" fill="none"><circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="9" r="3" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="16" r="3" stroke="currentColor" stroke-width="1.6"/></svg>',
+  micro:'<svg viewBox="0 0 24 24" fill="none"><path d="M6 18h9M9 18l-1-3M11 6l3 5-3 2-3-5zM13 4l2 1M5 21h14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  scalpel:'<svg viewBox="0 0 24 24" fill="none"><path d="M4 20l8-8 6-6c1-1 2 0 1 1l-6 6-8 8-2 1 1-2z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 12l4-4" stroke="currentColor" stroke-width="1.6"/></svg>',
+  body:'<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="5" r="2.4" stroke="currentColor" stroke-width="1.6"/><path d="M12 8v7M12 15l-4 6M12 15l4 6M6 11l6-2 6 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
+  heart:'<svg viewBox="0 0 24 24" fill="none"><path d="M12 20s-7-4.6-9-9C1.5 7.5 4 4 7.5 4 10 4 12 6 12 6s2-2 4.5-2C20 4 22.5 7.5 21 11c-2 4.4-9 9-9 9z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>',
+  pulse:'<svg viewBox="0 0 24 24" fill="none"><path d="M2 12h4l2-6 4 12 2-6h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  globe:'<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18" stroke="currentColor" stroke-width="1.5"/></svg>',
+  tree:'<svg viewBox="0 0 24 24" fill="none"><path d="M12 21v-7M12 14L7 9M12 11l4-4M12 14V4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="4" r="1.6" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="9" r="1.6" stroke="currentColor" stroke-width="1.5"/><circle cx="16" cy="7" r="1.6" stroke="currentColor" stroke-width="1.5"/></svg>',
+  leaf:'<svg viewBox="0 0 24 24" fill="none"><path d="M5 19c0-8 6-14 14-14 0 8-6 14-14 14zM9 15l6-6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  drop:'<svg viewBox="0 0 24 24" fill="none"><path d="M12 3c4 5 6 8 6 11a6 6 0 01-12 0c0-3 2-6 6-11z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>',
+  chart:'<svg viewBox="0 0 24 24" fill="none"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+  eye:'<svg viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.7"/></svg>',
+  arr:'<svg class="arr" viewBox="0 0 24 24" fill="none" width="15" height="15"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+};
+
+/* ---- catalog data ----------------------------------------------------- */
+const CATS=[
+  {name:"Cells & Molecules", icon:"cell", items:[
+    {t:"DNA & Molecular Explorer", ic:"dna", live:true, href:UNIVERSE,
+      d:"Fall past the cell membrane, into the nucleus, down to the double helix and the atoms that spell out life."},
+    {t:"Interactive Cell Explorer", ic:"cell",
+      d:"Peel a cell apart organelle by organelle — nucleus, mitochondria, Golgi — with every job explained in place."},
+    {t:"Histology Viewer", ic:"tissue",
+      d:"Stained tissue slides at real magnification: epithelium, muscle, nerve and bone, annotated as you scan."},
+    {t:"Microbiology Lab", ic:"micro",
+      d:"Streak a plate, stain a smear and watch bacteria, protists and fungi under a virtual scope."}
+  ]},
+  {name:"Anatomy & Physiology", icon:"body", items:[
+    {t:"Virtual Dissection Theatre", ic:"scalpel", live:true, href:LAB,
+      d:"A real specimen on the table. Cut, retract and identify structures layer by layer, at your own pace."},
+    {t:"Human Anatomy Explorer", ic:"body",
+      d:"Spin a full human body and fade through skin, muscle, vessels and skeleton to any structure you name."},
+    {t:"Organ Systems", ic:"heart",
+      d:"Follow blood through the heart, air through the lungs and signals down a nerve — eleven systems, one flow."},
+    {t:"Physiology Simulations", ic:"pulse",
+      d:"Change a variable — adrenaline, altitude, blood sugar — and watch the whole body respond in real time."}
+  ]},
+  {name:"Life & Ecosystems", icon:"globe", items:[
+    {t:"The Biology Universe", ic:"globe", live:true, href:UNIVERSE,
+      d:"One continuous zoom from the observable universe all the way down to a single atom — every scale of life between."},
+    {t:"Evolution Explorer", ic:"tree",
+      d:"Walk the tree of life, branch by branch, and replay how a fin became a limb across deep time."},
+    {t:"Ecology Simulations", ic:"leaf",
+      d:"Tune predators, prey and climate on a living island and watch populations boom, crash and rebalance."}
+  ]},
+  {name:"Lab Skills", icon:"micro", items:[
+    {t:"Virtual Microscope", ic:"eye",
+      d:"Master magnification, focus and staining on real specimen slides — a live preview runs on this very page."},
+    {t:"Gram Staining Lab", ic:"drop",
+      d:"Run the four-step stain and read the result: crystal-violet purple or safranin pink, and what it means."},
+    {t:"Gel Electrophoresis", ic:"chart",
+      d:"Load your samples, run the current and read DNA fragments as they separate into glowing bands."}
+  ]}
+];
+
+/* ---- render catalog --------------------------------------------------- */
+function buildCatalog(){
+  const wrap=$("#catalog");if(!wrap)return;
+  let html="";
+  CATS.forEach((cat,ci)=>{
+    const live=cat.items.filter(i=>i.live).length;
+    html+='<div class="cat reveal">'
+      +'<div class="cat-head"><span class="kk">'+I[cat.icon]+'</span>'
+      +'<h3>'+cat.name+'</h3>'
+      +'<span class="cnt">'+cat.items.length+' EXPERIENCES'+(live?' · '+live+' LIVE':'')+'</span></div>'
+      +'<div class="exp-grid">';
+    cat.items.forEach((it,ii)=>{
+      const dcls=' d'+((ii%3)+1);
+      if(it.live){
+        html+='<a class="card lift exp'+dcls+'" href="'+it.href+'" aria-label="'+it.t+' — live, open experience">'
+          +'<span class="liveband" aria-hidden="true"></span><div class="glow"></div>'
+          +'<div class="ico">'+I[it.ic]+'</div>'
+          +'<h4>'+it.t+'</h4><p>'+it.d+'</p>'
+          +'<div class="foot"><span class="chip live"><span class="d"></span>Live</span>'
+          +'<span class="open">Open '+I.arr+'</span></div></a>';
+      }else{
+        html+='<article class="card lift exp'+dcls+'" tabindex="0" aria-label="'+it.t+'">'
+          +'<div class="glow"></div><div class="ico">'+I[it.ic]+'</div>'
+          +'<h4>'+it.t+'</h4><p>'+it.d+'</p>'
+          +'<div class="foot"><span class="chip live"><span class="d"></span>Open bench</span></div></article>';
+      }
+    });
+    html+='</div></div>';
+  });
+  wrap.innerHTML=html;
+}
+
+/* ---- interactive cell ------------------------------------------------- */
+const ORG={
+  membrane:{n:"Cell membrane",r:"Boundary",k:"#39e0d8",d:"A double layer of phospholipids that wraps the whole cell. It is selectively permeable — it decides what gets in and out, keeping the inside stable while nutrients enter and waste leaves."},
+  cytoplasm:{n:"Cytoplasm",r:"Matrix",k:"#34d399",d:"The jelly-like fluid that fills the cell. Organelles float and react here, and much of the cell's chemistry — including the first steps of respiration — happens in this crowded soup."},
+  nucleus:{n:"Nucleus",r:"Control centre",k:"#8b95e6",d:"The command centre. It stores the cell's DNA and directs everything the cell does by controlling which genes are switched on, releasing instructions as messenger RNA."},
+  nucleolus:{n:"Nucleolus",r:"Ribosome factory",k:"#c9d0ff",d:"A dense spot inside the nucleus. This is where ribosomes are assembled before they head out into the cytoplasm to build proteins."},
+  mito:{n:"Mitochondria",r:"Powerhouse",k:"#e5704f",d:"The power plants. Using oxygen and glucose, their folded inner membranes carry out aerobic respiration to produce ATP — the energy currency that runs the whole cell."},
+  rer:{n:"Rough endoplasmic reticulum",r:"Protein highway",k:"#a78bfa",d:"A folded network studded with ribosomes (the dots). Proteins made here are threaded inside, folded and sent onward — especially proteins bound for export."},
+  ser:{n:"Smooth endoplasmic reticulum",r:"Lipid & detox",k:"#5eead4",d:"The ribosome-free stretch of the network. It builds lipids and steroids, stores calcium, and helps detoxify drugs and waste."},
+  golgi:{n:"Golgi apparatus",r:"Packaging & shipping",k:"#f6c667",d:"The post office. It receives proteins and lipids, modifies and labels them, then packages them into vesicles addressed to the right destination inside or outside the cell."},
+  ribosome:{n:"Ribosomes",r:"Protein builders",k:"#34d399",d:"Tiny machines — free-floating or stuck to the ER — that read messenger RNA and string amino acids into proteins. Every protein in your body starts here."},
+  lysosome:{n:"Lysosome",r:"Recycling & defence",k:"#fb7185",d:"A sac of digestive enzymes. It breaks down worn-out organelles, food particles and invading bacteria, recycling the pieces back into the cell."},
+  vacuole:{n:"Vacuole",r:"Storage",k:"#2bbfb6",d:"A membrane-bound bubble that stores water, nutrients and waste. In animal cells they're small and many; a plant cell has one giant central vacuole."},
+  centrosome:{n:"Centrosome",r:"Division organiser",k:"#e2c069",d:"A pair of centrioles that organise the cell's microtubules. During cell division it forms the spindle that pulls duplicated chromosomes apart."}
+};
+const ORDER=["membrane","cytoplasm","nucleus","nucleolus","mito","rer","ser","golgi","ribosome","lysosome","vacuole","centrosome"];
+
+function wireCell(){
+  const orgs=$$(".organelle"),nameEl=$("#cellName"),roleEl=$("#cellRole"),descEl=$("#cellDesc"),legend=$("#cellLegend");
+  if(!orgs.length)return;
+  // legend chips
+  legend.innerHTML=ORDER.map(k=>'<button class="oleg" data-key="'+k+'" style="--k:'+ORG[k].k+'"><span class="sw"></span>'+ORG[k].n+'</button>').join("");
+  const legBtns=$$(".oleg",legend);
+  function select(key){
+    const o=ORG[key];if(!o)return;
+    orgs.forEach(g=>{const on=g.dataset.key===key;g.classList.toggle("on",on);g.classList.toggle("dim",!on);});
+    legBtns.forEach(b=>b.classList.toggle("on",b.dataset.key===key));
+    // fade text swap
+    [nameEl,descEl].forEach(el=>{el.style.opacity="0";});
+    roleEl.hidden=false;roleEl.style.opacity="0";
+    setTimeout(()=>{
+      nameEl.textContent=o.n;roleEl.textContent=o.r;descEl.textContent=o.d;
+      [nameEl,roleEl,descEl].forEach(el=>{el.style.opacity="1";});
+    },REDUCED?0:150);
+  }
+  orgs.forEach(g=>{
+    g.addEventListener("click",()=>select(g.dataset.key));
+    g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();select(g.dataset.key);}});
+  });
+  legBtns.forEach(b=>b.addEventListener("click",()=>select(b.dataset.key)));
+}
+
+/* ---- virtual microscope ----------------------------------------------- */
+const SPECIMENS={
+  onion:{label:"Onion epidermis",cap:"<b>Onion epidermis</b> — brick-like plant cells with a visible wall and a single dark nucleus each. A classroom classic for a first look at cells.",fov:1000,
+    draw:function(){
+      let s='<defs><linearGradient id="on" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#123a30"/><stop offset="1" stop-color="#0c2a24"/></linearGradient></defs><rect width="300" height="300" fill="#0a221d"/>';
+      for(let r=0;r<6;r++)for(let c=0;c<5;c++){const x=c*60+((r%2)?-14:0),y=r*52,w=58,h=50;
+        s+='<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="14" fill="url(#on)" stroke="#3fae8f" stroke-width="1.6"/>';
+        s+='<circle cx="'+(x+w*0.5)+'" cy="'+(y+h*0.5)+'" r="6.5" fill="#8fe3c6" opacity=".85"/>';}
+      return s;}},
+  blood:{label:"Human blood",cap:"<b>Human blood smear</b> — pale pink discs are red cells (no nucleus); the big purple-nucleus cells are white blood cells patrolling for infection.",fov:60,
+    draw:function(){
+      let s='<rect width="300" height="300" fill="#f4d9df"/>';
+      for(let i=0;i<70;i++){const x=Math.random()*300,y=Math.random()*300,r=13+Math.random()*3;
+        s+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+r.toFixed(1)+'" fill="#e2707f"/>';
+        s+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+(r*0.5).toFixed(1)+'" fill="#f0aeb8"/>';}
+      [[90,110],[210,190]].forEach(p=>{s+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="18" fill="#c9b3e6"/>';
+        s+='<path d="M'+(p[0]-9)+' '+p[1]+'a9 9 0 1 0 18 0a7 7 0 0 0 -18 0z" fill="#6b3fa0"/>';});
+      return s;}},
+  stomata:{label:"Leaf stomata",cap:"<b>Leaf stomata</b> — mouth-shaped pores flanked by two guard cells. They open and close to trade CO₂ for water vapour during photosynthesis.",fov:400,
+    draw:function(){
+      let s='<rect width="300" height="300" fill="#0d2c14"/>';
+      // jigsaw pavement cells
+      for(let i=0;i<9;i++){const x=(i%3)*100+20,y=Math.floor(i/3)*100+20;
+        s+='<path d="M'+x+' '+(y+30)+' q10 -30 40 -20 q30 -10 40 20 q10 30 -20 40 q-30 20 -50 -5 q-25 -10 -10 -35z" fill="#164a25" stroke="#3c8f4e" stroke-width="1.4"/>';}
+      // three stomata
+      [[80,90],[200,150],[120,220]].forEach(p=>{
+        s+='<g transform="translate('+p[0]+','+p[1]+')">'
+          +'<ellipse cx="0" cy="0" rx="26" ry="15" fill="#2f7a41"/>'
+          +'<ellipse cx="0" cy="0" rx="9" ry="13" fill="#06170b"/>'
+          +'<ellipse cx="0" cy="0" rx="26" ry="15" fill="none" stroke="#5fbf72" stroke-width="2"/></g>';});
+      return s;}},
+  bacteria:{label:"Bacteria",cap:"<b>Bacteria (bacilli & cocci)</b> — rod and sphere-shaped prokaryotes, hundreds of times smaller than your cells. Only at the highest magnification do they resolve at all.",fov:20,
+    draw:function(){
+      let s='<rect width="300" height="300" fill="#e9eef2"/>';
+      for(let i=0;i<40;i++){const x=Math.random()*300,y=Math.random()*300;
+        if(Math.random()<.6){const a=Math.random()*180;
+          s+='<rect x="'+(x-11).toFixed(1)+'" y="'+(y-4).toFixed(1)+'" width="22" height="8" rx="4" fill="#6d4fa0" transform="rotate('+a.toFixed(0)+' '+x.toFixed(1)+' '+y.toFixed(1)+')"/>';}
+        else s+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="5" fill="#7a3f8f"/>';}
+      return s;}}
+};
+
+function wireMicroscope(){
+  const svg=$("#specSVG"),field=$("#scopeField"),magR=$("#magR"),focR=$("#focR"),
+    magVal=$("#magVal"),focVal=$("#focVal"),magBig=$("#magBig"),tabs=$("#specTabs"),cap=$("#specCap"),
+    scaleBar=$("#scaleBar"),scaleLbl=$("#scaleLbl");
+  if(!svg||!magR)return;
+  let current="onion";
+
+  tabs.innerHTML=Object.keys(SPECIMENS).map((k,i)=>
+    '<button class="spec-tab'+(k==="onion"?" on":"")+'" role="tab" data-k="'+k+'" aria-selected="'+(k==="onion")+'">'+SPECIMENS[k].label+'</button>').join("");
+  const tabBtns=$$(".spec-tab",tabs);
+
+  function drawSpec(k){svg.innerHTML=SPECIMENS[k].draw();cap.innerHTML=SPECIMENS[k].cap;}
+  function fillTrack(el){const min=+el.min,max=+el.max;el.style.setProperty("--fill",((el.value-min)/(max-min)*100)+"%");}
+
+  function render(){
+    const mag=+magR.value;              // 40 – 1000
+    const foc=+focR.value;              // 0 (sharp) – 100 (blur)
+    // scale: gentle zoom that grows with magnification
+    const scale=(1+ (mag-40)/(1000-40) * 1.6).toFixed(3);
+    // sharpness: high mag resolves detail; low mag is soft. focus knob adds blur.
+    const magBlur=Math.max(0,(240-mag)/60);        // ~3.3px at 40×, 0 by ~240×
+    const focBlur=foc/100*6;                        // up to 6px from detune
+    const blur=(magBlur+focBlur).toFixed(2);
+    svg.style.transform="scale("+scale+")";
+    svg.style.filter="blur("+blur+"px)";
+    magVal.textContent=mag+"×";magBig.textContent=mag+"×";
+    magR.setAttribute("aria-valuetext",mag+" times");
+    focVal.textContent = foc<8?"Sharp" : foc<40?"Soft" : foc<75?"Blurred" : "Out of focus";
+    focR.setAttribute("aria-valuetext",focVal.textContent);
+    // scale bar: field of view shrinks as magnification climbs
+    const baseFov=SPECIMENS[current].fov;           // µm across at 40×
+    const fov=baseFov*40/mag;                        // µm across now
+    const barUm=fov/5;                               // the fixed 64px bar ≈ 1/5 of the field width
+    let lbl,unit="µm";
+    if(barUm>=1000){lbl=(barUm/1000).toPrecision(2);unit="mm";}
+    else if(barUm>=10){lbl=Math.round(barUm);}
+    else if(barUm>=1){lbl=barUm.toFixed(1);}
+    else{lbl=barUm.toFixed(2);}
+    scaleLbl.textContent=lbl+" "+unit;
+    fillTrack(magR);fillTrack(focR);
+  }
+
+  tabBtns.forEach(b=>b.addEventListener("click",()=>{
+    current=b.dataset.k;tabBtns.forEach(x=>{x.classList.toggle("on",x===b);x.setAttribute("aria-selected",x===b);});
+    drawSpec(current);render();
+  }));
+  magR.addEventListener("input",render);
+  focR.addEventListener("input",render);
+  drawSpec(current);render();
+}
+
+/* ---- page init (called by shell) -------------------------------------- */
+window.__pageInit=function(){
+  buildCatalog();
+  wireCell();
+  wireMicroscope();
+  if(window.__observeReveals)window.__observeReveals();
+  // smooth-scroll for in-page hero button
+  const j=$("#jumpExp");if(j)j.addEventListener("click",e=>{e.preventDefault();
+    const t=$("#experiences");if(t)t.scrollIntoView({behavior:REDUCED?"auto":"smooth"});});
+};
+})();
+</script>
+<!-- __BIOQ_EMBED__ -->
+<style>body.embed .nav,body.embed .mobile-menu,body.embed footer,body.embed .skiplink{display:none!important}
+body.embed main{padding-top:20px!important}body.embed #launch{display:none!important}</style>
+<script>(function(){var q=new URLSearchParams(location.search);if(!q.get('embed'))return;
+try{localStorage.setItem('bioq_seen','1');}catch(e){}
+function apply(){if(document.body)document.body.classList.add('embed');}
+if(document.body)apply();else addEventListener('DOMContentLoaded',apply);
+addEventListener('message',function(e){var d=e.data||{};if(d.bioqTheme){document.documentElement.setAttribute('data-theme',d.bioqTheme);try{localStorage.setItem('bioq_theme',d.bioqTheme);}catch(x){}}});
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href]');if(!a)return;var h=a.getAttribute('href')||'';
+if(/\.html/i.test(h)&&/^\.?\/?(index|learn|lessons|reason|labs|solve|explore|me|about|lab|universe)\.html/i.test(h.replace(/^\.\//,''))){e.preventDefault();try{parent.postMessage({bioqNav:h},'*');}catch(x){}}},true);
+})();</script>
+
+<script id="atmo-js">
+/* ============================================================================
+   BIOLOGY ENTELLOQ — THE LIVING FIELD.
+
+   Physics Entelloq puts a sheet of spacetime behind the product and bends it
+   around the cursor. This is the biological answer to that, and it is not the
+   same idea in different colours: matter is passive and gets curved, whereas
+   tissue is ALIVE and reaches toward what it wants. So the field here is a thick
+   section of living tissue seen down a microscope, and the cursor is a nutrient
+   source. Cells near it swell, their membranes brighten, and the capillary
+   network grows toward it — chemotaxis, the oldest behaviour there is.
+
+   Four things are happening at once in the shader:
+     · a Worley cell field (membranes are the F2-F1 ridge — the real thing under
+       phase contrast) in two parallax layers, so the section has thickness
+     · a domain warp driven by slow fbm, because no real tissue is on a grid
+     · ridged fbm capillaries that bias their flow toward the cursor
+     · a breath — everything respires at about 7 cycles a minute, which is why
+       it reads as alive rather than as a screensaver on a loop
+
+   SELF-INSTALLING. Dropping this one <script> onto a page is the whole install:
+   it makes its own canvas, injects its own CSS, picks its colour from
+   <body data-page>, and follows the light/dark toggle. It never needs markup.
+   ========================================================================== */
+(function () {
+  "use strict";
+  if (window.BIOQ_ATMO) return;                       // idempotent: safe to double-inject
+
+  // Inside the unified app shell each section loads in an iframe with ?embed=1.
+  // The shell already has a field; a second one per iframe would mean two WebGL
+  // contexts fighting for the GPU and a visible seam where the two tissues meet.
+  // So the embedded page renders none of its own and goes transparent instead,
+  // letting the shell's single continuous field show through — which is also why
+  // navigating between sections never interrupts it.
+  try {
+    if (new URLSearchParams(location.search).get("embed")) {
+      var t = document.createElement("style");
+      t.id = "atmo-embed";
+      t.textContent = "html,body{background:transparent!important}.bg-veil{display:none!important}";
+      (document.head || document.documentElement).appendChild(t);
+      window.BIOQ_ATMO = { theme: function () {}, setSection: function () {}, mouse: null, mode: "embedded" };
+      return;
+    }
+  } catch (e) {}
+
+  /* --- where the colour comes from -------------------------------------- */
+  // Each pillar gets its own biology, and the hues deliberately match the `tc`
+  // accent the app shell already assigns that view — so the field is the same
+  // colour as the section you are standing in rather than a second, competing
+  // palette. Intensity is how ALIVE the field looks: the Lab runs hot, Me runs quiet.
+  var SECTIONS = {
+    home:     ["#34d399", 0.44],   // em     — chlorophyll
+    learn:    ["#34d399", 0.52],   // em
+    lessons:  ["#38e0d8", 0.50],   // cy
+    reason:   ["#8b5cf6", 0.48],   // violet — the colour of thinking
+    labs:     ["#f6c667", 0.52],   // amber  — a bench lamp
+    solve:    ["#7c8cf8", 0.48],   // indigo
+    explore:  ["#38e0d8", 0.58],   // cy     — open water
+    me:       ["#c9a86a", 0.34],   // quiet, warm, low
+    about:    ["#34d399", 0.46],   // em
+    lab:      ["#fb7185", 0.64],   // rose   — an opened body, and the field runs hot
+    universe: ["#38e0d8", 0.60]    // cy
+  };
+
+  var reduced = false;
+  try { reduced = matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
+  var STILL = reduced || /[?&#](still|print)=?1?/.test(location.search + location.hash);
+
+  /* --- install ----------------------------------------------------------- */
+  var css = document.createElement("style");
+  css.id = "atmo-css";
+  css.textContent =
+    // z-index:-1, NOT 0. A positioned element at z-index:0 paints ABOVE ordinary
+    // in-flow block content, so the field would cover the page. Negative z puts it
+    // between the root background and everything else, which means not one existing
+    // element needs its position or stacking touched — and the product's fixed nav
+    // (position:fixed;z-index:60) keeps working exactly as before.
+    "#atmo{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;" +
+      "opacity:0;transition:opacity 1.2s cubic-bezier(.22,1,.36,1);display:block}" +
+    "#atmo.lit{opacity:.78}" +
+    // In light mode the same field reads as a stained section on a white slide, so
+    // it stays — but fainter, because ink on paper is a quieter medium.
+    "html[data-theme=\"light\"] #atmo.lit{opacity:.42}" +
+    // The pages paint --bg on BOTH html and body; body's copy would hide a
+    // negative-z child, so hand the background to the root alone. --bg is a themed
+    // custom property, so this keeps following the light/dark toggle for free.
+    "html{background:var(--bg,#04070a)}body{background:transparent!important}";
+  (document.head || document.documentElement).appendChild(css);
+
+  var cv = document.createElement("canvas");
+  cv.id = "atmo";
+  cv.setAttribute("aria-hidden", "true");
+  // NOTE: attach() is *declared* here but deliberately not *called* until the very
+  // bottom of this module. It reaches into cur/tgt/M/FS/VS, all of which are `var`
+  // bindings that are hoisted but still undefined at this point in the file —
+  // calling it here would throw on the first property write and silently leave the
+  // page with no field at all.
+  function attach() {
+    if (!document.body) return setTimeout(attach, 16);
+    document.body.insertBefore(cv, document.body.firstChild);
+    // The class is what fades the field in, and it must land on a LATER frame than
+    // the insert or the CSS transition has nothing to transition from. rAF is the
+    // usual way to get that, but rAF does not run at all in a background tab — so a
+    // page that loads hidden would sit at opacity 0. The timer is the backstop;
+    // adding the class twice costs nothing.
+    function lit() { cv.classList.add("lit"); }
+    requestAnimationFrame(lit);
+    setTimeout(lit, 80);
+    boot();
+  }
+
+  /* --- state ------------------------------------------------------------- */
+  function hexRGB(h) {
+    h = String(h).replace("#", "");
+    return [parseInt(h.slice(0, 2), 16) / 255, parseInt(h.slice(2, 4), 16) / 255, parseInt(h.slice(4, 6), 16) / 255];
+  }
+  var cur = { r: 0.20, g: 0.83, b: 0.60, in: 0.44, lt: 0 };
+  var tgt = { r: 0.20, g: 0.83, b: 0.60, in: 0.44, lt: 0 };
+  var M = { x: innerWidth / 2, y: innerHeight / 2, tx: innerWidth / 2, ty: innerHeight / 2, live: 0, tlive: 0 };
+
+  addEventListener("pointermove", function (e) {
+    M.tx = e.clientX; M.ty = e.clientY; M.tlive = 1;
+  }, { passive: true });
+  // A pointer that has left should stop feeding the tissue, or the glow sits there
+  // forever on a page nobody is touching. pointerleave does not bubble, so it has
+  // to be bound to the root element rather than to window; mouseout with a null
+  // relatedTarget is the belt-and-braces case for leaving through the chrome.
+  document.documentElement.addEventListener("pointerleave", function () { M.tlive = 0; }, { passive: true });
+  addEventListener("mouseout", function (e) { if (!e.relatedTarget) M.tlive = 0; }, { passive: true });
+  addEventListener("blur", function () { M.tlive = 0; });
+  // Touch has no hover: without this the glow would stay wherever the last tap
+  // landed, permanently, on every phone.
+  addEventListener("pointerup", function (e) {
+    if (e.pointerType !== "mouse") M.tlive = 0;
+  }, { passive: true });
+
+  function theme(rgb, intensity) {
+    tgt.r = rgb[0]; tgt.g = rgb[1]; tgt.b = rgb[2];
+    if (typeof intensity === "number") tgt.in = intensity;
+  }
+  function setSection(key) {
+    var s = SECTIONS[key] || SECTIONS.home;
+    theme(hexRGB(s[0]), s[1]);
+    nudge();                             // navigating must restain the field even in STILL mode
+  }
+  // repaint is filled in by whichever renderer boots. In STILL mode (reduced
+  // motion, or ?still=1) exactly one frame is ever drawn, so without this a reader
+  // who switches to light mode would be left looking at the dark field forever.
+  var repaint = null;
+  function nudge() {
+    if (!STILL || !repaint) return;      // the animated path picks the change up on its own
+    for (var i = 0; i < 60; i++) ease(); // settle the eased colour, then draw the one frame
+    repaint(0);
+  }
+  function readTheme() {
+    var next = (document.documentElement.getAttribute("data-theme") === "light") ? 1 : 0;
+    if (next === tgt.lt) return;
+    tgt.lt = next;
+    nudge();
+  }
+
+  function ease() {
+    cur.r += (tgt.r - cur.r) * 0.035; cur.g += (tgt.g - cur.g) * 0.035;
+    cur.b += (tgt.b - cur.b) * 0.035; cur.in += (tgt.in - cur.in) * 0.035;
+    cur.lt += (tgt.lt - cur.lt) * 0.08;
+    M.x += (M.tx - M.x) * 0.075; M.y += (M.ty - M.y) * 0.075;
+    M.live += (M.tlive - M.live) * 0.04;
+  }
+
+  /* --- the field --------------------------------------------------------- */
+  var FS = [
+    "precision mediump float;",
+    "uniform vec2 uRes;uniform float uT;uniform vec2 uM;uniform vec3 uC;uniform float uIn;uniform float uLive;uniform float uLight;",
+
+    "float h1(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}",
+    "vec2 h2(vec2 p){return fract(sin(vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3))))*43758.5453);}",
+    "float vn(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);",
+    " float a=h1(i),b=h1(i+vec2(1,0)),c=h1(i+vec2(0,1)),d=h1(i+vec2(1,1));",
+    " return mix(mix(a,b,f.x),mix(c,d,f.x),f.y);}",
+    "float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<4;i++){v+=a*vn(p);p*=2.07;a*=.5;}return v;}",
+    // Ridged noise gives threads instead of blobs — this is what makes a capillary
+    // look like a vessel and not like a cloud.
+    "float ridge(vec2 p){float v=0.,a=.5;for(int i=0;i<4;i++){v+=a*(1.-abs(vn(p)*2.-1.));p*=2.11;a*=.5;}return v;}",
+
+    // Worley. Returns (F1, F2-F1, cell id). Every nucleus orbits its own cell on a
+    // slow private path, so no two cells ever pulse together.
+    "vec3 cells(vec2 p,float t){vec2 n=floor(p),f=fract(p);",
+    " float f1=8.,f2=8.;vec2 id=vec2(0.);",
+    " for(int j=-1;j<=1;j++){for(int i=-1;i<=1;i++){",
+    "  vec2 g=vec2(float(i),float(j));vec2 o=h2(n+g);",
+    "  o=.5+.40*sin(t*.32+6.2831*o);",
+    "  float d=length(g+o-f);",
+    "  if(d<f1){f2=f1;f1=d;id=n+g;}else if(d<f2){f2=d;}",
+    " }}",
+    " return vec3(f1,f2-f1,h1(id));}",
+
+    "void main(){",
+    " vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y;",
+    " vec2 m=(uM-.5*uRes)/uRes.y;m.y*=-1.;",
+    " float t=uT;",
+    // ~7 breaths a minute. Slow enough that you feel it rather than watch it.
+    " float breath=.5+.5*sin(t*.72);",
+
+    // Chemotaxis. Everything below is stronger the closer it is to the cursor,
+    // and uLive fades the whole effect out when the pointer leaves.
+    " float rm=length(uv-m);",
+    // Tight. A wide gradient turns the whole page into a lamp; the point is a
+    // local response in the tissue the pointer is actually over, so the falloff
+    // is effectively gone by a third of the screen height.
+    " float food=exp(-rm*rm*7.5)*uLive;",
+
+    // Domain warp — the reason this reads as tissue and not as a tiling.
+    " vec2 w=uv+vec2(fbm(uv*1.5+t*.05),fbm(uv*1.5-t*.04+11.3))*.34;",
+    // Tissue swells toward the food source: cells near the cursor get physically
+    // bigger by shrinking the sampling scale there.
+    " float swell=1.-food*.30;",
+
+    // Two layers at different depths. The far one drifts slower and sits dimmer,
+    // which is what gives a flat quad the thickness of a real section.
+    " vec3 c1=cells(w*3.4*swell+vec2(t*.020,-t*.014),t);",
+    " vec3 c2=cells(w*6.9*swell+vec2(-t*.030,t*.023)+31.7,t*1.25);",
+
+    // Membrane = the F2-F1 ridge. This is the single most biological line there is.
+    " float mem1=1.-smoothstep(.0,.085,c1.y);",
+    " float mem2=1.-smoothstep(.0,.060,c2.y);",
+    // Cytoplasm: each cell tinted by its own id, so the field has variation
+    // rather than one flat wash.
+    " float cyto=(.35+.65*c1.z)*(1.-smoothstep(.15,.85,c1.x));",
+    // Nuclei, breathing slightly out of phase per cell.
+    " float nuc=smoothstep(.135+.02*sin(t*.6+c1.z*31.),.0,c1.x)*(.55+.45*c1.z);",
+
+    // Capillaries, warped again so they wander, and pulled toward the cursor so
+    // the network visibly grows in that direction.
+    " vec2 vp=w*2.3+vec2(t*.035,-t*.028)-normalize(uv-m+1e-4)*food*.55;",
+    " float vas=ridge(vp);",
+    " vas=pow(max(vas-.62,0.)*2.6,2.0);",
+
+    // Motes — organelles and spores adrift in the medium, the counterpart to the
+    // stars in the physics field. They rise, because everything in a fluid does.
+    " vec2 sp=w*17.0+vec2(0.,-t*.10);vec2 si=floor(sp);vec2 sf=fract(sp)-.5;",
+    " float sv=h1(si);",
+    " float mote=step(.972,sv)*smoothstep(.055,0.,length(sf-(h2(si)-.5)*.6))*(.55+.45*sin(t*2.1+sv*44.));",
+
+    // --- compose ---
+    " float lum=(.030+.055*breath)*(.55+uIn);",
+    " vec3 col=vec3(.012,.026,.034)*(1.-uLight);",
+    " col+=uC*cyto*lum*1.35;",
+    " col+=uC*mem1*(.055+uIn*.13)*(.75+.25*breath);",
+    " col+=mix(uC,vec3(1.),.35)*mem2*(.022+uIn*.055);",
+    " col+=mix(uC,vec3(1.),.55)*nuc*(.020+uIn*.048);",
+    " col+=mix(uC,vec3(1.,.55,.52),.30)*vas*(.055+uIn*.14);",
+    " col+=vec3(.85,.95,1.)*mote*.55;",
+    // The food source itself: a soft bloom, plus a brightening of whatever tissue
+    // is under it, so the cursor lights the section rather than floating over it.
+    " col+=uC*food*(.085+uIn*.15);",
+    " col*=1.+food*.34;",
+    // Depth: the section is thickest and best-lit in the middle of the field.
+    " col*=1.-.38*smoothstep(.55,1.35,length(uv));",
+
+    // Light mode: invert the physics, not the palette. On a slide the stain
+    // ABSORBS — so a green stain removes red and blue and leaves green, which
+    // means the structures subtract (1-uC), not uC. Subtracting uC would print
+    // the complement and give a magenta negative of the tissue.
+    " float dens=cyto*.30+mem1*1.05+mem2*.42+nuc*.62+vas*.95;",
+    " dens=min(dens*(.46+uIn*.60)*(1.+food*.45),1.25);",
+    " vec3 ink=vec3(1.)-(vec3(1.)-uC)*dens*.80-vec3(.05)*dens;",
+    // Illumination falls off toward the edge of the coverslip.
+    " ink=mix(ink,vec3(1.),.22*smoothstep(.55,1.4,length(uv)));",
+    " col=mix(col,ink,uLight);",
+
+    " gl_FragColor=vec4(col,1.);}"
+  ].join("\n");
+
+  var VS = "attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}";
+
+  function boot() {
+    readTheme();
+    // Follow the product's own theme toggle without it having to know we exist.
+    try {
+      new MutationObserver(readTheme).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    } catch (e) {}
+    // Pick the colour from the page the shell already declares.
+    setSection((document.body && document.body.getAttribute("data-page")) || "home");
+    for (var i = 0; i < 40; i++) ease();     // start already at the right colour, no fade-in from green
+
+    var gl = null;
+    try {
+      gl = cv.getContext("webgl", { alpha: true, antialias: false, depth: false, stencil: false, powerPreference: "low-power" })
+        || cv.getContext("experimental-webgl", { alpha: true, antialias: false, depth: false });
+    } catch (e) {}
+    if (!gl) return fallback();
+
+    function sh(ty, src) {
+      var o = gl.createShader(ty); gl.shaderSource(o, src); gl.compileShader(o);
+      if (!gl.getShaderParameter(o, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(o) || "compile");
+      return o;
+    }
+    var prog;
+    try {
+      prog = gl.createProgram();
+      gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS));
+      gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS));
+      gl.linkProgram(prog);
+      if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog) || "link");
+    } catch (e) { return fallback(); }
+
+    gl.useProgram(prog);
+    var buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    var lp = gl.getAttribLocation(prog, "p");
+    gl.enableVertexAttribArray(lp);
+    gl.vertexAttribPointer(lp, 2, gl.FLOAT, false, 0, 0);
+
+    var uRes = gl.getUniformLocation(prog, "uRes"), uT = gl.getUniformLocation(prog, "uT"),
+        uM = gl.getUniformLocation(prog, "uM"), uC = gl.getUniformLocation(prog, "uC"),
+        uIn = gl.getUniformLocation(prog, "uIn"), uLive = gl.getUniformLocation(prog, "uLive"),
+        uLight = gl.getUniformLocation(prog, "uLight");
+
+    // A full-screen procedural field is fill-rate bound, so resolution is the one
+    // dial that matters. 1.25x is enough for the membranes to stay crisp and cheap
+    // enough that an integrated GPU never notices.
+    var dpr = Math.min(devicePixelRatio || 1, 1.25);
+    // A page can boot while its tab is hidden or its pane is not compositing, and
+    // then innerWidth is 0 — sizing to that leaves a 1x1 canvas which never
+    // recovers, because becoming visible does not fire a resize event. Fall back
+    // through the layout box to a sane default so the field is always drawable.
+    function vw() { return innerWidth || document.documentElement.clientWidth || cv.clientWidth || 1280; }
+    function vh() { return innerHeight || document.documentElement.clientHeight || cv.clientHeight || 800; }
+    function size() {
+      var w = Math.max(1, Math.round(vw() * dpr)), h = Math.max(1, Math.round(vh() * dpr));
+      if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; gl.viewport(0, 0, w, h); }
+    }
+    addEventListener("resize", size); size();
+
+    var raf = null, t0 = 0;
+    // draw() is the whole render and nothing else; frame() is draw() plus the
+    // scheduling. Keeping them apart is what lets _tick() below render on demand
+    // without quietly queueing a second rAF alongside the running loop.
+    function draw(ms) {
+      ease(); size();
+      if (!t0) t0 = ms || 0;
+      gl.uniform2f(uRes, cv.width, cv.height);
+      gl.uniform1f(uT, ((ms || 0) - t0) * 0.001);
+      var s = cv.width / vw();
+      gl.uniform2f(uM, M.x * s, (vh() - M.y) * s);
+      gl.uniform3f(uC, cur.r, cur.g, cur.b);
+      gl.uniform1f(uIn, cur.in);
+      gl.uniform1f(uLive, M.live);
+      gl.uniform1f(uLight, cur.lt);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    }
+    function frame(ms) {
+      raf = null;
+      draw(ms);
+      if (!STILL) raf = requestAnimationFrame(frame);
+    }
+    repaint = draw;
+    if (STILL) draw(0); else raf = requestAnimationFrame(frame);
+
+    // A field nobody can see must not cost a frame.
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) { if (raf) { cancelAnimationFrame(raf); raf = null; } }
+      // Coming back from hidden also re-measures, because the viewport may have
+      // been 0 the whole time the tab was in the background.
+      else if (!raf && !STILL) { size(); raf = requestAnimationFrame(frame); }
+    });
+
+    // _tick renders exactly one frame on demand. rAF is throttled to nothing in a
+    // hidden tab, so this is the only way to prove the field actually draws when
+    // the page is not on screen — which is precisely when it needs proving.
+    window.BIOQ_ATMO = { theme: theme, setSection: setSection, mouse: M, mode: "webgl", _tick: draw };
+  }
+
+  /* --- fallback ---------------------------------------------------------- */
+  // No WebGL. Draw the same idea in 2D: drifting cells with membranes and nuclei,
+  // and a nutrient glow at the cursor. Fewer cells, no capillaries, same product.
+  function fallback() {
+    var ctx = cv.getContext("2d");
+    if (!ctx) { window.BIOQ_ATMO = { theme: theme, setSection: setSection, mouse: M, mode: "none" }; return; }
+    var dpr = Math.min(devicePixelRatio || 1, 1.5), W = 0, H = 0, pop = [];
+    function size() {
+      W = innerWidth; H = innerHeight;
+      cv.width = Math.max(1, Math.round(W * dpr)); cv.height = Math.max(1, Math.round(H * dpr));
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var n = Math.max(10, Math.min(30, Math.round(W * H / 46000)));
+      pop = [];
+      for (var i = 0; i < n; i++) pop.push({
+        x: Math.random() * W, y: Math.random() * H, r: 42 + Math.random() * 78,
+        vx: (Math.random() - 0.5) * 0.13, vy: (Math.random() - 0.5) * 0.13, ph: Math.random() * 6.283
+      });
+    }
+    size(); addEventListener("resize", size);
+
+    var raf = null, t = 0;
+    function rgba(a) { return "rgba(" + (cur.r * 255 | 0) + "," + (cur.g * 255 | 0) + "," + (cur.b * 255 | 0) + "," + a + ")"; }
+    function frame() {
+      raf = null; ease(); t += 0.016;
+      var light = cur.lt > 0.5;
+      ctx.clearRect(0, 0, W, H);
+      var glow = ctx.createRadialGradient(M.x, M.y, 0, M.x, M.y, 340);
+      glow.addColorStop(0, rgba((light ? 0.10 : 0.13) * M.live)); glow.addColorStop(1, rgba(0));
+      ctx.fillStyle = glow; ctx.fillRect(0, 0, W, H);
+      for (var i = 0; i < pop.length; i++) {
+        var c = pop[i];
+        c.x += c.vx; c.y += c.vy;
+        if (c.x < -140) c.x = W + 140; if (c.x > W + 140) c.x = -140;
+        if (c.y < -140) c.y = H + 140; if (c.y > H + 140) c.y = -140;
+        // Chemotaxis, cheaply: a cell near the cursor swells.
+        var d = Math.hypot(c.x - M.x, c.y - M.y);
+        var food = Math.exp(-(d * d) / 260000) * M.live;
+        var r = c.r * (1 + Math.sin(t * 0.62 + c.ph) * 0.05 + food * 0.20);
+        var g = ctx.createRadialGradient(c.x, c.y, r * 0.2, c.x, c.y, r);
+        g.addColorStop(0, rgba((light ? 0.030 : 0.052) * (0.6 + cur.in) * (1 + food))); g.addColorStop(1, rgba(0));
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(c.x, c.y, r, 0, 6.283); ctx.fill();
+        ctx.strokeStyle = rgba((light ? 0.055 : 0.085) * (1 + food * 1.4)); ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.arc(c.x, c.y, r, 0, 6.283); ctx.stroke();
+        ctx.fillStyle = rgba((light ? 0.045 : 0.062) * (1 + food));
+        ctx.beginPath(); ctx.arc(c.x + r * 0.11, c.y - r * 0.07, r * 0.24, 0, 6.283); ctx.fill();
+      }
+      if (!STILL) raf = requestAnimationFrame(frame);
+    }
+    repaint = frame;
+    if (STILL) { for (var k = 0; k < 40; k++) ease(); frame(); } else raf = requestAnimationFrame(frame);
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) { if (raf) { cancelAnimationFrame(raf); raf = null; } }
+      else if (!raf && !STILL) raf = requestAnimationFrame(frame);
+    });
+
+    window.BIOQ_ATMO = { theme: theme, setSection: setSection, mouse: M, mode: "2d" };
+  }
+
+  /* --- go ---------------------------------------------------------------- */
+  // Last line on purpose: everything above is now assigned, so boot() can read it.
+  attach();
+})();
+
+</script>
+</body>
+</html>

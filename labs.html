@@ -1,0 +1,1279 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<!-- __TITLE__ -->
+<title>Labs — Biology Entelloq</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* ============================================================================
+   BIOLOGY ENTELLOQ — shared product shell. IDENTICAL across every pillar page
+   (Home · Learn · Solve · Explore · Me) so the product reads as one thing.
+   DO NOT edit tokens, nav, or component classes when building a pillar — only
+   fill <main id="page"> and add scoped rules in <style id="page-css">.
+   ========================================================================== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+img,svg,canvas{display:block;max-width:100%}
+button,input,select,textarea{font:inherit;color:inherit;background:none;border:none}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--em);outline-offset:3px;border-radius:6px}
+::selection{background:color-mix(in srgb,var(--em) 45%,transparent);color:var(--ink)}
+
+:root{
+  --em:#34d399; --em-2:#10b981; --cy:#38e0d8; --cy-2:#22d3ee;
+  --indigo:#7c8cf8; --violet:#8b5cf6; --amber:#f6c667; --rose:#fb7185;
+  --grad-life:linear-gradient(120deg,var(--em),var(--cy));
+  --grad-mind:linear-gradient(120deg,var(--cy),var(--indigo));
+  --bg:#04070a; --bg-2:#070b10; --panel:#0b1117; --raise:#0e151c;
+  --ink:#eaf2f5; --dim:#9fb2bc; --faint:#7d8b93;
+  --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.05);
+  --glass:rgba(10,15,20,.62); --glass-strong:rgba(8,12,17,.82); --hair:rgba(255,255,255,.10);
+  --shadow-2:0 12px 40px -12px rgba(0,0,0,.7);
+  --shadow-glow:0 0 0 1px rgba(52,211,153,.18),0 20px 60px -18px rgba(16,185,129,.35);
+  --spot:rgba(52,211,153,.16);
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --serif:"Instrument Serif",Georgia,serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --ease-out:cubic-bezier(.23,1,.32,1); --ease-in-out:cubic-bezier(.77,0,.175,1);
+  --r-sm:10px; --r:16px; --r-lg:24px; --r-xl:34px;
+  --edge:clamp(20px,5vw,72px); --maxw:1200px;
+}
+:root[data-theme="light"]{
+  --bg:#f6f8f9; --bg-2:#eef2f4; --panel:#ffffff; --raise:#ffffff;
+  --ink:#0c1418; --dim:#4a5a63; --faint:#5c6b74;
+  --line:rgba(6,20,26,.10); --line-2:rgba(6,20,26,.06);
+  --glass:rgba(255,255,255,.72); --glass-strong:rgba(255,255,255,.86); --hair:rgba(6,20,26,.12);
+  --em:#0a7d57; --em-2:#0a7d57; --cy:#0891b2; --indigo:#5b63e6;
+  --shadow-2:0 14px 44px -16px rgba(20,40,50,.28);
+  --shadow-glow:0 0 0 1px rgba(14,163,113,.18),0 22px 60px -20px rgba(14,163,113,.28);
+  --spot:rgba(14,163,113,.12);
+}
+html,body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;
+  letter-spacing:-.011em;-webkit-font-smoothing:antialiased;min-height:100%;overflow-x:hidden}
+
+/* type scale */
+.eyebrow{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--em);display:inline-flex;align-items:center;gap:9px}
+.eyebrow::before{content:"";width:16px;height:1px;background:currentColor;opacity:.6}
+.display{font-weight:800;letter-spacing:-.03em;line-height:1.02;font-size:clamp(2.6rem,7vw,5rem)}
+.h1{font-weight:800;letter-spacing:-.028em;line-height:1.05;font-size:clamp(2rem,5vw,3.4rem)}
+.h2{font-weight:700;letter-spacing:-.024em;line-height:1.1;font-size:clamp(1.6rem,3.6vw,2.5rem)}
+.h3{font-weight:600;letter-spacing:-.02em;line-height:1.2;font-size:clamp(1.1rem,2vw,1.35rem)}
+.lead{font-size:clamp(1.02rem,1.6vw,1.3rem);color:var(--dim);line-height:1.6}
+.serif{font-family:var(--serif);font-weight:400}
+.grad{background:var(--grad-life);-webkit-background-clip:text;background-clip:text;color:transparent}
+.grad-mind{background:var(--grad-mind);-webkit-background-clip:text;background-clip:text;color:transparent}
+.muted{color:var(--dim)} .faint{color:var(--faint)}
+
+.wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--edge);width:100%}
+.band{padding-block:clamp(56px,9vw,110px);position:relative}
+.grid{display:grid;gap:22px}
+.g2{grid-template-columns:repeat(2,1fr)} .g3{grid-template-columns:repeat(3,1fr)} .g4{grid-template-columns:repeat(4,1fr)}
+.sec-head{max-width:720px;margin-bottom:clamp(30px,5vw,54px)}
+.sec-head .eyebrow{margin-bottom:16px} .sec-head h2{margin-bottom:14px}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:9px;padding:11px 20px;border-radius:12px;font-weight:600;
+  font-size:14.5px;cursor:pointer;position:relative;overflow:hidden;
+  transition:transform .14s var(--ease-out),box-shadow .3s var(--ease-out),background .3s,border-color .3s}
+.btn:active{transform:scale(.97)}
+.btn.primary{color:#03110c;background:var(--grad-life);box-shadow:var(--shadow-glow)}
+.btn.primary:hover{box-shadow:0 0 0 1px rgba(52,211,153,.3),0 26px 70px -18px rgba(16,185,129,.55)}
+.btn.ghost{color:var(--ink);border:1px solid var(--hair);background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.btn.ghost:hover{border-color:color-mix(in srgb,var(--em) 40%,var(--hair))}
+.btn .arr{transition:transform .2s var(--ease-out)} .btn:hover .arr{transform:translateX(3px)}
+
+/* cards */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:clamp(20px,3vw,30px);position:relative;overflow:hidden;
+  transition:transform .4s var(--ease-out),border-color .4s,box-shadow .4s var(--ease-out)}
+.card .glow{position:absolute;inset:-1px;border-radius:inherit;opacity:0;pointer-events:none;
+  background:radial-gradient(50% 60% at var(--mx,50%) 0%,var(--spot),transparent 70%);transition:opacity .4s}
+@media (hover:hover) and (pointer:fine){
+  .card.lift:hover{transform:translateY(-6px);border-color:var(--hair);box-shadow:var(--shadow-2)}
+  .card.lift:hover .glow{opacity:1}}
+.card .ico{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;margin-bottom:18px;
+  background:color-mix(in srgb,var(--em) 12%,transparent);color:var(--em);
+  border:1px solid color-mix(in srgb,var(--em) 22%,transparent)}
+.card .ico svg{width:22px;height:22px}
+.card h3{margin-bottom:8px} .card p{color:var(--dim);font-size:15px;line-height:1.6}
+.chip{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;padding:5px 10px;border-radius:999px;border:1px solid var(--line);color:var(--dim)}
+.chip.live{color:var(--em);border-color:color-mix(in srgb,var(--em) 30%,transparent);background:color-mix(in srgb,var(--em) 10%,transparent)}
+.chip.soon{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 26%,transparent)}
+.chip .d{width:6px;height:6px;border-radius:50%;background:currentColor}
+
+/* reveal-on-scroll (opacity+transform only) */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .5s var(--ease-out),transform .5s var(--ease-out)}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.06s}.reveal.d2{transition-delay:.12s}.reveal.d3{transition-delay:.18s}.reveal.d4{transition-delay:.24s}
+
+/* ambient veil */
+.bg-veil{position:fixed;inset:0;z-index:0;pointer-events:none;background:
+  radial-gradient(60% 45% at 78% -5%,color-mix(in srgb,var(--cy) 10%,transparent),transparent 60%),
+  radial-gradient(55% 45% at 8% 8%,color-mix(in srgb,var(--em) 10%,transparent),transparent 55%)}
+
+/* ===== persistent product nav ===== */
+header.nav{position:fixed;top:0;left:0;right:0;z-index:60;transition:background .3s,border-color .3s,backdrop-filter .3s}
+header.nav.scrolled{background:var(--glass);backdrop-filter:blur(18px) saturate(1.4);
+  -webkit-backdrop-filter:blur(18px) saturate(1.4);border-bottom:1px solid var(--line)}
+.nav-in{max-width:var(--maxw);margin-inline:auto;padding:12px var(--edge);display:flex;align-items:center;gap:18px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px}
+.brand .logo{width:28px;height:28px} .brand b{font-weight:800}
+.nav-links{display:flex;align-items:center;gap:2px;margin-left:6px}
+.nav-links a{padding:8px 14px;border-radius:10px;font-size:14px;font-weight:500;color:var(--dim);
+  transition:color .2s,background .2s;position:relative}
+.nav-links a:hover{color:var(--ink);background:color-mix(in srgb,var(--ink) 6%,transparent)}
+.nav-links a.active{color:var(--ink)}
+.nav-links a.active::after{content:"";position:absolute;left:14px;right:14px;bottom:3px;height:2px;border-radius:2px;background:var(--grad-life)}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.iconbtn{width:38px;height:38px;border-radius:11px;border:1px solid var(--line);display:grid;place-items:center;
+  color:var(--dim);cursor:pointer;background:var(--panel);transition:color .2s,border-color .2s,transform .12s var(--ease-out)}
+.iconbtn:hover{color:var(--ink);border-color:var(--hair)} .iconbtn:active{transform:scale(.94)} .iconbtn svg{width:17px;height:17px}
+.navtoggle{display:none}
+main{position:relative;z-index:1;padding-top:64px;min-height:100vh}
+.mobile-menu{display:none;position:fixed;inset:64px 0 0;z-index:55;background:var(--glass-strong);
+  backdrop-filter:blur(20px);padding:24px var(--edge)}
+.mobile-menu.open{display:block}
+.mobile-menu a{display:block;padding:16px 0;font-size:20px;font-weight:600;border-bottom:1px solid var(--line)}
+
+/* footer */
+footer{position:relative;z-index:1;border-top:1px solid var(--line);background:var(--bg-2);margin-top:40px}
+.foot-in{max-width:var(--maxw);margin-inline:auto;padding:40px var(--edge);display:flex;flex-wrap:wrap;gap:18px;
+  align-items:center;justify-content:space-between;color:var(--faint);font-size:13px}
+.foot-in a{color:var(--dim)} .foot-in a:hover{color:var(--ink)}
+
+@media (max-width:900px){.g4{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr}}
+@media (max-width:1024px){.nav-links{display:none}.navtoggle{display:grid}}
+@media (max-width:680px){.g4,.g3,.g2{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.12s!important}
+  .reveal{opacity:1!important;transform:none!important}}
+</style>
+<style id="page-css">
+/* The Labs — index + bench chrome. Shared tokens only. */
+.lb-tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase}
+.lb-go{margin-top:16px;font-size:13.5px;font-weight:600;transition:transform .2s var(--ease-out)}
+.card:hover .lb-go{transform:translateX(3px)}
+.lb-page{--lc:var(--em)}
+.lb-back{display:inline-flex;font-size:13.5px;color:var(--dim);font-weight:600;margin-bottom:20px;transition:color .2s}
+.lb-back:hover{color:var(--ink)}
+.lb-hd{max-width:760px;margin-bottom:26px}
+.lb-stage{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:clamp(20px,3vw,30px);min-height:380px}
+.lb-err{color:var(--dim);font-size:15px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+
+/* ── shared bench furniture every lab module can use ─────────────────────── */
+.bx{display:grid;grid-template-columns:1.25fr .75fr;gap:clamp(18px,3vw,30px);align-items:start}
+@media (max-width:900px){.bx{grid-template-columns:1fr}}
+.bx-view{background:var(--bg-2);border:1px solid var(--line);border-radius:16px;overflow:hidden;position:relative;min-height:300px}
+.bx-view canvas,.bx-view svg{display:block;width:100%}
+.bx-side{display:flex;flex-direction:column;gap:16px}
+.bx-grp{display:flex;flex-direction:column;gap:9px}
+.bx-grp>label,.bx-lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--faint)}
+.bx-row{display:flex;align-items:center;gap:10px}
+.bx-slider{width:100%;accent-color:var(--lc,var(--em))}
+.bx-val{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--ink);min-width:56px;text-align:right}
+.bx-btn{padding:10px 16px;border-radius:11px;border:1px solid var(--line);background:var(--panel);color:var(--dim);
+  cursor:pointer;font-size:13.5px;font-weight:600;transition:color .2s,border-color .2s,background .2s,transform .12s var(--ease-out)}
+.bx-btn:hover:not(:disabled){color:var(--ink);border-color:var(--hair)}
+.bx-btn:active:not(:disabled){transform:scale(.97)}
+.bx-btn.on{color:var(--lc,var(--em));border-color:color-mix(in srgb,var(--lc,var(--em)) 45%,transparent);
+  background:color-mix(in srgb,var(--lc,var(--em)) 12%,transparent)}
+.bx-btn.pri{background:var(--grad-life);color:#04140e;border-color:transparent}
+.bx-btn:disabled{opacity:.45;cursor:not-allowed}
+.bx-chips{display:flex;flex-wrap:wrap;gap:8px}
+.bx-read{font-family:var(--mono);font-size:13px;color:var(--dim);background:color-mix(in srgb,var(--ink) 4%,transparent);
+  border:1px solid var(--line);border-radius:10px;padding:11px 14px;line-height:1.55}
+.bx-read b{color:var(--ink)}
+.bx-note{font-size:13.5px;color:var(--dim);line-height:1.6}
+.bx-steps{display:flex;flex-direction:column;gap:8px}
+.bx-step{display:flex;gap:11px;align-items:flex-start;padding:11px 13px;border-radius:11px;border:1px solid var(--line);
+  font-size:13.5px;color:var(--dim);transition:border-color .25s,color .25s,background .25s}
+.bx-step .n{width:20px;height:20px;border-radius:50%;flex:none;display:grid;place-items:center;font-family:var(--mono);
+  font-size:10px;font-weight:700;background:var(--line);color:var(--dim)}
+.bx-step.done{color:var(--ink);border-color:color-mix(in srgb,var(--em) 35%,transparent)}
+.bx-step.done .n{background:var(--em);color:#04140e}
+.bx-step.now{color:var(--ink);border-color:color-mix(in srgb,var(--lc,var(--em)) 50%,transparent);
+  background:color-mix(in srgb,var(--lc,var(--em)) 9%,transparent)}
+.bx-verdict{margin-top:14px;padding:14px 16px;border-radius:12px;border-left:3px solid var(--lc,var(--em));
+  background:color-mix(in srgb,var(--ink) 4%,transparent);font-size:14px;line-height:1.6;color:var(--dim)}
+.bx-verdict b{color:var(--ink)}
+
+</style>
+</head>
+<body data-page="labs" data-page="labs" data-page="labs" data-page="labs" data-page="learn">
+<div class="bg-veil" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="brand" href="./index.html" aria-label="Biology Entelloq home">
+      <svg class="logo" viewBox="0 0 100 100" fill="none" aria-hidden="true"><defs><linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#34d399"/><stop offset="1" stop-color="#38e0d8"/></linearGradient></defs>
+        <path d="M32 16c20 9 16 28 0 34 20 6 24 24 0 34" stroke="url(#bg1)" stroke-width="5" stroke-linecap="round"/>
+        <path d="M68 16C48 25 52 44 68 50 48 56 44 75 68 84" stroke="url(#bg1)" stroke-width="5" stroke-linecap="round"/></svg>
+      <span>Biology <b>Entelloq</b></span></a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="./index.html">Home</a>
+      <a href="./learn.html" data-nav="learn">Learn</a>
+      <a href="./solve.html" data-nav="solve">Solve</a>
+      <a href="./explore.html" data-nav="explore">Explore</a>
+      <a href="./me.html" data-nav="me">Me</a>
+    </nav>
+    <div class="nav-right">
+      <button class="iconbtn" id="themeBtn" aria-label="Toggle theme" aria-pressed="false"><svg id="themeIcon" viewBox="0 0 24 24" fill="none"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></button>
+      <a class="btn primary" href="./lab.html">Open the Lab <span class="arr">→</span></a>
+      <button class="iconbtn navtoggle" id="navToggle" aria-label="Menu" aria-controls="mobileMenu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="./index.html">Home</a>
+  <a href="./learn.html">Learn</a>
+  <a href="./solve.html">Solve</a>
+  <a href="./explore.html">Explore</a>
+  <a href="./me.html">Me</a>
+  <a href="./lab.html">Open the Lab →</a>
+</div>
+
+<main id="page"><div id="labsApp"></div></main>
+
+<footer>
+  <div class="foot-in">
+    <span>Biology Entelloq — the biological sibling of Physics Entelloq.</span>
+    <span><a href="./index.html">Home</a> · <a href="./lab.html">Lab</a> · <a href="./universe.html">Universe</a></span>
+  </div>
+</footer>
+
+<script>
+/* shared shell behaviour — nav scroll state, theme, mobile menu, scroll-reveal.
+   Pillar-specific JS goes in <script id="page-js"> AFTER this block. */
+(function(){
+  const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+  const root=document.documentElement;
+  // theme
+  function setTheme(t){root.setAttribute("data-theme",t);try{localStorage.setItem("bioq_theme",t);}catch(e){}
+    $("#themeBtn").setAttribute("aria-pressed",t==="light"?"true":"false");
+    $("#themeIcon").innerHTML=t==="light"
+      ?'<circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'
+      :'<path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>';}
+  try{setTheme(localStorage.getItem("bioq_theme")||"dark");}catch(e){setTheme("dark");}
+  $("#themeBtn").addEventListener("click",()=>setTheme(root.getAttribute("data-theme")==="light"?"dark":"light"));
+  // nav scroll state
+  const nav=$("#nav"); addEventListener("scroll",()=>nav.classList.toggle("scrolled",scrollY>16),{passive:true});
+  nav.classList.toggle("scrolled",scrollY>16);
+  // mobile menu
+  const mm=$("#mobileMenu"),nt=$("#navToggle");
+  nt.addEventListener("click",()=>{const o=mm.classList.toggle("open");nt.setAttribute("aria-expanded",o?"true":"false");});
+  // active nav link (set data-page on <body> in each pillar, e.g. <body data-page="learn">)
+  const page=document.body.dataset.page; if(page){const a=document.querySelector('.nav-links a[data-nav="'+page+'"]'); if(a)a.classList.add("active");}
+  // scroll reveal
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}}),{threshold:.12,rootMargin:"0px 0px -6% 0px"});
+  function observe(){$$(".reveal:not(.in)").forEach(el=>io.observe(el));}
+  observe(); window.__observeReveals=observe;
+  // card glow
+  addEventListener("pointermove",e=>{const c=e.target.closest(".card");if(!c)return;const r=c.getBoundingClientRect();
+    c.style.setProperty("--mx",((e.clientX-r.left)/r.width*100)+"%");},{passive:true});
+})();
+</script>
+<script id="page-js">
+/* ============================================================================
+   Biology Entelloq — THE LABS.
+   A registry + shell. Each lab is a self-contained module that registers itself
+   and is handed a host element to build into; the shell owns the picker, the
+   mounting, and the teardown so a lab never has to think about routing.
+   Every lab here is REAL and runnable — there are no teasers in this product.
+   ========================================================================== */
+const LABS = (function () {
+  const list = [];
+  return {
+    register(id, def) { list.push(Object.assign({ id }, def)); },
+    all() { return list; },
+    get(id) { return list.find((l) => l.id === id); },
+  };
+})();
+
+(function () {
+  "use strict";
+  const $ = (s, r = document) => r.querySelector(s);
+  const app = document.getElementById("labsApp");
+  if (!app) return;
+
+  let live = null;          // { dispose } of the mounted lab
+  function unmount() { if (live && live.dispose) { try { live.dispose(); } catch (e) {} } live = null; }
+
+  function route() {
+    const id = location.hash.replace(/^#/, "");
+    const lab = LABS.get(id);
+    unmount();
+    if (lab) renderLab(lab); else renderIndex();
+    scrollTo({ top: 0, behavior: "smooth" });
+    if (window.__observeReveals) window.__observeReveals();
+  }
+  addEventListener("hashchange", route);
+
+  function renderIndex() {
+    const cards = LABS.all().map((l, i) => `
+      <a class="card lift reveal d${(i % 3) + 1}" href="#${l.id}" style="--lc:${l.color || "var(--em)"}">
+        <div class="glow"></div>
+        <div class="ico" style="background:color-mix(in srgb,${l.color || "var(--em)"} 13%,transparent);
+             color:${l.color || "var(--em)"};border-color:color-mix(in srgb,${l.color || "var(--em)"} 24%,transparent)">${l.icon || ""}</div>
+        <div class="lb-tag" style="color:${l.color || "var(--em)"}">${l.tag || "Lab"}</div>
+        <h3 class="h3" style="margin:4px 0 8px">${l.title}</h3>
+        <p>${l.blurb}</p>
+        <div class="lb-go" style="color:${l.color || "var(--em)"}">Open the bench →</div>
+      </a>`).join("");
+    app.innerHTML = `
+      <div class="wrap band">
+        <div class="reveal">
+          <div class="eyebrow">The benches</div>
+          <h1 class="h1" style="margin:16px 0 16px">Run the experiment<br><span class="grad">yourself.</span></h1>
+          <p class="lead" style="max-width:640px">Every bench here works: reagents, variables, instruments and results. Change something, and the biology answers back.</p>
+        </div>
+        <div class="grid g3" style="margin-top:38px">${cards}</div>
+      </div>`;
+  }
+
+  function renderLab(l) {
+    app.innerHTML = `
+      <div class="wrap band lb-page" style="--lc:${l.color || "var(--em)"}">
+        <a class="lb-back" href="#">← All benches</a>
+        <div class="lb-hd reveal">
+          <div class="lb-tag" style="color:${l.color || "var(--em)"}">${l.tag || "Lab"}</div>
+          <h1 class="h1" style="margin:8px 0 12px">${l.title}</h1>
+          <p class="lead" style="max-width:720px">${l.blurb}</p>
+        </div>
+        <div class="lb-stage" id="labStage"></div>
+      </div>`;
+    const host = $("#labStage");
+    try { live = l.build(host) || null; }
+    catch (e) {
+      host.innerHTML = `<div class="lb-err">This bench hit a problem starting up. <button class="btn ghost" onclick="location.reload()">Reload</button></div>`;
+      console.warn("lab failed: " + l.id, e);
+    }
+  }
+
+  // Defer the first route by a microtask: the bench modules are concatenated AFTER
+  // this shell, so they have not registered yet at this point in synchronous
+  // execution. A microtask runs once the whole script block has finished, by which
+  // time every LABS.register() call has landed.
+  queueMicrotask(route);
+})();
+/* ============================================================================
+   Biology Entelloq — working lab benches.
+   Every bench here runs: real variables, real mechanisms, real numbers. Written
+   against the LABS contract in _labs.js.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------- helpers -- */
+function LB_el(t, c, h) { const e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; }
+const LB_REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+function LB_slider(host, label, min, max, val, step, fmt, on) {
+  const g = LB_el("div", "bx-grp");
+  g.innerHTML = `<label>${label}</label><div class="bx-row"><input type="range" class="bx-slider" min="${min}" max="${max}" value="${val}" step="${step}"><span class="bx-val"></span></div>`;
+  const i = g.querySelector("input"), o = g.querySelector(".bx-val");
+  const upd = () => { o.textContent = fmt(+i.value); on(+i.value); };
+  i.addEventListener("input", upd); host.appendChild(g); upd(); return i;
+}
+function LB_canvas(host, ratio) {
+  const c = LB_el("canvas"); host.appendChild(c);
+  const ctx = c.getContext("2d"); let W, H, dpr;
+  function size() {
+    dpr = Math.min(devicePixelRatio || 1, 2);
+    const r = host.getBoundingClientRect();
+    W = Math.max(240, r.width); H = Math.round(W * (ratio || 0.62));
+    c.style.width = "100%"; c.style.height = H + "px";
+    c.width = W * dpr; c.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  size(); addEventListener("resize", size);
+  return { c, ctx, get W() { return W; }, get H() { return H; }, size, off: () => removeEventListener("resize", size) };
+}
+function LB_css(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim() || v; }
+
+/* ============================================================== MICROSCOPE == */
+LABS.register("microscope", {
+  title: "Virtual Microscope", tag: "Microscopy", color: "var(--cy)",
+  icon: '<svg viewBox="0 0 24 24" fill="none"><path d="M6 18h9M9 18l-1-3M11 6l3 5-3 2-3-5zM13 4l2 1M5 21h14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  blurb: "Four real specimen slides at 40x to 1000x. Change the objective, hunt for focus, add a stain — the field of view narrows and the scale bar recalculates exactly as it would on the bench.",
+  build(host) {
+    const wrap = LB_el("div", "bx"); host.appendChild(wrap);
+    const view = LB_el("div", "bx-view"); const side = LB_el("div", "bx-side");
+    wrap.appendChild(view); wrap.appendChild(side);
+    const cv = LB_canvas(view, 0.78);
+
+    const SLIDES = {
+      onion: { n: "Onion epidermis", stain: "iodine", need: 100 },
+      blood: { n: "Human blood smear", stain: "methylene blue", need: 400 },
+      stomata: { n: "Leaf stomata", stain: "none", need: 100 },
+      bacteria: { n: "Bacteria (mixed)", stain: "methylene blue", need: 1000 },
+    };
+    const MAGS = [40, 100, 400, 1000];
+    let slide = "onion", mag = 100, focus = 50, light = 70, stained = false, raf, t = 0;
+
+    // Declared BEFORE the sliders: LB_slider fires its callback immediately to show
+    // the initial value, and those callbacks call read() — referencing these after
+    // the sliders would hit the temporal dead zone and kill the bench.
+    const readout = LB_el("div", "bx-read");
+    const note = LB_el("div", "bx-note");
+
+    const grp = LB_el("div", "bx-grp");
+    grp.innerHTML = "<label>Specimen slide</label>";
+    const chips = LB_el("div", "bx-chips");
+    Object.keys(SLIDES).forEach((k) => {
+      const b = LB_el("button", "bx-btn" + (k === slide ? " on" : ""), SLIDES[k].n);
+      b.addEventListener("click", () => {
+        slide = k; [...chips.children].forEach((c) => c.classList.remove("on")); b.classList.add("on"); read();
+      });
+      chips.appendChild(b);
+    });
+    grp.appendChild(chips); side.appendChild(grp);
+
+    const mg = LB_el("div", "bx-grp");
+    mg.innerHTML = "<label>Objective</label>";
+    const mchips = LB_el("div", "bx-chips");
+    MAGS.forEach((m) => {
+      const b = LB_el("button", "bx-btn" + (m === mag ? " on" : ""), m + "x");
+      b.addEventListener("click", () => {
+        mag = m; [...mchips.children].forEach((c) => c.classList.remove("on")); b.classList.add("on"); read();
+      });
+      mchips.appendChild(b);
+    });
+    mg.appendChild(mchips); side.appendChild(mg);
+
+    LB_slider(side, "Fine focus", 0, 100, 50, 1, (v) => (Math.abs(v - 50) < 6 ? "sharp" : Math.abs(v - 50) < 20 ? "soft" : "blurred"), (v) => { focus = v; read(); });
+    LB_slider(side, "Condenser / light", 20, 100, 70, 1, (v) => v + "%", (v) => { light = v; read(); });
+
+    const stainBtn = LB_el("button", "bx-btn", "Apply stain");
+    stainBtn.addEventListener("click", () => {
+      stained = !stained; stainBtn.classList.toggle("on", stained);
+      stainBtn.textContent = stained ? "Wash off stain" : "Apply stain"; read();
+    });
+    side.appendChild(stainBtn);
+    side.appendChild(readout); side.appendChild(note);
+
+    // real optics: field of view is inversely proportional to magnification.
+    function fovMicrons() { return 4000 / (mag / 40); }   // ~4mm field at 40x
+    function blur() { return Math.min(9, Math.abs(focus - 50) / 5.2); }
+
+    function read() {
+      const s = SLIDES[slide];
+      const fov = fovMicrons();
+      const resolved = mag >= s.need;
+      readout.innerHTML = `Field of view <b>${fov >= 1000 ? (fov / 1000).toFixed(2) + " mm" : Math.round(fov) + " µm"}</b> · `
+        + `magnification <b>${mag}x</b> · focus <b>${blur() < 1 ? "sharp" : blur().toFixed(1) + " µm off"}</b>`;
+      note.textContent = !resolved
+        ? `At ${mag}x this specimen is not resolved — step up the objective to at least ${s.need}x to see its structure.`
+        : (s.stain !== "none" && !stained)
+          ? `Structure is visible but low-contrast. ${s.stain[0].toUpperCase() + s.stain.slice(1)} would stain it.`
+          : `Well resolved. Total magnification is objective x10 eyepiece; the scale bar below is measured, not decorative.`;
+    }
+
+    function draw() {
+      t += LB_REDUCED ? 0 : 0.016;
+      const { ctx, W, H } = cv;
+      ctx.clearRect(0, 0, W, H);
+      const cx = W / 2, cy = H / 2, R = Math.min(W, H) * 0.44;
+      ctx.save();
+      ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.28); ctx.clip();
+      // illuminated field
+      const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R);
+      const L = light / 100;
+      g.addColorStop(0, `rgba(255,252,240,${0.10 + L * 0.5})`);
+      g.addColorStop(1, `rgba(220,235,240,${0.04 + L * 0.16})`);
+      ctx.fillStyle = g; ctx.fillRect(cx - R, cy - R, R * 2, R * 2);
+      ctx.filter = `blur(${blur()}px)`;
+      const s = SLIDES[slide], resolved = mag >= s.need;
+      const zoom = mag / 100;
+      if (slide === "onion") drawOnion(ctx, cx, cy, R, zoom, stained);
+      else if (slide === "blood") drawBlood(ctx, cx, cy, R, zoom, stained, resolved);
+      else if (slide === "stomata") drawStomata(ctx, cx, cy, R, zoom);
+      else drawBacteria(ctx, cx, cy, R, zoom, stained, resolved);
+      ctx.filter = "none";
+      ctx.restore();
+      // eyepiece surround + scale bar
+      ctx.strokeStyle = "rgba(255,255,255,.14)"; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.28); ctx.stroke();
+      const fov = fovMicrons(), barUm = niceBar(fov / 4);
+      const px = (barUm / fov) * (R * 2);
+      ctx.strokeStyle = LB_css("--ink"); ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(cx - R + 16, cy + R - 18); ctx.lineTo(cx - R + 16 + px, cy + R - 18); ctx.stroke();
+      ctx.fillStyle = LB_css("--ink"); ctx.font = "600 12px ui-monospace,monospace"; ctx.textAlign = "left";
+      ctx.fillText(barUm >= 1000 ? (barUm / 1000) + " mm" : barUm + " µm", cx - R + 16, cy + R - 26);
+      raf = requestAnimationFrame(draw);
+    }
+    function niceBar(x) { const p = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000]; return p.reduce((a, b) => Math.abs(b - x) < Math.abs(a - x) ? b : a); }
+
+    function drawOnion(ctx, cx, cy, R, z, st) {
+      const w = 120 * z, h = 58 * z;
+      ctx.lineWidth = Math.max(1, 2 * z);
+      ctx.strokeStyle = st ? "rgba(120,70,150,.85)" : "rgba(150,170,175,.55)";
+      for (let r = -4; r <= 4; r++) for (let c = -4; c <= 4; c++) {
+        const x = cx + c * w + (r % 2 ? w / 2 : 0), y = cy + r * h;
+        ctx.beginPath();
+        ctx.moveTo(x - w / 2, y - h / 2); ctx.lineTo(x + w / 2, y - h / 2);
+        ctx.lineTo(x + w / 2, y + h / 2); ctx.lineTo(x - w / 2, y + h / 2); ctx.closePath();
+        ctx.stroke();
+        if (z >= 1) {   // nuclei resolve from 100x
+          ctx.fillStyle = st ? "rgba(90,40,120,.85)" : "rgba(120,140,150,.5)";
+          ctx.beginPath(); ctx.arc(x + w * 0.16, y, Math.max(1.5, 5 * z), 0, 6.28); ctx.fill();
+        }
+      }
+    }
+    function drawBlood(ctx, cx, cy, R, z, st, resolved) {
+      for (let i = 0; i < 90; i++) {
+        const a = i * 2.39, r = Math.sqrt(i / 90) * R * 1.1;
+        const x = cx + Math.cos(a) * r, y = cy + Math.sin(a) * r;
+        const rad = 7 * z;
+        ctx.fillStyle = st ? "rgba(190,70,90,.75)" : "rgba(205,110,110,.55)";
+        ctx.beginPath(); ctx.arc(x, y, rad, 0, 6.28); ctx.fill();
+        if (resolved) {  // the biconcave pale centre only resolves at 400x+
+          ctx.fillStyle = "rgba(255,250,245,.5)";
+          ctx.beginPath(); ctx.arc(x, y, rad * 0.45, 0, 6.28); ctx.fill();
+        }
+      }
+      if (resolved) {   // one white cell with a lobed nucleus
+        ctx.fillStyle = st ? "rgba(70,60,170,.85)" : "rgba(150,150,190,.6)";
+        ctx.beginPath(); ctx.arc(cx + 20 * z, cy - 14 * z, 12 * z, 0, 6.28); ctx.fill();
+        ctx.fillStyle = st ? "rgba(40,30,120,.95)" : "rgba(110,110,160,.8)";
+        for (let k = 0; k < 3; k++) {
+          ctx.beginPath(); ctx.arc(cx + 20 * z + Math.cos(k * 2) * 5 * z, cy - 14 * z + Math.sin(k * 2) * 5 * z, 5 * z, 0, 6.28); ctx.fill();
+        }
+      }
+    }
+    function drawStomata(ctx, cx, cy, R, z) {
+      ctx.strokeStyle = "rgba(120,175,130,.5)"; ctx.lineWidth = Math.max(1, 1.6 * z);
+      for (let r = -3; r <= 3; r++) for (let c = -3; c <= 3; c++) {
+        const x = cx + c * 110 * z + (r % 2 ? 55 * z : 0), y = cy + r * 74 * z;
+        ctx.beginPath();
+        for (let k = 0; k <= 7; k++) {
+          const a = k / 7 * 6.28, rr = 44 * z * (0.8 + Math.sin(k * 2.1) * 0.16);
+          k ? ctx.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr * 0.7) : ctx.moveTo(x + rr, y);
+        }
+        ctx.closePath(); ctx.stroke();
+      }
+      // guard cells + pore, opening and closing gently
+      const open = 0.5 + Math.sin(t * 0.5) * 0.35;
+      [[0, 0], [-110 * z, 74 * z], [110 * z, -74 * z]].forEach(([dx, dy]) => {
+        ctx.fillStyle = "rgba(80,160,100,.75)";
+        ctx.beginPath(); ctx.ellipse(cx + dx - 11 * z * open, cy + dy, 9 * z, 22 * z, 0, 0, 6.28); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(cx + dx + 11 * z * open, cy + dy, 9 * z, 22 * z, 0, 0, 6.28); ctx.fill();
+      });
+    }
+    function drawBacteria(ctx, cx, cy, R, z, st, resolved) {
+      const col = st ? "rgba(60,70,170,.9)" : "rgba(150,160,180,.4)";
+      ctx.fillStyle = col; ctx.strokeStyle = col;
+      for (let i = 0; i < 150; i++) {
+        const a = i * 2.39, r = Math.sqrt(i / 150) * R * 1.15;
+        const x = cx + Math.cos(a) * r, y = cy + Math.sin(a) * r;
+        const s = resolved ? 1 : 0.4;
+        if (i % 3 === 0) { ctx.beginPath(); ctx.arc(x, y, 3.2 * z * s, 0, 6.28); ctx.fill(); }
+        else {
+          ctx.save(); ctx.translate(x, y); ctx.rotate(a);
+          ctx.beginPath(); ctx.ellipse(0, 0, 7 * z * s, 2.6 * z * s, 0, 0, 6.28); ctx.fill(); ctx.restore();
+        }
+      }
+    }
+    read(); draw();
+    return { dispose() { cancelAnimationFrame(raf); cv.off(); } };
+  },
+});
+
+/* ======================================================== ELECTROPHORESIS == */
+LABS.register("gel-electrophoresis", {
+  title: "Gel Electrophoresis", tag: "Molecular", color: "var(--indigo)",
+  icon: '<svg viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="18" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M8 6v2M12 6v2M16 6v2M8 12h1M12 14h1M16 11h1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>',
+  blurb: "Load a real agarose gel, set the voltage and run it. Small fragments race ahead, migration falls off logarithmically with size — then read an unknown off the ladder.",
+  build(host) {
+    const wrap = LB_el("div", "bx"); host.appendChild(wrap);
+    const view = LB_el("div", "bx-view"); const side = LB_el("div", "bx-side");
+    wrap.appendChild(view); wrap.appendChild(side);
+    const cv = LB_canvas(view, 0.72);
+
+    const LADDER = [10000, 6000, 3000, 1500, 1000, 500, 250];
+    const UNKNOWN = 1500 + Math.floor(Math.random() * 6) * 500;   // hidden truth
+    const LANES = [
+      { n: "Ladder", frags: LADDER.slice(), fixed: true },
+      { n: "Sample A", frags: [3000, 800] },
+      { n: "Sample B", frags: [UNKNOWN] },
+      { n: "Empty", frags: [] },
+    ];
+    let volts = 90, minutes = 0, running = false, raf, loaded = false;
+
+    LB_slider(side, "Voltage", 40, 150, 90, 5, (v) => v + " V", (v) => { volts = v; });
+    const loadBtn = LB_el("button", "bx-btn pri", "Load the wells");
+    const runBtn = LB_el("button", "bx-btn", "Run the gel"); runBtn.disabled = true;
+    const resetBtn = LB_el("button", "bx-btn", "Reset");
+    const row = LB_el("div", "bx-chips"); row.appendChild(loadBtn); row.appendChild(runBtn); row.appendChild(resetBtn);
+    side.appendChild(row);
+    const readout = LB_el("div", "bx-read"); side.appendChild(readout);
+    const guessWrap = LB_el("div", "bx-grp"); side.appendChild(guessWrap);
+    const verdict = LB_el("div", "bx-verdict"); verdict.style.display = "none"; side.appendChild(verdict);
+
+    loadBtn.addEventListener("click", () => { loaded = true; runBtn.disabled = false; loadBtn.disabled = true; upd(); });
+    runBtn.addEventListener("click", () => { running = !running; runBtn.textContent = running ? "Pause" : "Run the gel"; });
+    resetBtn.addEventListener("click", () => {
+      minutes = 0; running = false; loaded = false; loadBtn.disabled = false;
+      runBtn.disabled = true; runBtn.textContent = "Run the gel"; verdict.style.display = "none"; upd();
+    });
+
+    guessWrap.innerHTML = "<label>Read Sample B off the ladder</label>";
+    const gchips = LB_el("div", "bx-chips");
+    [500, 1000, 1500, 2000, 2500, 3000, 3500, 4000].forEach((bp) => {
+      const b = LB_el("button", "bx-btn", bp + " bp");
+      b.addEventListener("click", () => {
+        const right = bp === UNKNOWN;
+        verdict.style.display = "";
+        verdict.innerHTML = right
+          ? `<b>Correct — ${UNKNOWN} bp.</b> You read it by interpolating between the ladder bands. Migration distance is proportional to log(1/size), which is why the ladder bands crowd together at the top.`
+          : `<b>Not quite.</b> Compare Sample B's band against its nearest ladder neighbours and interpolate — remember spacing is logarithmic, not linear. (It is not ${bp} bp.)`;
+      });
+      gchips.appendChild(b);
+    });
+    guessWrap.appendChild(gchips);
+
+    // real physics: distance ∝ voltage × time × log-inverse of fragment size
+    function migration(bp) {
+      const mobility = 1 / Math.log10(bp);          // small fragments move further
+      return Math.min(1, (volts / 100) * (minutes / 60) * mobility * 1.55);
+    }
+    function upd() {
+      readout.innerHTML = !loaded
+        ? "Wells empty. Load the samples to begin."
+        : `Running at <b>${volts} V</b> for <b>${minutes.toFixed(0)} min</b>. ${minutes < 8 ? "Bands are still in the wells." : minutes > 55 ? "Careful — the smallest fragments are running off the end." : "Bands separating."}`;
+    }
+    function draw() {
+      if (running) { minutes += 0.25; if (minutes > 90) { minutes = 90; running = false; runBtn.textContent = "Run the gel"; } upd(); }
+      const { ctx, W, H } = cv; ctx.clearRect(0, 0, W, H);
+      const padX = 26, padTop = 30, gelH = H - padTop - 24, laneW = (W - padX * 2) / LANES.length;
+      // gel slab
+      ctx.fillStyle = "rgba(120,150,170,.10)";
+      ctx.fillRect(padX, padTop, W - padX * 2, gelH);
+      ctx.strokeStyle = "rgba(255,255,255,.10)"; ctx.strokeRect(padX, padTop, W - padX * 2, gelH);
+      ctx.fillStyle = LB_css("--faint"); ctx.font = "600 11px ui-monospace,monospace"; ctx.textAlign = "center";
+      ctx.fillText("− cathode", W / 2, 16);
+      ctx.fillText("+ anode", W / 2, H - 8);
+      LANES.forEach((L, i) => {
+        const x = padX + laneW * i + laneW / 2;
+        ctx.fillStyle = "rgba(255,255,255,.16)";
+        ctx.fillRect(x - laneW * 0.3, padTop + 4, laneW * 0.6, 7);      // the well
+        ctx.fillStyle = LB_css("--dim"); ctx.font = "600 11px Inter,sans-serif";
+        ctx.fillText(L.n, x, padTop - 8);
+        if (!loaded) return;
+        L.frags.forEach((bp) => {
+          const y = padTop + 12 + migration(bp) * (gelH - 26);
+          const int = L.fixed ? 0.5 : 0.85;
+          ctx.fillStyle = `rgba(${L.fixed ? "150,170,255" : "120,255,210"},${int})`;
+          ctx.shadowColor = L.fixed ? "rgba(150,170,255,.8)" : "rgba(120,255,210,.8)";
+          ctx.shadowBlur = 8;
+          ctx.fillRect(x - laneW * 0.3, y, laneW * 0.6, 5);
+          ctx.shadowBlur = 0;
+          if (L.fixed && minutes > 6) {
+            ctx.fillStyle = LB_css("--faint"); ctx.font = "500 9.5px ui-monospace,monospace"; ctx.textAlign = "right";
+            ctx.fillText(bp >= 1000 ? (bp / 1000) + "kb" : bp, padX - 4, y + 5);
+            ctx.textAlign = "center";
+          }
+        });
+      });
+      raf = requestAnimationFrame(draw);
+    }
+    upd(); draw();
+    return { dispose() { cancelAnimationFrame(raf); cv.off(); } };
+  },
+});
+
+/* ========================================================== PREDATOR-PREY == */
+LABS.register("predator-prey", {
+  title: "Predator & Prey", tag: "Ecology", color: "var(--amber)",
+  icon: '<svg viewBox="0 0 24 24" fill="none"><path d="M3 17c3-6 6 2 9-4s6 3 9-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="6" cy="7" r="1.6" fill="currentColor"/><circle cx="17" cy="15" r="1.6" fill="currentColor"/></svg>',
+  blurb: "The Lotka–Volterra cycle, running live. Push the birth and predation rates and watch the two populations chase each other — the predator peak always lagging the prey peak.",
+  build(host) {
+    const wrap = LB_el("div", "bx"); host.appendChild(wrap);
+    const view = LB_el("div", "bx-view"); const side = LB_el("div", "bx-side");
+    wrap.appendChild(view); wrap.appendChild(side);
+    const cv = LB_canvas(view, 0.62);
+
+    let a = 0.9, b = 0.9, c = 0.6, d = 0.9;   // prey birth, predation, pred death, conversion
+    let prey = 40, pred = 9, raf, hist = [], t = 0;
+    LB_slider(side, "Prey birth rate", 20, 200, 90, 5, (v) => (v / 100).toFixed(2), (v) => { a = v / 100; });
+    LB_slider(side, "Predation rate", 20, 200, 90, 5, (v) => (v / 100).toFixed(2), (v) => { b = v / 100; });
+    LB_slider(side, "Predator death rate", 20, 200, 60, 5, (v) => (v / 100).toFixed(2), (v) => { c = v / 100; });
+    const resetBtn = LB_el("button", "bx-btn", "Reset populations");
+    resetBtn.addEventListener("click", () => { prey = 40; pred = 9; hist = []; });
+    side.appendChild(resetBtn);
+    const readout = LB_el("div", "bx-read"); side.appendChild(readout);
+    const note = LB_el("div", "bx-note",
+      "Prey grow when predators are scarce; predators grow only after prey are plentiful, so their peak always lags. That lag is why the two curves are permanently out of phase — the classic Lotka–Volterra oscillation.");
+    side.appendChild(note);
+
+    function step(dt) {
+      // dPrey/dt = a·N − b·N·P ; dPred/dt = d·b·N·P − c·P
+      const dN = (a * prey - b * prey * pred * 0.02) * dt;
+      const dP = (d * b * prey * pred * 0.02 * 0.35 - c * pred) * dt;
+      prey = Math.max(0.4, Math.min(400, prey + dN));
+      pred = Math.max(0.2, Math.min(400, pred + dP));
+      hist.push([prey, pred]); if (hist.length > 460) hist.shift();
+    }
+    function draw() {
+      if (!LB_REDUCED) { for (let i = 0; i < 3; i++) step(0.016); t += 0.016; } else step(0.05);
+      const { ctx, W, H } = cv; ctx.clearRect(0, 0, W, H);
+      const pad = 30, gw = W - pad * 2, gh = H - pad * 2;
+      ctx.strokeStyle = "rgba(255,255,255,.10)"; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(pad, pad); ctx.lineTo(pad, H - pad); ctx.lineTo(W - pad, H - pad); ctx.stroke();
+      const maxV = Math.max(60, ...hist.map((h) => Math.max(h[0], h[1])));
+      function series(idx, col) {
+        ctx.strokeStyle = col; ctx.lineWidth = 2.2; ctx.beginPath();
+        hist.forEach((h, i) => {
+          const x = pad + (i / 460) * gw, y = H - pad - (h[idx] / maxV) * gh;
+          i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+        });
+        ctx.stroke();
+      }
+      series(0, LB_css("--em")); series(1, LB_css("--rose"));
+      ctx.font = "600 11px ui-monospace,monospace"; ctx.textAlign = "left";
+      ctx.fillStyle = LB_css("--em"); ctx.fillText("prey", pad + 6, pad + 4);
+      ctx.fillStyle = LB_css("--rose"); ctx.fillText("predators", pad + 50, pad + 4);
+      readout.innerHTML = `Prey <b>${prey.toFixed(0)}</b> · Predators <b>${pred.toFixed(0)}</b>`;
+      raf = requestAnimationFrame(draw);
+    }
+    draw();
+    return { dispose() { cancelAnimationFrame(raf); cv.off(); } };
+  },
+});
+
+/* ========================================================= ENZYME KINETICS = */
+LABS.register("enzyme-kinetics", {
+  title: "Enzyme Kinetics", tag: "Molecular", color: "var(--em)",
+  icon: '<svg viewBox="0 0 24 24" fill="none"><path d="M4 18c4 0 4-9 8-9s4 6 8 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="7" cy="9" r="1.6" fill="currentColor"/></svg>',
+  blurb: "Drive a real enzyme with temperature, pH and substrate. Find its optimum — then cook it past 55 °C and watch the denaturation refuse to reverse, exactly as broken tertiary structure does.",
+  build(host) {
+    const wrap = LB_el("div", "bx"); host.appendChild(wrap);
+    const view = LB_el("div", "bx-view"); const side = LB_el("div", "bx-side");
+    wrap.appendChild(view); wrap.appendChild(side);
+    const cv = LB_canvas(view, 0.62);
+
+    const ENZ = { pepsin: { n: "Pepsin", pH: 2, t: 37 }, amylase: { n: "Amylase", pH: 7, t: 37 }, trypsin: { n: "Trypsin", pH: 8, t: 37 } };
+    let enz = "amylase", temp = 37, pH = 7, sub = 50, denatured = false, raf;
+
+    const eg = LB_el("div", "bx-grp"); eg.innerHTML = "<label>Enzyme</label>";
+    const ec = LB_el("div", "bx-chips");
+    Object.keys(ENZ).forEach((k) => {
+      const b = LB_el("button", "bx-btn" + (k === enz ? " on" : ""), ENZ[k].n);
+      b.addEventListener("click", () => { enz = k; [...ec.children].forEach((x) => x.classList.remove("on")); b.classList.add("on"); });
+      ec.appendChild(b);
+    });
+    eg.appendChild(ec); side.appendChild(eg);
+    LB_slider(side, "Temperature", 0, 80, 37, 1, (v) => v + " °C", (v) => { temp = v; if (v > 55) denatured = true; });
+    LB_slider(side, "pH", 1, 14, 7, 1, (v) => "pH " + v, (v) => { pH = v; });
+    LB_slider(side, "Substrate concentration", 0, 100, 50, 1, (v) => v + " mM", (v) => { sub = v; });
+    const resetBtn = LB_el("button", "bx-btn", "Fresh enzyme sample");
+    resetBtn.addEventListener("click", () => { denatured = false; });
+    side.appendChild(resetBtn);
+    const readout = LB_el("div", "bx-read"); side.appendChild(readout);
+    const note = LB_el("div", "bx-note"); side.appendChild(note);
+
+    function rate() {
+      if (denatured) return 0;
+      const e = ENZ[enz];
+      const tf = Math.exp(-Math.pow(temp - e.t, 2) / 260);      // bell around optimum
+      const pf = Math.exp(-Math.pow(pH - e.pH, 2) / 3.2);
+      const sf = sub / (18 + sub);                               // Michaelis–Menten
+      return tf * pf * sf * 100;
+    }
+    function draw() {
+      const { ctx, W, H } = cv; ctx.clearRect(0, 0, W, H);
+      const pad = 34, gw = W - pad * 2, gh = H - pad * 2;
+      ctx.strokeStyle = "rgba(255,255,255,.10)";
+      ctx.beginPath(); ctx.moveTo(pad, pad); ctx.lineTo(pad, H - pad); ctx.lineTo(W - pad, H - pad); ctx.stroke();
+      ctx.fillStyle = LB_css("--faint"); ctx.font = "600 10.5px ui-monospace,monospace";
+      ctx.textAlign = "center"; ctx.fillText("temperature (°C)", W / 2, H - 10);
+      // rate-vs-temperature curve for the current pH & substrate
+      const e = ENZ[enz];
+      ctx.strokeStyle = LB_css("--em"); ctx.lineWidth = 2.4; ctx.beginPath();
+      for (let x = 0; x <= 80; x++) {
+        const tf = Math.exp(-Math.pow(x - e.t, 2) / 260);
+        const pf = Math.exp(-Math.pow(pH - e.pH, 2) / 3.2);
+        const v = (x > 55 ? 0 : tf * pf * (sub / (18 + sub)) * 100);
+        const px = pad + (x / 80) * gw, py = H - pad - (v / 100) * gh;
+        x ? ctx.lineTo(px, py) : ctx.moveTo(px, py);
+      }
+      ctx.stroke();
+      // denature zone
+      ctx.fillStyle = "rgba(232,115,94,.10)";
+      ctx.fillRect(pad + (55 / 80) * gw, pad, gw - (55 / 80) * gw, gh);
+      ctx.fillStyle = "rgba(232,115,94,.75)"; ctx.font = "600 10px ui-monospace,monospace"; ctx.textAlign = "left";
+      ctx.fillText("denaturation", pad + (56 / 80) * gw, pad + 12);
+      // current operating point
+      const r = rate();
+      const mx = pad + (temp / 80) * gw, my = H - pad - (r / 100) * gh;
+      ctx.fillStyle = denatured ? LB_css("--rose") : LB_css("--amber");
+      ctx.beginPath(); ctx.arc(mx, my, 6, 0, 6.28); ctx.fill();
+      readout.innerHTML = `Reaction rate <b>${r.toFixed(1)}</b> arbitrary units${denatured ? " — <b style='color:var(--rose)'>denatured</b>" : ""}`;
+      note.textContent = denatured
+        ? "Above ~55 °C the hydrogen and ionic bonds holding the tertiary structure gave way. The active site's shape is gone — and cooling it back down does NOT restore it. Take a fresh sample."
+        : Math.abs(temp - e.t) < 5 && Math.abs(pH - ENZ[enz].pH) < 1
+          ? `Close to ${ENZ[enz].n}'s optimum (${e.t} °C, pH ${ENZ[enz].pH}). Raising substrate now gives diminishing returns — the active sites are saturating.`
+          : `${ENZ[enz].n} works best near ${e.t} °C and pH ${ENZ[enz].pH}. Away from that, fewer collisions have the right energy and geometry.`;
+      raf = requestAnimationFrame(draw);
+    }
+    draw();
+    return { dispose() { cancelAnimationFrame(raf); cv.off(); } };
+  },
+});
+
+</script>
+<!-- __BIOQ_EMBED__ -->
+<style>body.embed .nav,body.embed .mobile-menu,body.embed footer,body.embed .skiplink{display:none!important}
+body.embed main{padding-top:20px!important}body.embed #launch{display:none!important}</style>
+<script>(function(){var q=new URLSearchParams(location.search);if(!q.get('embed'))return;
+try{localStorage.setItem('bioq_seen','1');}catch(e){}
+function apply(){if(document.body)document.body.classList.add('embed');}
+if(document.body)apply();else addEventListener('DOMContentLoaded',apply);
+addEventListener('message',function(e){var d=e.data||{};if(d.bioqTheme){document.documentElement.setAttribute('data-theme',d.bioqTheme);try{localStorage.setItem('bioq_theme',d.bioqTheme);}catch(x){}}});
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href]');if(!a)return;var h=a.getAttribute('href')||'';
+if(/\.html/i.test(h)&&/^\.?\/?(index|learn|lessons|reason|labs|solve|explore|me|about|lab|universe)\.html/i.test(h.replace(/^\.\//,''))){e.preventDefault();try{parent.postMessage({bioqNav:h},'*');}catch(x){}}},true);
+})();</script>
+
+<script id="atmo-js">
+/* ============================================================================
+   BIOLOGY ENTELLOQ — THE LIVING FIELD.
+
+   Physics Entelloq puts a sheet of spacetime behind the product and bends it
+   around the cursor. This is the biological answer to that, and it is not the
+   same idea in different colours: matter is passive and gets curved, whereas
+   tissue is ALIVE and reaches toward what it wants. So the field here is a thick
+   section of living tissue seen down a microscope, and the cursor is a nutrient
+   source. Cells near it swell, their membranes brighten, and the capillary
+   network grows toward it — chemotaxis, the oldest behaviour there is.
+
+   Four things are happening at once in the shader:
+     · a Worley cell field (membranes are the F2-F1 ridge — the real thing under
+       phase contrast) in two parallax layers, so the section has thickness
+     · a domain warp driven by slow fbm, because no real tissue is on a grid
+     · ridged fbm capillaries that bias their flow toward the cursor
+     · a breath — everything respires at about 7 cycles a minute, which is why
+       it reads as alive rather than as a screensaver on a loop
+
+   SELF-INSTALLING. Dropping this one <script> onto a page is the whole install:
+   it makes its own canvas, injects its own CSS, picks its colour from
+   <body data-page>, and follows the light/dark toggle. It never needs markup.
+   ========================================================================== */
+(function () {
+  "use strict";
+  if (window.BIOQ_ATMO) return;                       // idempotent: safe to double-inject
+
+  // Inside the unified app shell each section loads in an iframe with ?embed=1.
+  // The shell already has a field; a second one per iframe would mean two WebGL
+  // contexts fighting for the GPU and a visible seam where the two tissues meet.
+  // So the embedded page renders none of its own and goes transparent instead,
+  // letting the shell's single continuous field show through — which is also why
+  // navigating between sections never interrupts it.
+  try {
+    if (new URLSearchParams(location.search).get("embed")) {
+      var t = document.createElement("style");
+      t.id = "atmo-embed";
+      t.textContent = "html,body{background:transparent!important}.bg-veil{display:none!important}";
+      (document.head || document.documentElement).appendChild(t);
+      window.BIOQ_ATMO = { theme: function () {}, setSection: function () {}, mouse: null, mode: "embedded" };
+      return;
+    }
+  } catch (e) {}
+
+  /* --- where the colour comes from -------------------------------------- */
+  // Each pillar gets its own biology, and the hues deliberately match the `tc`
+  // accent the app shell already assigns that view — so the field is the same
+  // colour as the section you are standing in rather than a second, competing
+  // palette. Intensity is how ALIVE the field looks: the Lab runs hot, Me runs quiet.
+  var SECTIONS = {
+    home:     ["#34d399", 0.44],   // em     — chlorophyll
+    learn:    ["#34d399", 0.52],   // em
+    lessons:  ["#38e0d8", 0.50],   // cy
+    reason:   ["#8b5cf6", 0.48],   // violet — the colour of thinking
+    labs:     ["#f6c667", 0.52],   // amber  — a bench lamp
+    solve:    ["#7c8cf8", 0.48],   // indigo
+    explore:  ["#38e0d8", 0.58],   // cy     — open water
+    me:       ["#c9a86a", 0.34],   // quiet, warm, low
+    about:    ["#34d399", 0.46],   // em
+    lab:      ["#fb7185", 0.64],   // rose   — an opened body, and the field runs hot
+    universe: ["#38e0d8", 0.60]    // cy
+  };
+
+  var reduced = false;
+  try { reduced = matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
+  var STILL = reduced || /[?&#](still|print)=?1?/.test(location.search + location.hash);
+
+  /* --- install ----------------------------------------------------------- */
+  var css = document.createElement("style");
+  css.id = "atmo-css";
+  css.textContent =
+    // z-index:-1, NOT 0. A positioned element at z-index:0 paints ABOVE ordinary
+    // in-flow block content, so the field would cover the page. Negative z puts it
+    // between the root background and everything else, which means not one existing
+    // element needs its position or stacking touched — and the product's fixed nav
+    // (position:fixed;z-index:60) keeps working exactly as before.
+    "#atmo{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;" +
+      "opacity:0;transition:opacity 1.2s cubic-bezier(.22,1,.36,1);display:block}" +
+    "#atmo.lit{opacity:.78}" +
+    // In light mode the same field reads as a stained section on a white slide, so
+    // it stays — but fainter, because ink on paper is a quieter medium.
+    "html[data-theme=\"light\"] #atmo.lit{opacity:.42}" +
+    // The pages paint --bg on BOTH html and body; body's copy would hide a
+    // negative-z child, so hand the background to the root alone. --bg is a themed
+    // custom property, so this keeps following the light/dark toggle for free.
+    "html{background:var(--bg,#04070a)}body{background:transparent!important}";
+  (document.head || document.documentElement).appendChild(css);
+
+  var cv = document.createElement("canvas");
+  cv.id = "atmo";
+  cv.setAttribute("aria-hidden", "true");
+  // NOTE: attach() is *declared* here but deliberately not *called* until the very
+  // bottom of this module. It reaches into cur/tgt/M/FS/VS, all of which are `var`
+  // bindings that are hoisted but still undefined at this point in the file —
+  // calling it here would throw on the first property write and silently leave the
+  // page with no field at all.
+  function attach() {
+    if (!document.body) return setTimeout(attach, 16);
+    document.body.insertBefore(cv, document.body.firstChild);
+    // The class is what fades the field in, and it must land on a LATER frame than
+    // the insert or the CSS transition has nothing to transition from. rAF is the
+    // usual way to get that, but rAF does not run at all in a background tab — so a
+    // page that loads hidden would sit at opacity 0. The timer is the backstop;
+    // adding the class twice costs nothing.
+    function lit() { cv.classList.add("lit"); }
+    requestAnimationFrame(lit);
+    setTimeout(lit, 80);
+    boot();
+  }
+
+  /* --- state ------------------------------------------------------------- */
+  function hexRGB(h) {
+    h = String(h).replace("#", "");
+    return [parseInt(h.slice(0, 2), 16) / 255, parseInt(h.slice(2, 4), 16) / 255, parseInt(h.slice(4, 6), 16) / 255];
+  }
+  var cur = { r: 0.20, g: 0.83, b: 0.60, in: 0.44, lt: 0 };
+  var tgt = { r: 0.20, g: 0.83, b: 0.60, in: 0.44, lt: 0 };
+  var M = { x: innerWidth / 2, y: innerHeight / 2, tx: innerWidth / 2, ty: innerHeight / 2, live: 0, tlive: 0 };
+
+  addEventListener("pointermove", function (e) {
+    M.tx = e.clientX; M.ty = e.clientY; M.tlive = 1;
+  }, { passive: true });
+  // A pointer that has left should stop feeding the tissue, or the glow sits there
+  // forever on a page nobody is touching. pointerleave does not bubble, so it has
+  // to be bound to the root element rather than to window; mouseout with a null
+  // relatedTarget is the belt-and-braces case for leaving through the chrome.
+  document.documentElement.addEventListener("pointerleave", function () { M.tlive = 0; }, { passive: true });
+  addEventListener("mouseout", function (e) { if (!e.relatedTarget) M.tlive = 0; }, { passive: true });
+  addEventListener("blur", function () { M.tlive = 0; });
+  // Touch has no hover: without this the glow would stay wherever the last tap
+  // landed, permanently, on every phone.
+  addEventListener("pointerup", function (e) {
+    if (e.pointerType !== "mouse") M.tlive = 0;
+  }, { passive: true });
+
+  function theme(rgb, intensity) {
+    tgt.r = rgb[0]; tgt.g = rgb[1]; tgt.b = rgb[2];
+    if (typeof intensity === "number") tgt.in = intensity;
+  }
+  function setSection(key) {
+    var s = SECTIONS[key] || SECTIONS.home;
+    theme(hexRGB(s[0]), s[1]);
+    nudge();                             // navigating must restain the field even in STILL mode
+  }
+  // repaint is filled in by whichever renderer boots. In STILL mode (reduced
+  // motion, or ?still=1) exactly one frame is ever drawn, so without this a reader
+  // who switches to light mode would be left looking at the dark field forever.
+  var repaint = null;
+  function nudge() {
+    if (!STILL || !repaint) return;      // the animated path picks the change up on its own
+    for (var i = 0; i < 60; i++) ease(); // settle the eased colour, then draw the one frame
+    repaint(0);
+  }
+  function readTheme() {
+    var next = (document.documentElement.getAttribute("data-theme") === "light") ? 1 : 0;
+    if (next === tgt.lt) return;
+    tgt.lt = next;
+    nudge();
+  }
+
+  function ease() {
+    cur.r += (tgt.r - cur.r) * 0.035; cur.g += (tgt.g - cur.g) * 0.035;
+    cur.b += (tgt.b - cur.b) * 0.035; cur.in += (tgt.in - cur.in) * 0.035;
+    cur.lt += (tgt.lt - cur.lt) * 0.08;
+    M.x += (M.tx - M.x) * 0.075; M.y += (M.ty - M.y) * 0.075;
+    M.live += (M.tlive - M.live) * 0.04;
+  }
+
+  /* --- the field --------------------------------------------------------- */
+  var FS = [
+    "precision mediump float;",
+    "uniform vec2 uRes;uniform float uT;uniform vec2 uM;uniform vec3 uC;uniform float uIn;uniform float uLive;uniform float uLight;",
+
+    "float h1(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}",
+    "vec2 h2(vec2 p){return fract(sin(vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3))))*43758.5453);}",
+    "float vn(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);",
+    " float a=h1(i),b=h1(i+vec2(1,0)),c=h1(i+vec2(0,1)),d=h1(i+vec2(1,1));",
+    " return mix(mix(a,b,f.x),mix(c,d,f.x),f.y);}",
+    "float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<4;i++){v+=a*vn(p);p*=2.07;a*=.5;}return v;}",
+    // Ridged noise gives threads instead of blobs — this is what makes a capillary
+    // look like a vessel and not like a cloud.
+    "float ridge(vec2 p){float v=0.,a=.5;for(int i=0;i<4;i++){v+=a*(1.-abs(vn(p)*2.-1.));p*=2.11;a*=.5;}return v;}",
+
+    // Worley. Returns (F1, F2-F1, cell id). Every nucleus orbits its own cell on a
+    // slow private path, so no two cells ever pulse together.
+    "vec3 cells(vec2 p,float t){vec2 n=floor(p),f=fract(p);",
+    " float f1=8.,f2=8.;vec2 id=vec2(0.);",
+    " for(int j=-1;j<=1;j++){for(int i=-1;i<=1;i++){",
+    "  vec2 g=vec2(float(i),float(j));vec2 o=h2(n+g);",
+    "  o=.5+.40*sin(t*.32+6.2831*o);",
+    "  float d=length(g+o-f);",
+    "  if(d<f1){f2=f1;f1=d;id=n+g;}else if(d<f2){f2=d;}",
+    " }}",
+    " return vec3(f1,f2-f1,h1(id));}",
+
+    "void main(){",
+    " vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y;",
+    " vec2 m=(uM-.5*uRes)/uRes.y;m.y*=-1.;",
+    " float t=uT;",
+    // ~7 breaths a minute. Slow enough that you feel it rather than watch it.
+    " float breath=.5+.5*sin(t*.72);",
+
+    // Chemotaxis. Everything below is stronger the closer it is to the cursor,
+    // and uLive fades the whole effect out when the pointer leaves.
+    " float rm=length(uv-m);",
+    // Tight. A wide gradient turns the whole page into a lamp; the point is a
+    // local response in the tissue the pointer is actually over, so the falloff
+    // is effectively gone by a third of the screen height.
+    " float food=exp(-rm*rm*7.5)*uLive;",
+
+    // Domain warp — the reason this reads as tissue and not as a tiling.
+    " vec2 w=uv+vec2(fbm(uv*1.5+t*.05),fbm(uv*1.5-t*.04+11.3))*.34;",
+    // Tissue swells toward the food source: cells near the cursor get physically
+    // bigger by shrinking the sampling scale there.
+    " float swell=1.-food*.30;",
+
+    // Two layers at different depths. The far one drifts slower and sits dimmer,
+    // which is what gives a flat quad the thickness of a real section.
+    " vec3 c1=cells(w*3.4*swell+vec2(t*.020,-t*.014),t);",
+    " vec3 c2=cells(w*6.9*swell+vec2(-t*.030,t*.023)+31.7,t*1.25);",
+
+    // Membrane = the F2-F1 ridge. This is the single most biological line there is.
+    " float mem1=1.-smoothstep(.0,.085,c1.y);",
+    " float mem2=1.-smoothstep(.0,.060,c2.y);",
+    // Cytoplasm: each cell tinted by its own id, so the field has variation
+    // rather than one flat wash.
+    " float cyto=(.35+.65*c1.z)*(1.-smoothstep(.15,.85,c1.x));",
+    // Nuclei, breathing slightly out of phase per cell.
+    " float nuc=smoothstep(.135+.02*sin(t*.6+c1.z*31.),.0,c1.x)*(.55+.45*c1.z);",
+
+    // Capillaries, warped again so they wander, and pulled toward the cursor so
+    // the network visibly grows in that direction.
+    " vec2 vp=w*2.3+vec2(t*.035,-t*.028)-normalize(uv-m+1e-4)*food*.55;",
+    " float vas=ridge(vp);",
+    " vas=pow(max(vas-.62,0.)*2.6,2.0);",
+
+    // Motes — organelles and spores adrift in the medium, the counterpart to the
+    // stars in the physics field. They rise, because everything in a fluid does.
+    " vec2 sp=w*17.0+vec2(0.,-t*.10);vec2 si=floor(sp);vec2 sf=fract(sp)-.5;",
+    " float sv=h1(si);",
+    " float mote=step(.972,sv)*smoothstep(.055,0.,length(sf-(h2(si)-.5)*.6))*(.55+.45*sin(t*2.1+sv*44.));",
+
+    // --- compose ---
+    " float lum=(.030+.055*breath)*(.55+uIn);",
+    " vec3 col=vec3(.012,.026,.034)*(1.-uLight);",
+    " col+=uC*cyto*lum*1.35;",
+    " col+=uC*mem1*(.055+uIn*.13)*(.75+.25*breath);",
+    " col+=mix(uC,vec3(1.),.35)*mem2*(.022+uIn*.055);",
+    " col+=mix(uC,vec3(1.),.55)*nuc*(.020+uIn*.048);",
+    " col+=mix(uC,vec3(1.,.55,.52),.30)*vas*(.055+uIn*.14);",
+    " col+=vec3(.85,.95,1.)*mote*.55;",
+    // The food source itself: a soft bloom, plus a brightening of whatever tissue
+    // is under it, so the cursor lights the section rather than floating over it.
+    " col+=uC*food*(.085+uIn*.15);",
+    " col*=1.+food*.34;",
+    // Depth: the section is thickest and best-lit in the middle of the field.
+    " col*=1.-.38*smoothstep(.55,1.35,length(uv));",
+
+    // Light mode: invert the physics, not the palette. On a slide the stain
+    // ABSORBS — so a green stain removes red and blue and leaves green, which
+    // means the structures subtract (1-uC), not uC. Subtracting uC would print
+    // the complement and give a magenta negative of the tissue.
+    " float dens=cyto*.30+mem1*1.05+mem2*.42+nuc*.62+vas*.95;",
+    " dens=min(dens*(.46+uIn*.60)*(1.+food*.45),1.25);",
+    " vec3 ink=vec3(1.)-(vec3(1.)-uC)*dens*.80-vec3(.05)*dens;",
+    // Illumination falls off toward the edge of the coverslip.
+    " ink=mix(ink,vec3(1.),.22*smoothstep(.55,1.4,length(uv)));",
+    " col=mix(col,ink,uLight);",
+
+    " gl_FragColor=vec4(col,1.);}"
+  ].join("\n");
+
+  var VS = "attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}";
+
+  function boot() {
+    readTheme();
+    // Follow the product's own theme toggle without it having to know we exist.
+    try {
+      new MutationObserver(readTheme).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    } catch (e) {}
+    // Pick the colour from the page the shell already declares.
+    setSection((document.body && document.body.getAttribute("data-page")) || "home");
+    for (var i = 0; i < 40; i++) ease();     // start already at the right colour, no fade-in from green
+
+    var gl = null;
+    try {
+      gl = cv.getContext("webgl", { alpha: true, antialias: false, depth: false, stencil: false, powerPreference: "low-power" })
+        || cv.getContext("experimental-webgl", { alpha: true, antialias: false, depth: false });
+    } catch (e) {}
+    if (!gl) return fallback();
+
+    function sh(ty, src) {
+      var o = gl.createShader(ty); gl.shaderSource(o, src); gl.compileShader(o);
+      if (!gl.getShaderParameter(o, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(o) || "compile");
+      return o;
+    }
+    var prog;
+    try {
+      prog = gl.createProgram();
+      gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS));
+      gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS));
+      gl.linkProgram(prog);
+      if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog) || "link");
+    } catch (e) { return fallback(); }
+
+    gl.useProgram(prog);
+    var buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    var lp = gl.getAttribLocation(prog, "p");
+    gl.enableVertexAttribArray(lp);
+    gl.vertexAttribPointer(lp, 2, gl.FLOAT, false, 0, 0);
+
+    var uRes = gl.getUniformLocation(prog, "uRes"), uT = gl.getUniformLocation(prog, "uT"),
+        uM = gl.getUniformLocation(prog, "uM"), uC = gl.getUniformLocation(prog, "uC"),
+        uIn = gl.getUniformLocation(prog, "uIn"), uLive = gl.getUniformLocation(prog, "uLive"),
+        uLight = gl.getUniformLocation(prog, "uLight");
+
+    // A full-screen procedural field is fill-rate bound, so resolution is the one
+    // dial that matters. 1.25x is enough for the membranes to stay crisp and cheap
+    // enough that an integrated GPU never notices.
+    var dpr = Math.min(devicePixelRatio || 1, 1.25);
+    // A page can boot while its tab is hidden or its pane is not compositing, and
+    // then innerWidth is 0 — sizing to that leaves a 1x1 canvas which never
+    // recovers, because becoming visible does not fire a resize event. Fall back
+    // through the layout box to a sane default so the field is always drawable.
+    function vw() { return innerWidth || document.documentElement.clientWidth || cv.clientWidth || 1280; }
+    function vh() { return innerHeight || document.documentElement.clientHeight || cv.clientHeight || 800; }
+    function size() {
+      var w = Math.max(1, Math.round(vw() * dpr)), h = Math.max(1, Math.round(vh() * dpr));
+      if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; gl.viewport(0, 0, w, h); }
+    }
+    addEventListener("resize", size); size();
+
+    var raf = null, t0 = 0;
+    // draw() is the whole render and nothing else; frame() is draw() plus the
+    // scheduling. Keeping them apart is what lets _tick() below render on demand
+    // without quietly queueing a second rAF alongside the running loop.
+    function draw(ms) {
+      ease(); size();
+      if (!t0) t0 = ms || 0;
+      gl.uniform2f(uRes, cv.width, cv.height);
+      gl.uniform1f(uT, ((ms || 0) - t0) * 0.001);
+      var s = cv.width / vw();
+      gl.uniform2f(uM, M.x * s, (vh() - M.y) * s);
+      gl.uniform3f(uC, cur.r, cur.g, cur.b);
+      gl.uniform1f(uIn, cur.in);
+      gl.uniform1f(uLive, M.live);
+      gl.uniform1f(uLight, cur.lt);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    }
+    function frame(ms) {
+      raf = null;
+      draw(ms);
+      if (!STILL) raf = requestAnimationFrame(frame);
+    }
+    repaint = draw;
+    if (STILL) draw(0); else raf = requestAnimationFrame(frame);
+
+    // A field nobody can see must not cost a frame.
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) { if (raf) { cancelAnimationFrame(raf); raf = null; } }
+      // Coming back from hidden also re-measures, because the viewport may have
+      // been 0 the whole time the tab was in the background.
+      else if (!raf && !STILL) { size(); raf = requestAnimationFrame(frame); }
+    });
+
+    // _tick renders exactly one frame on demand. rAF is throttled to nothing in a
+    // hidden tab, so this is the only way to prove the field actually draws when
+    // the page is not on screen — which is precisely when it needs proving.
+    window.BIOQ_ATMO = { theme: theme, setSection: setSection, mouse: M, mode: "webgl", _tick: draw };
+  }
+
+  /* --- fallback ---------------------------------------------------------- */
+  // No WebGL. Draw the same idea in 2D: drifting cells with membranes and nuclei,
+  // and a nutrient glow at the cursor. Fewer cells, no capillaries, same product.
+  function fallback() {
+    var ctx = cv.getContext("2d");
+    if (!ctx) { window.BIOQ_ATMO = { theme: theme, setSection: setSection, mouse: M, mode: "none" }; return; }
+    var dpr = Math.min(devicePixelRatio || 1, 1.5), W = 0, H = 0, pop = [];
+    function size() {
+      W = innerWidth; H = innerHeight;
+      cv.width = Math.max(1, Math.round(W * dpr)); cv.height = Math.max(1, Math.round(H * dpr));
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var n = Math.max(10, Math.min(30, Math.round(W * H / 46000)));
+      pop = [];
+      for (var i = 0; i < n; i++) pop.push({
+        x: Math.random() * W, y: Math.random() * H, r: 42 + Math.random() * 78,
+        vx: (Math.random() - 0.5) * 0.13, vy: (Math.random() - 0.5) * 0.13, ph: Math.random() * 6.283
+      });
+    }
+    size(); addEventListener("resize", size);
+
+    var raf = null, t = 0;
+    function rgba(a) { return "rgba(" + (cur.r * 255 | 0) + "," + (cur.g * 255 | 0) + "," + (cur.b * 255 | 0) + "," + a + ")"; }
+    function frame() {
+      raf = null; ease(); t += 0.016;
+      var light = cur.lt > 0.5;
+      ctx.clearRect(0, 0, W, H);
+      var glow = ctx.createRadialGradient(M.x, M.y, 0, M.x, M.y, 340);
+      glow.addColorStop(0, rgba((light ? 0.10 : 0.13) * M.live)); glow.addColorStop(1, rgba(0));
+      ctx.fillStyle = glow; ctx.fillRect(0, 0, W, H);
+      for (var i = 0; i < pop.length; i++) {
+        var c = pop[i];
+        c.x += c.vx; c.y += c.vy;
+        if (c.x < -140) c.x = W + 140; if (c.x > W + 140) c.x = -140;
+        if (c.y < -140) c.y = H + 140; if (c.y > H + 140) c.y = -140;
+        // Chemotaxis, cheaply: a cell near the cursor swells.
+        var d = Math.hypot(c.x - M.x, c.y - M.y);
+        var food = Math.exp(-(d * d) / 260000) * M.live;
+        var r = c.r * (1 + Math.sin(t * 0.62 + c.ph) * 0.05 + food * 0.20);
+        var g = ctx.createRadialGradient(c.x, c.y, r * 0.2, c.x, c.y, r);
+        g.addColorStop(0, rgba((light ? 0.030 : 0.052) * (0.6 + cur.in) * (1 + food))); g.addColorStop(1, rgba(0));
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(c.x, c.y, r, 0, 6.283); ctx.fill();
+        ctx.strokeStyle = rgba((light ? 0.055 : 0.085) * (1 + food * 1.4)); ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.arc(c.x, c.y, r, 0, 6.283); ctx.stroke();
+        ctx.fillStyle = rgba((light ? 0.045 : 0.062) * (1 + food));
+        ctx.beginPath(); ctx.arc(c.x + r * 0.11, c.y - r * 0.07, r * 0.24, 0, 6.283); ctx.fill();
+      }
+      if (!STILL) raf = requestAnimationFrame(frame);
+    }
+    repaint = frame;
+    if (STILL) { for (var k = 0; k < 40; k++) ease(); frame(); } else raf = requestAnimationFrame(frame);
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) { if (raf) { cancelAnimationFrame(raf); raf = null; } }
+      else if (!raf && !STILL) raf = requestAnimationFrame(frame);
+    });
+
+    window.BIOQ_ATMO = { theme: theme, setSection: setSection, mouse: M, mode: "2d" };
+  }
+
+  /* --- go ---------------------------------------------------------------- */
+  // Last line on purpose: everything above is now assigned, so boot() can read it.
+  attach();
+})();
+
+</script>
+</body>
+</html>

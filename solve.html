@@ -1,0 +1,2007 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<title>Biology Entelloq — Solve · Practice engine</title>
+<meta name="description" content="Biology Entelloq Solve — a real, offline practice engine. MCQ, assertion-reason, match, diagram-labelling, case studies and experimental analysis across NEET, CBSE, AP Biology and Olympiad. Practice, timed and adaptive modes with weak-topic tracking.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* ============================================================================
+   BIOLOGY ENTELLOQ — shared shell (design system → launch → nav → footer)
+   Cloned from the platform shell so every pillar reads as one product.
+   Motion follows Emil Kowalski's rules: transform/opacity only, custom easings,
+   scale(0.95)+opacity entrances, ease-out for enters, stagger, reduced-motion.
+   ========================================================================== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{min-height:100%;overflow-x:hidden}
+img,svg,canvas{display:block;max-width:100%}
+button,input,select{font:inherit;color:inherit;background:none;border:none}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--em);outline-offset:3px;border-radius:6px}
+::selection{background:color-mix(in srgb,var(--em) 45%,transparent);color:var(--ink)}
+.skiplink{position:fixed;top:10px;left:10px;z-index:200;background:var(--panel);color:var(--ink);
+  border:1px solid var(--hair);border-radius:10px;padding:10px 16px;font-weight:600;font-size:14px;
+  transform:translateY(-180%);transition:transform .2s var(--ease-out)}
+.skiplink:focus-visible{transform:none;outline-offset:2px}
+
+:root{
+  --em:#34d399; --em-2:#10b981; --cy:#38e0d8; --cy-2:#22d3ee;
+  --indigo:#7c8cf8; --indigo-2:#8b5cf6; --amber:#f6c667; --rose:#fb7185;
+  --grad-life:linear-gradient(120deg,var(--em),var(--cy));
+  --grad-mind:linear-gradient(120deg,var(--cy),var(--indigo));
+  --grad-spark:linear-gradient(120deg,var(--indigo-2),var(--em));
+  --bg:#04070a; --bg-2:#070b10; --panel:#0b1117; --raise:#0e151c;
+  --ink:#eaf2f5; --dim:#9fb2bc; --faint:#7d8b93;
+  --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.05);
+  --glass:rgba(10,15,20,.62); --glass-strong:rgba(8,12,17,.82);
+  --hair:rgba(255,255,255,.10);
+  --shadow-1:0 1px 2px rgba(0,0,0,.4);
+  --shadow-2:0 12px 40px -12px rgba(0,0,0,.7);
+  --shadow-glow:0 0 0 1px rgba(52,211,153,.18),0 20px 60px -18px rgba(16,185,129,.35);
+  --spot:rgba(52,211,153,.16);
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --ease-out:cubic-bezier(.23,1,.32,1);
+  --ease-in-out:cubic-bezier(.77,0,.175,1);
+  --ease-drawer:cubic-bezier(.32,.72,0,1);
+  --ease-spring:cubic-bezier(.34,1.56,.64,1);
+  --r-sm:10px; --r:16px; --r-lg:24px; --r-xl:34px;
+  --edge:clamp(20px,5vw,72px);
+  --maxw:1200px;
+}
+:root[data-theme="light"]{
+  --bg:#f6f8f9; --bg-2:#eef2f4; --panel:#ffffff; --raise:#ffffff;
+  --ink:#0c1418; --dim:#4a5a63; --faint:#5c6b74;
+  --line:rgba(6,20,26,.10); --line-2:rgba(6,20,26,.06);
+  --glass:rgba(255,255,255,.72); --glass-strong:rgba(255,255,255,.86);
+  --hair:rgba(6,20,26,.12);
+  --em:#0a7d57; --em-2:#0a7d57; --cy:#0891b2; --indigo:#5b63e6;
+  --shadow-2:0 14px 44px -16px rgba(20,40,50,.28);
+  --shadow-glow:0 0 0 1px rgba(14,163,113,.18),0 22px 60px -20px rgba(14,163,113,.28);
+  --spot:rgba(14,163,113,.12);
+}
+html,body{background:var(--bg);color:var(--ink);font-family:var(--sans);
+  font-feature-settings:"cv11","ss01";line-height:1.55;letter-spacing:-.011em;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+
+.eyebrow{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--em);display:inline-flex;align-items:center;gap:9px}
+.eyebrow::before{content:"";width:16px;height:1px;background:currentColor;opacity:.6}
+.display{font-weight:800;letter-spacing:-.03em;line-height:1.02;font-size:clamp(2.6rem,7.5vw,5.6rem)}
+.h1{font-weight:800;letter-spacing:-.028em;line-height:1.05;font-size:clamp(2.1rem,5vw,3.6rem)}
+.h2{font-weight:700;letter-spacing:-.024em;line-height:1.1;font-size:clamp(1.7rem,3.6vw,2.6rem)}
+.h3{font-weight:600;letter-spacing:-.02em;line-height:1.2;font-size:clamp(1.15rem,2vw,1.4rem)}
+.lead{font-size:clamp(1.05rem,1.7vw,1.35rem);color:var(--dim);line-height:1.6;font-weight:400}
+.serif{font-family:var(--serif);font-weight:400;letter-spacing:0}
+.grad{background:var(--grad-life);-webkit-background-clip:text;background-clip:text;color:transparent}
+.grad-mind{background:var(--grad-mind);-webkit-background-clip:text;background-clip:text;color:transparent}
+.muted{color:var(--dim)} .faint{color:var(--faint)}
+
+.wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--edge);width:100%}
+section.band{padding-block:clamp(72px,11vw,150px);position:relative}
+.center{text-align:center}
+.stack-sm{display:flex;flex-direction:column;gap:14px}
+.grid{display:grid;gap:22px}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+
+#fx{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity 1.2s var(--ease-out)}
+#fx.on{opacity:1}
+.bg-veil{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(60% 45% at 78% -5%,color-mix(in srgb,var(--cy) 12%,transparent),transparent 60%),
+    radial-gradient(55% 45% at 8% 8%,color-mix(in srgb,var(--em) 12%,transparent),transparent 55%),
+    radial-gradient(50% 50% at 50% 108%,color-mix(in srgb,var(--indigo) 10%,transparent),transparent 60%);}
+
+/* ---- launch ---- */
+#launch{position:fixed;inset:0;z-index:100;background:#020406;display:grid;place-items:center;overflow:hidden;
+  transition:opacity .9s var(--ease-out),filter .9s var(--ease-out),visibility .9s}
+#launch.done{opacity:0;visibility:hidden;filter:blur(14px);pointer-events:none}
+#launchCanvas{position:absolute;inset:0;width:100%;height:100%}
+.launch-core{position:relative;z-index:2;display:grid;place-items:center;gap:26px;text-align:center;padding:24px}
+.launch-mark{width:96px;height:96px;position:relative;opacity:0;transform:scale(.82);animation:markIn 1s var(--ease-out) .35s forwards}
+.launch-mark svg{width:100%;height:100%;filter:drop-shadow(0 0 24px rgba(52,211,153,.55))}
+@keyframes markIn{to{opacity:1;transform:scale(1)}}
+.launch-word{display:flex;gap:.04em;font-weight:800;letter-spacing:-.03em;font-size:clamp(2rem,6vw,3.4rem);line-height:1}
+.launch-word span{opacity:0;transform:translateY(18px) scale(.9);filter:blur(6px);display:inline-block;animation:letterIn .7s var(--ease-out) forwards}
+@keyframes letterIn{to{opacity:1;transform:none;filter:blur(0)}}
+.launch-sub{font-family:var(--mono);font-size:12.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--cy);opacity:0;animation:fadeUp .8s var(--ease-out) 1.5s forwards}
+.launch-bar{width:min(240px,60vw);height:2px;border-radius:2px;overflow:hidden;background:rgba(255,255,255,.08);opacity:0;animation:fadeUp .8s var(--ease-out) 1.7s forwards}
+.launch-bar i{display:block;height:100%;width:0;background:var(--grad-life);box-shadow:0 0 12px var(--em)}
+.launch-skip{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);opacity:0;animation:fadeUp .8s var(--ease-out) 2.4s forwards;padding:8px 14px;border-radius:999px;border:1px solid var(--line);cursor:pointer;transition:color .2s,border-color .2s,transform .12s var(--ease-out)}
+.launch-skip:hover{color:var(--ink);border-color:var(--hair)}
+.launch-skip:active{transform:translateX(-50%) scale(.96)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ---- nav ---- */
+header.nav{position:fixed;top:0;left:0;right:0;z-index:60;transition:background .3s var(--ease-out),border-color .3s,backdrop-filter .3s}
+.nav-in{max-width:var(--maxw);margin-inline:auto;padding:14px var(--edge);display:flex;align-items:center;gap:20px}
+header.nav.scrolled{background:var(--glass);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:11px;font-weight:700;letter-spacing:-.02em;font-size:16px;cursor:pointer;transition:opacity .2s}
+.brand:hover{opacity:.85}
+.brand .logo{width:30px;height:30px}
+.brand b{font-weight:800}
+.brand .tag{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);border:1px solid var(--line);border-radius:5px;padding:2px 6px;margin-left:2px}
+.nav-links{display:flex;align-items:center;gap:4px;margin-left:8px}
+.nav-links a{padding:8px 14px;border-radius:10px;font-size:14px;font-weight:500;color:var(--dim);transition:color .2s,background .2s;position:relative}
+.nav-links a:hover{color:var(--ink);background:color-mix(in srgb,var(--ink) 6%,transparent)}
+.nav-links a.active{color:var(--ink)}
+.nav-links a.active::after{content:"";position:absolute;left:14px;right:14px;bottom:3px;height:2px;border-radius:2px;background:var(--grad-life)}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.iconbtn{width:38px;height:38px;border-radius:11px;border:1px solid var(--line);display:grid;place-items:center;color:var(--dim);cursor:pointer;background:var(--panel);transition:color .2s,border-color .2s,transform .12s var(--ease-out),background .2s}
+.iconbtn:hover{color:var(--ink);border-color:var(--hair)}
+.iconbtn:active{transform:scale(.94)}
+.iconbtn svg{width:17px;height:17px}
+.btn{display:inline-flex;align-items:center;gap:9px;padding:11px 20px;border-radius:12px;font-weight:600;font-size:14.5px;cursor:pointer;position:relative;overflow:hidden;transition:transform .14s var(--ease-out),box-shadow .3s var(--ease-out),background .3s}
+.btn:active{transform:scale(.97)}
+.btn.primary{color:#03110c;background:var(--grad-life);box-shadow:var(--shadow-glow)}
+.btn.primary:hover{box-shadow:0 0 0 1px rgba(52,211,153,.3),0 26px 70px -18px rgba(16,185,129,.55)}
+.btn.ghost{color:var(--ink);border:1px solid var(--hair);background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.btn.ghost:hover{border-color:color-mix(in srgb,var(--em) 40%,var(--hair))}
+.btn[disabled]{opacity:.45;cursor:not-allowed;pointer-events:none}
+.btn .arr{transition:transform .2s var(--ease-out)}
+.btn:hover .arr{transform:translateX(3px)}
+.navtoggle{display:none}
+
+main{position:relative;z-index:1;padding-top:70px}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .5s var(--ease-out),transform .5s var(--ease-out)}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.06s}.reveal.d2{transition-delay:.12s}
+.reveal.d3{transition-delay:.18s}.reveal.d4{transition-delay:.24s}.reveal.d5{transition-delay:.3s}
+@keyframes pageIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+.sec-head{max-width:720px;margin-bottom:clamp(34px,5vw,62px)}
+.sec-head.center{margin-inline:auto}
+.sec-head .eyebrow{margin-bottom:18px}
+.sec-head h2{margin-bottom:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);padding:clamp(22px,3vw,32px);position:relative;overflow:hidden;transition:transform .4s var(--ease-out),border-color .4s,box-shadow .4s var(--ease-out)}
+.card .glow{position:absolute;inset:-1px;border-radius:inherit;opacity:0;pointer-events:none;background:radial-gradient(50% 60% at var(--mx,50%) 0%,var(--spot),transparent 70%);transition:opacity .4s}
+@media (hover:hover) and (pointer:fine){
+  .card.lift:hover{transform:translateY(-6px);border-color:var(--hair);box-shadow:var(--shadow-2)}
+  .card.lift:hover .glow{opacity:1}
+}
+.card .ico{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;margin-bottom:20px;background:color-mix(in srgb,var(--em) 12%,transparent);color:var(--em);border:1px solid color-mix(in srgb,var(--em) 22%,transparent)}
+.card .ico svg{width:22px;height:22px}
+.card h3{margin-bottom:9px}
+.card p{color:var(--dim);font-size:15px;line-height:1.6}
+.chip{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border-radius:999px;border:1px solid var(--line);color:var(--dim)}
+.chip.live{color:var(--em);border-color:color-mix(in srgb,var(--em) 30%,transparent);background:color-mix(in srgb,var(--em) 10%,transparent)}
+.chip.soon{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 26%,transparent)}
+.chip .d{width:6px;height:6px;border-radius:50%;background:currentColor}
+
+/* footer */
+footer{position:relative;z-index:1;border-top:1px solid var(--line);margin-top:40px;background:var(--bg-2)}
+.foot-in{max-width:var(--maxw);margin-inline:auto;padding:clamp(48px,7vw,84px) var(--edge) 40px;display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:40px}
+.foot-brand p{color:var(--dim);font-size:14px;max-width:280px;margin-top:14px}
+.foot-col h4{font-size:12px;font-family:var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:14px}
+.foot-col a{display:block;color:var(--dim);font-size:14px;padding:5px 0;transition:color .2s}
+.foot-col a:hover{color:var(--ink)}
+.foot-bottom{max-width:var(--maxw);margin-inline:auto;padding:22px var(--edge);border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;color:var(--faint);font-size:12.5px}
+
+@media (max-width:1024px){
+  .nav-links{display:none}
+  .navtoggle{display:grid}
+  .mobile-menu.open{display:block}
+}
+@media (max-width:940px){
+  .g3,.g4{grid-template-columns:1fr 1fr}
+  .foot-in{grid-template-columns:1fr 1fr}
+}
+@media (max-width:560px){
+  .nav-right .btn.primary{display:none}
+}
+@media (max-width:680px){
+  .g3,.g4,.g2{grid-template-columns:1fr}
+  .foot-in{grid-template-columns:1fr}
+}
+.mobile-menu{display:none;position:fixed;inset:70px 0 0;z-index:55;background:var(--glass-strong);backdrop-filter:blur(20px);padding:24px var(--edge);animation:pageIn .3s var(--ease-out)}
+.mobile-menu a{display:block;padding:16px 0;font-size:20px;font-weight:600;border-bottom:1px solid var(--line)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.12s!important}
+  .reveal{opacity:1!important;transform:none!important;filter:none!important}
+  #fx{display:none}
+}
+</style>
+<style id="page-css">
+/* ============================================================================
+   SOLVE — page-scoped styles (prefix .sv-)
+   ========================================================================== */
+.sv-hero{padding-block:clamp(46px,7vw,86px) clamp(20px,3vw,30px)}
+.sv-hero .badge{display:inline-flex;align-items:center;gap:10px;padding:7px 14px 7px 8px;border-radius:999px;border:1px solid var(--line);background:var(--glass);backdrop-filter:blur(10px);font-size:13px;color:var(--dim);margin-bottom:22px}
+.sv-hero .badge .dot{width:8px;height:8px;border-radius:50%;background:var(--em);box-shadow:0 0 0 4px color-mix(in srgb,var(--em) 22%,transparent)}
+.sv-hero h1{font-size:clamp(2.4rem,6vw,4.2rem);font-weight:800;letter-spacing:-.032em;line-height:1.02;margin-bottom:18px}
+.sv-hero p.lead{max-width:640px}
+
+/* stat strip */
+.sv-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:34px}
+.sv-stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px}
+.sv-stat b{display:block;font-size:clamp(1.4rem,2.6vw,1.9rem);font-weight:800;letter-spacing:-.02em}
+.sv-stat span{font-family:var(--mono);font-size:11px;letter-spacing:.05em;color:var(--faint)}
+@media (max-width:680px){.sv-stats{grid-template-columns:1fr 1fr}}
+
+/* config */
+.sv-config{display:grid;gap:26px}
+.sv-field .flabel{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.sv-field .flabel .lt{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+.sv-field .flabel .hint{font-size:12.5px;color:var(--dim)}
+.sv-opts{display:flex;flex-wrap:wrap;gap:10px}
+.sv-topics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media (max-width:780px){.sv-topics{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:460px){.sv-topics{grid-template-columns:1fr}}
+.sv-opt{display:inline-flex;align-items:center;gap:9px;padding:11px 15px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--dim);cursor:pointer;font-size:14px;font-weight:500;text-align:left;transition:border-color .2s,color .2s,background .2s,transform .12s var(--ease-out)}
+.sv-opt:hover{color:var(--ink);border-color:var(--hair)}
+.sv-opt:active{transform:scale(.97)}
+.sv-opt .oi{width:26px;height:26px;border-radius:8px;flex:none;display:grid;place-items:center;color:var(--em);background:color-mix(in srgb,var(--em) 10%,transparent)}
+.sv-opt .oi svg{width:15px;height:15px}
+.sv-opt .osub{display:block;font-size:11.5px;color:var(--faint);font-weight:400;margin-top:1px}
+.sv-opt.on{color:var(--ink);border-color:color-mix(in srgb,var(--em) 45%,transparent);background:color-mix(in srgb,var(--em) 12%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--em) 20%,transparent)}
+.sv-opt.on .oi{color:#04120c;background:var(--grad-life)}
+
+.sv-start-row{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:6px}
+.sv-summary{color:var(--dim);font-size:13.5px;font-family:var(--mono);letter-spacing:.02em}
+.sv-summary b{color:var(--ink);font-weight:600}
+
+/* weak panel */
+.sv-weak-list{display:flex;flex-direction:column;gap:10px}
+.sv-weak-row{display:flex;align-items:center;gap:14px}
+.sv-weak-row .wt{font-size:14px;font-weight:600;min-width:130px}
+.sv-meter{flex:1;height:9px;border-radius:6px;background:color-mix(in srgb,var(--ink) 8%,transparent);overflow:hidden;position:relative}
+.sv-meter i{position:absolute;inset:0 auto 0 0;border-radius:6px;background:var(--grad-life)}
+.sv-meter.bad i{background:linear-gradient(90deg,var(--rose),var(--amber))}
+.sv-weak-row .wp{font-family:var(--mono);font-size:12px;color:var(--dim);min-width:42px;text-align:right}
+
+/* ---- runner ---- */
+.sv-runner{max-width:860px;margin-inline:auto}
+.sv-run-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.sv-run-top .spacer{flex:1}
+.sv-prog{height:6px;border-radius:6px;background:color-mix(in srgb,var(--ink) 9%,transparent);overflow:hidden;margin-bottom:26px}
+.sv-prog i{display:block;height:100%;width:0;border-radius:6px;background:var(--grad-life);transition:width .45s var(--ease-out)}
+.sv-timer{font-family:var(--mono);font-size:14px;font-weight:600;padding:6px 12px;border-radius:10px;border:1px solid var(--line);color:var(--dim);display:inline-flex;align-items:center;gap:8px}
+.sv-timer.warn{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 40%,transparent)}
+.sv-timer.crit{color:var(--rose);border-color:color-mix(in srgb,var(--rose) 45%,transparent);animation:svPulse 1s var(--ease-in-out) infinite}
+@keyframes svPulse{50%{opacity:.55}}
+
+.sv-qcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);padding:clamp(22px,3.4vw,34px);position:relative;overflow:hidden}
+.sv-qmeta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.sv-stem{font-size:clamp(1.15rem,2.2vw,1.5rem);font-weight:600;letter-spacing:-.02em;line-height:1.35;margin-bottom:22px}
+.sv-passage{background:color-mix(in srgb,var(--ink) 4%,transparent);border:1px solid var(--line);border-left:3px solid var(--cy);border-radius:var(--r);padding:16px 18px;margin-bottom:20px;font-size:14.5px;line-height:1.7;color:var(--dim)}
+.sv-passage strong{color:var(--ink)}
+.sv-table{width:100%;border-collapse:collapse;margin-bottom:20px;font-size:14px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.sv-table th,.sv-table td{padding:9px 13px;text-align:left;border-bottom:1px solid var(--line)}
+.sv-table th{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.sv-table tr:last-child td{border-bottom:none}
+
+/* options */
+.sv-choices{display:flex;flex-direction:column;gap:11px}
+.sv-choice{display:flex;align-items:flex-start;gap:14px;padding:15px 17px;border-radius:14px;border:1px solid var(--line);background:var(--panel);cursor:pointer;text-align:left;font-size:15px;line-height:1.5;color:var(--ink);transition:border-color .18s,background .18s,transform .1s var(--ease-out)}
+.sv-choice:hover{border-color:var(--hair);background:color-mix(in srgb,var(--ink) 3%,transparent)}
+.sv-choice:active{transform:scale(.992)}
+.sv-choice .key{width:28px;height:28px;border-radius:9px;flex:none;display:grid;place-items:center;font-family:var(--mono);font-size:13px;font-weight:600;color:var(--dim);border:1px solid var(--line);transition:all .18s}
+.sv-choice.sel{border-color:color-mix(in srgb,var(--em) 55%,transparent);background:color-mix(in srgb,var(--em) 12%,transparent)}
+.sv-choice.sel .key{color:#04120c;background:var(--grad-life);border-color:transparent}
+.sv-choice.correct{border-color:color-mix(in srgb,var(--em) 60%,transparent);background:color-mix(in srgb,var(--em) 14%,transparent)}
+.sv-choice.correct .key{color:#04120c;background:var(--em);border-color:transparent}
+.sv-choice.wrong{border-color:color-mix(in srgb,var(--rose) 55%,transparent);background:color-mix(in srgb,var(--rose) 12%,transparent)}
+.sv-choice.wrong .key{color:#fff;background:var(--rose);border-color:transparent}
+.sv-choice.lock{cursor:default;pointer-events:none}
+.sv-choice .kmark{margin-left:auto;font-size:16px;opacity:0;transition:opacity .2s}
+.sv-choice.correct .kmark,.sv-choice.wrong .kmark{opacity:1}
+
+/* sub-questions (case study) */
+.sv-sub{margin-top:20px;padding-top:20px;border-top:1px solid var(--line)}
+.sv-sub .sq{font-size:15.5px;font-weight:600;margin-bottom:12px}
+.sv-sub .sqn{font-family:var(--mono);color:var(--cy);margin-right:6px}
+
+/* match + diagram pairing */
+.sv-pair{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:640px){.sv-pair{grid-template-columns:1fr}}
+.sv-col h4{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:10px}
+.sv-item{display:flex;align-items:center;gap:11px;padding:13px 15px;border-radius:12px;border:1px solid var(--line);background:var(--panel);cursor:pointer;font-size:14.5px;margin-bottom:10px;transition:border-color .18s,background .18s,transform .1s var(--ease-out)}
+.sv-item:hover{border-color:var(--hair)}
+.sv-item:active{transform:scale(.99)}
+.sv-item.pick{border-color:color-mix(in srgb,var(--cy) 60%,transparent);background:color-mix(in srgb,var(--cy) 12%,transparent)}
+.sv-item.done{border-color:color-mix(in srgb,var(--em) 45%,transparent)}
+.sv-item .tagn{font-family:var(--mono);font-size:11px;color:var(--em);border:1px solid color-mix(in srgb,var(--em) 30%,transparent);border-radius:6px;padding:2px 7px;margin-left:auto;white-space:nowrap}
+.sv-item .badge-r{font-family:var(--mono);font-size:11px;color:var(--cy);margin-left:auto}
+.sv-item.ok{border-color:color-mix(in srgb,var(--em) 60%,transparent);background:color-mix(in srgb,var(--em) 12%,transparent)}
+.sv-item.no{border-color:color-mix(in srgb,var(--rose) 55%,transparent);background:color-mix(in srgb,var(--rose) 12%,transparent)}
+.sv-hint{font-size:12.5px;color:var(--faint);margin-top:4px}
+
+/* diagram */
+.sv-diagram{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:start}
+@media (max-width:720px){.sv-diagram{grid-template-columns:1fr}}
+.sv-svgwrap{border:1px solid var(--line);border-radius:var(--r-lg);background:radial-gradient(circle at 50% 42%,color-mix(in srgb,var(--em) 8%,transparent),transparent 70%),var(--bg-2);overflow:hidden}
+.sv-svgwrap svg{width:100%;height:auto;display:block}
+.sv-hot{cursor:pointer}
+.sv-hot circle{transition:all .18s}
+.sv-hot .ring{fill:color-mix(in srgb,var(--panel) 80%,transparent);stroke:var(--em);stroke-width:2}
+.sv-hot.pick .ring{stroke:var(--cy);stroke-width:3;fill:color-mix(in srgb,var(--cy) 22%,transparent)}
+.sv-hot.filled .ring{fill:color-mix(in srgb,var(--em) 30%,transparent)}
+.sv-hot.ok .ring{stroke:var(--em);fill:color-mix(in srgb,var(--em) 30%,transparent)}
+.sv-hot.no .ring{stroke:var(--rose);fill:color-mix(in srgb,var(--rose) 26%,transparent)}
+.sv-hot text{font-family:var(--mono);font-weight:600;fill:var(--ink);pointer-events:none}
+.sv-hotlabel{font-family:var(--sans);font-size:11px;fill:var(--ink);pointer-events:none;font-weight:600}
+.sv-chips{display:flex;flex-wrap:wrap;gap:9px}
+.sv-labelchip{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:11px;border:1px solid var(--line);background:var(--panel);cursor:pointer;font-size:14px;font-weight:500;transition:all .16s}
+.sv-labelchip:hover{border-color:var(--hair)}
+.sv-labelchip.pick{border-color:color-mix(in srgb,var(--cy) 60%,transparent);background:color-mix(in srgb,var(--cy) 14%,transparent);color:var(--ink)}
+.sv-labelchip.used{opacity:.42;text-decoration:line-through}
+.sv-labelchip .n{font-family:var(--mono);font-size:11px;color:var(--cy)}
+
+/* feedback */
+.sv-feedback{margin-top:20px;border-radius:var(--r);border:1px solid var(--line);padding:18px 20px;background:color-mix(in srgb,var(--ink) 3%,transparent);animation:pageIn .3s var(--ease-out)}
+.sv-feedback.good{border-color:color-mix(in srgb,var(--em) 40%,transparent);background:color-mix(in srgb,var(--em) 8%,transparent)}
+.sv-feedback.bad{border-color:color-mix(in srgb,var(--rose) 40%,transparent);background:color-mix(in srgb,var(--rose) 8%,transparent)}
+.sv-feedback .fh{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;margin-bottom:8px}
+.sv-feedback .fh .fi{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;flex:none}
+.sv-feedback.good .fh .fi{background:var(--em);color:#04120c}
+.sv-feedback.bad .fh .fi{background:var(--rose);color:#fff}
+.sv-feedback .ex{font-size:14.5px;line-height:1.65;color:var(--dim)}
+.sv-feedback .ex b{color:var(--ink)}
+
+.sv-run-foot{display:flex;align-items:center;gap:12px;margin-top:22px}
+.sv-run-foot .spacer{flex:1}
+.sv-ghostbtn{padding:10px 16px;border-radius:11px;border:1px solid var(--line);background:transparent;color:var(--dim);cursor:pointer;font-size:14px;font-weight:500;transition:color .2s,border-color .2s}
+.sv-ghostbtn:hover{color:var(--ink);border-color:var(--hair)}
+
+/* ---- results ---- */
+.sv-results{max-width:900px;margin-inline:auto}
+.sv-scorecard{display:grid;grid-template-columns:auto 1fr;gap:clamp(24px,4vw,44px);align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-xl);padding:clamp(26px,4vw,42px);margin-bottom:26px;position:relative;overflow:hidden}
+@media (max-width:640px){.sv-scorecard{grid-template-columns:1fr;text-align:center;justify-items:center}}
+.sv-ring{width:168px;height:168px;flex:none}
+.sv-ring circle{fill:none;stroke-width:12}
+.sv-ring .track{stroke:color-mix(in srgb,var(--ink) 9%,transparent)}
+.sv-ring .fill{stroke:var(--em);stroke-linecap:round;transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset 1.1s var(--ease-out)}
+.sv-ring .pct{font-weight:800;font-size:34px;letter-spacing:-.03em;fill:var(--ink)}
+.sv-ring .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.14em;fill:var(--faint);text-transform:uppercase}
+.sv-verdict .vt{font-size:clamp(1.5rem,3vw,2.1rem);font-weight:800;letter-spacing:-.02em;margin-bottom:8px}
+.sv-verdict p{color:var(--dim);font-size:15px;max-width:460px}
+.sv-rstats{display:flex;flex-wrap:wrap;gap:22px;margin-top:18px}
+.sv-rstats .rs b{display:block;font-size:1.3rem;font-weight:800}
+.sv-rstats .rs span{font-family:var(--mono);font-size:11px;color:var(--faint)}
+
+.sv-break{display:flex;flex-direction:column;gap:14px}
+.sv-brow{display:grid;grid-template-columns:150px 1fr auto;gap:14px;align-items:center}
+@media (max-width:560px){.sv-brow{grid-template-columns:110px 1fr auto}}
+.sv-brow .bt{font-size:14px;font-weight:600}
+.sv-brow .bp{font-family:var(--mono);font-size:13px;color:var(--dim);min-width:54px;text-align:right}
+
+.sv-reco{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media (max-width:680px){.sv-reco{grid-template-columns:1fr}}
+
+/* review */
+.sv-mistakes{display:flex;flex-direction:column;gap:16px;max-width:860px;margin-inline:auto}
+.sv-mrow{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);padding:20px 22px}
+.sv-mrow .mq{font-size:15.5px;font-weight:600;margin:10px 0 12px;line-height:1.45}
+.sv-ans{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+.sv-ans .a{font-size:13px;padding:7px 12px;border-radius:9px;border:1px solid var(--line)}
+.sv-ans .a.yours{color:var(--rose);border-color:color-mix(in srgb,var(--rose) 35%,transparent);background:color-mix(in srgb,var(--rose) 8%,transparent)}
+.sv-ans .a.right{color:var(--em);border-color:color-mix(in srgb,var(--em) 35%,transparent);background:color-mix(in srgb,var(--em) 8%,transparent)}
+.sv-mrow .mex{font-size:14px;color:var(--dim);line-height:1.65;border-top:1px solid var(--line);padding-top:12px}
+.sv-mrow .mex b{color:var(--ink)}
+
+.sv-empty{text-align:center;padding:60px 20px;color:var(--faint)}
+.sv-empty .ei{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;margin:0 auto 16px;background:color-mix(in srgb,var(--em) 10%,transparent);color:var(--em)}
+.sv-gen-note{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);border:1px dashed color-mix(in srgb,var(--amber) 40%,transparent);border-radius:8px;padding:4px 9px;display:inline-flex;align-items:center;gap:6px}
+.sv-toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);z-index:80;background:var(--glass-strong);backdrop-filter:blur(16px);border:1px solid var(--hair);border-radius:12px;padding:12px 18px;font-size:14px;box-shadow:var(--shadow-2);opacity:0;transition:opacity .25s,transform .25s var(--ease-out);pointer-events:none}
+.sv-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body data-page="solve">
+<div class="bg-veil" aria-hidden="true"></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<!-- ===================== LAUNCH ===================== -->
+<div id="launch" role="dialog" aria-label="Biology Entelloq launching">
+  <canvas id="launchCanvas" aria-hidden="true"></canvas>
+  <div class="launch-core">
+    <div class="launch-mark" aria-hidden="true">
+      <svg viewBox="0 0 100 100" fill="none">
+        <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#34d399"/><stop offset="1" stop-color="#38e0d8"/></linearGradient></defs>
+        <path d="M30 14c22 10 18 30 0 36 22 6 26 26 0 36" stroke="url(#lg)" stroke-width="4" stroke-linecap="round"/>
+        <path d="M70 14C48 24 52 44 70 50 48 56 44 76 70 86" stroke="url(#lg)" stroke-width="4" stroke-linecap="round"/>
+        <g stroke="url(#lg)" stroke-width="2.4" stroke-linecap="round" opacity=".75">
+          <line x1="33" y1="24" x2="67" y2="24"/><line x1="30" y1="42" x2="70" y2="42"/>
+          <line x1="30" y1="58" x2="70" y2="58"/><line x1="33" y1="76" x2="67" y2="76"/></g>
+      </svg>
+    </div>
+    <div class="launch-word" id="launchWord" aria-label="Biology Entelloq"></div>
+    <div class="launch-sub">The practice engine for life</div>
+    <div class="launch-bar"><i id="launchBar"></i></div>
+  </div>
+  <button class="launch-skip" id="launchSkip">Skip intro &rarr;</button>
+</div>
+
+<!-- ===================== NAV ===================== -->
+<a href="#svMain" class="skiplink">Skip to content</a>
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="brand" href="./index.html" aria-label="Biology Entelloq home">
+      <svg class="logo" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+        <defs><linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#34d399"/><stop offset="1" stop-color="#38e0d8"/></linearGradient></defs>
+        <path d="M32 16c20 9 16 28 0 34 20 6 24 24 0 34" stroke="url(#bg1)" stroke-width="5" stroke-linecap="round"/>
+        <path d="M68 16C48 25 52 44 68 50 48 56 44 75 68 84" stroke="url(#bg1)" stroke-width="5" stroke-linecap="round"/>
+      </svg>
+      <span>Biology <b>Entelloq</b></span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="./index.html">Platform</a>
+      <a href="./index.html#/about">Ecosystem</a>
+      <a href="./universe.html">Universe</a>
+      <a href="#svMain" class="active" aria-current="page">Solve</a>
+    </nav>
+    <div class="nav-right">
+      <button class="iconbtn" id="themeBtn" aria-label="Toggle light and dark theme" aria-pressed="false"><svg id="themeIcon" viewBox="0 0 24 24" fill="none"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></button>
+      <a class="btn primary" href="./lab.html">Enter the Lab <span class="arr">&rarr;</span></a>
+      <button class="iconbtn navtoggle" id="navToggle" aria-label="Menu" aria-controls="mobileMenu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="./index.html">Platform</a>
+  <a href="./index.html#/about">Ecosystem</a>
+  <a href="./universe.html">Universe</a>
+  <a href="#svMain">Solve</a>
+  <a href="./lab.html">Enter the Lab &rarr;</a>
+</div>
+
+<main id="svMain"><div class="wrap" id="svRoot"><!-- Solve views injected here --></div></main>
+
+<div class="sv-toast" id="svToast" role="status" aria-live="polite"></div>
+
+<footer>
+  <div class="foot-in">
+    <div class="foot-brand">
+      <a class="brand" href="./index.html" style="cursor:pointer">
+        <svg class="logo" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+          <defs><linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#34d399"/><stop offset="1" stop-color="#38e0d8"/></linearGradient></defs>
+          <path d="M32 16c20 9 16 28 0 34 20 6 24 24 0 34" stroke="url(#bg2)" stroke-width="5" stroke-linecap="round"/>
+          <path d="M68 16C48 25 52 44 68 50 48 56 44 75 68 84" stroke="url(#bg2)" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+        <span>Biology <b>Entelloq</b></span>
+      </a>
+      <p>The definitive way to learn life &mdash; interactive labs, an AI tutor, and a practice engine that actually knows where you're weak.</p>
+    </div>
+    <div class="foot-col">
+      <h4>Explore</h4>
+      <a href="./index.html">Platform</a>
+      <a href="./lab.html">Dissection Lab</a>
+      <a href="./universe.html">Biology Universe</a>
+      <a href="#svMain">Solve</a>
+    </div>
+    <div class="foot-col">
+      <h4>Practice</h4>
+      <a href="#svMain" data-sv="mode-practice">Practice mode</a>
+      <a href="#svMain" data-sv="mode-timed">Timed mode</a>
+      <a href="#svMain" data-sv="mode-adaptive">Adaptive mode</a>
+      <a href="#svMain" data-sv="review">Review mistakes</a>
+    </div>
+    <div class="foot-col">
+      <h4>Entelloq</h4>
+      <a href="./index.html#/about">Ecosystem</a>
+      <a href="./index.html#/founder">Founder</a>
+      <a href="mailto:darshprasad@gmail.com">Contact</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>&copy; 2026 Entelloq. Built for the curious.</span>
+    <span>Solve runs fully offline &mdash; your progress lives only in this browser.</span>
+  </div>
+</footer>
+
+<!-- ===================== SHARED SHELL SCRIPT ===================== -->
+<script>
+(function(){
+"use strict";
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const root=document.documentElement;
+
+/* THEME */
+function setTheme(t){root.setAttribute("data-theme",t);try{localStorage.setItem("bioq_theme",t);}catch(e){}
+  const b=$("#themeBtn"); if(b)b.setAttribute("aria-pressed",t==="light"?"true":"false");
+  const i=$("#themeIcon"); if(i)i.innerHTML=t==="light"
+    ?'<circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'
+    :'<path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>';}
+(function initTheme(){let t="dark";try{t=localStorage.getItem("bioq_theme")||"dark";}catch(e){}setTheme(t);})();
+$("#themeBtn").addEventListener("click",()=>setTheme(root.getAttribute("data-theme")==="light"?"dark":"light"));
+
+/* NAV scroll + mobile menu + card glow */
+const nav=$("#nav"),mobileMenu=$("#mobileMenu"),navToggle=$("#navToggle");
+addEventListener("scroll",()=>{nav.classList.toggle("scrolled",scrollY>16);},{passive:true});
+function closeMenu(){mobileMenu.classList.remove("open");navToggle.setAttribute("aria-expanded","false");}
+navToggle.addEventListener("click",()=>{const open=mobileMenu.classList.toggle("open");navToggle.setAttribute("aria-expanded",open?"true":"false");});
+mobileMenu.addEventListener("click",e=>{if(e.target.closest("a"))closeMenu();});
+document.addEventListener("pointermove",e=>{const c=e.target.closest(".card");if(!c)return;
+  const r=c.getBoundingClientRect();c.style.setProperty("--mx",((e.clientX-r.left)/r.width*100)+"%");},{passive:true});
+
+/* REVEAL — exposed so dynamically injected content can be observed */
+let revealObs;
+function observeReveals(){
+  if(REDUCED){$$(".reveal").forEach(el=>el.classList.add("in"));return;}
+  if(!revealObs)revealObs=new IntersectionObserver((es)=>{
+    es.forEach(en=>{if(en.isIntersecting){en.target.classList.add("in");revealObs.unobserve(en.target);}});
+  },{rootMargin:"0px 0px -8% 0px"});
+  $$(".reveal:not(.in)").forEach(el=>revealObs.observe(el));
+}
+window.__observeReveals=observeReveals;
+
+/* AMBIENT FX */
+function startFX(){
+  if(REDUCED)return;const cv=$("#fx");const ctx=cv.getContext("2d");
+  let W,H,dpr,pts=[],raf;
+  function size(){dpr=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;
+    cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    const n=Math.min(40,Math.floor(W*H/38000));pts=Array.from({length:n},()=>({
+      x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.16,vy:(Math.random()-.5)*.16,r:Math.random()*1.5+.6}));}
+  size();
+  function draw(){ctx.clearRect(0,0,W,H);
+    for(const p of pts){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,6.28);ctx.fillStyle="rgba(56,224,216,.4)";ctx.fill();}
+    for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
+      const a=pts[i],b=pts[j],d=Math.hypot(a.x-b.x,a.y-b.y);
+      if(d<120){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
+        ctx.strokeStyle="rgba(52,211,153,"+(.06*(1-d/120))+")";ctx.lineWidth=1;ctx.stroke();}}
+    raf=requestAnimationFrame(draw);}
+  window.addEventListener("resize",size);
+  document.addEventListener("visibilitychange",()=>{if(document.hidden){cancelAnimationFrame(raf);raf=null;}else if(!raf)draw();});
+  cv.classList.add("on");draw();
+}
+
+/* LAUNCH */
+function buildLaunchWord(){
+  const w=$("#launchWord");const words=["Biology","Entelloq"];let d=0.9,html="";
+  words.forEach((word,wi)=>{for(const ch of word){html+='<span style="animation-delay:'+d.toFixed(2)+'s">'+ch+'</span>';d+=.045;}
+    if(wi===0){html+='<span style="width:.35em"> </span>';}});
+  w.innerHTML=html;
+}
+function launchCanvas(){
+  const cv=$("#launchCanvas");const ctx=cv.getContext("2d");
+  let W,H,dpr,raf,t0=performance.now(),pts=[];
+  function size(){dpr=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;
+    cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    pts=Array.from({length:64},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:Math.random()*1.8+.5}));}
+  size();window.addEventListener("resize",size);
+  function draw(now){const el=now-t0;ctx.clearRect(0,0,W,H);const fade=Math.min(1,el/700);
+    for(const p of pts){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,6.28);ctx.fillStyle="rgba(56,224,216,"+(.5*fade)+")";ctx.fill();}
+    for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const a=pts[i],b=pts[j],d=Math.hypot(a.x-b.x,a.y-b.y);
+      if(d<130){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle="rgba(52,211,153,"+(.10*(1-d/130)*fade)+")";ctx.stroke();}}
+    raf=requestAnimationFrame(draw);}
+  raf=requestAnimationFrame(draw);
+  return ()=>{cancelAnimationFrame(raf);window.removeEventListener("resize",size);};
+}
+function runLaunch(){
+  const overlay=$("#launch"),bar=$("#launchBar"),skip=$("#launchSkip");
+  let seen=false;try{seen=!!localStorage.getItem("bioq_seen");}catch(e){}
+  const DUR=REDUCED?300:(seen?1000:2400);
+  buildLaunchWord();
+  const stop=REDUCED?null:launchCanvas();
+  let done=false;const t0=performance.now();
+  function tick(now){const p=Math.min(1,(now-t0)/DUR);if(bar)bar.style.width=(p*100)+"%";if(p<1&&!done)requestAnimationFrame(tick);}
+  requestAnimationFrame(tick);
+  function onKey(e){if((e.key==="Enter"||e.key==="Escape")&&!done){clearTimeout(timer);finish();}}
+  function finish(){if(done)return;done=true;try{localStorage.setItem("bioq_seen","1");}catch(e){}
+    removeEventListener("keydown",onKey);overlay.classList.add("done");if(stop)setTimeout(stop,900);boot();}
+  const timer=setTimeout(finish,DUR);
+  skip.addEventListener("click",()=>{clearTimeout(timer);finish();});
+  overlay.addEventListener("click",e=>{if(e.target===overlay){clearTimeout(timer);finish();}});
+  addEventListener("keydown",onKey);
+  try{skip.focus({preventScroll:true});}catch(e){}
+}
+
+/* BOOT */
+let booted=false;
+function boot(){
+  if(booted)return;booted=true;
+  startFX();
+  nav.classList.toggle("scrolled",scrollY>16);
+  if(window.SOLVE&&window.SOLVE.start)window.SOLVE.start();
+  observeReveals();
+}
+window.__closeMenu=closeMenu;
+if(document.readyState!=="loading")runLaunch();
+else addEventListener("DOMContentLoaded",runLaunch);
+})();
+</script>
+<script id="page-js">
+/* ============================================================================
+   SOLVE ENGINE — offline practice engine (localStorage only, no backend)
+   ========================================================================== */
+window.SOLVE=(function(){
+"use strict";
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const REDUCED=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const root=$("#svRoot");
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+/* ---- persistence ---- */
+const PFX="bioq_solve_";
+const store={
+  get(k,f){try{const v=JSON.parse(localStorage.getItem(PFX+k));return v==null?f:v;}catch(e){return f;}},
+  set(k,v){try{localStorage.setItem(PFX+k,JSON.stringify(v));}catch(e){}}
+};
+
+/* ---- icons ---- */
+const I={
+  micro:'<svg viewBox="0 0 24 24" fill="none"><path d="M6 18h9M9 18l-1-3M11 6l3 5-3 2-3-5zM13 4l2 1M5 21h14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  dna:'<svg viewBox="0 0 24 24" fill="none"><path d="M7 3c8 4 6 10 0 12 8 3 8 9 0 12M17 3c-8 4-6 10 0 12-8 3-8 9 0 12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>',
+  heart:'<svg viewBox="0 0 24 24" fill="none"><path d="M12 20s-7-4.6-9-9C1.5 7.5 4 4 7.5 4 10 4 12 6 12 6s2-2 4.5-2C20 4 22.5 7.5 21 11c-2 4.4-9 9-9 9z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>',
+  globe:'<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18" stroke="currentColor" stroke-width="1.5"/></svg>',
+  leaf:'<svg viewBox="0 0 24 24" fill="none"><path d="M5 19c0-8 6-14 14-14 0 8-6 14-14 14zM9 15l6-6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  bug:'<svg viewBox="0 0 24 24" fill="none"><ellipse cx="12" cy="13" rx="5" ry="6" stroke="currentColor" stroke-width="1.7"/><path d="M12 7V4M7 10L4 8M17 10l3-2M7 14H3M17 14h4M8 18l-3 2M16 18l3 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
+  flask:'<svg viewBox="0 0 24 24" fill="none"><path d="M9 3v6l-5 8a2 2 0 002 3h12a2 2 0 002-3l-5-8V3M8 3h8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="16" r="1" fill="currentColor"/><circle cx="14" cy="18" r="1" fill="currentColor"/></svg>',
+  mix:'<svg viewBox="0 0 24 24" fill="none"><circle cx="7" cy="7" r="3.4" stroke="currentColor" stroke-width="1.6"/><circle cx="17" cy="17" r="3.4" stroke="currentColor" stroke-width="1.6"/><path d="M12 5h5v5M12 19H7v-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  x:'<svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>',
+  arrow:'<svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  spark:'<svg viewBox="0 0 24 24" fill="none"><path d="M12 3l1.8 5.6L19 10l-5.2 1.4L12 17l-1.8-5.6L5 10l5.2-1.4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>',
+  clock:'<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>',
+  target:'<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg>',
+  book:'<svg viewBox="0 0 24 24" fill="none"><path d="M4 5a2 2 0 012-2h13v16H6a2 2 0 00-2 2V5zM19 3v16" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>'
+};
+const TOPIC_ICON={"Cell Biology":"micro","Genetics & DNA":"dna","Human Physiology":"heart","Evolution":"globe","Ecology":"leaf","Plant Biology":"leaf","Microbiology":"bug","Biotechnology":"flask"};
+const TOPICS=["Cell Biology","Genetics & DNA","Human Physiology","Evolution","Ecology","Plant Biology","Microbiology","Biotechnology"];
+const AR_OPTS=[
+  "Both A and R are true, and R is the correct explanation of A",
+  "Both A and R are true, but R is <em>not</em> the correct explanation of A",
+  "A is true but R is false",
+  "A is false but R is true"
+];
+const TYPE_LABEL={mcq:"Multiple choice",ar:"Assertion &amp; Reason",match:"Match the following",diagram:"Label the diagram",case:"Case study",exp:"Experimental analysis"};
+
+/* ============================================================================
+   DIAGRAM ART
+   ========================================================================== */
+function artCell(){return `
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <path d="M160 20C245 20 300 78 300 132C300 200 245 240 160 240C86 240 20 202 20 134C20 70 86 20 160 20Z" fill="rgba(52,211,153,.06)" stroke="url(#svmem)" stroke-width="5"/>
+    <path d="M112 176c26-12 46 8 72-3s42 6 66-5" fill="none" stroke="#7c8cf8" stroke-width="3" opacity=".7"/>
+    <path d="M104 194c26-12 46 8 72-3s46 6 70-5" fill="none" stroke="#7c8cf8" stroke-width="3" opacity=".5"/>
+    <ellipse cx="238" cy="86" rx="30" ry="15" fill="rgba(251,113,133,.12)" stroke="#fb7185" stroke-width="3" transform="rotate(22 238 86)"/>
+    <path d="M222 86c7-6 7 5 15 0s7 5 15 0" stroke="#fb7185" stroke-width="2" fill="none" transform="rotate(22 238 86)"/>
+    <circle cx="128" cy="120" r="46" fill="url(#svnuc)" opacity=".9"/>
+    <circle cx="128" cy="120" r="46" fill="none" stroke="#eaf2f5" stroke-width="1.6" stroke-dasharray="3 6" opacity=".45"/>
+    <circle cx="142" cy="108" r="15" fill="#0d3b37" opacity=".55"/>
+  </g>`;}
+function artHeart(){return `
+  <g stroke-linejoin="round" stroke-linecap="round">
+    <path d="M150 60c-14-22-42-30-66-16-26 16-28 52-6 78l72 84 72-84c22-26 20-62-6-78-24-14-52-6-66 16Z" fill="rgba(251,113,133,.08)" stroke="url(#svmem)" stroke-width="4.5"/>
+    <path d="M150 66v150" stroke="var(--line)" stroke-width="2.5"/>
+    <path d="M84 118c26 8 44 8 64 0" stroke="var(--line)" stroke-width="2.5" fill="none"/>
+    <path d="M150 40c4-14 16-22 30-16 16 7 14 26 4 34" fill="none" stroke="#fb7185" stroke-width="5"/>
+    <path d="M124 54c-2-16-16-22-28-16" fill="none" stroke="#38e0d8" stroke-width="5"/>
+  </g>`;}
+const DIAGRAMS={
+  cell:{art:artCell,vb:"0 0 320 260",hotspots:[
+    {x:128,y:120,label:"Nucleus"},{x:238,y:86,label:"Mitochondrion"},{x:160,y:22,label:"Cell membrane"},{x:206,y:186,label:"Ribosome"}]},
+  heart:{art:artHeart,vb:"0 0 300 250",hotspots:[
+    {x:184,y:34,label:"Aorta"},{x:110,y:44,label:"Pulmonary artery"},{x:98,y:96,label:"Right atrium"},{x:188,y:170,label:"Left ventricle"}]}
+};
+
+/* ============================================================================
+   QUESTION BANK  (>=32 real questions, all 6 types, 8 topics)
+   diff: 1 Foundation · 2 Core · 3 Advanced · boards: NEET CBSE AP OLY
+   ========================================================================== */
+const QBANK=[
+/* ---- CELL BIOLOGY ---- */
+{id:"cell1",topic:"Cell Biology",type:"mcq",diff:1,boards:["NEET","CBSE","AP"],
+ stem:"Which organelle is described as the powerhouse of the cell?",
+ options:["Ribosome","Mitochondrion","Golgi apparatus","Lysosome"],answer:1,
+ explain:"Mitochondria carry out aerobic respiration, using the electron transport chain and oxidative phosphorylation to generate most of the cell's ATP."},
+{id:"cell2",topic:"Cell Biology",type:"mcq",diff:2,boards:["NEET","CBSE","AP","OLY"],
+ stem:"Which structure is the site of protein synthesis in the cell?",
+ options:["Ribosome","Smooth endoplasmic reticulum","Golgi apparatus","Peroxisome"],answer:0,
+ explain:"Ribosomes translate the codons of mRNA into a polypeptide chain. The smooth ER makes lipids, the Golgi packages proteins, and peroxisomes break down fatty acids."},
+{id:"cell3",topic:"Cell Biology",type:"ar",diff:2,boards:["NEET","CBSE","OLY"],
+ assertion:"Mitochondria and chloroplasts are called semi-autonomous organelles.",
+ reason:"They contain their own circular DNA and 70S ribosomes and can make some of their own proteins.",
+ answer:0,
+ explain:"Both statements are true and the reason is the correct explanation: their own DNA and 70S (prokaryote-type) ribosomes let them synthesise some proteins independently — evidence for the endosymbiotic theory."},
+{id:"cell4",topic:"Cell Biology",type:"diagram",diff:2,boards:["NEET","CBSE","AP"],diagram:"cell",
+ stem:"Label this animal cell. Tap a label, then tap the matching marker on the diagram.",
+ explain:"The membrane forms the outer boundary; the nucleus (largest, with a nucleolus) stores DNA; mitochondria are the rod-shaped ATP factories; ribosomes are the small dense granules where proteins are made."},
+{id:"cell5",topic:"Cell Biology",type:"mcq",diff:3,boards:["AP","OLY","NEET"],
+ stem:"The fluid-mosaic model of Singer and Nicolson describes the cell membrane as:",
+ options:["A rigid double layer of protein sandwiching lipid","A phospholipid bilayer with proteins floating in and through it","A single layer of glycoprotein","A solid mesh of cellulose fibres"],answer:1,
+ explain:"In the fluid-mosaic model the membrane is a fluid phospholipid bilayer in which integral and peripheral proteins are dispersed like a mosaic and can move laterally."},
+{id:"cell6",topic:"Cell Biology",type:"match",diff:2,boards:["NEET","CBSE","AP"],
+ stem:"Match each organelle to its primary function.",
+ left:["Nucleus","Ribosome","Golgi apparatus","Lysosome","Chloroplast"],
+ right:["Stores genetic material and controls the cell","Synthesises proteins","Modifies, packages and secretes proteins","Digests worn-out organelles and debris","Carries out photosynthesis"],
+ explain:"Nucleus = control centre; ribosome = protein synthesis; Golgi = packaging and secretion; lysosome = intracellular digestion; chloroplast = photosynthesis."},
+{id:"cellAR2",topic:"Cell Biology",type:"ar",diff:3,boards:["OLY","AP"],
+ assertion:"All enzymes are proteins.",
+ reason:"Ribozymes are RNA molecules that can catalyse biochemical reactions.",
+ answer:3,
+ explain:"The assertion is false — not all enzymes are proteins. The reason is true: ribozymes are catalytic RNA molecules (e.g. the peptidyl transferase in the ribosome), which is exactly why the assertion is false."},
+
+/* ---- GENETICS & DNA ---- */
+{id:"gen1",topic:"Genetics & DNA",type:"mcq",diff:1,boards:["NEET","CBSE","AP"],
+ stem:"Which nitrogenous base is found in RNA but NOT in DNA?",
+ options:["Thymine","Uracil","Guanine","Cytosine"],answer:1,
+ explain:"RNA uses uracil in place of the thymine found in DNA. Adenine pairs with uracil in RNA (and with thymine in DNA)."},
+{id:"gen2",topic:"Genetics & DNA",type:"mcq",diff:2,boards:["NEET","CBSE","AP"],
+ stem:"Which enzyme synthesises an RNA strand using a DNA template during transcription?",
+ options:["DNA polymerase","RNA polymerase","DNA ligase","Helicase"],answer:1,
+ explain:"RNA polymerase reads the template DNA strand 3'→5' and builds a complementary RNA strand 5'→3'. DNA polymerase copies DNA, ligase seals nicks, and helicase unwinds the helix."},
+{id:"gen3",topic:"Genetics & DNA",type:"ar",diff:3,boards:["NEET","OLY","AP"],
+ assertion:"DNA replication is described as semiconservative.",
+ reason:"Each daughter DNA molecule contains one original parental strand and one newly synthesised strand.",
+ answer:0,
+ explain:"Both true and the reason explains the assertion. The Meselson–Stahl experiment confirmed that each new duplex keeps one parental strand — the definition of semiconservative replication."},
+{id:"gen4",topic:"Genetics & DNA",type:"mcq",diff:2,boards:["NEET","CBSE"],
+ stem:"In a dihybrid cross between two AaBb individuals, the expected phenotypic ratio in the offspring is:",
+ options:["3 : 1","1 : 1 : 1 : 1","9 : 3 : 3 : 1","1 : 2 : 1"],answer:2,
+ explain:"Independent assortment of two heterozygous gene pairs gives the classic 9:3:3:1 phenotypic ratio (Mendel's law of independent assortment)."},
+{id:"gen5",topic:"Genetics & DNA",type:"case",diff:3,boards:["NEET","AP","OLY"],
+ passage:"Sickle-cell anaemia results from a single change in the β-globin gene, where the codon GAG becomes GTG. This replaces glutamic acid with valine at position 6 of the β-globin chain. The altered haemoglobin (HbS) polymerises when deoxygenated, distorting red cells into a sickle shape. Curiously, carriers who have one HbA and one HbS allele are more common in regions where malaria is endemic.",
+ subs:[
+   {stem:"The change GAG → GTG is best described as a:",options:["Frameshift mutation","Point (substitution) mutation","Chromosomal deletion","Nonsense mutation"],answer:1,
+    explain:"A single base is substituted for another (A→T), so it is a point/substitution mutation. It is missense (changes one amino acid), not a frameshift or deletion."},
+   {stem:"Sickle-cell anaemia is inherited as an:",options:["Autosomal dominant trait","Autosomal recessive trait","X-linked dominant trait","Y-linked trait"],answer:1,
+    explain:"Individuals must inherit two HbS alleles (one from each parent) to show the disease, so it is autosomal recessive."},
+   {stem:"Why is the HbS allele common where malaria is endemic?",options:["It cures malaria completely","Heterozygous carriers have increased resistance to malaria","Malaria creates the mutation","It has no effect on malaria"],answer:1,
+    explain:"Heterozygotes (HbA HbS) are relatively protected against malaria — a heterozygote advantage that maintains the HbS allele in the population (balancing selection)."}
+ ],
+ explain:"Sickle-cell disease is a classic example of a point mutation, autosomal recessive inheritance, and heterozygote advantage (balancing selection) with malaria."},
+{id:"gen6",topic:"Genetics & DNA",type:"mcq",diff:3,boards:["AP","OLY","NEET"],
+ stem:"Which statement about the genetic code is FALSE?",
+ options:["It is degenerate — most amino acids have more than one codon","It is read in non-overlapping triplets","It is ambiguous — one codon can code for several amino acids","It is nearly universal across organisms"],answer:2,
+ explain:"The genetic code is unambiguous: each codon specifies only one amino acid. It IS degenerate, non-overlapping and nearly universal, so those statements are true."},
+{id:"gen7",topic:"Genetics & DNA",type:"match",diff:2,boards:["NEET","CBSE","OLY"],
+ stem:"Match each molecular process to its description.",
+ left:["Replication","Transcription","Translation","Reverse transcription"],
+ right:["DNA is copied to make two identical DNA molecules","An RNA copy is made from a DNA template","mRNA is decoded by ribosomes to build a protein","DNA is synthesised from an RNA template"],
+ explain:"Replication = DNA→DNA; transcription = DNA→RNA; translation = RNA→protein; reverse transcription = RNA→DNA (used by retroviruses)."},
+
+/* ---- HUMAN PHYSIOLOGY ---- */
+{id:"phy1",topic:"Human Physiology",type:"mcq",diff:1,boards:["NEET","CBSE","AP"],
+ stem:"Oxygen is transported in the blood mainly bound to:",
+ options:["Plasma proteins","Haemoglobin in red blood cells","White blood cells","Platelets"],answer:1,
+ explain:"About 98% of oxygen is carried bound to haemoglobin as oxyhaemoglobin inside red blood cells; only a small fraction dissolves directly in plasma."},
+{id:"phy2",topic:"Human Physiology",type:"mcq",diff:2,boards:["NEET","CBSE","AP"],
+ stem:"Which chamber of the heart pumps oxygenated blood into the aorta to supply the body?",
+ options:["Right atrium","Right ventricle","Left atrium","Left ventricle"],answer:3,
+ explain:"The left ventricle has the thickest muscular wall and pumps oxygenated blood at high pressure into the aorta for systemic circulation."},
+{id:"phy3",topic:"Human Physiology",type:"ar",diff:2,boards:["NEET","CBSE"],
+ assertion:"The alveoli are the main site of gas exchange in the lungs.",
+ reason:"The lungs are located within the thoracic cavity.",
+ answer:1,
+ explain:"Both statements are true, but the reason does not explain the assertion. Alveoli are efficient because their walls are one cell thick and richly supplied with capillaries — not merely because the lungs sit in the thorax."},
+{id:"phy4",topic:"Human Physiology",type:"diagram",diff:2,boards:["NEET","CBSE","AP"],diagram:"heart",
+ stem:"Label this schematic heart (anterior view). Tap a label, then tap the matching marker.",
+ explain:"The aorta arches from the top centre; the pulmonary artery leaves toward the viewer's left; the right atrium receives deoxygenated blood on the viewer's left; the left ventricle forms the lower muscular apex on the viewer's right."},
+{id:"phyAR2",topic:"Human Physiology",type:"ar",diff:3,boards:["OLY","AP","NEET"],
+ assertion:"Arteries generally carry oxygenated blood away from the heart.",
+ reason:"The pulmonary artery carries oxygenated blood from the heart to the lungs.",
+ answer:2,
+ explain:"The assertion is generally true (arteries carry blood away from the heart, usually oxygenated). The reason is false: the pulmonary artery carries DEOXYGENATED blood to the lungs — it is the exception to the 'arteries = oxygenated' rule."},
+{id:"phy5",topic:"Human Physiology",type:"exp",diff:3,boards:["AP","OLY","CBSE"],
+ passage:"A student measured a volunteer's breathing rate at rest and during increasing exercise intensity. Blood carbon-dioxide levels were also recorded.",
+ table:{head:["Activity","Breaths / min","Blood CO₂"],rows:[["Rest","14","Low"],["Light jog","24","Rising"],["Hard sprint","38","High"]]},
+ stem:"The increase in ventilation during exercise is primarily driven by:",
+ options:["A fall in blood oxygen detected by the brain","A rise in blood CO₂ / H⁺ detected by chemoreceptors","An increase in blood glucose","Cooling of the blood in the lungs"],answer:1,
+ explain:"Rising CO₂ lowers blood pH (more H⁺). Central and peripheral chemoreceptors detect this and drive the respiratory centre to increase breathing rate — CO₂/H⁺ is the main stimulus, more sensitive than O₂ changes."},
+{id:"phy6",topic:"Human Physiology",type:"mcq",diff:2,boards:["NEET","CBSE","AP"],
+ stem:"In the nephron, the greatest proportion of filtered water and solutes is reabsorbed in the:",
+ options:["Proximal convoluted tubule","Loop of Henle","Distal convoluted tubule","Collecting duct"],answer:0,
+ explain:"About 65-70% of filtrate is reabsorbed in the proximal convoluted tubule, whose brush-border of microvilli gives a huge surface area for reabsorption of glucose, ions and water."},
+
+/* ---- EVOLUTION ---- */
+{id:"evo1",topic:"Evolution",type:"mcq",diff:1,boards:["NEET","CBSE","AP"],
+ stem:"The theory of evolution by natural selection was proposed by:",
+ options:["Gregor Mendel","Charles Darwin","Louis Pasteur","Jean-Baptiste Lamarck"],answer:1,
+ explain:"Charles Darwin (with Alfred Russel Wallace) proposed evolution by natural selection in 'On the Origin of Species' (1859). Lamarck proposed inheritance of acquired characteristics, a different mechanism."},
+{id:"evo2",topic:"Evolution",type:"ar",diff:2,boards:["NEET","OLY"],
+ assertion:"Analogous organs are evidence of convergent evolution.",
+ reason:"Analogous organs have different evolutionary origins but perform similar functions.",
+ answer:0,
+ explain:"Both true and the reason explains the assertion. The wings of insects and birds have different origins but similar function (flight) — different lineages converging on a similar solution."},
+{id:"evo3",topic:"Evolution",type:"mcq",diff:2,boards:["NEET","CBSE","AP"],
+ stem:"The forelimbs of humans, whales and bats have the same basic bone plan but different uses. This is evidence of:",
+ options:["Convergent evolution","Divergent evolution from a common ancestor","Spontaneous generation","Lamarckian inheritance"],answer:1,
+ explain:"These are homologous structures — the same underlying pentadactyl limb inherited from a common ancestor, then adapted to different functions. That is divergent evolution."},
+{id:"evo4",topic:"Evolution",type:"mcq",diff:3,boards:["AP","OLY"],
+ stem:"The Hardy–Weinberg equilibrium holds only when all of the following are true EXCEPT:",
+ options:["The population is very large","Mating is random","There is no migration in or out","Natural selection is acting on the trait"],answer:3,
+ explain:"Hardy–Weinberg equilibrium requires NO natural selection (as well as no mutation, no migration, random mating and a large population). If selection acts, allele frequencies change and the population is not in equilibrium."},
+{id:"evo5",topic:"Evolution",type:"mcq",diff:2,boards:["NEET","CBSE","AP"],
+ stem:"The rise of dark-coloured peppered moths during the Industrial Revolution is a classic example of:",
+ options:["Genetic drift","Natural selection (directional)","Convergent evolution","Artificial selection"],answer:1,
+ explain:"Soot-darkened tree bark meant dark moths were better camouflaged from predators, so their frequency rose — directional natural selection (industrial melanism)."},
+
+/* ---- ECOLOGY ---- */
+{id:"eco1",topic:"Ecology",type:"mcq",diff:1,boards:["NEET","CBSE","AP"],
+ stem:"Organisms that synthesise their own food from inorganic materials are called:",
+ options:["Producers (autotrophs)","Primary consumers","Decomposers","Secondary consumers"],answer:0,
+ explain:"Producers, or autotrophs (e.g. green plants and algae), make their own food, usually by photosynthesis, and form the base of every food chain."},
+{id:"eco2",topic:"Ecology",type:"mcq",diff:2,boards:["NEET","CBSE","OLY"],
+ stem:"According to Lindeman's ten-percent law, the energy transferred from one trophic level to the next is about:",
+ options:["100%","50%","10%","1%"],answer:2,
+ explain:"On average only about 10% of the energy at one trophic level is incorporated into the next; the rest is lost mainly as heat through respiration and in undigested material."},
+{id:"eco3",topic:"Ecology",type:"match",diff:2,boards:["NEET","CBSE"],
+ stem:"Match each organism to its trophic role in a grassland food chain.",
+ left:["Grass","Grasshopper","Frog","Fungi & bacteria"],
+ right:["Producer","Primary consumer (herbivore)","Secondary consumer","Decomposer"],
+ explain:"Grass = producer; grasshopper eats grass = primary consumer; frog eats the grasshopper = secondary consumer; fungi and bacteria break down dead matter = decomposers."},
+{id:"eco4",topic:"Ecology",type:"ar",diff:2,boards:["NEET","CBSE","AP"],
+ assertion:"Energy flow through an ecosystem is unidirectional.",
+ reason:"A large fraction of energy is lost as heat at each trophic level and cannot be recycled back.",
+ answer:0,
+ explain:"Both true and the reason explains it. Because energy is continually lost as heat (second law of thermodynamics), it flows one way — from producers to consumers — and must be constantly replenished by the Sun."},
+{id:"eco5",topic:"Ecology",type:"mcq",diff:3,boards:["AP","OLY","NEET"],
+ stem:"A pyramid of ENERGY in an ecosystem is always upright because:",
+ options:["There are always more producers by number","Energy decreases at each successive trophic level","Producers are always larger organisms","Predators are always fewer than prey"],answer:1,
+ explain:"Usable energy always decreases from one trophic level to the next (about 90% is lost as heat each step), so a pyramid of energy can never be inverted — unlike pyramids of number or biomass, which sometimes can."},
+
+/* ---- PLANT BIOLOGY ---- */
+{id:"pla1",topic:"Plant Biology",type:"mcq",diff:1,boards:["NEET","CBSE","AP"],
+ stem:"Which pigment absorbs light energy for photosynthesis in green plants?",
+ options:["Haemoglobin","Chlorophyll","Melanin","Carotene only"],answer:1,
+ explain:"Chlorophyll (mainly chlorophyll a) is the primary pigment that absorbs light — chiefly red and blue wavelengths — and reflects green, giving plants their colour."},
+{id:"pla2",topic:"Plant Biology",type:"mcq",diff:2,boards:["NEET","CBSE","AP","OLY"],
+ stem:"The light-dependent reactions of photosynthesis take place in the:",
+ options:["Stroma of the chloroplast","Thylakoid membranes","Mitochondrial matrix","Cytoplasm"],answer:1,
+ explain:"The light reactions occur on the thylakoid membranes, which hold the photosystems and electron-transport chain. The light-independent (Calvin) cycle then runs in the stroma."},
+{id:"pla3",topic:"Plant Biology",type:"mcq",diff:2,boards:["NEET","CBSE"],
+ stem:"The opening and closing of stomata is directly controlled by:",
+ options:["Guard cells","Companion cells","Root hair cells","Xylem vessels"],answer:0,
+ explain:"A pair of guard cells surrounds each stoma. When they take up water and become turgid the pore opens; when they lose water and go flaccid it closes — regulating gas exchange and transpiration."},
+{id:"pla4",topic:"Plant Biology",type:"ar",diff:3,boards:["AP","OLY","NEET"],
+ assertion:"C4 plants are more productive than C3 plants in hot, bright climates.",
+ reason:"C4 plants concentrate CO₂ in the bundle-sheath cells, minimising photorespiration.",
+ answer:0,
+ explain:"Both true and the reason explains it. By pumping CO₂ into bundle-sheath cells, C4 plants keep RuBisCO saturated with CO₂ and suppress wasteful photorespiration, which is otherwise high at high temperatures."},
+{id:"pla5",topic:"Plant Biology",type:"exp",diff:2,boards:["NEET","CBSE","AP"],
+ passage:"Bubbles of oxygen released by pondweed were counted to measure photosynthesis rate as light intensity increased.",
+ table:{head:["Light intensity","Bubbles / min"],rows:[["Low","8"],["Medium","19"],["High","28"],["Very high","29"]]},
+ stem:"At very high light intensity the rate stops increasing. The most likely limiting factor now is:",
+ options:["Light intensity","Carbon dioxide concentration or temperature","Oxygen concentration","Water availability inside the beaker"],answer:1,
+ explain:"Once light is no longer limiting, another factor caps the rate. The plateau means CO₂ concentration (or temperature) has become the limiting factor — the rate can't rise further without increasing it."},
+
+/* ---- MICROBIOLOGY ---- */
+{id:"mic1",topic:"Microbiology",type:"mcq",diff:1,boards:["NEET","CBSE","AP"],
+ stem:"Bacteria are best described as which kind of cell?",
+ options:["Eukaryotic","Prokaryotic","Viral","Fungal"],answer:1,
+ explain:"Bacteria are prokaryotes: they lack a membrane-bound nucleus and membrane-bound organelles, and carry their DNA as a single circular chromosome in the cytoplasm."},
+{id:"mic2",topic:"Microbiology",type:"mcq",diff:2,boards:["NEET","AP","OLY"],
+ stem:"Penicillin kills susceptible bacteria mainly by:",
+ options:["Dissolving the plasma membrane","Inhibiting synthesis of the peptidoglycan cell wall","Blocking DNA replication","Stopping ribosomes from reading mRNA"],answer:1,
+ explain:"Penicillin inhibits the transpeptidase enzymes that cross-link peptidoglycan, so growing bacteria cannot build an intact cell wall and burst by osmotic lysis. It does not affect human cells, which have no such wall."},
+{id:"mic3",topic:"Microbiology",type:"ar",diff:2,boards:["NEET","CBSE","OLY"],
+ assertion:"Viruses are described as obligate intracellular parasites.",
+ reason:"Viruses lack the ribosomes and metabolic machinery to synthesise proteins on their own, so they must use a host cell.",
+ answer:0,
+ explain:"Both true and the reason explains it. Because a virus has no ribosomes or metabolism of its own, it can only replicate by hijacking a living host cell — hence 'obligate intracellular parasite'."},
+{id:"mic4",topic:"Microbiology",type:"mcq",diff:3,boards:["AP","OLY"],
+ stem:"Gram-positive bacteria appear purple after Gram staining because:",
+ options:["They have an outer lipopolysaccharide membrane","Their thick peptidoglycan layer retains the crystal-violet–iodine complex","They lack a cell wall entirely","They actively pump in the counterstain"],answer:1,
+ explain:"Gram-positive cells have a thick peptidoglycan wall that traps the crystal-violet–iodine complex during decolourisation, so they stay purple. Gram-negative cells have thin peptidoglycan and take up the pink counterstain instead."},
+
+/* ---- BIOTECHNOLOGY ---- */
+{id:"bio1",topic:"Biotechnology",type:"mcq",diff:2,boards:["NEET","CBSE","AP"],
+ stem:"The 'molecular scissors' used to cut DNA at specific sequences in genetic engineering are:",
+ options:["DNA ligases","Restriction endonucleases","DNA polymerases","Helicases"],answer:1,
+ explain:"Restriction endonucleases recognise specific short DNA sequences and cut the backbone there, often leaving 'sticky ends'. DNA ligase then joins fragments back together."},
+{id:"bio2",topic:"Biotechnology",type:"mcq",diff:2,boards:["NEET","CBSE","AP","OLY"],
+ stem:"The polymerase chain reaction (PCR) is used to:",
+ options:["Sequence a whole genome directly","Amplify a specific DNA segment into many copies","Translate mRNA into protein","Cut DNA into fragments"],answer:1,
+ explain:"PCR uses a heat-stable DNA polymerase (Taq), primers and repeated cycles of denaturation, annealing and extension to exponentially amplify a target DNA sequence into millions of copies."},
+{id:"bio3",topic:"Biotechnology",type:"ar",diff:3,boards:["AP","OLY","NEET"],
+ assertion:"CRISPR-Cas9 can edit a chosen target sequence in the genome with high precision.",
+ reason:"A guide RNA directs the Cas9 nuclease to a DNA sequence complementary to the guide.",
+ answer:0,
+ explain:"Both true and the reason explains it. The guide RNA base-pairs with the matching target DNA, positioning Cas9 to cut precisely at that site, which is what makes CRISPR so specific."},
+{id:"bio4",topic:"Biotechnology",type:"match",diff:2,boards:["NEET","CBSE","AP"],
+ stem:"Match each tool of recombinant-DNA technology to its use.",
+ left:["Restriction enzyme","DNA ligase","Plasmid","Taq polymerase"],
+ right:["Cuts DNA at specific recognition sites","Joins DNA fragments together","Acts as a vector to carry foreign DNA into a host","Amplifies DNA during PCR"],
+ explain:"Restriction enzyme = cutting; ligase = joining; plasmid = vector; Taq polymerase = the heat-stable enzyme that copies DNA in PCR."},
+{id:"bio5",topic:"Biotechnology",type:"mcq",diff:3,boards:["AP","OLY"],
+ stem:"In recombinant-DNA work, the vector most commonly used to introduce a gene into a bacterial cell is a:",
+ options:["Ribosome","Plasmid","Centromere","Golgi vesicle"],answer:1,
+ explain:"Plasmids are small circular DNA molecules that replicate independently in bacteria. A gene of interest is inserted into a plasmid, which then carries it into the host cell as a cloning vector."}
+];
+
+/* ============================================================================
+   LOCAL QUESTION GENERATOR ("AI generate" — honest, template-based)
+   ========================================================================== */
+const GEN_TEMPLATES=[
+  {topic:"Cell Biology",make(){
+    const map={"Mitochondrion":"generating most of the cell's ATP by aerobic respiration","Ribosome":"synthesising proteins from mRNA","Golgi apparatus":"modifying, packaging and secreting proteins","Lysosome":"digesting worn-out organelles and debris","Rough endoplasmic reticulum":"synthesising and transporting proteins","Chloroplast":"carrying out photosynthesis"};
+    const keys=Object.keys(map);const ans=keys[Math.floor(Math.random()*keys.length)];
+    const opts=shuffle([ans,...shuffle(keys.filter(k=>k!==ans)).slice(0,3)]);
+    return{stem:"Which organelle is chiefly responsible for "+map[ans]+"?",options:opts,answer:opts.indexOf(ans),
+      explain:"The "+ans.toLowerCase()+" is responsible for "+map[ans]+"."};}},
+  {topic:"Genetics & DNA",make(){
+    const map={"DNA polymerase":"synthesising a new DNA strand during replication","RNA polymerase":"building an RNA strand during transcription","DNA ligase":"joining Okazaki fragments and sealing nicks in DNA","Helicase":"unwinding and separating the two DNA strands","Reverse transcriptase":"making DNA from an RNA template"};
+    const keys=Object.keys(map);const ans=keys[Math.floor(Math.random()*keys.length)];
+    const opts=shuffle([ans,...shuffle(keys.filter(k=>k!==ans)).slice(0,3)]);
+    return{stem:"Which enzyme is responsible for "+map[ans]+"?",options:opts,answer:opts.indexOf(ans),
+      explain:ans+" is the enzyme responsible for "+map[ans]+"."};}},
+  {topic:"Ecology",make(){
+    const map={"Producer":"an organism that makes its own food from inorganic materials","Primary consumer":"a herbivore that eats producers","Secondary consumer":"an animal that eats primary consumers","Decomposer":"an organism that breaks down dead organic matter and recycles nutrients","Apex predator":"a predator at the top of a food chain with no natural predators"};
+    const keys=Object.keys(map);const ans=keys[Math.floor(Math.random()*keys.length)];
+    const opts=shuffle([ans,...shuffle(keys.filter(k=>k!==ans)).slice(0,3)]);
+    return{stem:"Which term best describes "+map[ans]+"?",options:opts,answer:opts.indexOf(ans),
+      explain:"A "+ans.toLowerCase()+" is "+map[ans]+"."};}},
+  {topic:"Human Physiology",make(){
+    const map={"Left ventricle":"pumping oxygenated blood into the aorta","Right ventricle":"pumping deoxygenated blood to the lungs","Left atrium":"receiving oxygenated blood from the lungs","Right atrium":"receiving deoxygenated blood from the body"};
+    const keys=Object.keys(map);const ans=keys[Math.floor(Math.random()*keys.length)];
+    const opts=shuffle([ans,...shuffle(keys.filter(k=>k!==ans)).slice(0,3)]);
+    return{stem:"Which heart chamber is responsible for "+map[ans]+"?",options:opts,answer:opts.indexOf(ans),
+      explain:"The "+ans.toLowerCase()+" is responsible for "+map[ans]+"."};}}
+];
+function generateQuestion(topic){
+  let pool=GEN_TEMPLATES;
+  if(topic&&topic!=="Mixed")pool=GEN_TEMPLATES.filter(t=>t.topic===topic);
+  if(!pool.length)pool=GEN_TEMPLATES;
+  const tpl=pool[Math.floor(Math.random()*pool.length)];
+  const q=tpl.make();
+  return{id:"gen-"+Date.now()+"-"+Math.floor(Math.random()*999),topic:tpl.topic,type:"mcq",diff:2,boards:["NEET","CBSE","AP","OLY"],generated:true,
+    stem:q.stem,options:q.options,answer:q.answer,explain:q.explain};
+}
+
+/* ============================================================================
+   STATE
+   ========================================================================== */
+let S=null;
+const DEFAULT_CFG={topic:"Mixed",board:"NEET",diff:2,mode:"practice",count:8};
+
+/* ---- grading ---- */
+function grade(q,resp){
+  if(q.type==="mcq"||q.type==="ar"||q.type==="exp"){
+    const ok=resp===q.answer;return{marks:ok?1:0,max:1,correct:ok};
+  }
+  if(q.type==="match"){
+    let m=0;const n=q.left.length;for(let i=0;i<n;i++){if(resp&&resp[i]===i)m++;}
+    return{marks:m,max:n,correct:m===n};
+  }
+  if(q.type==="diagram"){
+    const hs=DIAGRAMS[q.diagram].hotspots;let m=0;
+    hs.forEach((h,i)=>{if(resp&&resp[i]===h.label)m++;});
+    return{marks:m,max:hs.length,correct:m===hs.length};
+  }
+  if(q.type==="case"){
+    let m=0;const n=q.subs.length;for(let i=0;i<n;i++){if(resp&&resp[i]===q.subs[i].answer)m++;}
+    return{marks:m,max:n,correct:m===n};
+  }
+  return{marks:0,max:1,correct:false};
+}
+function isComplete(q,resp){
+  if(!resp&&resp!==0)return false;
+  if(q.type==="mcq"||q.type==="ar"||q.type==="exp")return typeof resp==="number"&&resp>=0;
+  if(q.type==="match")return Object.keys(resp).length===q.left.length;
+  if(q.type==="diagram")return Object.keys(resp).length===DIAGRAMS[q.diagram].hotspots.length;
+  if(q.type==="case")return Object.keys(resp).length===q.subs.length;
+  return false;
+}
+
+/* ---- small utilities ---- */
+const stripTags=s=>String(s).replace(/<[^>]+>/g,"");
+const scrollTop=()=>{try{window.scrollTo({top:0,behavior:REDUCED?"auto":"smooth"});}catch(e){window.scrollTo(0,0);}};
+let toastTimer=null;
+function toast(msg){const t=$("#svToast");if(!t)return;t.textContent=msg;t.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),2200);}
+const DIFF_NAME=["","Foundation","Core","Advanced"];
+const BOARDS=["NEET","CBSE","AP","OLY"];
+const BOARD_NAME={NEET:"NEET",CBSE:"CBSE",AP:"AP Biology",OLY:"Olympiad"};
+const MODES=[["practice","Practice","Instant feedback + explanations"],["timed","Timed","Beat the clock, review at the end"],["adaptive","Adaptive","Difficulty follows your accuracy"]];
+
+let CFG=Object.assign({},DEFAULT_CFG,store.get("cfg",{}));
+
+/* ============================================================================
+   START SCREEN
+   ========================================================================== */
+function historyStats(){
+  const h=store.get("history",[]);
+  if(!h.length)return{sessions:0,best:0,answered:0,avg:0};
+  let best=0,ans=0,pctSum=0;
+  h.forEach(s=>{best=Math.max(best,s.pct);ans+=s.count;pctSum+=s.pct;});
+  return{sessions:h.length,best,answered:ans,avg:Math.round(pctSum/h.length)};
+}
+function weakTopics(min){
+  const w=store.get("weak",{});const out=[];
+  Object.keys(w).forEach(t=>{const o=w[t];if(o.seen>=(min||3)){out.push({topic:t,pct:Math.round(o.correct/o.seen*100),seen:o.seen});}});
+  out.sort((a,b)=>a.pct-b.pct);return out;
+}
+function renderStart(){
+  const st=historyStats();const mis=store.get("mistakes",[]);const weak=weakTopics(3);const hist=store.get("history",[]).slice(-5).reverse();
+  const topicOpts=["Mixed",...TOPICS].map(t=>{
+    const on=CFG.topic===t;const ic=t==="Mixed"?I.mix:I[TOPIC_ICON[t]];
+    return `<button class="sv-opt${on?" on":""}" data-group="topic" data-val="${esc(t)}" role="radio" aria-checked="${on}"><span class="oi">${ic}</span><span>${t==="Mixed"?"Mixed — all topics":esc(t)}</span></button>`;
+  }).join("");
+  const boardOpts=BOARDS.map(b=>`<button class="sv-opt${CFG.board===b?" on":""}" data-group="board" data-val="${b}" role="radio" aria-checked="${CFG.board===b}"><span>${BOARD_NAME[b]}</span></button>`).join("");
+  const diffOpts=[1,2,3].map(d=>`<button class="sv-opt${CFG.diff===d?" on":""}" data-group="diff" data-val="${d}" role="radio" aria-checked="${CFG.diff===d}"><span>${DIFF_NAME[d]}</span></button>`).join("");
+  const modeOpts=MODES.map(m=>`<button class="sv-opt${CFG.mode===m[0]?" on":""}" data-group="mode" data-val="${m[0]}" role="radio" aria-checked="${CFG.mode===m[0]}"><span>${m[1]}<span class="osub">${m[2]}</span></span></button>`).join("");
+  const countOpts=[5,8,12,999].map(c=>`<button class="sv-opt${CFG.count===c?" on":""}" data-group="count" data-val="${c}" role="radio" aria-checked="${CFG.count===c}"><span>${c===999?"Max":c+" questions"}</span></button>`).join("");
+
+  const weakPanel=weak.length?`
+    <div class="card reveal" style="margin-top:22px">
+      <div class="sv-qmeta"><span class="chip live"><span class="d"></span>Your weak spots</span></div>
+      <h3 class="h3" style="margin-bottom:14px">Where you tend to slip</h3>
+      <div class="sv-weak-list">
+      ${weak.slice(0,5).map(w=>`<div class="sv-weak-row"><span class="wt">${esc(w.topic)}</span><span class="sv-meter${w.pct<60?" bad":""}"><i style="width:${w.pct}%"></i></span><span class="wp">${w.pct}%</span></div>`).join("")}
+      </div>
+      <div class="sv-start-row" style="margin-top:18px"><button class="btn ghost" data-act="drill-weak">${I.target} Drill my weakest topic</button></div>
+    </div>`:"";
+
+  const histPanel=hist.length?`
+    <div class="card reveal d1" style="margin-top:22px">
+      <div class="sv-qmeta"><span class="chip"><span class="d"></span>Recent sessions</span></div>
+      <div class="sv-break" style="margin-top:6px">
+      ${hist.map(s=>`<div class="sv-brow"><span class="bt">${esc(s.topic)}</span><span class="sv-summary" style="font-size:12px">${s.mode} · ${DIFF_NAME[s.diff]||"—"} · ${new Date(s.date).toLocaleDateString()}</span><span class="bp">${s.pct}%</span></div>`).join("")}
+      </div>
+    </div>`:"";
+
+  root.innerHTML=`
+  <section class="band sv-hero">
+    <div class="reveal">
+      <span class="badge"><span class="dot"></span> Offline practice engine · no account needed</span>
+      <h1>Solve biology<br><span class="grad">until it's instinct.</span></h1>
+      <p class="lead">Real questions across eight topics and six formats — multiple choice, assertion-reason, matching, diagram labelling, case studies and experiment analysis. Choose your board, pick a mode, and let the engine find your weak spots.</p>
+    </div>
+    <div class="sv-stats reveal d1">
+      <div class="sv-stat"><b>${st.sessions}</b><span>SESSIONS DONE</span></div>
+      <div class="sv-stat"><b>${st.best}%</b><span>BEST SCORE</span></div>
+      <div class="sv-stat"><b>${st.answered}</b><span>QUESTIONS ANSWERED</span></div>
+      <div class="sv-stat"><b>${QBANK.length}+</b><span>IN THE BANK</span></div>
+    </div>
+  </section>
+
+  <section class="band" style="padding-top:0">
+    <div class="grid g2" style="align-items:start;gap:26px">
+      <div>
+        <div class="card reveal" id="svConfigCard">
+          <div class="sec-head" style="margin-bottom:24px"><div class="eyebrow">Build your session</div><h2 class="h2" style="font-size:clamp(1.4rem,2.6vw,1.9rem)">Set it up</h2></div>
+          <div class="sv-config">
+            <div class="sv-field"><div class="flabel"><span class="lt">Topic</span></div><div class="sv-topics" role="radiogroup" aria-label="Topic">${topicOpts}</div></div>
+            <div class="sv-field"><div class="flabel"><span class="lt">Exam board</span></div><div class="sv-opts" role="radiogroup" aria-label="Exam board">${boardOpts}</div></div>
+            <div class="sv-field"><div class="flabel"><span class="lt">Difficulty</span><span class="hint" id="svDiffHint"></span></div><div class="sv-opts" role="radiogroup" aria-label="Difficulty">${diffOpts}</div></div>
+            <div class="sv-field"><div class="flabel"><span class="lt">Mode</span></div><div class="sv-opts" role="radiogroup" aria-label="Mode">${modeOpts}</div></div>
+            <div class="sv-field"><div class="flabel"><span class="lt">Length</span></div><div class="sv-opts" role="radiogroup" aria-label="Number of questions">${countOpts}</div></div>
+          </div>
+          <div class="sv-start-row">
+            <button class="btn primary" data-act="start" style="font-size:15px;padding:13px 24px">Start session <span class="arr">→</span></button>
+            <span class="sv-summary" id="svSummary"></span>
+          </div>
+        </div>
+        ${weakPanel}
+        ${histPanel}
+      </div>
+      <div>
+        <div class="card reveal d1">
+          <div class="sv-qmeta"><span class="chip soon"><span class="d"></span>Local AI</span></div>
+          <div class="ico">${I.spark}</div>
+          <h3 class="h3">Generate a fresh question</h3>
+          <p class="muted" style="margin:8px 0 16px">Assembled on your device from vetted local templates — clearly labelled, never a fake API call. Great for a quick warm-up.</p>
+          <div class="sv-start-row"><button class="btn ghost" data-act="generate">${I.spark} Generate &amp; try one</button></div>
+          <p class="sv-hint" style="margin-top:12px"><span class="sv-gen-note">${I.spark} Locally generated</span></p>
+        </div>
+        <div class="card reveal d2" style="margin-top:22px">
+          <div class="ico" style="background:color-mix(in srgb,var(--rose) 12%,transparent);color:var(--rose);border-color:color-mix(in srgb,var(--rose) 22%,transparent)">${I.book}</div>
+          <h3 class="h3">Review your mistakes</h3>
+          <p class="muted" style="margin:8px 0 16px">Every question you miss is saved with its full explanation, so you can come back and turn weaknesses into wins.</p>
+          <div class="sv-start-row">
+            <button class="btn ghost" data-act="review">Review mistakes${mis.length?" ("+mis.length+")":""}</button>
+            ${mis.length>=3?`<button class="btn ghost" data-act="practice-mistakes">${I.target} Re-quiz them</button>`:""}
+          </div>
+        </div>
+        <div class="card reveal d3" style="margin-top:22px">
+          <h3 class="h3" style="margin-bottom:12px">Six ways to be tested</h3>
+          <div class="sv-break">
+            ${[["Multiple choice","One correct option, four plausible ones"],["Assertion &amp; Reason","The classic four-way logic format"],["Match the following","Tap-to-pair two columns"],["Diagram labelling","Place labels on a live diagram"],["Case study","A passage with linked sub-questions"],["Experimental analysis","Read the data, draw the conclusion"]].map(x=>`<div class="sv-brow" style="grid-template-columns:1fr"><div><b style="font-size:14.5px">${x[0]}</b><div class="sv-hint">${x[1]}</div></div></div>`).join("")}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>`;
+  updateSummary();
+  window.__observeReveals&&window.__observeReveals();
+}
+function updateSummary(){
+  const el=$("#svSummary");if(el){const n=poolFor(CFG).length;const c=CFG.count===999?n:Math.min(CFG.count,n);
+    el.innerHTML=`<b>${c}</b> question${c===1?"":"s"} · <b>${CFG.topic}</b> · ${BOARD_NAME[CFG.board]} · ${CFG.mode}`;}
+  const dh=$("#svDiffHint");if(dh)dh.textContent=CFG.mode==="adaptive"?"Adaptive mode adjusts this for you":"";
+}
+function poolFor(cfg){
+  let pool=QBANK.slice();
+  if(cfg.topic!=="Mixed")pool=pool.filter(q=>q.topic===cfg.topic);
+  const byBoard=pool.filter(q=>q.boards.includes(cfg.board));
+  if(byBoard.length>=Math.min(cfg.count===999?4:cfg.count,4))pool=byBoard;
+  if(cfg.mode!=="adaptive"&&cfg.count!==999){
+    const byDiff=pool.filter(q=>q.diff===cfg.diff);
+    if(byDiff.length>=Math.min(cfg.count,3))pool=byDiff;
+  }
+  return pool;
+}
+
+/* ============================================================================
+   SESSION START
+   ========================================================================== */
+function startSession(cfg){
+  const pool=shuffle(poolFor(cfg));
+  if(!pool.length){toast("No questions match — try a Mixed topic");return;}
+  const total=cfg.count===999?pool.length:Math.min(cfg.count,pool.length);
+  S={cfg:Object.assign({},cfg),mode:cfg.mode,plan:cfg.mode==="adaptive"?[]:pool.slice(0,total),
+     remaining:cfg.mode==="adaptive"?pool.slice():[],idx:0,total,records:[],recent:[],
+     adaptiveDiff:cfg.diff,startTime:Date.now(),timerId:null,timeLeft:0,custom:false,label:cfg.topic};
+  if(cfg.mode==="timed"){S.timeLeft=total*50;startTimer();}
+  loadQuestion();scrollTop();
+}
+function startItems(items,mode,label){
+  S={cfg:{topic:label,board:"—",diff:2,mode},mode,plan:items.slice(),remaining:[],idx:0,total:items.length,
+     records:[],recent:[],adaptiveDiff:2,startTime:Date.now(),timerId:null,timeLeft:0,custom:true,label};
+  if(mode==="timed"){S.timeLeft=items.length*50;startTimer();}
+  loadQuestion();scrollTop();
+}
+function currentQ(){return S.plan[S.idx];}
+function loadQuestion(){
+  let q;
+  if(S.mode==="adaptive"){q=adaptivePick();if(!q){S.total=S.idx;return finishQuiz(false);}S.plan[S.idx]=q;}
+  else q=S.plan[S.idx];
+  S.cur=(q.type==="match"||q.type==="diagram"||q.type==="case")?{}:null;
+  S.pick=null;S.pickHot=null;S.labelPick=null;S.phase="answer";
+  if(q.type==="match")S.rightOrder=shuffle(q.right.map((_,i)=>i));
+  if(q.type==="diagram")S.labelOrder=shuffle(DIAGRAMS[q.diagram].hotspots.map(h=>h.label));
+  renderRunner();
+}
+function adaptivePick(){
+  if(!S.remaining.length)return null;
+  S.remaining.sort((a,b)=>Math.abs(a.diff-S.adaptiveDiff)-Math.abs(b.diff-S.adaptiveDiff));
+  const best=Math.abs(S.remaining[0].diff-S.adaptiveDiff);
+  const cands=S.remaining.filter(q=>Math.abs(q.diff-S.adaptiveDiff)===best);
+  const q=cands[Math.floor(Math.random()*cands.length)];
+  S.remaining=S.remaining.filter(x=>x!==q);return q;
+}
+function adaptiveAdjust(r){
+  S.recent.push(r.marks/r.max);if(S.recent.length>3)S.recent.shift();
+  const acc=S.recent.reduce((a,b)=>a+b,0)/S.recent.length;
+  if(acc>=0.75&&S.adaptiveDiff<3)S.adaptiveDiff++;
+  else if(acc<=0.4&&S.adaptiveDiff>1)S.adaptiveDiff--;
+}
+
+/* ---- timer ---- */
+function startTimer(){S.timerId=setInterval(()=>{S.timeLeft--;updateTimer();if(S.timeLeft<=0){clearInterval(S.timerId);S.timerId=null;finishQuiz(true);}},1000);}
+function stopTimer(){if(S&&S.timerId){clearInterval(S.timerId);S.timerId=null;}}
+function updateTimer(){
+  const el=$("#svTime");if(!el)return;
+  const m=Math.floor(S.timeLeft/60),s=S.timeLeft%60;el.textContent=m+":"+(s<10?"0":"")+s;
+  const box=$("#svTimer");if(box){const frac=S.timeLeft/(S.total*50);box.classList.toggle("warn",frac<=0.25&&frac>0.1);box.classList.toggle("crit",S.timeLeft<=10);}
+}
+
+/* ============================================================================
+   RUNNER
+   ========================================================================== */
+function renderRunner(){
+  const q=currentQ();
+  root.innerHTML=`
+  <section class="band" style="padding-block:clamp(28px,5vw,56px)">
+    <div class="sv-runner">
+      <div class="sv-run-top">
+        <span class="chip live"><span class="d"></span>${esc(q.topic)}</span>
+        <span class="chip">${TYPE_LABEL[q.type]}</span>
+        <span class="chip">${DIFF_NAME[q.diff]}</span>
+        <span class="spacer"></span>
+        ${S.mode==="timed"?`<span class="sv-timer" id="svTimer">${I.clock}<span id="svTime"></span></span>`:""}
+        <button class="sv-ghostbtn" data-act="quit">Quit</button>
+      </div>
+      <div class="sv-summary" style="margin-bottom:12px">Question <b id="svCounter">${S.idx+1}</b> of ${S.total}${S.mode==="adaptive"?" · adaptive":""}${q.generated?` &nbsp;<span class="sv-gen-note">${I.spark} Locally generated</span>`:""}</div>
+      <div class="sv-prog"><i id="svBar"></i></div>
+      <div class="sv-qcard reveal">
+        <div id="svStem">${renderStemBlock(q)}</div>
+        <div id="svQArea"></div>
+        <div id="svFeedback"></div>
+      </div>
+      <div class="sv-run-foot">
+        <button class="sv-ghostbtn" data-act="skip">Skip</button>
+        <span class="spacer"></span>
+        <button class="btn primary" data-act="primary" id="svPrimary">Check answer</button>
+      </div>
+    </div>
+  </section>`;
+  paintQuestion();updatePrimary();updateProg();
+  if(S.mode==="timed")updateTimer();
+  window.__observeReveals&&window.__observeReveals();
+}
+function updateProg(){const b=$("#svBar");if(b)b.style.width=(S.records.length/S.total*100)+"%";const c=$("#svCounter");if(c)c.textContent=S.idx+1;}
+function paintQuestion(){const a=$("#svQArea");if(!a)return;const q=currentQ();a.innerHTML=renderInteractive(q);wireInteractive(q);}
+
+function renderStemBlock(q){
+  if(q.type==="ar"){
+    return `<div class="sv-qmeta"><span class="chip">Assertion &amp; Reason</span></div>
+      <div class="sv-passage" style="border-left-color:var(--em)"><strong>Assertion (A):</strong> ${esc(q.assertion)}</div>
+      <div class="sv-passage" style="border-left-color:var(--indigo)"><strong>Reason (R):</strong> ${esc(q.reason)}</div>
+      <div class="sv-stem" style="font-size:1.05rem">Which option is correct?</div>`;
+  }
+  if(q.type==="exp"){
+    let t="";if(q.table){t=`<table class="sv-table"><thead><tr>${q.table.head.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${q.table.rows.map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table>`;}
+    return `<div class="sv-passage">${esc(q.passage)}</div>${t}<div class="sv-stem">${esc(q.stem)}</div>`;
+  }
+  if(q.type==="case"){
+    return `<div class="sv-passage">${esc(q.passage)}</div><div class="sv-stem" style="font-size:1.1rem">Answer each sub-question below.</div>`;
+  }
+  return `<div class="sv-stem">${esc(q.stem)}</div>`;
+}
+
+/* ---- per-type interactive render ---- */
+function choiceRow(i,text,q,resp){
+  let cls="sv-choice",kmark="";
+  const rev=S.phase==="revealed";
+  if(rev){cls+=" lock";if(i===q.answer){cls+=" correct";kmark=I.check;}else if(i===resp){cls+=" wrong";kmark=I.x;}}
+  else if(resp===i)cls+=" sel";
+  return `<button class="${cls}" data-choice="${i}"><span class="key">${String.fromCharCode(65+i)}</span><span>${text}</span><span class="kmark">${kmark}</span></button>`;
+}
+function renderInteractive(q){
+  const rev=S.phase==="revealed";
+  if(q.type==="mcq"||q.type==="exp")
+    return `<div class="sv-choices">${q.options.map((o,i)=>choiceRow(i,esc(o),q,S.cur)).join("")}</div>`;
+  if(q.type==="ar")
+    return `<div class="sv-choices">${AR_OPTS.map((o,i)=>choiceRow(i,o,q,S.cur)).join("")}</div>`;
+  if(q.type==="case")
+    return q.subs.map((sub,si)=>`<div class="sv-sub"><div class="sq"><span class="sqn">${si+1}.</span>${esc(sub.stem)}</div>
+      <div class="sv-choices">${sub.options.map((o,i)=>{
+        let cls="sv-choice",km="";const resp=S.cur[si];
+        if(rev){cls+=" lock";if(i===sub.answer){cls+=" correct";km=I.check;}else if(i===resp){cls+=" wrong";km=I.x;}}
+        else if(resp===i)cls+=" sel";
+        return `<button class="${cls}" data-sub="${si}" data-choice="${i}"><span class="key">${String.fromCharCode(65+i)}</span><span>${esc(o)}</span><span class="kmark">${km}</span></button>`;
+      }).join("")}</div></div>`).join("");
+  if(q.type==="match"){
+    const rights=S.rightOrder;
+    const leftHTML=q.left.map((t,i)=>{
+      const paired=S.cur[i];
+      if(rev){const ok=S.cur[i]===i;return `<div class="sv-item ${ok?"ok":"no"}"><span>${esc(t)}</span><span class="badge-r">${paired!=null?esc(q.right[paired]):"—"}</span>${ok?"":`<div class="sv-hint" style="width:100%;margin-top:6px">Correct: ${esc(q.right[i])}</div>`}</div>`;}
+      const dn=paired!=null?(rights.indexOf(paired)+1):null;
+      return `<div class="sv-item${S.pick&&S.pick.i===i?" pick":""}${paired!=null?" done":""}" data-side="L" data-i="${i}" role="button" tabindex="0"><span>${esc(t)}</span>${dn?`<span class="tagn">→ ${dn}</span>`:`<span class="sv-hint" style="margin-left:auto">tap</span>`}</div>`;
+    }).join("");
+    const rightHTML=rights.map((ri,pos)=>{
+      const used=Object.values(S.cur).indexOf(ri)>=0;
+      if(rev)return `<div class="sv-item"><span class="badge-r" style="margin-left:0;margin-right:8px">${pos+1}</span><span>${esc(q.right[ri])}</span></div>`;
+      return `<div class="sv-item${used?" done":""}" data-side="R" data-ri="${ri}" role="button" tabindex="0"><span class="badge-r" style="margin-left:0;margin-right:8px">${pos+1}</span><span>${esc(q.right[ri])}</span></div>`;
+    }).join("");
+    return `<p class="sv-hint" style="margin-bottom:12px">Tap an item on the left, then tap its match on the right. Tap a paired item again to undo.</p>
+      <div class="sv-pair"><div class="sv-col"><h4>Term</h4>${leftHTML}</div><div class="sv-col"><h4>Match</h4>${rightHTML}</div></div>`;
+  }
+  if(q.type==="diagram"){
+    const D=DIAGRAMS[q.diagram];
+    const markers=D.hotspots.map((h,i)=>{
+      const placed=S.cur[i];let cls="sv-hot";
+      if(rev){cls+=placed===h.label?" ok":" no";}
+      else{if(S.pickHot===i)cls+=" pick";if(placed)cls+=" filled";}
+      const showLabel=rev?h.label:(placed||"");
+      return `<g class="${cls}" data-hi="${i}" role="button" tabindex="0" aria-label="Marker ${i+1}">
+        <circle class="ring" cx="${h.x}" cy="${h.y}" r="13"></circle>
+        <text x="${h.x}" y="${h.y+4}" text-anchor="middle" font-size="11">${placed&&!rev?"":(rev?"":i+1)}</text>
+        ${showLabel?`<text class="sv-hotlabel" x="${h.x}" y="${h.y-20}" text-anchor="middle">${esc(showLabel)}</text>`:""}
+        ${rev&&placed!==h.label&&placed?`<text class="sv-hotlabel" x="${h.x}" y="${h.y+30}" text-anchor="middle" fill="var(--rose)">${esc(placed)}</text>`:""}
+      </g>`;
+    }).join("");
+    const chips=S.labelOrder.map((l,n)=>{
+      const used=Object.values(S.cur).indexOf(l)>=0;
+      if(rev)return "";
+      return `<button class="sv-labelchip${S.labelPick===l?" pick":""}${used?" used":""}" data-label="${esc(l)}"><span class="n">${n+1}</span>${esc(l)}</button>`;
+    }).join("");
+    return `<div class="sv-diagram">
+      <div class="sv-svgwrap"><svg viewBox="${D.vb}" role="img" aria-label="${esc(q.stem)}">
+        <defs>
+          <linearGradient id="svmem" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#34d399"/><stop offset="1" stop-color="#38e0d8"/></linearGradient>
+          <radialGradient id="svnuc" cx="45%" cy="40%" r="70%"><stop offset="0" stop-color="#3ad0c6"/><stop offset="1" stop-color="#1c8f86"/></radialGradient>
+        </defs>${D.art()}${markers}</svg></div>
+      <div>${rev?`<p class="sv-hint">The correct labels are shown on the diagram.</p>`:`<h4 style="font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:10px">Labels — tap one, then tap a marker</h4><div class="sv-chips">${chips}</div>`}</div>
+    </div>`;
+  }
+  return "";
+}
+function wireInteractive(q){
+  const area=$("#svQArea");if(!area)return;
+  if(q.type==="mcq"||q.type==="exp"||q.type==="ar"){
+    $$(".sv-choice",area).forEach(el=>el.addEventListener("click",()=>{if(S.phase!=="answer")return;S.cur=+el.dataset.choice;paintQuestion();updatePrimary();}));
+  }
+  else if(q.type==="case"){
+    $$(".sv-choice",area).forEach(el=>el.addEventListener("click",()=>{if(S.phase!=="answer")return;S.cur[+el.dataset.sub]=+el.dataset.choice;paintQuestion();updatePrimary();}));
+  }
+  else if(q.type==="match"){
+    $$(".sv-item",area).forEach(el=>{
+      const act=()=>{
+        if(S.phase!=="answer")return;
+        if(el.dataset.side==="L"){
+          const i=+el.dataset.i;
+          if(S.cur[i]!=null){delete S.cur[i];S.pick=null;paintQuestion();updatePrimary();return;}
+          S.pick=(S.pick&&S.pick.i===i)?null:{i};paintQuestion();
+        }else{
+          const ri=+el.dataset.ri;
+          if(!S.pick){toast("Pick a term on the left first");return;}
+          Object.keys(S.cur).forEach(k=>{if(S.cur[k]===ri)delete S.cur[k];});
+          S.cur[S.pick.i]=ri;S.pick=null;paintQuestion();updatePrimary();
+        }
+      };
+      el.addEventListener("click",act);
+      el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();act();}});
+    });
+  }
+  else if(q.type==="diagram"){
+    $$(".sv-labelchip",area).forEach(el=>el.addEventListener("click",()=>{if(S.phase!=="answer")return;const l=el.dataset.label;S.labelPick=S.labelPick===l?null:l;paintQuestion();}));
+    $$(".sv-hot",area).forEach(el=>{
+      const act=()=>{
+        if(S.phase!=="answer")return;const hi=+el.dataset.hi;
+        if(S.labelPick){Object.keys(S.cur).forEach(k=>{if(S.cur[k]===S.labelPick)delete S.cur[k];});S.cur[hi]=S.labelPick;S.labelPick=null;paintQuestion();updatePrimary();}
+        else if(S.cur[hi]){delete S.cur[hi];paintQuestion();updatePrimary();}
+        else{S.pickHot=S.pickHot===hi?null:hi;toast("Now tap a label to place here");}
+      };
+      el.addEventListener("click",act);
+      el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();act();}});
+    });
+  }
+}
+function updatePrimary(){
+  const btn=$("#svPrimary");if(!btn)return;const q=currentQ();
+  if(S.phase==="revealed"){btn.disabled=false;btn.innerHTML=(S.idx>=S.total-1?"See results":"Next question")+' <span class="arr">→</span>';return;}
+  const ok=isComplete(q,S.cur);btn.disabled=!ok;
+  if(S.mode==="timed")btn.innerHTML=(S.idx>=S.total-1?"Finish":"Next")+' <span class="arr">→</span>';
+  else btn.textContent="Check answer";
+}
+function cloneResp(r){return (r&&typeof r==="object")?Object.assign({},r):r;}
+function submit(force){
+  const q=currentQ();if(S.phase!=="answer")return;
+  if(!force&&!isComplete(q,S.cur)){toast("Choose an answer, or press Skip");return;}
+  const r=grade(q,S.cur);
+  S.records.push({q,resp:cloneResp(S.cur),marks:r.marks,max:r.max,correct:r.correct});
+  if(S.mode==="adaptive")adaptiveAdjust(r);
+  if(S.mode==="timed"){nextQuestion();}
+  else{S.phase="revealed";paintQuestion();renderFeedback(q,r);updatePrimary();updateProg();
+    const fb=$("#svFeedback");if(fb)fb.scrollIntoView({behavior:REDUCED?"auto":"smooth",block:"nearest"});}
+}
+function renderFeedback(q,r){
+  const fb=$("#svFeedback");if(!fb)return;
+  const good=r.correct;const partial=r.marks>0&&r.marks<r.max;
+  const head=good?"Correct":(partial?`Partly right — ${r.marks} of ${r.max}`:"Not quite");
+  fb.innerHTML=`<div class="sv-feedback ${good?"good":"bad"}">
+    <div class="fh"><span class="fi">${good?I.check:I.x}</span>${head}</div>
+    <div class="ex"><b>Why:</b> ${esc(q.explain)}</div></div>`;
+}
+function nextQuestion(){
+  S.idx++;
+  if(S.idx>=S.total){finishQuiz(false);return;}
+  loadQuestion();scrollTop();
+}
+
+/* ============================================================================
+   RESULTS + PERSISTENCE
+   ========================================================================== */
+function finishQuiz(timedOut){
+  stopTimer();
+  if(timedOut&&S.mode!=="adaptive"){
+    for(let i=S.records.length;i<S.total;i++){const q=S.plan[i];if(!q)break;const g=grade(q,(q.type==="match"||q.type==="diagram"||q.type==="case")?{}:null);S.records.push({q,resp:null,marks:0,max:g.max,correct:false});}
+  }
+  const session=persistResults(timedOut);
+  renderResults(session);scrollTop();
+}
+function answerText(rec,which){
+  const q=rec.q;
+  if(q.type==="mcq"||q.type==="exp"){return which==="right"?q.options[q.answer]:(rec.resp==null?"No answer":q.options[rec.resp]);}
+  if(q.type==="ar"){return which==="right"?stripTags(AR_OPTS[q.answer]):(rec.resp==null?"No answer":stripTags(AR_OPTS[rec.resp]));}
+  const g=grade(q,rec.resp);return which==="right"?"All matched":`${g.marks} of ${g.max} correct`;
+}
+function persistResults(timedOut){
+  const per={};let em=0,mx=0;
+  S.records.forEach(rec=>{const t=rec.q.topic;if(!per[t])per[t]={m:0,x:0};per[t].m+=rec.marks;per[t].x+=rec.max;em+=rec.marks;mx+=rec.max;});
+  const pct=mx?Math.round(em/mx*100):0;const timeMs=Date.now()-S.startTime;
+  /* weak stats (skip generated one-offs from custom generated set only if desired; keep all real topics) */
+  const weak=store.get("weak",{});
+  S.records.forEach(rec=>{const t=rec.q.topic;if(!weak[t])weak[t]={seen:0,correct:0};weak[t].seen+=rec.max;weak[t].correct+=rec.marks;});
+  store.set("weak",weak);
+  /* mistakes */
+  let mis=store.get("mistakes",[]);
+  S.records.forEach(rec=>{if(rec.correct)return;mis=mis.filter(m=>m.qid!==rec.q.id);
+    mis.unshift({qid:rec.q.id,topic:rec.q.topic,type:rec.q.type,date:Date.now(),
+      stem:rec.q.type==="ar"?rec.q.assertion:(rec.q.stem||rec.q.passage||"").slice(0,180),
+      yours:answerText(rec,"your"),right:answerText(rec,"right"),explain:rec.q.explain,q:rec.q});});
+  mis=mis.slice(0,80);store.set("mistakes",mis);
+  /* history */
+  const hist=store.get("history",[]);
+  hist.push({date:Date.now(),topic:S.label||S.cfg.topic,board:S.cfg.board,diff:S.cfg.diff,mode:S.mode,marks:em,max:mx,pct,count:S.records.length,timeMs,timedOut:!!timedOut});
+  store.set("history",hist.slice(-40));
+  return {per,em,mx,pct,timeMs,timedOut};
+}
+function verdict(pct){
+  if(pct>=90)return["Outstanding.","You have real command of this material. Push into Advanced or a new topic."];
+  if(pct>=75)return["Strong work.","Solid understanding — tighten the few gaps below and you're exam-ready."];
+  if(pct>=55)return["Good progress.","You're getting there. The weak topics below are where the marks are hiding."];
+  if(pct>=35)return["Keep going.","The foundations need another pass. Review the mistakes and re-quiz the weak topics."];
+  return["Early days.","Everyone starts here. Work through the explanations — repetition is how this sticks."];
+}
+function renderResults(res){
+  const v=verdict(res.pct);const secs=Math.round(res.timeMs/1000);const mm=Math.floor(secs/60),ss=secs%60;
+  const C=2*Math.PI*76;const off=C*(1-res.pct/100);
+  const perRows=Object.keys(res.per).sort((a,b)=>(res.per[a].m/res.per[a].x)-(res.per[b].m/res.per[b].x)).map(t=>{
+    const o=res.per[t];const p=Math.round(o.m/o.x*100);
+    return `<div class="sv-brow"><span class="bt">${esc(t)}</span><span class="sv-meter${p<60?" bad":""}"><i style="width:${p}%"></i></span><span class="bp">${o.m}/${o.x}</span></div>`;
+  }).join("");
+  const weakHere=Object.keys(res.per).filter(t=>res.per[t].m/res.per[t].x<0.6).sort((a,b)=>(res.per[a].m/res.per[a].x)-(res.per[b].m/res.per[b].x));
+  const recos=weakHere.length?weakHere.slice(0,4).map(t=>`
+    <div class="card lift"><div class="glow"></div>
+      <div class="ico">${I[TOPIC_ICON[t]]||I.mix}</div>
+      <h3 class="h3" style="font-size:1.1rem">${esc(t)}</h3>
+      <p class="muted" style="font-size:14px;margin:6px 0 14px">Scored ${Math.round(res.per[t].m/res.per[t].x*100)}% here. A focused set will lift this fast.</p>
+      <button class="btn ghost" data-act="drill" data-topic="${esc(t)}">${I.target} Practise ${esc(t)}</button>
+    </div>`).join(""):`
+    <div class="card"><div class="ico">${I.check}</div><h3 class="h3">No weak topics this round</h3><p class="muted" style="font-size:14px;margin-top:6px">You stayed above 60% everywhere. Try a harder difficulty or a new topic to keep stretching.</p></div>`;
+  const mis=store.get("mistakes",[]);
+  root.innerHTML=`
+  <section class="band" style="padding-block:clamp(30px,5vw,64px)">
+    <div class="sv-results">
+      <div class="sec-head reveal" style="margin-bottom:26px"><div class="eyebrow">Session complete</div><h2 class="h2">Here's how you did</h2></div>
+      <div class="sv-scorecard reveal">
+        <svg class="sv-ring" viewBox="0 0 168 168" aria-hidden="true">
+          <circle class="track" cx="84" cy="84" r="76"></circle>
+          <circle class="fill" cx="84" cy="84" r="76" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${C.toFixed(1)}" data-off="${off.toFixed(1)}"></circle>
+          <text class="pct" x="84" y="80" text-anchor="middle">${res.pct}%</text>
+          <text class="lbl" x="84" y="104" text-anchor="middle">SCORE</text>
+        </svg>
+        <div class="sv-verdict">
+          <div class="vt">${v[0]}${res.timedOut?' <span class="chip soon" style="vertical-align:middle">Time up</span>':""}</div>
+          <p>${v[1]}</p>
+          <div class="sv-rstats">
+            <div class="rs"><b>${res.em}/${res.mx}</b><span>MARKS</span></div>
+            <div class="rs"><b>${S.records.length}</b><span>QUESTIONS</span></div>
+            <div class="rs"><b>${mm}:${ss<10?"0":""}${ss}</b><span>TIME</span></div>
+            <div class="rs"><b>${Math.round(res.em/Math.max(1,res.mx)*100)}%</b><span>ACCURACY</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="card reveal d1" style="margin-bottom:24px">
+        <div class="sec-head" style="margin-bottom:20px"><div class="eyebrow">Per-topic breakdown</div></div>
+        <div class="sv-break">${perRows}</div>
+      </div>
+      <div class="sec-head reveal d2"><div class="eyebrow">What to do next</div><h2 class="h2" style="font-size:clamp(1.4rem,2.6vw,1.9rem)">Turn the gaps into gains</h2></div>
+      <div class="sv-reco reveal d2">${recos}</div>
+      <div class="sv-start-row reveal d3" style="margin-top:30px">
+        <button class="btn primary" data-act="again">Play again <span class="arr">→</span></button>
+        <button class="btn ghost" data-act="new">New session</button>
+        <button class="btn ghost" data-act="review">Review mistakes${mis.length?" ("+mis.length+")":""}</button>
+      </div>
+    </div>
+  </section>`;
+  window.__observeReveals&&window.__observeReveals();
+  requestAnimationFrame(()=>{const f=$(".sv-ring .fill");if(f)f.style.strokeDashoffset=f.dataset.off;});
+}
+
+/* ============================================================================
+   REVIEW MISTAKES
+   ========================================================================== */
+function renderReview(){
+  const mis=store.get("mistakes",[]);
+  const body=mis.length?`
+    <div class="sv-start-row" style="margin-bottom:22px">
+      ${mis.length>=3?`<button class="btn primary" data-act="practice-mistakes">${I.target} Re-quiz these ${mis.length} <span class="arr">→</span></button>`:""}
+      <button class="btn ghost" data-act="clear-mistakes">Clear all</button>
+      <button class="btn ghost" data-act="new">Back to start</button>
+    </div>
+    <div class="sv-mistakes">
+    ${mis.map(m=>`<div class="sv-mrow reveal">
+      <div class="sv-qmeta"><span class="chip live"><span class="d"></span>${esc(m.topic)}</span><span class="chip">${TYPE_LABEL[m.type]||m.type}</span></div>
+      <div class="mq">${esc(m.stem)}${m.stem&&m.stem.length>=180?"…":""}</div>
+      <div class="sv-ans"><span class="a yours">You: ${esc(m.yours)}</span><span class="a right">Correct: ${esc(m.right)}</span></div>
+      <div class="mex"><b>Why:</b> ${esc(m.explain)}</div>
+    </div>`).join("")}
+    </div>`:`
+    <div class="sv-empty">
+      <div class="ei">${I.check}</div>
+      <h3 class="h3" style="color:var(--ink)">Nothing to review — yet</h3>
+      <p style="margin:8px auto 20px;max-width:380px">Miss a question and it lands here with its explanation. Start a session to begin.</p>
+      <button class="btn primary" data-act="new">Start practising <span class="arr">→</span></button>
+    </div>`;
+  root.innerHTML=`<section class="band" style="padding-block:clamp(30px,5vw,60px)">
+    <div class="sec-head reveal" style="margin-inline:auto;text-align:center;max-width:640px"><div class="eyebrow" style="justify-content:center">Review</div><h2 class="h2">Your mistakes, with the fix</h2><p class="lead" style="margin-top:12px">Every missed question is saved on this device with the full explanation.</p></div>
+    ${body}
+  </section>`;
+  window.__observeReveals&&window.__observeReveals();
+}
+
+/* ============================================================================
+   GLOBAL ACTIONS
+   ========================================================================== */
+function handleAction(act,el){
+  switch(act){
+    case "start":store.set("cfg",CFG);startSession(CFG);break;
+    case "generate":startItems([generateQuestion(CFG.topic)],"practice","Generated");break;
+    case "review":renderReview();scrollTop();break;
+    case "new":renderStart();scrollTop();break;
+    case "again":if(S)startSession(S.cfg&&S.cfg.topic&&!S.custom?S.cfg:CFG);else startSession(CFG);break;
+    case "quit":stopTimer();renderStart();scrollTop();break;
+    case "skip":if(S.phase==="revealed")nextQuestion();else submit(true);break;
+    case "primary":if(S.phase==="revealed")nextQuestion();else submit(false);break;
+    case "drill":{const t=el.dataset.topic;const c=Object.assign({},CFG,{topic:t,mode:"practice",count:8});startSession(c);break;}
+    case "drill-weak":{const w=weakTopics(3);if(w.length){const c=Object.assign({},CFG,{topic:w[0].topic,mode:"practice",count:8});startSession(c);}break;}
+    case "practice-mistakes":{const mis=store.get("mistakes",[]);const items=mis.map(m=>m.q).filter(Boolean);if(items.length)startItems(shuffle(items).slice(0,12),"practice","Mistake review");else toast("No saved mistakes yet");break;}
+    case "clear-mistakes":store.set("mistakes",[]);renderReview();toast("Mistakes cleared");break;
+  }
+}
+function wireGlobal(){
+  document.addEventListener("click",e=>{
+    const a=e.target.closest("[data-act]");
+    if(a){e.preventDefault();handleAction(a.dataset.act,a);return;}
+    const opt=e.target.closest(".sv-opt[data-group]");
+    if(opt){const g=opt.dataset.group;let v=opt.dataset.val;if(g==="diff"||g==="count")v=+v;CFG[g]=v;
+      const grp=opt.parentElement;$$(".sv-opt",grp).forEach(o=>{const on=o===opt;o.classList.toggle("on",on);o.setAttribute("aria-checked",on);});
+      updateSummary();return;}
+    const sv=e.target.closest("[data-sv]");
+    if(sv){const k=sv.getAttribute("data-sv");
+      if(k==="review"){e.preventDefault();renderReview();scrollTop();}
+      else if(k.indexOf("mode-")===0){e.preventDefault();CFG.mode=k.slice(5);store.set("cfg",CFG);renderStart();scrollTop();}
+      if(window.__closeMenu)window.__closeMenu();
+    }
+  });
+}
+
+/* ---- boot ---- */
+function init(){wireGlobal();renderStart();}
+
+return {start:init};
+})();
+</script></script>
+<!-- __BIOQ_EMBED__ -->
+<style>body.embed .nav,body.embed .mobile-menu,body.embed footer,body.embed .skiplink{display:none!important}
+body.embed main{padding-top:20px!important}body.embed #launch{display:none!important}</style>
+<script>(function(){var q=new URLSearchParams(location.search);if(!q.get('embed'))return;
+try{localStorage.setItem('bioq_seen','1');}catch(e){}
+function apply(){if(document.body)document.body.classList.add('embed');}
+if(document.body)apply();else addEventListener('DOMContentLoaded',apply);
+addEventListener('message',function(e){var d=e.data||{};if(d.bioqTheme){document.documentElement.setAttribute('data-theme',d.bioqTheme);try{localStorage.setItem('bioq_theme',d.bioqTheme);}catch(x){}}});
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href]');if(!a)return;var h=a.getAttribute('href')||'';
+if(/\.html/i.test(h)&&/^\.?\/?(index|learn|lessons|reason|labs|solve|explore|me|about|lab|universe)\.html/i.test(h.replace(/^\.\//,''))){e.preventDefault();try{parent.postMessage({bioqNav:h},'*');}catch(x){}}},true);
+})();</script>
+
+<script id="atmo-js">
+/* ============================================================================
+   BIOLOGY ENTELLOQ — THE LIVING FIELD.
+
+   Physics Entelloq puts a sheet of spacetime behind the product and bends it
+   around the cursor. This is the biological answer to that, and it is not the
+   same idea in different colours: matter is passive and gets curved, whereas
+   tissue is ALIVE and reaches toward what it wants. So the field here is a thick
+   section of living tissue seen down a microscope, and the cursor is a nutrient
+   source. Cells near it swell, their membranes brighten, and the capillary
+   network grows toward it — chemotaxis, the oldest behaviour there is.
+
+   Four things are happening at once in the shader:
+     · a Worley cell field (membranes are the F2-F1 ridge — the real thing under
+       phase contrast) in two parallax layers, so the section has thickness
+     · a domain warp driven by slow fbm, because no real tissue is on a grid
+     · ridged fbm capillaries that bias their flow toward the cursor
+     · a breath — everything respires at about 7 cycles a minute, which is why
+       it reads as alive rather than as a screensaver on a loop
+
+   SELF-INSTALLING. Dropping this one <script> onto a page is the whole install:
+   it makes its own canvas, injects its own CSS, picks its colour from
+   <body data-page>, and follows the light/dark toggle. It never needs markup.
+   ========================================================================== */
+(function () {
+  "use strict";
+  if (window.BIOQ_ATMO) return;                       // idempotent: safe to double-inject
+
+  // Inside the unified app shell each section loads in an iframe with ?embed=1.
+  // The shell already has a field; a second one per iframe would mean two WebGL
+  // contexts fighting for the GPU and a visible seam where the two tissues meet.
+  // So the embedded page renders none of its own and goes transparent instead,
+  // letting the shell's single continuous field show through — which is also why
+  // navigating between sections never interrupts it.
+  try {
+    if (new URLSearchParams(location.search).get("embed")) {
+      var t = document.createElement("style");
+      t.id = "atmo-embed";
+      t.textContent = "html,body{background:transparent!important}.bg-veil{display:none!important}";
+      (document.head || document.documentElement).appendChild(t);
+      window.BIOQ_ATMO = { theme: function () {}, setSection: function () {}, mouse: null, mode: "embedded" };
+      return;
+    }
+  } catch (e) {}
+
+  /* --- where the colour comes from -------------------------------------- */
+  // Each pillar gets its own biology, and the hues deliberately match the `tc`
+  // accent the app shell already assigns that view — so the field is the same
+  // colour as the section you are standing in rather than a second, competing
+  // palette. Intensity is how ALIVE the field looks: the Lab runs hot, Me runs quiet.
+  var SECTIONS = {
+    home:     ["#34d399", 0.44],   // em     — chlorophyll
+    learn:    ["#34d399", 0.52],   // em
+    lessons:  ["#38e0d8", 0.50],   // cy
+    reason:   ["#8b5cf6", 0.48],   // violet — the colour of thinking
+    labs:     ["#f6c667", 0.52],   // amber  — a bench lamp
+    solve:    ["#7c8cf8", 0.48],   // indigo
+    explore:  ["#38e0d8", 0.58],   // cy     — open water
+    me:       ["#c9a86a", 0.34],   // quiet, warm, low
+    about:    ["#34d399", 0.46],   // em
+    lab:      ["#fb7185", 0.64],   // rose   — an opened body, and the field runs hot
+    universe: ["#38e0d8", 0.60]    // cy
+  };
+
+  var reduced = false;
+  try { reduced = matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
+  var STILL = reduced || /[?&#](still|print)=?1?/.test(location.search + location.hash);
+
+  /* --- install ----------------------------------------------------------- */
+  var css = document.createElement("style");
+  css.id = "atmo-css";
+  css.textContent =
+    // z-index:-1, NOT 0. A positioned element at z-index:0 paints ABOVE ordinary
+    // in-flow block content, so the field would cover the page. Negative z puts it
+    // between the root background and everything else, which means not one existing
+    // element needs its position or stacking touched — and the product's fixed nav
+    // (position:fixed;z-index:60) keeps working exactly as before.
+    "#atmo{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;" +
+      "opacity:0;transition:opacity 1.2s cubic-bezier(.22,1,.36,1);display:block}" +
+    "#atmo.lit{opacity:.78}" +
+    // In light mode the same field reads as a stained section on a white slide, so
+    // it stays — but fainter, because ink on paper is a quieter medium.
+    "html[data-theme=\"light\"] #atmo.lit{opacity:.42}" +
+    // The pages paint --bg on BOTH html and body; body's copy would hide a
+    // negative-z child, so hand the background to the root alone. --bg is a themed
+    // custom property, so this keeps following the light/dark toggle for free.
+    "html{background:var(--bg,#04070a)}body{background:transparent!important}";
+  (document.head || document.documentElement).appendChild(css);
+
+  var cv = document.createElement("canvas");
+  cv.id = "atmo";
+  cv.setAttribute("aria-hidden", "true");
+  // NOTE: attach() is *declared* here but deliberately not *called* until the very
+  // bottom of this module. It reaches into cur/tgt/M/FS/VS, all of which are `var`
+  // bindings that are hoisted but still undefined at this point in the file —
+  // calling it here would throw on the first property write and silently leave the
+  // page with no field at all.
+  function attach() {
+    if (!document.body) return setTimeout(attach, 16);
+    document.body.insertBefore(cv, document.body.firstChild);
+    // The class is what fades the field in, and it must land on a LATER frame than
+    // the insert or the CSS transition has nothing to transition from. rAF is the
+    // usual way to get that, but rAF does not run at all in a background tab — so a
+    // page that loads hidden would sit at opacity 0. The timer is the backstop;
+    // adding the class twice costs nothing.
+    function lit() { cv.classList.add("lit"); }
+    requestAnimationFrame(lit);
+    setTimeout(lit, 80);
+    boot();
+  }
+
+  /* --- state ------------------------------------------------------------- */
+  function hexRGB(h) {
+    h = String(h).replace("#", "");
+    return [parseInt(h.slice(0, 2), 16) / 255, parseInt(h.slice(2, 4), 16) / 255, parseInt(h.slice(4, 6), 16) / 255];
+  }
+  var cur = { r: 0.20, g: 0.83, b: 0.60, in: 0.44, lt: 0 };
+  var tgt = { r: 0.20, g: 0.83, b: 0.60, in: 0.44, lt: 0 };
+  var M = { x: innerWidth / 2, y: innerHeight / 2, tx: innerWidth / 2, ty: innerHeight / 2, live: 0, tlive: 0 };
+
+  addEventListener("pointermove", function (e) {
+    M.tx = e.clientX; M.ty = e.clientY; M.tlive = 1;
+  }, { passive: true });
+  // A pointer that has left should stop feeding the tissue, or the glow sits there
+  // forever on a page nobody is touching. pointerleave does not bubble, so it has
+  // to be bound to the root element rather than to window; mouseout with a null
+  // relatedTarget is the belt-and-braces case for leaving through the chrome.
+  document.documentElement.addEventListener("pointerleave", function () { M.tlive = 0; }, { passive: true });
+  addEventListener("mouseout", function (e) { if (!e.relatedTarget) M.tlive = 0; }, { passive: true });
+  addEventListener("blur", function () { M.tlive = 0; });
+  // Touch has no hover: without this the glow would stay wherever the last tap
+  // landed, permanently, on every phone.
+  addEventListener("pointerup", function (e) {
+    if (e.pointerType !== "mouse") M.tlive = 0;
+  }, { passive: true });
+
+  function theme(rgb, intensity) {
+    tgt.r = rgb[0]; tgt.g = rgb[1]; tgt.b = rgb[2];
+    if (typeof intensity === "number") tgt.in = intensity;
+  }
+  function setSection(key) {
+    var s = SECTIONS[key] || SECTIONS.home;
+    theme(hexRGB(s[0]), s[1]);
+    nudge();                             // navigating must restain the field even in STILL mode
+  }
+  // repaint is filled in by whichever renderer boots. In STILL mode (reduced
+  // motion, or ?still=1) exactly one frame is ever drawn, so without this a reader
+  // who switches to light mode would be left looking at the dark field forever.
+  var repaint = null;
+  function nudge() {
+    if (!STILL || !repaint) return;      // the animated path picks the change up on its own
+    for (var i = 0; i < 60; i++) ease(); // settle the eased colour, then draw the one frame
+    repaint(0);
+  }
+  function readTheme() {
+    var next = (document.documentElement.getAttribute("data-theme") === "light") ? 1 : 0;
+    if (next === tgt.lt) return;
+    tgt.lt = next;
+    nudge();
+  }
+
+  function ease() {
+    cur.r += (tgt.r - cur.r) * 0.035; cur.g += (tgt.g - cur.g) * 0.035;
+    cur.b += (tgt.b - cur.b) * 0.035; cur.in += (tgt.in - cur.in) * 0.035;
+    cur.lt += (tgt.lt - cur.lt) * 0.08;
+    M.x += (M.tx - M.x) * 0.075; M.y += (M.ty - M.y) * 0.075;
+    M.live += (M.tlive - M.live) * 0.04;
+  }
+
+  /* --- the field --------------------------------------------------------- */
+  var FS = [
+    "precision mediump float;",
+    "uniform vec2 uRes;uniform float uT;uniform vec2 uM;uniform vec3 uC;uniform float uIn;uniform float uLive;uniform float uLight;",
+
+    "float h1(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}",
+    "vec2 h2(vec2 p){return fract(sin(vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3))))*43758.5453);}",
+    "float vn(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);",
+    " float a=h1(i),b=h1(i+vec2(1,0)),c=h1(i+vec2(0,1)),d=h1(i+vec2(1,1));",
+    " return mix(mix(a,b,f.x),mix(c,d,f.x),f.y);}",
+    "float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<4;i++){v+=a*vn(p);p*=2.07;a*=.5;}return v;}",
+    // Ridged noise gives threads instead of blobs — this is what makes a capillary
+    // look like a vessel and not like a cloud.
+    "float ridge(vec2 p){float v=0.,a=.5;for(int i=0;i<4;i++){v+=a*(1.-abs(vn(p)*2.-1.));p*=2.11;a*=.5;}return v;}",
+
+    // Worley. Returns (F1, F2-F1, cell id). Every nucleus orbits its own cell on a
+    // slow private path, so no two cells ever pulse together.
+    "vec3 cells(vec2 p,float t){vec2 n=floor(p),f=fract(p);",
+    " float f1=8.,f2=8.;vec2 id=vec2(0.);",
+    " for(int j=-1;j<=1;j++){for(int i=-1;i<=1;i++){",
+    "  vec2 g=vec2(float(i),float(j));vec2 o=h2(n+g);",
+    "  o=.5+.40*sin(t*.32+6.2831*o);",
+    "  float d=length(g+o-f);",
+    "  if(d<f1){f2=f1;f1=d;id=n+g;}else if(d<f2){f2=d;}",
+    " }}",
+    " return vec3(f1,f2-f1,h1(id));}",
+
+    "void main(){",
+    " vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y;",
+    " vec2 m=(uM-.5*uRes)/uRes.y;m.y*=-1.;",
+    " float t=uT;",
+    // ~7 breaths a minute. Slow enough that you feel it rather than watch it.
+    " float breath=.5+.5*sin(t*.72);",
+
+    // Chemotaxis. Everything below is stronger the closer it is to the cursor,
+    // and uLive fades the whole effect out when the pointer leaves.
+    " float rm=length(uv-m);",
+    // Tight. A wide gradient turns the whole page into a lamp; the point is a
+    // local response in the tissue the pointer is actually over, so the falloff
+    // is effectively gone by a third of the screen height.
+    " float food=exp(-rm*rm*7.5)*uLive;",
+
+    // Domain warp — the reason this reads as tissue and not as a tiling.
+    " vec2 w=uv+vec2(fbm(uv*1.5+t*.05),fbm(uv*1.5-t*.04+11.3))*.34;",
+    // Tissue swells toward the food source: cells near the cursor get physically
+    // bigger by shrinking the sampling scale there.
+    " float swell=1.-food*.30;",
+
+    // Two layers at different depths. The far one drifts slower and sits dimmer,
+    // which is what gives a flat quad the thickness of a real section.
+    " vec3 c1=cells(w*3.4*swell+vec2(t*.020,-t*.014),t);",
+    " vec3 c2=cells(w*6.9*swell+vec2(-t*.030,t*.023)+31.7,t*1.25);",
+
+    // Membrane = the F2-F1 ridge. This is the single most biological line there is.
+    " float mem1=1.-smoothstep(.0,.085,c1.y);",
+    " float mem2=1.-smoothstep(.0,.060,c2.y);",
+    // Cytoplasm: each cell tinted by its own id, so the field has variation
+    // rather than one flat wash.
+    " float cyto=(.35+.65*c1.z)*(1.-smoothstep(.15,.85,c1.x));",
+    // Nuclei, breathing slightly out of phase per cell.
+    " float nuc=smoothstep(.135+.02*sin(t*.6+c1.z*31.),.0,c1.x)*(.55+.45*c1.z);",
+
+    // Capillaries, warped again so they wander, and pulled toward the cursor so
+    // the network visibly grows in that direction.
+    " vec2 vp=w*2.3+vec2(t*.035,-t*.028)-normalize(uv-m+1e-4)*food*.55;",
+    " float vas=ridge(vp);",
+    " vas=pow(max(vas-.62,0.)*2.6,2.0);",
+
+    // Motes — organelles and spores adrift in the medium, the counterpart to the
+    // stars in the physics field. They rise, because everything in a fluid does.
+    " vec2 sp=w*17.0+vec2(0.,-t*.10);vec2 si=floor(sp);vec2 sf=fract(sp)-.5;",
+    " float sv=h1(si);",
+    " float mote=step(.972,sv)*smoothstep(.055,0.,length(sf-(h2(si)-.5)*.6))*(.55+.45*sin(t*2.1+sv*44.));",
+
+    // --- compose ---
+    " float lum=(.030+.055*breath)*(.55+uIn);",
+    " vec3 col=vec3(.012,.026,.034)*(1.-uLight);",
+    " col+=uC*cyto*lum*1.35;",
+    " col+=uC*mem1*(.055+uIn*.13)*(.75+.25*breath);",
+    " col+=mix(uC,vec3(1.),.35)*mem2*(.022+uIn*.055);",
+    " col+=mix(uC,vec3(1.),.55)*nuc*(.020+uIn*.048);",
+    " col+=mix(uC,vec3(1.,.55,.52),.30)*vas*(.055+uIn*.14);",
+    " col+=vec3(.85,.95,1.)*mote*.55;",
+    // The food source itself: a soft bloom, plus a brightening of whatever tissue
+    // is under it, so the cursor lights the section rather than floating over it.
+    " col+=uC*food*(.085+uIn*.15);",
+    " col*=1.+food*.34;",
+    // Depth: the section is thickest and best-lit in the middle of the field.
+    " col*=1.-.38*smoothstep(.55,1.35,length(uv));",
+
+    // Light mode: invert the physics, not the palette. On a slide the stain
+    // ABSORBS — so a green stain removes red and blue and leaves green, which
+    // means the structures subtract (1-uC), not uC. Subtracting uC would print
+    // the complement and give a magenta negative of the tissue.
+    " float dens=cyto*.30+mem1*1.05+mem2*.42+nuc*.62+vas*.95;",
+    " dens=min(dens*(.46+uIn*.60)*(1.+food*.45),1.25);",
+    " vec3 ink=vec3(1.)-(vec3(1.)-uC)*dens*.80-vec3(.05)*dens;",
+    // Illumination falls off toward the edge of the coverslip.
+    " ink=mix(ink,vec3(1.),.22*smoothstep(.55,1.4,length(uv)));",
+    " col=mix(col,ink,uLight);",
+
+    " gl_FragColor=vec4(col,1.);}"
+  ].join("\n");
+
+  var VS = "attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}";
+
+  function boot() {
+    readTheme();
+    // Follow the product's own theme toggle without it having to know we exist.
+    try {
+      new MutationObserver(readTheme).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    } catch (e) {}
+    // Pick the colour from the page the shell already declares.
+    setSection((document.body && document.body.getAttribute("data-page")) || "home");
+    for (var i = 0; i < 40; i++) ease();     // start already at the right colour, no fade-in from green
+
+    var gl = null;
+    try {
+      gl = cv.getContext("webgl", { alpha: true, antialias: false, depth: false, stencil: false, powerPreference: "low-power" })
+        || cv.getContext("experimental-webgl", { alpha: true, antialias: false, depth: false });
+    } catch (e) {}
+    if (!gl) return fallback();
+
+    function sh(ty, src) {
+      var o = gl.createShader(ty); gl.shaderSource(o, src); gl.compileShader(o);
+      if (!gl.getShaderParameter(o, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(o) || "compile");
+      return o;
+    }
+    var prog;
+    try {
+      prog = gl.createProgram();
+      gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS));
+      gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS));
+      gl.linkProgram(prog);
+      if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog) || "link");
+    } catch (e) { return fallback(); }
+
+    gl.useProgram(prog);
+    var buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    var lp = gl.getAttribLocation(prog, "p");
+    gl.enableVertexAttribArray(lp);
+    gl.vertexAttribPointer(lp, 2, gl.FLOAT, false, 0, 0);
+
+    var uRes = gl.getUniformLocation(prog, "uRes"), uT = gl.getUniformLocation(prog, "uT"),
+        uM = gl.getUniformLocation(prog, "uM"), uC = gl.getUniformLocation(prog, "uC"),
+        uIn = gl.getUniformLocation(prog, "uIn"), uLive = gl.getUniformLocation(prog, "uLive"),
+        uLight = gl.getUniformLocation(prog, "uLight");
+
+    // A full-screen procedural field is fill-rate bound, so resolution is the one
+    // dial that matters. 1.25x is enough for the membranes to stay crisp and cheap
+    // enough that an integrated GPU never notices.
+    var dpr = Math.min(devicePixelRatio || 1, 1.25);
+    // A page can boot while its tab is hidden or its pane is not compositing, and
+    // then innerWidth is 0 — sizing to that leaves a 1x1 canvas which never
+    // recovers, because becoming visible does not fire a resize event. Fall back
+    // through the layout box to a sane default so the field is always drawable.
+    function vw() { return innerWidth || document.documentElement.clientWidth || cv.clientWidth || 1280; }
+    function vh() { return innerHeight || document.documentElement.clientHeight || cv.clientHeight || 800; }
+    function size() {
+      var w = Math.max(1, Math.round(vw() * dpr)), h = Math.max(1, Math.round(vh() * dpr));
+      if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; gl.viewport(0, 0, w, h); }
+    }
+    addEventListener("resize", size); size();
+
+    var raf = null, t0 = 0;
+    // draw() is the whole render and nothing else; frame() is draw() plus the
+    // scheduling. Keeping them apart is what lets _tick() below render on demand
+    // without quietly queueing a second rAF alongside the running loop.
+    function draw(ms) {
+      ease(); size();
+      if (!t0) t0 = ms || 0;
+      gl.uniform2f(uRes, cv.width, cv.height);
+      gl.uniform1f(uT, ((ms || 0) - t0) * 0.001);
+      var s = cv.width / vw();
+      gl.uniform2f(uM, M.x * s, (vh() - M.y) * s);
+      gl.uniform3f(uC, cur.r, cur.g, cur.b);
+      gl.uniform1f(uIn, cur.in);
+      gl.uniform1f(uLive, M.live);
+      gl.uniform1f(uLight, cur.lt);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    }
+    function frame(ms) {
+      raf = null;
+      draw(ms);
+      if (!STILL) raf = requestAnimationFrame(frame);
+    }
+    repaint = draw;
+    if (STILL) draw(0); else raf = requestAnimationFrame(frame);
+
+    // A field nobody can see must not cost a frame.
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) { if (raf) { cancelAnimationFrame(raf); raf = null; } }
+      // Coming back from hidden also re-measures, because the viewport may have
+      // been 0 the whole time the tab was in the background.
+      else if (!raf && !STILL) { size(); raf = requestAnimationFrame(frame); }
+    });
+
+    // _tick renders exactly one frame on demand. rAF is throttled to nothing in a
+    // hidden tab, so this is the only way to prove the field actually draws when
+    // the page is not on screen — which is precisely when it needs proving.
+    window.BIOQ_ATMO = { theme: theme, setSection: setSection, mouse: M, mode: "webgl", _tick: draw };
+  }
+
+  /* --- fallback ---------------------------------------------------------- */
+  // No WebGL. Draw the same idea in 2D: drifting cells with membranes and nuclei,
+  // and a nutrient glow at the cursor. Fewer cells, no capillaries, same product.
+  function fallback() {
+    var ctx = cv.getContext("2d");
+    if (!ctx) { window.BIOQ_ATMO = { theme: theme, setSection: setSection, mouse: M, mode: "none" }; return; }
+    var dpr = Math.min(devicePixelRatio || 1, 1.5), W = 0, H = 0, pop = [];
+    function size() {
+      W = innerWidth; H = innerHeight;
+      cv.width = Math.max(1, Math.round(W * dpr)); cv.height = Math.max(1, Math.round(H * dpr));
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var n = Math.max(10, Math.min(30, Math.round(W * H / 46000)));
+      pop = [];
+      for (var i = 0; i < n; i++) pop.push({
+        x: Math.random() * W, y: Math.random() * H, r: 42 + Math.random() * 78,
+        vx: (Math.random() - 0.5) * 0.13, vy: (Math.random() - 0.5) * 0.13, ph: Math.random() * 6.283
+      });
+    }
+    size(); addEventListener("resize", size);
+
+    var raf = null, t = 0;
+    function rgba(a) { return "rgba(" + (cur.r * 255 | 0) + "," + (cur.g * 255 | 0) + "," + (cur.b * 255 | 0) + "," + a + ")"; }
+    function frame() {
+      raf = null; ease(); t += 0.016;
+      var light = cur.lt > 0.5;
+      ctx.clearRect(0, 0, W, H);
+      var glow = ctx.createRadialGradient(M.x, M.y, 0, M.x, M.y, 340);
+      glow.addColorStop(0, rgba((light ? 0.10 : 0.13) * M.live)); glow.addColorStop(1, rgba(0));
+      ctx.fillStyle = glow; ctx.fillRect(0, 0, W, H);
+      for (var i = 0; i < pop.length; i++) {
+        var c = pop[i];
+        c.x += c.vx; c.y += c.vy;
+        if (c.x < -140) c.x = W + 140; if (c.x > W + 140) c.x = -140;
+        if (c.y < -140) c.y = H + 140; if (c.y > H + 140) c.y = -140;
+        // Chemotaxis, cheaply: a cell near the cursor swells.
+        var d = Math.hypot(c.x - M.x, c.y - M.y);
+        var food = Math.exp(-(d * d) / 260000) * M.live;
+        var r = c.r * (1 + Math.sin(t * 0.62 + c.ph) * 0.05 + food * 0.20);
+        var g = ctx.createRadialGradient(c.x, c.y, r * 0.2, c.x, c.y, r);
+        g.addColorStop(0, rgba((light ? 0.030 : 0.052) * (0.6 + cur.in) * (1 + food))); g.addColorStop(1, rgba(0));
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(c.x, c.y, r, 0, 6.283); ctx.fill();
+        ctx.strokeStyle = rgba((light ? 0.055 : 0.085) * (1 + food * 1.4)); ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.arc(c.x, c.y, r, 0, 6.283); ctx.stroke();
+        ctx.fillStyle = rgba((light ? 0.045 : 0.062) * (1 + food));
+        ctx.beginPath(); ctx.arc(c.x + r * 0.11, c.y - r * 0.07, r * 0.24, 0, 6.283); ctx.fill();
+      }
+      if (!STILL) raf = requestAnimationFrame(frame);
+    }
+    repaint = frame;
+    if (STILL) { for (var k = 0; k < 40; k++) ease(); frame(); } else raf = requestAnimationFrame(frame);
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) { if (raf) { cancelAnimationFrame(raf); raf = null; } }
+      else if (!raf && !STILL) raf = requestAnimationFrame(frame);
+    });
+
+    window.BIOQ_ATMO = { theme: theme, setSection: setSection, mouse: M, mode: "2d" };
+  }
+
+  /* --- go ---------------------------------------------------------------- */
+  // Last line on purpose: everything above is now assigned, so boot() can read it.
+  attach();
+})();
+
+</script>
+</body>
+</html>

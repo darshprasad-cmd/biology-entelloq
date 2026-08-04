@@ -1,0 +1,1308 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<!-- __TITLE__ -->
+<title>Explore — Biology Entelloq</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* ============================================================================
+   BIOLOGY ENTELLOQ — shared product shell. IDENTICAL across every pillar page
+   (Home · Learn · Solve · Explore · Me) so the product reads as one thing.
+   DO NOT edit tokens, nav, or component classes when building a pillar — only
+   fill <main id="page"> and add scoped rules in <style id="page-css">.
+   ========================================================================== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+img,svg,canvas{display:block;max-width:100%}
+button,input,select,textarea{font:inherit;color:inherit;background:none;border:none}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--em);outline-offset:3px;border-radius:6px}
+::selection{background:color-mix(in srgb,var(--em) 45%,transparent);color:var(--ink)}
+
+:root{
+  --em:#34d399; --em-2:#10b981; --cy:#38e0d8; --cy-2:#22d3ee;
+  --indigo:#7c8cf8; --violet:#8b5cf6; --amber:#f6c667; --rose:#fb7185;
+  --grad-life:linear-gradient(120deg,var(--em),var(--cy));
+  --grad-mind:linear-gradient(120deg,var(--cy),var(--indigo));
+  --bg:#04070a; --bg-2:#070b10; --panel:#0b1117; --raise:#0e151c;
+  --ink:#eaf2f5; --dim:#9fb2bc; --faint:#7d8b93;
+  --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.05);
+  --glass:rgba(10,15,20,.62); --glass-strong:rgba(8,12,17,.82); --hair:rgba(255,255,255,.10);
+  --shadow-2:0 12px 40px -12px rgba(0,0,0,.7);
+  --shadow-glow:0 0 0 1px rgba(52,211,153,.18),0 20px 60px -18px rgba(16,185,129,.35);
+  --spot:rgba(52,211,153,.16);
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --serif:"Instrument Serif",Georgia,serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --ease-out:cubic-bezier(.23,1,.32,1); --ease-in-out:cubic-bezier(.77,0,.175,1);
+  --r-sm:10px; --r:16px; --r-lg:24px; --r-xl:34px;
+  --edge:clamp(20px,5vw,72px); --maxw:1200px;
+}
+:root[data-theme="light"]{
+  --bg:#f6f8f9; --bg-2:#eef2f4; --panel:#ffffff; --raise:#ffffff;
+  --ink:#0c1418; --dim:#4a5a63; --faint:#5c6b74;
+  --line:rgba(6,20,26,.10); --line-2:rgba(6,20,26,.06);
+  --glass:rgba(255,255,255,.72); --glass-strong:rgba(255,255,255,.86); --hair:rgba(6,20,26,.12);
+  --em:#0a7d57; --em-2:#0a7d57; --cy:#0891b2; --indigo:#5b63e6;
+  --shadow-2:0 14px 44px -16px rgba(20,40,50,.28);
+  --shadow-glow:0 0 0 1px rgba(14,163,113,.18),0 22px 60px -20px rgba(14,163,113,.28);
+  --spot:rgba(14,163,113,.12);
+}
+html,body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;
+  letter-spacing:-.011em;-webkit-font-smoothing:antialiased;min-height:100%;overflow-x:hidden}
+
+/* type scale */
+.eyebrow{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--em);display:inline-flex;align-items:center;gap:9px}
+.eyebrow::before{content:"";width:16px;height:1px;background:currentColor;opacity:.6}
+.display{font-weight:800;letter-spacing:-.03em;line-height:1.02;font-size:clamp(2.6rem,7vw,5rem)}
+.h1{font-weight:800;letter-spacing:-.028em;line-height:1.05;font-size:clamp(2rem,5vw,3.4rem)}
+.h2{font-weight:700;letter-spacing:-.024em;line-height:1.1;font-size:clamp(1.6rem,3.6vw,2.5rem)}
+.h3{font-weight:600;letter-spacing:-.02em;line-height:1.2;font-size:clamp(1.1rem,2vw,1.35rem)}
+.lead{font-size:clamp(1.02rem,1.6vw,1.3rem);color:var(--dim);line-height:1.6}
+.serif{font-family:var(--serif);font-weight:400}
+.grad{background:var(--grad-life);-webkit-background-clip:text;background-clip:text;color:transparent}
+.grad-mind{background:var(--grad-mind);-webkit-background-clip:text;background-clip:text;color:transparent}
+.muted{color:var(--dim)} .faint{color:var(--faint)}
+
+.wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--edge);width:100%}
+.band{padding-block:clamp(56px,9vw,110px);position:relative}
+.grid{display:grid;gap:22px}
+.g2{grid-template-columns:repeat(2,1fr)} .g3{grid-template-columns:repeat(3,1fr)} .g4{grid-template-columns:repeat(4,1fr)}
+.sec-head{max-width:720px;margin-bottom:clamp(30px,5vw,54px)}
+.sec-head .eyebrow{margin-bottom:16px} .sec-head h2{margin-bottom:14px}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:9px;padding:11px 20px;border-radius:12px;font-weight:600;
+  font-size:14.5px;cursor:pointer;position:relative;overflow:hidden;
+  transition:transform .14s var(--ease-out),box-shadow .3s var(--ease-out),background .3s,border-color .3s}
+.btn:active{transform:scale(.97)}
+.btn.primary{color:#03110c;background:var(--grad-life);box-shadow:var(--shadow-glow)}
+.btn.primary:hover{box-shadow:0 0 0 1px rgba(52,211,153,.3),0 26px 70px -18px rgba(16,185,129,.55)}
+.btn.ghost{color:var(--ink);border:1px solid var(--hair);background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.btn.ghost:hover{border-color:color-mix(in srgb,var(--em) 40%,var(--hair))}
+.btn .arr{transition:transform .2s var(--ease-out)} .btn:hover .arr{transform:translateX(3px)}
+
+/* cards */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:clamp(20px,3vw,30px);position:relative;overflow:hidden;
+  transition:transform .4s var(--ease-out),border-color .4s,box-shadow .4s var(--ease-out)}
+.card .glow{position:absolute;inset:-1px;border-radius:inherit;opacity:0;pointer-events:none;
+  background:radial-gradient(50% 60% at var(--mx,50%) 0%,var(--spot),transparent 70%);transition:opacity .4s}
+@media (hover:hover) and (pointer:fine){
+  .card.lift:hover{transform:translateY(-6px);border-color:var(--hair);box-shadow:var(--shadow-2)}
+  .card.lift:hover .glow{opacity:1}}
+.card .ico{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;margin-bottom:18px;
+  background:color-mix(in srgb,var(--em) 12%,transparent);color:var(--em);
+  border:1px solid color-mix(in srgb,var(--em) 22%,transparent)}
+.card .ico svg{width:22px;height:22px}
+.card h3{margin-bottom:8px} .card p{color:var(--dim);font-size:15px;line-height:1.6}
+.chip{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;padding:5px 10px;border-radius:999px;border:1px solid var(--line);color:var(--dim)}
+.chip.live{color:var(--em);border-color:color-mix(in srgb,var(--em) 30%,transparent);background:color-mix(in srgb,var(--em) 10%,transparent)}
+.chip.soon{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 26%,transparent)}
+.chip .d{width:6px;height:6px;border-radius:50%;background:currentColor}
+
+/* reveal-on-scroll (opacity+transform only) */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .5s var(--ease-out),transform .5s var(--ease-out)}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.06s}.reveal.d2{transition-delay:.12s}.reveal.d3{transition-delay:.18s}.reveal.d4{transition-delay:.24s}
+
+/* ambient veil */
+.bg-veil{position:fixed;inset:0;z-index:0;pointer-events:none;background:
+  radial-gradient(60% 45% at 78% -5%,color-mix(in srgb,var(--cy) 10%,transparent),transparent 60%),
+  radial-gradient(55% 45% at 8% 8%,color-mix(in srgb,var(--em) 10%,transparent),transparent 55%)}
+
+/* ===== persistent product nav ===== */
+header.nav{position:fixed;top:0;left:0;right:0;z-index:60;transition:background .3s,border-color .3s,backdrop-filter .3s}
+header.nav.scrolled{background:var(--glass);backdrop-filter:blur(18px) saturate(1.4);
+  -webkit-backdrop-filter:blur(18px) saturate(1.4);border-bottom:1px solid var(--line)}
+.nav-in{max-width:var(--maxw);margin-inline:auto;padding:12px var(--edge);display:flex;align-items:center;gap:18px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px}
+.brand .logo{width:28px;height:28px} .brand b{font-weight:800}
+.nav-links{display:flex;align-items:center;gap:2px;margin-left:6px}
+.nav-links a{padding:8px 14px;border-radius:10px;font-size:14px;font-weight:500;color:var(--dim);
+  transition:color .2s,background .2s;position:relative}
+.nav-links a:hover{color:var(--ink);background:color-mix(in srgb,var(--ink) 6%,transparent)}
+.nav-links a.active{color:var(--ink)}
+.nav-links a.active::after{content:"";position:absolute;left:14px;right:14px;bottom:3px;height:2px;border-radius:2px;background:var(--grad-life)}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.iconbtn{width:38px;height:38px;border-radius:11px;border:1px solid var(--line);display:grid;place-items:center;
+  color:var(--dim);cursor:pointer;background:var(--panel);transition:color .2s,border-color .2s,transform .12s var(--ease-out)}
+.iconbtn:hover{color:var(--ink);border-color:var(--hair)} .iconbtn:active{transform:scale(.94)} .iconbtn svg{width:17px;height:17px}
+.navtoggle{display:none}
+main{position:relative;z-index:1;padding-top:64px;min-height:100vh}
+.mobile-menu{display:none;position:fixed;inset:64px 0 0;z-index:55;background:var(--glass-strong);
+  backdrop-filter:blur(20px);padding:24px var(--edge)}
+.mobile-menu.open{display:block}
+.mobile-menu a{display:block;padding:16px 0;font-size:20px;font-weight:600;border-bottom:1px solid var(--line)}
+
+/* footer */
+footer{position:relative;z-index:1;border-top:1px solid var(--line);background:var(--bg-2);margin-top:40px}
+.foot-in{max-width:var(--maxw);margin-inline:auto;padding:40px var(--edge);display:flex;flex-wrap:wrap;gap:18px;
+  align-items:center;justify-content:space-between;color:var(--faint);font-size:13px}
+.foot-in a{color:var(--dim)} .foot-in a:hover{color:var(--ink)}
+
+@media (max-width:900px){.g4{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr}}
+@media (max-width:1024px){.nav-links{display:none}.navtoggle{display:grid}}
+@media (max-width:680px){.g4,.g3,.g2{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.12s!important}
+  .reveal{opacity:1!important;transform:none!important}}
+</style>
+<style id="page-css">
+/* ============================ EXPLORE — scoped ============================ */
+.ex-hero{padding-top:clamp(48px,8vw,88px);padding-bottom:clamp(30px,5vw,52px);position:relative}
+.ex-hero .eyebrow{margin-bottom:20px}
+.ex-hero h1{max-width:16ch;margin-bottom:20px}
+.ex-hero .lead{max-width:60ch}
+.ex-hero .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.ex-stats{display:flex;flex-wrap:wrap;gap:14px;margin-top:40px}
+.ex-stat{flex:1 1 150px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
+  padding:16px 18px}
+.ex-stat b{display:block;font-size:clamp(1.5rem,3vw,2rem);font-weight:800;letter-spacing:-.02em;
+  background:var(--grad-life);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ex-stat span{font-size:12.5px;color:var(--dim)}
+
+/* generic tool frame */
+.ex-frame{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:clamp(18px,2.6vw,28px);position:relative;overflow:hidden}
+.ex-tag{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--faint)}
+.ex-hint{font-size:12.5px;color:var(--faint);font-family:var(--mono);letter-spacing:.02em}
+
+/* ---- Tree of Life ------------------------------------------------------- */
+.tree-grid{display:grid;grid-template-columns:1.35fr 1fr;gap:20px;align-items:stretch}
+.tree-stage{position:relative;min-height:clamp(340px,44vw,440px);border-radius:var(--r);
+  background:radial-gradient(120% 100% at 12% 50%,color-mix(in srgb,var(--em) 7%,transparent),transparent 60%);
+  border:1px solid var(--line-2);overflow:hidden}
+.tree-lines{position:absolute;inset:0;width:100%;height:100%}
+.tree-lines line{stroke:var(--line);stroke-width:.5;transition:stroke .3s,opacity .3s}
+.tree-lines line.on{stroke:var(--em);opacity:.9}
+.node{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;cursor:pointer;
+  padding:8px 13px;border-radius:999px;font-size:13px;font-weight:600;letter-spacing:-.01em;
+  background:var(--raise);border:1px solid var(--line);color:var(--ink);
+  transition:border-color .25s,box-shadow .3s var(--ease-out),transform .18s var(--ease-out),background .25s;z-index:2}
+.node small{display:block;font-family:var(--mono);font-weight:500;font-size:9.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--faint);margin-top:1px}
+.node:hover{border-color:var(--hair);transform:translate(-50%,-50%) scale(1.04)}
+.node.root{background:var(--grad-life);color:#03110c;border-color:transparent}
+.node.root small{color:rgba(3,17,12,.62)}
+.node.active{border-color:color-mix(in srgb,var(--em) 55%,transparent);
+  box-shadow:0 0 0 1px color-mix(in srgb,var(--em) 40%,transparent),0 14px 34px -14px color-mix(in srgb,var(--em) 60%,transparent)}
+.node.domain.active,.node.kingdom.active{background:color-mix(in srgb,var(--em) 14%,var(--raise))}
+.tree-info{display:flex;flex-direction:column}
+.tree-info .ti-rank{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--em);margin-bottom:10px}
+.tree-info h3{margin-bottom:10px}
+.tree-info p{color:var(--dim);font-size:14.5px;line-height:1.62;margin-bottom:16px}
+.ti-facts{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:18px}
+.ti-facts li{position:relative;padding-left:22px;font-size:13.5px;color:var(--dim);line-height:1.5}
+.ti-facts li::before{content:"";position:absolute;left:2px;top:7px;width:8px;height:8px;border-radius:50%;
+  background:var(--grad-life)}
+.ti-ex{margin-top:auto}
+.ti-ex .lbl{font-size:11px;font-family:var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--faint);display:block;margin-bottom:8px}
+.tag-row{display:flex;flex-wrap:wrap;gap:7px}
+.tag{font-size:12px;padding:5px 11px;border-radius:999px;background:color-mix(in srgb,var(--em) 9%,transparent);
+  border:1px solid color-mix(in srgb,var(--em) 20%,transparent);color:var(--ink)}
+
+/* ---- Disease Library ---------------------------------------------------- */
+.dz-controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:20px}
+.dz-search{flex:1 1 260px;display:flex;align-items:center;gap:10px;background:var(--raise);
+  border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.dz-search:focus-within{border-color:color-mix(in srgb,var(--em) 45%,var(--hair))}
+.dz-search svg{width:17px;height:17px;color:var(--faint);flex:none}
+.dz-search input{flex:1;font-size:14.5px;color:var(--ink)}
+.dz-search input::placeholder{color:var(--faint)}
+.dz-filters{display:flex;flex-wrap:wrap;gap:8px}
+.fbtn{cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  padding:7px 12px;border-radius:999px;border:1px solid var(--line);color:var(--dim);background:transparent;
+  transition:color .2s,border-color .2s,background .2s}
+.fbtn:hover{color:var(--ink);border-color:var(--hair)}
+.fbtn.on{color:var(--em);border-color:color-mix(in srgb,var(--em) 45%,transparent);background:color-mix(in srgb,var(--em) 10%,transparent)}
+.dz-count{font-size:12.5px;color:var(--faint);font-family:var(--mono);margin-bottom:14px}
+.dz-list{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.dz-item{background:var(--raise);border:1px solid var(--line);border-radius:var(--r);padding:18px 18px 16px;
+  transition:border-color .3s,transform .3s var(--ease-out),box-shadow .3s}
+@media (hover:hover){.dz-item:hover{border-color:var(--hair);transform:translateY(-3px);box-shadow:var(--shadow-2)}}
+.dz-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}
+.dz-head h4{font-size:16px;font-weight:700;letter-spacing:-.015em}
+.dz-sys{flex:none;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  padding:4px 9px;border-radius:999px;border:1px solid var(--line);color:var(--dim);white-space:nowrap}
+.dz-cat{display:inline-block;font-size:11px;font-weight:600;color:var(--em);margin-bottom:10px}
+.dz-cause{font-size:13.5px;color:var(--dim);line-height:1.55;margin-bottom:12px}
+.dz-cause b{color:var(--ink);font-weight:600}
+.dz-symp .lbl{font-size:10px;font-family:var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--faint);display:block;margin-bottom:7px}
+.symp{display:flex;flex-wrap:wrap;gap:6px}
+.symp span{font-size:11.5px;padding:4px 9px;border-radius:8px;background:color-mix(in srgb,var(--rose) 10%,transparent);
+  border:1px solid color-mix(in srgb,var(--rose) 20%,transparent);color:var(--ink)}
+.dz-empty{grid-column:1/-1;text-align:center;padding:40px 20px;color:var(--faint);font-size:14px}
+
+/* ---- Evolution Timeline ------------------------------------------------- */
+.tl-scroll{overflow-x:auto;padding-bottom:8px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+.tl-track{position:relative;display:flex;gap:0;min-width:760px;padding:34px 10px 12px}
+.tl-track::before{content:"";position:absolute;left:10px;right:10px;top:44px;height:2px;border-radius:2px;
+  background:linear-gradient(90deg,color-mix(in srgb,var(--em) 55%,transparent),color-mix(in srgb,var(--cy) 55%,transparent))}
+.tl-ev{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;cursor:pointer;
+  padding-top:22px;min-width:60px}
+.tl-ev .dot{width:14px;height:14px;border-radius:50%;background:var(--raise);border:2px solid var(--em);
+  position:absolute;top:8px;transition:transform .2s var(--ease-out),background .2s,box-shadow .3s;z-index:2}
+.tl-ev:hover .dot{transform:scale(1.25)}
+.tl-ev.on .dot{background:var(--em);box-shadow:0 0 0 5px color-mix(in srgb,var(--em) 22%,transparent)}
+.tl-ev .yr{font-family:var(--mono);font-size:11px;color:var(--dim);margin-bottom:4px;transition:color .2s}
+.tl-ev.on .yr{color:var(--em)}
+.tl-ev .nm{font-size:11.5px;font-weight:600;text-align:center;color:var(--faint);line-height:1.25;max-width:90px;transition:color .2s}
+.tl-ev.on .nm,.tl-ev:hover .nm{color:var(--ink)}
+.tl-detail{margin-top:20px;display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start;
+  background:var(--raise);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.tl-when{font-family:var(--mono);font-weight:700;font-size:clamp(1.1rem,2.4vw,1.5rem);letter-spacing:-.01em;
+  background:var(--grad-mind);-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
+.tl-when small{display:block;font-size:10.5px;letter-spacing:.1em;color:var(--faint);
+  -webkit-text-fill-color:var(--faint);margin-top:3px}
+.tl-body h4{font-size:18px;font-weight:700;margin-bottom:8px;letter-spacing:-.015em}
+.tl-body p{color:var(--dim);font-size:14.5px;line-height:1.62;margin-bottom:12px}
+.tl-sig{display:inline-flex;align-items:flex-start;gap:9px;font-size:13px;color:var(--ink);
+  background:color-mix(in srgb,var(--em) 9%,transparent);border:1px solid color-mix(in srgb,var(--em) 20%,transparent);
+  border-radius:10px;padding:9px 13px}
+.tl-sig svg{width:15px;height:15px;color:var(--em);flex:none;margin-top:1px}
+
+/* ---- Human Body Atlas --------------------------------------------------- */
+.atlas-grid{display:grid;grid-template-columns:260px 1fr;gap:20px;align-items:start}
+.sys-list{display:flex;flex-direction:column;gap:8px}
+.sys-btn{display:flex;align-items:center;gap:12px;text-align:left;cursor:pointer;width:100%;
+  padding:11px 14px;border-radius:12px;border:1px solid var(--line);background:var(--raise);
+  color:var(--ink);transition:border-color .25s,background .25s,transform .15s var(--ease-out)}
+.sys-btn:hover{border-color:var(--hair);transform:translateX(3px)}
+.sys-btn.on{border-color:color-mix(in srgb,var(--em) 45%,transparent);background:color-mix(in srgb,var(--em) 10%,transparent)}
+.sys-btn .si{width:34px;height:34px;flex:none;border-radius:10px;display:grid;place-items:center;
+  background:color-mix(in srgb,var(--em) 12%,transparent);color:var(--em);border:1px solid color-mix(in srgb,var(--em) 20%,transparent)}
+.sys-btn .si svg{width:18px;height:18px}
+.sys-btn .sn{font-size:14px;font-weight:600}
+.sys-btn .sn small{display:block;font-weight:400;font-size:11.5px;color:var(--faint);margin-top:1px}
+.atlas-detail{background:var(--raise);border:1px solid var(--line);border-radius:var(--r);padding:24px;min-height:100%}
+.atlas-detail .ad-rank{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--em);margin-bottom:10px}
+.atlas-detail h3{margin-bottom:12px}
+.atlas-detail p{color:var(--dim);font-size:14.5px;line-height:1.62;margin-bottom:18px}
+.ad-organs .lbl{font-size:11px;font-family:var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--faint);display:block;margin-bottom:9px}
+.ad-facts{list-style:none;display:flex;flex-direction:column;gap:9px;margin-top:18px}
+.ad-facts li{position:relative;padding-left:22px;font-size:13.5px;color:var(--dim);line-height:1.5}
+.ad-facts li::before{content:"";position:absolute;left:2px;top:6px;width:8px;height:8px;border-radius:2px;background:var(--grad-life)}
+
+/* ---- Knowledge graph ---------------------------------------------------- */
+.kg-stage{position:relative;height:clamp(320px,44vw,420px);border-radius:var(--r);overflow:hidden;
+  border:1px solid var(--line-2);background:radial-gradient(120% 90% at 50% 0%,color-mix(in srgb,var(--em) 6%,transparent),transparent 60%)}
+.kg-stage canvas{width:100%;height:100%;cursor:grab}
+.kg-tip{position:absolute;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .2s,transform .2s;
+  max-width:230px;background:var(--glass-strong);backdrop-filter:blur(12px);border:1px solid var(--hair);
+  border-radius:12px;padding:11px 13px;z-index:3;box-shadow:var(--shadow-2)}
+.kg-tip.show{opacity:1;transform:none}
+.kg-tip b{display:block;font-size:13.5px;margin-bottom:3px}
+.kg-tip span{font-size:12px;color:var(--dim);line-height:1.5}
+.kg-legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:16px}
+.kg-legend span{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--dim)}
+.kg-legend i{width:9px;height:9px;border-radius:50%;background:var(--em)}
+
+/* teaser card extras */
+.card .tz-seed{list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.card .tz-seed li{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--dim);
+  padding:8px 0;border-top:1px solid var(--line-2)}
+.card .tz-seed li b{color:var(--ink);font-weight:600}
+.card .tz-seed li span{font-family:var(--mono);font-size:11px;color:var(--faint);text-align:right;flex:none}
+.card .card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+
+@media (max-width:900px){
+  .tree-grid{grid-template-columns:1fr}
+  .atlas-grid{grid-template-columns:1fr}
+  .sys-list{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+}
+@media (max-width:680px){
+  .dz-list{grid-template-columns:1fr}
+  .tl-detail{grid-template-columns:1fr}
+  .sys-list{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body data-page="explore">
+<div class="bg-veil" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="brand" href="./index.html" aria-label="Biology Entelloq home">
+      <svg class="logo" viewBox="0 0 100 100" fill="none" aria-hidden="true"><defs><linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#34d399"/><stop offset="1" stop-color="#38e0d8"/></linearGradient></defs>
+        <path d="M32 16c20 9 16 28 0 34 20 6 24 24 0 34" stroke="url(#bg1)" stroke-width="5" stroke-linecap="round"/>
+        <path d="M68 16C48 25 52 44 68 50 48 56 44 75 68 84" stroke="url(#bg1)" stroke-width="5" stroke-linecap="round"/></svg>
+      <span>Biology <b>Entelloq</b></span></a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="./index.html">Home</a>
+      <a href="./learn.html" data-nav="learn">Learn</a>
+      <a href="./solve.html" data-nav="solve">Solve</a>
+      <a href="./explore.html" data-nav="explore">Explore</a>
+      <a href="./me.html" data-nav="me">Me</a>
+    </nav>
+    <div class="nav-right">
+      <button class="iconbtn" id="themeBtn" aria-label="Toggle theme" aria-pressed="false"><svg id="themeIcon" viewBox="0 0 24 24" fill="none"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></button>
+      <a class="btn primary" href="./lab.html">Open the Lab <span class="arr">→</span></a>
+      <button class="iconbtn navtoggle" id="navToggle" aria-label="Menu" aria-controls="mobileMenu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="./index.html">Home</a>
+  <a href="./learn.html">Learn</a>
+  <a href="./solve.html">Solve</a>
+  <a href="./explore.html">Explore</a>
+  <a href="./me.html">Me</a>
+  <a href="./lab.html">Open the Lab →</a>
+</div>
+
+<main id="page">
+  <!-- ===================== HERO ===================== -->
+  <section class="band wrap ex-hero">
+    <div class="reveal"><div class="eyebrow">The Explore atlas</div></div>
+    <h1 class="h1 reveal d1">All of life, <span class="grad">on one map you can touch.</span></h1>
+    <p class="lead reveal d2">A living reference for biology — the tree of life, a disease library, four billion years of evolution, the human body, and a knowledge graph that ties every strand together. Everything here is interactive and populated with real science.</p>
+    <div class="cta reveal d3">
+      <a class="btn primary" href="./universe.html">Zoom the Universe <span class="arr">→</span></a>
+      <a class="btn ghost" href="./lab.html">Open the Dissection Lab</a>
+    </div>
+    <div class="ex-stats reveal d3">
+      <div class="ex-stat"><b>3</b><span>Domains of life</span></div>
+      <div class="ex-stat"><b>~3.8 Gyr</b><span>Of evolution mapped</span></div>
+      <div class="ex-stat"><b>14</b><span>Diseases catalogued</span></div>
+      <div class="ex-stat"><b>10</b><span>Body systems</span></div>
+    </div>
+  </section>
+
+  <!-- ===================== TREE OF LIFE ===================== -->
+  <section class="band wrap" id="tree">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Tree of Life</div>
+      <h2 class="h2">Three domains. Four kingdoms. One ancestor.</h2>
+      <p class="lead">Tap any branch to trace how life diversified from a single cell into everything alive today.</p>
+    </div>
+    <div class="ex-frame reveal">
+      <div class="tree-grid">
+        <div class="tree-stage" id="treeStage">
+          <svg class="tree-lines" id="treeLines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg>
+          <!-- nodes injected -->
+        </div>
+        <div class="tree-info" id="treeInfo" aria-live="polite"><!-- info injected --></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== DISEASE LIBRARY ===================== -->
+  <section class="band wrap" id="diseases">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Disease Library</div>
+      <h2 class="h2">What goes wrong, and why.</h2>
+      <p class="lead">Search by name or symptom, or filter by cause. Each entry names the pathogen or mechanism, the body system it strikes, and its hallmark symptoms.</p>
+    </div>
+    <div class="ex-frame reveal">
+      <div class="dz-controls">
+        <label class="dz-search">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20l-3.2-3.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <input id="dzSearch" type="search" placeholder="Search diseases or symptoms…" aria-label="Search diseases">
+        </label>
+        <div class="dz-filters" id="dzFilters" role="group" aria-label="Filter by category"></div>
+      </div>
+      <div class="dz-count" id="dzCount"></div>
+      <div class="dz-list" id="dzList"></div>
+    </div>
+  </section>
+
+  <!-- ===================== EVOLUTION TIMELINE ===================== -->
+  <section class="band wrap" id="timeline">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Evolution Timeline</div>
+      <h2 class="h2">3.8 billion years, in twelve moments.</h2>
+      <p class="lead">From the first self-copying cell to the human mind. Select a moment on the track to read what changed — and why it mattered.</p>
+    </div>
+    <div class="ex-frame reveal">
+      <div class="tl-scroll"><div class="tl-track" id="tlTrack" role="tablist" aria-label="Evolution timeline"></div></div>
+      <div class="tl-detail" id="tlDetail" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- ===================== HUMAN BODY ATLAS ===================== -->
+  <section class="band wrap" id="atlas">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Human Body Atlas</div>
+      <h2 class="h2">Ten systems, one body.</h2>
+      <p class="lead">Choose a system to see the organs that build it and the job it does to keep you alive.</p>
+    </div>
+    <div class="ex-frame reveal">
+      <div class="atlas-grid">
+        <div class="sys-list" id="sysList" role="tablist" aria-label="Body systems"></div>
+        <div class="atlas-detail" id="atlasDetail" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== KNOWLEDGE GRAPH ===================== -->
+  <section class="band wrap" id="graph">
+    <div class="sec-head reveal">
+      <div class="eyebrow">The knowledge graph</div>
+      <h2 class="h2">Biology is one connected story.</h2>
+      <p class="lead">DNA to genes to proteins to disease to medicine — every concept in Biology Entelloq lives on a graph. Hover a node to see how it links to the rest.</p>
+    </div>
+    <div class="ex-frame reveal">
+      <div class="kg-stage">
+        <canvas id="kgCanvas" role="img" aria-label="Knowledge graph connecting DNA, RNA, genes, proteins, mutations, disease and medicine"></canvas>
+        <div class="kg-tip" id="kgTip"></div>
+      </div>
+      <div class="kg-legend">
+        <span><i></i> Hover any node for its definition</span>
+        <span><i style="background:var(--cy)"></i> Glowing edges trace an active pathway</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== MORE TO EXPLORE ===================== -->
+  <section class="band wrap" id="more">
+    <div class="sec-head reveal">
+      <div class="eyebrow">More to explore</div>
+      <h2 class="h2">The rest of the atlas.</h2>
+      <p class="lead">Reference spaces coming online — each one seeded with real biology today, deepening as Explore grows.</p>
+    </div>
+    <div class="grid g3" id="teasers"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="foot-in">
+    <span>Biology Entelloq — the biological sibling of Physics Entelloq.</span>
+    <span><a href="./index.html">Home</a> · <a href="./lab.html">Lab</a> · <a href="./universe.html">Universe</a></span>
+  </div>
+</footer>
+
+<script>
+/* shared shell behaviour — nav scroll state, theme, mobile menu, scroll-reveal.
+   Pillar-specific JS goes in <script id="page-js"> AFTER this block. */
+(function(){
+  const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+  const root=document.documentElement;
+  // theme
+  function setTheme(t){root.setAttribute("data-theme",t);try{localStorage.setItem("bioq_theme",t);}catch(e){}
+    $("#themeBtn").setAttribute("aria-pressed",t==="light"?"true":"false");
+    $("#themeIcon").innerHTML=t==="light"
+      ?'<circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'
+      :'<path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>';}
+  try{setTheme(localStorage.getItem("bioq_theme")||"dark");}catch(e){setTheme("dark");}
+  $("#themeBtn").addEventListener("click",()=>setTheme(root.getAttribute("data-theme")==="light"?"dark":"light"));
+  // nav scroll state
+  const nav=$("#nav"); addEventListener("scroll",()=>nav.classList.toggle("scrolled",scrollY>16),{passive:true});
+  nav.classList.toggle("scrolled",scrollY>16);
+  // mobile menu
+  const mm=$("#mobileMenu"),nt=$("#navToggle");
+  nt.addEventListener("click",()=>{const o=mm.classList.toggle("open");nt.setAttribute("aria-expanded",o?"true":"false");});
+  // active nav link (set data-page on <body> in each pillar, e.g. <body data-page="learn">)
+  const page=document.body.dataset.page; if(page){const a=document.querySelector('.nav-links a[data-nav="'+page+'"]'); if(a)a.classList.add("active");}
+  // scroll reveal
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}}),{threshold:.12,rootMargin:"0px 0px -6% 0px"});
+  function observe(){$$(".reveal:not(.in)").forEach(el=>io.observe(el));}
+  observe(); window.__observeReveals=observe;
+  // card glow
+  addEventListener("pointermove",e=>{const c=e.target.closest(".card");if(!c)return;const r=c.getBoundingClientRect();
+    c.style.setProperty("--mx",((e.clientX-r.left)/r.width*100)+"%");},{passive:true});
+})();
+</script>
+<script id="page-js">
+/* ======================= EXPLORE — pillar behaviour ======================= */
+(function(){
+  "use strict";
+  const $=(s,r=document)=>r.querySelector(s);
+  const REDUCED=matchMedia("(prefers-reduced-motion:reduce)").matches;
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+  /* ---------------------------- TREE OF LIFE ---------------------------- */
+  const TREE={
+    nodes:[
+      {id:"life",label:"Life",sub:"LUCA",cls:"root",x:7,y:46,rank:"Root · Last Universal Common Ancestor",
+        desc:"Every living thing traces back to a single population of cells roughly 3.8 billion years ago. This ancestor — LUCA — already ran on DNA, RNA, ribosomes and ATP-based metabolism, which is why all life still shares the same genetic code.",
+        facts:["One shared genetic code across all organisms","Lived ~3.5–3.8 billion years ago","Split into three domains — Carl Woese, 1977"],
+        ex:["All organisms"]},
+      {id:"bacteria",label:"Bacteria",sub:"Domain",cls:"domain",x:37,y:16,rank:"Domain",
+        desc:"The most abundant organisms on Earth. Bacteria are prokaryotes — no nucleus, DNA loose in the cytoplasm — with cell walls built from peptidoglycan. They drive nutrient cycles, live in and on us, and include both allies and pathogens.",
+        facts:["Prokaryotic: no membrane-bound nucleus","Peptidoglycan cell walls","Reproduce by rapid binary fission"],
+        ex:["E. coli","Cyanobacteria","Streptococcus","Lactobacillus"]},
+      {id:"archaea",label:"Archaea",sub:"Domain",cls:"domain",x:37,y:46,rank:"Domain",
+        desc:"Prokaryotes that look like bacteria but are genetically closer to us. Many are extremophiles thriving in boiling vents, acid, or salt. Their membranes use unique ether-linked lipids found nowhere else in life.",
+        facts:["Ether-linked membrane lipids (unique)","Masters of extreme heat, salt and acid","Genetically closer to Eukarya than to Bacteria"],
+        ex:["Methanogens","Halophiles","Thermophiles"]},
+      {id:"eukarya",label:"Eukarya",sub:"Domain",cls:"domain",x:37,y:78,rank:"Domain",
+        desc:"Life with a control room. Eukaryotic cells keep DNA inside a membrane-bound nucleus and run specialised organelles — mitochondria, chloroplasts — acquired long ago by endosymbiosis. This domain contains every organism you can see with the naked eye.",
+        facts:["Membrane-bound nucleus and organelles","Mitochondria arose from engulfed bacteria","Splits into four classic kingdoms"],
+        ex:["Protists","Fungi","Plants","Animals"]},
+      {id:"protista",label:"Protista",sub:"Kingdom",cls:"kingdom",x:74,y:50,rank:"Kingdom · Eukarya",
+        desc:"The eukaryotic catch-all — mostly single-celled organisms that are neither plant, animal, nor fungus. Some photosynthesise, some hunt, some cause disease. They were the first eukaryotes and the base of aquatic food webs.",
+        facts:["Mostly single-celled eukaryotes","Include both autotrophs and heterotrophs","Base of ocean and freshwater food webs"],
+        ex:["Amoeba","Paramecium","Algae","Plasmodium"]},
+      {id:"fungi",label:"Fungi",sub:"Kingdom",cls:"kingdom",x:74,y:64,rank:"Kingdom · Eukarya",
+        desc:"Earth's recyclers. Fungi absorb nutrients by secreting enzymes onto their surroundings, and their cell walls are made of chitin — the same material as insect shells. They partner with plant roots and gave us antibiotics.",
+        facts:["Chitin cell walls, not cellulose","Absorb food externally as decomposers","Source of penicillin and bread/beer yeast"],
+        ex:["Mushrooms","Yeasts","Molds","Lichen fungi"]},
+      {id:"plantae",label:"Plantae",sub:"Kingdom",cls:"kingdom",x:74,y:78,rank:"Kingdom · Eukarya",
+        desc:"Multicellular autotrophs that turn sunlight, water and CO₂ into sugar through photosynthesis in chloroplasts. Rigid cellulose walls give them structure, and they release the oxygen the rest of us breathe.",
+        facts:["Photosynthesise using chloroplasts","Cellulose cell walls for rigidity","Produce most of the planet's oxygen"],
+        ex:["Mosses","Ferns","Flowering plants","Trees"]},
+      {id:"animalia",label:"Animalia",sub:"Kingdom",cls:"kingdom",x:74,y:92,rank:"Kingdom · Eukarya",
+        desc:"Multicellular heterotrophs that eat other organisms for energy. Animals have no cell walls, most can move, and many evolved nervous and muscular tissue — the machinery of behaviour, from a jellyfish's pulse to a human thought.",
+        facts:["Heterotrophs: consume other life for energy","No cell walls; specialised nerve & muscle tissue","Range from sponges to primates"],
+        ex:["Insects","Fish","Birds","Mammals"]}
+    ],
+    edges:[["life","bacteria"],["life","archaea"],["life","eukarya"],
+      ["eukarya","protista"],["eukarya","fungi"],["eukarya","plantae"],["eukarya","animalia"]]
+  };
+  (function buildTree(){
+    const stage=$("#treeStage"), lines=$("#treeLines"), info=$("#treeInfo");
+    if(!stage) return;
+    const byId=id=>TREE.nodes.find(n=>n.id===id);
+    lines.innerHTML=TREE.edges.map(([a,b])=>{const na=byId(a),nb=byId(b);
+      return `<line data-a="${a}" data-b="${b}" x1="${na.x}" y1="${na.y}" x2="${nb.x}" y2="${nb.y}"/>`;}).join("");
+    TREE.nodes.forEach(n=>{
+      const btn=document.createElement("button");
+      btn.className="node "+n.cls; btn.dataset.id=n.id;
+      btn.style.left=n.x+"%"; btn.style.top=n.y+"%";
+      btn.setAttribute("aria-pressed","false");
+      btn.innerHTML=esc(n.label)+"<small>"+esc(n.sub)+"</small>";
+      btn.addEventListener("click",()=>select(n.id));
+      stage.appendChild(btn);
+    });
+    function select(id){
+      const n=byId(id);
+      stage.querySelectorAll(".node").forEach(b=>{const on=b.dataset.id===id;
+        b.classList.toggle("active",on); b.setAttribute("aria-pressed",on?"true":"false");});
+      lines.querySelectorAll("line").forEach(l=>l.classList.toggle("on",l.dataset.a===id||l.dataset.b===id));
+      info.innerHTML=`<div class="ti-rank">${esc(n.rank)}</div>
+        <h3 class="h3">${esc(n.label)}</h3><p>${esc(n.desc)}</p>
+        <ul class="ti-facts">${n.facts.map(f=>`<li>${esc(f)}</li>`).join("")}</ul>
+        <div class="ti-ex"><span class="lbl">Example organisms</span>
+          <div class="tag-row">${n.ex.map(e=>`<span class="tag">${esc(e)}</span>`).join("")}</div></div>`;
+    }
+    select("life");
+  })();
+
+  /* ---------------------------- DISEASE LIBRARY ---------------------------- */
+  const DISEASES=[
+    {n:"Tuberculosis",cat:"Infectious",sys:"Respiratory",cause:"The bacterium <b>Mycobacterium tuberculosis</b>, spread through airborne droplets and settling in the lungs.",symp:["Persistent cough","Blood in sputum","Night sweats","Fever","Weight loss"]},
+    {n:"Malaria",cat:"Infectious",sys:"Blood",cause:"<b>Plasmodium</b> parasites delivered by the bite of an infected female <i>Anopheles</i> mosquito.",symp:["Cyclical fever","Chills","Anemia","Headache","Fatigue"]},
+    {n:"Influenza",cat:"Infectious",sys:"Respiratory",cause:"<b>Influenza viruses</b> (types A, B) that mutate yearly, driving seasonal epidemics.",symp:["High fever","Body aches","Dry cough","Sore throat","Fatigue"]},
+    {n:"Cholera",cat:"Infectious",sys:"Digestive",cause:"The bacterium <b>Vibrio cholerae</b>, ingested through contaminated water or food.",symp:["Severe watery diarrhea","Rapid dehydration","Vomiting","Leg cramps"]},
+    {n:"COVID-19",cat:"Infectious",sys:"Respiratory",cause:"The coronavirus <b>SARS-CoV-2</b>, transmitted by respiratory aerosols and droplets.",symp:["Fever","Dry cough","Loss of smell","Shortness of breath","Fatigue"]},
+    {n:"Sickle Cell Anemia",cat:"Genetic",sys:"Blood",cause:"An inherited point mutation in the <b>HBB gene</b> that warps hemoglobin, deforming red blood cells into rigid sickles.",symp:["Pain crises","Chronic anemia","Swelling of hands/feet","Frequent infections"]},
+    {n:"Cystic Fibrosis",cat:"Genetic",sys:"Respiratory",cause:"Mutations in the <b>CFTR gene</b> disrupt chloride transport, producing thick sticky mucus in the lungs and gut.",symp:["Thick mucus","Recurrent lung infections","Poor weight gain","Salty sweat"]},
+    {n:"Type 1 Diabetes",cat:"Autoimmune",sys:"Endocrine",cause:"An <b>autoimmune attack</b> destroys insulin-producing beta cells in the pancreas, halting insulin supply.",symp:["Excessive thirst","Frequent urination","Weight loss","Fatigue"]},
+    {n:"Rheumatoid Arthritis",cat:"Autoimmune",sys:"Musculoskeletal",cause:"The <b>immune system attacks the synovium</b> lining the joints, driving chronic inflammation.",symp:["Joint pain","Swelling","Morning stiffness","Symmetric joint damage"]},
+    {n:"Alzheimer's Disease",cat:"Neurodegenerative",sys:"Nervous",cause:"Build-up of <b>amyloid-β plaques and tau tangles</b> that kill neurons and erode brain tissue.",symp:["Memory loss","Confusion","Disorientation","Mood changes"]},
+    {n:"Parkinson's Disease",cat:"Neurodegenerative",sys:"Nervous",cause:"Progressive loss of <b>dopamine neurons in the substantia nigra</b> of the midbrain.",symp:["Resting tremor","Muscle rigidity","Slow movement","Postural instability"]},
+    {n:"Type 2 Diabetes",cat:"Metabolic",sys:"Endocrine",cause:"Cells grow <b>resistant to insulin</b> while the pancreas struggles to keep up, raising blood sugar.",symp:["Increased thirst","Frequent urination","Slow-healing wounds","Blurred vision"]},
+    {n:"Hypertension",cat:"Metabolic",sys:"Circulatory",cause:"Chronically <b>high blood pressure</b> from genetic, dietary and lifestyle factors — often silent for years.",symp:["Often symptomless","Headaches","Dizziness","Nosebleeds (severe)"]},
+    {n:"Asthma",cat:"Chronic",sys:"Respiratory",cause:"<b>Chronic airway inflammation</b> and hyper-reactivity that narrow the bronchi in response to triggers.",symp:["Wheezing","Shortness of breath","Chest tightness","Coughing at night"]}
+  ];
+  (function buildDiseases(){
+    const list=$("#dzList"), count=$("#dzCount"), search=$("#dzSearch"), filters=$("#dzFilters");
+    if(!list) return;
+    const cats=["All",...[...new Set(DISEASES.map(d=>d.cat))]];
+    let active="All", q="";
+    filters.innerHTML=cats.map((c,i)=>`<button class="fbtn${i===0?" on":""}" data-cat="${esc(c)}">${esc(c)}</button>`).join("");
+    filters.addEventListener("click",e=>{const b=e.target.closest(".fbtn");if(!b)return;
+      active=b.dataset.cat; filters.querySelectorAll(".fbtn").forEach(x=>x.classList.toggle("on",x===b)); render();});
+    search.addEventListener("input",()=>{q=search.value.trim().toLowerCase(); render();});
+    function render(){
+      const rows=DISEASES.filter(d=>{
+        const catOk=active==="All"||d.cat===active;
+        const hay=(d.n+" "+d.sys+" "+d.symp.join(" ")+" "+d.cat).toLowerCase();
+        return catOk && (!q||hay.includes(q));
+      });
+      count.textContent=rows.length+" of "+DISEASES.length+" diseases"+(active!=="All"?" · "+active:"")+(q?' · "'+search.value.trim()+'"':"");
+      list.innerHTML=rows.length?rows.map(d=>`
+        <article class="dz-item">
+          <div class="dz-head"><h4>${esc(d.n)}</h4><span class="dz-sys">${esc(d.sys)}</span></div>
+          <span class="dz-cat">${esc(d.cat)}</span>
+          <p class="dz-cause">${d.cause}</p>
+          <div class="dz-symp"><span class="lbl">Key symptoms</span>
+            <div class="symp">${d.symp.map(s=>`<span>${esc(s)}</span>`).join("")}</div></div>
+        </article>`).join("")
+        :`<div class="dz-empty">No diseases match "${esc(search.value.trim())}". Try a different term or clear the filter.</div>`;
+    }
+    render();
+  })();
+
+  /* ---------------------------- EVOLUTION TIMELINE ---------------------------- */
+  const EVENTS=[
+    {yr:"3.8 Gya",nm:"First life",t:"The first cells",d:"Simple prokaryotes appear in Earth's early oceans. LUCA — the last universal common ancestor — already uses DNA, RNA and ATP, seeding the shared chemistry of all life.",sig:"Everything alive descends from this moment."},
+    {yr:"3.5 Gya",nm:"Photosynthesis",t:"Cyanobacteria learn to harvest light",d:"Cyanobacteria evolve oxygenic photosynthesis, building layered mats called stromatolites — some of the oldest fossils on Earth.",sig:"Sunlight becomes the engine of the biosphere."},
+    {yr:"2.4 Gya",nm:"Great Oxygenation",t:"The Great Oxygenation Event",d:"Oxygen from photosynthesis saturates the oceans and floods the atmosphere, poisoning most existing life but enabling aerobic respiration.",sig:"Earth's first mass extinction — and the air we now breathe."},
+    {yr:"2.1 Gya",nm:"Eukaryotes",t:"The first complex cells",d:"One cell engulfs another and keeps it alive — endosymbiosis gives rise to mitochondria and the eukaryotic cell, with a true nucleus.",sig:"The blueprint for all plants, animals and fungi."},
+    {yr:"1.2 Gya",nm:"Sex & multicellularity",t:"Sex and the first tissues",d:"Sexual reproduction shuffles genes for faster adaptation, and cells begin cooperating as early multicellular organisms like red algae.",sig:"Genetic variety and teamwork accelerate evolution."},
+    {yr:"541 Mya",nm:"Cambrian Explosion",t:"The Cambrian Explosion",d:"In a geological blink, almost every major animal body plan appears — eyes, shells, limbs and predators arrive together in the fossil record.",sig:"The ancestors of nearly all animal phyla alive today."},
+    {yr:"470 Mya",nm:"Plants on land",t:"Life colonises the land",d:"Descendants of green algae evolve into the first land plants — mosses and liverworts — greening the continents and building soils.",sig:"Terrestrial ecosystems and a richer oxygen supply begin."},
+    {yr:"375 Mya",nm:"Tetrapods",t:"Fins become limbs",d:"Lobe-finned fish like Tiktaalik evolve weight-bearing limbs and begin venturing onto land, ancestors of all four-limbed vertebrates.",sig:"The move from water to land — origin of amphibians, reptiles, mammals."},
+    {yr:"230 Mya",nm:"Age of dinosaurs",t:"Dinosaurs rise",d:"In the Mesozoic, dinosaurs diversify to dominate the land for over 160 million years, while early mammals stay small and nocturnal.",sig:"The longest reign of any land-animal group."},
+    {yr:"66 Mya",nm:"K–Pg extinction",t:"The asteroid and the reset",d:"A city-sized asteroid strikes near Chicxulub, wiping out non-avian dinosaurs and ~75% of species — and clearing the stage for mammals.",sig:"Mammals radiate into the vacant niches."},
+    {yr:"7 Mya",nm:"Hominins",t:"The human branch splits",d:"The lineage leading to humans diverges from that of chimpanzees; early hominins begin walking upright across African woodlands.",sig:"The start of the road to Homo sapiens."},
+    {yr:"300 Kya",nm:"Homo sapiens",t:"Modern humans appear",d:"Anatomically modern Homo sapiens emerge in Africa, later developing language, symbolic art and technology that reshape the planet.",sig:"A species that can now read its own genome."}
+  ];
+  (function buildTimeline(){
+    const track=$("#tlTrack"), detail=$("#tlDetail");
+    if(!track) return;
+    track.innerHTML=EVENTS.map((e,i)=>`
+      <button class="tl-ev" role="tab" data-i="${i}" aria-selected="false" aria-controls="tlDetail">
+        <span class="yr">${esc(e.yr)}</span><span class="dot"></span><span class="nm">${esc(e.nm)}</span>
+      </button>`).join("");
+    const btns=[...track.querySelectorAll(".tl-ev")];
+    function select(i,focus){
+      const e=EVENTS[i];
+      btns.forEach((b,j)=>{const on=j===i;b.classList.toggle("on",on);b.setAttribute("aria-selected",on?"true":"false");});
+      detail.innerHTML=`
+        <div class="tl-when">${esc(e.yr)}<small>Years ago</small></div>
+        <div class="tl-body">
+          <h4>${esc(e.t)}</h4><p>${esc(e.d)}</p>
+          <div class="tl-sig"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2L4.5 13.5H11l-1 8.5L19.5 10H13l0-8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span>${esc(e.sig)}</span></div>
+        </div>`;
+      if(focus)btns[i].focus();
+    }
+    track.addEventListener("click",e=>{const b=e.target.closest(".tl-ev");if(b)select(+b.dataset.i);});
+    track.addEventListener("keydown",e=>{
+      const cur=btns.findIndex(b=>b.classList.contains("on"));
+      if(e.key==="ArrowRight"||e.key==="ArrowDown"){e.preventDefault();select(Math.min(EVENTS.length-1,cur+1),true);}
+      else if(e.key==="ArrowLeft"||e.key==="ArrowUp"){e.preventDefault();select(Math.max(0,cur-1),true);}
+      else if(e.key==="Home"){e.preventDefault();select(0,true);}
+      else if(e.key==="End"){e.preventDefault();select(EVENTS.length-1,true);}
+    });
+    select(0);
+  })();
+
+  /* ---------------------------- HUMAN BODY ATLAS ---------------------------- */
+  const IC={
+    nerv:'<path d="M12 3v18M12 7c3 0 3-3 6-2M12 11c-3 0-3-3-6-2M12 15c3 0 3 3 6 2M12 17c-3 0-3 3-6 2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
+    circ:'<path d="M12 20s-7-4.5-7-10a4 4 0 017-2.6A4 4 0 0119 10c0 5.5-7 10-7 10z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>',
+    resp:'<path d="M12 3v7m0 0c0 4-2 5-4 5s-3-2-3-5V9m7 1c0 4 2 5 4 5s3-2 3-5V9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>',
+    dig:'<path d="M8 3v5a4 4 0 004 4h1a3 3 0 013 3v1a3 3 0 01-3 3H9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
+    skel:'<path d="M9 4a1.5 1.5 0 113 0 1.5 1.5 0 11-3 0zM10.5 6v3l-3 2M10.5 9l3 2M10.5 12v6M8 18h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>',
+    musc:'<path d="M6 5c4 0 6 2 6 6s2 8-2 8-4-4-4-8M14 6c3 1 4 3 4 6s-1 6-3 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
+    endo:'<circle cx="12" cy="8" r="3" stroke="currentColor" stroke-width="1.7"/><path d="M12 11v4m-3 3h6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
+    immu:'<path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>',
+    urin:'<path d="M8 4v4a4 4 0 004 4 4 4 0 004-4V4M12 12v4m0 0a3 3 0 100 4 3 3 0 000-4z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
+    repr:'<circle cx="9" cy="14" r="3.5" stroke="currentColor" stroke-width="1.7"/><path d="M15 4l4 4m0-4v4h-4M14 9l-2.5 2.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>'
+  };
+  const SYSTEMS=[
+    {k:"nerv",n:"Nervous",tag:"Control & signalling",rank:"System · Control network",
+      desc:"The body's high-speed communication and control network. It senses the world, processes information, and fires electrical and chemical signals to coordinate everything from a reflex to a memory.",
+      organs:["Brain","Spinal cord","Peripheral nerves","Sensory receptors"],
+      facts:["~86 billion neurons in the brain","Signals travel up to 120 m/s","Governs thought, movement and the senses"]},
+    {k:"circ",n:"Circulatory",tag:"Transport",rank:"System · Transport",
+      desc:"A closed transport network that carries oxygen, nutrients, hormones and heat to every cell and hauls carbon dioxide and waste away. The heart is the pump; blood vessels are the pipes.",
+      organs:["Heart","Arteries","Veins","Capillaries","Blood"],
+      facts:["Heart beats ~100,000 times a day","~5 litres of blood in an adult","Vessels would circle Earth twice if unspooled"]},
+    {k:"resp",n:"Respiratory",tag:"Gas exchange",rank:"System · Gas exchange",
+      desc:"Brings oxygen in and pushes carbon dioxide out. Air travels down the trachea into ever-smaller branches, ending in millions of alveoli where gases swap into the blood.",
+      organs:["Lungs","Trachea","Bronchi","Alveoli","Diaphragm"],
+      facts:["~300 million alveoli per lungs","You breathe ~20,000 times a day","Alveolar surface ≈ half a tennis court"]},
+    {k:"dig",n:"Digestive",tag:"Breakdown & absorption",rank:"System · Breakdown & absorption",
+      desc:"A ~9-metre tube that mechanically and chemically breaks food into molecules small enough to absorb, then reclaims water and expels the rest.",
+      organs:["Stomach","Small intestine","Large intestine","Liver","Pancreas"],
+      facts:["Tract is ~9 metres long","Home to trillions of gut microbes","Liver performs 500+ chemical jobs"]},
+    {k:"skel",n:"Skeletal",tag:"Structure & protection",rank:"System · Framework",
+      desc:"The rigid framework that supports the body, protects soft organs, anchors muscles for movement, and manufactures blood cells inside the marrow.",
+      organs:["Bones","Cartilage","Ligaments","Joints","Bone marrow"],
+      facts:["206 bones in an adult","Marrow makes billions of blood cells daily","Femur is stronger than concrete by weight"]},
+    {k:"musc",n:"Muscular",tag:"Movement",rank:"System · Movement",
+      desc:"Converts chemical energy into force. Skeletal muscle moves the skeleton, smooth muscle lines the organs, and cardiac muscle drives the heart — together generating movement, posture and heat.",
+      organs:["Skeletal muscle","Smooth muscle","Cardiac muscle","Tendons"],
+      facts:["~600 muscles in the body","Muscle contraction produces body heat","The heart is a muscle that never rests"]},
+    {k:"endo",n:"Endocrine",tag:"Hormonal control",rank:"System · Chemical messengers",
+      desc:"A network of glands that release hormones into the blood to regulate metabolism, growth, mood, sleep and reproduction — slow, body-wide signalling that complements the fast nervous system.",
+      organs:["Pituitary","Thyroid","Pancreas","Adrenal glands","Gonads"],
+      facts:["Pituitary is the 'master gland'","Hormones act at tiny concentrations","Insulin and adrenaline are endocrine signals"]},
+    {k:"immu",n:"Immune / Lymphatic",tag:"Defence",rank:"System · Defence",
+      desc:"The body's defence force and drainage network. White blood cells detect and destroy pathogens, while lymph vessels return fluid and ferry immune cells around the body.",
+      organs:["Lymph nodes","Spleen","Thymus","Bone marrow","White blood cells"],
+      facts:["Remembers past infections for years","Thymus trains T-cells to tell self from foe","Basis of how vaccines protect you"]},
+    {k:"urin",n:"Urinary",tag:"Filtration & waste",rank:"System · Filtration",
+      desc:"Filters the blood to remove waste and excess water, balances salts and blood pressure, and ships urine out. The kidneys are the master filters.",
+      organs:["Kidneys","Ureters","Bladder","Urethra"],
+      facts:["Kidneys filter ~180 litres of blood a day","~1 million nephrons per kidney","Regulates blood pressure and pH"]},
+    {k:"repr",n:"Reproductive",tag:"Continuation of life",rank:"System · Reproduction",
+      desc:"Produces the specialised sex cells and hormones that allow a species to create the next generation, combining genetic material from two parents.",
+      organs:["Gonads (ovaries / testes)","Reproductive tract","Sex-hormone glands"],
+      facts:["Gametes carry half the genome (23 chromosomes)","Combines DNA from two parents","Driven by endocrine hormones"]}
+  ];
+  (function buildAtlas(){
+    const listEl=$("#sysList"), detail=$("#atlasDetail");
+    if(!listEl) return;
+    listEl.innerHTML=SYSTEMS.map((s,i)=>`
+      <button class="sys-btn" role="tab" data-i="${i}" aria-selected="false" aria-controls="atlasDetail">
+        <span class="si"><svg viewBox="0 0 24 24" fill="none">${IC[s.k]}</svg></span>
+        <span class="sn">${esc(s.n)}<small>${esc(s.tag)}</small></span>
+      </button>`).join("");
+    const btns=[...listEl.querySelectorAll(".sys-btn")];
+    function select(i){
+      const s=SYSTEMS[i];
+      btns.forEach((b,j)=>{const on=j===i;b.classList.toggle("on",on);b.setAttribute("aria-selected",on?"true":"false");});
+      detail.innerHTML=`
+        <div class="ad-rank">${esc(s.rank)}</div>
+        <h3 class="h3">${esc(s.n)} system</h3><p>${esc(s.desc)}</p>
+        <div class="ad-organs"><span class="lbl">Key organs</span>
+          <div class="tag-row">${s.organs.map(o=>`<span class="tag">${esc(o)}</span>`).join("")}</div></div>
+        <ul class="ad-facts">${s.facts.map(f=>`<li>${esc(f)}</li>`).join("")}</ul>`;
+    }
+    listEl.addEventListener("click",e=>{const b=e.target.closest(".sys-btn");if(b)select(+b.dataset.i);});
+    select(0);
+  })();
+
+  /* ---------------------------- KNOWLEDGE GRAPH ---------------------------- */
+  const KG=[
+    {id:"dna",t:"DNA",x:.14,y:.5,d:"The molecule of heredity — a double helix of four bases that stores the full instruction set for building and running an organism."},
+    {id:"rna",t:"RNA",x:.36,y:.24,d:"A working copy of DNA. Messenger RNA carries genetic instructions from the nucleus to the ribosome to be read."},
+    {id:"gene",t:"Gene",x:.36,y:.76,d:"A stretch of DNA that codes for one product — usually a protein. Genes are the units of heredity."},
+    {id:"protein",t:"Protein",x:.58,y:.5,d:"Folded chains of amino acids that do the work of the cell — enzymes, structure, signalling and defence."},
+    {id:"mutation",t:"Mutation",x:.56,y:.85,d:"A change in the DNA sequence. It can be harmless, harmful, or the raw material that evolution acts on."},
+    {id:"disease",t:"Disease",x:.82,y:.66,d:"When genes, proteins or cells malfunction, the body's systems fail — the root of most illness traces back to molecules."},
+    {id:"medicine",t:"Medicine",x:.86,y:.3,d:"Drugs and therapies that target proteins, genes or pathogens to restore health — increasingly designed from the genome up."}
+  ];
+  const KGE=[["dna","rna"],["dna","gene"],["gene","protein"],["rna","protein"],
+    ["mutation","gene"],["mutation","disease"],["protein","disease"],["protein","medicine"],["disease","medicine"]];
+  (function buildKG(){
+    const cv=$("#kgCanvas"); if(!cv) return;
+    const tip=$("#kgTip"), ctx=cv.getContext("2d");
+    let W,H,dpr,t=0,hover=-1,mx=-1,my=-1,lastHover=-2,raf=null;
+    function size(){dpr=Math.min(devicePixelRatio||1,2);const r=cv.getBoundingClientRect();
+      W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
+    const nodes=KG.map(n=>({...n,ph:Math.random()*6.28}));
+    function pos(n){return{x:n.x*W,y:n.y*H+(REDUCED?0:Math.sin(t/1000+n.ph)*3.5)};}
+    const cssv=getComputedStyle(document.documentElement);
+    const col=v=>cssv.getPropertyValue(v).trim()||v;
+    cv.onmousemove=e=>{const r=cv.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top;};
+    cv.onmouseleave=()=>{mx=my=-1;hover=-1;tip.classList.remove("show");};
+    function draw(){
+      t+=16;ctx.clearRect(0,0,W,H);
+      const cEm=col("--em"),cInk=col("--ink"),cRaise=col("--raise"),cLine=col("--line"),cCy=col("--cy");
+      hover=-1;
+      nodes.forEach((n,i)=>{const p=pos(n);if(mx>=0&&Math.hypot(mx-p.x,my-p.y)<26)hover=i;});
+      KGE.forEach(([a,b])=>{const na=nodes.find(n=>n.id===a),nb=nodes.find(n=>n.id===b);
+        const pa=pos(na),pb=pos(nb);const on=hover>=0&&(nodes[hover].id===a||nodes[hover].id===b);
+        ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);
+        ctx.strokeStyle=on?cEm:cLine;ctx.globalAlpha=on?.75:1;ctx.lineWidth=on?2:1;ctx.stroke();ctx.globalAlpha=1;
+        if(on&&!REDUCED){const f=(t/900)%1;const px=pa.x+(pb.x-pa.x)*f,py=pa.y+(pb.y-pa.y)*f;
+          ctx.beginPath();ctx.arc(px,py,2.6,0,6.28);ctx.fillStyle=cCy;ctx.fill();}
+      });
+      nodes.forEach((n,i)=>{const p=pos(n);const on=i===hover;const r=on?15:11;
+        const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,r*2.4);
+        g.addColorStop(0,on?"rgba(52,211,153,.5)":"rgba(52,211,153,.2)");g.addColorStop(1,"rgba(52,211,153,0)");
+        ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,r*2.4,0,6.28);ctx.fill();
+        ctx.beginPath();ctx.arc(p.x,p.y,r,0,6.28);ctx.fillStyle=on?cEm:cRaise;ctx.fill();
+        ctx.lineWidth=2;ctx.strokeStyle=cEm;ctx.stroke();
+        ctx.fillStyle=cInk;ctx.font="600 12px Inter,sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";
+        const tw=ctx.measureText(n.t).width, lx=Math.max(tw/2+4,Math.min(W-tw/2-4,p.x));
+        ctx.fillText(n.t,lx,p.y+r+13);
+      });
+      if(hover>=0){const n=nodes[hover];const p=pos(n);
+        if(hover!==lastHover){tip.innerHTML="<b>"+n.t+"</b><span>"+n.d+"</span>";lastHover=hover;}
+        tip.style.left=Math.min(W-236,Math.max(6,p.x+16))+"px";tip.style.top=Math.max(6,p.y-10)+"px";
+        tip.classList.add("show");cv.style.cursor="pointer";}
+      else{tip.classList.remove("show");cv.style.cursor="grab";lastHover=-2;}
+      raf=requestAnimationFrame(draw);
+    }
+    window.addEventListener("resize",size);
+    const io=new IntersectionObserver(es=>{es.forEach(en=>{
+      if(en.isIntersecting){if(!raf){size();draw();}}else{cancelAnimationFrame(raf);raf=null;}
+    })},{threshold:.05});
+    io.observe(cv);
+  })();
+
+  /* ---------------------------- MORE TO EXPLORE (teasers) ---------------------------- */
+  const I={
+    species:'<path d="M4 20c2-6 5-9 9-9m0 0c0-3 2-6 5-7-1 3-2 5-5 7m0 0c3 0 5 1 7 3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
+    dna:'<path d="M8 3c8 4 0 10 8 14M16 3c-8 4 0 10-8 14M8 6h8M8 12h8M9 18h6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
+    nobel:'<circle cx="12" cy="9" r="5" stroke="currentColor" stroke-width="1.7"/><path d="M9 13l-1.5 8L12 19l4.5 2L15 13" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>',
+    research:'<path d="M6 3h9l4 4v14H6z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 12h6M9 16h6M9 8h3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
+    process:'<path d="M12 4a8 8 0 018 8m0 0h-3m3 0V9M12 20a8 8 0 01-8-8m0 0h3m-3 0v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>',
+    viz:'<path d="M4 20V4M4 20h16M8 16V9M12 16V6M16 16v-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>'
+  };
+  const TEASERS=[
+    {ico:I.species,tag:"soon",title:"Species Explorer",body:"Browse the diversity of life by clade, habitat and traits — from tardigrades to blue whales.",
+      seed:[["Described species","~1.2 M"],["Est. total on Earth","~8.7 M"],["Largest phylum","Arthropoda"]]},
+    {ico:I.dna,tag:"soon",title:"Genetics Database",body:"Search genes, the proteins they encode and the traits and disorders they shape.",
+      seed:[["BRCA1","Breast/ovarian risk"],["TP53","Tumour suppressor"],["CFTR","Cystic fibrosis"],["HBB","Sickle cell"]]},
+    {ico:I.nobel,tag:"live",title:"Nobel Discoveries",body:"The prize-winning breakthroughs that rebuilt modern biology.",
+      seed:[["Watson · Crick · Wilkins","1962 · DNA structure"],["B. McClintock","1983 · Jumping genes"],["Doudna · Charpentier","2020 · CRISPR"],["Karikó · Weissman","2023 · mRNA vaccines"]]},
+    {ico:I.research,tag:"soon",title:"Research Frontier",body:"Plain-language summaries of where biology is heading, updated as fields move.",
+      seed:[["CRISPR base editing","Rewriting single letters"],["Organoids","Mini-organs in a dish"],["Single-cell atlases","Mapping every cell type"]]},
+    {ico:I.process,tag:"live",title:"Biological Processes",body:"Step-through the core machinery that keeps cells and bodies running.",
+      seed:[["Photosynthesis","Light → sugar"],["Cellular respiration","Sugar → ATP"],["Mitosis","One cell → two"],["Protein synthesis","Gene → protein"]]},
+    {ico:I.viz,tag:"soon",title:"Scientific Visualizations",body:"Cinematic 3D views of molecules, cells and systems you can rotate and dissect.",
+      seed:[["Protein folding","Real-time 3D"],["The synapse","Signal in motion"],["Cell division","Frame by frame"]]}
+  ];
+  (function buildTeasers(){
+    const wrap=$("#teasers"); if(!wrap) return;
+    wrap.innerHTML=TEASERS.map((c,i)=>`
+      <article class="card lift reveal${i%3?(" d"+(i%3)):""}">
+        <div class="glow"></div>
+        <div class="card-top"><div class="ico"><svg viewBox="0 0 24 24" fill="none">${c.ico}</svg></div>
+          <span class="chip ${c.tag}"><span class="d"></span>${c.tag==="live"?"Seeded":"Soon"}</span></div>
+        <h3 class="h3">${esc(c.title)}</h3>
+        <p>${esc(c.body)}</p>
+        <ul class="tz-seed">${c.seed.map(([a,b])=>`<li><b>${esc(a)}</b><span>${esc(b)}</span></li>`).join("")}</ul>
+      </article>`).join("");
+    if(window.__observeReveals)window.__observeReveals();
+  })();
+})();
+</script>
+<!-- __BIOQ_EMBED__ -->
+<style>body.embed .nav,body.embed .mobile-menu,body.embed footer,body.embed .skiplink{display:none!important}
+body.embed main{padding-top:20px!important}body.embed #launch{display:none!important}</style>
+<script>(function(){var q=new URLSearchParams(location.search);if(!q.get('embed'))return;
+try{localStorage.setItem('bioq_seen','1');}catch(e){}
+function apply(){if(document.body)document.body.classList.add('embed');}
+if(document.body)apply();else addEventListener('DOMContentLoaded',apply);
+addEventListener('message',function(e){var d=e.data||{};if(d.bioqTheme){document.documentElement.setAttribute('data-theme',d.bioqTheme);try{localStorage.setItem('bioq_theme',d.bioqTheme);}catch(x){}}});
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href]');if(!a)return;var h=a.getAttribute('href')||'';
+if(/\.html/i.test(h)&&/^\.?\/?(index|learn|lessons|reason|labs|solve|explore|me|about|lab|universe)\.html/i.test(h.replace(/^\.\//,''))){e.preventDefault();try{parent.postMessage({bioqNav:h},'*');}catch(x){}}},true);
+})();</script>
+
+<script id="atmo-js">
+/* ============================================================================
+   BIOLOGY ENTELLOQ — THE LIVING FIELD.
+
+   Physics Entelloq puts a sheet of spacetime behind the product and bends it
+   around the cursor. This is the biological answer to that, and it is not the
+   same idea in different colours: matter is passive and gets curved, whereas
+   tissue is ALIVE and reaches toward what it wants. So the field here is a thick
+   section of living tissue seen down a microscope, and the cursor is a nutrient
+   source. Cells near it swell, their membranes brighten, and the capillary
+   network grows toward it — chemotaxis, the oldest behaviour there is.
+
+   Four things are happening at once in the shader:
+     · a Worley cell field (membranes are the F2-F1 ridge — the real thing under
+       phase contrast) in two parallax layers, so the section has thickness
+     · a domain warp driven by slow fbm, because no real tissue is on a grid
+     · ridged fbm capillaries that bias their flow toward the cursor
+     · a breath — everything respires at about 7 cycles a minute, which is why
+       it reads as alive rather than as a screensaver on a loop
+
+   SELF-INSTALLING. Dropping this one <script> onto a page is the whole install:
+   it makes its own canvas, injects its own CSS, picks its colour from
+   <body data-page>, and follows the light/dark toggle. It never needs markup.
+   ========================================================================== */
+(function () {
+  "use strict";
+  if (window.BIOQ_ATMO) return;                       // idempotent: safe to double-inject
+
+  // Inside the unified app shell each section loads in an iframe with ?embed=1.
+  // The shell already has a field; a second one per iframe would mean two WebGL
+  // contexts fighting for the GPU and a visible seam where the two tissues meet.
+  // So the embedded page renders none of its own and goes transparent instead,
+  // letting the shell's single continuous field show through — which is also why
+  // navigating between sections never interrupts it.
+  try {
+    if (new URLSearchParams(location.search).get("embed")) {
+      var t = document.createElement("style");
+      t.id = "atmo-embed";
+      t.textContent = "html,body{background:transparent!important}.bg-veil{display:none!important}";
+      (document.head || document.documentElement).appendChild(t);
+      window.BIOQ_ATMO = { theme: function () {}, setSection: function () {}, mouse: null, mode: "embedded" };
+      return;
+    }
+  } catch (e) {}
+
+  /* --- where the colour comes from -------------------------------------- */
+  // Each pillar gets its own biology, and the hues deliberately match the `tc`
+  // accent the app shell already assigns that view — so the field is the same
+  // colour as the section you are standing in rather than a second, competing
+  // palette. Intensity is how ALIVE the field looks: the Lab runs hot, Me runs quiet.
+  var SECTIONS = {
+    home:     ["#34d399", 0.44],   // em     — chlorophyll
+    learn:    ["#34d399", 0.52],   // em
+    lessons:  ["#38e0d8", 0.50],   // cy
+    reason:   ["#8b5cf6", 0.48],   // violet — the colour of thinking
+    labs:     ["#f6c667", 0.52],   // amber  — a bench lamp
+    solve:    ["#7c8cf8", 0.48],   // indigo
+    explore:  ["#38e0d8", 0.58],   // cy     — open water
+    me:       ["#c9a86a", 0.34],   // quiet, warm, low
+    about:    ["#34d399", 0.46],   // em
+    lab:      ["#fb7185", 0.64],   // rose   — an opened body, and the field runs hot
+    universe: ["#38e0d8", 0.60]    // cy
+  };
+
+  var reduced = false;
+  try { reduced = matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
+  var STILL = reduced || /[?&#](still|print)=?1?/.test(location.search + location.hash);
+
+  /* --- install ----------------------------------------------------------- */
+  var css = document.createElement("style");
+  css.id = "atmo-css";
+  css.textContent =
+    // z-index:-1, NOT 0. A positioned element at z-index:0 paints ABOVE ordinary
+    // in-flow block content, so the field would cover the page. Negative z puts it
+    // between the root background and everything else, which means not one existing
+    // element needs its position or stacking touched — and the product's fixed nav
+    // (position:fixed;z-index:60) keeps working exactly as before.
+    "#atmo{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;" +
+      "opacity:0;transition:opacity 1.2s cubic-bezier(.22,1,.36,1);display:block}" +
+    "#atmo.lit{opacity:.78}" +
+    // In light mode the same field reads as a stained section on a white slide, so
+    // it stays — but fainter, because ink on paper is a quieter medium.
+    "html[data-theme=\"light\"] #atmo.lit{opacity:.42}" +
+    // The pages paint --bg on BOTH html and body; body's copy would hide a
+    // negative-z child, so hand the background to the root alone. --bg is a themed
+    // custom property, so this keeps following the light/dark toggle for free.
+    "html{background:var(--bg,#04070a)}body{background:transparent!important}";
+  (document.head || document.documentElement).appendChild(css);
+
+  var cv = document.createElement("canvas");
+  cv.id = "atmo";
+  cv.setAttribute("aria-hidden", "true");
+  // NOTE: attach() is *declared* here but deliberately not *called* until the very
+  // bottom of this module. It reaches into cur/tgt/M/FS/VS, all of which are `var`
+  // bindings that are hoisted but still undefined at this point in the file —
+  // calling it here would throw on the first property write and silently leave the
+  // page with no field at all.
+  function attach() {
+    if (!document.body) return setTimeout(attach, 16);
+    document.body.insertBefore(cv, document.body.firstChild);
+    // The class is what fades the field in, and it must land on a LATER frame than
+    // the insert or the CSS transition has nothing to transition from. rAF is the
+    // usual way to get that, but rAF does not run at all in a background tab — so a
+    // page that loads hidden would sit at opacity 0. The timer is the backstop;
+    // adding the class twice costs nothing.
+    function lit() { cv.classList.add("lit"); }
+    requestAnimationFrame(lit);
+    setTimeout(lit, 80);
+    boot();
+  }
+
+  /* --- state ------------------------------------------------------------- */
+  function hexRGB(h) {
+    h = String(h).replace("#", "");
+    return [parseInt(h.slice(0, 2), 16) / 255, parseInt(h.slice(2, 4), 16) / 255, parseInt(h.slice(4, 6), 16) / 255];
+  }
+  var cur = { r: 0.20, g: 0.83, b: 0.60, in: 0.44, lt: 0 };
+  var tgt = { r: 0.20, g: 0.83, b: 0.60, in: 0.44, lt: 0 };
+  var M = { x: innerWidth / 2, y: innerHeight / 2, tx: innerWidth / 2, ty: innerHeight / 2, live: 0, tlive: 0 };
+
+  addEventListener("pointermove", function (e) {
+    M.tx = e.clientX; M.ty = e.clientY; M.tlive = 1;
+  }, { passive: true });
+  // A pointer that has left should stop feeding the tissue, or the glow sits there
+  // forever on a page nobody is touching. pointerleave does not bubble, so it has
+  // to be bound to the root element rather than to window; mouseout with a null
+  // relatedTarget is the belt-and-braces case for leaving through the chrome.
+  document.documentElement.addEventListener("pointerleave", function () { M.tlive = 0; }, { passive: true });
+  addEventListener("mouseout", function (e) { if (!e.relatedTarget) M.tlive = 0; }, { passive: true });
+  addEventListener("blur", function () { M.tlive = 0; });
+  // Touch has no hover: without this the glow would stay wherever the last tap
+  // landed, permanently, on every phone.
+  addEventListener("pointerup", function (e) {
+    if (e.pointerType !== "mouse") M.tlive = 0;
+  }, { passive: true });
+
+  function theme(rgb, intensity) {
+    tgt.r = rgb[0]; tgt.g = rgb[1]; tgt.b = rgb[2];
+    if (typeof intensity === "number") tgt.in = intensity;
+  }
+  function setSection(key) {
+    var s = SECTIONS[key] || SECTIONS.home;
+    theme(hexRGB(s[0]), s[1]);
+    nudge();                             // navigating must restain the field even in STILL mode
+  }
+  // repaint is filled in by whichever renderer boots. In STILL mode (reduced
+  // motion, or ?still=1) exactly one frame is ever drawn, so without this a reader
+  // who switches to light mode would be left looking at the dark field forever.
+  var repaint = null;
+  function nudge() {
+    if (!STILL || !repaint) return;      // the animated path picks the change up on its own
+    for (var i = 0; i < 60; i++) ease(); // settle the eased colour, then draw the one frame
+    repaint(0);
+  }
+  function readTheme() {
+    var next = (document.documentElement.getAttribute("data-theme") === "light") ? 1 : 0;
+    if (next === tgt.lt) return;
+    tgt.lt = next;
+    nudge();
+  }
+
+  function ease() {
+    cur.r += (tgt.r - cur.r) * 0.035; cur.g += (tgt.g - cur.g) * 0.035;
+    cur.b += (tgt.b - cur.b) * 0.035; cur.in += (tgt.in - cur.in) * 0.035;
+    cur.lt += (tgt.lt - cur.lt) * 0.08;
+    M.x += (M.tx - M.x) * 0.075; M.y += (M.ty - M.y) * 0.075;
+    M.live += (M.tlive - M.live) * 0.04;
+  }
+
+  /* --- the field --------------------------------------------------------- */
+  var FS = [
+    "precision mediump float;",
+    "uniform vec2 uRes;uniform float uT;uniform vec2 uM;uniform vec3 uC;uniform float uIn;uniform float uLive;uniform float uLight;",
+
+    "float h1(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}",
+    "vec2 h2(vec2 p){return fract(sin(vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3))))*43758.5453);}",
+    "float vn(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);",
+    " float a=h1(i),b=h1(i+vec2(1,0)),c=h1(i+vec2(0,1)),d=h1(i+vec2(1,1));",
+    " return mix(mix(a,b,f.x),mix(c,d,f.x),f.y);}",
+    "float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<4;i++){v+=a*vn(p);p*=2.07;a*=.5;}return v;}",
+    // Ridged noise gives threads instead of blobs — this is what makes a capillary
+    // look like a vessel and not like a cloud.
+    "float ridge(vec2 p){float v=0.,a=.5;for(int i=0;i<4;i++){v+=a*(1.-abs(vn(p)*2.-1.));p*=2.11;a*=.5;}return v;}",
+
+    // Worley. Returns (F1, F2-F1, cell id). Every nucleus orbits its own cell on a
+    // slow private path, so no two cells ever pulse together.
+    "vec3 cells(vec2 p,float t){vec2 n=floor(p),f=fract(p);",
+    " float f1=8.,f2=8.;vec2 id=vec2(0.);",
+    " for(int j=-1;j<=1;j++){for(int i=-1;i<=1;i++){",
+    "  vec2 g=vec2(float(i),float(j));vec2 o=h2(n+g);",
+    "  o=.5+.40*sin(t*.32+6.2831*o);",
+    "  float d=length(g+o-f);",
+    "  if(d<f1){f2=f1;f1=d;id=n+g;}else if(d<f2){f2=d;}",
+    " }}",
+    " return vec3(f1,f2-f1,h1(id));}",
+
+    "void main(){",
+    " vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y;",
+    " vec2 m=(uM-.5*uRes)/uRes.y;m.y*=-1.;",
+    " float t=uT;",
+    // ~7 breaths a minute. Slow enough that you feel it rather than watch it.
+    " float breath=.5+.5*sin(t*.72);",
+
+    // Chemotaxis. Everything below is stronger the closer it is to the cursor,
+    // and uLive fades the whole effect out when the pointer leaves.
+    " float rm=length(uv-m);",
+    // Tight. A wide gradient turns the whole page into a lamp; the point is a
+    // local response in the tissue the pointer is actually over, so the falloff
+    // is effectively gone by a third of the screen height.
+    " float food=exp(-rm*rm*7.5)*uLive;",
+
+    // Domain warp — the reason this reads as tissue and not as a tiling.
+    " vec2 w=uv+vec2(fbm(uv*1.5+t*.05),fbm(uv*1.5-t*.04+11.3))*.34;",
+    // Tissue swells toward the food source: cells near the cursor get physically
+    // bigger by shrinking the sampling scale there.
+    " float swell=1.-food*.30;",
+
+    // Two layers at different depths. The far one drifts slower and sits dimmer,
+    // which is what gives a flat quad the thickness of a real section.
+    " vec3 c1=cells(w*3.4*swell+vec2(t*.020,-t*.014),t);",
+    " vec3 c2=cells(w*6.9*swell+vec2(-t*.030,t*.023)+31.7,t*1.25);",
+
+    // Membrane = the F2-F1 ridge. This is the single most biological line there is.
+    " float mem1=1.-smoothstep(.0,.085,c1.y);",
+    " float mem2=1.-smoothstep(.0,.060,c2.y);",
+    // Cytoplasm: each cell tinted by its own id, so the field has variation
+    // rather than one flat wash.
+    " float cyto=(.35+.65*c1.z)*(1.-smoothstep(.15,.85,c1.x));",
+    // Nuclei, breathing slightly out of phase per cell.
+    " float nuc=smoothstep(.135+.02*sin(t*.6+c1.z*31.),.0,c1.x)*(.55+.45*c1.z);",
+
+    // Capillaries, warped again so they wander, and pulled toward the cursor so
+    // the network visibly grows in that direction.
+    " vec2 vp=w*2.3+vec2(t*.035,-t*.028)-normalize(uv-m+1e-4)*food*.55;",
+    " float vas=ridge(vp);",
+    " vas=pow(max(vas-.62,0.)*2.6,2.0);",
+
+    // Motes — organelles and spores adrift in the medium, the counterpart to the
+    // stars in the physics field. They rise, because everything in a fluid does.
+    " vec2 sp=w*17.0+vec2(0.,-t*.10);vec2 si=floor(sp);vec2 sf=fract(sp)-.5;",
+    " float sv=h1(si);",
+    " float mote=step(.972,sv)*smoothstep(.055,0.,length(sf-(h2(si)-.5)*.6))*(.55+.45*sin(t*2.1+sv*44.));",
+
+    // --- compose ---
+    " float lum=(.030+.055*breath)*(.55+uIn);",
+    " vec3 col=vec3(.012,.026,.034)*(1.-uLight);",
+    " col+=uC*cyto*lum*1.35;",
+    " col+=uC*mem1*(.055+uIn*.13)*(.75+.25*breath);",
+    " col+=mix(uC,vec3(1.),.35)*mem2*(.022+uIn*.055);",
+    " col+=mix(uC,vec3(1.),.55)*nuc*(.020+uIn*.048);",
+    " col+=mix(uC,vec3(1.,.55,.52),.30)*vas*(.055+uIn*.14);",
+    " col+=vec3(.85,.95,1.)*mote*.55;",
+    // The food source itself: a soft bloom, plus a brightening of whatever tissue
+    // is under it, so the cursor lights the section rather than floating over it.
+    " col+=uC*food*(.085+uIn*.15);",
+    " col*=1.+food*.34;",
+    // Depth: the section is thickest and best-lit in the middle of the field.
+    " col*=1.-.38*smoothstep(.55,1.35,length(uv));",
+
+    // Light mode: invert the physics, not the palette. On a slide the stain
+    // ABSORBS — so a green stain removes red and blue and leaves green, which
+    // means the structures subtract (1-uC), not uC. Subtracting uC would print
+    // the complement and give a magenta negative of the tissue.
+    " float dens=cyto*.30+mem1*1.05+mem2*.42+nuc*.62+vas*.95;",
+    " dens=min(dens*(.46+uIn*.60)*(1.+food*.45),1.25);",
+    " vec3 ink=vec3(1.)-(vec3(1.)-uC)*dens*.80-vec3(.05)*dens;",
+    // Illumination falls off toward the edge of the coverslip.
+    " ink=mix(ink,vec3(1.),.22*smoothstep(.55,1.4,length(uv)));",
+    " col=mix(col,ink,uLight);",
+
+    " gl_FragColor=vec4(col,1.);}"
+  ].join("\n");
+
+  var VS = "attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}";
+
+  function boot() {
+    readTheme();
+    // Follow the product's own theme toggle without it having to know we exist.
+    try {
+      new MutationObserver(readTheme).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    } catch (e) {}
+    // Pick the colour from the page the shell already declares.
+    setSection((document.body && document.body.getAttribute("data-page")) || "home");
+    for (var i = 0; i < 40; i++) ease();     // start already at the right colour, no fade-in from green
+
+    var gl = null;
+    try {
+      gl = cv.getContext("webgl", { alpha: true, antialias: false, depth: false, stencil: false, powerPreference: "low-power" })
+        || cv.getContext("experimental-webgl", { alpha: true, antialias: false, depth: false });
+    } catch (e) {}
+    if (!gl) return fallback();
+
+    function sh(ty, src) {
+      var o = gl.createShader(ty); gl.shaderSource(o, src); gl.compileShader(o);
+      if (!gl.getShaderParameter(o, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(o) || "compile");
+      return o;
+    }
+    var prog;
+    try {
+      prog = gl.createProgram();
+      gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS));
+      gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS));
+      gl.linkProgram(prog);
+      if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog) || "link");
+    } catch (e) { return fallback(); }
+
+    gl.useProgram(prog);
+    var buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    var lp = gl.getAttribLocation(prog, "p");
+    gl.enableVertexAttribArray(lp);
+    gl.vertexAttribPointer(lp, 2, gl.FLOAT, false, 0, 0);
+
+    var uRes = gl.getUniformLocation(prog, "uRes"), uT = gl.getUniformLocation(prog, "uT"),
+        uM = gl.getUniformLocation(prog, "uM"), uC = gl.getUniformLocation(prog, "uC"),
+        uIn = gl.getUniformLocation(prog, "uIn"), uLive = gl.getUniformLocation(prog, "uLive"),
+        uLight = gl.getUniformLocation(prog, "uLight");
+
+    // A full-screen procedural field is fill-rate bound, so resolution is the one
+    // dial that matters. 1.25x is enough for the membranes to stay crisp and cheap
+    // enough that an integrated GPU never notices.
+    var dpr = Math.min(devicePixelRatio || 1, 1.25);
+    // A page can boot while its tab is hidden or its pane is not compositing, and
+    // then innerWidth is 0 — sizing to that leaves a 1x1 canvas which never
+    // recovers, because becoming visible does not fire a resize event. Fall back
+    // through the layout box to a sane default so the field is always drawable.
+    function vw() { return innerWidth || document.documentElement.clientWidth || cv.clientWidth || 1280; }
+    function vh() { return innerHeight || document.documentElement.clientHeight || cv.clientHeight || 800; }
+    function size() {
+      var w = Math.max(1, Math.round(vw() * dpr)), h = Math.max(1, Math.round(vh() * dpr));
+      if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; gl.viewport(0, 0, w, h); }
+    }
+    addEventListener("resize", size); size();
+
+    var raf = null, t0 = 0;
+    // draw() is the whole render and nothing else; frame() is draw() plus the
+    // scheduling. Keeping them apart is what lets _tick() below render on demand
+    // without quietly queueing a second rAF alongside the running loop.
+    function draw(ms) {
+      ease(); size();
+      if (!t0) t0 = ms || 0;
+      gl.uniform2f(uRes, cv.width, cv.height);
+      gl.uniform1f(uT, ((ms || 0) - t0) * 0.001);
+      var s = cv.width / vw();
+      gl.uniform2f(uM, M.x * s, (vh() - M.y) * s);
+      gl.uniform3f(uC, cur.r, cur.g, cur.b);
+      gl.uniform1f(uIn, cur.in);
+      gl.uniform1f(uLive, M.live);
+      gl.uniform1f(uLight, cur.lt);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    }
+    function frame(ms) {
+      raf = null;
+      draw(ms);
+      if (!STILL) raf = requestAnimationFrame(frame);
+    }
+    repaint = draw;
+    if (STILL) draw(0); else raf = requestAnimationFrame(frame);
+
+    // A field nobody can see must not cost a frame.
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) { if (raf) { cancelAnimationFrame(raf); raf = null; } }
+      // Coming back from hidden also re-measures, because the viewport may have
+      // been 0 the whole time the tab was in the background.
+      else if (!raf && !STILL) { size(); raf = requestAnimationFrame(frame); }
+    });
+
+    // _tick renders exactly one frame on demand. rAF is throttled to nothing in a
+    // hidden tab, so this is the only way to prove the field actually draws when
+    // the page is not on screen — which is precisely when it needs proving.
+    window.BIOQ_ATMO = { theme: theme, setSection: setSection, mouse: M, mode: "webgl", _tick: draw };
+  }
+
+  /* --- fallback ---------------------------------------------------------- */
+  // No WebGL. Draw the same idea in 2D: drifting cells with membranes and nuclei,
+  // and a nutrient glow at the cursor. Fewer cells, no capillaries, same product.
+  function fallback() {
+    var ctx = cv.getContext("2d");
+    if (!ctx) { window.BIOQ_ATMO = { theme: theme, setSection: setSection, mouse: M, mode: "none" }; return; }
+    var dpr = Math.min(devicePixelRatio || 1, 1.5), W = 0, H = 0, pop = [];
+    function size() {
+      W = innerWidth; H = innerHeight;
+      cv.width = Math.max(1, Math.round(W * dpr)); cv.height = Math.max(1, Math.round(H * dpr));
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var n = Math.max(10, Math.min(30, Math.round(W * H / 46000)));
+      pop = [];
+      for (var i = 0; i < n; i++) pop.push({
+        x: Math.random() * W, y: Math.random() * H, r: 42 + Math.random() * 78,
+        vx: (Math.random() - 0.5) * 0.13, vy: (Math.random() - 0.5) * 0.13, ph: Math.random() * 6.283
+      });
+    }
+    size(); addEventListener("resize", size);
+
+    var raf = null, t = 0;
+    function rgba(a) { return "rgba(" + (cur.r * 255 | 0) + "," + (cur.g * 255 | 0) + "," + (cur.b * 255 | 0) + "," + a + ")"; }
+    function frame() {
+      raf = null; ease(); t += 0.016;
+      var light = cur.lt > 0.5;
+      ctx.clearRect(0, 0, W, H);
+      var glow = ctx.createRadialGradient(M.x, M.y, 0, M.x, M.y, 340);
+      glow.addColorStop(0, rgba((light ? 0.10 : 0.13) * M.live)); glow.addColorStop(1, rgba(0));
+      ctx.fillStyle = glow; ctx.fillRect(0, 0, W, H);
+      for (var i = 0; i < pop.length; i++) {
+        var c = pop[i];
+        c.x += c.vx; c.y += c.vy;
+        if (c.x < -140) c.x = W + 140; if (c.x > W + 140) c.x = -140;
+        if (c.y < -140) c.y = H + 140; if (c.y > H + 140) c.y = -140;
+        // Chemotaxis, cheaply: a cell near the cursor swells.
+        var d = Math.hypot(c.x - M.x, c.y - M.y);
+        var food = Math.exp(-(d * d) / 260000) * M.live;
+        var r = c.r * (1 + Math.sin(t * 0.62 + c.ph) * 0.05 + food * 0.20);
+        var g = ctx.createRadialGradient(c.x, c.y, r * 0.2, c.x, c.y, r);
+        g.addColorStop(0, rgba((light ? 0.030 : 0.052) * (0.6 + cur.in) * (1 + food))); g.addColorStop(1, rgba(0));
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(c.x, c.y, r, 0, 6.283); ctx.fill();
+        ctx.strokeStyle = rgba((light ? 0.055 : 0.085) * (1 + food * 1.4)); ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.arc(c.x, c.y, r, 0, 6.283); ctx.stroke();
+        ctx.fillStyle = rgba((light ? 0.045 : 0.062) * (1 + food));
+        ctx.beginPath(); ctx.arc(c.x + r * 0.11, c.y - r * 0.07, r * 0.24, 0, 6.283); ctx.fill();
+      }
+      if (!STILL) raf = requestAnimationFrame(frame);
+    }
+    repaint = frame;
+    if (STILL) { for (var k = 0; k < 40; k++) ease(); frame(); } else raf = requestAnimationFrame(frame);
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) { if (raf) { cancelAnimationFrame(raf); raf = null; } }
+      else if (!raf && !STILL) raf = requestAnimationFrame(frame);
+    });
+
+    window.BIOQ_ATMO = { theme: theme, setSection: setSection, mouse: M, mode: "2d" };
+  }
+
+  /* --- go ---------------------------------------------------------------- */
+  // Last line on purpose: everything above is now assigned, so boot() can read it.
+  attach();
+})();
+
+</script>
+</body>
+</html>

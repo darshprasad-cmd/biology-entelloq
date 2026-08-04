@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<!-- __TITLE__ -->
+<title>Biology Entelloq</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* ============================================================================
+   BIOLOGY ENTELLOQ — shared product shell. IDENTICAL across every pillar page
+   (Home · Learn · Solve · Explore · Me) so the product reads as one thing.
+   DO NOT edit tokens, nav, or component classes when building a pillar — only
+   fill <main id="page"> and add scoped rules in <style id="page-css">.
+   ========================================================================== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+img,svg,canvas{display:block;max-width:100%}
+button,input,select,textarea{font:inherit;color:inherit;background:none;border:none}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--em);outline-offset:3px;border-radius:6px}
+::selection{background:color-mix(in srgb,var(--em) 45%,transparent);color:var(--ink)}
+
+:root{
+  --em:#34d399; --em-2:#10b981; --cy:#38e0d8; --cy-2:#22d3ee;
+  --indigo:#7c8cf8; --violet:#8b5cf6; --amber:#f6c667; --rose:#fb7185;
+  --grad-life:linear-gradient(120deg,var(--em),var(--cy));
+  --grad-mind:linear-gradient(120deg,var(--cy),var(--indigo));
+  --bg:#04070a; --bg-2:#070b10; --panel:#0b1117; --raise:#0e151c;
+  --ink:#eaf2f5; --dim:#9fb2bc; --faint:#7d8b93;
+  --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.05);
+  --glass:rgba(10,15,20,.62); --glass-strong:rgba(8,12,17,.82); --hair:rgba(255,255,255,.10);
+  --shadow-2:0 12px 40px -12px rgba(0,0,0,.7);
+  --shadow-glow:0 0 0 1px rgba(52,211,153,.18),0 20px 60px -18px rgba(16,185,129,.35);
+  --spot:rgba(52,211,153,.16);
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --serif:"Instrument Serif",Georgia,serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --ease-out:cubic-bezier(.23,1,.32,1); --ease-in-out:cubic-bezier(.77,0,.175,1);
+  --r-sm:10px; --r:16px; --r-lg:24px; --r-xl:34px;
+  --edge:clamp(20px,5vw,72px); --maxw:1200px;
+}
+:root[data-theme="light"]{
+  --bg:#f6f8f9; --bg-2:#eef2f4; --panel:#ffffff; --raise:#ffffff;
+  --ink:#0c1418; --dim:#4a5a63; --faint:#5c6b74;
+  --line:rgba(6,20,26,.10); --line-2:rgba(6,20,26,.06);
+  --glass:rgba(255,255,255,.72); --glass-strong:rgba(255,255,255,.86); --hair:rgba(6,20,26,.12);
+  --em:#0a7d57; --em-2:#0a7d57; --cy:#0891b2; --indigo:#5b63e6;
+  --shadow-2:0 14px 44px -16px rgba(20,40,50,.28);
+  --shadow-glow:0 0 0 1px rgba(14,163,113,.18),0 22px 60px -20px rgba(14,163,113,.28);
+  --spot:rgba(14,163,113,.12);
+}
+html,body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;
+  letter-spacing:-.011em;-webkit-font-smoothing:antialiased;min-height:100%;overflow-x:hidden}
+
+/* type scale */
+.eyebrow{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--em);display:inline-flex;align-items:center;gap:9px}
+.eyebrow::before{content:"";width:16px;height:1px;background:currentColor;opacity:.6}
+.display{font-weight:800;letter-spacing:-.03em;line-height:1.02;font-size:clamp(2.6rem,7vw,5rem)}
+.h1{font-weight:800;letter-spacing:-.028em;line-height:1.05;font-size:clamp(2rem,5vw,3.4rem)}
+.h2{font-weight:700;letter-spacing:-.024em;line-height:1.1;font-size:clamp(1.6rem,3.6vw,2.5rem)}
+.h3{font-weight:600;letter-spacing:-.02em;line-height:1.2;font-size:clamp(1.1rem,2vw,1.35rem)}
+.lead{font-size:clamp(1.02rem,1.6vw,1.3rem);color:var(--dim);line-height:1.6}
+.serif{font-family:var(--serif);font-weight:400}
+.grad{background:var(--grad-life);-webkit-background-clip:text;background-clip:text;color:transparent}
+.grad-mind{background:var(--grad-mind);-webkit-background-clip:text;background-clip:text;color:transparent}
+.muted{color:var(--dim)} .faint{color:var(--faint)}
+
+.wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--edge);width:100%}
+.band{padding-block:clamp(56px,9vw,110px);position:relative}
+.grid{display:grid;gap:22px}
+.g2{grid-template-columns:repeat(2,1fr)} .g3{grid-template-columns:repeat(3,1fr)} .g4{grid-template-columns:repeat(4,1fr)}
+.sec-head{max-width:720px;margin-bottom:clamp(30px,5vw,54px)}
+.sec-head .eyebrow{margin-bottom:16px} .sec-head h2{margin-bottom:14px}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:9px;padding:11px 20px;border-radius:12px;font-weight:600;
+  font-size:14.5px;cursor:pointer;position:relative;overflow:hidden;
+  transition:transform .14s var(--ease-out),box-shadow .3s var(--ease-out),background .3s,border-color .3s}
+.btn:active{transform:scale(.97)}
+.btn.primary{color:#03110c;background:var(--grad-life);box-shadow:var(--shadow-glow)}
+.btn.primary:hover{box-shadow:0 0 0 1px rgba(52,211,153,.3),0 26px 70px -18px rgba(16,185,129,.55)}
+.btn.ghost{color:var(--ink);border:1px solid var(--hair);background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.btn.ghost:hover{border-color:color-mix(in srgb,var(--em) 40%,var(--hair))}
+.btn .arr{transition:transform .2s var(--ease-out)} .btn:hover .arr{transform:translateX(3px)}
+
+/* cards */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:clamp(20px,3vw,30px);position:relative;overflow:hidden;
+  transition:transform .4s var(--ease-out),border-color .4s,box-shadow .4s var(--ease-out)}
+.card .glow{position:absolute;inset:-1px;border-radius:inherit;opacity:0;pointer-events:none;
+  background:radial-gradient(50% 60% at var(--mx,50%) 0%,var(--spot),transparent 70%);transition:opacity .4s}
+@media (hover:hover) and (pointer:fine){
+  .card.lift:hover{transform:translateY(-6px);border-color:var(--hair);box-shadow:var(--shadow-2)}
+  .card.lift:hover .glow{opacity:1}}
+.card .ico{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;margin-bottom:18px;
+  background:color-mix(in srgb,var(--em) 12%,transparent);color:var(--em);
+  border:1px solid color-mix(in srgb,var(--em) 22%,transparent)}
+.card .ico svg{width:22px;height:22px}
+.card h3{margin-bottom:8px} .card p{color:var(--dim);font-size:15px;line-height:1.6}
+.chip{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;padding:5px 10px;border-radius:999px;border:1px solid var(--line);color:var(--dim)}
+.chip.live{color:var(--em);border-color:color-mix(in srgb,var(--em) 30%,transparent);background:color-mix(in srgb,var(--em) 10%,transparent)}
+.chip.soon{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 26%,transparent)}
+.chip .d{width:6px;height:6px;border-radius:50%;background:currentColor}
+
+/* reveal-on-scroll (opacity+transform only) */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .5s var(--ease-out),transform .5s var(--ease-out)}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.06s}.reveal.d2{transition-delay:.12s}.reveal.d3{transition-delay:.18s}.reveal.d4{transition-delay:.24s}
+
+/* ambient veil */
+.bg-veil{position:fixed;inset:0;z-index:0;pointer-events:none;background:
+  radial-gradient(60% 45% at 78% -5%,color-mix(in srgb,var(--cy) 10%,transparent),transparent 60%),
+  radial-gradient(55% 45% at 8% 8%,color-mix(in srgb,var(--em) 10%,transparent),transparent 55%)}
+
+/* ===== persistent product nav ===== */
+header.nav{position:fixed;top:0;left:0;right:0;z-index:60;transition:background .3s,border-color .3s,backdrop-filter .3s}
+header.nav.scrolled{background:var(--glass);backdrop-filter:blur(18px) saturate(1.4);
+  -webkit-backdrop-filter:blur(18px) saturate(1.4);border-bottom:1px solid var(--line)}
+.nav-in{max-width:var(--maxw);margin-inline:auto;padding:12px var(--edge);display:flex;align-items:center;gap:18px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px}
+.brand .logo{width:28px;height:28px} .brand b{font-weight:800}
+.nav-links{display:flex;align-items:center;gap:2px;margin-left:6px}
+.nav-links a{padding:8px 14px;border-radius:10px;font-size:14px;font-weight:500;color:var(--dim);
+  transition:color .2s,background .2s;position:relative}
+.nav-links a:hover{color:var(--ink);background:color-mix(in srgb,var(--ink) 6%,transparent)}
+.nav-links a.active{color:var(--ink)}
+.nav-links a.active::after{content:"";position:absolute;left:14px;right:14px;bottom:3px;height:2px;border-radius:2px;background:var(--grad-life)}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.iconbtn{width:38px;height:38px;border-radius:11px;border:1px solid var(--line);display:grid;place-items:center;
+  color:var(--dim);cursor:pointer;background:var(--panel);transition:color .2s,border-color .2s,transform .12s var(--ease-out)}
+.iconbtn:hover{color:var(--ink);border-color:var(--hair)} .iconbtn:active{transform:scale(.94)} .iconbtn svg{width:17px;height:17px}
+.navtoggle{display:none}
+main{position:relative;z-index:1;padding-top:64px;min-height:100vh}
+.mobile-menu{display:none;position:fixed;inset:64px 0 0;z-index:55;background:var(--glass-strong);
+  backdrop-filter:blur(20px);padding:24px var(--edge)}
+.mobile-menu.open{display:block}
+.mobile-menu a{display:block;padding:16px 0;font-size:20px;font-weight:600;border-bottom:1px solid var(--line)}
+
+/* footer */
+footer{position:relative;z-index:1;border-top:1px solid var(--line);background:var(--bg-2);margin-top:40px}
+.foot-in{max-width:var(--maxw);margin-inline:auto;padding:40px var(--edge);display:flex;flex-wrap:wrap;gap:18px;
+  align-items:center;justify-content:space-between;color:var(--faint);font-size:13px}
+.foot-in a{color:var(--dim)} .foot-in a:hover{color:var(--ink)}
+
+@media (max-width:900px){.g4{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr}}
+@media (max-width:1024px){.nav-links{display:none}.navtoggle{display:grid}}
+@media (max-width:680px){.g4,.g3,.g2{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.12s!important}
+  .reveal{opacity:1!important;transform:none!important}}
+</style>
+<style id="page-css">/* pillar-specific rules go here */</style>
+</head>
+<body>
+<div class="bg-veil" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="brand" href="./Biology Entelloq.html" aria-label="Biology Entelloq home">
+      <svg class="logo" viewBox="0 0 100 100" fill="none" aria-hidden="true"><defs><linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#34d399"/><stop offset="1" stop-color="#38e0d8"/></linearGradient></defs>
+        <path d="M32 16c20 9 16 28 0 34 20 6 24 24 0 34" stroke="url(#bg1)" stroke-width="5" stroke-linecap="round"/>
+        <path d="M68 16C48 25 52 44 68 50 48 56 44 75 68 84" stroke="url(#bg1)" stroke-width="5" stroke-linecap="round"/></svg>
+      <span>Biology <b>Entelloq</b></span></a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="./Biology Entelloq.html">Home</a>
+      <a href="./Biology Entelloq - Learn.html" data-nav="learn">Learn</a>
+      <a href="./Biology Entelloq - Solve.html" data-nav="solve">Solve</a>
+      <a href="./Biology Entelloq - Explore.html" data-nav="explore">Explore</a>
+      <a href="./Biology Entelloq - Me.html" data-nav="me">Me</a>
+    </nav>
+    <div class="nav-right">
+      <button class="iconbtn" id="themeBtn" aria-label="Toggle theme" aria-pressed="false"><svg id="themeIcon" viewBox="0 0 24 24" fill="none"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></button>
+      <a class="btn primary" href="./Biology Entelloq - Dissection Lab.html">Open the Lab <span class="arr">→</span></a>
+      <button class="iconbtn navtoggle" id="navToggle" aria-label="Menu" aria-controls="mobileMenu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="./Biology Entelloq.html">Home</a>
+  <a href="./Biology Entelloq - Learn.html">Learn</a>
+  <a href="./Biology Entelloq - Solve.html">Solve</a>
+  <a href="./Biology Entelloq - Explore.html">Explore</a>
+  <a href="./Biology Entelloq - Me.html">Me</a>
+  <a href="./Biology Entelloq - Dissection Lab.html">Open the Lab →</a>
+</div>
+
+<main id="page"><!-- __PAGE__ pillar content goes here --></main>
+
+<footer>
+  <div class="foot-in">
+    <span>Biology Entelloq — the biological sibling of Physics Entelloq.</span>
+    <span><a href="./Biology Entelloq.html">Home</a> · <a href="./Biology Entelloq - Dissection Lab.html">Lab</a> · <a href="./Biology Universe.html">Universe</a></span>
+  </div>
+</footer>
+
+<script>
+/* shared shell behaviour — nav scroll state, theme, mobile menu, scroll-reveal.
+   Pillar-specific JS goes in <script id="page-js"> AFTER this block. */
+(function(){
+  const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+  const root=document.documentElement;
+  // theme
+  function setTheme(t){root.setAttribute("data-theme",t);try{localStorage.setItem("bioq_theme",t);}catch(e){}
+    $("#themeBtn").setAttribute("aria-pressed",t==="light"?"true":"false");
+    $("#themeIcon").innerHTML=t==="light"
+      ?'<circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'
+      :'<path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>';}
+  try{setTheme(localStorage.getItem("bioq_theme")||"dark");}catch(e){setTheme("dark");}
+  $("#themeBtn").addEventListener("click",()=>setTheme(root.getAttribute("data-theme")==="light"?"dark":"light"));
+  // nav scroll state
+  const nav=$("#nav"); addEventListener("scroll",()=>nav.classList.toggle("scrolled",scrollY>16),{passive:true});
+  nav.classList.toggle("scrolled",scrollY>16);
+  // mobile menu
+  const mm=$("#mobileMenu"),nt=$("#navToggle");
+  nt.addEventListener("click",()=>{const o=mm.classList.toggle("open");nt.setAttribute("aria-expanded",o?"true":"false");});
+  // active nav link (set data-page on <body> in each pillar, e.g. <body data-page="learn">)
+  const page=document.body.dataset.page; if(page){const a=document.querySelector('.nav-links a[data-nav="'+page+'"]'); if(a)a.classList.add("active");}
+  // scroll reveal
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}}),{threshold:.12,rootMargin:"0px 0px -6% 0px"});
+  function observe(){$$(".reveal:not(.in)").forEach(el=>io.observe(el));}
+  observe(); window.__observeReveals=observe;
+  // card glow
+  addEventListener("pointermove",e=>{const c=e.target.closest(".card");if(!c)return;const r=c.getBoundingClientRect();
+    c.style.setProperty("--mx",((e.clientX-r.left)/r.width*100)+"%");},{passive:true});
+})();
+</script>
+<script id="page-js">/* pillar-specific behaviour goes here */</script>
+</body>
+</html>
