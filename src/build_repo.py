@@ -97,8 +97,16 @@ def main():
     # module trees; ship those whole so the worlds are rebuildable too. __pycache__
     # and the 670KB vendored three.js copy under universe are skipped — the lab's
     # copy is the one the docs point at.
+    # human-*.js built the torso prosection, which was cut from the product. The
+    # files stay on the authoring machine (recoverable) but are kept out of the
+    # public repo: nothing assembles them, so in here they would be dead code that
+    # reads as a feature. wf-*.js are spent build-workflow briefs, same reasoning.
     lab = copy_tree(os.path.join(ROOT, "_build"), os.path.join(SRC, "lab"),
-                    skip={"__pycache__", "_check.mjs"})
+                    skip={"__pycache__", "_check.mjs",
+                          "human.js", "human-wall.js", "human-thorax.js",
+                          "human-gi.js", "human-deep.js",
+                          "wf-app.js", "wf-refine.js", "wf-accurate.js",
+                          "wf-fidelity.js", "wf-presence.js"})
     uni = copy_tree(os.path.join(ROOT, "universe", "_build"), os.path.join(SRC, "universe"),
                     skip={"__pycache__", "vendor"})
     print("  lab modules: %d   universe modules: %d" % (lab, uni))
