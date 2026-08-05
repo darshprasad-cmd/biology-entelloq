@@ -89,7 +89,7 @@ def main():
     # .git and take the whole history with it — and on Windows it fails outright
     # the moment any process has the directory open.
     os.makedirs(OUT, exist_ok=True)
-    for stale in list(PAGES.values()) + ["CNAME", ".nojekyll", "404.html"]:
+    for stale in list(PAGES.values()) + ["CNAME", ".nojekyll", "404.html", "bioq-og.jpg", "favicon.png"]:
         p = os.path.join(OUT, stale)
         if os.path.isfile(p):
             os.remove(p)
@@ -114,16 +114,18 @@ def main():
     # The social card has to be a real fetchable file — a scraper cannot read a
     # data: URI out of <meta property="og:image">, so this one image is the sole
     # exception to everything else being inlined.
-    og = os.path.join(SRC, "bioq-og.jpg")
-    if os.path.exists(og):
-        shutil.copy2(og, os.path.join(OUT, "bioq-og.jpg"))
-        print("  bioq-og.jpg    <- social card")
+    for asset, label in (("bioq-og.jpg", "social card"), ("favicon.png", "site icon")):
+        src_a = os.path.join(SRC, asset)
+        if os.path.exists(src_a):
+            shutil.copy2(src_a, os.path.join(OUT, asset))
+            print("  %-14s <- %s" % (asset, label))
 
     # A 404 that keeps people inside the product rather than on a GitHub page.
     open(os.path.join(OUT, "404.html"), "w", encoding="utf-8", newline="\n").write(
         '<!doctype html><html lang="en"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
         "<title>Not found — Biology Entelloq</title>"
+        '<link rel="icon" type="image/png" href="/favicon.png">'
         "<style>html,body{height:100%;margin:0}body{background:#04070a;color:#eaf2f5;"
         'font:16px/1.6 system-ui,sans-serif;display:grid;place-items:center;text-align:center;padding:24px}'
         "h1{font-size:2rem;letter-spacing:-.03em;margin:0 0 10px}p{color:#9fb2bc;margin:0 0 22px}"
