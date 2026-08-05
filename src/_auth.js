@@ -112,7 +112,14 @@
       "background:color-mix(in srgb,var(--em,#34d399) 22%,transparent);display:grid;place-items:center;" +
       "font-size:10px;font-weight:700;color:var(--em,#34d399)}" +
     ".bq-acct .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}" +
-    ".bq-pop{position:absolute;bottom:calc(100% + 8px);left:0;width:min(300px,86vw);z-index:400;" +
+    // Anchored to the RIGHT edge, not the left. This control lives at the right end
+    // of a top bar on some pages and full-width in a sidebar on others; left:0 sent
+    // the panel straight off the side of a phone (measured: 126px of horizontal
+    // overflow at 390px wide, which dragged the whole page sideways). Right-anchored
+    // it stays inside on both, and the width is clamped to the viewport rather than
+    // to a vw fraction so the gutters survive at any size.
+    ".bq-pop{position:absolute;bottom:calc(100% + 8px);right:0;left:auto;" +
+      "width:min(300px,calc(100vw - 28px));max-width:calc(100vw - 28px);z-index:400;" +
       "border:1px solid var(--line,rgba(255,255,255,.1));border-radius:15px;padding:15px;" +
       "background:var(--panel,#0b1117);box-shadow:0 22px 60px -18px rgba(0,0,0,.7);" +
       "opacity:0;transform:translateY(6px) scale(.97);pointer-events:none;" +

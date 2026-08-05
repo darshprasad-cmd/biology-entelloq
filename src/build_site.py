@@ -27,7 +27,11 @@ DOMAIN = "biology.entelloq.com"
 
 # source filename -> URL slug
 PAGES = {
-    "Biology Entelloq.html":                  "index.html",
+    # The front door is the root. The app shell moved to /app.html when the launch
+    # page was added — every internal link to it is rewritten from this one map, so
+    # nothing else in the product has to know the URL changed.
+    "Biology Entelloq - Launch.html":          "index.html",
+    "Biology Entelloq.html":                  "app.html",
     "Biology Entelloq - Learn.html":           "learn.html",
     "Biology Entelloq - Lessons.html":         "lessons.html",
     "Biology Entelloq - Reason.html":          "reason.html",
@@ -65,7 +69,7 @@ def fix_embed_guard(html):
     Re-point the test at the slug set.
     """
     old = r"/(Biology Entelloq|Biology Universe)/i.test(h)"
-    new = r"/^\.?\/?(index|learn|lessons|reason|labs|solve|explore|me|about|lab|universe)\.html/i.test(h.replace(/^\.\//,''))"
+    new = r"/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore|me|about|lab|universe)\.html/i.test(h.replace(/^\.\//,''))"
     if old in html:
         html = html.replace(old, new)
 
@@ -75,7 +79,7 @@ def fix_embed_guard(html):
     # a filename that no longer exists on the site and EVERY shell deep-link
     # ("./index.html#explore/graph") would be a dead click. Rewrite the escaped
     # form too.
-    html = html.replace(r"Biology Entelloq\.html", r"index\.html")
+    html = html.replace(r"Biology Entelloq\.html", r"app\.html")
     return html
 
 
@@ -106,6 +110,14 @@ def main():
     # Jekyll pipeline (which skips files it does not recognise).
     open(os.path.join(OUT, "CNAME"), "w", encoding="utf-8", newline="\n").write(DOMAIN + "\n")
     open(os.path.join(OUT, ".nojekyll"), "w", encoding="utf-8", newline="\n").write("")
+
+    # The social card has to be a real fetchable file — a scraper cannot read a
+    # data: URI out of <meta property="og:image">, so this one image is the sole
+    # exception to everything else being inlined.
+    og = os.path.join(SRC, "bioq-og.jpg")
+    if os.path.exists(og):
+        shutil.copy2(og, os.path.join(OUT, "bioq-og.jpg"))
+        print("  bioq-og.jpg    <- social card")
 
     # A 404 that keeps people inside the product rather than on a GitHub page.
     open(os.path.join(OUT, "404.html"), "w", encoding="utf-8", newline="\n").write(

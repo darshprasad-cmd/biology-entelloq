@@ -455,7 +455,7 @@ input[type=range].rng::-moz-range-thumb{width:22px;height:22px;border-radius:50%
 <a href="#page" class="skiplink">Skip to content</a>
 <header class="nav" id="nav">
   <div class="nav-in">
-    <a class="brand" href="./index.html" aria-label="Biology Entelloq home">
+    <a class="brand" href="./app.html" aria-label="Biology Entelloq home">
       <svg class="logo" viewBox="0 0 100 100" fill="none" aria-hidden="true">
         <defs><linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0" stop-color="#34d399"/><stop offset="1" stop-color="#38e0d8"/></linearGradient></defs>
@@ -465,7 +465,7 @@ input[type=range].rng::-moz-range-thumb{width:22px;height:22px;border-radius:50%
       <span>Biology <b>Entelloq</b></span>
     </a>
     <nav class="nav-links" aria-label="Primary">
-      <a href="./index.html">Platform</a>
+      <a href="./app.html">Platform</a>
       <a href="./learn.html" class="active" aria-current="page">Learn</a>
       <a href="./universe.html">Universe</a>
       <a href="./lab.html">Dissection Lab</a>
@@ -479,7 +479,7 @@ input[type=range].rng::-moz-range-thumb{width:22px;height:22px;border-radius:50%
   </div>
 </header>
 <div class="mobile-menu" id="mobileMenu">
-  <a href="./index.html">Platform</a>
+  <a href="./app.html">Platform</a>
   <a href="./learn.html">Learn</a>
   <a href="./universe.html">Universe</a>
   <a href="./lab.html">Enter the Lab →</a>
@@ -765,7 +765,7 @@ input[type=range].rng::-moz-range-thumb{width:22px;height:22px;border-radius:50%
       </div>
       <div class="foot-col">
         <h4>Pillars</h4>
-        <a href="./index.html">Platform</a>
+        <a href="./app.html">Platform</a>
         <a href="./learn.html">Learn</a>
         <a href="./universe.html">Universe</a>
         <a href="#experiences">All experiences</a>
@@ -774,7 +774,7 @@ input[type=range].rng::-moz-range-thumb{width:22px;height:22px;border-radius:50%
         <h4>Nearby</h4>
         <a href="#microscope">Virtual microscope</a>
         <a href="./labs.html">Benches</a>
-        <a href="./index.html">About</a>
+        <a href="./app.html">About</a>
       </div>
     </div>
     <div class="foot-bottom">
@@ -874,7 +874,7 @@ const CMDK_ITEMS=[
   {g:"On this page",t:"The interactive cell",s:"Click through an animal cell",href:"#cell",kind:"Demo"},
   {g:"On this page",t:"The virtual microscope",s:"Magnify & focus a live specimen",href:"#microscope",kind:"Demo"},
   {g:"On this page",t:"All experiences",s:"Browse the full catalog",href:"#experiences",kind:"Jump"},
-  {g:"Pillars",t:"Platform",s:"The Biology Entelloq home",href:"./index.html",kind:"Page"},
+  {g:"Pillars",t:"Platform",s:"The Biology Entelloq home",href:"./app.html",kind:"Page"},
   {g:"Pillars",t:"Learn",s:"You are here",href:"./learn.html",kind:"Page"}
 ];
 const SEARCH_ICO='<svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M20 20l-3-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
@@ -1217,7 +1217,7 @@ function apply(){if(document.body)document.body.classList.add('embed');}
 if(document.body)apply();else addEventListener('DOMContentLoaded',apply);
 addEventListener('message',function(e){var d=e.data||{};if(d.bioqTheme){document.documentElement.setAttribute('data-theme',d.bioqTheme);try{localStorage.setItem('bioq_theme',d.bioqTheme);}catch(x){}}});
 document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href]');if(!a)return;var h=a.getAttribute('href')||'';
-if(/\.html/i.test(h)&&/^\.?\/?(index|learn|lessons|reason|labs|solve|explore|me|about|lab|universe)\.html/i.test(h.replace(/^\.\//,''))){e.preventDefault();try{parent.postMessage({bioqNav:h},'*');}catch(x){}}},true);
+if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore|me|about|lab|universe)\.html/i.test(h.replace(/^\.\//,''))){e.preventDefault();try{parent.postMessage({bioqNav:h},'*');}catch(x){}}},true);
 })();</script>
 
 <script id="atmo-js">
@@ -1773,7 +1773,14 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|learn|lessons|reason|labs|solve|explore|me|
       "background:color-mix(in srgb,var(--em,#34d399) 22%,transparent);display:grid;place-items:center;" +
       "font-size:10px;font-weight:700;color:var(--em,#34d399)}" +
     ".bq-acct .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}" +
-    ".bq-pop{position:absolute;bottom:calc(100% + 8px);left:0;width:min(300px,86vw);z-index:400;" +
+    // Anchored to the RIGHT edge, not the left. This control lives at the right end
+    // of a top bar on some pages and full-width in a sidebar on others; left:0 sent
+    // the panel straight off the side of a phone (measured: 126px of horizontal
+    // overflow at 390px wide, which dragged the whole page sideways). Right-anchored
+    // it stays inside on both, and the width is clamped to the viewport rather than
+    // to a vw fraction so the gutters survive at any size.
+    ".bq-pop{position:absolute;bottom:calc(100% + 8px);right:0;left:auto;" +
+      "width:min(300px,calc(100vw - 28px));max-width:calc(100vw - 28px);z-index:400;" +
       "border:1px solid var(--line,rgba(255,255,255,.1));border-radius:15px;padding:15px;" +
       "background:var(--panel,#0b1117);box-shadow:0 22px 60px -18px rgba(0,0,0,.7);" +
       "opacity:0;transform:translateY(6px) scale(.97);pointer-events:none;" +

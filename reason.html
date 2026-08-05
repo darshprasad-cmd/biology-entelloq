@@ -245,14 +245,14 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);background:v
 
 <header class="nav" id="nav">
   <div class="nav-in">
-    <a class="brand" href="./index.html" aria-label="Biology Entelloq home">
+    <a class="brand" href="./app.html" aria-label="Biology Entelloq home">
       <svg class="logo" viewBox="0 0 100 100" fill="none" aria-hidden="true"><defs><linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1">
         <stop offset="0" stop-color="#34d399"/><stop offset="1" stop-color="#38e0d8"/></linearGradient></defs>
         <path d="M32 16c20 9 16 28 0 34 20 6 24 24 0 34" stroke="url(#bg1)" stroke-width="5" stroke-linecap="round"/>
         <path d="M68 16C48 25 52 44 68 50 48 56 44 75 68 84" stroke="url(#bg1)" stroke-width="5" stroke-linecap="round"/></svg>
       <span>Biology <b>Entelloq</b></span></a>
     <nav class="nav-links" aria-label="Primary">
-      <a href="./index.html">Home</a>
+      <a href="./app.html">Home</a>
       <a href="./learn.html" data-nav="learn">Learn</a>
       <a href="./solve.html" data-nav="solve">Solve</a>
       <a href="./explore.html" data-nav="explore">Explore</a>
@@ -266,7 +266,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);background:v
   </div>
 </header>
 <div class="mobile-menu" id="mobileMenu">
-  <a href="./index.html">Home</a>
+  <a href="./app.html">Home</a>
   <a href="./learn.html">Learn</a>
   <a href="./solve.html">Solve</a>
   <a href="./explore.html">Explore</a>
@@ -279,7 +279,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);background:v
 <footer>
   <div class="foot-in">
     <span>Biology Entelloq — the biological sibling of Physics Entelloq.</span>
-    <span><a href="./index.html">Home</a> · <a href="./lab.html">Lab</a> · <a href="./universe.html">Universe</a></span>
+    <span><a href="./app.html">Home</a> · <a href="./lab.html">Lab</a> · <a href="./universe.html">Universe</a></span>
   </div>
 </footer>
 
@@ -552,7 +552,7 @@ function apply(){if(document.body)document.body.classList.add('embed');}
 if(document.body)apply();else addEventListener('DOMContentLoaded',apply);
 addEventListener('message',function(e){var d=e.data||{};if(d.bioqTheme){document.documentElement.setAttribute('data-theme',d.bioqTheme);try{localStorage.setItem('bioq_theme',d.bioqTheme);}catch(x){}}});
 document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href]');if(!a)return;var h=a.getAttribute('href')||'';
-if(/\.html/i.test(h)&&/^\.?\/?(index|learn|lessons|reason|labs|solve|explore|me|about|lab|universe)\.html/i.test(h.replace(/^\.\//,''))){e.preventDefault();try{parent.postMessage({bioqNav:h},'*');}catch(x){}}},true);
+if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore|me|about|lab|universe)\.html/i.test(h.replace(/^\.\//,''))){e.preventDefault();try{parent.postMessage({bioqNav:h},'*');}catch(x){}}},true);
 })();</script>
 
 <script id="atmo-js">
@@ -1108,7 +1108,14 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|learn|lessons|reason|labs|solve|explore|me|
       "background:color-mix(in srgb,var(--em,#34d399) 22%,transparent);display:grid;place-items:center;" +
       "font-size:10px;font-weight:700;color:var(--em,#34d399)}" +
     ".bq-acct .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}" +
-    ".bq-pop{position:absolute;bottom:calc(100% + 8px);left:0;width:min(300px,86vw);z-index:400;" +
+    // Anchored to the RIGHT edge, not the left. This control lives at the right end
+    // of a top bar on some pages and full-width in a sidebar on others; left:0 sent
+    // the panel straight off the side of a phone (measured: 126px of horizontal
+    // overflow at 390px wide, which dragged the whole page sideways). Right-anchored
+    // it stays inside on both, and the width is clamped to the viewport rather than
+    // to a vw fraction so the gutters survive at any size.
+    ".bq-pop{position:absolute;bottom:calc(100% + 8px);right:0;left:auto;" +
+      "width:min(300px,calc(100vw - 28px));max-width:calc(100vw - 28px);z-index:400;" +
       "border:1px solid var(--line,rgba(255,255,255,.1));border-radius:15px;padding:15px;" +
       "background:var(--panel,#0b1117);box-shadow:0 22px 60px -18px rgba(0,0,0,.7);" +
       "opacity:0;transform:translateY(6px) scale(.97);pointer-events:none;" +
