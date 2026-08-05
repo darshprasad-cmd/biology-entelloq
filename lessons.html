@@ -153,6 +153,12 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);background:v
 @media (max-width:680px){.g4,.g3,.g2{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.12s!important}
   .reveal{opacity:1!important;transform:none!important}}
+
+/* The primary CTA hard-codes near-black text over --grad-life, which works on the
+   dark theme. Light theme darkens --em to #0a7d57, dropping that label to ~3.75:1
+   over the green half of the gradient. Light mode therefore gets white text on a
+   deliberately darker gradient instead. */
+:root[data-theme="light"] .btn.primary{color:#fff;background:linear-gradient(120deg,var(--em),#0a6f8c)}
 </style>
 <style id="page-css">
 /* 6-Lens lessons — scoped page styles (uses shared tokens only) */
@@ -1111,7 +1117,12 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);background:v
         // made the trace leap back up in the middle of relaxing. Ends at 4, where
         // passive filling picks it up.
         if (p < 0.46) return 12 - (p - 0.34) / 0.12 * 8;
-        return 4 + (p - 0.46) / 0.54 * 8;                                        // filling
+        // Passive filling ends at 8, NOT 12 — because the first branch above is
+        // atrial systole, which is what lifts the ventricle the rest of the way to
+        // 12. Ending filling at 12 made the beat wrap discontinuously (12 at p=1
+        // against 8 at p=0), so the trace jumped every time the marker crossed the
+        // right edge of the plot.
+        return 4 + (p - 0.46) / 0.54 * 4;                                        // filling
       }
       // Aortic pressure. This curve is NOT drawn independently of the ventricle —
       // it is built from it, because that is where its shape actually comes from:
@@ -1147,16 +1158,36 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);background:v
       // percent of the beat and reads out as "AV valves shut" through nearly all of
       // diastole, when in life they are open for nearly all of it.
       const AV_GRAD = 1.2;   // mmHg the atrium leads the ventricle by — the gradient that drives filling
-      // The instant the falling ventricle drops below the atrium and the valves open.
-      // Scanned rather than hard-coded so it stays correct if either curve is retuned.
+      const AV_SHUT = 0.06;  // atrial systole ends and isovolumetric contraction slams the AV valves
+      // While the valve is OPEN the atrium is not an independent curve at all — it is
+      // the ventricle plus the filling gradient, because the two are one connected
+      // space. The a-wave is therefore a BUMP on top of that, not a free-standing
+      // arch: written as a free arch it started at 8 while the previous beat had left
+      // the atrium at 13.2, and handed over to the v-wave with a 4.6 mmHg step.
+      // Vanishing at both ends is what makes the wrap and the handoff seamless.
+      function aWave(p) { return Math.sin(p / AV_SHUT * Math.PI) * 4.2; }
+      // Valve shut: the x-descent as the emptied atrium is pulled down by the
+      // descending base, then the v-wave as venous return refills it against a
+      // closed door. Starts exactly where the open phase left off.
+      const AV_X = 6.5, AV_V = 13.5;
+      function atriumShut(p) {
+        const q = (p - AV_SHUT) / (0.46 - AV_SHUT);
+        const start = ventricle(AV_SHUT) + AV_GRAD + aWave(AV_SHUT);
+        if (q < 0.35) return start + (AV_X - start) * (q / 0.35);
+        return AV_X + (AV_V - AV_X) * ((q - 0.35) / 0.65);
+      }
+      // The instant the falling ventricle drops back below the atrium and the valves
+      // reopen. Scanned rather than hard-coded so it stays correct if either curve is
+      // retuned — and because the scan finds the CROSSING, the two branches meet
+      // there by construction.
       const AV_OPEN = (() => {
-        for (let i = 68; i <= 200; i++) { const p = i / 200; if (ventricle(p) + AV_GRAD < 3 + p * 5) return p; }
+        for (let i = 68; i <= 200; i++) { const p = i / 200; if (ventricle(p) + AV_GRAD < atriumShut(p)) return p; }
         return 0.46;
       })();
       function atrium(p) {
-        if (p < 0.08) return 8 + Math.sin(p / 0.08 * Math.PI) * 7;   // a-wave — atrial systole
-        if (p < AV_OPEN) return 3 + p * 5;                            // v-wave — filling against a shut valve
-        return ventricle(p) + AV_GRAD;                                // valve open — the two curves run together
+        if (p < AV_SHUT) return ventricle(p) + AV_GRAD + aWave(p);   // atrial systole, valve still open
+        if (p < AV_OPEN) return atriumShut(p);                        // valve shut: x-descent, then the v-wave
+        return ventricle(p) + AV_GRAD;                                // valve open — the two run together
       }
       function draw() {
         t += reduced ? 0.02 : 0.0042 * (hr / 70);

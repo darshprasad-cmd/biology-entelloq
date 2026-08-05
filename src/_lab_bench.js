@@ -109,7 +109,7 @@ LABS.register("microscope", {
       readout.innerHTML = `Field of view <b>${fov >= 1000 ? (fov / 1000).toFixed(2) + " mm" : Math.round(fov) + " µm"}</b> · `
         + `objective <b>${mag / 10}x</b>, total <b>${mag}x</b> · focus <b>${df < 6 ? "sharp" : df + " µm off"}</b>`;
       note.textContent = !resolved
-        ? `At ${mag}x this specimen is not resolved — step up to at least the ${s.need / 10}x objective to see its structure.`
+        ? `At the ${mag / 10}x objective this specimen is not resolved — step up to at least the ${s.need / 10}x to see its structure.`
         : (s.stain !== "none" && !stained)
           ? `Structure is visible but low-contrast. ${s.stain[0].toUpperCase() + s.stain.slice(1)} would stain it.`
           : `Well resolved. Total magnification is objective x10 eyepiece; the scale bar below is measured, not decorative.`;
@@ -134,9 +134,9 @@ LABS.register("microscope", {
       // Pixels per micron, straight off the same field of view the scale bar is
       // drawn from. Anything sized through u is measurable against that bar.
       const u = (R * 2) / fovMicrons();
-      if (slide === "onion") drawOnion(ctx, cx, cy, R, zoom, stained);
+      if (slide === "onion") drawOnion(ctx, cx, cy, R, u, stained);
       else if (slide === "blood") drawBlood(ctx, cx, cy, R, u, stained, resolved);
-      else if (slide === "stomata") drawStomata(ctx, cx, cy, R, zoom);
+      else if (slide === "stomata") drawStomata(ctx, cx, cy, R, u);
       else drawBacteria(ctx, cx, cy, R, u, stained, resolved);
       ctx.filter = "none";
       ctx.restore();
@@ -153,8 +153,14 @@ LABS.register("microscope", {
     }
     function niceBar(x) { const p = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000]; return p.reduce((a, b) => Math.abs(b - x) < Math.abs(a - x) ? b : a); }
 
-    function drawOnion(ctx, cx, cy, R, z, st) {
-      const w = 120 * z, h = 58 * z;
+    // Onion epidermis: long brick-shaped cells, roughly 250 x 60 um, with a nucleus
+    // about 10 um across. Sized in microns through `u` like the blood and bacteria
+    // slides, so all four slides now measure true against the same scale bar —
+    // previously these two were sized off a bare zoom factor that only agreed with
+    // the bar at one canvas size.
+    function drawOnion(ctx, cx, cy, R, u, st) {
+      const w = 250 * u, h = 60 * u;
+      const z = w / 120;                       // line weights keep their old feel
       ctx.lineWidth = Math.max(1, 2 * z);
       ctx.strokeStyle = st ? "rgba(120,70,150,.85)" : "rgba(150,170,175,.55)";
       for (let r = -4; r <= 4; r++) for (let c = -4; c <= 4; c++) {
@@ -163,9 +169,9 @@ LABS.register("microscope", {
         ctx.moveTo(x - w / 2, y - h / 2); ctx.lineTo(x + w / 2, y - h / 2);
         ctx.lineTo(x + w / 2, y + h / 2); ctx.lineTo(x - w / 2, y + h / 2); ctx.closePath();
         ctx.stroke();
-        if (z >= 1) {   // nuclei resolve from 100x
+        if (5 * u >= 1.5) {   // a 10 um nucleus is only worth drawing once it is a pixel or two
           ctx.fillStyle = st ? "rgba(90,40,120,.85)" : "rgba(120,140,150,.5)";
-          ctx.beginPath(); ctx.arc(x + w * 0.16, y, Math.max(1.5, 5 * z), 0, 6.28); ctx.fill();
+          ctx.beginPath(); ctx.arc(x + w * 0.16, y, 5 * u, 0, 6.28); ctx.fill();
         }
       }
     }
@@ -174,7 +180,14 @@ LABS.register("microscope", {
     // needs 400x total. The count is what fills the field of a monolayer smear;
     // sizing is the scale bar's job, not the sprite count's.
     function drawBlood(ctx, cx, cy, R, u, st, resolved) {
-      const N = 240, rad = 3.75 * u;
+      const rad = 3.75 * u;
+      // Correctly-sized cells stopped filling the field, so the count has to follow
+      // the magnification: a real smear is a monolayer at every zoom, and how many
+      // cells that takes depends on how many cell-diameters fit across the view.
+      // Capped, because at low power the cells are unresolved anyway and drawing ten
+      // thousand specks would cost frames to render a pink haze.
+      const across = (R * 2) / Math.max(rad * 2, 0.001);
+      const N = Math.max(60, Math.min(760, Math.round(0.26 * across * across * 4 / Math.PI)));
       for (let i = 0; i < N; i++) {
         const a = i * 2.39, r = Math.sqrt(i / N) * R * 1.1;
         const x = cx + Math.cos(a) * r, y = cy + Math.sin(a) * r;
@@ -194,13 +207,16 @@ LABS.register("microscope", {
         }
       }
     }
-    function drawStomata(ctx, cx, cy, R, z) {
+    // Leaf epidermis: pavement cells about 70 um across, stomata about 40 um long.
+    // Also sized in microns now, for the same reason as the onion above.
+    function drawStomata(ctx, cx, cy, R, u) {
+      const z = 70 * u / 44;                   // line weights keep their old feel
       ctx.strokeStyle = "rgba(120,175,130,.5)"; ctx.lineWidth = Math.max(1, 1.6 * z);
       for (let r = -3; r <= 3; r++) for (let c = -3; c <= 3; c++) {
-        const x = cx + c * 110 * z + (r % 2 ? 55 * z : 0), y = cy + r * 74 * z;
+        const x = cx + c * 175 * u + (r % 2 ? 87 * u : 0), y = cy + r * 118 * u;
         ctx.beginPath();
         for (let k = 0; k <= 7; k++) {
-          const a = k / 7 * 6.28, rr = 44 * z * (0.8 + Math.sin(k * 2.1) * 0.16);
+          const a = k / 7 * 6.28, rr = 70 * u * (0.8 + Math.sin(k * 2.1) * 0.16);
           k ? ctx.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr * 0.7) : ctx.moveTo(x + rr, y);
         }
         ctx.closePath(); ctx.stroke();

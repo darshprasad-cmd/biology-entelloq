@@ -163,6 +163,12 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);background:v
 @media (max-width:560px){.nav-right .btn.primary{display:none}}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.12s!important}
   .reveal{opacity:1!important;transform:none!important}}
+
+/* The primary CTA hard-codes near-black text over --grad-life, which works on the
+   dark theme. Light theme darkens --em to #0a7d57, dropping that label to ~3.75:1
+   over the green half of the gradient. Light mode therefore gets white text on a
+   deliberately darker gradient instead. */
+:root[data-theme="light"] .btn.primary{color:#fff;background:linear-gradient(120deg,var(--em),#0a6f8c)}
 </style>
 <style id="page-css">
 /* ============================ EXPLORE — scoped ============================ */

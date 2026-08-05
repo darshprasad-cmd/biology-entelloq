@@ -215,6 +215,12 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);margin-top:4
     transition-duration:.12s!important}
   .reveal{opacity:1!important;transform:none!important;filter:none!important}
 }
+
+/* The primary CTA hard-codes near-black text over --grad-life, which works on the
+   dark theme. Light theme darkens --em to #0a7d57, dropping that label to ~3.75:1
+   over the green half of the gradient. Light mode therefore gets white text on a
+   deliberately darker gradient instead. */
+:root[data-theme="light"] .btn.primary{color:#fff;background:linear-gradient(120deg,var(--em),#0a6f8c)}
 </style>
 
 <!-- ============================================================================
@@ -569,9 +575,15 @@ function realData(){
      with a per-view count, keyed by the same short keys the shell routes on
      ("lab", "universe", …). Read that, so "you haven't been here yet" is a
      claim about something that actually happened. */
+  /* ONLY the two immersive worlds. The shell counts every view it routes to,
+     including this page, so folding the whole counts object in here made
+     hasActivity() true for anyone who merely opened Me — the first-run state
+     became unreachable and new readers were shown a dashboard of zeroes.
+     Entering the Lab or the Universe is genuine activity; navigating is not,
+     and gating the recommendations is all `seen` is ever used for. */
   const seen={};
   const counts=readJSON("bioq_activity",{}).counts||{};
-  Object.keys(counts).forEach(k=>{ if(counts[k]>0)seen[k]=counts[k]; });
+  ["lab","universe"].forEach(k=>{ if(counts[k]>0)seen[k]=counts[k]; });
   return {
     history:Array.isArray(history)?history:[],
     mistakes:Array.isArray(mistakes)?mistakes:[],
@@ -646,7 +658,6 @@ function renderJourney(d){
   const sessions=d.history.length;
   const touched=new Set(d.history.map(a=>normalizeSlug(a.topic||a.slug||a.name||a.subject)).filter(Boolean)).size;
   const reviewed=d.mistakes.length;
-  const seenCount=d.seen?Object.keys(d.seen).length:0;
   const times=d.history.map(a=>a.at||a.ts||a.time||a.date).filter(Boolean);
   const last=times.length?fmtDate(Math.max.apply(null,times.map(t=>+new Date(t)))):"—";
   const facts=[
