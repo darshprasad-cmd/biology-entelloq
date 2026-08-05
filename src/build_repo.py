@@ -27,6 +27,9 @@ SRC = os.path.join(REPO, "src")
 # (source path, destination inside src/) — authoring sources only, no build output.
 SOURCES = [
     ("product/_atmo.js",        "_atmo.js"),
+    ("product/_auth.js",        "_auth.js"),
+    ("product/inject_auth.py",  "inject_auth.py"),
+    ("product/build_labs.py",   "build_labs.py"),
     ("product/_lessons.js",     "_lessons.js"),
     ("product/_lessons.css",    "_lessons.css"),
     ("product/_lessons_main.html", "_lessons_main.html"),
