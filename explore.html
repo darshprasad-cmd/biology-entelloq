@@ -1373,8 +1373,12 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|learn|lessons|reason|labs|solve|explore|me|
   "use strict";
   if (window.BIOQ_AUTH) return;
 
-  // Fill this in once and every page inherits it at the next build.
-  var BIOQ_GOOGLE_CLIENT_ID = "";
+  // The OAuth Client ID. Public by design — it identifies the app to Google and is
+  // visible in every page that ships, which is fine and expected for a browser
+  // client. The client SECRET that Google issues alongside it is NOT used here and
+  // must never appear in this file: browser sign-in exchanges nothing, so there is
+  // nothing for a secret to protect, and this repository is public.
+  var BIOQ_GOOGLE_CLIENT_ID = "939725315910-4dplo09o8pj8n4jruihj1k6bqe3qf8fu.apps.googleusercontent.com";
 
   var K_USER = "bioq_user", K_CID = "bioq_gid_client";
   var GIS = "https://accounts.google.com/gsi/client";
