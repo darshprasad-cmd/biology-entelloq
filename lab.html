@@ -2,7 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- viewport-fit=cover lets the scene run under the notch and the home indicator,
+     which is the whole point of a full-bleed specimen — and it is also what makes
+     env(safe-area-inset-*) report anything but 0px, which is how shell.js keeps the
+     instrument tray off the home indicator. Zoom is deliberately NOT disabled: the
+     canvas already refuses double-tap zoom via touch-action, and the panels are text
+     somebody may need to enlarge. -->
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Biology Entelloq — Dissection Lab</title>
 <style>
   :root{
@@ -30,7 +36,6 @@
   #handcursor[data-health="3"]{border-color:var(--bad);opacity:.35}
 </style>
 <style id="shellcss"></style>
-<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAwFBMVEVJZjSfpJpXYVSKqGXX2NRxkVcrVh1ubW6sq7BdkDbc2tseJx2izGPCy7oMEQ/p4O0ZHB5fY2Td2N+4w6+jpaRsqFB2a6uprasVHRhjcSMVfxWFf5BosVq4pNDZtO+Vs3EzUi0/P3+MwWm9ucg/Q0CPvGo/f39+hn17d4N2fnZHYjlSfT8AAAADBwcMFg4WJhQqNyk1Ri0aNBUiOBs2VSkkKiT///9PV00CCAhyd2+zt64mRxlVZU76+fmWmJLU189SsK2fAAAAQHRSTlP9+P399Pr8BRD/mvf/+24uI1Ri+mNRCImhBAIqHhQHHXsEHUL/YAStQJm1bAD+/v7+/f/+/v4B/p3+/P/+//76GIH1TwAABINJREFUeNqVVod2o0gQHKKEkiXLeePlRE9PAGEhJP7/r656QPL67H37bvzAwHR1rO6RKt9Zu8luir/J0zt76o3wdLr7FvoDwGQq989XsqabdcDsvg8Q8U/Xs1m6baNou1z26f1GIN8DYONqlrZJbFmT1s7GybZPb9avIC+AiYi3SRWEiWPciLTPlun9t4gLYFr+dN1mXsS01szJXLMgibtlevPWwrT8FCUOwqRtVXnWCZ5IJTXunKWzixF1lp+2nSgnm1XMDFFR7xMl9sj2s+DzBXBX/hJZkmUKXxs754UiB4MHLwAY2Z5tqFG/yHuoXFTwnzjJCP8lbFaGxHQ7ewFMIK9kD04vFOTUoqBhQbfTVCujaTsgBDC9i7pRwB0cN0lSadPs93Fch5T5bLGwpPsbIJ6UOHSfkVEs+gjRQlyjZlG7TNMoBuJQSOxk0wmcUeJQhqwIgMT5A3Tapon3p7bv02MEK8whV5E4JYA/OrEc6psUrLkysk37KOqP6bH/lYJjKFD/Z7lTk/LDPijXiK4otDaWLaBcn9r2lB6Px9Ro1nOV1VpMAPCXCs5DhyuYjTW1q/Bm9skpbVsg+jkCSBaJrnqJ4S4eOIMrR07ZGERkak0SRtqKjROKUiQLq6NrADYNhIsQc+41LFSWOxUnMakzAk6hgIWibFaq3Ub4lReemA4V9NvKUWL1ftmQlVS1aXrcj07b5Z0q1yH/SM6BnBJiGzgsSWprarr4dEr7NAqEwmZ0pb58NUaPiaMCJipjFgfh1elEddzspYAAuJD307W6/dvabn5mRuFgd5FrqyttUbM43kd930YDRzRl16p8xnOHprHWO53nnEE/o/COE0N1beKuTZdmkKd4pr48BEqAo+HLIQNPUA+FYGIbN6iA0yZQCrmlbqZ+U4a9McZ7B9Ahq6SjnQOjTAPKRk2W8KgeFwDlszPeyRL5woHhhqXZtDG16aJjujfd4BEAMWJYkTQXB6fyA8Q4l7RpFFxzrbbH/hRJHYIRBP3zilGqAZAfMIisAfk0Wyk9WGcjWWE+AJJdqdt/rA82hEsHkBQVsFbLOAscnncod98EAHG0Q8fhs6+8F48kYNC7Ch1eB0CNXrX7JhggdV+q24+598OIwVDhuoburBLAQIC6ibZ28A4x3wBw+9UN3alBPny36BW8ARAQSO0pHvc5+RymhnAiDzHmHu07z3L0kvhkDdEc7c0j1ZqbcqI+PpYPBlzIRZ1TjlXmUFIneWFEr+PG6LGps+lOgi7X6GGXy8TD2FIF8g/XXAjZgEzNWDYxMBWXJuUqBB1meyGZIg+bbhh9bLN4yLDJ5MQbRuXchKCIcwf1c5TLk5QnyFk9QOMP5eQ8vdcGZc7R1OIYiqIJfToKSoJyDPFuEwZ+ADyWKyNphuNa8l0hGsv6AkCAIv/7tyfQKlRJiOxYOym7D2QIDNFB/+PrM241hh3y52CLBzaEa95syqf/nqIrupwJUmceXwLGrsv123N6fR4FwQc+g7Eeyov8618Cq+eX9fDyuDofiO/+OPnR+t+AfwE8H2rDF051PwAAAABJRU5ErkJggg==">
 </head>
 <body>
 <div id="stage"></div>
@@ -7108,7 +7113,13 @@ function createDissection(THREE, ctx) {
   }
 
   return {
-    setTool, update, dispose, state,
+    // pick(nx, ny) is exposed for main.js's touch router, which has to know at
+    // TOUCHDOWN whether a finger landed on the specimen or on empty space —
+    // one gesture means the instrument, the other means orbit, and the two
+    // answers must be the same one this engine will give on the next frame.
+    // Re-deriving the visibility and reflected-flap rules over in main.js would
+    // be a second source of truth that silently drifts from this one.
+    setTool, update, dispose, state, pick,
     get tool() { return tool; },
     get hovered() { return hovered ? hovered.id : null; },
     get contact() { return contact; },
@@ -24200,10 +24211,25 @@ function setupEnvironment(THREE, deps, refs) {
 
   // Real shadows do most of the grounding. ONE shadow-casting lamp only — a
   // second doubles the cost for almost no perceptual gain at this scale.
+  //
+  // The lamp's shadow map is a second render of every specimen mesh each frame,
+  // and PCFSoft is a 4x4 tap filter on top of it. That is affordable on a
+  // laptop and it is not on a phone, so on a handset the map is quartered in
+  // area and the filter drops to plain PCF. Keeping the shadow at all rather
+  // than switching it off is the deliberate half of this: without it the
+  // specimen stops sitting ON the table and starts floating over it, and that
+  // grounding is most of why the theatre reads as a real place. A softer, more
+  // approximate shadow still does that; no shadow does not.
+  //
+  // Read from the shell (SH_PHONE) at CALL time, not module-evaluation time:
+  // env.js is concatenated ahead of shell.js, so a top-level reference here
+  // would hit the temporal dead zone. setupEnvironment runs from startApp,
+  // long after every module body has evaluated.
+  const handheld = (typeof SH_PHONE !== 'undefined') && !!SH_PHONE;
   let shadowsOn = true;
   try {
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.type = handheld ? THREE.PCFShadowMap : THREE.PCFSoftShadowMap;
   } catch (e) { shadowsOn = false; }
 
   const canvas2d = (w, h) => {
@@ -24247,7 +24273,7 @@ function setupEnvironment(THREE, deps, refs) {
   addTo(lamp.target);
   if (shadowsOn) {
     lamp.castShadow = true;
-    lamp.shadow.mapSize.set(1024, 1024);
+    lamp.shadow.mapSize.set(handheld ? 512 : 1024, handheld ? 512 : 1024);
     lamp.shadow.camera.near = 4;
     lamp.shadow.camera.far = 44;
     lamp.shadow.bias = -0.0018;
@@ -26060,6 +26086,12 @@ const HV_HOT = [206, 255, 236]; // hot near-white core for tips / pinch
 
 const HV_TAU = Math.PI * 2;
 
+// How far the contrast plate under a hand reaches, in CSS pixels, when the webcam
+// backdrop is switched off. Sized to roughly a drawn hand: wide enough that the
+// whole skeleton sits on it, tight enough that it reads as the hand's own shadow
+// rather than a smudge over the specimen.
+const HV_PLATE_R = 132;
+
 function hvRgba(c, a) {
   return "rgba(" + c[0] + "," + c[1] + "," + c[2] + "," + a + ")";
 }
@@ -26101,7 +26133,8 @@ function hvGestureName(g) {
  *
  * @param {HTMLElement} [root] where to attach the canvas (default document.body)
  * @returns {{ mount:Function, update:Function, setEnabled:Function,
- *             resize:Function, dispose:Function }}
+ *             setDial:Function, setBackdrop:Function, resize:Function,
+ *             dispose:Function }}
  */
 function createHandViz(root) {
   const host = root || (typeof document !== "undefined" ? document.body : null);
@@ -26121,6 +26154,14 @@ function createHandViz(root) {
 
   let enabled = false;
   let video = null;
+
+  // Whether the webcam plate is composited in behind the overlay. Tracking does
+  // not depend on it in any way — the landmarks, the glowing hand, the cursor and
+  // the dial are all drawn from the tracker's numbers, and the video is only ever
+  // wallpaper. Plenty of people do not want to watch themselves while they
+  // dissect, so this is a pure display choice; Physics Entelloq tracks hands
+  // without ever showing a camera and nothing about the gestures changes.
+  let showVideo = true;
 
   // Per-hand cursor trails (pixel coords). Short and additive — a subtle comet
   // tail on the grip point, cleared the instant a hand leaves so no stale streak
@@ -26196,6 +26237,11 @@ function createHandViz(root) {
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
+  }
+
+  // ── show / hide the webcam plate without touching anything else ──────────────
+  function setBackdrop(on) {
+    showVideo = on !== false;
   }
 
   // ── backdrop: dim, desaturated, mirrored webcam + a center-clean vignette ─────
@@ -26315,6 +26361,53 @@ function createHandViz(root) {
       ctx.lineTo(c.x * W + ox, c.y * H + oy);
     }
     ctx.stroke();
+  }
+
+  // ── contrast plate, drawn ONLY when the webcam backdrop is off ───────────────
+  //
+  // The skeleton, the rays and the cursor are all painted with `lighter`, so they
+  // add light and can only be seen against something darker than themselves. With
+  // the webcam plate on, the backdrop's vignette supplies that: it lays ~0.55 of
+  // page-background over the middle of the frame. Take the backdrop away and that
+  // dimming goes with it — over a brightly lit organ the thin bright core of the
+  // bones washes straight out.
+  //
+  // Restoring the full-frame vignette would be the wrong fix: the whole point of
+  // turning the camera off is to see the specimen, not to dim it. So the contrast
+  // comes back LOCALLY and only where the overlay actually draws — a soft pool
+  // under the palm plus a dark keyline down the bones, in normal compositing
+  // before the additive pass. It reads as the hand's own shadow, which is what a
+  // hand over a lit bench would cast anyway.
+  function drawHandPlate(h, ox, oy) {
+    const lm = h.landmarks;
+    ctx.save();
+
+    // Pool centred on the middle-finger MCP — the palm's centre, not the grip
+    // point, so the plate sits under the whole hand instead of off at a fingertip.
+    const px = lm[9].x * W + ox;
+    const py = lm[9].y * H + oy;
+    const pool = ctx.createRadialGradient(px, py, 0, px, py, HV_PLATE_R);
+    pool.addColorStop(0, hvRgba(HV_BG, 0.34));
+    pool.addColorStop(0.55, hvRgba(HV_BG, 0.17));
+    pool.addColorStop(1, hvRgba(HV_BG, 0));
+    ctx.fillStyle = pool;
+    ctx.beginPath();
+    ctx.arc(px, py, HV_PLATE_R, 0, HV_TAU);
+    ctx.fill();
+
+    // Keyline: two dark strokes down the bones, wide-and-faint then narrow-and-
+    // deeper, so the glow pass has a dark bed even where the pool has faded out at
+    // the fingertips.
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.strokeStyle = hvRgba(HV_BG, 0.24);
+    ctx.lineWidth = 18;
+    strokeBones(lm, ox, oy);
+    ctx.strokeStyle = hvRgba(HV_BG, 0.34);
+    ctx.lineWidth = 9;
+    strokeBones(lm, ox, oy);
+
+    ctx.restore();
   }
 
   function drawSkeleton(h, ox, oy) {
@@ -26657,7 +26750,20 @@ function createHandViz(root) {
       typeof performance !== "undefined" ? performance.now() : Date.now();
     const hands = (snapshot && snapshot.hands) || [];
 
-    drawBackdrop();
+    // The per-frame drawImage is genuinely skipped, not drawn at zero alpha —
+    // compositing a 1280x720 video into a full-viewport canvas every frame is the
+    // single most expensive thing this module does, and switching the plate off
+    // should actually buy that back.
+    if (showVideo) {
+      drawBackdrop();
+    } else {
+      for (let i = 0; i < hands.length; i++) {
+        const h = hands[i];
+        if (!h || !h.present) continue;
+        const o = hvResampleOffset(h);
+        drawHandPlate(h, o.x, o.y);
+      }
+    }
 
     // Maintain trails: extend for present hands, drop for absent ones. The trail
     // rides the resampled point too, so it reads as a continuous comet rather than
@@ -26725,6 +26831,7 @@ function createHandViz(root) {
     update: update,
     setEnabled: setEnabled,
     setDial: setDial,
+    setBackdrop: setBackdrop,
     resize: resize,
     dispose: dispose,
   };
@@ -26978,6 +27085,21 @@ body.handmode #dock{display:grid;grid-template-columns:repeat(2,60px);gap:14px;p
 #gripfill{position:absolute;inset:0;transform-origin:left center;transform:scaleX(0);
           background:linear-gradient(90deg,var(--em),var(--cy));transition:transform .06s linear}
 #gripfill[data-on="1"]{box-shadow:0 0 10px rgba(56,224,216,.7)}
+/* Show-camera switch. Hidden with the rest of the live readouts until the camera
+   is actually running, because it is meaningless before that. */
+#hand #camrow{display:none}
+#hand.live #camrow{display:flex;align-items:center;justify-content:space-between;gap:9px}
+.tgl{position:relative;width:34px;height:18px;flex:none;padding:0;border-radius:10px;cursor:pointer;
+     border:1px solid var(--line);background:rgba(255,255,255,.05);transition:.18s}
+.tgl i{position:absolute;left:2px;top:2px;width:12px;height:12px;border-radius:50%;
+     background:var(--faint);transition:.18s}
+.tgl[aria-checked="true"]{border-color:rgba(52,211,153,.45);background:rgba(52,211,153,.16)}
+.tgl[aria-checked="true"] i{left:18px;background:var(--em);box-shadow:0 0 8px rgba(52,211,153,.8)}
+.tgl:hover{border-color:rgba(52,211,153,.5)}
+/* Camera hidden: the video goes, the tracked skeleton stays on a dark plate so
+   the panel still shows that tracking is live. */
+#selfwrap.nocam{background:rgba(4,7,10,.85);border-color:rgba(52,211,153,.16)}
+#selfwrap.nocam #selfview{display:none}
 #handbtn{margin-top:1px;width:100%;padding:9px 12px;border:1px solid rgba(52,211,153,.42);border-radius:9px;
          cursor:pointer;color:var(--em);font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
          text-transform:uppercase;transition:.16s;
@@ -27182,6 +27304,219 @@ body.handmode #dock{display:grid;grid-template-columns:repeat(2,60px);gap:14px;p
 .krow s{text-decoration:none;font-size:12px;line-height:1.5;color:var(--dim)}
 #kbox .foot{margin-top:4px;font-family:var(--mono);font-size:9px;letter-spacing:.14em;
       text-transform:uppercase;color:var(--faint)}
+
+/* ── things the phone layout needs, defined off ────────────────────────────
+   Three elements exist in the markup for every viewport but are only ever
+   shown on a phone. Declaring them off here (rather than only on there) keeps
+   the desktop rendering identical to what it was, whatever else changes. */
+/* The instrument name under its glyph. On a desktop it lives in the hover
+   tooltip; a touch screen has no hover, and "which one is the retractor" is not
+   a question a student should have to answer by tapping one to find out. */
+.tname{display:none}
+/* The objective's hint. On a desktop it has its own bar at the foot (#hint);
+   down on a phone the foot is the instrument tray. */
+#objhint{display:none;font-size:11.5px;line-height:1.45;color:var(--dim)}
+#objhint b{color:var(--cy)}
+/* Controls that only make sense without a keyboard. */
+.mobonly{display:none}
+
+/* ── touch, on any device that has it ──────────────────────────────────────
+   Not scoped to the phone: a touchscreen laptop and a tablet get a finger too,
+   and every rule here is either inert under a mouse or corrects something that
+   is only wrong under a finger. */
+/* The scene owns every touch that lands on it — no page scroll, no rubber
+   band, no double-tap zoom, no long-press callout over the specimen.
+   OrbitControls sets touch-action on the canvas itself, but the stage behind it
+   is ours and a gap between the two is a scroll waiting to happen. */
+#stage{touch-action:none}
+#stage canvas{touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+html,body{overscroll-behavior:none}
+/* A panel that reaches the end of its scroll must not hand the rest of the
+   gesture to the page behind it: that is what turns "read the case note" into
+   "rubber-band the whole lab". */
+#recl,#drawbody,#vig,#struct,#kbox,#vbox,#cards{overscroll-behavior:contain}
+@media (hover:none){
+  /* Hover affordances are a lie here. The tooltip only appears AFTER the tap
+     has already selected the instrument, and on iOS the hover state then sticks
+     to that button until you tap somewhere else. */
+  .ttip{display:none}
+  .tool:hover{transform:none;background:rgba(255,255,255,.02);color:var(--dim)}
+  .tool.on:hover{color:var(--em);
+      background:linear-gradient(135deg,rgba(52,211,153,.2),rgba(56,224,216,.09))}
+  .card:hover{transform:none;box-shadow:none;background:rgba(52,211,153,.05)}
+  *{-webkit-tap-highlight-color:transparent}
+  /* A drag that begins on a label must move the instrument, not select the word. */
+  .tool,.minibtn,.bchip,.sysb,.seg button,.caseb,.btn,.act,.card,.rung,.lbl,
+  #specbtn,#helpbtn,#handbtn,#coachok{
+      -webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+}
+
+/* ── the phone ─────────────────────────────────────────────────────────────
+   The desktop chrome is a ring of sidebars around a wide viewport: instruments
+   down the left, a 320px rail down the right, the objective floating across the
+   top. A 390px phone has no sides. So the same surfaces become a top row and a
+   bottom sheet, and the middle — the specimen — is left alone, which is the one
+   thing that was already right.
+
+   Every rule is scoped to body.bioq-phone, a class buildShell adds only when
+   the device has a coarse pointer AND a short screen edge. It is deliberately
+   a class and not a media query: the layout comes with structural changes (the
+   systems toggles move into the console, the record and the viva grow buttons)
+   and a query on max-width would flip the CSS back to the desktop the moment
+   the handset was turned on its side while the DOM stayed where it was. The
+   short EDGE of a screen does not change when you rotate it. */
+body.bioq-phone{
+  /* The notch, the home indicator and the rounded corners. These read as 0px
+     without viewport-fit=cover on the viewport meta — assemble.py sets it. */
+  --sat:env(safe-area-inset-top,0px);
+  --sar:env(safe-area-inset-right,0px);
+  --sab:env(safe-area-inset-bottom,0px);
+  --sal:env(safe-area-inset-left,0px);
+  --edge:10px;
+  --pl:calc(var(--sal) + 10px);
+  --pr:calc(var(--sar) + 10px);
+  /* The bottom stack, stated once so everything above the tray agrees on where
+     the tray ends: a 58px button plus 7px of padding either side. */
+  --dockh:72px;
+  --bot:calc(var(--sab) + 10px);
+  --above-dock:calc(var(--bot) + var(--dockh) + 8px);
+}
+
+/* picker — one card per row, and the deck scrolls if the shelf grows */
+body.bioq-phone #pick .in{padding:20px 16px;width:100%}
+body.bioq-phone #pick .kick{font-size:8.5px;letter-spacing:.3em;margin-bottom:12px}
+body.bioq-phone #pick h1{font-size:23px}
+body.bioq-phone #pick .tag{font-size:12.5px;margin-bottom:20px}
+body.bioq-phone #cards{gap:11px;max-height:62vh;overflow-y:auto;padding:2px}
+body.bioq-phone .card{width:100%;padding:16px 17px;border-radius:13px}
+body.bioq-phone .card h2{font-size:17px;margin:9px 0 6px}
+body.bioq-phone .card p{font-size:12px}
+
+/* top: the help and specimen chips on one row, the objective on the next.
+   Two rows and not one because the specimen name is variable width — a single
+   row that reserved room for "Earthworm" would leave a hole under "Frog". */
+body.bioq-phone #topright{top:calc(var(--sat) + 10px);right:var(--pr);gap:7px;z-index:26}
+body.bioq-phone #helpbtn{width:38px}
+body.bioq-phone #specbtn{padding:8px 11px;gap:7px}
+body.bioq-phone #specbtn .lbl{display:none}
+body.bioq-phone #specbtn .specname{font-size:12.5px}
+body.bioq-phone #obj{top:calc(var(--sat) + 54px);left:var(--pl);right:var(--pr);
+  transform:none;min-width:0;max-width:none;width:auto;padding:10px 13px;gap:7px}
+body.bioq-phone #objtxt{font-size:12.5px;line-height:1.4}
+body.bioq-phone .objmain{gap:10px}
+body.bioq-phone #hint{display:none}
+body.bioq-phone #objhint{display:block}
+
+/* the demonstrator, deliberately OVER the objective bar rather than under it.
+   The objective's height depends on how long the objective is, so there is no
+   offset below it that reliably clears it on every step; and while the
+   demonstrator is speaking, what it is saying outranks the step you are already
+   on. It takes itself away after a few seconds and the objective is back. */
+body.bioq-phone #say{left:var(--pl);right:var(--pr);width:auto;
+  top:calc(var(--sat) + 54px);bottom:auto;padding:12px 14px;z-index:27;
+  transform:translateY(-8px) scale(.99)}
+body.bioq-phone #say.on{transform:none}
+body.bioq-phone #say .t{font-size:12.5px}
+
+/* the instrument tray: a strip along the bottom, at thumb height, with the
+   names spelled out. flex:1 1 0 and min-width:0 so six instruments always fit
+   the width — a tray that scrolls sideways hides instruments, and an instrument
+   nobody knows is there may as well not be. */
+body.bioq-phone #dock{left:var(--pl);right:var(--pr);top:auto;bottom:var(--bot);
+  display:flex;flex-direction:row;gap:6px;padding:7px;z-index:24;transform:none}
+body.bioq-phone .tool{width:auto;height:58px;flex:1 1 0;min-width:0;border-radius:11px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+body.bioq-phone .tool svg{width:22px;height:22px}
+body.bioq-phone .tool .tnum{display:none}
+body.bioq-phone .tname{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;font-family:var(--mono);font-size:7.5px;letter-spacing:.05em;
+  text-transform:uppercase;color:inherit;opacity:.85}
+/* The selected marker was a bar off the LEFT edge, which means nothing once the
+   tray runs horizontally. Underline the instrument instead. */
+body.bioq-phone .tool.on::after{left:50%;top:auto;bottom:-6px;transform:translateX(-50%);
+  width:24px;height:3px}
+
+/* the rail becomes a bottom sheet, stacking UP from just above the tray. It is
+   still pointer-events:none with only its panels interactive, so the empty part
+   of the sheet is still specimen you can turn. */
+body.bioq-phone #rail{left:0;right:0;top:auto;bottom:var(--above-dock);width:auto;
+  padding:0 var(--pr) 0 var(--pl);max-height:62vh;gap:7px;justify-content:flex-end}
+body.bioq-phone #rail #struct{max-height:30vh;overflow-y:auto;padding:12px 14px}
+body.bioq-phone #struct .n{font-size:14px}
+body.bioq-phone #vig{max-height:30vh}
+body.bioq-phone #drawbody{max-height:40vh;gap:14px}
+body.bioq-phone #railfoot{justify-content:flex-start;gap:6px;padding:7px}
+/* Everything you tap grows to something a thumb can actually land on. */
+body.bioq-phone .minibtn,body.bioq-phone .bchip{padding:9px 12px;font-size:9.5px}
+body.bioq-phone .seg button{padding:9px 8px;font-size:9px}
+body.bioq-phone .sysb{padding:8px 11px;font-size:9.5px}
+body.bioq-phone .caseb{padding:10px 11px;font-size:11.5px}
+body.bioq-phone #struct .act{padding:7px 10px}
+body.bioq-phone .btn{padding:11px 16px;margin-bottom:8px}
+
+/* the systems toggles are re-homed into the console (see buildShell), so they
+   stop being a fixed panel and become a row of chips inside a drawer section */
+body.bioq-phone #systems{position:static;transform:none;left:auto;top:auto;max-width:none;
+  padding:0;background:none;border:none;box-shadow:none;justify-content:flex-start;gap:5px;
+  backdrop-filter:none;-webkit-backdrop-filter:none}
+
+/* the attempt record, full sheet, with its own way out — it is opened by the L
+   key on a desktop and a phone has no L */
+body.bioq-phone #rec{left:var(--pl);right:var(--pr);top:calc(var(--sat) + 10px);
+  bottom:calc(var(--sab) + 10px);width:auto;z-index:28}
+body.bioq-phone #recl{font-size:11px}
+body.bioq-phone #recclose{position:absolute;right:10px;top:10px}
+body.bioq-phone .mobonly{display:inline-flex}
+
+/* hand tracking is not offered here at all (see buildShell for why), so the
+   cockpit goes rather than sitting there as a control that would not work.
+   The coach card is positioned defensively anyway — it costs one rule. */
+body.bioq-phone #hand{display:none}
+body.bioq-phone #coach{left:var(--pl);right:var(--pr);width:auto;bottom:var(--above-dock)}
+
+/* the viva and the keyboard reference stop being dialogs and become the screen */
+body.bioq-phone #viva,body.bioq-phone #keys{padding:0}
+body.bioq-phone #vbox,body.bioq-phone #kbox{width:100%;height:100%;max-height:none;
+  border-radius:0;padding:calc(var(--sat) + 20px) 18px calc(var(--sab) + 20px)}
+body.bioq-phone #kgrps{column-count:1}
+
+/* the tutor's question line sits above the tray. 16px on the input is not a
+   style choice: iOS Safari zooms the whole page in on any focused field with a
+   smaller font, and it does not zoom back out. */
+body.bioq-phone #ask{left:var(--pl);right:var(--pr);width:auto;transform:none;
+  bottom:var(--above-dock);z-index:29}
+body.bioq-phone #askin{font-size:16px}
+
+/* physio.js mounts a 352x278 bedside monitor at the top-left corner. There is
+   no corner here, and nothing is lost by dropping it: #physline in the rail
+   already carries the same numbers on one line, which is exactly what it was
+   built for. This needs the body class to out-specify PHY_CSS, which is
+   injected into head after this stylesheet. */
+body.bioq-phone #phy-mon{display:none}
+
+/* At 360px — the narrowest Android still in a classroom — each of the six
+   instruments gets 49px, and "Retractor" is the one name that does not fit at
+   the tracked-out size. Tighten the label rather than let it ellipsise: an
+   instrument called "Retracto…" is worse than a slightly denser one. */
+@media (max-width:380px){
+  body.bioq-phone #dock{gap:5px;padding:6px}
+  body.bioq-phone .tname{font-size:7px;letter-spacing:0}
+}
+
+/* a phone on its side is 390px tall, and the top rows plus the tray already
+   claim 180 of it. The sheets get shorter and the objective drops to its text. */
+@media (max-height:520px){
+  body.bioq-phone{--dockh:58px}
+  body.bioq-phone .tool{height:46px}
+  body.bioq-phone .tool svg{width:19px;height:19px}
+  body.bioq-phone #objdots{display:none}
+  body.bioq-phone #objhint{display:none}
+  body.bioq-phone #obj{padding:8px 12px}
+  body.bioq-phone #rail{max-height:46vh}
+  body.bioq-phone #rail #struct{max-height:26vh}
+  body.bioq-phone #drawbody{max-height:34vh}
+  body.bioq-phone #vig{max-height:24vh}
+}
 `;
 
 /* Cleaner instrument glyphs — 24×24, stroked, rendered at 26px in the dock. */
@@ -27250,6 +27585,36 @@ const SHELL_KEYMAP_DEF = [
   { key: '?',   label: 'This sheet',                   group: 'Console' },
   { key: 'Esc', label: 'Close whatever is open',       group: 'Console' },
 ];
+
+/*
+ * Is this a phone? Decided ONCE, at load, from two things:
+ *
+ *   - a coarse pointer, which is the only honest test for "this is a finger",
+ *   - the SHORT edge of the viewport, because that is the one measure of a
+ *     handset that does not change when the handset is turned on its side.
+ *
+ * Deliberately not a media query. The phone layout comes with structural
+ * changes as well as CSS ones — the systems toggles move into the console, the
+ * attempt record and the viva grow buttons because there is no keyboard to open
+ * them with — and a query on max-width would hand a rotated phone the desktop
+ * stylesheet while the DOM stayed rearranged for the phone. A query on
+ * max-height would hand the phone layout to a short desktop window instead.
+ *
+ * 520px covers the largest handsets in portrait (a Pro Max is 440 CSS px wide)
+ * and leaves tablets and unfolded foldables on the desktop layout, where their
+ * width genuinely does carry the sidebars.
+ *
+ * main.js reads this too (as SH_PHONE — shell.js is concatenated ahead of it),
+ * for the pixel-ratio cap and the post-processing tier.
+ */
+const SH_PHONE = (() => {
+  try {
+    if (typeof window === 'undefined' || !window.matchMedia) return false;
+    if (!window.matchMedia('(pointer: coarse)').matches) return false;
+    const short = Math.min(window.innerWidth || 0, window.innerHeight || 0);
+    return short > 0 && short <= 520;
+  } catch (e) { return false; }   // matchMedia throws in a few embedded webviews
+})();
 
 /* Everything the shell interpolates into innerHTML goes through this first:
    case labels and layer names arrive from data files, not from the shell. */
@@ -27337,7 +27702,13 @@ function buildShell(root) {
   /* chrome */
   const objBar = el(`<div id="obj" class="chrome">
       <div id="objdots"></div>
-      <div class="objmain"><span class="lbl" id="objn">—</span><span id="objtxt">—</span></div></div>`);
+      <div class="objmain"><span class="lbl" id="objn">—</span><span id="objtxt">—</span></div>
+      <div id="objhint"></div></div>`);
+  // The hint has its own bar at the foot of a desktop viewport (#hint). On a
+  // phone the foot is the instrument tray, and "what to do" and "how to do it"
+  // belong on the same card anyway — so it is written to both, and CSS shows
+  // whichever of the two that viewport has room for.
+  const objHint = objBar.querySelector('#objhint');
   // A VISIBLE, always-present specimen switcher. The cold open loads the frog and
   // hides the picker, and a keyboard shortcut nobody is told about is not an access
   // path — a user with four specimens on the shelf could reach only one. This chip
@@ -27370,6 +27741,9 @@ function buildShell(root) {
         <span id="gesturechip" class="gchip" data-k="dim">—</span>
         <div class="gripwrap"><span class="lbl">Grip</span><div class="griptrack"><div id="gripfill"></div></div></div>
       </div>
+      <div id="camrow"><span class="lbl">Show camera</span>
+        <button id="cambtn" class="tgl" role="switch" aria-checked="true"
+          aria-label="Show camera"><i></i></button></div>
       <button id="handbtn" class="off">Use my hands</button>
       <div id="handnote" class="hnote">Drive the instruments with a pinch. Runs on-device — nothing is recorded.</div></div>`);
   const coach = el(`<div id="coach" class="chrome">
@@ -27378,6 +27752,8 @@ function buildShell(root) {
         <li><b>Pinch</b> your fingers to grip</li>
         <li>Move your hand to <b>aim</b> the instrument</li>
         <li><b>Open</b> your hand to let go</li>
+        <li><b>Twist</b> your open hand like a dial to change instrument</li>
+        <li><b>Flick</b> it sharply up or down to change instrument</li>
       </ul>
       <button id="coachok" class="minibtn">Got it</button></div>`);
   const systems = el(`<div id="systems" class="chrome"></div>`);
@@ -27431,8 +27807,12 @@ function buildShell(root) {
 
   /* tool dock */
   SHELL_TOOLS.forEach((t, i) => {
+    // .tname is display:none everywhere but the phone tray, where the hover
+    // tooltip below cannot exist and the glyph alone does not tell a student
+    // which of these is the retractor.
     const b = el(`<button class="tool${i === 0 ? ' on' : ''}" data-tool="${t.id}" aria-label="${t.name}">
         <svg viewBox="0 0 24 24">${ICONS[t.id]}</svg><i class="tnum">${i + 1}</i>
+        <span class="tname">${t.name}</span>
         <span class="ttip"><b>${t.name}</b><s>${t.desc}</s><em>Key ${i + 1}</em></span></button>`);
     b.onclick = () => { setTool(t.id); fire('tool', t.id); };
     dock.appendChild(b);
@@ -27447,6 +27827,9 @@ function buildShell(root) {
   const gripfill = handBox.querySelector('#gripfill');
   const handCount = handBox.querySelector('#handcount');
   const handNote = handBox.querySelector('#handnote');
+  const camBtn = handBox.querySelector('#cambtn');
+  const selfwrap = handBox.querySelector('#selfwrap');
+  const selflabel = handBox.querySelector('#selflabel');
   const coachOk = coach.querySelector('#coachok');
   skel.width = 240; skel.height = 180;
   const skelCtx = skel.getContext ? skel.getContext('2d') : null;
@@ -27509,13 +27892,20 @@ function buildShell(root) {
     dots.forEach((d, i) => { d.className = i < objIdx ? 'done' : (i === objIdx ? 'now' : ''); });
     if (objIdx >= list.length) {
       objBar.querySelector('#objn').textContent = 'Complete';
-      objBar.querySelector('#objtxt').innerHTML = '<b>Dissection complete.</b> Press V for the viva.';
-      hint.innerHTML = 'Press <b>V</b> for the viva · <b>L</b> for your record';
+      objBar.querySelector('#objtxt').innerHTML = SH_PHONE
+        ? '<b>Dissection complete.</b> The viva is in the console.'
+        : '<b>Dissection complete.</b> Press V for the viva.';
+      // A phone has no V and no L, so it is told where the two buttons are.
+      hint.innerHTML = SH_PHONE
+        ? 'Open the <b>console</b> for the viva and your record'
+        : 'Press <b>V</b> for the viva · <b>L</b> for your record';
+      if (objHint) objHint.innerHTML = hint.innerHTML;
       return;
     }
     objBar.querySelector('#objn').textContent = 'Step ' + (objIdx + 1) + ' / ' + list.length;
     objBar.querySelector('#objtxt').innerHTML = list[objIdx].text;
     hint.innerHTML = list[objIdx].hint;
+    if (objHint) objHint.innerHTML = hint.innerHTML;
   }
 
   function pushEvent(evt) {
@@ -27894,6 +28284,35 @@ function buildShell(root) {
   let handOn = false;
   handBtn.onclick = () => { handOn = !handOn; fire('hands', handOn); };
 
+  /* ── show-camera preference ────────────────────────────────────────────
+     Hand tracking and the camera PICTURE are two different things: the tracker
+     needs the frames, the student does not need to watch themselves. This
+     switch turns off the picture in both places it appears — the full-viewport
+     ambient plate behind the scene (main.js hands it to handviz) and the
+     thumbnail in this panel — and changes nothing else. A control called "Show
+     camera" that left a live video of your face in the corner would be a lie.
+
+     Wrapped in try/catch because localStorage throws in private mode and when
+     storage is blocked, and a preference is never worth taking the app down for. */
+  const CAM_KEY = 'bioq_show_camera';
+  let camOn = true;
+  try { camOn = window.localStorage.getItem(CAM_KEY) !== '0'; } catch (e) { /* default on */ }
+
+  function renderCam() {
+    camBtn.setAttribute('aria-checked', camOn ? 'true' : 'false');
+    selfwrap.classList.toggle('nocam', !camOn);
+    // The label is a claim about what you are looking at, so it has to change too.
+    selflabel.textContent = camOn ? 'You · live' : 'Tracking · live';
+  }
+  function setCam(v) {
+    camOn = !!v;
+    try { window.localStorage.setItem(CAM_KEY, camOn ? '1' : '0'); } catch (e) { /* fine */ }
+    renderCam();
+    fire('camera', camOn);
+  }
+  camBtn.onclick = () => setCam(!camOn);
+  renderCam();
+
   // What the panel is showing right now. setHandState writes the lifecycle bits
   // (on/status/health/reason) and the poll loop, when the live tracker snapshot
   // is reachable, writes the fast-moving bits (gesture/grip/count) and the
@@ -28053,9 +28472,62 @@ function buildShell(root) {
     renderHand();
   }
 
+  /* ── the phone ─────────────────────────────────────────────────────────
+     Nearly all of the phone layout is CSS (the body.bioq-phone block in
+     SHELL_CSS). This is the part that cannot be: three surfaces that on a
+     desktop are reachable only because there is a keyboard or a spare corner,
+     and one that is honestly withdrawn.
+
+     Guarded by SH_PHONE, which is false on every desktop, so none of this can
+     reach one. */
+  if (SH_PHONE) {
+    document.body.classList.add('bioq-phone');
+
+    // The systems toggles floated at the top centre. Down here that is the
+    // objective bar's row, and anywhere else on a 390px screen is the specimen.
+    // The console is where the other rarely-touched switches already live.
+    const secSys = el(`<div class="dsec" id="secsys"><span class="lbl">Systems</span></div>`);
+    secSys.appendChild(systems);
+    drawBody.appendChild(secSys);
+
+    // Hand tracking, honestly. The camera is on the same side of the phone as
+    // your face; you are holding the thing you would have to gesture at; and
+    // the landmark detector would be competing for the GPU with the specimen it
+    // is meant to be pointing at. Offering a switch that started a camera and
+    // then tracked badly would be worse than not offering one. Nothing is
+    // really lost either: tracking was only ever an approximation of touching
+    // the specimen, and this screen does that directly. So the cockpit is gone
+    // (CSS) and this says why, where the settings are.
+    const secHand = el(`<div class="dsec" id="sechand"><span class="lbl">Hand tracking</span>
+        <div class="dnote">Hand tracking is a desktop feature. It wants a camera you are not
+        holding, and running the detector alongside the specimen costs the frame rate of
+        both. Here your finger is the instrument: touch a structure to use the instrument
+        you have selected, drag anywhere else to turn the specimen, pinch to zoom.</div></div>`);
+    drawBody.appendChild(secHand);
+
+    // The attempt record and the viva are the L and V keys on a desktop. Without
+    // these two buttons a student's own record of what they did would simply be
+    // unreachable on a phone.
+    const recBtn = el(`<button class="minibtn mobonly" id="recbtn">Record</button>`);
+    recBtn.onclick = () => rec.classList.toggle('on');
+    const vivaBtn = el(`<button class="minibtn mobonly" id="vivabtn">Viva</button>`);
+    vivaBtn.onclick = () => fire('viva');
+    railFoot.appendChild(recBtn);
+    railFoot.appendChild(vivaBtn);
+
+    // ...and the record covers the whole screen once it is open, so it needs a
+    // way out that is not Escape.
+    const recClose = el(`<button class="minibtn mobonly" id="recclose">Close</button>`);
+    recClose.onclick = () => rec.classList.remove('on');
+    rec.appendChild(recClose);
+  }
+
   return {
     on, setTool, setStructure, setSpecimen, setHandState, showViva,
     say: sayMsg,
+    // The stored show-camera choice, so main.js can apply it to the overlay the
+    // moment tracking starts rather than waiting for the first toggle.
+    cameraVisible: () => camOn,
     pushEvent,
     // Phase 2–4 surfaces. Every one is safe to call with null/undefined, and
     // the app boots identically if main.js never calls any of them.
@@ -28070,7 +28542,10 @@ function buildShell(root) {
     showKeymap: (o) => keysEl.classList.toggle('on', o === undefined ? true : !!o),
     checkObjectives: (state) => refreshObjective(state),
     setObjective: () => {},
-    setHint: (h) => { hint.innerHTML = h; },
+    setHint: (h) => { hint.innerHTML = h; if (objHint) objHint.innerHTML = h; },
+    // Whether this is running the phone layout. main.js uses it for the
+    // pixel-ratio cap and the post-processing tier.
+    isPhone: () => SH_PHONE,
     setCameraPreview: () => {},
     mountCards: (specs, cb) => {
       const c = pick.querySelector('#cards');
@@ -28130,16 +28605,38 @@ const mouse = { x: 0.5, y: 0.5, down: false };
 let handMode = false;
 let currentTool = 'probe';
 
+// Phone or not, decided by the shell (SH_PHONE — a coarse pointer plus a short
+// screen edge; see the note there for why it is not a media query). shell.js is
+// concatenated ahead of this file so the binding is already live, but main.js
+// feature-detects every one of its neighbours and this is no different.
+const MN_PHONE = (typeof SH_PHONE !== 'undefined') && !!SH_PHONE;
+
 // The instrument tray, in cycle order. One list shared by the number keys, the
 // flick, the wrist dial and the on-screen dial HUD, so they can never disagree.
 const TOOL_ORDER = ['probe', 'scalpel', 'forceps', 'pins', 'retractor', 'swab'];
 const TOOL_LABELS = ['Probe', 'Scalpel', 'Forceps', 'Pins', 'Retractor', 'Swab'];
 
+/*
+ * How many device pixels the specimen is worth.
+ *
+ * A phone reports devicePixelRatio 3 with a GPU that has a fraction of a
+ * laptop's fill rate, so honouring it means shading NINE pixels for every CSS
+ * pixel of a scene that is already paying for a bloom chain and a fullscreen
+ * grade. 1.5 is where the edges of the organs still read as sharp on a 400ppi
+ * screen and the frame budget survives; below that the fine structures (chordae,
+ * mesentery) start to alias and this is a lab, not a screensaver. The desktop
+ * cap of 2 is untouched.
+ */
+function bootPixelRatio() {
+  const dpr = typeof devicePixelRatio === 'number' && devicePixelRatio > 0 ? devicePixelRatio : 1;
+  return Math.min(dpr, MN_PHONE ? 1.5 : 2);
+}
+
 function bootScene(root) {
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(38, innerWidth / innerHeight, 0.1, 400);
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setPixelRatio(bootPixelRatio());
   renderer.setSize(innerWidth, innerHeight);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.15;
@@ -28179,6 +28676,14 @@ function bootScene(root) {
       postfx = createPostFX(THREE, (typeof POSTFX_DEPS !== 'undefined' ? POSTFX_DEPS : {}),
         { scene, camera, renderer, composer: env && env.composer });
     } catch (e) { console.warn('postfx failed', e); postfx = null; }
+    // A phone GPU is not a laptop GPU. postfx probes the renderer and picks its
+    // own tier, but that probe reads a GPU NAME, and a current Adreno or Mali
+    // with eight cores and dpr 2 looks like a workstation to it — it would be
+    // handed tier 2, which costs a SECOND full scene render for depth of field.
+    // Step it to the grade-only tier using postfx's own tiers rather than
+    // inventing a second quality system; nothing ever promotes a tier back up,
+    // so this sticks for the session.
+    if (postfx && MN_PHONE && postfx.setQuality) postfx.setQuality(0);
   }
 
   addEventListener('resize', () => {
@@ -28221,22 +28726,66 @@ function drawCursor(show, nx, ny, grip, health) {
  *
  * The whole difficulty is false positives: a student sweeping their hand up the
  * body to reach the head must NOT change the scalpel out from under themselves.
- * Four independent guards, all of which must pass:
+ * Five independent guards, all of which must pass:
  *   - never while pinching (that is a live incision, the most costly moment)
- *   - genuinely fast: normal aiming does not exceed ~1 screen-height/second
+ *   - genuinely fast
+ *   - genuinely SNAPPY — see the tuning note below, this is the load-bearing one
  *   - genuinely vertical: |vy| must dominate |vx|, so a diagonal sweep is ignored
  *   - a cooldown, so one flick cannot ripple through three tools
- * Measured over a short window; a long window would smear the peak into the
- * slow approach either side of it and never trip.
+ *
+ * TUNING, measured rather than guessed. The pipeline was simulated end to end —
+ * the real HndOneEuro2D and HndResampler2D driven with minimum-jerk hand paths
+ * through the camera geometry (1280x720, 55-78 degree lenses, hand 0.40-0.70 m
+ * out) and the 1.3x reach gain — and the previous constants did not survive it:
+ *
+ *   deliberate 15 cm flick, 200 ms, hand at 0.55 m, 65 deg lens ... |vy| = 1.53
+ *   the same flick at 0.40 m ................................... |vy| = 2.14
+ *   the same flick at 0.70 m ................................... |vy| = 1.19
+ *   reaching 25 cm across the specimen in 600 ms ............... |vy| = 1.78
+ *   ordinary aiming .............................................. |vy| = 0.21
+ *
+ * Two things fall out. FLICK_SPEED = 2.3 was unreachable: across 59 simulated
+ * intentional flicks it fired on 16 of them (27%) — only the ones made with the
+ * hand almost against the lens — which is exactly why nobody found this gesture.
+ * And peak speed CANNOT separate the two cases at all: a slow 25 cm reach reads
+ * FASTER than a sharp 15 cm flick, because the 30 fps sampling and the One-Euro
+ * filter cost a 200 ms burst about two thirds of its peak and a 600 ms sweep only
+ * half of it. Simply lowering the threshold to 1.5 fired on 71 of 130 ordinary
+ * repositioning moves — it would have swapped the instrument mid-approach every
+ * other time the hand crossed the specimen.
+ *
+ * What DOES separate them is how hard the velocity itself changes. Minimum-jerk
+ * peak acceleration goes as amplitude/duration^2, so a flick out-accelerates a
+ * reach roughly 5:1 where it only out-runs it 1.2:1, and enough of that survives
+ * the filter to gate on:
+ *
+ *   peak |dvy/dt| — flicks 10.9 to 27.7,  reaches 4.4 to 11.5
+ *
+ * Hence FLICK_SNAP. With speed 1.2 / snap 12 the same simulation fires on 45 of
+ * 59 intentional flicks (76%, up from 27%) and on 3 of 130 ordinary moves (2.3%),
+ * all three of them a hand held 40 cm from a narrow 55 degree lens making a hard
+ * 10-12 cm move, which is nearly a flick anyway. FLICK_RATIO and FLICK_COOL were
+ * swept too and neither wanted moving: at these speeds the ratio test changes
+ * nothing between 2.4 and 3.0 (a real flick shows |vy|/|vx| near 7), and 700 ms
+ * comfortably covers the return stroke of an out-and-back flick, which lands
+ * about 400 ms after the outward one and must not step the tray back again.
  */
-const FLICK_SPEED = 2.3;      // screen heights / second
+const FLICK_SPEED = 1.2;      // screen heights / second
+const FLICK_SNAP = 12;        // screen heights / second^2 — how sharply it accelerates
 const FLICK_RATIO = 2.4;      // how much |vy| must dominate |vx|
 const FLICK_COOL = 700;       // ms between accepted flicks
-const flick = { last: -1e9 };
+const flick = { last: -1e9, prevVy: null, prevT: 0 };
+
+function flickReset() {
+  flick.prevVy = null;
+  flick.prevT = 0;
+}
 
 function detectToolFlick(h, now, gripping) {
-  if (gripping) return 0;                       // hands off during a cut
-  if (now - flick.last < FLICK_COOL) return 0;
+  // Hands off during a cut. Dropping the velocity history too, so the first
+  // sample after the grip releases is a reference and not a phantom acceleration
+  // measured across the whole pinch.
+  if (gripping) { flickReset(); return 0; }
   // Velocity comes from the tracker, which measures it BETWEEN CAMERA FRAMES.
   // This used to difference the cursor here instead, and that was quietly wrong:
   // the cursor only stepped on detect frames, so on the one render frame that
@@ -28247,7 +28796,25 @@ function detectToolFlick(h, now, gripping) {
   // estimate is in real screen-heights per second on every monitor.
   const vy = h.velY, vx = h.velX;
   if (typeof vy !== 'number' || typeof vx !== 'number') return 0;
+
+  // The snap test needs a genuinely NEW velocity sample, for the same reason the
+  // wrist dial does: velY is rewritten at camera rate (~30fps) while this runs at
+  // display rate, so a repeated value is not new information. Differencing it
+  // against itself would read zero acceleration on four frames out of five and
+  // the gesture would fire or not depending on the monitor.
+  const fresh = flick.prevVy !== null && vy !== flick.prevVy;
+  const dt = now - flick.prevT;
+  const snap = fresh && dt > 0 ? Math.abs(vy - flick.prevVy) / (dt / 1000) : 0;
+  // Keep the history current even on the frames that go on to bail out — the
+  // cooldown check below especially. Letting the reference go stale there would
+  // make the first sample after a cooldown difference itself against a value from
+  // 700 ms ago, and the gesture immediately after a tool change would be deaf.
+  if (vy !== flick.prevVy) { flick.prevVy = vy; flick.prevT = now; }
+  if (!fresh) return 0;
+  if (now - flick.last < FLICK_COOL) return 0;
+
   if (Math.abs(vy) < FLICK_SPEED) return 0;
+  if (snap < FLICK_SNAP) return 0;
   if (Math.abs(vy) < Math.abs(vx) * FLICK_RATIO) return 0;
   flick.last = now;
   return vy < 0 ? 1 : -1;                       // screen y grows downward: up = next
@@ -28379,6 +28946,99 @@ function applyCameraLife(dt, interacting) {
   camera.updateMatrixWorld();
 }
 
+/* ---- touch: who owns this finger ---------------------------------------- *
+ * A mouse has a hover state and a separate button, so the desktop rule can be
+ * trivial: the pointer is always aiming the instrument, and holding the button
+ * uses it. A finger has neither. It arrives already pressed, directly on top of
+ * the thing it is pointing at, and the SAME gesture has to be able to mean both
+ * "cut here" and "turn the specimen round so I can see the other side".
+ *
+ * The rule, decided at touchdown:
+ *
+ *   two or more fingers  -> the camera, always. Nothing in the instrument tray
+ *       takes two contact points, and pinch-to-zoom is the one gesture people
+ *       try without being told, so it must never be ambiguous.
+ *   one finger ON the specimen -> the instrument. Direct manipulation: putting
+ *       the scalpel down on the liver and having the VIEW swing instead would
+ *       be a lie about what the instrument does.
+ *   one finger on empty space -> orbit. There is nothing out there to cut, so
+ *       the only useful meaning is "look at it from over here" — and it makes
+ *       the entire background one enormous orbit target with no modifier key to
+ *       learn and no mode to be in.
+ *
+ * Decided ONCE, at touchdown, and never revisited for the life of the gesture.
+ * A stroke that starts on the liver stays a cut even when the finger runs off
+ * the edge of it, because re-deciding mid-drag would abort the incision at
+ * exactly the moment it crossed a tissue boundary — which is the moment a real
+ * incision is most committed. The same reasoning is why the hit test is the
+ * SAME test dissect.js will make on the next frame (dissection.pick) rather
+ * than a generous one: a fat-finger radius would claim touches that dissect
+ * then finds nothing under, and a gesture that neither cuts nor orbits is worse
+ * than one that orbits.
+ *
+ * Claiming is done by stopping the pointerdown in the CAPTURE phase, before it
+ * reaches the canvas. OrbitControls listens on the canvas and only tracks
+ * pointers whose pointerdown it actually saw, so a claimed finger is invisible
+ * to it and there is nothing to arbitrate — no toggling controls.enabled
+ * underneath a drag it has already started, which is the failure mode that
+ * makes touch camera controls stick.
+ */
+const TCH = {
+  claimed: -1,          // pointerId currently driving the instrument, -1 for none
+  ids: new Set(),       // fingers down ON THE SCENE; taps on chrome are not fingers
+};
+
+// Surfaces a finger can land on that are emphatically not the specimen. Wider
+// than .chrome on purpose: the picker, the cold open, the viva, the keyboard
+// sheet, the microscope (#his) and the scale journey (#zoomverse) are all
+// full-screen things OTHER modules own, and a finger dragging on one of them
+// must not also be cutting the specimen hidden underneath. The ones that are
+// display:none when shut need no guard — an invisible element is not a hit
+// target — so only the two that merely fade out carry a state selector.
+const TCH_CHROME = '.chrome, #pick:not(.gone), #coldopen, #viva.on, #keys.on, #his, #zoomverse';
+
+function tchScene(e) {
+  return !(e.target && e.target.closest && e.target.closest(TCH_CHROME));
+}
+
+function tchHitsSpecimen(clientX, clientY) {
+  if (!dissection || !dissection.pick) return false;
+  // A radiology study forces every mesh visible and gates dissection off for
+  // the frame (see tick), so while one is up nothing is touchable and every
+  // finger belongs to the camera.
+  if (imaging && imaging.mode && imaging.mode() !== 'off') return false;
+  return !!dissection.pick(clientX / innerWidth, clientY / innerHeight);
+}
+
+function tchDown(e) {
+  if (e.pointerType !== 'touch') return;   // a pen hovers and a mouse has a button
+  if (!tchScene(e)) return;
+  TCH.ids.add(e.pointerId);
+  if (TCH.ids.size > 1) {
+    // A second finger means the camera, whatever the first one was doing. If
+    // that first finger was cutting, the stroke ENDS here rather than being
+    // dragged sideways by the zoom — which is exactly what letting go of the
+    // mouse button does, and dissect.js already knows how to finish that.
+    if (TCH.claimed >= 0) { TCH.claimed = -1; mouse.down = false; }
+    return;                                // through to OrbitControls
+  }
+  if (!tchHitsSpecimen(e.clientX, e.clientY)) return;   // empty space: orbit
+  TCH.claimed = e.pointerId;
+  mouse.x = e.clientX / innerWidth;
+  mouse.y = e.clientY / innerHeight;
+  mouse.down = true;
+  e.stopPropagation();                     // keep it away from OrbitControls
+}
+
+// pointerup AND pointercancel. A cancel is not an edge case on a phone — the
+// system takes the gesture away for an edge swipe or an incoming call — and
+// without this the instrument would stay gripped forever afterwards.
+function tchUp(e) {
+  if (e.pointerType !== 'touch') return;
+  TCH.ids.delete(e.pointerId);
+  if (TCH.claimed === e.pointerId) { TCH.claimed = -1; mouse.down = false; }
+}
+
 /* ---- input router ------------------------------------------------------ */
 function routeInput() {
   // VR outranks everything: if a headset is presenting, its controller or tracked
@@ -28391,6 +29051,7 @@ function routeInput() {
     drawCursor(false);
     controls.enabled = false;
     dialReset();
+    flickReset();
     if (handViz && handViz.setDial) handViz.setDial({ active: false });
     return;
   }
@@ -28419,6 +29080,15 @@ function routeInput() {
     // A flick changes the instrument. Measured on the SMOOTHED cursor, not raw
     // landmarks — the One Euro filter has already removed the tremor that would
     // otherwise read as a dozen tiny flicks per second.
+    //
+    // The two gesture detectors cannot double-fire. On a frame where the flick
+    // wins, the dial is not consulted at all and dialReset() drops the reference
+    // roll, so the palm rotation that rode along with the flick is discarded
+    // rather than banked toward a notch. The reverse cannot happen either: a
+    // wrist twist rotates the palm about the forearm axis, which barely moves the
+    // index fingertip the cursor is taken from — nowhere near FLICK_SPEED, let
+    // alone FLICK_SNAP. And ordinary aiming reaches neither (measured |vy| ~0.21
+    // and snap ~2 against gates of 1.2 and 12).
     const dir = detectToolFlick(h, nowP, input.gripping);
     if (dir) { cycleTool(dir); dialReset(); }  // the flick already moved the tray; don't also dial
     else {
@@ -28457,8 +29127,15 @@ function routeInput() {
     input.span = 0;
     input.source = 'mouse';
     drawCursor(false);
-    controls.enabled = !mouse.down || currentTool === 'probe';
+    // Touch settled ownership at touchdown (see tchDown) and a claimed finger
+    // never reached OrbitControls at all, so there is nothing here for the
+    // mouse rule to arbitrate — it would only re-enable orbiting underneath a
+    // probe stroke that is deliberately not orbiting.
+    controls.enabled = TCH.claimed >= 0 ? false : (!mouse.down || currentTool === 'probe');
     dialReset();  // no hand driving → no dial state to carry forward
+    // Same for the flick's velocity history: the gap while the mouse was driving
+    // is not an acceleration, and differencing across it would be a fabrication.
+    flickReset();
     if (handViz && handViz.setDial) handViz.setDial({ active: false });
   }
 }
@@ -28880,7 +29557,10 @@ function tick(t) {
       // Still whenever anything is being touched — a drag, a grip, or a tracked
       // hand present — so idle drift never compounds with hand-tracking jitter or
       // nudges a live incision.
-      const busy = mouse.down || input.gripping
+      // TCH.ids covers the touch case the other two miss: an orbit drag sets
+      // neither mouse.down nor gripping, and letting the idle drift ride along
+      // on top of it makes the camera feel like it is sliding out of your hand.
+      const busy = mouse.down || input.gripping || TCH.ids.size > 0
         || (handMode && hands && hands.snapshot && hands.snapshot.active);
       applyCameraLife(dt, busy);
     }
@@ -28918,8 +29598,8 @@ const KEYMAP = [
   { key: '4', label: 'Pins', group: 'Instruments' },
   { key: '5', label: 'Retractor', group: 'Instruments' },
   { key: '6', label: 'Swab', group: 'Instruments' },
-  { key: 'twist', label: 'Hand tracking — twist your open hand like a dial to change instrument', group: 'Instruments' },
-  { key: 'flick', label: 'Hand tracking — or flick sharply up / down to change instrument', group: 'Instruments' },
+  { key: 'twist', label: 'Hand tracking — twist your open hand like a dial to step the tray', group: 'Instruments' },
+  { key: 'flick', label: 'Hand tracking — flick your hand sharply up for the next instrument, down for the previous', group: 'Instruments' },
   { key: 'Z', label: 'Microscope — histology of hovered structure', group: 'Examine' },
   { key: 'I', label: 'Scale journey — zoom from tissue to a single atom', group: 'Examine' },
   { key: 'X', label: 'Cycle imaging: X-ray / CT / MRI / ultrasound', group: 'Examine' },
@@ -29223,6 +29903,16 @@ function startApp() {
     }).catch((err) => shell.say('VR failed to start: ' + (err && err.message)));
   });
 
+  // The webcam picture is a display choice, not a tracking one: handviz keeps
+  // drawing the landmarks, the hand, the cursor and the dial either way, and the
+  // tracker never even notices. The shell owns the preference (and persists it);
+  // this is the one line that carries it to the overlay.
+  shell.on('camera', (show) => { if (handViz && handViz.setBackdrop) handViz.setBackdrop(show); });
+  function applyCameraPref() {
+    if (!handViz || !handViz.setBackdrop) return;
+    handViz.setBackdrop(shell.cameraVisible ? shell.cameraVisible() : true);
+  }
+
   shell.on('hands', async (want) => {
     if (!want) {
       handMode = false;
@@ -29239,14 +29929,23 @@ function startApp() {
     if (res.ok) {
       handMode = true;
       document.body.classList.add('handmode');
-      if (handViz) { handViz.mount(hands.videoEl); handViz.setEnabled(true); }
+      if (handViz) {
+        handViz.mount(hands.videoEl);
+        handViz.setEnabled(true);
+        // Honour the stored show-camera choice before the first frame is painted,
+        // so someone who turned the picture off last session never sees it flash
+        // back for a frame on the next start.
+        applyCameraPref();
+      }
       shell.setHandState({ on: true, status: 'tracking', video: hands.videoEl });
       // The gestures have to be TAUGHT. With the dock out of reach they are the
       // only way to change instrument, and no one discovers a motion gesture by
-      // accident.
-      shell.say('Camera on. Pinch to grip. Twist your open hand like a dial — or flick it '
-        + 'sharply up or down — to change instrument. Press U to re-centre tracking on your '
-        + 'hand, or E to retune the smoothing. Nothing is recorded.');
+      // accident — the flick shipped undiscovered for exactly that reason. Both
+      // are named here, both with the direction that makes them work.
+      shell.say('Camera on. Pinch to grip. Two ways to change instrument without the dock: '
+        + 'twist your open hand like a dial, or flick it sharply up for the next instrument '
+        + 'and down for the previous. Press U to re-centre tracking on your hand, or E to '
+        + 'retune the smoothing. Nothing is recorded.');
     } else {
       handMode = false;
       shell.setHandState({ on: false, status: 'failed', reason: res.reason });
@@ -29255,9 +29954,33 @@ function startApp() {
   });
 
   // pointer
-  addEventListener('pointermove', (e) => { mouse.x = e.clientX / innerWidth; mouse.y = e.clientY / innerHeight; });
-  addEventListener('pointerdown', (e) => { if (e.target.closest('.chrome')) return; mouse.down = true; });
-  addEventListener('pointerup', () => { mouse.down = false; });
+  //
+  // TWO paths, and they must not overlap. Touch goes through tchDown/tchUp,
+  // which decide at touchdown whether a finger is the instrument or the camera;
+  // the three below are the MOUSE path. Without the pointerType guards every
+  // orbit drag would also be a grip, because a finger reports a pointerdown the
+  // instant it lands and there is no button to have not pressed.
+  //
+  // tchDown is on the CAPTURE phase deliberately: it has to run before the
+  // canvas's own listener so it can keep a claimed finger away from
+  // OrbitControls entirely. See the note above tchDown.
+  addEventListener('pointerdown', tchDown, { capture: true });
+  addEventListener('pointerup', tchUp);
+  addEventListener('pointercancel', tchUp);
+
+  addEventListener('pointermove', (e) => {
+    // A finger that is orbiting must not also drag the instrument across the
+    // tissue behind it, so only the claimed one moves the aim.
+    if (e.pointerType === 'touch' && TCH.claimed !== e.pointerId) return;
+    mouse.x = e.clientX / innerWidth; mouse.y = e.clientY / innerHeight;
+  });
+  addEventListener('pointerdown', (e) => {
+    if (e.pointerType === 'touch') return;
+    if (e.target.closest('.chrome')) return;
+    mouse.down = true;
+  });
+  addEventListener('pointerup', (e) => { if (e.pointerType !== 'touch') mouse.down = false; });
+  addEventListener('pointercancel', (e) => { if (e.pointerType !== 'touch') mouse.down = false; });
   addEventListener('keydown', onKey);
 
   if (shell.setKeymap) shell.setKeymap(KEYMAP, { silent: true });
@@ -29287,11 +30010,23 @@ function startApp() {
   window.__LAB.camera = camera;
   // The flick detector is otherwise only reachable behind a live webcam, which no
   // automated check has. Exposed so its thresholds can be regression-tested.
+  // NOTE for anyone driving this from a test: the snap gate needs TWO calls with
+  // different h.velY values (and a real gap in `now`) before it can fire, because
+  // the first one only establishes the velocity reference. flickState is exposed
+  // so a test can inspect or clear that reference between cases.
   window.__LAB.flick = detectToolFlick;
+  window.__LAB.flickState = flick;
+  window.__LAB.flickReset = flickReset;
   window.__LAB.cycleTool = cycleTool;
   // The wrist dial and recenter are otherwise only reachable behind a live webcam.
   window.__LAB.dialTool = detectToolDial;
   window.__LAB.dial = dial;
+  // The touch router's decision, for the same reason the flick and dial state
+  // are exposed: which finger owns the gesture is otherwise only observable on
+  // a real touchscreen, and it is the one rule that decides whether a drag cuts
+  // or orbits.
+  window.__LAB.touch = TCH;
+  window.__LAB.touchHit = tchHitsSpecimen;
   window.__LAB.recenter = () => (hands && hands.recenter ? hands.recenter() : false);
   // Constructing a tracker touches no camera or network (all inert until start()),
   // so tests can make one to exercise the reach map / spike guard without a webcam.

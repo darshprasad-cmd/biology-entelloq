@@ -424,11 +424,14 @@ const TCH = {
   ids: new Set(),       // fingers down ON THE SCENE; taps on chrome are not fingers
 };
 
-// Surfaces a finger can land on that are emphatically not the specimen. The
-// picker and the two full-screen sheets are included as well as .chrome: a
-// finger dragging on the specimen chooser must not also be orbiting the
-// specimen hidden behind it.
-const TCH_CHROME = '.chrome, #pick:not(.gone), #viva.on, #keys.on, #coldopen';
+// Surfaces a finger can land on that are emphatically not the specimen. Wider
+// than .chrome on purpose: the picker, the cold open, the viva, the keyboard
+// sheet, the microscope (#his) and the scale journey (#zoomverse) are all
+// full-screen things OTHER modules own, and a finger dragging on one of them
+// must not also be cutting the specimen hidden underneath. The ones that are
+// display:none when shut need no guard — an invisible element is not a hit
+// target — so only the two that merely fade out carry a state selector.
+const TCH_CHROME = '.chrome, #pick:not(.gone), #coldopen, #viva.on, #keys.on, #his, #zoomverse';
 
 function tchScene(e) {
   return !(e.target && e.target.closest && e.target.closest(TCH_CHROME));

@@ -653,6 +653,15 @@ body.bioq-phone #askin{font-size:16px}
    injected into head after this stylesheet. */
 body.bioq-phone #phy-mon{display:none}
 
+/* At 360px — the narrowest Android still in a classroom — each of the six
+   instruments gets 49px, and "Retractor" is the one name that does not fit at
+   the tracked-out size. Tighten the label rather than let it ellipsise: an
+   instrument called "Retracto…" is worse than a slightly denser one. */
+@media (max-width:380px){
+  body.bioq-phone #dock{gap:5px;padding:6px}
+  body.bioq-phone .tname{font-size:7px;letter-spacing:0}
+}
+
 /* a phone on its side is 390px tall, and the top rows plus the tray already
    claim 180 of it. The sheets get shorter and the objective drops to its text. */
 @media (max-height:520px){
