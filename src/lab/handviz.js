@@ -59,6 +59,12 @@ const HV_HOT = [206, 255, 236]; // hot near-white core for tips / pinch
 
 const HV_TAU = Math.PI * 2;
 
+// How far the contrast plate under a hand reaches, in CSS pixels, when the webcam
+// backdrop is switched off. Sized to roughly a drawn hand: wide enough that the
+// whole skeleton sits on it, tight enough that it reads as the hand's own shadow
+// rather than a smudge over the specimen.
+const HV_PLATE_R = 132;
+
 function hvRgba(c, a) {
   return "rgba(" + c[0] + "," + c[1] + "," + c[2] + "," + a + ")";
 }
@@ -100,7 +106,8 @@ function hvGestureName(g) {
  *
  * @param {HTMLElement} [root] where to attach the canvas (default document.body)
  * @returns {{ mount:Function, update:Function, setEnabled:Function,
- *             resize:Function, dispose:Function }}
+ *             setDial:Function, setBackdrop:Function, resize:Function,
+ *             dispose:Function }}
  */
 export function createHandViz(root) {
   const host = root || (typeof document !== "undefined" ? document.body : null);
@@ -120,6 +127,14 @@ export function createHandViz(root) {
 
   let enabled = false;
   let video = null;
+
+  // Whether the webcam plate is composited in behind the overlay. Tracking does
+  // not depend on it in any way — the landmarks, the glowing hand, the cursor and
+  // the dial are all drawn from the tracker's numbers, and the video is only ever
+  // wallpaper. Plenty of people do not want to watch themselves while they
+  // dissect, so this is a pure display choice; Physics Entelloq tracks hands
+  // without ever showing a camera and nothing about the gestures changes.
+  let showVideo = true;
 
   // Per-hand cursor trails (pixel coords). Short and additive — a subtle comet
   // tail on the grip point, cleared the instant a hand leaves so no stale streak
@@ -195,6 +210,11 @@ export function createHandViz(root) {
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
+  }
+
+  // ── show / hide the webcam plate without touching anything else ──────────────
+  function setBackdrop(on) {
+    showVideo = on !== false;
   }
 
   // ── backdrop: dim, desaturated, mirrored webcam + a center-clean vignette ─────
@@ -314,6 +334,53 @@ export function createHandViz(root) {
       ctx.lineTo(c.x * W + ox, c.y * H + oy);
     }
     ctx.stroke();
+  }
+
+  // ── contrast plate, drawn ONLY when the webcam backdrop is off ───────────────
+  //
+  // The skeleton, the rays and the cursor are all painted with `lighter`, so they
+  // add light and can only be seen against something darker than themselves. With
+  // the webcam plate on, the backdrop's vignette supplies that: it lays ~0.55 of
+  // page-background over the middle of the frame. Take the backdrop away and that
+  // dimming goes with it — over a brightly lit organ the thin bright core of the
+  // bones washes straight out.
+  //
+  // Restoring the full-frame vignette would be the wrong fix: the whole point of
+  // turning the camera off is to see the specimen, not to dim it. So the contrast
+  // comes back LOCALLY and only where the overlay actually draws — a soft pool
+  // under the palm plus a dark keyline down the bones, in normal compositing
+  // before the additive pass. It reads as the hand's own shadow, which is what a
+  // hand over a lit bench would cast anyway.
+  function drawHandPlate(h, ox, oy) {
+    const lm = h.landmarks;
+    ctx.save();
+
+    // Pool centred on the middle-finger MCP — the palm's centre, not the grip
+    // point, so the plate sits under the whole hand instead of off at a fingertip.
+    const px = lm[9].x * W + ox;
+    const py = lm[9].y * H + oy;
+    const pool = ctx.createRadialGradient(px, py, 0, px, py, HV_PLATE_R);
+    pool.addColorStop(0, hvRgba(HV_BG, 0.34));
+    pool.addColorStop(0.55, hvRgba(HV_BG, 0.17));
+    pool.addColorStop(1, hvRgba(HV_BG, 0));
+    ctx.fillStyle = pool;
+    ctx.beginPath();
+    ctx.arc(px, py, HV_PLATE_R, 0, HV_TAU);
+    ctx.fill();
+
+    // Keyline: two dark strokes down the bones, wide-and-faint then narrow-and-
+    // deeper, so the glow pass has a dark bed even where the pool has faded out at
+    // the fingertips.
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.strokeStyle = hvRgba(HV_BG, 0.24);
+    ctx.lineWidth = 18;
+    strokeBones(lm, ox, oy);
+    ctx.strokeStyle = hvRgba(HV_BG, 0.34);
+    ctx.lineWidth = 9;
+    strokeBones(lm, ox, oy);
+
+    ctx.restore();
   }
 
   function drawSkeleton(h, ox, oy) {
@@ -656,7 +723,20 @@ export function createHandViz(root) {
       typeof performance !== "undefined" ? performance.now() : Date.now();
     const hands = (snapshot && snapshot.hands) || [];
 
-    drawBackdrop();
+    // The per-frame drawImage is genuinely skipped, not drawn at zero alpha —
+    // compositing a 1280x720 video into a full-viewport canvas every frame is the
+    // single most expensive thing this module does, and switching the plate off
+    // should actually buy that back.
+    if (showVideo) {
+      drawBackdrop();
+    } else {
+      for (let i = 0; i < hands.length; i++) {
+        const h = hands[i];
+        if (!h || !h.present) continue;
+        const o = hvResampleOffset(h);
+        drawHandPlate(h, o.x, o.y);
+      }
+    }
 
     // Maintain trails: extend for present hands, drop for absent ones. The trail
     // rides the resampled point too, so it reads as a continuous comet rather than
@@ -724,6 +804,7 @@ export function createHandViz(root) {
     update: update,
     setEnabled: setEnabled,
     setDial: setDial,
+    setBackdrop: setBackdrop,
     resize: resize,
     dispose: dispose,
   };

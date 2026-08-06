@@ -244,6 +244,21 @@ body.handmode #dock{display:grid;grid-template-columns:repeat(2,60px);gap:14px;p
 #gripfill{position:absolute;inset:0;transform-origin:left center;transform:scaleX(0);
           background:linear-gradient(90deg,var(--em),var(--cy));transition:transform .06s linear}
 #gripfill[data-on="1"]{box-shadow:0 0 10px rgba(56,224,216,.7)}
+/* Show-camera switch. Hidden with the rest of the live readouts until the camera
+   is actually running, because it is meaningless before that. */
+#hand #camrow{display:none}
+#hand.live #camrow{display:flex;align-items:center;justify-content:space-between;gap:9px}
+.tgl{position:relative;width:34px;height:18px;flex:none;padding:0;border-radius:10px;cursor:pointer;
+     border:1px solid var(--line);background:rgba(255,255,255,.05);transition:.18s}
+.tgl i{position:absolute;left:2px;top:2px;width:12px;height:12px;border-radius:50%;
+     background:var(--faint);transition:.18s}
+.tgl[aria-checked="true"]{border-color:rgba(52,211,153,.45);background:rgba(52,211,153,.16)}
+.tgl[aria-checked="true"] i{left:18px;background:var(--em);box-shadow:0 0 8px rgba(52,211,153,.8)}
+.tgl:hover{border-color:rgba(52,211,153,.5)}
+/* Camera hidden: the video goes, the tracked skeleton stays on a dark plate so
+   the panel still shows that tracking is live. */
+#selfwrap.nocam{background:rgba(4,7,10,.85);border-color:rgba(52,211,153,.16)}
+#selfwrap.nocam #selfview{display:none}
 #handbtn{margin-top:1px;width:100%;padding:9px 12px;border:1px solid rgba(52,211,153,.42);border-radius:9px;
          cursor:pointer;color:var(--em);font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
          text-transform:uppercase;transition:.16s;
@@ -636,6 +651,9 @@ export function buildShell(root) {
         <span id="gesturechip" class="gchip" data-k="dim">—</span>
         <div class="gripwrap"><span class="lbl">Grip</span><div class="griptrack"><div id="gripfill"></div></div></div>
       </div>
+      <div id="camrow"><span class="lbl">Show camera</span>
+        <button id="cambtn" class="tgl" role="switch" aria-checked="true"
+          aria-label="Show camera"><i></i></button></div>
       <button id="handbtn" class="off">Use my hands</button>
       <div id="handnote" class="hnote">Drive the instruments with a pinch. Runs on-device — nothing is recorded.</div></div>`);
   const coach = el(`<div id="coach" class="chrome">
@@ -644,6 +662,8 @@ export function buildShell(root) {
         <li><b>Pinch</b> your fingers to grip</li>
         <li>Move your hand to <b>aim</b> the instrument</li>
         <li><b>Open</b> your hand to let go</li>
+        <li><b>Twist</b> your open hand like a dial to change instrument</li>
+        <li><b>Flick</b> it sharply up or down to change instrument</li>
       </ul>
       <button id="coachok" class="minibtn">Got it</button></div>`);
   const systems = el(`<div id="systems" class="chrome"></div>`);
@@ -713,6 +733,9 @@ export function buildShell(root) {
   const gripfill = handBox.querySelector('#gripfill');
   const handCount = handBox.querySelector('#handcount');
   const handNote = handBox.querySelector('#handnote');
+  const camBtn = handBox.querySelector('#cambtn');
+  const selfwrap = handBox.querySelector('#selfwrap');
+  const selflabel = handBox.querySelector('#selflabel');
   const coachOk = coach.querySelector('#coachok');
   skel.width = 240; skel.height = 180;
   const skelCtx = skel.getContext ? skel.getContext('2d') : null;
@@ -1160,6 +1183,35 @@ export function buildShell(root) {
   let handOn = false;
   handBtn.onclick = () => { handOn = !handOn; fire('hands', handOn); };
 
+  /* ── show-camera preference ────────────────────────────────────────────
+     Hand tracking and the camera PICTURE are two different things: the tracker
+     needs the frames, the student does not need to watch themselves. This
+     switch turns off the picture in both places it appears — the full-viewport
+     ambient plate behind the scene (main.js hands it to handviz) and the
+     thumbnail in this panel — and changes nothing else. A control called "Show
+     camera" that left a live video of your face in the corner would be a lie.
+
+     Wrapped in try/catch because localStorage throws in private mode and when
+     storage is blocked, and a preference is never worth taking the app down for. */
+  const CAM_KEY = 'bioq_show_camera';
+  let camOn = true;
+  try { camOn = window.localStorage.getItem(CAM_KEY) !== '0'; } catch (e) { /* default on */ }
+
+  function renderCam() {
+    camBtn.setAttribute('aria-checked', camOn ? 'true' : 'false');
+    selfwrap.classList.toggle('nocam', !camOn);
+    // The label is a claim about what you are looking at, so it has to change too.
+    selflabel.textContent = camOn ? 'You · live' : 'Tracking · live';
+  }
+  function setCam(v) {
+    camOn = !!v;
+    try { window.localStorage.setItem(CAM_KEY, camOn ? '1' : '0'); } catch (e) { /* fine */ }
+    renderCam();
+    fire('camera', camOn);
+  }
+  camBtn.onclick = () => setCam(!camOn);
+  renderCam();
+
   // What the panel is showing right now. setHandState writes the lifecycle bits
   // (on/status/health/reason) and the poll loop, when the live tracker snapshot
   // is reachable, writes the fast-moving bits (gesture/grip/count) and the
@@ -1322,6 +1374,9 @@ export function buildShell(root) {
   return {
     on, setTool, setStructure, setSpecimen, setHandState, showViva,
     say: sayMsg,
+    // The stored show-camera choice, so main.js can apply it to the overlay the
+    // moment tracking starts rather than waiting for the first toggle.
+    cameraVisible: () => camOn,
     pushEvent,
     // Phase 2–4 surfaces. Every one is safe to call with null/undefined, and
     // the app boots identically if main.js never calls any of them.

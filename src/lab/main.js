@@ -132,22 +132,66 @@ function drawCursor(show, nx, ny, grip, health) {
  *
  * The whole difficulty is false positives: a student sweeping their hand up the
  * body to reach the head must NOT change the scalpel out from under themselves.
- * Four independent guards, all of which must pass:
+ * Five independent guards, all of which must pass:
  *   - never while pinching (that is a live incision, the most costly moment)
- *   - genuinely fast: normal aiming does not exceed ~1 screen-height/second
+ *   - genuinely fast
+ *   - genuinely SNAPPY — see the tuning note below, this is the load-bearing one
  *   - genuinely vertical: |vy| must dominate |vx|, so a diagonal sweep is ignored
  *   - a cooldown, so one flick cannot ripple through three tools
- * Measured over a short window; a long window would smear the peak into the
- * slow approach either side of it and never trip.
+ *
+ * TUNING, measured rather than guessed. The pipeline was simulated end to end —
+ * the real HndOneEuro2D and HndResampler2D driven with minimum-jerk hand paths
+ * through the camera geometry (1280x720, 55-78 degree lenses, hand 0.40-0.70 m
+ * out) and the 1.3x reach gain — and the previous constants did not survive it:
+ *
+ *   deliberate 15 cm flick, 200 ms, hand at 0.55 m, 65 deg lens ... |vy| = 1.53
+ *   the same flick at 0.40 m ................................... |vy| = 2.14
+ *   the same flick at 0.70 m ................................... |vy| = 1.19
+ *   reaching 25 cm across the specimen in 600 ms ............... |vy| = 1.78
+ *   ordinary aiming .............................................. |vy| = 0.21
+ *
+ * Two things fall out. FLICK_SPEED = 2.3 was unreachable: across 59 simulated
+ * intentional flicks it fired on 16 of them (27%) — only the ones made with the
+ * hand almost against the lens — which is exactly why nobody found this gesture.
+ * And peak speed CANNOT separate the two cases at all: a slow 25 cm reach reads
+ * FASTER than a sharp 15 cm flick, because the 30 fps sampling and the One-Euro
+ * filter cost a 200 ms burst about two thirds of its peak and a 600 ms sweep only
+ * half of it. Simply lowering the threshold to 1.5 fired on 71 of 130 ordinary
+ * repositioning moves — it would have swapped the instrument mid-approach every
+ * other time the hand crossed the specimen.
+ *
+ * What DOES separate them is how hard the velocity itself changes. Minimum-jerk
+ * peak acceleration goes as amplitude/duration^2, so a flick out-accelerates a
+ * reach roughly 5:1 where it only out-runs it 1.2:1, and enough of that survives
+ * the filter to gate on:
+ *
+ *   peak |dvy/dt| — flicks 10.9 to 27.7,  reaches 4.4 to 11.5
+ *
+ * Hence FLICK_SNAP. With speed 1.2 / snap 12 the same simulation fires on 45 of
+ * 59 intentional flicks (76%, up from 27%) and on 3 of 130 ordinary moves (2.3%),
+ * all three of them a hand held 40 cm from a narrow 55 degree lens making a hard
+ * 10-12 cm move, which is nearly a flick anyway. FLICK_RATIO and FLICK_COOL were
+ * swept too and neither wanted moving: at these speeds the ratio test changes
+ * nothing between 2.4 and 3.0 (a real flick shows |vy|/|vx| near 7), and 700 ms
+ * comfortably covers the return stroke of an out-and-back flick, which lands
+ * about 400 ms after the outward one and must not step the tray back again.
  */
-const FLICK_SPEED = 2.3;      // screen heights / second
+const FLICK_SPEED = 1.2;      // screen heights / second
+const FLICK_SNAP = 12;        // screen heights / second^2 — how sharply it accelerates
 const FLICK_RATIO = 2.4;      // how much |vy| must dominate |vx|
 const FLICK_COOL = 700;       // ms between accepted flicks
-const flick = { last: -1e9 };
+const flick = { last: -1e9, prevVy: null, prevT: 0 };
+
+function flickReset() {
+  flick.prevVy = null;
+  flick.prevT = 0;
+}
 
 function detectToolFlick(h, now, gripping) {
-  if (gripping) return 0;                       // hands off during a cut
-  if (now - flick.last < FLICK_COOL) return 0;
+  // Hands off during a cut. Dropping the velocity history too, so the first
+  // sample after the grip releases is a reference and not a phantom acceleration
+  // measured across the whole pinch.
+  if (gripping) { flickReset(); return 0; }
   // Velocity comes from the tracker, which measures it BETWEEN CAMERA FRAMES.
   // This used to difference the cursor here instead, and that was quietly wrong:
   // the cursor only stepped on detect frames, so on the one render frame that
@@ -158,7 +202,25 @@ function detectToolFlick(h, now, gripping) {
   // estimate is in real screen-heights per second on every monitor.
   const vy = h.velY, vx = h.velX;
   if (typeof vy !== 'number' || typeof vx !== 'number') return 0;
+
+  // The snap test needs a genuinely NEW velocity sample, for the same reason the
+  // wrist dial does: velY is rewritten at camera rate (~30fps) while this runs at
+  // display rate, so a repeated value is not new information. Differencing it
+  // against itself would read zero acceleration on four frames out of five and
+  // the gesture would fire or not depending on the monitor.
+  const fresh = flick.prevVy !== null && vy !== flick.prevVy;
+  const dt = now - flick.prevT;
+  const snap = fresh && dt > 0 ? Math.abs(vy - flick.prevVy) / (dt / 1000) : 0;
+  // Keep the history current even on the frames that go on to bail out — the
+  // cooldown check below especially. Letting the reference go stale there would
+  // make the first sample after a cooldown difference itself against a value from
+  // 700 ms ago, and the gesture immediately after a tool change would be deaf.
+  if (vy !== flick.prevVy) { flick.prevVy = vy; flick.prevT = now; }
+  if (!fresh) return 0;
+  if (now - flick.last < FLICK_COOL) return 0;
+
   if (Math.abs(vy) < FLICK_SPEED) return 0;
+  if (snap < FLICK_SNAP) return 0;
   if (Math.abs(vy) < Math.abs(vx) * FLICK_RATIO) return 0;
   flick.last = now;
   return vy < 0 ? 1 : -1;                       // screen y grows downward: up = next
@@ -302,6 +364,7 @@ function routeInput() {
     drawCursor(false);
     controls.enabled = false;
     dialReset();
+    flickReset();
     if (handViz && handViz.setDial) handViz.setDial({ active: false });
     return;
   }
@@ -330,6 +393,15 @@ function routeInput() {
     // A flick changes the instrument. Measured on the SMOOTHED cursor, not raw
     // landmarks — the One Euro filter has already removed the tremor that would
     // otherwise read as a dozen tiny flicks per second.
+    //
+    // The two gesture detectors cannot double-fire. On a frame where the flick
+    // wins, the dial is not consulted at all and dialReset() drops the reference
+    // roll, so the palm rotation that rode along with the flick is discarded
+    // rather than banked toward a notch. The reverse cannot happen either: a
+    // wrist twist rotates the palm about the forearm axis, which barely moves the
+    // index fingertip the cursor is taken from — nowhere near FLICK_SPEED, let
+    // alone FLICK_SNAP. And ordinary aiming reaches neither (measured |vy| ~0.21
+    // and snap ~2 against gates of 1.2 and 12).
     const dir = detectToolFlick(h, nowP, input.gripping);
     if (dir) { cycleTool(dir); dialReset(); }  // the flick already moved the tray; don't also dial
     else {
@@ -370,6 +442,9 @@ function routeInput() {
     drawCursor(false);
     controls.enabled = !mouse.down || currentTool === 'probe';
     dialReset();  // no hand driving → no dial state to carry forward
+    // Same for the flick's velocity history: the gap while the mouse was driving
+    // is not an acceleration, and differencing across it would be a fabrication.
+    flickReset();
     if (handViz && handViz.setDial) handViz.setDial({ active: false });
   }
 }
@@ -829,8 +904,8 @@ const KEYMAP = [
   { key: '4', label: 'Pins', group: 'Instruments' },
   { key: '5', label: 'Retractor', group: 'Instruments' },
   { key: '6', label: 'Swab', group: 'Instruments' },
-  { key: 'twist', label: 'Hand tracking — twist your open hand like a dial to change instrument', group: 'Instruments' },
-  { key: 'flick', label: 'Hand tracking — or flick sharply up / down to change instrument', group: 'Instruments' },
+  { key: 'twist', label: 'Hand tracking — twist your open hand like a dial to step the tray', group: 'Instruments' },
+  { key: 'flick', label: 'Hand tracking — flick your hand sharply up for the next instrument, down for the previous', group: 'Instruments' },
   { key: 'Z', label: 'Microscope — histology of hovered structure', group: 'Examine' },
   { key: 'I', label: 'Scale journey — zoom from tissue to a single atom', group: 'Examine' },
   { key: 'X', label: 'Cycle imaging: X-ray / CT / MRI / ultrasound', group: 'Examine' },
@@ -1134,6 +1209,16 @@ export function startApp() {
     }).catch((err) => shell.say('VR failed to start: ' + (err && err.message)));
   });
 
+  // The webcam picture is a display choice, not a tracking one: handviz keeps
+  // drawing the landmarks, the hand, the cursor and the dial either way, and the
+  // tracker never even notices. The shell owns the preference (and persists it);
+  // this is the one line that carries it to the overlay.
+  shell.on('camera', (show) => { if (handViz && handViz.setBackdrop) handViz.setBackdrop(show); });
+  function applyCameraPref() {
+    if (!handViz || !handViz.setBackdrop) return;
+    handViz.setBackdrop(shell.cameraVisible ? shell.cameraVisible() : true);
+  }
+
   shell.on('hands', async (want) => {
     if (!want) {
       handMode = false;
@@ -1150,14 +1235,23 @@ export function startApp() {
     if (res.ok) {
       handMode = true;
       document.body.classList.add('handmode');
-      if (handViz) { handViz.mount(hands.videoEl); handViz.setEnabled(true); }
+      if (handViz) {
+        handViz.mount(hands.videoEl);
+        handViz.setEnabled(true);
+        // Honour the stored show-camera choice before the first frame is painted,
+        // so someone who turned the picture off last session never sees it flash
+        // back for a frame on the next start.
+        applyCameraPref();
+      }
       shell.setHandState({ on: true, status: 'tracking', video: hands.videoEl });
       // The gestures have to be TAUGHT. With the dock out of reach they are the
       // only way to change instrument, and no one discovers a motion gesture by
-      // accident.
-      shell.say('Camera on. Pinch to grip. Twist your open hand like a dial — or flick it '
-        + 'sharply up or down — to change instrument. Press U to re-centre tracking on your '
-        + 'hand, or E to retune the smoothing. Nothing is recorded.');
+      // accident — the flick shipped undiscovered for exactly that reason. Both
+      // are named here, both with the direction that makes them work.
+      shell.say('Camera on. Pinch to grip. Two ways to change instrument without the dock: '
+        + 'twist your open hand like a dial, or flick it sharply up for the next instrument '
+        + 'and down for the previous. Press U to re-centre tracking on your hand, or E to '
+        + 'retune the smoothing. Nothing is recorded.');
     } else {
       handMode = false;
       shell.setHandState({ on: false, status: 'failed', reason: res.reason });
@@ -1198,7 +1292,13 @@ export function startApp() {
   window.__LAB.camera = camera;
   // The flick detector is otherwise only reachable behind a live webcam, which no
   // automated check has. Exposed so its thresholds can be regression-tested.
+  // NOTE for anyone driving this from a test: the snap gate needs TWO calls with
+  // different h.velY values (and a real gap in `now`) before it can fire, because
+  // the first one only establishes the velocity reference. flickState is exposed
+  // so a test can inspect or clear that reference between cases.
   window.__LAB.flick = detectToolFlick;
+  window.__LAB.flickState = flick;
+  window.__LAB.flickReset = flickReset;
   window.__LAB.cycleTool = cycleTool;
   // The wrist dial and recenter are otherwise only reachable behind a live webcam.
   window.__LAB.dialTool = detectToolDial;

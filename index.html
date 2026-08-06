@@ -425,6 +425,10 @@ footer{border-top:1px solid var(--line-2); padding:60px 0 40px}
 /* The brand mark sits inside the console, over its live canvas — the one element
    here the physics stylesheet has no rule for, because physics has no mark to put
    there. */
+/* The founder avatar was a lettered circle; it now holds the actual photograph,
+   so the initials styling has to give way to a cover-fitted image. */
+.f-ava{overflow:hidden;font-size:0}
+.f-ava img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
 .console-body{position:relative}
 .console-body #heroCanvas{position:absolute;inset:0;width:100%;height:100%;opacity:.5}
 .console-mark{position:relative;display:block;width:min(78%,340px);margin:6px auto 2px;height:auto}
@@ -748,13 +752,13 @@ footer{border-top:1px solid var(--line-2); padding:60px 0 40px}
     <h2>Built by one student who refused<br/>to memorise biology.</h2>
   </div>
   <div class="founder-card card holo reveal" data-tilt>
-    <div class="f-ava" aria-hidden="true">DP<span class="ring"></span></div>
+    <div class="f-ava"><img src="data:image/webp;base64,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" alt="Darsh Prasad" width="200" height="200" decoding="async"><span class="ring" aria-hidden="true"></span></div>
     <div class="f-body">
       <div class="f-nm">Darsh Prasad</div>
       <div class="f-rl">Founder · Designer · Engineer</div>
       <p class="f-q">“Biology is the only subject where the thing you are studying is also the thing doing the studying. It should never have been reduced to a list to memorise.”</p>
       <p class="f-bio">Darsh designed and engineered Biology Entelloq end to end — every specimen, every bench, every simulation and every pixel. The models are checked against real biology before they ship: the microscope's cells are sized against its own scale bar, the cardiac pressure curves are continuous across the beat, and a bench that would teach the wrong thing does not go out. Biology Entelloq is the sibling of Physics Entelloq, built on the same conviction — that the deepest way to understand something is to run it, bend it, and watch what happens.</p>
-      <div class="f-links"><a class="chip" href="mailto:darshprasad@gmail.com">✉ darshprasad@gmail.com</a><a class="chip" href="https://physics.entelloq.com">⚛ Physics Entelloq ↗</a><a class="chip" href="./about.html">◈ The full story ↗</a></div>
+      <div class="f-links"><a class="chip" href="mailto:entelloqnetworks@gmail.com">✉ entelloqnetworks@gmail.com</a><a class="chip" href="https://physics.entelloq.com">⚛ Physics Entelloq ↗</a><a class="chip" href="./about.html">◈ The full story ↗</a></div>
     </div>
   </div>
 </section>
@@ -801,7 +805,7 @@ footer{border-top:1px solid var(--line-2); padding:60px 0 40px}
         <li><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3L13 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> No logins to provision, no data leaving the room</li>
         <li><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3L13 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> The practicals your syllabus examines but the lab cannot run</li>
       </ul>
-      <a class="btn btn-ghost" href="mailto:darshprasad@gmail.com" data-magnetic>Get in touch</a>
+      <a class="btn btn-ghost" href="mailto:entelloqnetworks@gmail.com" data-magnetic>Get in touch</a>
     </div>
   </div>
 </section>
@@ -860,7 +864,7 @@ footer{border-top:1px solid var(--line-2); padding:60px 0 40px}
       <h5>Entelloq</h5>
       <a href="https://physics.entelloq.com">Physics Entelloq</a>
       <a href="./about.html">About</a>
-      <a href="mailto:darshprasad@gmail.com">Contact</a>
+      <a href="mailto:entelloqnetworks@gmail.com">Contact</a>
     </div>
   </div>
   <div class="foot-bot">
