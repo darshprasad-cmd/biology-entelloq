@@ -578,6 +578,28 @@ function prefetchLab(){
     lframe.src=src; lframe.dataset.src=src;
   });
 }
+// Every section is a separate document, so the first visit to each one costs a
+// round trip and a parse. Warm them in the background once the app is idle, in the
+// order people actually reach for them, and one at a time so the prefetch never
+// competes with something the reader asked for. <link rel=prefetch> is the right
+// tool: the browser fetches at its own lowest priority, caches, and the iframe
+// that follows is served locally.
+function prefetchSections(){
+  const idle=window.requestIdleCallback||function(f){return setTimeout(f,1500);};
+  const order=["learn","lessons","labs","solve","explore","reason","me","about"];
+  let i=0;
+  (function next(){
+    if(i>=order.length) return;
+    const v=BYKEY[order[i++]];
+    if(!v||!v.file) return next();
+    const l=document.createElement("link");
+    l.rel="prefetch"; l.as="document"; l.href="./"+v.file+"?embed=1";
+    // Move to the next one only when this has landed, so a slow connection
+    // degrades to fewer warmed sections rather than eight competing requests.
+    l.onload=l.onerror=()=>idle(next);
+    document.head.appendChild(l);
+  })();
+}
 let coolTimer=null;
 function closeLaunch(){
   launcherOpen=false; launcher.classList.remove("on");
@@ -691,6 +713,7 @@ addEventListener("keydown",e=>{
 buildHome();
 routeFromHash();
 prefetchLab();
+prefetchSections();
 })();
 </script>
 <script id="atmo-js">
