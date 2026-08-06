@@ -876,7 +876,7 @@ footer{border-top:1px solid var(--line-2); padding:60px 0 40px}
    Biology Entelloq — landing behaviour.
 
    Same contract as the Physics Entelloq landing it shares a stylesheet with:
-   .reveal gets .on when it comes into view, [data-tilt] tilts, [data-magnetic]
+   .reveal gets .in when it comes into view, [data-tilt] tilts, [data-magnetic]
    leans toward the cursor, .metric .n counts up, .fill[data-w] fills, and the two
    canvases run live models. Everything degrades to a static page under
    prefers-reduced-motion, and nothing here needs the network.
@@ -936,13 +936,26 @@ footer{border-top:1px solid var(--line-2); padding:60px 0 40px}
   var io = ("IntersectionObserver" in window) ? new IntersectionObserver(function (es) {
     es.forEach(function (e) {
       if (!e.isIntersecting) return;
-      e.target.classList.add("on");
+      e.target.classList.add("in");
       fillIn(e.target);
       io.unobserve(e.target);
     });
   }, { rootMargin: "0px 0px -8% 0px" }) : null;
+  function revealAll() { $$(".reveal").forEach(function (el) { el.classList.add("in"); fillIn(el); }); }
   if (io) $$(".reveal").forEach(function (el) { io.observe(el); });
-  else $$(".reveal").forEach(function (el) { el.classList.add("on"); fillIn(el); });
+  else revealAll();
+  // FAILSAFE. .reveal is opacity:0 until it is activated, so anything that stops
+  // this observer from firing — a tab that never composites, an engine quirk, a
+  // future edit that throws earlier in this file — leaves the entire page blank
+  // while still measuring as fully present in the DOM. That exact bug shipped
+  // once, from adding the wrong class name. A page must never need JavaScript to
+  // merely be visible, so after a couple of seconds anything still hidden is shown
+  // regardless.
+  setTimeout(function () {
+    $$(".reveal").forEach(function (el) {
+      if (!el.classList.contains("in")) { el.classList.add("in"); fillIn(el); }
+    });
+  }, 2200);
   // The hero is above the fold and never intersects on the way in.
   $$(".metric .n").forEach(count);
 
