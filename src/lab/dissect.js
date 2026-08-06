@@ -376,7 +376,13 @@ export function createDissection(THREE, ctx) {
   }
 
   return {
-    setTool, update, dispose, state,
+    // pick(nx, ny) is exposed for main.js's touch router, which has to know at
+    // TOUCHDOWN whether a finger landed on the specimen or on empty space —
+    // one gesture means the instrument, the other means orbit, and the two
+    // answers must be the same one this engine will give on the next frame.
+    // Re-deriving the visibility and reflected-flap rules over in main.js would
+    // be a second source of truth that silently drifts from this one.
+    setTool, update, dispose, state, pick,
     get tool() { return tool; },
     get hovered() { return hovered ? hovered.id : null; },
     get contact() { return contact; },

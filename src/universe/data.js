@@ -32,7 +32,7 @@ const UNI_DATA = {
       elements: { name: 'Stardust', desc: 'Supernovae seeded space with carbon, oxygen and iron. Biology is what those ashes did next.' },
     },
     research: ['Astrobiology: the search for biosignatures on exoplanets'],
-    labs: ['Coming soon: a habitable-zone explorer'],
+    labs: [],
     related: ['earth', 'atom'], ai: 'Why is carbon the backbone of all known life?',
   },
   earth: {
@@ -49,7 +49,7 @@ const UNI_DATA = {
       land: { name: 'The Continents', desc: 'Green with forests and grasslands — vast solar collectors turning light into living carbon.' },
     },
     research: ['Earth-system science: life as a planetary force'],
-    labs: ['Coming soon: the carbon cycle, simulated'],
+    labs: [],
     related: ['biome', 'universe'], ai: 'How did life change Earth’s atmosphere?',
   },
   biome: {
@@ -67,7 +67,7 @@ const UNI_DATA = {
     },
     diseases: ['Deforestation & zoonotic spillover — new diseases crossing from wildlife'],
     research: ['Biodiversity & ecosystem stability'],
-    labs: ['Coming soon: an ecosystem-collapse simulator'],
+    labs: [],
     related: ['ecosystem', 'earth'], ai: 'Why are rainforests so biodiverse?',
   },
   ecosystem: {
@@ -86,7 +86,7 @@ const UNI_DATA = {
     },
     diseases: ['Trophic collapse when a keystone species is lost'],
     research: ['Food-web ecology & rewilding'],
-    labs: ['Coming soon: predator–prey population dynamics'],
+    labs: ['Predator & prey — the Lotka-Volterra bench'],
     related: ['organism', 'biome'], ai: 'What is a keystone species?',
   },
   organism: {
@@ -141,7 +141,7 @@ const UNI_DATA = {
     },
     diseases: ['Fibrosis — scar tissue that can’t contract', 'Cardiomyopathy'],
     research: ['Tissue engineering & organs-on-a-chip'],
-    labs: ['Coming soon: histology microscope'],
+    labs: ['The virtual microscope — four slides, 40x to 1000x'],
     related: ['cell', 'organ'], ai: 'Why is heart muscle striated?',
   },
   cell: {
@@ -162,7 +162,7 @@ const UNI_DATA = {
     },
     diseases: ['Cancer — a cell that forgets to stop dividing', 'Mitochondrial disease'],
     research: ['Single-cell sequencing & the Human Cell Atlas'],
-    labs: ['Coming soon: build-a-cell sandbox'],
+    labs: [],
     related: ['organelle', 'tissue', 'dna'], ai: 'What makes a cell alive rather than just chemistry?',
   },
   organelle: {
@@ -181,7 +181,7 @@ const UNI_DATA = {
     },
     diseases: ['Mitochondrial myopathies', 'Roles in ageing & neurodegeneration'],
     research: ['Mitochondrial replacement therapy'],
-    labs: ['Coming soon: cellular respiration simulator'],
+    labs: ['Cellular Respiration — a six-lens lesson with a live ATP tally'],
     related: ['protein', 'cell'], ai: 'How does a mitochondrion actually make ATP?',
   },
   protein: {
@@ -200,7 +200,7 @@ const UNI_DATA = {
     },
     diseases: ['Sickle-cell anaemia — one wrong amino acid in haemoglobin', 'Alzheimer’s & protein misfolding'],
     research: ['AlphaFold & AI protein design'],
-    labs: ['Coming soon: fold-a-protein puzzle'],
+    labs: [],
     related: ['dna', 'organelle'], ai: 'Why does a protein’s shape determine what it does?',
   },
   dna: {
@@ -238,7 +238,7 @@ const UNI_DATA = {
     },
     diseases: ['Point mutations & single-nucleotide polymorphisms (SNPs)'],
     research: ['DNA synthesis & data storage in DNA'],
-    labs: ['Coming soon: base-pairing puzzle'],
+    labs: ['DNA Replication — watch the fork run, leading and lagging'],
     related: ['atom', 'dna'], ai: 'Why does adenine only pair with thymine?',
   },
   atom: {

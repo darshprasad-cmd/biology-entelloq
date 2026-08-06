@@ -41,16 +41,38 @@ const mouse = { x: 0.5, y: 0.5, down: false };
 let handMode = false;
 let currentTool = 'probe';
 
+// Phone or not, decided by the shell (SH_PHONE — a coarse pointer plus a short
+// screen edge; see the note there for why it is not a media query). shell.js is
+// concatenated ahead of this file so the binding is already live, but main.js
+// feature-detects every one of its neighbours and this is no different.
+const MN_PHONE = (typeof SH_PHONE !== 'undefined') && !!SH_PHONE;
+
 // The instrument tray, in cycle order. One list shared by the number keys, the
 // flick, the wrist dial and the on-screen dial HUD, so they can never disagree.
 const TOOL_ORDER = ['probe', 'scalpel', 'forceps', 'pins', 'retractor', 'swab'];
 const TOOL_LABELS = ['Probe', 'Scalpel', 'Forceps', 'Pins', 'Retractor', 'Swab'];
 
+/*
+ * How many device pixels the specimen is worth.
+ *
+ * A phone reports devicePixelRatio 3 with a GPU that has a fraction of a
+ * laptop's fill rate, so honouring it means shading NINE pixels for every CSS
+ * pixel of a scene that is already paying for a bloom chain and a fullscreen
+ * grade. 1.5 is where the edges of the organs still read as sharp on a 400ppi
+ * screen and the frame budget survives; below that the fine structures (chordae,
+ * mesentery) start to alias and this is a lab, not a screensaver. The desktop
+ * cap of 2 is untouched.
+ */
+function bootPixelRatio() {
+  const dpr = typeof devicePixelRatio === 'number' && devicePixelRatio > 0 ? devicePixelRatio : 1;
+  return Math.min(dpr, MN_PHONE ? 1.5 : 2);
+}
+
 function bootScene(root) {
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(38, innerWidth / innerHeight, 0.1, 400);
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setPixelRatio(bootPixelRatio());
   renderer.setSize(innerWidth, innerHeight);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.15;
@@ -90,6 +112,14 @@ function bootScene(root) {
       postfx = createPostFX(THREE, (typeof POSTFX_DEPS !== 'undefined' ? POSTFX_DEPS : {}),
         { scene, camera, renderer, composer: env && env.composer });
     } catch (e) { console.warn('postfx failed', e); postfx = null; }
+    // A phone GPU is not a laptop GPU. postfx probes the renderer and picks its
+    // own tier, but that probe reads a GPU NAME, and a current Adreno or Mali
+    // with eight cores and dpr 2 looks like a workstation to it — it would be
+    // handed tier 2, which costs a SECOND full scene render for depth of field.
+    // Step it to the grade-only tier using postfx's own tiers rather than
+    // inventing a second quality system; nothing ever promotes a tier back up,
+    // so this sticks for the session.
+    if (postfx && MN_PHONE && postfx.setQuality) postfx.setQuality(0);
   }
 
   addEventListener('resize', () => {
@@ -352,6 +382,96 @@ function applyCameraLife(dt, interacting) {
   camera.updateMatrixWorld();
 }
 
+/* ---- touch: who owns this finger ---------------------------------------- *
+ * A mouse has a hover state and a separate button, so the desktop rule can be
+ * trivial: the pointer is always aiming the instrument, and holding the button
+ * uses it. A finger has neither. It arrives already pressed, directly on top of
+ * the thing it is pointing at, and the SAME gesture has to be able to mean both
+ * "cut here" and "turn the specimen round so I can see the other side".
+ *
+ * The rule, decided at touchdown:
+ *
+ *   two or more fingers  -> the camera, always. Nothing in the instrument tray
+ *       takes two contact points, and pinch-to-zoom is the one gesture people
+ *       try without being told, so it must never be ambiguous.
+ *   one finger ON the specimen -> the instrument. Direct manipulation: putting
+ *       the scalpel down on the liver and having the VIEW swing instead would
+ *       be a lie about what the instrument does.
+ *   one finger on empty space -> orbit. There is nothing out there to cut, so
+ *       the only useful meaning is "look at it from over here" — and it makes
+ *       the entire background one enormous orbit target with no modifier key to
+ *       learn and no mode to be in.
+ *
+ * Decided ONCE, at touchdown, and never revisited for the life of the gesture.
+ * A stroke that starts on the liver stays a cut even when the finger runs off
+ * the edge of it, because re-deciding mid-drag would abort the incision at
+ * exactly the moment it crossed a tissue boundary — which is the moment a real
+ * incision is most committed. The same reasoning is why the hit test is the
+ * SAME test dissect.js will make on the next frame (dissection.pick) rather
+ * than a generous one: a fat-finger radius would claim touches that dissect
+ * then finds nothing under, and a gesture that neither cuts nor orbits is worse
+ * than one that orbits.
+ *
+ * Claiming is done by stopping the pointerdown in the CAPTURE phase, before it
+ * reaches the canvas. OrbitControls listens on the canvas and only tracks
+ * pointers whose pointerdown it actually saw, so a claimed finger is invisible
+ * to it and there is nothing to arbitrate — no toggling controls.enabled
+ * underneath a drag it has already started, which is the failure mode that
+ * makes touch camera controls stick.
+ */
+const TCH = {
+  claimed: -1,          // pointerId currently driving the instrument, -1 for none
+  ids: new Set(),       // fingers down ON THE SCENE; taps on chrome are not fingers
+};
+
+// Surfaces a finger can land on that are emphatically not the specimen. The
+// picker and the two full-screen sheets are included as well as .chrome: a
+// finger dragging on the specimen chooser must not also be orbiting the
+// specimen hidden behind it.
+const TCH_CHROME = '.chrome, #pick:not(.gone), #viva.on, #keys.on, #coldopen';
+
+function tchScene(e) {
+  return !(e.target && e.target.closest && e.target.closest(TCH_CHROME));
+}
+
+function tchHitsSpecimen(clientX, clientY) {
+  if (!dissection || !dissection.pick) return false;
+  // A radiology study forces every mesh visible and gates dissection off for
+  // the frame (see tick), so while one is up nothing is touchable and every
+  // finger belongs to the camera.
+  if (imaging && imaging.mode && imaging.mode() !== 'off') return false;
+  return !!dissection.pick(clientX / innerWidth, clientY / innerHeight);
+}
+
+function tchDown(e) {
+  if (e.pointerType !== 'touch') return;   // a pen hovers and a mouse has a button
+  if (!tchScene(e)) return;
+  TCH.ids.add(e.pointerId);
+  if (TCH.ids.size > 1) {
+    // A second finger means the camera, whatever the first one was doing. If
+    // that first finger was cutting, the stroke ENDS here rather than being
+    // dragged sideways by the zoom — which is exactly what letting go of the
+    // mouse button does, and dissect.js already knows how to finish that.
+    if (TCH.claimed >= 0) { TCH.claimed = -1; mouse.down = false; }
+    return;                                // through to OrbitControls
+  }
+  if (!tchHitsSpecimen(e.clientX, e.clientY)) return;   // empty space: orbit
+  TCH.claimed = e.pointerId;
+  mouse.x = e.clientX / innerWidth;
+  mouse.y = e.clientY / innerHeight;
+  mouse.down = true;
+  e.stopPropagation();                     // keep it away from OrbitControls
+}
+
+// pointerup AND pointercancel. A cancel is not an edge case on a phone — the
+// system takes the gesture away for an edge swipe or an incoming call — and
+// without this the instrument would stay gripped forever afterwards.
+function tchUp(e) {
+  if (e.pointerType !== 'touch') return;
+  TCH.ids.delete(e.pointerId);
+  if (TCH.claimed === e.pointerId) { TCH.claimed = -1; mouse.down = false; }
+}
+
 /* ---- input router ------------------------------------------------------ */
 function routeInput() {
   // VR outranks everything: if a headset is presenting, its controller or tracked
@@ -440,7 +560,11 @@ function routeInput() {
     input.span = 0;
     input.source = 'mouse';
     drawCursor(false);
-    controls.enabled = !mouse.down || currentTool === 'probe';
+    // Touch settled ownership at touchdown (see tchDown) and a claimed finger
+    // never reached OrbitControls at all, so there is nothing here for the
+    // mouse rule to arbitrate — it would only re-enable orbiting underneath a
+    // probe stroke that is deliberately not orbiting.
+    controls.enabled = TCH.claimed >= 0 ? false : (!mouse.down || currentTool === 'probe');
     dialReset();  // no hand driving → no dial state to carry forward
     // Same for the flick's velocity history: the gap while the mouse was driving
     // is not an acceleration, and differencing across it would be a fabrication.
@@ -866,7 +990,10 @@ function tick(t) {
       // Still whenever anything is being touched — a drag, a grip, or a tracked
       // hand present — so idle drift never compounds with hand-tracking jitter or
       // nudges a live incision.
-      const busy = mouse.down || input.gripping
+      // TCH.ids covers the touch case the other two miss: an orbit drag sets
+      // neither mouse.down nor gripping, and letting the idle drift ride along
+      // on top of it makes the camera feel like it is sliding out of your hand.
+      const busy = mouse.down || input.gripping || TCH.ids.size > 0
         || (handMode && hands && hands.snapshot && hands.snapshot.active);
       applyCameraLife(dt, busy);
     }
@@ -1260,9 +1387,33 @@ export function startApp() {
   });
 
   // pointer
-  addEventListener('pointermove', (e) => { mouse.x = e.clientX / innerWidth; mouse.y = e.clientY / innerHeight; });
-  addEventListener('pointerdown', (e) => { if (e.target.closest('.chrome')) return; mouse.down = true; });
-  addEventListener('pointerup', () => { mouse.down = false; });
+  //
+  // TWO paths, and they must not overlap. Touch goes through tchDown/tchUp,
+  // which decide at touchdown whether a finger is the instrument or the camera;
+  // the three below are the MOUSE path. Without the pointerType guards every
+  // orbit drag would also be a grip, because a finger reports a pointerdown the
+  // instant it lands and there is no button to have not pressed.
+  //
+  // tchDown is on the CAPTURE phase deliberately: it has to run before the
+  // canvas's own listener so it can keep a claimed finger away from
+  // OrbitControls entirely. See the note above tchDown.
+  addEventListener('pointerdown', tchDown, { capture: true });
+  addEventListener('pointerup', tchUp);
+  addEventListener('pointercancel', tchUp);
+
+  addEventListener('pointermove', (e) => {
+    // A finger that is orbiting must not also drag the instrument across the
+    // tissue behind it, so only the claimed one moves the aim.
+    if (e.pointerType === 'touch' && TCH.claimed !== e.pointerId) return;
+    mouse.x = e.clientX / innerWidth; mouse.y = e.clientY / innerHeight;
+  });
+  addEventListener('pointerdown', (e) => {
+    if (e.pointerType === 'touch') return;
+    if (e.target.closest('.chrome')) return;
+    mouse.down = true;
+  });
+  addEventListener('pointerup', (e) => { if (e.pointerType !== 'touch') mouse.down = false; });
+  addEventListener('pointercancel', (e) => { if (e.pointerType !== 'touch') mouse.down = false; });
   addEventListener('keydown', onKey);
 
   if (shell.setKeymap) shell.setKeymap(KEYMAP, { silent: true });
@@ -1303,6 +1454,12 @@ export function startApp() {
   // The wrist dial and recenter are otherwise only reachable behind a live webcam.
   window.__LAB.dialTool = detectToolDial;
   window.__LAB.dial = dial;
+  // The touch router's decision, for the same reason the flick and dial state
+  // are exposed: which finger owns the gesture is otherwise only observable on
+  // a real touchscreen, and it is the one rule that decides whether a drag cuts
+  // or orbits.
+  window.__LAB.touch = TCH;
+  window.__LAB.touchHit = tchHitsSpecimen;
   window.__LAB.recenter = () => (hands && hands.recenter ? hands.recenter() : false);
   // Constructing a tracker touches no camera or network (all inert until start()),
   // so tests can make one to exercise the reach map / spike guard without a webcam.

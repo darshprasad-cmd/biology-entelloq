@@ -148,7 +148,13 @@ TEMPLATE = r"""<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- viewport-fit=cover lets the scene run under the notch and the home indicator,
+     which is the whole point of a full-bleed specimen — and it is also what makes
+     env(safe-area-inset-*) report anything but 0px, which is how shell.js keeps the
+     instrument tray off the home indicator. Zoom is deliberately NOT disabled: the
+     canvas already refuses double-tap zoom via touch-action, and the panels are text
+     somebody may need to enlarge. -->
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Biology Entelloq — Dissection Lab</title>
 <style>
   :root{

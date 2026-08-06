@@ -463,6 +463,210 @@ body.handmode #dock{display:grid;grid-template-columns:repeat(2,60px);gap:14px;p
 .krow s{text-decoration:none;font-size:12px;line-height:1.5;color:var(--dim)}
 #kbox .foot{margin-top:4px;font-family:var(--mono);font-size:9px;letter-spacing:.14em;
       text-transform:uppercase;color:var(--faint)}
+
+/* ── things the phone layout needs, defined off ────────────────────────────
+   Three elements exist in the markup for every viewport but are only ever
+   shown on a phone. Declaring them off here (rather than only on there) keeps
+   the desktop rendering identical to what it was, whatever else changes. */
+/* The instrument name under its glyph. On a desktop it lives in the hover
+   tooltip; a touch screen has no hover, and "which one is the retractor" is not
+   a question a student should have to answer by tapping one to find out. */
+.tname{display:none}
+/* The objective's hint. On a desktop it has its own bar at the foot (#hint);
+   down on a phone the foot is the instrument tray. */
+#objhint{display:none;font-size:11.5px;line-height:1.45;color:var(--dim)}
+#objhint b{color:var(--cy)}
+/* Controls that only make sense without a keyboard. */
+.mobonly{display:none}
+
+/* ── touch, on any device that has it ──────────────────────────────────────
+   Not scoped to the phone: a touchscreen laptop and a tablet get a finger too,
+   and every rule here is either inert under a mouse or corrects something that
+   is only wrong under a finger. */
+/* The scene owns every touch that lands on it — no page scroll, no rubber
+   band, no double-tap zoom, no long-press callout over the specimen.
+   OrbitControls sets touch-action on the canvas itself, but the stage behind it
+   is ours and a gap between the two is a scroll waiting to happen. */
+#stage{touch-action:none}
+#stage canvas{touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+html,body{overscroll-behavior:none}
+/* A panel that reaches the end of its scroll must not hand the rest of the
+   gesture to the page behind it: that is what turns "read the case note" into
+   "rubber-band the whole lab". */
+#recl,#drawbody,#vig,#struct,#kbox,#vbox,#cards{overscroll-behavior:contain}
+@media (hover:none){
+  /* Hover affordances are a lie here. The tooltip only appears AFTER the tap
+     has already selected the instrument, and on iOS the hover state then sticks
+     to that button until you tap somewhere else. */
+  .ttip{display:none}
+  .tool:hover{transform:none;background:rgba(255,255,255,.02);color:var(--dim)}
+  .tool.on:hover{color:var(--em);
+      background:linear-gradient(135deg,rgba(52,211,153,.2),rgba(56,224,216,.09))}
+  .card:hover{transform:none;box-shadow:none;background:rgba(52,211,153,.05)}
+  *{-webkit-tap-highlight-color:transparent}
+  /* A drag that begins on a label must move the instrument, not select the word. */
+  .tool,.minibtn,.bchip,.sysb,.seg button,.caseb,.btn,.act,.card,.rung,.lbl,
+  #specbtn,#helpbtn,#handbtn,#coachok{
+      -webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+}
+
+/* ── the phone ─────────────────────────────────────────────────────────────
+   The desktop chrome is a ring of sidebars around a wide viewport: instruments
+   down the left, a 320px rail down the right, the objective floating across the
+   top. A 390px phone has no sides. So the same surfaces become a top row and a
+   bottom sheet, and the middle — the specimen — is left alone, which is the one
+   thing that was already right.
+
+   Every rule is scoped to body.bioq-phone, a class buildShell adds only when
+   the device has a coarse pointer AND a short screen edge. It is deliberately
+   a class and not a media query: the layout comes with structural changes (the
+   systems toggles move into the console, the record and the viva grow buttons)
+   and a query on max-width would flip the CSS back to the desktop the moment
+   the handset was turned on its side while the DOM stayed where it was. The
+   short EDGE of a screen does not change when you rotate it. */
+body.bioq-phone{
+  /* The notch, the home indicator and the rounded corners. These read as 0px
+     without viewport-fit=cover on the viewport meta — assemble.py sets it. */
+  --sat:env(safe-area-inset-top,0px);
+  --sar:env(safe-area-inset-right,0px);
+  --sab:env(safe-area-inset-bottom,0px);
+  --sal:env(safe-area-inset-left,0px);
+  --edge:10px;
+  --pl:calc(var(--sal) + 10px);
+  --pr:calc(var(--sar) + 10px);
+  /* The bottom stack, stated once so everything above the tray agrees on where
+     the tray ends: a 58px button plus 7px of padding either side. */
+  --dockh:72px;
+  --bot:calc(var(--sab) + 10px);
+  --above-dock:calc(var(--bot) + var(--dockh) + 8px);
+}
+
+/* picker — one card per row, and the deck scrolls if the shelf grows */
+body.bioq-phone #pick .in{padding:20px 16px;width:100%}
+body.bioq-phone #pick .kick{font-size:8.5px;letter-spacing:.3em;margin-bottom:12px}
+body.bioq-phone #pick h1{font-size:23px}
+body.bioq-phone #pick .tag{font-size:12.5px;margin-bottom:20px}
+body.bioq-phone #cards{gap:11px;max-height:62vh;overflow-y:auto;padding:2px}
+body.bioq-phone .card{width:100%;padding:16px 17px;border-radius:13px}
+body.bioq-phone .card h2{font-size:17px;margin:9px 0 6px}
+body.bioq-phone .card p{font-size:12px}
+
+/* top: the help and specimen chips on one row, the objective on the next.
+   Two rows and not one because the specimen name is variable width — a single
+   row that reserved room for "Earthworm" would leave a hole under "Frog". */
+body.bioq-phone #topright{top:calc(var(--sat) + 10px);right:var(--pr);gap:7px;z-index:26}
+body.bioq-phone #helpbtn{width:38px}
+body.bioq-phone #specbtn{padding:8px 11px;gap:7px}
+body.bioq-phone #specbtn .lbl{display:none}
+body.bioq-phone #specbtn .specname{font-size:12.5px}
+body.bioq-phone #obj{top:calc(var(--sat) + 54px);left:var(--pl);right:var(--pr);
+  transform:none;min-width:0;max-width:none;width:auto;padding:10px 13px;gap:7px}
+body.bioq-phone #objtxt{font-size:12.5px;line-height:1.4}
+body.bioq-phone .objmain{gap:10px}
+body.bioq-phone #hint{display:none}
+body.bioq-phone #objhint{display:block}
+
+/* the demonstrator, deliberately OVER the objective bar rather than under it.
+   The objective's height depends on how long the objective is, so there is no
+   offset below it that reliably clears it on every step; and while the
+   demonstrator is speaking, what it is saying outranks the step you are already
+   on. It takes itself away after a few seconds and the objective is back. */
+body.bioq-phone #say{left:var(--pl);right:var(--pr);width:auto;
+  top:calc(var(--sat) + 54px);bottom:auto;padding:12px 14px;z-index:27;
+  transform:translateY(-8px) scale(.99)}
+body.bioq-phone #say.on{transform:none}
+body.bioq-phone #say .t{font-size:12.5px}
+
+/* the instrument tray: a strip along the bottom, at thumb height, with the
+   names spelled out. flex:1 1 0 and min-width:0 so six instruments always fit
+   the width — a tray that scrolls sideways hides instruments, and an instrument
+   nobody knows is there may as well not be. */
+body.bioq-phone #dock{left:var(--pl);right:var(--pr);top:auto;bottom:var(--bot);
+  display:flex;flex-direction:row;gap:6px;padding:7px;z-index:24;transform:none}
+body.bioq-phone .tool{width:auto;height:58px;flex:1 1 0;min-width:0;border-radius:11px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+body.bioq-phone .tool svg{width:22px;height:22px}
+body.bioq-phone .tool .tnum{display:none}
+body.bioq-phone .tname{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;font-family:var(--mono);font-size:7.5px;letter-spacing:.05em;
+  text-transform:uppercase;color:inherit;opacity:.85}
+/* The selected marker was a bar off the LEFT edge, which means nothing once the
+   tray runs horizontally. Underline the instrument instead. */
+body.bioq-phone .tool.on::after{left:50%;top:auto;bottom:-6px;transform:translateX(-50%);
+  width:24px;height:3px}
+
+/* the rail becomes a bottom sheet, stacking UP from just above the tray. It is
+   still pointer-events:none with only its panels interactive, so the empty part
+   of the sheet is still specimen you can turn. */
+body.bioq-phone #rail{left:0;right:0;top:auto;bottom:var(--above-dock);width:auto;
+  padding:0 var(--pr) 0 var(--pl);max-height:62vh;gap:7px;justify-content:flex-end}
+body.bioq-phone #rail #struct{max-height:30vh;overflow-y:auto;padding:12px 14px}
+body.bioq-phone #struct .n{font-size:14px}
+body.bioq-phone #vig{max-height:30vh}
+body.bioq-phone #drawbody{max-height:40vh;gap:14px}
+body.bioq-phone #railfoot{justify-content:flex-start;gap:6px;padding:7px}
+/* Everything you tap grows to something a thumb can actually land on. */
+body.bioq-phone .minibtn,body.bioq-phone .bchip{padding:9px 12px;font-size:9.5px}
+body.bioq-phone .seg button{padding:9px 8px;font-size:9px}
+body.bioq-phone .sysb{padding:8px 11px;font-size:9.5px}
+body.bioq-phone .caseb{padding:10px 11px;font-size:11.5px}
+body.bioq-phone #struct .act{padding:7px 10px}
+body.bioq-phone .btn{padding:11px 16px;margin-bottom:8px}
+
+/* the systems toggles are re-homed into the console (see buildShell), so they
+   stop being a fixed panel and become a row of chips inside a drawer section */
+body.bioq-phone #systems{position:static;transform:none;left:auto;top:auto;max-width:none;
+  padding:0;background:none;border:none;box-shadow:none;justify-content:flex-start;gap:5px;
+  backdrop-filter:none;-webkit-backdrop-filter:none}
+
+/* the attempt record, full sheet, with its own way out — it is opened by the L
+   key on a desktop and a phone has no L */
+body.bioq-phone #rec{left:var(--pl);right:var(--pr);top:calc(var(--sat) + 10px);
+  bottom:calc(var(--sab) + 10px);width:auto;z-index:28}
+body.bioq-phone #recl{font-size:11px}
+body.bioq-phone #recclose{position:absolute;right:10px;top:10px}
+body.bioq-phone .mobonly{display:inline-flex}
+
+/* hand tracking is not offered here at all (see buildShell for why), so the
+   cockpit goes rather than sitting there as a control that would not work.
+   The coach card is positioned defensively anyway — it costs one rule. */
+body.bioq-phone #hand{display:none}
+body.bioq-phone #coach{left:var(--pl);right:var(--pr);width:auto;bottom:var(--above-dock)}
+
+/* the viva and the keyboard reference stop being dialogs and become the screen */
+body.bioq-phone #viva,body.bioq-phone #keys{padding:0}
+body.bioq-phone #vbox,body.bioq-phone #kbox{width:100%;height:100%;max-height:none;
+  border-radius:0;padding:calc(var(--sat) + 20px) 18px calc(var(--sab) + 20px)}
+body.bioq-phone #kgrps{column-count:1}
+
+/* the tutor's question line sits above the tray. 16px on the input is not a
+   style choice: iOS Safari zooms the whole page in on any focused field with a
+   smaller font, and it does not zoom back out. */
+body.bioq-phone #ask{left:var(--pl);right:var(--pr);width:auto;transform:none;
+  bottom:var(--above-dock);z-index:29}
+body.bioq-phone #askin{font-size:16px}
+
+/* physio.js mounts a 352x278 bedside monitor at the top-left corner. There is
+   no corner here, and nothing is lost by dropping it: #physline in the rail
+   already carries the same numbers on one line, which is exactly what it was
+   built for. This needs the body class to out-specify PHY_CSS, which is
+   injected into head after this stylesheet. */
+body.bioq-phone #phy-mon{display:none}
+
+/* a phone on its side is 390px tall, and the top rows plus the tray already
+   claim 180 of it. The sheets get shorter and the objective drops to its text. */
+@media (max-height:520px){
+  body.bioq-phone{--dockh:58px}
+  body.bioq-phone .tool{height:46px}
+  body.bioq-phone .tool svg{width:19px;height:19px}
+  body.bioq-phone #objdots{display:none}
+  body.bioq-phone #objhint{display:none}
+  body.bioq-phone #obj{padding:8px 12px}
+  body.bioq-phone #rail{max-height:46vh}
+  body.bioq-phone #rail #struct{max-height:26vh}
+  body.bioq-phone #drawbody{max-height:34vh}
+  body.bioq-phone #vig{max-height:24vh}
+}
 `;
 
 /* Cleaner instrument glyphs — 24×24, stroked, rendered at 26px in the dock. */
@@ -531,6 +735,36 @@ const SHELL_KEYMAP_DEF = [
   { key: '?',   label: 'This sheet',                   group: 'Console' },
   { key: 'Esc', label: 'Close whatever is open',       group: 'Console' },
 ];
+
+/*
+ * Is this a phone? Decided ONCE, at load, from two things:
+ *
+ *   - a coarse pointer, which is the only honest test for "this is a finger",
+ *   - the SHORT edge of the viewport, because that is the one measure of a
+ *     handset that does not change when the handset is turned on its side.
+ *
+ * Deliberately not a media query. The phone layout comes with structural
+ * changes as well as CSS ones — the systems toggles move into the console, the
+ * attempt record and the viva grow buttons because there is no keyboard to open
+ * them with — and a query on max-width would hand a rotated phone the desktop
+ * stylesheet while the DOM stayed rearranged for the phone. A query on
+ * max-height would hand the phone layout to a short desktop window instead.
+ *
+ * 520px covers the largest handsets in portrait (a Pro Max is 440 CSS px wide)
+ * and leaves tablets and unfolded foldables on the desktop layout, where their
+ * width genuinely does carry the sidebars.
+ *
+ * main.js reads this too (as SH_PHONE — shell.js is concatenated ahead of it),
+ * for the pixel-ratio cap and the post-processing tier.
+ */
+const SH_PHONE = (() => {
+  try {
+    if (typeof window === 'undefined' || !window.matchMedia) return false;
+    if (!window.matchMedia('(pointer: coarse)').matches) return false;
+    const short = Math.min(window.innerWidth || 0, window.innerHeight || 0);
+    return short > 0 && short <= 520;
+  } catch (e) { return false; }   // matchMedia throws in a few embedded webviews
+})();
 
 /* Everything the shell interpolates into innerHTML goes through this first:
    case labels and layer names arrive from data files, not from the shell. */
@@ -618,7 +852,13 @@ export function buildShell(root) {
   /* chrome */
   const objBar = el(`<div id="obj" class="chrome">
       <div id="objdots"></div>
-      <div class="objmain"><span class="lbl" id="objn">—</span><span id="objtxt">—</span></div></div>`);
+      <div class="objmain"><span class="lbl" id="objn">—</span><span id="objtxt">—</span></div>
+      <div id="objhint"></div></div>`);
+  // The hint has its own bar at the foot of a desktop viewport (#hint). On a
+  // phone the foot is the instrument tray, and "what to do" and "how to do it"
+  // belong on the same card anyway — so it is written to both, and CSS shows
+  // whichever of the two that viewport has room for.
+  const objHint = objBar.querySelector('#objhint');
   // A VISIBLE, always-present specimen switcher. The cold open loads the frog and
   // hides the picker, and a keyboard shortcut nobody is told about is not an access
   // path — a user with four specimens on the shelf could reach only one. This chip
@@ -717,8 +957,12 @@ export function buildShell(root) {
 
   /* tool dock */
   SHELL_TOOLS.forEach((t, i) => {
+    // .tname is display:none everywhere but the phone tray, where the hover
+    // tooltip below cannot exist and the glyph alone does not tell a student
+    // which of these is the retractor.
     const b = el(`<button class="tool${i === 0 ? ' on' : ''}" data-tool="${t.id}" aria-label="${t.name}">
         <svg viewBox="0 0 24 24">${ICONS[t.id]}</svg><i class="tnum">${i + 1}</i>
+        <span class="tname">${t.name}</span>
         <span class="ttip"><b>${t.name}</b><s>${t.desc}</s><em>Key ${i + 1}</em></span></button>`);
     b.onclick = () => { setTool(t.id); fire('tool', t.id); };
     dock.appendChild(b);
@@ -798,13 +1042,20 @@ export function buildShell(root) {
     dots.forEach((d, i) => { d.className = i < objIdx ? 'done' : (i === objIdx ? 'now' : ''); });
     if (objIdx >= list.length) {
       objBar.querySelector('#objn').textContent = 'Complete';
-      objBar.querySelector('#objtxt').innerHTML = '<b>Dissection complete.</b> Press V for the viva.';
-      hint.innerHTML = 'Press <b>V</b> for the viva · <b>L</b> for your record';
+      objBar.querySelector('#objtxt').innerHTML = SH_PHONE
+        ? '<b>Dissection complete.</b> The viva is in the console.'
+        : '<b>Dissection complete.</b> Press V for the viva.';
+      // A phone has no V and no L, so it is told where the two buttons are.
+      hint.innerHTML = SH_PHONE
+        ? 'Open the <b>console</b> for the viva and your record'
+        : 'Press <b>V</b> for the viva · <b>L</b> for your record';
+      if (objHint) objHint.innerHTML = hint.innerHTML;
       return;
     }
     objBar.querySelector('#objn').textContent = 'Step ' + (objIdx + 1) + ' / ' + list.length;
     objBar.querySelector('#objtxt').innerHTML = list[objIdx].text;
     hint.innerHTML = list[objIdx].hint;
+    if (objHint) objHint.innerHTML = hint.innerHTML;
   }
 
   function pushEvent(evt) {
@@ -1371,6 +1622,56 @@ export function buildShell(root) {
     renderHand();
   }
 
+  /* ── the phone ─────────────────────────────────────────────────────────
+     Nearly all of the phone layout is CSS (the body.bioq-phone block in
+     SHELL_CSS). This is the part that cannot be: three surfaces that on a
+     desktop are reachable only because there is a keyboard or a spare corner,
+     and one that is honestly withdrawn.
+
+     Guarded by SH_PHONE, which is false on every desktop, so none of this can
+     reach one. */
+  if (SH_PHONE) {
+    document.body.classList.add('bioq-phone');
+
+    // The systems toggles floated at the top centre. Down here that is the
+    // objective bar's row, and anywhere else on a 390px screen is the specimen.
+    // The console is where the other rarely-touched switches already live.
+    const secSys = el(`<div class="dsec" id="secsys"><span class="lbl">Systems</span></div>`);
+    secSys.appendChild(systems);
+    drawBody.appendChild(secSys);
+
+    // Hand tracking, honestly. The camera is on the same side of the phone as
+    // your face; you are holding the thing you would have to gesture at; and
+    // the landmark detector would be competing for the GPU with the specimen it
+    // is meant to be pointing at. Offering a switch that started a camera and
+    // then tracked badly would be worse than not offering one. Nothing is
+    // really lost either: tracking was only ever an approximation of touching
+    // the specimen, and this screen does that directly. So the cockpit is gone
+    // (CSS) and this says why, where the settings are.
+    const secHand = el(`<div class="dsec" id="sechand"><span class="lbl">Hand tracking</span>
+        <div class="dnote">Hand tracking is a desktop feature. It wants a camera you are not
+        holding, and running the detector alongside the specimen costs the frame rate of
+        both. Here your finger is the instrument: touch a structure to use the instrument
+        you have selected, drag anywhere else to turn the specimen, pinch to zoom.</div></div>`);
+    drawBody.appendChild(secHand);
+
+    // The attempt record and the viva are the L and V keys on a desktop. Without
+    // these two buttons a student's own record of what they did would simply be
+    // unreachable on a phone.
+    const recBtn = el(`<button class="minibtn mobonly" id="recbtn">Record</button>`);
+    recBtn.onclick = () => rec.classList.toggle('on');
+    const vivaBtn = el(`<button class="minibtn mobonly" id="vivabtn">Viva</button>`);
+    vivaBtn.onclick = () => fire('viva');
+    railFoot.appendChild(recBtn);
+    railFoot.appendChild(vivaBtn);
+
+    // ...and the record covers the whole screen once it is open, so it needs a
+    // way out that is not Escape.
+    const recClose = el(`<button class="minibtn mobonly" id="recclose">Close</button>`);
+    recClose.onclick = () => rec.classList.remove('on');
+    rec.appendChild(recClose);
+  }
+
   return {
     on, setTool, setStructure, setSpecimen, setHandState, showViva,
     say: sayMsg,
@@ -1391,7 +1692,10 @@ export function buildShell(root) {
     showKeymap: (o) => keysEl.classList.toggle('on', o === undefined ? true : !!o),
     checkObjectives: (state) => refreshObjective(state),
     setObjective: () => {},
-    setHint: (h) => { hint.innerHTML = h; },
+    setHint: (h) => { hint.innerHTML = h; if (objHint) objHint.innerHTML = h; },
+    // Whether this is running the phone layout. main.js uses it for the
+    // pixel-ratio cap and the post-processing tier.
+    isPhone: () => SH_PHONE,
     setCameraPreview: () => {},
     mountCards: (specs, cb) => {
       const c = pick.querySelector('#cards');

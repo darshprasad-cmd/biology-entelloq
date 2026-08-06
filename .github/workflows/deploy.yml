@@ -1,0 +1,66 @@
+# Deploy the site with GitHub Actions instead of the legacy Pages builder.
+#
+# The legacy builder became the slowest and least reliable part of shipping here:
+# build times went 19s -> 597s -> 858s across a single day, and once it failed with
+# a zero-duration "Page build failed" and quietly went on serving the previous
+# commit. A deploy that silently reverts is the worst failure mode a deploy can
+# have — a fix looks pushed, looks green in git, and simply is not on the site.
+#
+# This uploads the repository as-is. There is no build step and there never should
+# be: every page here is already a self-contained HTML file.
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:      # so a deploy can be re-run without an empty commit
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never let two deploys race. A newer push should win, but an in-flight deploy is
+# allowed to finish rather than leaving Pages in a half-updated state.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # Cheap guard against the class of bug that has actually bitten this site:
+      # a page that ships but renders blank. Both of these were real.
+      - name: Sanity-check the built pages
+        run: |
+          set -e
+          test -f index.html || { echo "::error::index.html missing"; exit 1; }
+          test -f CNAME     || { echo "::error::CNAME missing — the custom domain would drop"; exit 1; }
+          grep -q "biology.entelloq.com" CNAME || { echo "::error::CNAME points somewhere else"; exit 1; }
+
+          # The landing page reveals its content by adding .in to .reveal elements.
+          # Adding the wrong class shipped a fully-built, completely invisible page
+          # once already, so fail the deploy rather than publish that again.
+          if grep -q 'class="reveal' index.html; then
+            grep -q 'classList.add("in")' index.html \
+              || { echo "::error::index.html uses .reveal but never adds .in — the page would render blank"; exit 1; }
+          fi
+
+          # Placeholder language is banned in this product.
+          if grep -riE "coming soon|lorem ipsum" --include="*.html" . ; then
+            echo "::error::placeholder language found"; exit 1
+          fi
+          echo "checks passed"
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4

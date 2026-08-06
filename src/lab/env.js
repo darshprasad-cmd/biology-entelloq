@@ -36,10 +36,25 @@ export function setupEnvironment(THREE, deps, refs) {
 
   // Real shadows do most of the grounding. ONE shadow-casting lamp only — a
   // second doubles the cost for almost no perceptual gain at this scale.
+  //
+  // The lamp's shadow map is a second render of every specimen mesh each frame,
+  // and PCFSoft is a 4x4 tap filter on top of it. That is affordable on a
+  // laptop and it is not on a phone, so on a handset the map is quartered in
+  // area and the filter drops to plain PCF. Keeping the shadow at all rather
+  // than switching it off is the deliberate half of this: without it the
+  // specimen stops sitting ON the table and starts floating over it, and that
+  // grounding is most of why the theatre reads as a real place. A softer, more
+  // approximate shadow still does that; no shadow does not.
+  //
+  // Read from the shell (SH_PHONE) at CALL time, not module-evaluation time:
+  // env.js is concatenated ahead of shell.js, so a top-level reference here
+  // would hit the temporal dead zone. setupEnvironment runs from startApp,
+  // long after every module body has evaluated.
+  const handheld = (typeof SH_PHONE !== 'undefined') && !!SH_PHONE;
   let shadowsOn = true;
   try {
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.type = handheld ? THREE.PCFShadowMap : THREE.PCFSoftShadowMap;
   } catch (e) { shadowsOn = false; }
 
   const canvas2d = (w, h) => {
@@ -83,7 +98,7 @@ export function setupEnvironment(THREE, deps, refs) {
   addTo(lamp.target);
   if (shadowsOn) {
     lamp.castShadow = true;
-    lamp.shadow.mapSize.set(1024, 1024);
+    lamp.shadow.mapSize.set(handheld ? 512 : 1024, handheld ? 512 : 1024);
     lamp.shadow.camera.near = 4;
     lamp.shadow.camera.far = 44;
     lamp.shadow.bias = -0.0018;
