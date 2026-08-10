@@ -122,7 +122,7 @@ function bootScene(root) {
     if (postfx && MN_PHONE && postfx.setQuality) postfx.setQuality(0);
   }
 
-  addEventListener('resize', () => {
+  function relayout() {
     camera.aspect = innerWidth / innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(innerWidth, innerHeight);
@@ -131,7 +131,27 @@ function bootScene(root) {
     if (handViz) handViz.resize();
     if (imaging) imaging.resize(innerWidth, innerHeight);
     if (zoomverse) zoomverse.resize(innerWidth, innerHeight);
-  });
+  }
+  addEventListener('resize', relayout);
+
+  // Rotating a phone is the one case `resize` alone does not reliably cover. iOS
+  // dispatches orientationchange — and sometimes resize with it — BEFORE the new
+  // innerWidth/innerHeight are readable, so a handler that measures immediately
+  // reads the pre-rotation size and leaves the scene stretched until something
+  // else happens to resize it. Re-running after the next frame and again once the
+  // animation has settled costs nothing and is what actually makes rotation clean.
+  // visualViewport is the modern signal and fires on the address bar sliding away
+  // too, which is the other way the usable height changes on a phone.
+  function afterRotate() {
+    requestAnimationFrame(relayout);
+    setTimeout(relayout, 250);
+  }
+  addEventListener('orientationchange', afterRotate);
+  if (window.visualViewport) {
+    // `resize` on visualViewport, not `scroll` — scroll fires continuously while
+    // the page moves and would relayout the whole renderer every frame.
+    visualViewport.addEventListener('resize', relayout);
+  }
 }
 
 /* ---- the hand cursor: the ONLY visualisation of the hand the student gets ---- */

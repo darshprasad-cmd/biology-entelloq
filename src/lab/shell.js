@@ -85,7 +85,8 @@ body.physio-on #obj{max-width:min(60vw, calc(100vw - 760px))}
    behind the bedside monitor twice, most recently at 1512x832 (a 13" MacBook).
    max(floor, min(preferred, ceiling)) makes the floor genuinely non-negotiable. */
 #dock{left:22px;transform:none;z-index:24;padding:11px;display:flex;flex-direction:column;gap:11px;
-      top:max(var(--docktop),min(calc(50% - 200px),calc(100vh - 560px)))}
+      top:max(var(--docktop),min(calc(50% - 200px),calc(100vh - 560px)));
+      top:max(var(--docktop),min(calc(50% - 200px),calc(100dvh - 560px)))}
 /* Short viewports (laptops at 720p, the actual school machine) cannot stack all
    three left-edge surfaces: monitor 285 + dock 359 + hand cockpit 136 = 780 > 720.
    The clamp above then resolves to its UPPER bound and pulls the dock back up
@@ -114,7 +115,8 @@ body.physio-on{--docktop:300px}
    overlap at tall viewports where the short-viewport media query does not apply. */
 body.handmode .tool{width:60px;height:60px}
 body.handmode #dock{display:grid;grid-template-columns:repeat(2,60px);gap:14px;padding:13px;
-      top:max(var(--docktop),min(calc(50% - 117px),calc(100vh - 420px)))}
+      top:max(var(--docktop),min(calc(50% - 117px),calc(100vh - 420px)));
+      top:max(var(--docktop),min(calc(50% - 117px),calc(100dvh - 420px)))}
 .tool{position:relative;width:52px;height:52px;border:1px solid transparent;border-radius:12px;cursor:pointer;
       background:rgba(255,255,255,.02);color:var(--dim);display:grid;place-items:center;
       transition:.16s cubic-bezier(.2,.7,.3,1)}
