@@ -60,6 +60,23 @@ def rewrite_links(html):
     return html
 
 
+def switcher():
+    """
+    The shared Entelloq ecosystem switcher, read from _switcher.html.
+
+    It is one self-contained block (its own namespaced CSS and JS, no dependency
+    on the host page) that lives at the end of every product page. It has twice
+    been lost by regenerating a page from its parts and copying the result over
+    the shipped file, so it is kept here as a SOURCE rather than as something
+    hand-pasted into twelve files — anything that needs it can now ask for it.
+    """
+    path = os.path.join(HERE, "_switcher.html")
+    if not os.path.exists(path):
+        print("  ! _switcher.html missing — 404 ships without the ecosystem switcher")
+        return ""
+    return open(path, encoding="utf-8").read()
+
+
 def fix_embed_guard(html):
     """
     The shell intercepts clicks on links to other Biology Entelloq pages and routes
@@ -121,6 +138,10 @@ def main():
             print("  %-14s <- %s" % (asset, label))
 
     # A 404 that keeps people inside the product rather than on a GitHub page.
+    # It carries the ecosystem switcher too: this page is the one place a visitor
+    # arrives with nowhere to go, so the way out to the other products matters most
+    # here. Every other page inherits the switcher from its source product; this one
+    # is written here, so it has to be added here.
     open(os.path.join(OUT, "404.html"), "w", encoding="utf-8", newline="\n").write(
         '<!doctype html><html lang="en"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
@@ -132,7 +153,9 @@ def main():
         "a{color:#34d399;text-decoration:none;border:1px solid rgba(52,211,153,.35);"
         "border-radius:999px;padding:10px 20px;display:inline-block}</style></head><body><div>"
         "<h1>Nothing lives here.</h1><p>That page is not part of Biology Entelloq.</p>"
-        '<a href="/">Back to the front door</a></div></body></html>'
+        '<a href="/">Back to the front door</a></div>'
+        + switcher() +
+        "</body></html>"
     )
 
     if missing:

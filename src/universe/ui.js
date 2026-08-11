@@ -67,7 +67,16 @@ body.immersed .hud.dim.rail{opacity:.25}
 /* hotspot markers over the 3D */
 .u-markers{position:fixed;inset:0;z-index:8;pointer-events:none}
 .u-mark{position:absolute;transform:translate(-50%,-50%);pointer-events:auto;cursor:pointer;
-  display:flex;align-items:center;gap:8px;will-change:transform,opacity}
+  display:flex;align-items:center;gap:8px;will-change:transform,opacity;
+  background:none;border:none;margin:0;padding:0;font:inherit;color:inherit;text-align:left}
+/* Focus ring for the keyboard path. A pale hairline on its own vanishes over a bright
+   nebula, so it rides on a dark halo and stays legible over anything the 3D puts
+   behind it. Focusing a marker also reveals its name, exactly as hovering does. */
+.u-mark:focus{outline:none}
+.u-mark:focus-visible{outline:2px solid var(--ink);outline-offset:4px;border-radius:12px;
+  box-shadow:0 0 0 8px rgba(4,7,10,.8)}
+.u-mark:focus-visible .ring{transform:scale(1.25)}
+.u-mark:focus-visible .nm{opacity:1;transform:none}
 .u-mark .ring{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--cy);flex:none;position:relative;
   background:radial-gradient(circle,rgba(56,224,216,.35),transparent 70%);transition:transform .2s var(--ease)}
 .u-mark .ring::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(56,224,216,.35);
@@ -134,6 +143,28 @@ body.immersed .hud.dim.rail{opacity:.25}
   .u-panel.open{transform:none}
   .u-hint{font-size:11px;gap:12px}
   .u-top{padding:16px}
+}
+
+/* Notched phones. The page already ships viewport-fit=cover, so env() carries the
+   real insets; without this the HUD sits under the notch in landscape and under the
+   home indicator at the bottom. It comes last — after the phone media query — so it
+   wins over both, and sits behind @supports so a browser with no env() keeps the
+   plain values above. The marker layer is deliberately untouched: it is positioned
+   from the 3D projection and has to stay welded to the canvas. */
+@supports (padding:env(safe-area-inset-top)){
+  .u-top{padding:calc(22px + env(safe-area-inset-top)) 26px 22px calc(26px + env(safe-area-inset-left))}
+  .u-scale{left:calc(26px + env(safe-area-inset-left));bottom:calc(26px + env(safe-area-inset-bottom))}
+  .u-hint{bottom:calc(24px + env(safe-area-inset-bottom))}
+  .u-rail{right:calc(20px + env(safe-area-inset-right))}
+  .u-help{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+  .u-panel{padding:calc(28px + env(safe-area-inset-top)) calc(26px + env(safe-area-inset-right))
+    calc(28px + env(safe-area-inset-bottom)) calc(26px + env(safe-area-inset-left))}
+  .u-panel .close{top:calc(20px + env(safe-area-inset-top));right:calc(20px + env(safe-area-inset-right))}
+  @media (max-width:640px){
+    .u-top{padding:calc(16px + env(safe-area-inset-top)) 16px 16px calc(16px + env(safe-area-inset-left))}
+    /* on a phone the panel is a bottom sheet — nothing above it to clear */
+    .u-panel{padding-top:28px}
+  }
 }
 `;
 
@@ -299,12 +330,23 @@ function buildUniverseUI(core) {
       live.add(s.id);
       let m = markEls.get(s.id);
       if (!m) {
-        m = el('div', 'u-mark');
-        m.innerHTML = `<span class="ring"></span><span class="nm">${(s.meta && s.meta.name) || ''}</span>`;
+        // A real <button>, so the keyboard path is native: it lands in the tab order,
+        // announces itself as a button, and BOTH Enter and Space fire the click. Built
+        // once per hotspot id and thereafter only moved — rebuilding the node every
+        // frame would attach a listener per frame and throw focus away each time.
+        const nm = (s.meta && s.meta.name) || '';
+        m = el('button', 'u-mark');
+        m.type = 'button';
+        m.setAttribute('aria-label', nm ? `Explore ${nm}` : 'Explore this hotspot');
+        m.innerHTML = `<span class="ring"></span><span class="nm">${nm}</span>`;
         m.addEventListener('click', () => openPanel(s.meta, s.stage));
         markers.appendChild(m); markEls.set(s.id, m);
       }
-      m.style.transform = `translate(${s.x}px, ${s.y}px)`;
+      // The inline transform overrides the sheet's translate(-50%,-50%), so the
+      // centring has to be baked in here: -7px puts the 14px ring's centre on the
+      // projected x, and -50% of the marker's own height puts the row's centre —
+      // and so the ring's — on the projected y.
+      m.style.transform = `translate(calc(${s.x}px - 7px), calc(${s.y}px - 50%))`;
       m.style.opacity = String(Math.max(0, s.fade));
     }
     // drop markers that are no longer projected

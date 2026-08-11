@@ -88,8 +88,8 @@
 /* frontier */
 .les-fr{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--line-2)}
 .les-fr:last-child{border:none}
-.les-frtag{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#f472b6;
-  border:1px solid color-mix(in srgb,#f472b6 30%,transparent);border-radius:6px;padding:4px 8px;flex:none;margin-top:2px}
+.les-frtag{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--rose);
+  border:1px solid color-mix(in srgb,var(--rose) 30%,transparent);border-radius:6px;padding:4px 8px;flex:none;margin-top:2px}
 .les-fr.open .les-frtag{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 30%,transparent)}
 .les-fr p{color:var(--dim);font-size:15px;line-height:1.6}
 

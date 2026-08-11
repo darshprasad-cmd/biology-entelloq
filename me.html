@@ -337,7 +337,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);margin-top:4
     <nav class="nav-links" aria-label="Primary">
       <a href="./app.html">Platform</a>
       <a href="./universe.html">Universe</a>
-      <a href="./lab.html">Labs</a>
+      <a href="./labs.html">Labs</a>
       <a href="./me.html" class="active" aria-current="page">Me</a>
     </nav>
     <div class="nav-right">
@@ -350,7 +350,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);margin-top:4
 <div class="mobile-menu" id="mobileMenu">
   <a href="./app.html">Platform</a>
   <a href="./universe.html">Universe</a>
-  <a href="./lab.html">Labs</a>
+  <a href="./labs.html">Labs</a>
   <a href="./me.html" aria-current="page">Me</a>
   <a href="./lab.html">Enter the Lab →</a>
 </div>
@@ -613,15 +613,34 @@ const SAMPLE={
 /* ---- mastery aggregation ---------------------------------------------- */
 function computeMastery(history){
   const agg={};
+  const bucket=slug=>agg[slug]||(agg[slug]={correct:0,total:0,attempts:0});
   (history||[]).forEach(a=>{
     if(!a||typeof a!=="object")return;
+    /* A session's `topic` is only the label it was started under, and Solve's
+       default mode is "Mixed", which is not a topic at all. So prefer `per`, the
+       per-topic marks Solve records alongside the session, and fall back to the
+       label only for a session saved before `per` was written. */
+    if(a.per&&typeof a.per==="object"){
+      let split=false;
+      Object.keys(a.per).forEach(k=>{
+        const p=a.per[k],ts=normalizeSlug(k);
+        if(!ts||!p||typeof p.m!=="number"||!(p.x>0))return;
+        const b=bucket(ts);b.correct+=p.m;b.total+=p.x;b.attempts++;split=true;
+      });
+      if(split)return;
+    }
     const slug=normalizeSlug(a.topic||a.slug||a.name||a.t||a.subject);
     if(!slug)return;
     let correct=null,total=null;
     if(typeof a.correct==="number"&&typeof a.total==="number"&&a.total>0){correct=a.correct;total=a.total;}
+    /* Solve saves a finished session as {marks,max,pct} and never as
+       {correct,total}, so without this branch every ring on this page stayed on
+       "Not started yet" however much had actually been practised. */
+    else if(typeof a.marks==="number"&&typeof a.max==="number"&&a.max>0){correct=a.marks;total=a.max;}
+    else if(typeof a.pct==="number"){correct=Math.max(0,Math.min(1,a.pct/100));total=1;}
     else if(typeof a.score==="number"){const s=a.score>1?a.score/100:a.score;correct=Math.max(0,Math.min(1,s));total=1;}
     if(correct==null)return;
-    const g=agg[slug]||(agg[slug]={correct:0,total:0,attempts:0});
+    const g=bucket(slug);
     g.correct+=correct;g.total+=total;g.attempts++;
   });
   return agg;
@@ -712,7 +731,22 @@ function buildRecs(d){
   const scored=Object.keys(agg).filter(s=>agg[s].total>0)
     .map(s=>({slug:s,pct:Math.round(agg[s].correct/agg[s].total*100)}))
     .sort((a,b)=>a.pct-b.pct);
-  const weakList=(Array.isArray(d.weak)?d.weak.map(normalizeSlug):Object.keys(d.weak||{}).map(normalizeSlug)).filter(Boolean);
+  /* bioq_solve_weak is not a list of weak topics: Solve writes it as a tally of
+     EVERY topic answered, {"Cell Biology":{seen,correct},...}, and only ever adds
+     to it. Taking the keys therefore called a topic the softest spot even when it
+     had been aced. Score the tally instead and keep only what is still under the
+     60% mark Solve itself uses, worst first, so an aced topic drops off by
+     itself the moment the running total crosses back over. */
+  let weakList;
+  if(Array.isArray(d.weak)){weakList=d.weak.map(normalizeSlug).filter(Boolean);}
+  else{
+    const tally=d.weak||{};
+    weakList=Object.keys(tally).map(t=>{
+      const o=tally[t];
+      if(!o||typeof o!=="object"||!(o.seen>=3))return null;
+      return {slug:normalizeSlug(t),pct:o.correct/o.seen*100};
+    }).filter(x=>x&&x.slug&&x.pct<60).sort((a,b)=>a.pct-b.pct).map(x=>x.slug);
+  }
   const recs=[]; const used={};
   function push(r){if(recs.length<4)recs.push(r);}
 
@@ -1132,10 +1166,22 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
     function vw() { return innerWidth || document.documentElement.clientWidth || cv.clientWidth || 1280; }
     function vh() { return innerHeight || document.documentElement.clientHeight || cv.clientHeight || 800; }
     function size() {
+      // Re-read it every measure: devicePixelRatio changes when the window moves to
+      // a display of a different density, or the browser is zoomed.
+      dpr = Math.min(devicePixelRatio || 1, 1.25);
       var w = Math.max(1, Math.round(vw() * dpr)), h = Math.max(1, Math.round(vh() * dpr));
       if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; gl.viewport(0, 0, w, h); }
     }
-    addEventListener("resize", size); size();
+    // draw() re-measures on every frame, so while the loop is running the resize
+    // event has nothing to add. It matters in STILL mode, where resizing the canvas
+    // clears it and no further frame is coming to put the field back — and it is
+    // coalesced to one measure per frame, because a window drag fires it in bursts.
+    var rz = 0;
+    addEventListener("resize", function () {
+      if (rz) return;
+      rz = requestAnimationFrame(function () { rz = 0; size(); if (STILL) draw(0); });
+    });
+    size();
 
     var raf = null, t0 = 0;
     // draw() is the whole render and nothing else; frame() is draw() plus the
@@ -1183,18 +1229,49 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
     var ctx = cv.getContext("2d");
     if (!ctx) { window.BIOQ_ATMO = { theme: theme, setSection: setSection, mouse: M, mode: "none" }; return; }
     var dpr = Math.min(devicePixelRatio || 1, 1.5), W = 0, H = 0, pop = [];
+    // Same reasoning as the WebGL path: a page can boot hidden with innerWidth 0,
+    // and becoming visible does not fire a resize event.
+    function vw() { return innerWidth || document.documentElement.clientWidth || cv.clientWidth || 1280; }
+    function vh() { return innerHeight || document.documentElement.clientHeight || cv.clientHeight || 800; }
+    function cell(x, y) {
+      return {
+        x: x, y: y, r: 42 + Math.random() * 78,
+        vx: (Math.random() - 0.5) * 0.13, vy: (Math.random() - 0.5) * 0.13, ph: Math.random() * 6.283
+      };
+    }
     function size() {
-      W = innerWidth; H = innerHeight;
+      var w = vw(), h = vh();
+      // devicePixelRatio is not fixed for the life of a page: dragging the window
+      // to a display of a different density, or zooming the browser, changes it,
+      // and a stale one leaves the field soft or oversampled.
+      dpr = Math.min(devicePixelRatio || 1, 1.5);
+      // Reseeding the population here is what used to make the whole field jump on
+      // every resize — and resize is not a rare event: a window drag fires it
+      // continuously, and on a phone so does the URL bar collapsing. So the cells
+      // are carried across and rescaled into the new box instead, and only the
+      // surplus or shortfall is dropped or seeded to keep the density right.
+      var sx = W ? w / W : 1, sy = H ? h / H : 1;
+      for (var i = 0; i < pop.length; i++) { pop[i].x *= sx; pop[i].y *= sy; }
+      W = w; H = h;
       cv.width = Math.max(1, Math.round(W * dpr)); cv.height = Math.max(1, Math.round(H * dpr));
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       var n = Math.max(10, Math.min(30, Math.round(W * H / 46000)));
-      pop = [];
-      for (var i = 0; i < n; i++) pop.push({
-        x: Math.random() * W, y: Math.random() * H, r: 42 + Math.random() * 78,
-        vx: (Math.random() - 0.5) * 0.13, vy: (Math.random() - 0.5) * 0.13, ph: Math.random() * 6.283
+      while (pop.length > n) pop.pop();
+      while (pop.length < n) pop.push(cell(Math.random() * W, Math.random() * H));
+    }
+    // Resize arrives in bursts, and each one reallocates the backing store, so it
+    // is coalesced to one measure per frame — which is all the display can show.
+    var rz = 0;
+    function onResize() {
+      if (rz) return;
+      rz = requestAnimationFrame(function () {
+        rz = 0; size();
+        // Setting cv.width clears the canvas, and in STILL mode no further frame is
+        // coming, so the single frame has to be drawn again by hand.
+        if (STILL) frame();
       });
     }
-    size(); addEventListener("resize", size);
+    size(); addEventListener("resize", onResize);
 
     var raf = null, t = 0;
     function rgba(a) { return "rgba(" + (cur.r * 255 | 0) + "," + (cur.g * 255 | 0) + "," + (cur.b * 255 | 0) + "," + a + ")"; }
@@ -1227,8 +1304,12 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
     repaint = frame;
     if (STILL) { for (var k = 0; k < 40; k++) ease(); frame(); } else raf = requestAnimationFrame(frame);
     document.addEventListener("visibilitychange", function () {
-      if (document.hidden) { if (raf) { cancelAnimationFrame(raf); raf = null; } }
-      else if (!raf && !STILL) raf = requestAnimationFrame(frame);
+      if (document.hidden) { if (raf) { cancelAnimationFrame(raf); raf = null; } return; }
+      // Re-measure on the way back: the viewport may have been 0 for the whole time
+      // the tab was in the background, and no resize event marks it coming good.
+      size();
+      if (STILL) frame();
+      else if (!raf) raf = requestAnimationFrame(frame);
     });
 
     window.BIOQ_ATMO = { theme: theme, setSection: setSection, mouse: M, mode: "2d" };

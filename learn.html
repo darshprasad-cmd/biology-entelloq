@@ -1545,10 +1545,22 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
     function vw() { return innerWidth || document.documentElement.clientWidth || cv.clientWidth || 1280; }
     function vh() { return innerHeight || document.documentElement.clientHeight || cv.clientHeight || 800; }
     function size() {
+      // Re-read it every measure: devicePixelRatio changes when the window moves to
+      // a display of a different density, or the browser is zoomed.
+      dpr = Math.min(devicePixelRatio || 1, 1.25);
       var w = Math.max(1, Math.round(vw() * dpr)), h = Math.max(1, Math.round(vh() * dpr));
       if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; gl.viewport(0, 0, w, h); }
     }
-    addEventListener("resize", size); size();
+    // draw() re-measures on every frame, so while the loop is running the resize
+    // event has nothing to add. It matters in STILL mode, where resizing the canvas
+    // clears it and no further frame is coming to put the field back — and it is
+    // coalesced to one measure per frame, because a window drag fires it in bursts.
+    var rz = 0;
+    addEventListener("resize", function () {
+      if (rz) return;
+      rz = requestAnimationFrame(function () { rz = 0; size(); if (STILL) draw(0); });
+    });
+    size();
 
     var raf = null, t0 = 0;
     // draw() is the whole render and nothing else; frame() is draw() plus the
@@ -1596,18 +1608,49 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
     var ctx = cv.getContext("2d");
     if (!ctx) { window.BIOQ_ATMO = { theme: theme, setSection: setSection, mouse: M, mode: "none" }; return; }
     var dpr = Math.min(devicePixelRatio || 1, 1.5), W = 0, H = 0, pop = [];
+    // Same reasoning as the WebGL path: a page can boot hidden with innerWidth 0,
+    // and becoming visible does not fire a resize event.
+    function vw() { return innerWidth || document.documentElement.clientWidth || cv.clientWidth || 1280; }
+    function vh() { return innerHeight || document.documentElement.clientHeight || cv.clientHeight || 800; }
+    function cell(x, y) {
+      return {
+        x: x, y: y, r: 42 + Math.random() * 78,
+        vx: (Math.random() - 0.5) * 0.13, vy: (Math.random() - 0.5) * 0.13, ph: Math.random() * 6.283
+      };
+    }
     function size() {
-      W = innerWidth; H = innerHeight;
+      var w = vw(), h = vh();
+      // devicePixelRatio is not fixed for the life of a page: dragging the window
+      // to a display of a different density, or zooming the browser, changes it,
+      // and a stale one leaves the field soft or oversampled.
+      dpr = Math.min(devicePixelRatio || 1, 1.5);
+      // Reseeding the population here is what used to make the whole field jump on
+      // every resize — and resize is not a rare event: a window drag fires it
+      // continuously, and on a phone so does the URL bar collapsing. So the cells
+      // are carried across and rescaled into the new box instead, and only the
+      // surplus or shortfall is dropped or seeded to keep the density right.
+      var sx = W ? w / W : 1, sy = H ? h / H : 1;
+      for (var i = 0; i < pop.length; i++) { pop[i].x *= sx; pop[i].y *= sy; }
+      W = w; H = h;
       cv.width = Math.max(1, Math.round(W * dpr)); cv.height = Math.max(1, Math.round(H * dpr));
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       var n = Math.max(10, Math.min(30, Math.round(W * H / 46000)));
-      pop = [];
-      for (var i = 0; i < n; i++) pop.push({
-        x: Math.random() * W, y: Math.random() * H, r: 42 + Math.random() * 78,
-        vx: (Math.random() - 0.5) * 0.13, vy: (Math.random() - 0.5) * 0.13, ph: Math.random() * 6.283
+      while (pop.length > n) pop.pop();
+      while (pop.length < n) pop.push(cell(Math.random() * W, Math.random() * H));
+    }
+    // Resize arrives in bursts, and each one reallocates the backing store, so it
+    // is coalesced to one measure per frame — which is all the display can show.
+    var rz = 0;
+    function onResize() {
+      if (rz) return;
+      rz = requestAnimationFrame(function () {
+        rz = 0; size();
+        // Setting cv.width clears the canvas, and in STILL mode no further frame is
+        // coming, so the single frame has to be drawn again by hand.
+        if (STILL) frame();
       });
     }
-    size(); addEventListener("resize", size);
+    size(); addEventListener("resize", onResize);
 
     var raf = null, t = 0;
     function rgba(a) { return "rgba(" + (cur.r * 255 | 0) + "," + (cur.g * 255 | 0) + "," + (cur.b * 255 | 0) + "," + a + ")"; }
@@ -1640,8 +1683,12 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
     repaint = frame;
     if (STILL) { for (var k = 0; k < 40; k++) ease(); frame(); } else raf = requestAnimationFrame(frame);
     document.addEventListener("visibilitychange", function () {
-      if (document.hidden) { if (raf) { cancelAnimationFrame(raf); raf = null; } }
-      else if (!raf && !STILL) raf = requestAnimationFrame(frame);
+      if (document.hidden) { if (raf) { cancelAnimationFrame(raf); raf = null; } return; }
+      // Re-measure on the way back: the viewport may have been 0 for the whole time
+      // the tab was in the background, and no resize event marks it coming good.
+      size();
+      if (STILL) frame();
+      else if (!raf) raf = requestAnimationFrame(frame);
     });
 
     window.BIOQ_ATMO = { theme: theme, setSection: setSection, mouse: M, mode: "2d" };

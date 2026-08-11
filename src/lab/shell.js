@@ -434,7 +434,12 @@ body.handmode #dock{display:grid;grid-template-columns:repeat(2,60px);gap:14px;p
 /* ── the tutor's question line ─────────────────────────────────────────────
    One glass line at the foot. While it is open the hint and the demonstrator
    step aside, and every key belongs to the student — see the keydown guard. */
-#ask{left:50%;bottom:16px;transform:translateX(-50%);width:min(620px,66vw);z-index:26;
+/* 16px from the bottom of the viewport, which with viewport-fit=cover is the
+   bottom of the SCREEN — on a tablet that is inside the home indicator, and the
+   system eats the first tap on the field. env() is 0px on everything without an
+   indicator, so no desktop moves. */
+#ask{left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);
+     width:min(620px,66vw);z-index:26;
      display:none;flex-direction:column;gap:9px;padding:13px 16px}
 #ask.on{display:flex}
 #ask .q{font-size:12.5px;line-height:1.55;color:var(--ink)}
@@ -544,7 +549,9 @@ body.bioq-phone{
 }
 
 /* picker — one card per row, and the deck scrolls if the shelf grows */
-body.bioq-phone #pick .in{padding:20px 16px;width:100%}
+/* The gutter here is measured from the screen edge, and on a phone held on its
+   side that edge is under the notch. The insets keep the deck clear of it. */
+body.bioq-phone #pick .in{padding:20px calc(var(--sar) + 16px) 20px calc(var(--sal) + 16px);width:100%}
 body.bioq-phone #pick .kick{font-size:8.5px;letter-spacing:.3em;margin-bottom:12px}
 body.bioq-phone #pick h1{font-size:23px}
 body.bioq-phone #pick .tag{font-size:12.5px;margin-bottom:20px}
@@ -637,8 +644,12 @@ body.bioq-phone #coach{left:var(--pl);right:var(--pr);width:auto;bottom:var(--ab
 
 /* the viva and the keyboard reference stop being dialogs and become the screen */
 body.bioq-phone #viva,body.bioq-phone #keys{padding:0}
+/* Full-screen sheets. The vertical insets were already here; a phone on its side
+   puts the notch on the LEFT or RIGHT of these instead, so the horizontal gutters
+   have to clear it too or the questions run underneath it. */
 body.bioq-phone #vbox,body.bioq-phone #kbox{width:100%;height:100%;max-height:none;
-  border-radius:0;padding:calc(var(--sat) + 20px) 18px calc(var(--sab) + 20px)}
+  border-radius:0;padding:calc(var(--sat) + 20px) calc(var(--sar) + 18px)
+                          calc(var(--sab) + 20px) calc(var(--sal) + 18px)}
 body.bioq-phone #kgrps{column-count:1}
 
 /* the tutor's question line sits above the tray. 16px on the input is not a

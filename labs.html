@@ -215,7 +215,6 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);background:v
 .bx-verdict b{color:var(--ink)}
 
 </style>
-<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAwFBMVEVJZjSfpJpXYVSKqGXX2NRxkVcrVh1ubW6sq7BdkDbc2tseJx2izGPCy7oMEQ/p4O0ZHB5fY2Td2N+4w6+jpaRsqFB2a6uprasVHRhjcSMVfxWFf5BosVq4pNDZtO+Vs3EzUi0/P3+MwWm9ucg/Q0CPvGo/f39+hn17d4N2fnZHYjlSfT8AAAADBwcMFg4WJhQqNyk1Ri0aNBUiOBs2VSkkKiT///9PV00CCAhyd2+zt64mRxlVZU76+fmWmJLU189SsK2fAAAAQHRSTlP9+P399Pr8BRD/mvf/+24uI1Ri+mNRCImhBAIqHhQHHXsEHUL/YAStQJm1bAD+/v7+/f/+/v4B/p3+/P/+//76GIH1TwAABINJREFUeNqVVod2o0gQHKKEkiXLeePlRE9PAGEhJP7/r656QPL67H37bvzAwHR1rO6RKt9Zu8luir/J0zt76o3wdLr7FvoDwGQq989XsqabdcDsvg8Q8U/Xs1m6baNou1z26f1GIN8DYONqlrZJbFmT1s7GybZPb9avIC+AiYi3SRWEiWPciLTPlun9t4gLYFr+dN1mXsS01szJXLMgibtlevPWwrT8FCUOwqRtVXnWCZ5IJTXunKWzixF1lp+2nSgnm1XMDFFR7xMl9sj2s+DzBXBX/hJZkmUKXxs754UiB4MHLwAY2Z5tqFG/yHuoXFTwnzjJCP8lbFaGxHQ7ewFMIK9kD04vFOTUoqBhQbfTVCujaTsgBDC9i7pRwB0cN0lSadPs93Fch5T5bLGwpPsbIJ6UOHSfkVEs+gjRQlyjZlG7TNMoBuJQSOxk0wmcUeJQhqwIgMT5A3Tapon3p7bv02MEK8whV5E4JYA/OrEc6psUrLkysk37KOqP6bH/lYJjKFD/Z7lTk/LDPijXiK4otDaWLaBcn9r2lB6Px9Ro1nOV1VpMAPCXCs5DhyuYjTW1q/Bm9skpbVsg+jkCSBaJrnqJ4S4eOIMrR07ZGERkak0SRtqKjROKUiQLq6NrADYNhIsQc+41LFSWOxUnMakzAk6hgIWibFaq3Ub4lReemA4V9NvKUWL1ftmQlVS1aXrcj07b5Z0q1yH/SM6BnBJiGzgsSWprarr4dEr7NAqEwmZ0pb58NUaPiaMCJipjFgfh1elEddzspYAAuJD307W6/dvabn5mRuFgd5FrqyttUbM43kd930YDRzRl16p8xnOHprHWO53nnEE/o/COE0N1beKuTZdmkKd4pr48BEqAo+HLIQNPUA+FYGIbN6iA0yZQCrmlbqZ+U4a9McZ7B9Ahq6SjnQOjTAPKRk2W8KgeFwDlszPeyRL5woHhhqXZtDG16aJjujfd4BEAMWJYkTQXB6fyA8Q4l7RpFFxzrbbH/hRJHYIRBP3zilGqAZAfMIisAfk0Wyk9WGcjWWE+AJJdqdt/rA82hEsHkBQVsFbLOAscnncod98EAHG0Q8fhs6+8F48kYNC7Ch1eB0CNXrX7JhggdV+q24+598OIwVDhuoburBLAQIC6ibZ28A4x3wBw+9UN3alBPny36BW8ARAQSO0pHvc5+RymhnAiDzHmHu07z3L0kvhkDdEc7c0j1ZqbcqI+PpYPBlzIRZ1TjlXmUFIneWFEr+PG6LGps+lOgi7X6GGXy8TD2FIF8g/XXAjZgEzNWDYxMBWXJuUqBB1meyGZIg+bbhh9bLN4yLDJ5MQbRuXchKCIcwf1c5TLk5QnyFk9QOMP5eQ8vdcGZc7R1OIYiqIJfToKSoJyDPFuEwZ+ADyWKyNphuNa8l0hGsv6AkCAIv/7tyfQKlRJiOxYOym7D2QIDNFB/+PrM241hh3y52CLBzaEa95syqf/nqIrupwJUmceXwLGrsv123N6fR4FwQc+g7Eeyov8618Cq+eX9fDyuDofiO/+OPnR+t+AfwE8H2rDF051PwAAAABJRU5ErkJggg==">
 </head>
 <body data-page="labs">
 <div class="bg-veil" aria-hidden="true"></div>
@@ -529,7 +528,7 @@ LABS.register("microscope", {
       ctx.filter = "none";
       ctx.restore();
       // eyepiece surround + scale bar
-      ctx.strokeStyle = "rgba(255,255,255,.14)"; ctx.lineWidth = 2;
+      ctx.strokeStyle = LB_css("--hair"); ctx.lineWidth = 2;
       ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.28); ctx.stroke();
       const fov = fovMicrons(), barUm = niceBar(fov / 4);
       const px = (barUm / fov) * (R * 2);
@@ -710,25 +709,33 @@ LABS.register("gel-electrophoresis", {
       // gel slab
       ctx.fillStyle = "rgba(120,150,170,.10)";
       ctx.fillRect(padX, padTop, W - padX * 2, gelH);
-      ctx.strokeStyle = "rgba(255,255,255,.10)"; ctx.strokeRect(padX, padTop, W - padX * 2, gelH);
+      ctx.strokeStyle = LB_css("--line"); ctx.strokeRect(padX, padTop, W - padX * 2, gelH);
       ctx.fillStyle = LB_css("--faint"); ctx.font = "600 11px ui-monospace,monospace"; ctx.textAlign = "center";
       ctx.fillText("− cathode", W / 2, 16);
       ctx.fillText("+ anode", W / 2, H - 8);
       LANES.forEach((L, i) => {
         const x = padX + laneW * i + laneW / 2;
-        ctx.fillStyle = "rgba(255,255,255,.16)";
+        // A well is a hole cut in the slab — brighter than the gel under the dark
+        // theme, darker than it under the light one. --hair flips with the theme
+        // and does both; baked white only ever did the first.
+        ctx.fillStyle = LB_css("--hair");
         ctx.fillRect(x - laneW * 0.3, padTop + 4, laneW * 0.6, 7);      // the well
         ctx.fillStyle = LB_css("--dim"); ctx.font = "600 11px Inter,sans-serif";
         ctx.fillText(L.n, x, padTop - 8);
         if (!loaded) return;
         L.frags.forEach((bp) => {
           const y = padTop + 12 + migration(bp) * (gelH - 26);
-          const int = L.fixed ? 0.5 : 0.85;
-          ctx.fillStyle = `rgba(${L.fixed ? "150,170,255" : "120,255,210"},${int})`;
-          ctx.shadowColor = L.fixed ? "rgba(150,170,255,.8)" : "rgba(120,255,210,.8)";
+          // The bands are the one thing this bench asks you to read, so they take
+          // their colour from the theme: indigo for the ladder, emerald for the
+          // samples. The fixed neon they used to carry was picked against a black
+          // gel and measured 1.01:1 on the light theme's white one — not there at
+          // all. The ladder still sits back from the samples, now by alpha alone.
+          const col = L.fixed ? LB_css("--indigo") : LB_css("--em");
+          ctx.globalAlpha = L.fixed ? 0.85 : 1;
+          ctx.fillStyle = col; ctx.shadowColor = col;
           ctx.shadowBlur = 8;
           ctx.fillRect(x - laneW * 0.3, y, laneW * 0.6, 5);
-          ctx.shadowBlur = 0;
+          ctx.shadowBlur = 0; ctx.globalAlpha = 1;
           if (L.fixed && minutes > 6) {
             ctx.fillStyle = LB_css("--faint"); ctx.font = "500 9.5px ui-monospace,monospace"; ctx.textAlign = "right";
             ctx.fillText(bp >= 1000 ? (bp / 1000) + "kb" : bp, padX - 4, y + 5);
@@ -783,7 +790,7 @@ LABS.register("predator-prey", {
       if (!LB_REDUCED) { for (let i = 0; i < 3; i++) step(0.016); t += 0.016; } else step(0.05);
       const { ctx, W, H } = cv; ctx.clearRect(0, 0, W, H);
       const pad = 30, gw = W - pad * 2, gh = H - pad * 2;
-      ctx.strokeStyle = "rgba(255,255,255,.10)"; ctx.lineWidth = 1;
+      ctx.strokeStyle = LB_css("--line"); ctx.lineWidth = 1;
       ctx.beginPath(); ctx.moveTo(pad, pad); ctx.lineTo(pad, H - pad); ctx.lineTo(W - pad, H - pad); ctx.stroke();
       const maxV = Math.max(60, ...hist.map((h) => Math.max(h[0], h[1])));
       function series(idx, col) {
@@ -851,7 +858,7 @@ LABS.register("enzyme-kinetics", {
     function draw() {
       const { ctx, W, H } = cv; ctx.clearRect(0, 0, W, H);
       const pad = 34, gw = W - pad * 2, gh = H - pad * 2;
-      ctx.strokeStyle = "rgba(255,255,255,.10)";
+      ctx.strokeStyle = LB_css("--line");
       ctx.beginPath(); ctx.moveTo(pad, pad); ctx.lineTo(pad, H - pad); ctx.lineTo(W - pad, H - pad); ctx.stroke();
       ctx.fillStyle = LB_css("--faint"); ctx.font = "600 10.5px ui-monospace,monospace";
       ctx.textAlign = "center"; ctx.fillText("temperature (°C)", W / 2, H - 10);
@@ -866,10 +873,14 @@ LABS.register("enzyme-kinetics", {
         x ? ctx.lineTo(px, py) : ctx.moveTo(px, py);
       }
       ctx.stroke();
-      // denature zone
-      ctx.fillStyle = "rgba(232,115,94,.10)";
+      // denature zone — washed and labelled in the theme's own rose, the colour the
+      // operating point already turns once the enzyme is cooked. The fixed salmon it
+      // used to carry left the 10px label at 1.9:1 on the light theme's paper.
+      const rose = LB_css("--rose");
+      ctx.globalAlpha = 0.1; ctx.fillStyle = rose;
       ctx.fillRect(pad + (55 / 80) * gw, pad, gw - (55 / 80) * gw, gh);
-      ctx.fillStyle = "rgba(232,115,94,.75)"; ctx.font = "600 10px ui-monospace,monospace"; ctx.textAlign = "left";
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = rose; ctx.font = "600 10px ui-monospace,monospace"; ctx.textAlign = "left";
       ctx.fillText("denaturation", pad + (56 / 80) * gw, pad + 12);
       // current operating point
       const r = rate();
@@ -5587,10 +5598,22 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
     function vw() { return innerWidth || document.documentElement.clientWidth || cv.clientWidth || 1280; }
     function vh() { return innerHeight || document.documentElement.clientHeight || cv.clientHeight || 800; }
     function size() {
+      // Re-read it every measure: devicePixelRatio changes when the window moves to
+      // a display of a different density, or the browser is zoomed.
+      dpr = Math.min(devicePixelRatio || 1, 1.25);
       var w = Math.max(1, Math.round(vw() * dpr)), h = Math.max(1, Math.round(vh() * dpr));
       if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; gl.viewport(0, 0, w, h); }
     }
-    addEventListener("resize", size); size();
+    // draw() re-measures on every frame, so while the loop is running the resize
+    // event has nothing to add. It matters in STILL mode, where resizing the canvas
+    // clears it and no further frame is coming to put the field back — and it is
+    // coalesced to one measure per frame, because a window drag fires it in bursts.
+    var rz = 0;
+    addEventListener("resize", function () {
+      if (rz) return;
+      rz = requestAnimationFrame(function () { rz = 0; size(); if (STILL) draw(0); });
+    });
+    size();
 
     var raf = null, t0 = 0;
     // draw() is the whole render and nothing else; frame() is draw() plus the
@@ -5638,18 +5661,49 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
     var ctx = cv.getContext("2d");
     if (!ctx) { window.BIOQ_ATMO = { theme: theme, setSection: setSection, mouse: M, mode: "none" }; return; }
     var dpr = Math.min(devicePixelRatio || 1, 1.5), W = 0, H = 0, pop = [];
+    // Same reasoning as the WebGL path: a page can boot hidden with innerWidth 0,
+    // and becoming visible does not fire a resize event.
+    function vw() { return innerWidth || document.documentElement.clientWidth || cv.clientWidth || 1280; }
+    function vh() { return innerHeight || document.documentElement.clientHeight || cv.clientHeight || 800; }
+    function cell(x, y) {
+      return {
+        x: x, y: y, r: 42 + Math.random() * 78,
+        vx: (Math.random() - 0.5) * 0.13, vy: (Math.random() - 0.5) * 0.13, ph: Math.random() * 6.283
+      };
+    }
     function size() {
-      W = innerWidth; H = innerHeight;
+      var w = vw(), h = vh();
+      // devicePixelRatio is not fixed for the life of a page: dragging the window
+      // to a display of a different density, or zooming the browser, changes it,
+      // and a stale one leaves the field soft or oversampled.
+      dpr = Math.min(devicePixelRatio || 1, 1.5);
+      // Reseeding the population here is what used to make the whole field jump on
+      // every resize — and resize is not a rare event: a window drag fires it
+      // continuously, and on a phone so does the URL bar collapsing. So the cells
+      // are carried across and rescaled into the new box instead, and only the
+      // surplus or shortfall is dropped or seeded to keep the density right.
+      var sx = W ? w / W : 1, sy = H ? h / H : 1;
+      for (var i = 0; i < pop.length; i++) { pop[i].x *= sx; pop[i].y *= sy; }
+      W = w; H = h;
       cv.width = Math.max(1, Math.round(W * dpr)); cv.height = Math.max(1, Math.round(H * dpr));
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       var n = Math.max(10, Math.min(30, Math.round(W * H / 46000)));
-      pop = [];
-      for (var i = 0; i < n; i++) pop.push({
-        x: Math.random() * W, y: Math.random() * H, r: 42 + Math.random() * 78,
-        vx: (Math.random() - 0.5) * 0.13, vy: (Math.random() - 0.5) * 0.13, ph: Math.random() * 6.283
+      while (pop.length > n) pop.pop();
+      while (pop.length < n) pop.push(cell(Math.random() * W, Math.random() * H));
+    }
+    // Resize arrives in bursts, and each one reallocates the backing store, so it
+    // is coalesced to one measure per frame — which is all the display can show.
+    var rz = 0;
+    function onResize() {
+      if (rz) return;
+      rz = requestAnimationFrame(function () {
+        rz = 0; size();
+        // Setting cv.width clears the canvas, and in STILL mode no further frame is
+        // coming, so the single frame has to be drawn again by hand.
+        if (STILL) frame();
       });
     }
-    size(); addEventListener("resize", size);
+    size(); addEventListener("resize", onResize);
 
     var raf = null, t = 0;
     function rgba(a) { return "rgba(" + (cur.r * 255 | 0) + "," + (cur.g * 255 | 0) + "," + (cur.b * 255 | 0) + "," + a + ")"; }
@@ -5682,8 +5736,12 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
     repaint = frame;
     if (STILL) { for (var k = 0; k < 40; k++) ease(); frame(); } else raf = requestAnimationFrame(frame);
     document.addEventListener("visibilitychange", function () {
-      if (document.hidden) { if (raf) { cancelAnimationFrame(raf); raf = null; } }
-      else if (!raf && !STILL) raf = requestAnimationFrame(frame);
+      if (document.hidden) { if (raf) { cancelAnimationFrame(raf); raf = null; } return; }
+      // Re-measure on the way back: the viewport may have been 0 for the whole time
+      // the tab was in the background, and no resize event marks it coming good.
+      size();
+      if (STILL) frame();
+      else if (!raf) raf = requestAnimationFrame(frame);
     });
 
     window.BIOQ_ATMO = { theme: theme, setSection: setSection, mouse: M, mode: "2d" };

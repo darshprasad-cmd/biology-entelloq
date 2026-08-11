@@ -182,7 +182,7 @@
     function stepMulti(d) {
       const s = addStep("Which principles are in play?", `<p class="rz-hint">${d.hint} Select every one that applies.</p>
         <div class="rz-multi">${d.options.map((o, i) => `<button class="rz-mo" data-i="${i}"><span class="rz-check"></span>${o.t}</button>`).join("")}</div>
-        <button class="btn ghost rz-check-btn">Check my selection</button><div class="rz-fb" id="fb"></div>`);
+        <button class="btn ghost rz-check-btn">Check my selection</button><div class="rz-fb" id="fb" role="status"></div>`);
       const opts = [...s.querySelectorAll(".rz-mo")]; const sel = new Set();
       opts.forEach((b) => b.addEventListener("click", () => { const i = +b.dataset.i; if (sel.has(i)) { sel.delete(i); b.classList.remove("sel"); } else { sel.add(i); b.classList.add("sel"); } }));
       s.querySelector(".rz-check-btn").addEventListener("click", () => {
@@ -192,17 +192,17 @@
       });
     }
     function stepMcq(title, d) {
-      const s = addStep(title, `<div class="rz-q">${d.q}</div><div class="rz-opts">${d.o.map((o, i) => `<button class="rz-opt" data-i="${i}">${o}</button>`).join("")}</div><div class="rz-fb" id="fb"></div>`);
+      const s = addStep(title, `<div class="rz-q">${d.q}</div><div class="rz-opts">${d.o.map((o, i) => `<button class="rz-opt" data-i="${i}">${o}</button>`).join("")}</div><div class="rz-fb" id="fb" role="status"></div>`);
       const opts = [...s.querySelectorAll(".rz-opt")]; let done = false;
       opts.forEach((b) => b.addEventListener("click", () => { if (done) return; done = true; const i = +b.dataset.i; opts.forEach((o, j) => { o.disabled = true; o.classList.add(j === d.a ? "right" : j === i ? "wrong" : "muted"); }); s.querySelector("#fb").innerHTML = `<div class="rz-verdict ${i === d.a ? "ok" : "no"}">${i === d.a ? "✓ Right." : "✗ Look again."}</div><p>${d.why}</p><button class="btn primary rz-next">Continue →</button>`; s.querySelector(".rz-next").addEventListener("click", advance); }));
     }
     function stepStrategy(d) {
-      const s = addStep("Choose your strategy", `<div class="rz-q">${d.q}</div><div class="rz-opts">${d.o.map((o, i) => `<button class="rz-opt" data-i="${i}">${o.t}</button>`).join("")}</div><div class="rz-fb" id="fb"></div>`);
+      const s = addStep("Choose your strategy", `<div class="rz-q">${d.q}</div><div class="rz-opts">${d.o.map((o, i) => `<button class="rz-opt" data-i="${i}">${o.t}</button>`).join("")}</div><div class="rz-fb" id="fb" role="status"></div>`);
       const opts = [...s.querySelectorAll(".rz-opt")]; let done = false;
       opts.forEach((b) => b.addEventListener("click", () => { if (done) return; const i = +b.dataset.i; const o = d.o[i]; if (o.ok) { done = true; opts.forEach((x, j) => { x.disabled = true; x.classList.add(d.o[j].ok ? "right" : "muted"); }); s.querySelector("#fb").innerHTML = `<div class="rz-verdict ok">✓ That's the biologist's move.</div><button class="btn primary rz-next">Reveal the reasoning →</button>`; s.querySelector(".rz-next").addEventListener("click", advance); } else { b.classList.add("wrong"); b.disabled = true; s.querySelector("#fb").innerHTML = `<div class="rz-verdict no">✗ A classic trap.</div><p>${o.why}</p><p class="rz-hint">Try another strategy.</p>`; } }));
     }
     function stepReason(steps) {
-      const s = addStep("Reason it out", `<button class="btn ghost rz-reveal">Reveal the worked reasoning</button><ol class="rz-reason" id="ro" style="display:none"></ol><div id="fb"></div>`);
+      const s = addStep("Reason it out", `<button class="btn ghost rz-reveal">Reveal the worked reasoning</button><ol class="rz-reason" id="ro" style="display:none"></ol><div id="fb" role="status"></div>`);
       s.querySelector(".rz-reveal").addEventListener("click", (e) => {
         e.target.style.display = "none"; const ol = s.querySelector("#ro"); ol.style.display = "";
         steps.forEach((t, i) => { const li = el("li", "in"); li.style.animationDelay = i * 0.08 + "s"; li.textContent = t; ol.appendChild(li); });

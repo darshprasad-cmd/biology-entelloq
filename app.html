@@ -395,7 +395,7 @@ const THREADS=[
     steps:[
       {k:"lessons",sub:"population",n:"Learn it",b:"Population Growth",s:"Play with r and K and watch the S-curve.",tc:"var(--cy)"},
       {k:"reason",sub:"resistance",n:"Reason it",b:"Antibiotic resistance",s:"Selection, not learning — reason it out.",tc:"var(--violet)"},
-      {k:"explore",n:"Explore it",b:"Evolution timeline",s:"3.8 billion years of the same idea.",tc:"var(--amber)"},
+      {k:"explore",sub:"timeline",n:"Explore it",b:"Evolution timeline",s:"3.8 billion years of the same idea.",tc:"var(--amber)"},
     ]},
 ];
 
@@ -462,24 +462,36 @@ let current=null, loadedSrc=null, loadTimer=null, pending=null;
 /* Load a section behind a skeleton, with a real error boundary: a section that
    fails, hangs or comes back empty shows a recoverable page instead of a blank
    pane — one broken module can never take the app down with it. */
-function loadSection(k, sub){
+function loadSection(k, sub, force){
   const v=BYKEY[k];
   const src="./"+v.file+"?embed=1"+(sub?"#"+sub:"");
   oops.classList.remove("on");
   clearTimeout(loadTimer);
-  if(loadedSrc===src){ skel.classList.remove("on"); postTheme(frame); return; }
+  // Already showing exactly this: don't reload for nothing — unless the reader
+  // asked again by picking the section they are already in, which means "take me
+  // back to the top of it".
+  if(loadedSrc===src && !force){ skel.classList.remove("on"); postTheme(frame); return; }
+  // Same document, different anchor: the browser navigates INSIDE the page that is
+  // already open and fires no load event at all, so waiting for one would hold the
+  // skeleton up until it timed out and wrongly called a working section broken.
+  // The jump is instant — there is nothing to wait for.
+  if(sub && loadedSrc && !pending && loadedSrc.split("#")[0]===src.split("#")[0]){
+    skel.classList.remove("on");
+    frame.src=src; loadedSrc=src; postTheme(frame);
+    return;
+  }
   pending={k,sub,src};
   skel.classList.add("on");
-  loadTimer=setTimeout(()=>{ if(pending&&pending.src===src) failSection(k,sub,"It took too long to respond."); }, 15000);
+  loadTimer=setTimeout(()=>{ if(pending&&pending.src===src){ pending=null; failSection(k,sub,"It took too long to respond."); } }, 15000);
   frame.onload=()=>{
-    clearTimeout(loadTimer);
+    clearTimeout(loadTimer); pending=null;
     let ok=true;
     try{ const d=frame.contentDocument; if(d&&d.body) ok=d.body.children.length>1||d.body.innerHTML.length>400; }
     catch(e){ ok=true; }                       // cross-origin: trust it
     if(!ok){ failSection(k,sub,"It loaded, but came back empty."); return; }
     skel.classList.remove("on"); postTheme(frame);
   };
-  frame.onerror=()=>{ clearTimeout(loadTimer); failSection(k,sub,"The file could not be opened."); };
+  frame.onerror=()=>{ clearTimeout(loadTimer); pending=null; failSection(k,sub,"The file could not be opened."); };
   frame.src=src; loadedSrc=src;
 }
 function failSection(k, sub, why){
@@ -510,7 +522,10 @@ function go(k,{push=true,sub=null}={}){
     buildHome();   // rebuild so the greeting + resume card reflect what you just did
   } else {
     home.classList.remove("on"); frame.classList.add("on");
-    loadSection(k,sub);
+    // `push` is false only when a route is being restored (boot, Back, hashchange);
+    // anything else is the reader deliberately asking for this section, so asking
+    // for the one they are already in returns it to its root.
+    loadSection(k,sub,push);
     ACT.visit(k,sub);
   }
   if(push){ try{history.pushState({k,sub},"","#"+k+(sub?"/"+sub:""));}catch(e){} }
@@ -567,7 +582,10 @@ function openLaunch(k){
   } else {
     lload.style.display="grid";
     lframe.onload=()=>{ lload.style.display="none"; lframe.dataset.ready="1"; postTheme(lframe); };
-    lframe.src=src; lframe.dataset.src=src;
+    // A prefetch may already be in flight for exactly this file — re-assigning src
+    // would throw that progress away and start the 2.4 MB load again, so only
+    // navigate when the frame is not already on its way there.
+    if(lframe.dataset.src!==src){ lframe.src=src; lframe.dataset.src=src; }
   }
   try{history.pushState({launch:k},"","#"+k);}catch(e){}
 }
@@ -608,6 +626,15 @@ let coolTimer=null;
 function closeLaunch(){
   launcherOpen=false; launcher.classList.remove("on");
   setActive(current||"home"); tintField(current||"home");
+  // Entering pushed "#lab"/"#universe" into the URL; closing has to take it back
+  // out, or a reload re-opens the world that was just closed and Back reads as
+  // broken. When Back is what closed it the hash has already moved on — the guard
+  // below leaves that case alone.
+  const lh=location.hash.replace(/^#/,"").split("/")[0];
+  if(BYKEY[lh]&&LAUNCH.includes(BYKEY[lh])){
+    const to=current||"home";
+    try{history.replaceState({k:to,sub:null},"","#"+to);}catch(e){}
+  }
   // Keep the world WARM so re-entering is instant — but not forever: a WebGL
   // context is expensive, so if it goes unused for a minute we release it.
   clearTimeout(coolTimer);
@@ -668,11 +695,11 @@ const CMDS=[
   {k:"solve",label:"Practice: Genetics & DNA",desc:"Question bank",kind:"Practice",kw:"dna genes heredity mendel replication quiz"},
   {k:"solve",label:"Practice: Human Physiology",desc:"Question bank",kind:"Practice",kw:"nephron heart circulation respiration quiz neet"},
   {k:"solve",label:"NEET · CBSE · AP · Olympiad",desc:"Exam-board practice",kind:"Practice",kw:"neet cbse ap biology olympiad exam board timed adaptive"},
-  // explore tools
-  {k:"explore",label:"Tree of Life",desc:"Domains & kingdoms",kind:"Explore",kw:"taxonomy classification bacteria archaea eukarya kingdom species phylogeny"},
-  {k:"explore",label:"Disease Library",desc:"Causes, systems, symptoms",kind:"Explore",kw:"disease illness infection genetic autoimmune cancer malaria diabetes symptoms pathology"},
-  {k:"explore",label:"Evolution Timeline",desc:"3.8 billion years",kind:"Explore",kw:"evolution timeline history life origin cambrian extinction darwin"},
-  {k:"explore",label:"Human Body Atlas",desc:"Systems & organs",kind:"Explore",kw:"anatomy organs systems skeleton nervous digestive circulatory body"},
+  // explore tools — each one is a real section of Explore, so it deep-links there
+  {k:"explore",sub:"tree",label:"Tree of Life",desc:"Domains & kingdoms",kind:"Explore",kw:"taxonomy classification bacteria archaea eukarya kingdom species phylogeny"},
+  {k:"explore",sub:"diseases",label:"Disease Library",desc:"Causes, systems, symptoms",kind:"Explore",kw:"disease illness infection genetic autoimmune cancer malaria diabetes symptoms pathology"},
+  {k:"explore",sub:"timeline",label:"Evolution Timeline",desc:"3.8 billion years",kind:"Explore",kw:"evolution timeline history life origin cambrian extinction darwin"},
+  {k:"explore",sub:"atlas",label:"Human Body Atlas",desc:"Systems & organs",kind:"Explore",kw:"anatomy organs systems skeleton nervous digestive circulatory body"},
   // scales inside the universe
   {k:"universe",label:"Zoom to the cell",desc:"Universe → atom, seamlessly",kind:"Scale",kw:"cell organelle scale zoom microscope powers of ten"},
   {k:"universe",label:"Zoom to DNA & the atom",desc:"The smallest scales",kind:"Scale",kw:"dna nucleotide atom molecule protein helix carbon scale"},
@@ -1050,10 +1077,22 @@ prefetchSections();
     function vw() { return innerWidth || document.documentElement.clientWidth || cv.clientWidth || 1280; }
     function vh() { return innerHeight || document.documentElement.clientHeight || cv.clientHeight || 800; }
     function size() {
+      // Re-read it every measure: devicePixelRatio changes when the window moves to
+      // a display of a different density, or the browser is zoomed.
+      dpr = Math.min(devicePixelRatio || 1, 1.25);
       var w = Math.max(1, Math.round(vw() * dpr)), h = Math.max(1, Math.round(vh() * dpr));
       if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; gl.viewport(0, 0, w, h); }
     }
-    addEventListener("resize", size); size();
+    // draw() re-measures on every frame, so while the loop is running the resize
+    // event has nothing to add. It matters in STILL mode, where resizing the canvas
+    // clears it and no further frame is coming to put the field back — and it is
+    // coalesced to one measure per frame, because a window drag fires it in bursts.
+    var rz = 0;
+    addEventListener("resize", function () {
+      if (rz) return;
+      rz = requestAnimationFrame(function () { rz = 0; size(); if (STILL) draw(0); });
+    });
+    size();
 
     var raf = null, t0 = 0;
     // draw() is the whole render and nothing else; frame() is draw() plus the
@@ -1101,18 +1140,49 @@ prefetchSections();
     var ctx = cv.getContext("2d");
     if (!ctx) { window.BIOQ_ATMO = { theme: theme, setSection: setSection, mouse: M, mode: "none" }; return; }
     var dpr = Math.min(devicePixelRatio || 1, 1.5), W = 0, H = 0, pop = [];
+    // Same reasoning as the WebGL path: a page can boot hidden with innerWidth 0,
+    // and becoming visible does not fire a resize event.
+    function vw() { return innerWidth || document.documentElement.clientWidth || cv.clientWidth || 1280; }
+    function vh() { return innerHeight || document.documentElement.clientHeight || cv.clientHeight || 800; }
+    function cell(x, y) {
+      return {
+        x: x, y: y, r: 42 + Math.random() * 78,
+        vx: (Math.random() - 0.5) * 0.13, vy: (Math.random() - 0.5) * 0.13, ph: Math.random() * 6.283
+      };
+    }
     function size() {
-      W = innerWidth; H = innerHeight;
+      var w = vw(), h = vh();
+      // devicePixelRatio is not fixed for the life of a page: dragging the window
+      // to a display of a different density, or zooming the browser, changes it,
+      // and a stale one leaves the field soft or oversampled.
+      dpr = Math.min(devicePixelRatio || 1, 1.5);
+      // Reseeding the population here is what used to make the whole field jump on
+      // every resize — and resize is not a rare event: a window drag fires it
+      // continuously, and on a phone so does the URL bar collapsing. So the cells
+      // are carried across and rescaled into the new box instead, and only the
+      // surplus or shortfall is dropped or seeded to keep the density right.
+      var sx = W ? w / W : 1, sy = H ? h / H : 1;
+      for (var i = 0; i < pop.length; i++) { pop[i].x *= sx; pop[i].y *= sy; }
+      W = w; H = h;
       cv.width = Math.max(1, Math.round(W * dpr)); cv.height = Math.max(1, Math.round(H * dpr));
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       var n = Math.max(10, Math.min(30, Math.round(W * H / 46000)));
-      pop = [];
-      for (var i = 0; i < n; i++) pop.push({
-        x: Math.random() * W, y: Math.random() * H, r: 42 + Math.random() * 78,
-        vx: (Math.random() - 0.5) * 0.13, vy: (Math.random() - 0.5) * 0.13, ph: Math.random() * 6.283
+      while (pop.length > n) pop.pop();
+      while (pop.length < n) pop.push(cell(Math.random() * W, Math.random() * H));
+    }
+    // Resize arrives in bursts, and each one reallocates the backing store, so it
+    // is coalesced to one measure per frame — which is all the display can show.
+    var rz = 0;
+    function onResize() {
+      if (rz) return;
+      rz = requestAnimationFrame(function () {
+        rz = 0; size();
+        // Setting cv.width clears the canvas, and in STILL mode no further frame is
+        // coming, so the single frame has to be drawn again by hand.
+        if (STILL) frame();
       });
     }
-    size(); addEventListener("resize", size);
+    size(); addEventListener("resize", onResize);
 
     var raf = null, t = 0;
     function rgba(a) { return "rgba(" + (cur.r * 255 | 0) + "," + (cur.g * 255 | 0) + "," + (cur.b * 255 | 0) + "," + a + ")"; }
@@ -1145,8 +1215,12 @@ prefetchSections();
     repaint = frame;
     if (STILL) { for (var k = 0; k < 40; k++) ease(); frame(); } else raf = requestAnimationFrame(frame);
     document.addEventListener("visibilitychange", function () {
-      if (document.hidden) { if (raf) { cancelAnimationFrame(raf); raf = null; } }
-      else if (!raf && !STILL) raf = requestAnimationFrame(frame);
+      if (document.hidden) { if (raf) { cancelAnimationFrame(raf); raf = null; } return; }
+      // Re-measure on the way back: the viewport may have been 0 for the whole time
+      // the tab was in the background, and no resize event marks it coming good.
+      size();
+      if (STILL) frame();
+      else if (!raf) raf = requestAnimationFrame(frame);
     });
 
     window.BIOQ_ATMO = { theme: theme, setSection: setSection, mouse: M, mode: "2d" };

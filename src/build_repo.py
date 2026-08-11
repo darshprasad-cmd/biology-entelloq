@@ -44,9 +44,11 @@ SOURCES = [
     ("product/_reason.css",     "_reason.css"),
     ("product/_reason_main.html", "_reason_main.html"),
     ("product/_template.html",  "_template.html"),
+    ("product/_switcher.html",  "_switcher.html"),
     ("product/build_page.py",   "build_page.py"),
     ("product/inject_embed.py", "inject_embed.py"),
     ("product/inject_atmo.py",  "inject_atmo.py"),
+    ("product/inject_switcher.py", "inject_switcher.py"),
     ("product/build_site.py",   "build_site.py"),
     ("product/build_repo.py",   "build_repo.py"),
 ]

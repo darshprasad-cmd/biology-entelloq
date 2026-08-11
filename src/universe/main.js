@@ -17,6 +17,23 @@ function startUniverse() {
     document.body.appendChild(p);
     throw err;
   }
+  // Deep links. "#cell", "#dna", "#earth" — any key on the zoom axis — open the
+  // Universe already at that scale. Without this every link INTO the Universe
+  // landed at the far end of the observable universe, thirteen scales away from
+  // whatever the link had promised, which made the app shell's command palette
+  // and the footers advertise places they could not actually take you.
+  //
+  // An arriving deep link SETS the position rather than flying to it: jumpTo()
+  // animates, and animating thirteen scales on arrival is a five-second wait for
+  // a page you asked to open at the cell. Later hash changes DO fly, because by
+  // then the reader is already somewhere and the travel is the point.
+  function scaleFromHash() {
+    return UNI_ORDER.indexOf(decodeURIComponent((location.hash || '').replace(/^#/, '')).trim().toLowerCase());
+  }
+  const at = scaleFromHash();
+  if (at >= 0) { core.Z.pos = core.Z.posTarget = at; core.jumpTo(at); }
+  addEventListener('hashchange', () => { const i = scaleFromHash(); if (i >= 0) core.jumpTo(i); });
+
   // reveal: fade the loader once the first frame is up
   const loader = document.getElementById('uniload');
   if (loader) { requestAnimationFrame(() => requestAnimationFrame(() => { loader.classList.add('gone'); setTimeout(() => loader.remove(), 700); })); }

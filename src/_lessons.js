@@ -18,14 +18,14 @@
     { k: "predict", n: "Predict", g: "B", c: "#7dd3fc", ic: "Ψ" },
     { k: "visual", n: "Visual", g: "C", c: "var(--cy)", ic: "◳" },
     { k: "math", n: "Math", g: "D", c: "var(--indigo)", ic: "∑" },
-    { k: "frontier", n: "Frontier", g: "E", c: "#f472b6", ic: "◆" },
+    { k: "frontier", n: "Frontier", g: "E", c: "var(--rose)", ic: "◆" },
     { k: "realworld", n: "Real World", g: "F", c: "var(--amber)", ic: "⊕" },
   ];
 
   // ── content ────────────────────────────────────────────────────────────────
   const LESSONS = [
     {
-      id: "diffusion", domain: "Cell Biology", color: "#34d399", diff: "Foundation",
+      id: "diffusion", domain: "Cell Biology", color: "var(--em)", diff: "Foundation",
       title: "Diffusion & Osmosis", chips: ["Passive transport", "Concentration gradient", "Equilibrium"],
       intuition: "Molecules are in ceaseless random motion. With no energy spent, that jiggling alone spreads them from where they are crowded to where they are sparse — until, statistically, both sides are even. Osmosis is just this, for water across a membrane.",
       lenses: {
@@ -41,7 +41,7 @@
       connections: ["Cell Membrane", "Active Transport", "Kidney Function", "Gas Exchange"],
     },
     {
-      id: "enzyme", domain: "Molecular Biology", color: "#7c8cf8", diff: "Core",
+      id: "enzyme", domain: "Molecular Biology", color: "var(--indigo)", diff: "Core",
       title: "Enzyme Action", chips: ["Catalysis", "Active site", "Induced fit"],
       intuition: "An enzyme is a protein folded into a precise pocket — the active site — shaped to grip one kind of molecule and lower the energy needed to change it. It speeds a reaction millions of times, then lets go, unchanged, to do it again.",
       lenses: {
@@ -57,7 +57,7 @@
       connections: ["Proteins", "Metabolism", "Cellular Respiration", "DNA Replication"],
     },
     {
-      id: "population", domain: "Ecology", color: "#38e0d8", diff: "Core",
+      id: "population", domain: "Ecology", color: "var(--cy)", diff: "Core",
       title: "Population Growth", chips: ["Exponential", "Logistic", "Carrying capacity"],
       intuition: "Give a population unlimited food and space and it explodes — exponentially, each generation multiplying the last. But no world is unlimited. As numbers rise, resources thin, and growth bends over into an S-shaped curve that levels at the carrying capacity, K.",
       lenses: {
@@ -74,7 +74,7 @@
     },
 
     {
-      id: "photosynthesis", domain: "Plant Biology", color: "#34d399", diff: "Core",
+      id: "photosynthesis", domain: "Plant Biology", color: "var(--em)", diff: "Core",
       title: "Photosynthesis", chips: ["Light reactions", "Calvin cycle", "Limiting factors"],
       intuition: "A leaf takes light, water and thin air and builds sugar out of them. Light knocks electrons off water in the thylakoid membrane; the energy carried away is spent, in the stroma, fixing carbon dioxide into a molecule the plant can eat. Almost every calorie you have ever eaten started here.",
       lenses: {
@@ -91,7 +91,7 @@
     },
 
     {
-      id: "respiration", domain: "Cell Biology", color: "#f6c667", diff: "Core",
+      id: "respiration", domain: "Cell Biology", color: "var(--amber)", diff: "Core",
       title: "Cellular Respiration", chips: ["Glycolysis", "Krebs cycle", "Electron transport"],
       intuition: "Respiration is controlled burning. Instead of releasing a sugar's energy as a single flash of heat, the cell strips its electrons away in small steps, banks the energy as a proton gradient, and lets it trickle back through a turbine that makes ATP. Oxygen's only job is to sit at the end and catch the spent electrons.",
       lenses: {
@@ -108,7 +108,7 @@
     },
 
     {
-      id: "replication", domain: "Genetics & DNA", color: "#38e0d8", diff: "Core",
+      id: "replication", domain: "Genetics & DNA", color: "var(--cy)", diff: "Core",
       title: "DNA Replication", chips: ["Semiconservative", "Leading & lagging", "Okazaki fragments"],
       intuition: "To copy itself, DNA unzips. Each old strand becomes a template for a new partner, so every daughter molecule is half old and half new — semiconservative. The awkward part is that the copying enzyme can only build in one direction, so one strand is made smoothly and the other in backwards-running fragments.",
       lenses: {
@@ -125,7 +125,7 @@
     },
 
     {
-      id: "selection", domain: "Evolution", color: "#fb7185", diff: "Foundation",
+      id: "selection", domain: "Evolution", color: "var(--rose)", diff: "Foundation",
       title: "Natural Selection", chips: ["Variation", "Heredity", "Differential survival"],
       intuition: "Natural selection needs only three things to be true: individuals differ, some of that difference is inherited, and not everyone survives to breed equally. Given those, the population MUST shift over generations. Nothing tries to change — the frequencies just move.",
       lenses: {
@@ -142,7 +142,7 @@
     },
 
     {
-      id: "actionpotential", domain: "Neuroscience", color: "#7c8cf8", diff: "Advanced",
+      id: "actionpotential", domain: "Neuroscience", color: "var(--indigo)", diff: "Advanced",
       title: "The Action Potential", chips: ["All-or-nothing", "Depolarisation", "Refractory period"],
       intuition: "A neuron holds itself at about −70 mV, like a loaded spring. Poke it hard enough to reach threshold and voltage-gated sodium channels fly open, the inside briefly goes POSITIVE, then potassium channels restore order. The signal does not get bigger with a bigger stimulus — it either fires fully, or not at all.",
       lenses: {

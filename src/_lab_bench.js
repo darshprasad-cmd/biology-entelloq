@@ -141,7 +141,7 @@ LABS.register("microscope", {
       ctx.filter = "none";
       ctx.restore();
       // eyepiece surround + scale bar
-      ctx.strokeStyle = "rgba(255,255,255,.14)"; ctx.lineWidth = 2;
+      ctx.strokeStyle = LB_css("--hair"); ctx.lineWidth = 2;
       ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.28); ctx.stroke();
       const fov = fovMicrons(), barUm = niceBar(fov / 4);
       const px = (barUm / fov) * (R * 2);
@@ -322,25 +322,33 @@ LABS.register("gel-electrophoresis", {
       // gel slab
       ctx.fillStyle = "rgba(120,150,170,.10)";
       ctx.fillRect(padX, padTop, W - padX * 2, gelH);
-      ctx.strokeStyle = "rgba(255,255,255,.10)"; ctx.strokeRect(padX, padTop, W - padX * 2, gelH);
+      ctx.strokeStyle = LB_css("--line"); ctx.strokeRect(padX, padTop, W - padX * 2, gelH);
       ctx.fillStyle = LB_css("--faint"); ctx.font = "600 11px ui-monospace,monospace"; ctx.textAlign = "center";
       ctx.fillText("− cathode", W / 2, 16);
       ctx.fillText("+ anode", W / 2, H - 8);
       LANES.forEach((L, i) => {
         const x = padX + laneW * i + laneW / 2;
-        ctx.fillStyle = "rgba(255,255,255,.16)";
+        // A well is a hole cut in the slab — brighter than the gel under the dark
+        // theme, darker than it under the light one. --hair flips with the theme
+        // and does both; baked white only ever did the first.
+        ctx.fillStyle = LB_css("--hair");
         ctx.fillRect(x - laneW * 0.3, padTop + 4, laneW * 0.6, 7);      // the well
         ctx.fillStyle = LB_css("--dim"); ctx.font = "600 11px Inter,sans-serif";
         ctx.fillText(L.n, x, padTop - 8);
         if (!loaded) return;
         L.frags.forEach((bp) => {
           const y = padTop + 12 + migration(bp) * (gelH - 26);
-          const int = L.fixed ? 0.5 : 0.85;
-          ctx.fillStyle = `rgba(${L.fixed ? "150,170,255" : "120,255,210"},${int})`;
-          ctx.shadowColor = L.fixed ? "rgba(150,170,255,.8)" : "rgba(120,255,210,.8)";
+          // The bands are the one thing this bench asks you to read, so they take
+          // their colour from the theme: indigo for the ladder, emerald for the
+          // samples. The fixed neon they used to carry was picked against a black
+          // gel and measured 1.01:1 on the light theme's white one — not there at
+          // all. The ladder still sits back from the samples, now by alpha alone.
+          const col = L.fixed ? LB_css("--indigo") : LB_css("--em");
+          ctx.globalAlpha = L.fixed ? 0.85 : 1;
+          ctx.fillStyle = col; ctx.shadowColor = col;
           ctx.shadowBlur = 8;
           ctx.fillRect(x - laneW * 0.3, y, laneW * 0.6, 5);
-          ctx.shadowBlur = 0;
+          ctx.shadowBlur = 0; ctx.globalAlpha = 1;
           if (L.fixed && minutes > 6) {
             ctx.fillStyle = LB_css("--faint"); ctx.font = "500 9.5px ui-monospace,monospace"; ctx.textAlign = "right";
             ctx.fillText(bp >= 1000 ? (bp / 1000) + "kb" : bp, padX - 4, y + 5);
@@ -395,7 +403,7 @@ LABS.register("predator-prey", {
       if (!LB_REDUCED) { for (let i = 0; i < 3; i++) step(0.016); t += 0.016; } else step(0.05);
       const { ctx, W, H } = cv; ctx.clearRect(0, 0, W, H);
       const pad = 30, gw = W - pad * 2, gh = H - pad * 2;
-      ctx.strokeStyle = "rgba(255,255,255,.10)"; ctx.lineWidth = 1;
+      ctx.strokeStyle = LB_css("--line"); ctx.lineWidth = 1;
       ctx.beginPath(); ctx.moveTo(pad, pad); ctx.lineTo(pad, H - pad); ctx.lineTo(W - pad, H - pad); ctx.stroke();
       const maxV = Math.max(60, ...hist.map((h) => Math.max(h[0], h[1])));
       function series(idx, col) {
@@ -463,7 +471,7 @@ LABS.register("enzyme-kinetics", {
     function draw() {
       const { ctx, W, H } = cv; ctx.clearRect(0, 0, W, H);
       const pad = 34, gw = W - pad * 2, gh = H - pad * 2;
-      ctx.strokeStyle = "rgba(255,255,255,.10)";
+      ctx.strokeStyle = LB_css("--line");
       ctx.beginPath(); ctx.moveTo(pad, pad); ctx.lineTo(pad, H - pad); ctx.lineTo(W - pad, H - pad); ctx.stroke();
       ctx.fillStyle = LB_css("--faint"); ctx.font = "600 10.5px ui-monospace,monospace";
       ctx.textAlign = "center"; ctx.fillText("temperature (°C)", W / 2, H - 10);
@@ -478,10 +486,14 @@ LABS.register("enzyme-kinetics", {
         x ? ctx.lineTo(px, py) : ctx.moveTo(px, py);
       }
       ctx.stroke();
-      // denature zone
-      ctx.fillStyle = "rgba(232,115,94,.10)";
+      // denature zone — washed and labelled in the theme's own rose, the colour the
+      // operating point already turns once the enzyme is cooked. The fixed salmon it
+      // used to carry left the 10px label at 1.9:1 on the light theme's paper.
+      const rose = LB_css("--rose");
+      ctx.globalAlpha = 0.1; ctx.fillStyle = rose;
       ctx.fillRect(pad + (55 / 80) * gw, pad, gw - (55 / 80) * gw, gh);
-      ctx.fillStyle = "rgba(232,115,94,.75)"; ctx.font = "600 10px ui-monospace,monospace"; ctx.textAlign = "left";
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = rose; ctx.font = "600 10px ui-monospace,monospace"; ctx.textAlign = "left";
       ctx.fillText("denaturation", pad + (56 / 80) * gw, pad + 12);
       // current operating point
       const r = rate();
