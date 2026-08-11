@@ -422,6 +422,16 @@ footer{border-top:1px solid var(--line-2); padding:60px 0 40px}
   .f-ava .ring{animation:none}
 }
 
+/* -- under the hood ------------------------------------------------------ */
+.uth{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.uth-card{border:1px solid var(--line-2);border-radius:18px;padding:26px 24px;
+  background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,0))}
+.uth-card .k{font-family:var(--mono,ui-monospace,monospace);font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--emerald)}
+.uth-card h4{font-size:17px;font-weight:700;margin:10px 0 8px;color:var(--ink)}
+.uth-card p{font-size:14px;line-height:1.6;color:var(--ink-dim);margin:0}
+.uth-foot{margin-top:26px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+
 /* The brand mark sits inside the console, over its live canvas — the one element
    here the physics stylesheet has no rule for, because physics has no mark to put
    there. */
@@ -489,10 +499,10 @@ footer{border-top:1px solid var(--line-2); padding:60px 0 40px}
         <span style="color:var(--ink-dim)">Olympiad</span>
       </div>
       <div class="metrics">
-        <div class="metric"><div class="n" data-count="9">0</div><div class="l">Six-lens lessons</div></div>
-        <div class="metric"><div class="n" data-count="8">0</div><div class="l">Working benches</div></div>
-        <div class="metric"><div class="n" data-count="5">0</div><div class="l">Dissection specimens</div></div>
-        <div class="metric"><div class="n" data-count="13">0</div><div class="l">Scales of life</div></div>
+        <div class="metric"><div class="n" data-count="9">9</div><div class="l">Six-lens lessons</div></div>
+        <div class="metric"><div class="n" data-count="8">8</div><div class="l">Working benches</div></div>
+        <div class="metric"><div class="n" data-count="5">5</div><div class="l">Dissection specimens</div></div>
+        <div class="metric"><div class="n" data-count="13">13</div><div class="l">Scales of life</div></div>
       </div>
     </div>
 
@@ -563,7 +573,7 @@ footer{border-top:1px solid var(--line-2); padding:60px 0 40px}
 <section id="intelligence" class="wrap">
   <div class="layer">
     <div class="layer-copy reveal">
-      <span class="eyebrow">The Intelligence Layer</span>
+      <span class="eyebrow">The Learning Model</span>
       <h2 style="font-size:clamp(30px,4.6vw,52px);margin:18px 0 20px">A model of biology.<br/>And a model of you.</h2>
       <p class="lead">Underneath the interface sits a structured graph of biology itself — molecules, cells, organs, organisms, ecosystems and how each depends on the last — fused with what you have actually opened, run and got wrong. Every interaction sharpens both, and all of it stays on your device.</p>
       <div style="margin-top:28px" class="trust">
@@ -682,7 +692,7 @@ footer{border-top:1px solid var(--line-2); padding:60px 0 40px}
   <div class="sec-head reveal">
     <span class="eyebrow">How the learning actually works</span>
     <h2>A loop engineered to compound.</h2>
-    <p class="lead">Every session feeds the next. Understanding isn't a finish line — it's a flywheel.</p>
+    <p class="lead">Every session feeds the next. Understanding isn't a finish line — it's a flywheel. Every lesson walks these four stages; the six lenses set how deep each stage goes.</p>
   </div>
   <div class="engine">
     <div class="step reveal" data-d="1"><span class="no">01 · EXPERIENCE</span><h4>Feel it</h4><p>Open the process and move something. Intuition before vocabulary, every time.</p></div>
@@ -736,12 +746,56 @@ footer{border-top:1px solid var(--line-2); padding:60px 0 40px}
     </div>
     <div class="quote reveal holo" data-d="2">
       <p>"Every page is one self-contained file with its dependencies inlined. Put it on a USB stick, open it on a laptop with no internet, and the dissection theatre still runs."</p>
-      <div class="who"><span class="pf" style="background:linear-gradient(135deg,#7c8cf8,#8b5cf6)">02</span><div><div class="nm">Works with no network</div><div class="rl">Including the 3D and the hand tracking</div></div></div>
+      <div class="who"><span class="pf" style="background:linear-gradient(135deg,#7c8cf8,#8b5cf6)">02</span><div><div class="nm">Runs without an internet connection</div><div class="rl">Simulations, 3D and your record work offline · hand tracking needs a one-time model download</div></div></div>
     </div>
     <div class="quote reveal holo" data-d="3">
       <p>"Your webcam feed is read by your own browser and thrown away frame by frame. Your progress is written to your own device. There is no server behind this to send anything to."</p>
       <div class="who"><span class="pf" style="background:linear-gradient(135deg,#f6c667,#fb7185)">03</span><div><div class="nm">Nothing leaves your machine</div><div class="rl">Because there is nowhere for it to go</div></div></div>
     </div>
+  </div>
+</section>
+
+<section id="underhood" class="wrap">
+  <div class="sec-head reveal">
+    <span class="eyebrow">Under the hood</span>
+    <h2>The engineering, stated plainly.</h2>
+    <p class="lead">Everything above rests on decisions you can inspect. This is how it actually works.</p>
+  </div>
+  <div class="uth">
+    <div class="uth-card reveal holo" data-d="1">
+      <span class="k">local-first</span>
+      <h4>Your record never leaves the browser</h4>
+      <p>No account, no server, no telemetry. Everything you open, run and get wrong is written to your own device — the learner model is yours, physically.</p>
+    </div>
+    <div class="uth-card reveal holo" data-d="2">
+      <span class="k">simulation</span>
+      <h4>Mechanistic models, not movies</h4>
+      <p>The benches run the actual mathematics — Michaelis&ndash;Menten kinetics, Lotka&ndash;Volterra cycles, gel migration by fragment length. The dissection table runs a 24-vessel circulatory graph with a real PQRST: clamp one renal artery and only that kidney's perfusion falls.</p>
+    </div>
+    <div class="uth-card reveal holo" data-d="3">
+      <span class="k">hand tracking</span>
+      <h4>21 landmarks, resolved on your machine</h4>
+      <p>MediaPipe reads your hand in the browser — One-Euro filtered, resampled to your display's refresh rate, with extrapolation tuned by measurement across six camera and display combinations. Frames are read and discarded.</p>
+    </div>
+    <div class="uth-card reveal holo" data-d="4">
+      <span class="k">knowledge graph</span>
+      <h4>Biology as a dependency web</h4>
+      <p>Concepts are stored as a graph — DNA to protein to cell to disease to ecosystem — so the product knows what depends on what, and your record maps onto structure instead of a list of scores.</p>
+    </div>
+    <div class="uth-card reveal holo" data-d="5">
+      <span class="k">offline</span>
+      <h4>Self-contained pages</h4>
+      <p>Every page is one HTML file with its dependencies inlined — three.js included, vendored as a data URI. Put it on a USB stick and the dissection theatre still runs.</p>
+    </div>
+    <div class="uth-card reveal holo" data-d="6">
+      <span class="k">no build step</span>
+      <h4>Plain modules, concatenated</h4>
+      <p>No framework, no bundler. Modules are written import-free and concatenated into one file with a collision guard — the whole product is view-source-able.</p>
+    </div>
+  </div>
+  <div class="uth-foot reveal" data-d="7">
+    <a class="btn btn-ghost" href="https://github.com/darshprasad-cmd/biology-entelloq" target="_blank" rel="noopener">Read the source on GitHub <svg class="ico" viewBox="0 0 16 16" fill="none"><path d="M3 8h9M8 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <span style="font-size:13px;color:var(--ink-faint)">The deployed site and its authoring sources, in one public repository.</span>
   </div>
 </section>
 
@@ -754,7 +808,7 @@ footer{border-top:1px solid var(--line-2); padding:60px 0 40px}
     <div class="f-ava"><img src="data:image/webp;base64,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" alt="Darsh Prasad" width="200" height="200" decoding="async"><span class="ring" aria-hidden="true"></span></div>
     <div class="f-body">
       <div class="f-nm">Darsh Prasad</div>
-      <div class="f-rl">Founder · Designer · Engineer</div>
+      <div class="f-rl">Founder · Product Designer · Engineer</div>
       <p class="f-q">“Biology is the only subject where the thing you are studying is also the thing doing the studying. It should never have been reduced to a list to memorise.”</p>
       <p class="f-bio">Darsh designed and engineered Biology Entelloq end to end — every specimen, every bench, every simulation and every pixel. The models are checked against real biology before they ship: the microscope's cells are sized against its own scale bar, the cardiac pressure curves are continuous across the beat, and a bench that would teach the wrong thing does not go out. Biology Entelloq is the sibling of Physics Entelloq, built on the same conviction — that the deepest way to understand something is to run it, bend it, and watch what happens.</p>
       <div class="f-links"><a class="chip" href="mailto:entelloqnetworks@gmail.com">✉ entelloqnetworks@gmail.com</a><a class="chip" href="https://physics.entelloq.com">⚛ Physics Entelloq ↗</a><a class="chip" href="./about.html">◈ The full story ↗</a></div>
@@ -778,7 +832,7 @@ footer{border-top:1px solid var(--line-2); padding:60px 0 40px}
         <li><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3L13 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> All eight working benches</li>
         <li><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3L13 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> All nine six-lens lessons</li>
         <li><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3L13 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> The universe-to-atom zoom, all thirteen scales</li>
-        <li><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3L13 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Runs with no network at all</li>
+        <li><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3L13 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Runs without an internet connection</li>
       </ul>
       <a class="btn btn-ghost" href="./app.html" data-magnetic>Just open it</a>
     </div>
@@ -861,14 +915,9 @@ footer{border-top:1px solid var(--line-2); padding:60px 0 40px}
     </div>
     <div>
       <h5>Entelloq</h5>
-      <a href="https://entelloq.com">Entelloq Networks</a>
       <a href="https://physics.entelloq.com">Physics Entelloq</a>
-      <a href="https://quant.entelloq.com">Quant Entelloq</a>
       <a href="./about.html">About</a>
       <a href="mailto:entelloqnetworks@gmail.com">Contact</a>
-      <a href="https://www.linkedin.com/in/entelloq-networks" target="_blank" rel="noopener">LinkedIn</a>
-      <a href="https://x.com/Entelloqnetwork" target="_blank" rel="noopener">X</a>
-      <a href="https://www.instagram.com/entelloq/" target="_blank" rel="noopener">Instagram</a>
     </div>
   </div>
   <div class="foot-bot">
@@ -1666,10 +1715,22 @@ footer{border-top:1px solid var(--line-2); padding:60px 0 40px}
     function vw() { return innerWidth || document.documentElement.clientWidth || cv.clientWidth || 1280; }
     function vh() { return innerHeight || document.documentElement.clientHeight || cv.clientHeight || 800; }
     function size() {
+      // Re-read it every measure: devicePixelRatio changes when the window moves to
+      // a display of a different density, or the browser is zoomed.
+      dpr = Math.min(devicePixelRatio || 1, 1.25);
       var w = Math.max(1, Math.round(vw() * dpr)), h = Math.max(1, Math.round(vh() * dpr));
       if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; gl.viewport(0, 0, w, h); }
     }
-    addEventListener("resize", size); size();
+    // draw() re-measures on every frame, so while the loop is running the resize
+    // event has nothing to add. It matters in STILL mode, where resizing the canvas
+    // clears it and no further frame is coming to put the field back — and it is
+    // coalesced to one measure per frame, because a window drag fires it in bursts.
+    var rz = 0;
+    addEventListener("resize", function () {
+      if (rz) return;
+      rz = requestAnimationFrame(function () { rz = 0; size(); if (STILL) draw(0); });
+    });
+    size();
 
     var raf = null, t0 = 0;
     // draw() is the whole render and nothing else; frame() is draw() plus the
@@ -1717,18 +1778,49 @@ footer{border-top:1px solid var(--line-2); padding:60px 0 40px}
     var ctx = cv.getContext("2d");
     if (!ctx) { window.BIOQ_ATMO = { theme: theme, setSection: setSection, mouse: M, mode: "none" }; return; }
     var dpr = Math.min(devicePixelRatio || 1, 1.5), W = 0, H = 0, pop = [];
+    // Same reasoning as the WebGL path: a page can boot hidden with innerWidth 0,
+    // and becoming visible does not fire a resize event.
+    function vw() { return innerWidth || document.documentElement.clientWidth || cv.clientWidth || 1280; }
+    function vh() { return innerHeight || document.documentElement.clientHeight || cv.clientHeight || 800; }
+    function cell(x, y) {
+      return {
+        x: x, y: y, r: 42 + Math.random() * 78,
+        vx: (Math.random() - 0.5) * 0.13, vy: (Math.random() - 0.5) * 0.13, ph: Math.random() * 6.283
+      };
+    }
     function size() {
-      W = innerWidth; H = innerHeight;
+      var w = vw(), h = vh();
+      // devicePixelRatio is not fixed for the life of a page: dragging the window
+      // to a display of a different density, or zooming the browser, changes it,
+      // and a stale one leaves the field soft or oversampled.
+      dpr = Math.min(devicePixelRatio || 1, 1.5);
+      // Reseeding the population here is what used to make the whole field jump on
+      // every resize — and resize is not a rare event: a window drag fires it
+      // continuously, and on a phone so does the URL bar collapsing. So the cells
+      // are carried across and rescaled into the new box instead, and only the
+      // surplus or shortfall is dropped or seeded to keep the density right.
+      var sx = W ? w / W : 1, sy = H ? h / H : 1;
+      for (var i = 0; i < pop.length; i++) { pop[i].x *= sx; pop[i].y *= sy; }
+      W = w; H = h;
       cv.width = Math.max(1, Math.round(W * dpr)); cv.height = Math.max(1, Math.round(H * dpr));
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       var n = Math.max(10, Math.min(30, Math.round(W * H / 46000)));
-      pop = [];
-      for (var i = 0; i < n; i++) pop.push({
-        x: Math.random() * W, y: Math.random() * H, r: 42 + Math.random() * 78,
-        vx: (Math.random() - 0.5) * 0.13, vy: (Math.random() - 0.5) * 0.13, ph: Math.random() * 6.283
+      while (pop.length > n) pop.pop();
+      while (pop.length < n) pop.push(cell(Math.random() * W, Math.random() * H));
+    }
+    // Resize arrives in bursts, and each one reallocates the backing store, so it
+    // is coalesced to one measure per frame — which is all the display can show.
+    var rz = 0;
+    function onResize() {
+      if (rz) return;
+      rz = requestAnimationFrame(function () {
+        rz = 0; size();
+        // Setting cv.width clears the canvas, and in STILL mode no further frame is
+        // coming, so the single frame has to be drawn again by hand.
+        if (STILL) frame();
       });
     }
-    size(); addEventListener("resize", size);
+    size(); addEventListener("resize", onResize);
 
     var raf = null, t = 0;
     function rgba(a) { return "rgba(" + (cur.r * 255 | 0) + "," + (cur.g * 255 | 0) + "," + (cur.b * 255 | 0) + "," + a + ")"; }
@@ -1761,8 +1853,12 @@ footer{border-top:1px solid var(--line-2); padding:60px 0 40px}
     repaint = frame;
     if (STILL) { for (var k = 0; k < 40; k++) ease(); frame(); } else raf = requestAnimationFrame(frame);
     document.addEventListener("visibilitychange", function () {
-      if (document.hidden) { if (raf) { cancelAnimationFrame(raf); raf = null; } }
-      else if (!raf && !STILL) raf = requestAnimationFrame(frame);
+      if (document.hidden) { if (raf) { cancelAnimationFrame(raf); raf = null; } return; }
+      // Re-measure on the way back: the viewport may have been 0 for the whole time
+      // the tab was in the background, and no resize event marks it coming good.
+      size();
+      if (STILL) frame();
+      else if (!raf) raf = requestAnimationFrame(frame);
     });
 
     window.BIOQ_ATMO = { theme: theme, setSection: setSection, mouse: M, mode: "2d" };
