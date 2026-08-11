@@ -15,7 +15,7 @@
   // The six lenses — glyphs/colours echo the reference's A–F rail.
   const LENSES = [
     { k: "experience", n: "Experience", g: "A", c: "var(--em)", ic: "●" },
-    { k: "predict", n: "Predict", g: "B", c: "#7dd3fc", ic: "Ψ" },
+    { k: "predict", n: "Predict", g: "B", c: "var(--sky)", ic: "Ψ" },
     { k: "visual", n: "Visual", g: "C", c: "var(--cy)", ic: "◳" },
     { k: "math", n: "Math", g: "D", c: "var(--indigo)", ic: "∑" },
     { k: "frontier", n: "Frontier", g: "E", c: "var(--rose)", ic: "◆" },
