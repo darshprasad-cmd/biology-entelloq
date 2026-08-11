@@ -124,7 +124,12 @@
       "background:var(--panel,#0b1117);box-shadow:0 22px 60px -18px rgba(0,0,0,.7);" +
       "opacity:0;transform:translateY(6px) scale(.97);pointer-events:none;" +
       "transition:opacity .18s,transform .18s cubic-bezier(.22,1,.36,1)}" +
-    ".bq-pop.on{opacity:1;transform:none;pointer-events:auto}" +
+    ".bq-pop{visibility:hidden}" +
+    ".bq-pop.on{opacity:1;transform:none;pointer-events:auto;visibility:visible}" +
+    // visibility cannot animate, but it CAN be delayed — so the closing fade still
+    // plays, and the panel only leaves the tab order once it is actually gone.
+    ".bq-pop{transition:opacity .18s,transform .18s cubic-bezier(.22,1,.36,1),visibility 0s .18s}" +
+    ".bq-pop.on{transition:opacity .18s,transform .18s cubic-bezier(.22,1,.36,1),visibility 0s}" +
     ".bq-pop h4{font-size:14px;font-weight:700;margin:0 0 4px;color:var(--ink,#eaf2f5)}" +
     ".bq-pop p{font-size:12.5px;line-height:1.55;color:var(--dim,#9fb2bc);margin:0 0 12px}" +
     ".bq-pop .who{display:flex;align-items:center;gap:10px;margin-bottom:12px}" +
@@ -199,12 +204,24 @@
 
   function render() {
     var u = user();
+    // innerHTML below replaces the very button that was just clicked, so whatever
+    // had focus is destroyed mid-interaction and focus drops to <body>. Remember
+    // where it was and put it back — but only if it was ours, or we would steal
+    // focus from somewhere else on the page.
+    var refocus = hosts.some(function (h) { return h.contains(document.activeElement); });
     hosts.forEach(function (h) {
       h.innerHTML =
         '<button type="button" aria-haspopup="dialog" aria-expanded="' + (open ? "true" : "false") + '">' +
           avatar(u) + '<span class="nm">' + (u ? esc(u.n) : "Sign in") + "</span></button>" +
         '<div class="bq-pop' + (open ? " on" : "") + '" role="dialog" aria-label="Account">' + popBody() + "</div>";
     });
+    if (refocus) {
+      // Prefer the panel's first control when it is open (that is where the user
+      // was heading), otherwise the chip they clicked.
+      var back = (open && hosts[0] && hosts[0].querySelector(".bq-pop button, .bq-pop input"))
+              || (hosts[0] && hosts[0].querySelector("button"));
+      if (back) try { back.focus(); } catch (e) {}
+    }
     if (open && !user() && cid() && !FILE) {
       load(function () {
         var host = document.getElementById("bq-gbtn");

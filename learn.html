@@ -78,6 +78,10 @@ a{color:inherit;text-decoration:none}
   --shadow-2:0 14px 44px -16px rgba(20,40,50,.28);
   --shadow-glow:0 0 0 1px rgba(14,163,113,.18),0 22px 60px -20px rgba(14,163,113,.28);
   --spot:rgba(14,163,113,.12);
+  /* Accents the light theme previously inherited from dark, where they measured
+     1.49:1 (amber), 2.53:1 (rose) and 3.97:1 (violet) against this background.
+     Same hues, taken dark enough to read: 5.0, 5.7 and 6.7:1. */
+  --violet:#6d28d9; --amber:#8a6410; --rose:#be1e46;
 }
 
 html,body{background:var(--bg);color:var(--ink);font-family:var(--sans);
@@ -281,7 +285,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);margin-top:4
   .g3,.g4,.g2{grid-template-columns:1fr}
   .foot-in{grid-template-columns:1fr}
 }
-.mobile-menu{display:none;position:fixed;inset:70px 0 0;z-index:55;background:var(--glass-strong);
+.mobile-menu{display:none;position:fixed;inset:70px 0 0;z-index:55;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding-bottom:max(24px,env(safe-area-inset-bottom));background:var(--glass-strong);
   backdrop-filter:blur(20px);padding:24px var(--edge);animation:pageIn .3s var(--ease-out)}
 .mobile-menu a{display:block;padding:16px 0;font-size:20px;font-weight:600;border-bottom:1px solid var(--line)}
 
@@ -1776,7 +1780,12 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
       "background:var(--panel,#0b1117);box-shadow:0 22px 60px -18px rgba(0,0,0,.7);" +
       "opacity:0;transform:translateY(6px) scale(.97);pointer-events:none;" +
       "transition:opacity .18s,transform .18s cubic-bezier(.22,1,.36,1)}" +
-    ".bq-pop.on{opacity:1;transform:none;pointer-events:auto}" +
+    ".bq-pop{visibility:hidden}" +
+    ".bq-pop.on{opacity:1;transform:none;pointer-events:auto;visibility:visible}" +
+    // visibility cannot animate, but it CAN be delayed — so the closing fade still
+    // plays, and the panel only leaves the tab order once it is actually gone.
+    ".bq-pop{transition:opacity .18s,transform .18s cubic-bezier(.22,1,.36,1),visibility 0s .18s}" +
+    ".bq-pop.on{transition:opacity .18s,transform .18s cubic-bezier(.22,1,.36,1),visibility 0s}" +
     ".bq-pop h4{font-size:14px;font-weight:700;margin:0 0 4px;color:var(--ink,#eaf2f5)}" +
     ".bq-pop p{font-size:12.5px;line-height:1.55;color:var(--dim,#9fb2bc);margin:0 0 12px}" +
     ".bq-pop .who{display:flex;align-items:center;gap:10px;margin-bottom:12px}" +
@@ -1851,12 +1860,24 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
 
   function render() {
     var u = user();
+    // innerHTML below replaces the very button that was just clicked, so whatever
+    // had focus is destroyed mid-interaction and focus drops to <body>. Remember
+    // where it was and put it back — but only if it was ours, or we would steal
+    // focus from somewhere else on the page.
+    var refocus = hosts.some(function (h) { return h.contains(document.activeElement); });
     hosts.forEach(function (h) {
       h.innerHTML =
         '<button type="button" aria-haspopup="dialog" aria-expanded="' + (open ? "true" : "false") + '">' +
           avatar(u) + '<span class="nm">' + (u ? esc(u.n) : "Sign in") + "</span></button>" +
         '<div class="bq-pop' + (open ? " on" : "") + '" role="dialog" aria-label="Account">' + popBody() + "</div>";
     });
+    if (refocus) {
+      // Prefer the panel's first control when it is open (that is where the user
+      // was heading), otherwise the chip they clicked.
+      var back = (open && hosts[0] && hosts[0].querySelector(".bq-pop button, .bq-pop input"))
+              || (hosts[0] && hosts[0].querySelector("button"));
+      if (back) try { back.focus(); } catch (e) {}
+    }
     if (open && !user() && cid() && !FILE) {
       load(function () {
         var host = document.getElementById("bq-gbtn");
@@ -1915,159 +1936,5 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
 })();
 
 </script>
-<!-- ENTELLOQ-ECOSYSTEM-SWITCHER:START -->
-<!-- ============================================================
-     ENTELLOQ ECOSYSTEM SWITCHER  ·  shared across every Entelloq app
-     Self-contained: namespaced `eqx-`, its own resets, no host CSS or JS
-     dependencies. Set data-eqx-current on the launcher to mark this app.
-     ============================================================ -->
-<style>
-.eqx-fab,.eqx-panel,.eqx-panel *{box-sizing:border-box}
-.eqx-fab{
-  position:fixed;left:18px;bottom:18px;z-index:99997;
-  display:flex;align-items:center;gap:9px;
-  margin:0;padding:9px 15px 9px 11px;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
-  font-size:13px;font-weight:600;line-height:1;letter-spacing:.01em;
-  color:#EEF0F4;background:rgba(14,16,21,.88);
-  border:1px solid rgba(255,255,255,.14);border-radius:999px;
-  box-shadow:0 2px 6px rgba(0,0,0,.28),0 14px 34px -14px rgba(0,0,0,.6);
-  cursor:pointer;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
-  transition:transform .22s cubic-bezier(.22,.9,.24,1),opacity .2s,visibility 0s;
-}
-.eqx-fab:hover{transform:translateY(-2px)}
-.eqx-fab:focus-visible{outline:2px solid #EEF0F4;outline-offset:2px}
-.eqx-fab.eqx-hide{opacity:0;visibility:hidden;pointer-events:none;transform:translateY(8px) scale(.95);transition:transform .22s,opacity .2s,visibility 0s .22s}
-.eqx-fab svg{width:16px;height:16px;display:block;flex:none}
-.eqx-panel{
-  position:fixed;left:18px;bottom:18px;z-index:99998;
-  width:320px;max-width:calc(100vw - 28px);
-  margin:0;padding:8px;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
-  color:#EEF0F4;background:rgba(12,14,19,.97);
-  border:1px solid rgba(255,255,255,.14);border-radius:16px;
-  box-shadow:0 3px 10px rgba(0,0,0,.34),0 26px 60px -22px rgba(0,0,0,.8);
-  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
-  opacity:0;visibility:hidden;pointer-events:none;
-  transform:translateY(10px) scale(.98);transform-origin:bottom left;
-  transition:opacity .2s,transform .26s cubic-bezier(.22,.9,.24,1),visibility 0s .26s;
-}
-.eqx-panel.eqx-open{opacity:1;visibility:visible;pointer-events:auto;transform:none;transition:opacity .2s,transform .26s cubic-bezier(.22,.9,.24,1)}
-.eqx-head{display:flex;align-items:center;justify-content:space-between;padding:9px 10px 10px}
-.eqx-head b{font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#98A0AE}
-.eqx-x{width:26px;height:26px;padding:0;display:grid;place-items:center;background:none;border:0;border-radius:7px;color:#98A0AE;cursor:pointer}
-.eqx-x:hover{color:#EEF0F4;background:rgba(255,255,255,.08)}
-.eqx-x:focus-visible{outline:2px solid #EEF0F4;outline-offset:1px}
-.eqx-x svg{width:14px;height:14px;display:block}
-.eqx-item{
-  display:flex;align-items:center;gap:12px;width:100%;
-  margin:0;padding:10px;text-align:left;
-  background:none;border:1px solid transparent;border-radius:11px;
-  color:#EEF0F4;text-decoration:none;cursor:pointer;font:inherit;
-  transition:background .18s,border-color .18s,transform .18s
-}
-.eqx-item:hover{background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.1);transform:translateX(2px)}
-.eqx-item:focus-visible{outline:2px solid #EEF0F4;outline-offset:-2px}
-.eqx-lg{width:34px;height:34px;flex:none;display:block;border-radius:50%;object-fit:cover;background:#0B0C0F;box-shadow:0 0 0 1.5px currentColor,0 1px 4px rgba(0,0,0,.45)}
-.eqx-tx{flex:1;min-width:0}
-.eqx-tx b{display:block;font-size:13px;font-weight:600;line-height:1.3;color:#EEF0F4}
-.eqx-tx span{display:block;font-size:11px;line-height:1.45;color:#98A0AE;margin-top:1px}
-.eqx-here{flex:none;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#98A0AE;border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:3px 7px}
-.eqx-item[aria-current="page"]{background:rgba(255,255,255,.045)}
-.eqx-foot{padding:9px 11px 6px;border-top:1px solid rgba(255,255,255,.09);margin-top:6px;display:flex;align-items:center;justify-content:space-between;gap:8px}
-.eqx-foot a{font-size:11px;color:#98A0AE;text-decoration:none}
-.eqx-foot a:hover{color:#EEF0F4;text-decoration:underline}
-.eqx-soc{display:flex;gap:4px}
-.eqx-soc a{width:26px;height:26px;display:grid;place-items:center;border-radius:7px;color:#98A0AE}
-.eqx-soc a:hover{color:#EEF0F4;background:rgba(255,255,255,.08)}
-.eqx-soc svg{width:14px;height:14px;display:block}
-@media (max-width:560px){
-  .eqx-fab{left:12px;bottom:12px;padding:8px 13px 8px 10px;font-size:12px}
-  .eqx-panel{left:10px;right:10px;bottom:12px;width:auto}
-}
-@media print{.eqx-fab,.eqx-panel{display:none!important}}
-@media (prefers-reduced-motion:reduce){.eqx-fab,.eqx-panel,.eqx-item{transition-duration:.01ms!important}}
-</style>
-
-<button class="eqx-fab" id="eqx-fab" type="button" aria-expanded="false" aria-controls="eqx-panel" aria-label="Switch Entelloq app">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
-    <circle cx="12" cy="12" r="9" opacity=".5"/><circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none"/>
-    <circle cx="12" cy="3" r="1.5" fill="currentColor" stroke="none"/><circle cx="20" cy="17" r="1.5" fill="currentColor" stroke="none"/><circle cx="4" cy="17" r="1.5" fill="currentColor" stroke="none"/>
-  </svg>Entelloq
-</button>
-
-<div class="eqx-panel" id="eqx-panel" role="dialog" aria-label="Entelloq ecosystem" tabindex="-1">
-  <div class="eqx-head">
-    <b>Entelloq Networks</b>
-    <button class="eqx-x" id="eqx-close" type="button" aria-label="Close">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
-    </button>
-  </div>
-  <div id="eqx-list"></div>
-  <div class="eqx-foot">
-    <a href="https://entelloq.com" target="_top">entelloq.com</a>
-    <span class="eqx-soc">
-      <a href="https://www.linkedin.com/in/entelloq-networks" target="_blank" rel="noopener" aria-label="Entelloq Networks on LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.4c0-1.29-.02-2.95-1.8-2.95-1.8 0-2.07 1.4-2.07 2.85V21H9z"/></svg></a>
-      <a href="https://x.com/Entelloqnetwork" target="_blank" rel="noopener" aria-label="Entelloq Networks on X"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 3h3.2l-7 8 8.2 10h-6.4l-5-6.1-5.8 6.1H1.5l7.5-8.6L1.2 3h6.6l4.5 5.6zm-1.1 16h1.8L7.7 4.8H5.8z"/></svg></a>
-      <a href="https://www.instagram.com/entelloq/" target="_blank" rel="noopener" aria-label="Entelloq Networks on Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.8"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg></a>
-    </span>
-  </div>
-</div>
-
-<script>
-(function(){
-  var CUR = 'biology';
-  var L = {
-    network:'data:image/jpeg;base64,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',
-    quant:'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAYEBQUFBAYFBQUHBgYHCQ8KCQgICRMNDgsPFhMXFxYTFRUYGyMeGBohGhUVHikfISQlJygnGB0rLismLiMmJyb/2wBDAQYHBwkICRIKChImGRUZJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJib/wAARCABIAEgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD5aooFOAqiBMUuKcBV7S9K1LVZWi0ywuLx15YQRltvuSOB+NMVyhikxXSf8IhrK8SnToX/ALkuqWyt+RkqDUfCviHT7Zru40mc2qjLXEGJ4l+rxkqPxNAGDSU/HcUhoAbRRRQMUU9RTRVqxhWe6ihdtkbH529FHJP5ZoJbNPTbOxtbNNV1hGlhkJ+y2SNsa5IOCzN1WMHgkck8DHJElxqeq620Fg0ywWbSBIrO3HlW8ef9gcH6nJ9SagZn1G+S9mXba+akQQHHlxjhVHsBV3c84udJsFKol01ysg5YADA/HtVqNzmqVWtFv+RWtbWwsbm3kvZI38q98uWDGcoO+R2qOC8m029bUND1GSymMzhRaysjoueM46giuz8Oadq2lQT3lhoM1xdLGJZJt8U8iHuTECTt/WvcvDNj8PPiDpCWetWFrO7oMXcKiKeI93DDnGfy7jFDtYIRfNdv/I+cUuNN8VMLfUUtdL1x+INQiUQwXTdknQfKjE9JFwMn5h/EDwbbW+i6teax4k0iK4s9HYxy2d4p/eXHIWEDOC2QSc5AUE4PFbPxL8AyfD3xZPo2pqdSs3hMunyq3lfaIyT8zEdGXkEdzjsa5nWJTqOiiaxMiabpsqRGKU5laSVSTM5HBLFNvsAopKy1Kqc0/wB2vm/L+v60KHi3VRrvibU9YWIQx3lw8kcSgARoT8q4HTAwKKyjRUvU6IpJJInsreS7uo7aJkV5DgGRwq/iT0rStreFIPLlto5Zy/EiX6KNuMbcc1jL24Bx2NbCXFvdCaWePT7UgjbGIH+b1xtNNGc7/Im+weYo2R3Fpz80TL5gz6g5H8qltkltFuEjndWmCq7+VgqM9uePrVQ3dvFhVCze0SBFUenzKST7mpnlt7d1jktRLO5BkBk2eWpH3MqBk9zxxwPWqVkYT5rGnFHBp2mxavp981rqULiSF4eHBBHRgM5565OSrZAruNKuNXuPFj6n4d097yWSKG5vLGyYCQzFR5zInoepA7k8V5cbmcn7Q0cW9cYbbwg7FR0HHA+lXdGutW0TXrTVtNvJo8Th47mN+VbOcEjofY9aG0VSg0nd3PQvjj4xsfFOlaVbfZ7yz1LSp3hkgulDcFBu2yLwwyF44PNec6CQ2h+Jom+6bGJx/vLcRY/Qn867P4x+Ik1MWmnzFL28Dfa3vclXRmBV4mUjB5AIIPYVwkMotPDl2MgSajKkYHfy4zuY/i2wfganqaapIxz1opDRSNRKkjI3AMSB3IqIU4GgDQS/ZSuIYiIxiLK8x+hB7nvznmq4c7t2TuznOec1CDTgaLkKKWxfjulJUMoGeCcZHJ9PQ9x+Ipi3MlvIfs8hVCQSmcjPp71UzSZp3BRsaGoXT6lfyX90scCyEbhCm0cADCjucD/Gqd7cG4kBA2RooSNM/dUdB/U+5qEsTxnpTTSKsIaKQ0UigoBoopgLmlzRRSAXJpM0UUxCZpKKKQwooopgf//Z',
-    physics:'data:image/jpeg;base64,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',
-    biology:'data:image/jpeg;base64,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',
-  };
-  var APPS = [
-    { id:'network', n:'Entelloq Networks', d:'The company and every product', u:'https://entelloq.com', c:'#93A3BC' },
-    { id:'quant',   n:'Quant Entelloq',    d:'Markets, trading and quantitative finance', u:'https://quant.entelloq.com', c:'#2DD4BF' },
-    { id:'physics', n:'Physics Entelloq',  d:'Simulations and physical intuition', u:'https://physics.entelloq.com', c:'#34D399' },
-    { id:'biology', n:'Biology Entelloq',  d:'The living world, made interactive', u:'https://biology.entelloq.com', c:'#A3E635' }
-  ];
-  var fab = document.getElementById('eqx-fab'),
-      panel = document.getElementById('eqx-panel'),
-      list = document.getElementById('eqx-list'),
-      closeBtn = document.getElementById('eqx-close');
-  if (!fab || !panel || !list) return;
-
-  list.innerHTML = APPS.map(function(a){
-    var here = a.id === CUR;
-    return '<a class="eqx-item" href="' + a.u + '" target="_top"' + (here ? ' aria-current="page"' : '') + '>' +
-             '<img class="eqx-lg" style="color:' + a.c + '" src="' + L[a.id] + '" alt="" width="34" height="34" loading="lazy" decoding="async">' +
-             '<span class="eqx-tx"><b>' + a.n + '</b><span>' + a.d + '</span></span>' +
-             (here ? '<span class="eqx-here">You are here</span>' : '') +
-           '</a>';
-  }).join('');
-
-  function open(){
-    panel.classList.add('eqx-open');
-    fab.classList.add('eqx-hide');
-    fab.setAttribute('aria-expanded','true');
-    setTimeout(function(){ if (panel.classList.contains('eqx-open')) (panel.querySelector('.eqx-item') || panel).focus(); }, 60);
-  }
-  function close(){
-    panel.classList.remove('eqx-open');
-    fab.classList.remove('eqx-hide');
-    fab.setAttribute('aria-expanded','false');
-    fab.focus();
-  }
-  fab.addEventListener('click', open);
-  if (closeBtn) closeBtn.addEventListener('click', close);
-  document.addEventListener('keydown', function(e){
-    if (e.key === 'Escape' && panel.classList.contains('eqx-open')) close();
-  }, true);
-  document.addEventListener('click', function(e){
-    if (!panel.classList.contains('eqx-open')) return;
-    if (!panel.contains(e.target) && e.target !== fab && !fab.contains(e.target)) close();
-  });
-})();
-</script>
-
-<!-- ENTELLOQ-ECOSYSTEM-SWITCHER:END -->
 </body>
 </html>

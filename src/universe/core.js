@@ -177,11 +177,23 @@ function bootUniverse(mount) {
 
   function jumpTo(i) { Z.posTarget = KIT.clamp(i, 0, N - 1); Z.flingVel = 0; Z.lastInput = now(); wake(); if (onJump) onJump(Math.round(Z.posTarget)); }
 
-  addEventListener('resize', () => {
+  function relayout() {
     camera.aspect = vw() / vh(); camera.updateProjectionMatrix();
     renderer.setSize(vw(), vh());
     if (composer) composer.setSize(vw(), vh());
+  }
+  addEventListener('resize', relayout);
+  // Rotating a phone is the case `resize` alone does not cover: iOS dispatches
+  // orientationchange before the new dimensions are readable, so measuring
+  // immediately reads the PRE-rotation size and leaves the zoom stretched until
+  // something else happens to resize it. Re-run after the next frame and again once
+  // the rotation animation has settled. visualViewport catches the other way the
+  // usable height changes on a phone — the address bar sliding away.
+  addEventListener('orientationchange', () => {
+    requestAnimationFrame(relayout);
+    setTimeout(relayout, 250);
   });
+  if (window.visualViewport) visualViewport.addEventListener('resize', relayout);
 
   // ── immersion: hide the chrome after a spell of no input, show it on any input.
   let immersed = false, onImmersion = null, onJump = null, onFrame = null;
