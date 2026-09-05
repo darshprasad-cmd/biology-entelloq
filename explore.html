@@ -440,7 +440,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);background:v
         </label>
         <div class="dz-filters" id="dzFilters" role="group" aria-label="Filter by category"></div>
       </div>
-      <div class="dz-count" id="dzCount"></div>
+      <div class="dz-count" id="dzCount" role="status" aria-live="polite" aria-atomic="true"></div>
       <div class="dz-list" id="dzList"></div>
     </div>
   </section>
@@ -805,10 +805,20 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);background:v
     if(!list) return;
     const cats=["All",...[...new Set(DISEASES.map(d=>d.cat))]];
     let active="All", q="";
-    filters.innerHTML=cats.map((c,i)=>`<button class="fbtn${i===0?" on":""}" data-cat="${esc(c)}">${esc(c)}</button>`).join("");
+    filters.innerHTML=cats.map((c,i)=>`<button type="button" class="fbtn${i===0?" on":""}" data-cat="${esc(c)}" aria-pressed="${i===0}">${esc(c)}</button>`).join("");
+    function updateFilters(){
+      filters.querySelectorAll(".fbtn").forEach(button=>{
+        const selected=button.dataset.cat===active;
+        button.classList.toggle("on",selected);button.setAttribute("aria-pressed",String(selected));
+      });
+    }
     filters.addEventListener("click",e=>{const b=e.target.closest(".fbtn");if(!b)return;
-      active=b.dataset.cat; filters.querySelectorAll(".fbtn").forEach(x=>x.classList.toggle("on",x===b)); render();});
+      active=b.dataset.cat;updateFilters();render();});
     search.addEventListener("input",()=>{q=search.value.trim().toLowerCase(); render();});
+    list.addEventListener("click",e=>{
+      if(!e.target.closest("#dzReset"))return;
+      active="All";q="";search.value="";updateFilters();render();search.focus();
+    });
     function render(){
       const rows=DISEASES.filter(d=>{
         const catOk=active==="All"||d.cat===active;
@@ -824,7 +834,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);background:v
           <div class="dz-symp"><span class="lbl">Key symptoms</span>
             <div class="symp">${d.symp.map(s=>`<span>${esc(s)}</span>`).join("")}</div></div>
         </article>`).join("")
-        :`<div class="dz-empty">No diseases match "${esc(search.value.trim())}". Try a different term or clear the filter.</div>`;
+        :`<div class="dz-empty"><p>No diseases match these filters. Try a broader term or return to the full collection.</p><button class="btn ghost" id="dzReset" type="button" style="margin-top:16px">Show all diseases</button></div>`;
     }
     render();
   })();

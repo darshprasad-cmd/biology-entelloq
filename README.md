@@ -64,7 +64,8 @@ to a single still frame and repaints only when you change theme or section.
 ## Repository layout
 
 ```
-index.html              the app shell — sidebar, command palette, section router
+index.html              public landing page
+app.html                the app shell — sidebar, command palette, section router
 learn.html  …           the pillar pages, each a standalone single-file app
 lab.html                the Dissection Lab
 universe.html           Biology Universe
@@ -85,6 +86,27 @@ src/
 ```
 
 ### Building
+
+For learning-only changes, use the narrow workflow below. It preserves the
+existing pages' shared shell and never rebuilds the dissection lab:
+
+```bash
+python scripts/build-learning.py        # sync only Lessons and Reason source slots
+node scripts/check-learning.cjs         # parallel contracts, unit tests and syntax
+```
+
+Edit Lessons and Reason in `src/_lessons.js/.css` and `src/_reason.js/.css`;
+their generated root HTML is committed for deployment. The learning builder has
+a non-mutating `--check` mode and rejects missing or ambiguous source slots.
+Home, Learn, Solve, Explore and Me are currently authored in their root HTML
+files. Do not run a whole-site rebuild for changes to these pages.
+
+The original dissection files, shared dependencies and app launcher are locked
+by `tests/test_lab_unchanged.py`. Do not regenerate its fingerprint fixture to
+make a non-lab change pass. See `docs/learning-polish/QA.md` for the bounded,
+optional browser workflow, which does not enter or interact with the lab.
+
+The full-product assemblers below are separate tools, not part of that workflow.
 
 The products are **concatenated, not bundled** — each module is written with no
 imports so the assembler only has to strip `export` keywords and check for

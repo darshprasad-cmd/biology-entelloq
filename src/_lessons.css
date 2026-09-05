@@ -7,6 +7,27 @@
 .les-lensdot{width:22px;height:22px;border-radius:7px;display:grid;place-items:center;font-family:var(--mono);
   font-size:11px;font-weight:600;color:var(--dc);border:1px solid color-mix(in srgb,var(--dc) 40%,transparent);
   background:color-mix(in srgb,var(--dc) 12%,transparent)}
+.les-card[hidden],.les-empty[hidden]{display:none}
+.les-filters{margin:26px 0 24px;padding:20px;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--panel)}
+.les-filterfields{display:grid;grid-template-columns:minmax(180px,1fr) minmax(150px,.6fr) minmax(125px,.4fr) auto;gap:14px;align-items:end}
+.les-filterfields label{display:flex;flex-direction:column;gap:8px;min-width:0}
+.les-filterfields label>span,.les-guide-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--dim)}
+.les-filterfields input,.les-filterfields select{width:100%;min-height:44px;border:1px solid var(--line);border-radius:10px;background:var(--bg-2);color:var(--ink);font:inherit;font-size:14px;padding:10px 12px}
+.les-filterfields input::placeholder{color:var(--faint)}
+.les-filterfields select option{background:var(--bg-2);color:var(--ink)}
+.les-clear{min-height:44px;white-space:nowrap}
+.les-clear:disabled{opacity:.45;cursor:default;transform:none}
+.les-filtermeta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:15px;font-size:12px;color:var(--dim)}
+.les-filtermeta p{margin:0;font-weight:600;color:var(--ink)}
+.les-empty{padding:32px 24px;border:1px dashed var(--line);border-radius:var(--r-lg);text-align:center}
+.les-empty p{max-width:520px;margin:12px auto 20px;color:var(--dim);line-height:1.6}
+.les-cardroute{display:flex;justify-content:space-between;gap:16px;margin-top:18px;font-size:12px;font-weight:600;color:var(--lc)}
+.les-orientation{margin-top:24px;padding:18px 20px;border-left:2px solid var(--lc);border-radius:0 12px 12px 0;background:var(--panel)}
+.les-orientation>p{margin:8px 0 12px;color:var(--ink);font-size:15px;line-height:1.6}
+.les-readingroute{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12px;line-height:1.6;color:var(--dim)}
+#lessonApp :is(a,button,input,select,[role=tabpanel]):focus-visible{outline:2px solid var(--em);outline-offset:4px}
+@media(max-width:1050px){.les-filterfields{grid-template-columns:1fr 1fr}.les-search{grid-column:1/-1}.les-clear{grid-column:1/-1;justify-self:start}}
+@media(max-width:480px){.les-filters{padding:16px}.les-filterfields{gap:12px}.les-filtermeta{display:block}.les-filtermeta>span{display:block;margin-top:5px}.les-orientation{padding:16px}.les-readingroute{display:block}.les-readingroute span{display:block;margin-top:4px}}
 
 /* lesson view */
 .les-lesson{--lc:var(--em)}
@@ -20,7 +41,7 @@
 .les-rail{display:flex;gap:8px;margin:30px 0 22px;flex-wrap:wrap;position:sticky;top:70px;z-index:5;
   background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(8px);padding:8px 0}
 .les-tab{display:flex;align-items:center;gap:9px;padding:9px 14px;border-radius:12px;border:1px solid var(--line);
-  background:var(--panel);cursor:pointer;color:var(--dim);transition:color .2s,border-color .2s,background .2s,transform .12s var(--ease-out)}
+  min-height:44px;background:var(--panel);cursor:pointer;color:var(--dim);transition:color .2s,border-color .2s,background .2s,transform .12s var(--ease-out)}
 .les-tab:hover{color:var(--ink)} .les-tab:active{transform:scale(.97)}
 .les-tab .les-g{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--dc)}
 .les-tab .les-ic{font-size:13px;color:var(--dc)}
@@ -32,7 +53,8 @@
 /* lens stage */
 .les-stage{min-height:340px}
 .les-lens{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);padding:clamp(22px,3vw,34px);
-  animation:lensIn .4s var(--ease-out)}
+  animation:lensIn .18s var(--ease-out)}
+.les-instant .les-lens{animation:none}
 @keyframes lensIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .les-lenshd{display:flex;align-items:center;gap:14px;margin-bottom:18px}
 .les-lg{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-family:var(--mono);
@@ -74,8 +96,8 @@
 .les-opt.right{border-color:var(--em);background:color-mix(in srgb,var(--em) 14%,transparent);color:var(--ink)}
 .les-opt.wrong{border-color:var(--rose);background:color-mix(in srgb,var(--rose) 12%,transparent);color:var(--ink)}
 .les-opt.muted{opacity:.5}
-.les-why{max-height:0;overflow:hidden;opacity:0;transition:max-height .5s var(--ease-out),opacity .4s;margin-top:0}
-.les-why.show{max-height:320px;opacity:1;margin-top:18px}
+.les-why{max-height:0;overflow:hidden;opacity:0;margin-top:0}
+.les-why.show{max-height:none;opacity:1;margin-top:18px}
 .les-verdict{font-weight:700;font-size:15px;margin-bottom:8px}
 .les-verdict.ok{color:var(--em)} .les-verdict.no{color:var(--rose)}
 .les-why p{color:var(--dim);font-size:15px;line-height:1.65;max-width:640px}
@@ -103,3 +125,4 @@
 .les-exam h4{color:var(--amber)} .les-exam p{color:var(--dim);font-size:14.5px;line-height:1.6;max-width:720px}
 .les-conn{display:flex;flex-wrap:wrap;gap:8px}
 .les-next{display:flex;flex-wrap:wrap;gap:12px;margin-top:10px;padding-top:22px;border-top:1px solid var(--line)}
+@media(prefers-reduced-motion:reduce){.les-lens{animation:none}.les-tab,.cell-tab,.les-fickbar i{transition:none}.les-tab:active,.cell-tab:active{transform:none}}

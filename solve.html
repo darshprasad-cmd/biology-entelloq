@@ -999,6 +999,22 @@ const BOARD_NAME={NEET:"NEET",CBSE:"CBSE",AP:"AP Biology",OLY:"Olympiad"};
 const MODES=[["practice","Practice","Instant feedback + explanations"],["timed","Timed","Beat the clock, review at the end"],["adaptive","Adaptive","Difficulty follows your accuracy"]];
 
 let CFG=Object.assign({},DEFAULT_CFG,store.get("cfg",{}));
+const TOPIC_FRAGMENTS={cell:"Cell Biology",genetics:"Genetics & DNA",physiology:"Human Physiology",evolution:"Evolution",ecology:"Ecology",microbio:"Microbiology"};
+function topicFromFragment(hash){
+  let slug;try{slug=decodeURIComponent(String(hash||"").replace(/^#/,"")).toLowerCase();}catch(e){return null;}
+  return Object.prototype.hasOwnProperty.call(TOPIC_FRAGMENTS,slug)?TOPIC_FRAGMENTS[slug]:null;
+}
+function applyTopicFragment(hash){
+  const topic=topicFromFragment(hash);if(!topic)return false;
+  CFG.topic=topic;return true;
+}
+function syncConfigRadios(){
+  $$('[role="radiogroup"]',root).forEach(group=>{
+    const options=$$('.sv-opt[data-group]',group);
+    const selected=options.find(option=>option.getAttribute("aria-checked")==="true")||options[0];
+    options.forEach(option=>{option.tabIndex=option===selected?0:-1;});
+  });
+}
 
 /* ============================================================================
    START SCREEN
@@ -1110,7 +1126,7 @@ function renderStart(){
       </div>
     </div>
   </section>`;
-  updateSummary();
+  syncConfigRadios();updateSummary();
   window.__observeReveals&&window.__observeReveals();
 }
 function updateSummary(){
@@ -1548,12 +1564,29 @@ function handleAction(act,el){
   }
 }
 function wireGlobal(){
+  root.addEventListener("keydown",e=>{
+    if(e.altKey||e.ctrlKey||e.metaKey)return;
+    if(!["ArrowRight","ArrowDown","ArrowLeft","ArrowUp","Home","End"].includes(e.key))return;
+    const opt=e.target.closest('.sv-opt[data-group][role="radio"]');
+    if(!opt||!root.contains(opt))return;
+    const group=opt.closest('[role="radiogroup"]');if(!group)return;
+    const options=$$('.sv-opt[data-group]:not(:disabled)',group);const current=options.indexOf(opt);if(current<0)return;
+    let next;if(e.key==="Home")next=0;else if(e.key==="End")next=options.length-1;
+    else next=(current+(["ArrowRight","ArrowDown"].includes(e.key)?1:-1)+options.length)%options.length;
+    e.preventDefault();options[next].focus();options[next].click();
+  });
+  addEventListener("hashchange",()=>{
+    if(!applyTopicFragment(location.hash))return;
+    // A link changes the next session's topic, never an in-flight answer or timer.
+    if($("#svConfigCard",root))renderStart();
+    else toast("Next session topic: "+CFG.topic+". Your current view is unchanged.");
+  });
   document.addEventListener("click",e=>{
     const a=e.target.closest("[data-act]");
     if(a){e.preventDefault();handleAction(a.dataset.act,a);return;}
     const opt=e.target.closest(".sv-opt[data-group]");
-    if(opt){const g=opt.dataset.group;let v=opt.dataset.val;if(g==="diff"||g==="count")v=+v;CFG[g]=v;
-      const grp=opt.parentElement;$$(".sv-opt",grp).forEach(o=>{const on=o===opt;o.classList.toggle("on",on);o.setAttribute("aria-checked",on);});
+    if(opt&&root.contains(opt)){const g=opt.dataset.group;let v=opt.dataset.val;if(g==="diff"||g==="count")v=+v;CFG[g]=v;
+      const grp=opt.parentElement;$$(".sv-opt",grp).forEach(o=>{const on=o===opt;o.classList.toggle("on",on);o.setAttribute("aria-checked",on);o.tabIndex=on?0:-1;});
       updateSummary();return;}
     const sv=e.target.closest("[data-sv]");
     if(sv){const k=sv.getAttribute("data-sv");
@@ -1565,7 +1598,7 @@ function wireGlobal(){
 }
 
 /* ---- boot ---- */
-function init(){wireGlobal();renderStart();}
+function init(){wireGlobal();applyTopicFragment(location.hash);renderStart();}
 
 return {start:init};
 })();

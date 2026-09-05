@@ -1,0 +1,12 @@
+{
+  "phase": "after",
+  "base": "http://127.0.0.1:3002",
+  "completed": true,
+  "reducedMotion": true,
+  "labRequestsBlocked": 1,
+  "observations": [],
+  "checks": [
+    "Home screenshots refreshed after copy-only edits; no full interaction suite rerun."
+  ],
+  "errors": []
+}

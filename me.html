@@ -542,6 +542,11 @@ const LAB="./lab.html";
 const UNIVERSE="./universe.html";
 
 function topicBySlug(s){return TOPICS.find(t=>t.slug===s)||null;}
+function topicRecommendation(slug){
+  if(slug==="molecular")return{href:"./lessons.html#enzyme",cta:"Open Enzyme Action",lesson:true};
+  if(slug==="neuro")return{href:"./lessons.html#actionpotential",cta:"Open The Action Potential",lesson:true};
+  return{href:SOLVE+"#"+slug,cta:"Practise in Solve",lesson:false};
+}
 /* map free-text topic labels onto our slugs */
 function normalizeSlug(x){
   if(!x)return null;
@@ -751,8 +756,8 @@ function buildRecs(d){
   function push(r){if(recs.length<4)recs.push(r);}
 
   const firstWeak = weakList[0] || (scored[0]&&scored[0].pct<80?scored[0].slug:null);
-  if(firstWeak){const t=topicBySlug(firstWeak);if(t){used[t.slug]=1;
-    push({icon:t.icon,title:"Revisit "+t.name,sub:"Your practice points here as the softest spot — one more pass will help.",cta:"Practise in Solve",href:SOLVE+"#"+t.slug});}}
+  if(firstWeak){const t=topicBySlug(firstWeak);if(t){used[t.slug]=1;const next=topicRecommendation(t.slug);
+    push({icon:t.icon,title:"Revisit "+t.name,sub:next.lesson?"Your practice points here — revisit the linked lesson and its interactive explanation.":"Your practice points here as the softest spot — one more pass will help.",cta:next.cta,href:next.href});}}
 
   const dseen=d.seen||{};
   if(!dseen.lab)
@@ -765,8 +770,8 @@ function buildRecs(d){
 
   if(scored.length){
     const best=scored[scored.length-1];
-    if(best.pct>=70&&!used[best.slug]){const t=topicBySlug(best.slug);if(t)
-      push({icon:t.icon,title:"Go deeper in "+t.name,sub:"You're strong here — push into harder material while it's warm.",cta:"Continue",href:SOLVE+"#"+t.slug});}
+    if(best.pct>=70&&!used[best.slug]){const t=topicBySlug(best.slug);if(t){const next=topicRecommendation(t.slug);
+      push({icon:t.icon,title:"Go deeper in "+t.name,sub:next.lesson?"Connect your practice to a lesson with an interactive explanation.":"You're strong here — push into harder material while it's warm.",cta:next.lesson?next.cta:"Continue",href:next.href});}}
   }
   /* always leave a way into the map */
   if(recs.length<4)
