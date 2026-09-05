@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  static:
+    name: Static site checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - run: python -m unittest discover -s tests
+      - name: Preserve deploy invariants
+        run: |
+          test -f index.html
+          test -f CNAME
+          grep -q "biology.entelloq.com" CNAME
+          if grep -riE "coming soon|lorem ipsum" --include="*.html" .; then
+            echo "::error::placeholder language found"
+            exit 1
+          fi
+      - name: Reject committed secrets
+        run: |
+          if git ls-files | grep -E '(^|/)\.env($|\.local$)'; then
+            echo "::error::committed environment file found"
+            exit 1
+          fi
