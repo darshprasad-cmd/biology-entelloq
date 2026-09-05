@@ -204,6 +204,106 @@
   }
 
   // ── shell chrome ────────────────────────────────────────────────────────────
+  // Save only the last lens and the first prediction for each lesson. This is
+  // a reading aid, not a mastery score or a snapshot of any simulation.
+  function createLessonProgress(lessons, lenses, getStorage) {
+    const key = "bioq_lessons_v1";
+    const version = 1;
+    const known = new Map(lessons.map((lesson) => [lesson.id, lesson]));
+    const lensKeys = new Set(lenses.map((lens) => lens.k));
+    const signatures = new Map(lessons.map((lesson) => [lesson.id, JSON.stringify(lesson.lenses.predict)]));
+    let records = Object.create(null);
+    let pending = Object.create(null);
+    let saved = false;
+    let available = true;
+    const plain = (value) => value && typeof value === "object" && !Array.isArray(value);
+    function sanitize(value) {
+      const clean = Object.create(null);
+      if (!plain(value) || value.version !== version || !plain(value.lessons)) return clean;
+      for (const [id, lesson] of known) {
+        if (!Object.prototype.hasOwnProperty.call(value.lessons, id)) continue;
+        const entry = value.lessons[id];
+        if (!plain(entry)) continue;
+        const prediction = entry.signature === signatures.get(id) && Number.isInteger(entry.prediction)
+          && entry.prediction >= 0 && entry.prediction < lesson.lenses.predict.o.length ? entry.prediction : null;
+        clean[id] = { lens: lensKeys.has(entry.lens) ? entry.lens : "experience", prediction, signature: signatures.get(id) };
+      }
+      return clean;
+    }
+    function emptyRecord(id) { return { lens: "experience", prediction: null, signature: signatures.get(id) }; }
+    function storedRecords() {
+      const raw = getStorage().getItem(key);
+      try { return raw ? sanitize(JSON.parse(raw)) : Object.create(null); }
+      catch (error) { return Object.create(null); /* Malformed text is never rendered. */ }
+    }
+    try { records = storedRecords(); saved = Object.keys(records).length > 0; }
+    catch (error) { available = false; }
+    function read(id) {
+      if (!known.has(id)) return null;
+      const entry = records[id] || emptyRecord(id);
+      return { ...entry };
+    }
+    function refresh() {
+      try {
+        const fresh = storedRecords();
+        // Merge changed fields, not this tab's old snapshot. A lens-only change
+        // must preserve another tab's first answer and every unrelated lesson.
+        for (const [id, change] of Object.entries(pending)) {
+          const entry = fresh[id] || emptyRecord(id);
+          if (Object.prototype.hasOwnProperty.call(change, "lens")) entry.lens = change.lens;
+          if (change.prediction) {
+            const action = change.prediction;
+            if (action.kind === "reset") entry.prediction = null;
+            else if (action.afterReset || entry.prediction === null) entry.prediction = action.value;
+          }
+          fresh[id] = entry;
+        }
+        records = fresh; return true;
+      } catch (error) { saved = false; available = false; return false; }
+    }
+    function persist() {
+      // Do not overwrite an unreadable snapshot. Pending field changes stay in
+      // memory and are merged when browser storage becomes available again.
+      if (!refresh()) return;
+      try {
+        getStorage().setItem(key, JSON.stringify({ version, lessons: records }));
+        pending = Object.create(null);
+        saved = true; available = true;
+      } catch (error) { saved = false; available = false; }
+    }
+    return {
+      read,
+      setLens(id, lens) {
+        const entry = read(id); if (!entry || !lensKeys.has(lens)) return false;
+        (pending[id] ||= {}).lens = lens;
+        records[id] = { ...entry, lens }; persist(); return true;
+      },
+      answer(id, prediction) {
+        const lesson = known.get(id);
+        if (!lesson || !Number.isInteger(prediction)
+          || prediction < 0 || prediction >= lesson.lenses.predict.o.length) return false;
+        refresh();
+        const entry = read(id); if (entry.prediction !== null) return false;
+        const change = pending[id] ||= {};
+        const afterReset = change.prediction?.kind === "reset" || change.prediction?.afterReset === true;
+        change.prediction = { kind: "answer", value: prediction, afterReset };
+        records[id] = { ...entry, prediction }; persist();
+        return records[id].prediction === prediction;
+      },
+      resetPrediction(id) {
+        if (!known.has(id)) return false;
+        refresh();
+        const entry = read(id); if (!entry || entry.prediction === null) return false;
+        (pending[id] ||= {}).prediction = { kind: "reset" };
+        records[id] = { ...entry, prediction: null }; persist(); return true;
+      },
+      get status() {
+        if (!available) return "This visit only — browser storage is unavailable. Lens and prediction are kept until you leave or reload. Simulations restart when reopened.";
+        return (saved ? "Saved on this device: " : "Saved as you go on this device: ") + "your last lens and prediction only. Simulations restart when reopened; this is not a mastery score.";
+      },
+    };
+  }
+  const lessonProgress = createLessonProgress(LESSONS, LENSES, () => window.localStorage);
   const app = document.getElementById("lessonApp");
   let animStop = null;              // cancel fn for the active lens animation
   function clearAnim() { if (animStop) { try { animStop(); } catch (e) {} animStop = null; } }
@@ -281,7 +381,7 @@
   // ── lesson view ──────────────────────────────────────────────────────────────
   function renderLesson(l) {
     app.innerHTML = "";
-    let active = "experience";
+    let active = lessonProgress.read(l.id).lens;
     const root = el("div", "wrap band les-lesson");
     root.style.setProperty("--lc", l.color);
     root.innerHTML = `
@@ -294,6 +394,7 @@
         <div class="les-orientation">
           <span class="les-guide-label">Your aim</span><p>${LESSON_AIMS[l.id]}</p>
           <div class="les-readingroute"><span>First time? Follow A → F.</span><span>Revising? Start with Predict, then check the explanation.</span></div>
+          <p class="les-save-status" id="lesson-save-status" role="status" aria-live="polite"></p>
         </div>
       </div>
       <div class="les-rail" role="tablist" aria-label="Lenses">
@@ -314,15 +415,18 @@
     app.appendChild(root);
     const stage = $("#lensStage", root);
     const tabs = [...root.querySelectorAll(".les-tab")];
+    function updateSaveStatus() { $("#lesson-save-status", root).textContent = lessonProgress.status; }
     function show(k, keyboard = false) {
       active = k; clearAnim();
+      lessonProgress.setLens(l.id, k);
       tabs.forEach((t) => {
         const selected = t.dataset.lens === k;
         t.classList.toggle("on", selected); t.setAttribute("aria-selected", String(selected)); t.tabIndex = selected ? 0 : -1;
       });
       stage.setAttribute("aria-labelledby", "lesson-tab-" + k);
       stage.classList.toggle("les-instant", keyboard);
-      stage.innerHTML = ""; stage.appendChild(renderLens(l, k));
+      stage.innerHTML = ""; stage.appendChild(renderLens(l, k, updateSaveStatus));
+      updateSaveStatus();
       if (window.__observeReveals) window.__observeReveals();
     }
     tabs.forEach((t) => t.addEventListener("click", (e) => show(t.dataset.lens, e.detail === 0)));
@@ -335,11 +439,11 @@
       if (next < 0) return;
       e.preventDefault(); show(LENSES[next].k, true); tabs[next].focus();
     });
-    show("experience");
+    show(active);
   }
 
   // ── per-lens content ─────────────────────────────────────────────────────────
-  function renderLens(l, k) {
+  function renderLens(l, k, onProgressChange) {
     const d = l.lenses[k];
     const meta = LENSES.find((x) => x.k === k);
     const box = el("div", "les-lens");
@@ -352,13 +456,42 @@
       queueMicrotask(() => { if (!box.isConnected) return; const host = $("#mnt", box); animStop = (BUILD[d.mount] || (() => {}))(host, l); });
     } else if (k === "predict") {
       box.innerHTML = headHTML + `<div class="les-q">${d.q}</div><div class="les-opts">${d.o.map((o, i) => `<button class="les-opt" data-i="${i}">${o}</button>`).join("")}</div><div class="les-why" id="why" role="status" aria-live="polite"></div>`;
-      const opts = [...box.querySelectorAll(".les-opt")]; let done = false;
+      const opts = [...box.querySelectorAll(".les-opt")];
+      const previous = lessonProgress.read(l.id).prediction;
+      let done = previous !== null;
+      function showAnswer(index, focus = false) {
+        opts.forEach((option, choice) => {
+          option.classList.add(choice === d.a ? "right" : (choice === index ? "wrong" : "muted")); option.disabled = true;
+          const label = choice === d.a ? "Correct answer" + (choice === index ? " · Your choice" : "")
+            : choice === index ? "Your choice · Review the explanation" : "Not selected";
+          option.setAttribute("aria-label", `${option.textContent}. ${label}.`);
+          option.appendChild(el("span", "les-answer-label", label));
+        });
+        const why = $("#why", box); why.innerHTML = `<div class="les-verdict ${index === d.a ? "ok" : "no"}">${index === d.a ? "✓ Exactly." : "✗ Not quite."}</div><p>${d.why}</p><button class="btn ghost les-retry" type="button">Try prediction again</button>`;
+        why.classList.add("show"); why.tabIndex = -1;
+        $(".les-retry", why).addEventListener("click", () => {
+          if (!lessonProgress.resetPrediction(l.id) && lessonProgress.read(l.id).prediction !== null) return;
+          done = false;
+          opts.forEach((option, choice) => {
+            option.disabled = false; option.classList.remove("right", "wrong", "muted");
+            option.removeAttribute("aria-label"); option.innerHTML = d.o[choice];
+          });
+          why.innerHTML = ""; why.classList.remove("show"); why.removeAttribute("tabindex");
+          if (onProgressChange) onProgressChange();
+          opts[0].focus({ preventScroll: true }); opts[0].scrollIntoView({ block: "nearest", behavior: "instant" });
+        });
+        if (focus) { why.focus({ preventScroll: true }); why.scrollIntoView({ block: "nearest", behavior: "instant" }); }
+      }
       opts.forEach((b) => b.addEventListener("click", () => {
-        if (done) return; done = true; const i = +b.dataset.i;
-        opts.forEach((o, j) => { o.classList.add(j === d.a ? "right" : (j === i ? "wrong" : "muted")); o.disabled = true; });
-        const why = $("#why", box); why.innerHTML = `<div class="les-verdict ${i === d.a ? "ok" : "no"}">${i === d.a ? "✓ Exactly." : "✗ Not quite."}</div><p>${d.why}</p>`;
-        why.classList.add("show");
+        if (done) return; const index = +b.dataset.i;
+        if (!lessonProgress.answer(l.id, index)) {
+          const savedPrediction = lessonProgress.read(l.id).prediction;
+          if (savedPrediction !== null) { done = true; showAnswer(savedPrediction, true); if (onProgressChange) onProgressChange(); }
+          return;
+        }
+        done = true; showAnswer(index, true); if (onProgressChange) onProgressChange();
       }));
+      if (done) showAnswer(previous);
     } else if (k === "visual") {
       box.innerHTML = headHTML + `<h3 class="h3" style="margin-bottom:14px">${d.title}</h3><ul class="les-vis">${d.pts.map((p) => `<li>${p}</li>`).join("")}</ul>`;
     } else if (k === "math") {

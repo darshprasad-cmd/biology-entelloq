@@ -25,6 +25,7 @@
 .les-orientation{margin-top:24px;padding:18px 20px;border-left:2px solid var(--lc);border-radius:0 12px 12px 0;background:var(--panel)}
 .les-orientation>p{margin:8px 0 12px;color:var(--ink);font-size:15px;line-height:1.6}
 .les-readingroute{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12px;line-height:1.6;color:var(--dim)}
+.les-orientation>.les-save-status{margin:12px 0 0;padding-top:12px;border-top:1px solid var(--line);color:var(--dim);font-size:12px;line-height:1.6}
 #lessonApp :is(a,button,input,select,[role=tabpanel]):focus-visible{outline:2px solid var(--em);outline-offset:4px}
 @media(max-width:1050px){.les-filterfields{grid-template-columns:1fr 1fr}.les-search{grid-column:1/-1}.les-clear{grid-column:1/-1;justify-self:start}}
 @media(max-width:480px){.les-filters{padding:16px}.les-filterfields{gap:12px}.les-filtermeta{display:block}.les-filtermeta>span{display:block;margin-top:5px}.les-orientation{padding:16px}.les-readingroute{display:block}.les-readingroute span{display:block;margin-top:4px}}
@@ -96,8 +97,13 @@
 .les-opt.right{border-color:var(--em);background:color-mix(in srgb,var(--em) 14%,transparent);color:var(--ink)}
 .les-opt.wrong{border-color:var(--rose);background:color-mix(in srgb,var(--rose) 12%,transparent);color:var(--ink)}
 .les-opt.muted{opacity:.5}
+.les-opt:disabled{cursor:default}
+.les-answer-label{display:block;margin-top:7px;font-family:var(--mono);font-size:10.5px;line-height:1.5;color:inherit}
+.les-retry{min-height:44px;margin-top:14px}
+.les-retry:focus-visible{transform:none;transition:none}
 .les-why{max-height:0;overflow:hidden;opacity:0;margin-top:0}
 .les-why.show{max-height:none;opacity:1;margin-top:18px}
+.les-why:focus{outline:2px solid var(--em);outline-offset:5px;border-radius:4px}
 .les-verdict{font-weight:700;font-size:15px;margin-bottom:8px}
 .les-verdict.ok{color:var(--em)} .les-verdict.no{color:var(--rose)}
 .les-why p{color:var(--dim);font-size:15px;line-height:1.65;max-width:640px}

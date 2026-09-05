@@ -1,0 +1,16 @@
+{
+  "base": "http://127.0.0.1:3002",
+  "baseCommit": "50bcfb0ea089199f74a51472105e6c3f16d557d4",
+  "phase": "local-followup",
+  "timestamp": "2026-09-05T16:24:18.416Z",
+  "complete": true,
+  "http": [],
+  "checks": [
+    "Landing: first keyboard stop skips to one main landmark; native FAQ opens/closes by keyboard and fits mobile.",
+    "Embedded shortcut: Ctrl+K and Meta+K open only parent search and Escape restores the exact lesson input and its text.",
+    "Lesson resume: exact last lens and prediction survive return/reload, textual feedback and explicit retake work, lessons remain independent, malformed/stale data recovers.",
+    "Denied storage: mobile lesson remains usable and labels progress as this visit only; no false saved-state claim."
+  ],
+  "errors": [],
+  "blockedLabRequests": 5
+}

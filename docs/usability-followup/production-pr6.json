@@ -1,0 +1,73 @@
+{
+  "base": "https://biology.entelloq.com",
+  "commit": "50bcfb0ea089199f74a51472105e6c3f16d557d4",
+  "phase": "production-pr6",
+  "timestamp": "2026-09-05T16:14:47.227Z",
+  "complete": true,
+  "http": [
+    {
+      "file": "app.html",
+      "status": 200,
+      "bytes": 137606,
+      "gitBlob": "2626ff24240381b7415857d0d3119ea0f28eb06a",
+      "expected": "2626ff24240381b7415857d0d3119ea0f28eb06a",
+      "matches": true
+    },
+    {
+      "file": "lessons.html",
+      "status": 200,
+      "bytes": 186890,
+      "gitBlob": "cdd156e901da6a22095d7832f488d788e642dbe0",
+      "expected": "cdd156e901da6a22095d7832f488d788e642dbe0",
+      "matches": true
+    },
+    {
+      "file": "solve.html",
+      "status": 200,
+      "bytes": 217292,
+      "gitBlob": "8b2c1ba179239f1f0896cb5625347be9a877cba4",
+      "expected": "8b2c1ba179239f1f0896cb5625347be9a877cba4",
+      "matches": true
+    },
+    {
+      "file": "lab.html",
+      "status": 200,
+      "bytes": 2541644,
+      "gitBlob": "e336a89fafc95b041b5ec1531db13f2ea9a39b45",
+      "expected": "e336a89fafc95b041b5ec1531db13f2ea9a39b45",
+      "matches": true
+    }
+  ],
+  "checks": [
+    "Four HTTPS artifacts match the requested Git commit, including the unchanged lab fetched as bytes only.",
+    "Production Home renders and keyboard search navigates to the Enzyme Action lesson.",
+    "Production Lessons search has a recoverable empty state and all nine original lessons.",
+    "Production Solve accepts topic deep links and keyboard configuration, session start, explanation and next question.",
+    "Production mobile Home fits the viewport; no uncaught errors across the smoke."
+  ],
+  "errors": [],
+  "blockedLabRequests": 1,
+  "workflows": [
+    {
+      "id": 33977065416,
+      "name": "Deploy to GitHub Pages",
+      "status": "pending",
+      "conclusion": null,
+      "url": "https://github.com/darshprasad-cmd/biology-entelloq/actions/runs/33977065416"
+    },
+    {
+      "id": 33977065433,
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/darshprasad-cmd/biology-entelloq/actions/runs/33977065433"
+    },
+    {
+      "id": 33977064918,
+      "name": "pages build and deployment",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/darshprasad-cmd/biology-entelloq/actions/runs/33977064918"
+    }
+  ]
+}

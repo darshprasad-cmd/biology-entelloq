@@ -578,6 +578,14 @@ function useShellNavigation(){
     const style=doc.createElement("style");style.id="shell-navigation-owner";
     style.textContent="body.embed #eqx-fab,body.embed #eqx-panel{display:none!important}";
     doc.head.appendChild(style);
+    // Keyboard events do not bubble out of an iframe. Capture this one shortcut
+    // before a section's standalone palette handles it, so the unified app has
+    // one search index and Escape returns to the exact control the reader used.
+    doc.defaultView.addEventListener("keydown",event=>{
+      if(event.altKey||!(event.ctrlKey||event.metaKey)||event.key.toLowerCase()!=="k")return;
+      event.preventDefault();event.stopImmediatePropagation();
+      openCmdk(event,doc.activeElement);
+    },true);
   }catch(error){/* Standalone file previews may disallow same-origin access. */}
 }
 function failSection(k, sub, why){
@@ -818,9 +826,9 @@ const CMDS=[
    kw:"dissection frog heart fish earthworm cockroach human scalpel anatomy specimen"},
 ];
 let csel=0,cflat=[],ctrig=null;
-function openCmdk(event){
+function openCmdk(event,returnFocus=document.activeElement){
   if(cmdk.classList.contains("on"))return;
-  ctrig=document.activeElement;
+  ctrig=returnFocus;
   cmdk.classList.toggle("keyboard-open",event?.type==="keydown"||event?.detail===0);
   cmdk.classList.add("on");cin.setAttribute("aria-expanded","true");cin.value="";render("");cin.focus();
 }
