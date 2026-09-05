@@ -817,9 +817,9 @@ const OBJECTIVES = {
   frog: [
     { id: 'pin', text: 'Pin the frog out by its four limbs so the body wall comes under tension.',
       hint: 'Pins tool (4). Grip on each limb.',
-      done: (s) => s.pinned.size >= 4 },
+      done: (s) => !!(s.pinning && s.pinning.continued) },
     { id: 'skin', text: 'Make a <b>midline incision</b> through the skin, from chest to vent.',
-      hint: 'Scalpel (3). Hold your grip and draw one smooth stroke — do not saw.',
+      hint: 'Scalpel (2). Hold your grip and draw one smooth stroke — do not saw.',
       done: (s) => s.incisions.has('skin') && s.incisions.get('skin').length > 1.1 },
     { id: 'reflect', text: 'Reflect the skin flaps to expose the muscle wall.',
       hint: 'Forceps (2 hands: 3). Grip the cut edge and draw it aside.',
@@ -1053,6 +1053,7 @@ export function buildShell(root) {
 
   function refreshObjective(state) {
     const sid = spec && spec.id;
+    if (sid === 'frog' && state.pinning && !state.pinning.continued) objIdx = 0;
     const list = OBJECTIVES[sid]
       || (typeof SPECIMEN_OBJECTIVES !== 'undefined' && SPECIMEN_OBJECTIVES[sid])
       || [];
@@ -1064,11 +1065,13 @@ export function buildShell(root) {
     dots.forEach((d, i) => { d.className = i < objIdx ? 'done' : (i === objIdx ? 'now' : ''); });
     if (objIdx >= list.length) {
       objBar.querySelector('#objn').textContent = 'Complete';
-      objBar.querySelector('#objtxt').innerHTML = SH_PHONE
+      objBar.querySelector('#objtxt').innerHTML = state.pinning && state.pinning.enabled
+        ? '<b>Dissection complete.</b> Open Help for your record and review questions.' : SH_PHONE
         ? '<b>Dissection complete.</b> The viva is in the console.'
         : '<b>Dissection complete.</b> Press V for the viva.';
       // A phone has no V and no L, so it is told where the two buttons are.
-      hint.innerHTML = SH_PHONE
+      hint.innerHTML = state.pinning && state.pinning.enabled
+        ? 'Open <b>Help</b> for review questions and your attempt record' : SH_PHONE
         ? 'Open the <b>console</b> for the viva and your record'
         : 'Press <b>V</b> for the viva · <b>L</b> for your record';
       if (objHint) objHint.innerHTML = hint.innerHTML;
@@ -1432,6 +1435,7 @@ export function buildShell(root) {
   setDrawer(false);
 
   document.addEventListener('keydown', (e) => {
+    if (document.body.classList.contains('frog-lab')) return;
     // While the student is typing prose, the app has no shortcuts at all.
     // Stopping here also stops main.js, whose listener is on window and so
     // runs after document in the bubble phase.
@@ -1696,6 +1700,8 @@ export function buildShell(root) {
 
   return {
     on, setTool, setStructure, setSpecimen, setHandState, showViva,
+    showRecord: () => { rec.classList.add('on'); rec.querySelector('#recclose')?.focus(); },
+    requestViva: () => fire('viva'),
     say: sayMsg,
     // The stored show-camera choice, so main.js can apply it to the overlay the
     // moment tracking starts rather than waiting for the first toggle.

@@ -26,10 +26,10 @@ OUT = os.path.join(ROOT, "dissection-lab.html")
 MODULES = ["hands.js", "anatomy.js", "frog.js", "heart.js",
            "earthworm.js", "fish.js", "cockroach.js",
            "surface.js", "strata.js",
-           "dissect.js", "softbody.js", "cutting.js", "blood.js", "constraints.js",
+           "pin-state.js", "dissect.js", "softbody.js", "cutting.js", "blood.js", "constraints.js",
            "instruments.js", "narrator.js", "sfx.js", "tutor.js", "histology.js",
            "imaging.js", "pathology.js", "physio.js", "xr.js", "zoomverse.js",
-           "env.js", "dust.js", "postfx.js", "intro.js", "handviz.js", "shell.js", "main.js"]
+           "env.js", "dust.js", "postfx.js", "intro.js", "handviz.js", "shell.js", "frog-stage.js", "frog-workspace.js", "main.js"]
 
 EXPORT_RE = re.compile(r"^export\s+(?=(const|let|var|function|async|class)\b)", re.M)
 EXPORT_BLOCK_RE = re.compile(r"^export\s*\{[^}]*\}\s*;?\s*$", re.M)

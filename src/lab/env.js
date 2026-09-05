@@ -312,6 +312,7 @@ export function setupEnvironment(THREE, deps, refs) {
       if (bloom && bloom.setSize) bloom.setSize(w, h);
     },
     setBloom(s) { if (bloom) bloom.strength = s; },
+    setVisible(on) { added.forEach(o => { o.visible = !!on; }); },
     // Exposed so postfx.js can splice its passes into the EXISTING chain (keeping
     // this bloom) rather than building a parallel composer and orphaning ours.
     // Undefined-safe: null when the addons failed to load, and postfx guards it.

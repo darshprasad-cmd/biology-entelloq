@@ -30,6 +30,63 @@ let histology = null, imaging = null, pathology = null;
 let physio = null, tutor = null, xr = null, zoomverse = null;
 let specimenId = null;
 let lastT = 0;
+let frogStage = null, frogWorkspace = null, frogAlternative = false;
+
+function frogExternal(part) { return !!part.mesh.userData.frogAuthored; }
+function frogWorkspaceAPI(fallback = false) {
+  return {
+    fallback, dissection: () => dissection, parts: () => parts,
+    tool: (t) => setTool(t),
+    view: (name, instant) => { if (frogStage) frogStage.preset(name, instant); },
+    quality: (q) => { if (frogStage) frogStage.setQuality(q); },
+    presentation: (name) => { if (blood) { blood.setIntensity(name === 'realistic' ? 0.35 : 0); blood.setEnabled(name === 'realistic'); } },
+    alternative: (on) => { frogAlternative = on; },
+    picker: () => { if (shell) shell.showPicker(); },
+    record: () => shell && shell.showRecord(),
+    viva: () => shell && shell.requestViva(),
+    hint: () => {
+      if (tutor) { if (tutor.pending) tutor.hint(); else tutor.ask(); }
+      else if (frogWorkspace) frogWorkspace.say('Place the pin near the end of each limb, inside its ring. Stabilize the belly wall without pinning a joint.');
+    },
+    restart: () => {
+      try { localStorage.removeItem('bioq-frog-pins-v1'); } catch (error) { /* In-memory restart remains available. */ }
+      if (fallback) {
+        if (frogWorkspace) frogWorkspace.dispose();
+        frogWorkspace = null; dissection.dispose(); startFrogFallback(document.getElementById('stage'));
+      } else loadSpecimen('frog');
+    },
+    restore: () => {
+      if (!dissection) return;
+      parts.forEach(p => {
+        p.mesh.userData.sysHidden = false;
+        p.mesh.visible = p.layer <= dissection.state.maxLayerRevealed && !dissection.state.removed.has(p.id);
+      });
+    },
+    structure: (id, explore) => {
+      const selected = parts.find(p => p.id === id);
+      if (!selected) return;
+      if (explore) parts.forEach(p => { p.mesh.visible = p.id === id; });
+      if (frogWorkspace) frogWorkspace.say(selected.name + ': ' + selected.note);
+    },
+  };
+}
+
+function startFrogFallback(root) {
+  // WebGL is optional for the first practical. The same Three geometry and pure
+  // pin validator run without a renderer; the accessible diagram owns the view.
+  scene = new THREE.Scene(); camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
+  const built = buildSpecimen(THREE, 'frog'); group = built.group; parts = built.parts;
+  scene.add(group); specimenId = 'frog';
+  dissection = createDissection(THREE, { scene, camera, group, parts,
+    pinning: built.pinning, specimenId: 'frog', requiresPinning: true,
+    onEvent: evt => { if (frogWorkspace) { frogWorkspace.update(); if (evt.text) frogWorkspace.say(evt.text, evt.kind === 'pin-rejected'); } },
+  });
+  currentTool = 'pins'; dissection.setTool('pins');
+  root.setAttribute('aria-label', '3D unavailable; accessible practical active');
+  frogWorkspace = createFrogWorkspace(frogWorkspaceAPI(true));
+  window.__LAB = { ok: true, fallback: true, dissection, parts, camera, THREE,
+    setTool, loadSpecimen: () => {}, };
+}
 
 // The abstract input the dissection engine consumes. Long-lived and mutated in
 // place — reallocating this every frame at 60fps is exactly the kind of garbage
@@ -131,6 +188,7 @@ function bootScene(root) {
     if (handViz) handViz.resize();
     if (imaging) imaging.resize(innerWidth, innerHeight);
     if (zoomverse) zoomverse.resize(innerWidth, innerHeight);
+    if (frogStage) frogStage.resize();
   }
   addEventListener('resize', relayout);
 
@@ -381,7 +439,7 @@ const _camRightV = new THREE.Vector3();
 const _camUpV = new THREE.Vector3();
 
 function applyCameraLife(dt, interacting) {
-  if (camLife.reduced) return;
+  if (camLife.reduced || specimenId === 'frog') return;
   const target = interacting ? 0 : 1;
   // Falls fast when you engage (12ms to mostly-still), rises slowly when you let
   // go (~1.5s) so the drift eases back in rather than lurching.
@@ -451,7 +509,7 @@ const TCH = {
 // must not also be cutting the specimen hidden underneath. The ones that are
 // display:none when shut need no guard — an invisible element is not a hit
 // target — so only the two that merely fade out carry a state selector.
-const TCH_CHROME = '.chrome, #pick:not(.gone), #coldopen, #viva.on, #keys.on, #his, #zoomverse';
+const TCH_CHROME = '.chrome, #frog-workspace, #pick:not(.gone), #coldopen, #viva.on, #keys.on, #his, #zoomverse';
 
 function tchScene(e) {
   return !(e.target && e.target.closest && e.target.closest(TCH_CHROME));
@@ -463,6 +521,10 @@ function tchHitsSpecimen(clientX, clientY) {
   // the frame (see tick), so while one is up nothing is touchable and every
   // finger belongs to the camera.
   if (imaging && imaging.mode && imaging.mode() !== 'off') return false;
+  if (specimenId === 'frog' && currentTool === 'pins' && dissection.projectPin) {
+    const projected = dissection.projectPin(clientX / innerWidth, clientY / innerHeight);
+    if (projected && projected.valid) return true;
+  }
   return !!dissection.pick(clientX / innerWidth, clientY / innerHeight);
 }
 
@@ -471,6 +533,7 @@ function tchDown(e) {
   if (!tchScene(e)) return;
   TCH.ids.add(e.pointerId);
   if (TCH.ids.size > 1) {
+    TCH.pinPending = null;
     // A second finger means the camera, whatever the first one was doing. If
     // that first finger was cutting, the stroke ENDS here rather than being
     // dragged sideways by the zoom — which is exactly what letting go of the
@@ -483,6 +546,10 @@ function tchDown(e) {
   mouse.x = e.clientX / innerWidth;
   mouse.y = e.clientY / innerHeight;
   mouse.down = true;
+  if (specimenId === 'frog' && currentTool === 'pins') {
+    TCH.pinPending = { id: e.pointerId, x: e.clientX, y: e.clientY };
+    mouse.down = false; // Commit a tap on release, not a possibly missed RAF.
+  }
   e.stopPropagation();                     // keep it away from OrbitControls
 }
 
@@ -491,6 +558,13 @@ function tchDown(e) {
 // without this the instrument would stay gripped forever afterwards.
 function tchUp(e) {
   if (e.pointerType !== 'touch') return;
+  const pending = TCH.pinPending;
+  if (pending && pending.id === e.pointerId) {
+    TCH.pinPending = null;
+    if (e.type !== 'pointercancel' && TCH.ids.size === 1 && Math.hypot(e.clientX - pending.x, e.clientY - pending.y) < 12) {
+      commitFrogPin(e.clientX, e.clientY, 'touch');
+    }
+  }
   TCH.ids.delete(e.pointerId);
   if (TCH.claimed === e.pointerId) { TCH.claimed = -1; mouse.down = false; }
 }
@@ -598,6 +672,11 @@ function routeInput() {
 
 /* ---- events from the dissection engine -> everyone --------------------- */
 function onEvent(evt) {
+  if (/^pin-(state|preview|rejected)$/.test(evt.kind) || evt.kind === 'tool-refused') {
+    if (shell && dissection) shell.checkObjectives(dissection.state);
+    if (frogWorkspace) { frogWorkspace.update(); if (evt.text && evt.kind !== 'pin-preview') frogWorkspace.say(evt.text, /rejected|refused/.test(evt.kind)); }
+    return;
+  }
   shell.pushEvent(evt);
   if (narrator) narrator.observe(evt);
 
@@ -622,7 +701,7 @@ function onEvent(evt) {
   if (cutting && evt.kind === 'peel') cutting.gape(evt.partId, 1);
 
   // Injury bleeds harder than a clean cut, and a torn artery is not a graze.
-  if (blood && dissection && dissection.contact && /damage|incise/.test(evt.kind)) {
+  if (blood && dissection && dissection.contact && /damage|incise/.test(evt.kind) && !(evt.meta && evt.meta.refused)) {
     const c = dissection.contact;
     const hard = evt.kind === 'damage';
     blood.bleed({
@@ -666,6 +745,7 @@ function onEvent(evt) {
 
   // The tutor watches everything, and decides for itself when to speak.
   if (tutor) tutor.observe(evt, dissection.state);
+  if (frogWorkspace) { frogWorkspace.update(); if (evt.text && evt.kind !== 'hover') frogWorkspace.say(evt.text, evt.kind === 'damage'); }
 }
 
 /* ---- contextual depth --------------------------------------------------- *
@@ -715,6 +795,7 @@ function setPhysiology(on) {
 }
 
 function doAction(id) {
+  if (specimenId === 'frog') return;
   const h = dissection && dissection.hovered;
   if (id === 'histology') {
     // Route through the same path the Z key uses so there is exactly one
@@ -749,6 +830,7 @@ function doAction(id) {
  * case changes, never after. Hence: dispose, mutate, rebuild — in that order.
  */
 function setCase(caseId) {
+  if (specimenId === 'frog') return null;
   if (!pathology) return null;
   if (soft) { soft.dispose(); soft = null; }
   const r = caseId ? pathology.apply(caseId) : (pathology.clear(), null);
@@ -763,6 +845,9 @@ function setCase(caseId) {
 
 /* ---- specimen lifecycle ------------------------------------------------ */
 function loadSpecimen(id) {
+  if (frogWorkspace) { frogWorkspace.dispose(); frogWorkspace = null; }
+  frogAlternative = false;
+  const oldGroup = group;
   if (group) { scene.remove(group); group = null; }
   if (dissection) { dissection.dispose(); dissection = null; }
   if (imaging) { imaging.dispose(); imaging = null; }          // it caches part meshes
@@ -773,6 +858,14 @@ function loadSpecimen(id) {
   if (strata) { strata.dispose(); strata = null; }
   if (cutting) cutting.clear();
   if (blood) blood.clear();
+  if (soft) { soft.dispose(); soft = null; }
+  if (oldGroup) {
+    // Material maps from anatomy.js are shared across specimens; keep those.
+    // Dispose the old instance's geometries/materials once, including children.
+    const geometries = new Set(), materials = new Set();
+    oldGroup.traverse(o => { if (o.geometry) geometries.add(o.geometry); if (o.material) (Array.isArray(o.material) ? o.material : [o.material]).forEach(m => materials.add(m)); });
+    geometries.forEach(g => g.dispose()); materials.forEach(m => m.dispose());
+  }
 
   specimenId = id;
   const built = buildSpecimen(THREE, id);
@@ -781,9 +874,14 @@ function loadSpecimen(id) {
   scene.add(group);
 
   const spec = SPECIMENS[id];
+  if (id !== 'frog' && frogStage) frogStage.setActive(false);
   camera.position.set(...spec.camera.pos);
   controls.target.set(...spec.camera.target);
   controls.update();
+  if (id === 'frog' && !frogStage) frogStage = createFrogStage(THREE, scene, camera, renderer, controls);
+  if (env && env.setVisible) env.setVisible(id !== 'frog');
+  if (frogStage) frogStage.setActive(id === 'frog');
+  if (dust) dust.setVisible(id !== 'frog');
   if (xr) xr.setFocus(...spec.camera.target);
 
   // Shadows are most of the grounding — the specimen must cast onto the table.
@@ -813,19 +911,20 @@ function loadSpecimen(id) {
   // precede dissection/physio/imaging, which cache part meshes and materials.
   if (surface) { surface.dispose(); surface = null; }
   if (typeof createSurfaceDetail === 'function') {
-    try { surface = createSurfaceDetail(THREE, parts, id, group); surface.apply(); }
+    try { surface = createSurfaceDetail(THREE, id === 'frog' ? parts.filter(p => !frogExternal(p)) : parts, id, group); surface.apply(); }
     catch (e) { console.warn('surface failed', e); surface = null; }
   }
 
   if (soft) { soft.dispose(); soft = null; }
   if (typeof createSoftBody === 'function') {
-    try { soft = createSoftBody(THREE, parts); soft.setLife(true); }
+    try { soft = createSoftBody(THREE, id === 'frog' ? parts.filter(p => !frogExternal(p)) : parts); soft.setLife(id !== 'frog'); }
     catch (e) { console.warn('softbody failed', e); soft = null; }
   }
 
   dissection = createDissection(THREE, {
     scene, camera, group, parts, onEvent,
     requiresPinning: SPECIMENS[id].requiresPinning !== false,
+    specimenId: id, pinning: built.pinning,
   });
   dissection.setTool(currentTool === 'swab' ? 'probe' : currentTool);
 
@@ -866,6 +965,14 @@ function loadSpecimen(id) {
   if (strata && shell.setStrata) shell.setStrata(strata.stack, 0);
   if (shell.setVignette) shell.setVignette(null);
   if (pathology && shell.setCases) shell.setCases(pathology.list(), (cid) => setCase(cid));
+  if (id === 'frog') {
+    if (tutor) tutor.setActive(false);
+    if (frogStage) frogStage.setQuality(1);
+    frogWorkspace = createFrogWorkspace(frogWorkspaceAPI());
+    setTool('pins');
+    shell.checkObjectives(dissection.state);
+    frogWorkspace.update();
+  }
 }
 
 /* ---- frame ------------------------------------------------------------- */
@@ -884,6 +991,7 @@ function loadSpecimen(id) {
  */
 function tick(t) {
   const dt = lastT ? Math.min(64, t - lastT) : 16; lastT = t;
+  if (frogAlternative) return;
 
   // The scale journey OWNS the whole frame while it is open: its own scene, its own
   // camera, driven by the scroll. Everything else — dissection, idle life, the
@@ -972,7 +1080,7 @@ function tick(t) {
 
   if (blood) {
     const c = !scanning && dissection ? dissection.contact : null;
-    if (c && input.gripping && currentTool === 'scalpel') {
+    if (c && input.gripping && currentTool === 'scalpel' && (!dissection.canUseTool || dissection.canUseTool('scalpel'))) {
       blood.bleed({
         point: c.point, normal: c.normal, partId: c.partId,
         severity: 0.35 + input.grip * 0.45, kind: 'capillary',
@@ -1020,7 +1128,11 @@ function tick(t) {
         || (handMode && hands && hands.snapshot && hands.snapshot.active);
       applyCameraLife(dt, busy);
     }
-    if (postfx) {
+    if (specimenId === 'frog') {
+      if (frogStage) frogStage.update(dt);
+      // Precision practical: no DOF, film grain, chromatic split or motion blur.
+      renderer.render(scene, camera);
+    } else if (postfx) {
       // Focus follows the blade: whatever the instrument is touching is what the
       // depth-of-field plane sharpens. Null (nothing under the cursor) lets it
       // ease back to the specimen's own depth rather than snapping.
@@ -1087,12 +1199,29 @@ const KEYMAP = [
 ];
 
 function setTool(t) {
+  if (specimenId === 'frog' && dissection && dissection.canUseTool && !dissection.canUseTool(t)) {
+    if (frogWorkspace) frogWorkspace.say(dissection.toolReason(t), true);
+    if (shell) shell.setTool(currentTool);
+    return false;
+  }
   currentTool = t;
   // The swab is main.js's own tool — dissect.js's TOOLS list has no such entry, so
   // park the engine on the probe and do the swabbing here in tick().
   if (dissection) dissection.setTool(t === 'swab' ? 'probe' : t);
   if (instr) instr.setTool(t);
-  shell.setTool(t);
+  if (shell) shell.setTool(t);
+  if (frogWorkspace) frogWorkspace.update();
+  return true;
+}
+
+function commitFrogPin(x, y, source) {
+  if (!dissection || currentTool !== 'pins' || specimenId !== 'frog') return;
+  const eventInput = { x: x / innerWidth, y: y / innerHeight, span: 0, source, grip: 0, gripping: false };
+  // Event-driven edges preserve short taps even on a temporarily slow GPU.
+  // They use the same input router contract and anatomical ray/validator.
+  dissection.update(eventInput, 0);
+  eventInput.grip = 1; eventInput.gripping = true; dissection.update(eventInput, 0);
+  eventInput.grip = 0; eventInput.gripping = false; dissection.update(eventInput, 0);
 }
 
 function onKey(e) {
@@ -1102,11 +1231,16 @@ function onKey(e) {
   if (e.metaKey || e.ctrlKey || e.altKey) return;
   const target = e.target;
   if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) return;
+  if (target && target.closest('#frog-workspace')) return;
 
   const tools = { '1': 'probe', '2': 'scalpel', '3': 'forceps', '4': 'pins', '5': 'retractor', '6': 'swab' };
   if (tools[e.key]) { setTool(tools[e.key]); return; }
 
   const k = e.key.toLowerCase();
+  if (specimenId === 'frog' && ['x', 'd', 'p', 'c', 'k', 'y', 'f', 'v'].includes(k)) {
+    if (frogWorkspace) frogWorkspace.say('Use Anatomy to explore; the guided practical keeps its specimen and layers intact.');
+    return;
+  }
   const hovered = dissection && dissection.hovered;
   const scanning = imaging && imaging.mode() !== 'off';
 
@@ -1283,7 +1417,8 @@ function onKey(e) {
 /* ---- wiring ------------------------------------------------------------ */
 export function startApp() {
   const root = document.getElementById('stage');
-  bootScene(root);
+  try { bootScene(root); }
+  catch (err) { console.warn('WebGL unavailable; opening accessible frog practical.', err.message); startFrogFallback(root); return; }
   shell = buildShell(document.body);
 
   const boot = (name, fn) => {
@@ -1304,7 +1439,8 @@ export function startApp() {
       const t = createTutor();
       t.setLevel('alevel');
       t.onSay((s) => {
-        shell.say(s.text, { consequence: s.kind === 'question' });
+        if (frogWorkspace) frogWorkspace.say(s.text, s.kind === 'question');
+        else shell.say(s.text, { consequence: s.kind === 'question' });
         if (narrator) narrator.speak(s.text);
       });
       return t;
@@ -1346,7 +1482,7 @@ export function startApp() {
   if (shell.setActions) shell.setActions([], doAction);
   shell.on('level', (l) => { if (tutor) tutor.setLevel(l); });
   shell.on('bleeding', (k) => { if (blood) { blood.setIntensity(k); blood.setEnabled(k > 0); } });
-  shell.on('imaging', (m) => { if (imaging) imaging.setMode(m); });
+  shell.on('imaging', (m) => { if (imaging && specimenId !== 'frog') imaging.setMode(m); });
   shell.on('slice', (t) => { if (imaging) imaging.setSlice(t); });
   shell.on('case', (id) => setCase(id));
   // WebXR requires an unconsumed user gesture, so this must call straight through
@@ -1369,7 +1505,11 @@ export function startApp() {
     handViz.setBackdrop(shell.cameraVisible ? shell.cameraVisible() : true);
   }
 
+  let handRequestGeneration = 0, handRequested = false;
   shell.on('hands', async (want) => {
+    if (want && handRequested) return;
+    handRequested = !!want;
+    const request = ++handRequestGeneration;
     if (!want) {
       handMode = false;
       document.body.classList.remove('handmode');
@@ -1382,6 +1522,9 @@ export function startApp() {
     shell.setHandState({ on: true, status: 'starting' });
     if (!hands) hands = createHands();
     const res = await hands.start();
+    // Off invalidates pending permission/model work. An old result must never
+    // enable the UI, or stop a newer session that the student opted into.
+    if (request !== handRequestGeneration) return;
     if (res.ok) {
       handMode = true;
       document.body.classList.add('handmode');
@@ -1403,6 +1546,7 @@ export function startApp() {
         + 'and down for the previous. Press U to re-centre tracking on your hand, or E to '
         + 'retune the smoothing. Nothing is recorded.');
     } else {
+      handRequested = false;
       handMode = false;
       shell.setHandState({ on: false, status: 'failed', reason: res.reason });
       shell.say('Could not start the camera: ' + res.reason + '. Mouse and keyboard do everything the hand does.');
@@ -1425,6 +1569,7 @@ export function startApp() {
   addEventListener('pointercancel', tchUp);
 
   addEventListener('pointermove', (e) => {
+    if (specimenId === 'frog' && e.target.closest && e.target.closest('#frog-workspace, .chrome')) return;
     // A finger that is orbiting must not also drag the instrument across the
     // tissue behind it, so only the claimed one moves the aim.
     if (e.pointerType === 'touch' && TCH.claimed !== e.pointerId) return;
@@ -1432,7 +1577,9 @@ export function startApp() {
   });
   addEventListener('pointerdown', (e) => {
     if (e.pointerType === 'touch') return;
-    if (e.target.closest('.chrome')) return;
+    if (e.target.closest('.chrome, #frog-workspace')) return;
+    mouse.x = e.clientX / innerWidth; mouse.y = e.clientY / innerHeight;
+    if (specimenId === 'frog' && currentTool === 'pins' && !handMode) { commitFrogPin(e.clientX, e.clientY, 'mouse'); return; }
     mouse.down = true;
   });
   addEventListener('pointerup', (e) => { if (e.pointerType !== 'touch') mouse.down = false; });
@@ -1463,6 +1610,7 @@ export function startApp() {
     if (dissection) dissection.update(input, 16);
   };
   window.__LAB.THREE = THREE;
+  window.__LAB.rendererInfo = () => ({ memory: { ...renderer.info.memory }, render: { ...renderer.info.render } });
   window.__LAB.camera = camera;
   // The flick detector is otherwise only reachable behind a live webcam, which no
   // automated check has. Exposed so its thresholds can be regression-tested.
@@ -1525,7 +1673,7 @@ export function startApp() {
   // click away from a page you were already using — a five-second cinematic there
   // is a wait, not a welcome. `?instant=1` skips the cold open entirely and puts
   // you straight on the table. Opened on its own, the full cold open still plays.
-  const INSTANT = /[?&]instant=1/.test(location.search);
+  const INSTANT = true; // The frog opens directly into its precision working view.
   if (!INSTANT && typeof createColdOpen === 'function') {
     try {
       intro = createColdOpen(THREE, { renderer, scene, camera, controls }, {

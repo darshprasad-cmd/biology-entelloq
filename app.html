@@ -190,6 +190,8 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);letter-spacin
 /* ── launch overlay (immersive full-screen) ─────────────────────────────── */
 #launcher{position:fixed;inset:0;z-index:60;background:var(--bg);display:none}
 #launcher.on{display:block;animation:lin .4s var(--ease)}
+/* The lab has its own switcher; do not overlay a duplicate on its instruments. */
+body.lab-open > .eqx-fab,body.lab-open > .eqx-panel{display:none!important}
 @keyframes lin{from{opacity:0}to{opacity:1}}
 #launchFrame{position:absolute;inset:0;width:100%;height:100%;border:0}
 .launch-x{position:fixed;top:16px;right:16px;z-index:62;display:flex;align-items:center;gap:8px;padding:9px 15px;
@@ -572,6 +574,7 @@ let launcherOpen=false;
 function openLaunch(k){
   const v=BYKEY[k]; launcherOpen=true; setActive(k); tintField(k);
   launcher.classList.add("on");
+  document.body.classList.toggle("lab-open", k === "lab");
   // `instant=1` tells the Lab to skip its five-second cold open: from inside the
   // app you are one click from a page you were already using, so it opens straight
   // onto the table. If it was prefetched, the frame is already warm and this is
@@ -625,6 +628,7 @@ function prefetchSections(){
 let coolTimer=null;
 function closeLaunch(){
   launcherOpen=false; launcher.classList.remove("on");
+  document.body.classList.remove("lab-open");
   setActive(current||"home"); tintField(current||"home");
   // Entering pushed "#lab"/"#universe" into the URL; closing has to take it back
   // out, or a reload re-opens the world that was just closed and Back reads as

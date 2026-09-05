@@ -1154,6 +1154,8 @@ export function createHands(options) {
   let stream = null;
   let running = false;
   let starting = false;
+  let startGeneration = 0;
+  let cancelVideoWait = null;
   let lastVideoTime = -1;
   let lastDetectTs = -1;
   let lastAnySeenMs = 0;
@@ -1244,6 +1246,9 @@ export function createHands(options) {
       return hndFailure("already-starting", "Camera is already starting up.");
     }
     starting = true;
+    const generation = ++startGeneration;
+    const cancelled = () => generation !== startGeneration;
+    const cancellation = () => hndFailure("cancelled", "Camera startup was cancelled.");
     try {
       if (typeof navigator === "undefined" || !navigator.mediaDevices ||
           !navigator.mediaDevices.getUserMedia) {
@@ -1268,20 +1273,24 @@ export function createHands(options) {
             /* @vite-ignore */ HND_TASKS_VISION_URL
           );
         } catch (e) {
+          if (cancelled()) return cancellation();
           return hndFailure(
             "model-failed",
             "Could not load the hand-tracking library. Check your connection, or keep using the mouse.",
           );
         }
+        if (cancelled()) return cancellation();
         let fileset;
         try {
           fileset = await vision.FilesetResolver.forVisionTasks(HND_WASM_URL);
         } catch (e) {
+          if (cancelled()) return cancellation();
           return hndFailure(
             "model-failed",
             "Could not load the hand-tracking runtime. Check your connection, or keep using the mouse.",
           );
         }
+        if (cancelled()) return cancellation();
 
         const baseCfg = {
           runningMode: "VIDEO",
@@ -1290,32 +1299,42 @@ export function createHands(options) {
           minHandPresenceConfidence: 0.5,
           minTrackingConfidence: 0.5,
         };
+        let candidate = null;
         try {
-          landmarker = await vision.HandLandmarker.createFromOptions(fileset, {
+          candidate = await vision.HandLandmarker.createFromOptions(fileset, {
             baseOptions: { modelAssetPath: HND_MODEL_URL, delegate: "GPU" },
             ...baseCfg,
           });
         } catch (e) {
+          if (cancelled()) return cancellation();
           // GPU delegate is unavailable on plenty of machines (no WebGL2,
           // blocklisted driver, locked-down VM). CPU is slower but universal.
           try {
-            landmarker = await vision.HandLandmarker.createFromOptions(fileset, {
+            candidate = await vision.HandLandmarker.createFromOptions(fileset, {
               baseOptions: { modelAssetPath: HND_MODEL_URL, delegate: "CPU" },
               ...baseCfg,
             });
           } catch (e2) {
-            landmarker = null;
+            if (cancelled()) return cancellation();
             return hndFailure(
               "model-failed",
               "Could not start the hand-tracking model on this device. Mouse control works exactly the same.",
             );
           }
         }
+        if (cancelled()) {
+          if (candidate && typeof candidate.close === "function") {
+            try { candidate.close(); } catch (e) { /* A stale model owns no active session. */ }
+          }
+          return cancellation();
+        }
+        landmarker = candidate;
       }
 
       // ── Camera. Nothing before this line has touched it.
+      let acquiredStream = null;
       try {
-        stream = await navigator.mediaDevices.getUserMedia({
+        acquiredStream = await navigator.mediaDevices.getUserMedia({
           // `ideal`, not exact: a webcam that cannot do 720p should hand back its
           // best rather than throw. A steady 30fps also matters — a camera that
           // drifts to 15fps under low light doubles the gap between landmark
@@ -1327,14 +1346,16 @@ export function createHands(options) {
           audio: false,
         });
       } catch (err) {
+        if (cancelled()) return cancellation();
         if (err && err.name === "OverconstrainedError") {
           // Some webcams refuse the exact size; retry with no constraints.
           try {
-            stream = await navigator.mediaDevices.getUserMedia({
+            acquiredStream = await navigator.mediaDevices.getUserMedia({
               video: true,
               audio: false,
             });
           } catch (err2) {
+            if (cancelled()) return cancellation();
             return hndMapCameraError(err2);
           }
         } else {
@@ -1342,6 +1363,13 @@ export function createHands(options) {
         }
       }
 
+      if (cancelled()) {
+        // This stream belongs to this request only. Releasing the shared camera
+        // here could stop a newer, explicitly authorized Off → On session.
+        hndStopTracks(acquiredStream);
+        return cancellation();
+      }
+      stream = acquiredStream;
       videoEl.srcObject = stream;
       try {
         await videoEl.play();
@@ -1349,6 +1377,7 @@ export function createHands(options) {
         // Autoplay policy can reject the promise even though the muted stream
         // plays fine; readyState below is the real test.
       }
+      if (cancelled()) return cancellation();
 
       // Wait for actual pixels, with a ceiling so a wedged device can't hang start().
       if (videoEl.readyState < 2) {
@@ -1359,12 +1388,16 @@ export function createHands(options) {
             done = true;
             videoEl.removeEventListener("loadeddata", onData);
             clearTimeout(timer);
+            if (cancelVideoWait === cancelWait) cancelVideoWait = null;
             resolve(v);
           };
           const onData = () => finish(true);
           const timer = setTimeout(() => finish(false), 8000);
+          const cancelWait = () => finish(false);
+          cancelVideoWait = cancelWait;
           videoEl.addEventListener("loadeddata", onData, { once: true });
         });
+        if (cancelled()) return cancellation();
         if (!gotData && videoEl.readyState < 2) {
           hndReleaseCamera();
           return hndFailure(
@@ -1391,7 +1424,7 @@ export function createHands(options) {
       snapshot.health = 1; // warming up; first detections will settle it
       return { ok: true, code: "ok", reason: "" };
     } finally {
-      starting = false;
+      if (!cancelled()) starting = false;
     }
   }
 
@@ -1399,12 +1432,16 @@ export function createHands(options) {
   // stop
   // ───────────────────────────────────────────────────────────────────────────
 
-  function hndReleaseCamera() {
-    if (stream) {
-      const tracks = stream.getTracks();
+  function hndStopTracks(cameraStream) {
+    if (cameraStream) {
+      const tracks = cameraStream.getTracks();
       for (let i = 0; i < tracks.length; i++) tracks[i].stop();
-      stream = null;
     }
+  }
+
+  function hndReleaseCamera() {
+    hndStopTracks(stream);
+    stream = null;
     // Clearing srcObject is what actually lets the OS drop the device and turn
     // the camera light off; stopping tracks alone is not always enough.
     try {
@@ -1416,6 +1453,9 @@ export function createHands(options) {
   }
 
   function stop() {
+    ++startGeneration;
+    starting = false;
+    if (cancelVideoWait) cancelVideoWait();
     running = false;
     hndReleaseCamera();
     snapshot.active = false;

@@ -9,6 +9,20 @@ permissions:
   contents: read
 
 jobs:
+  frog:
+    name: Frog lab checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - run: node --test tests/*.test.mjs
+      - run: python -m unittest discover -s scripts/frog-lab -p "test_*.py"
+      - run: python scripts/build-frog-lab.py --check
   static:
     name: Static site checks
     runs-on: ubuntu-latest
