@@ -110,3 +110,7 @@ no build step for the pages themselves, no runtime dependencies.
 
 Built by **Darsh Prasad**.
 Part of the Entelloq family — Physics Entelloq · Quant Entelloq · Biology Entelloq.
+
+### Shared Entelloq navigation
+
+The founder details and cross-app launcher are authored in `src/_switcher.html`. After regenerating pages, run `node src/ecosystem/sync.cjs`, then `node scripts/check-network.cjs`. The launcher stays above mobile navigation and is available on all product pages.
