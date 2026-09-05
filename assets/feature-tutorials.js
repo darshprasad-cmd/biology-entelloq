@@ -1,6 +1,7 @@
 /* Guided feature demonstrations. Navigation only: never starts a camera or changes a specimen. */
 (function(){
   'use strict';
+  if(window.EntelloqFeatureGuide)return;
   var physics=document.currentScript.dataset.app==='physics',root=null,index=0,timer=0,trigger=null,active=false,started=0,scrolled=false;
   function find(selector){var el=Array.from(document.querySelectorAll(selector)).find(function(n){var r=n.getBoundingClientRect();return r.width>0&&r.height>0;});if(el)return {el:el,frame:null};for(var id of ['launchFrame','viewFrame']){var frame=document.getElementById(id);try{el=frame&&frame.contentDocument&&frame.contentDocument.querySelector(selector);if(el)return {el:el,frame:frame};}catch(e){}}return null;}
   function enterSandbox(){if(document.getElementById("sbx-c"))return;var b=document.querySelector("[data-explore-go=\"sandbox\"]");if(b)b.click();}
