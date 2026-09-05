@@ -1700,7 +1700,17 @@ export function buildShell(root) {
 
   return {
     on, setTool, setStructure, setSpecimen, setHandState, showViva,
-    showRecord: () => { rec.classList.add('on'); rec.querySelector('#recclose')?.focus(); },
+    showRecord: () => {
+      // The legacy Close was phone-only. The frog Help route also needs an
+      // explicit way out on desktop, where legacy keyboard shortcuts are off.
+      let close = rec.querySelector('#recclose');
+      if (!close) {
+        close = el('<button class="minibtn" id="recclose">Close</button>');
+        close.onclick = () => rec.classList.remove('on');
+        rec.appendChild(close);
+      }
+      rec.classList.add('on'); close.focus();
+    },
     requestViva: () => fire('viva'),
     say: sayMsg,
     // The stored show-camera choice, so main.js can apply it to the overlay the

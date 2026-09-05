@@ -42,11 +42,52 @@ class LabBuildSafetyTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             BUILDER.integration_tail(self.fixture('<script type="module">otherApp();</script>'))
 
-    def test_vendor_data_matches_repository_bytes(self):
+    def test_vendor_data_matches_canonical_repository_bytes(self):
+        for name in ("three.module.min.js", "OrbitControls.js"):
+            with self.subTest(vendor=name):
+                vendor = ROOT / "src" / "lab" / "vendor" / name
+                encoded = BUILDER.data_module(vendor)
+                self.assertTrue(encoded.startswith("data:text/javascript;base64,"))
+                canonical = vendor.read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+                self.assertEqual(base64.b64decode(encoded.split(",", 1)[1]), canonical)
+
+    def test_vendor_encoding_is_identical_for_lf_crlf_and_cr_checkouts(self):
         vendor = ROOT / "src" / "lab" / "vendor" / "OrbitControls.js"
-        encoded = BUILDER.data_module(vendor)
-        self.assertTrue(encoded.startswith("data:text/javascript;base64,"))
-        self.assertEqual(base64.b64decode(encoded.split(",", 1)[1]), vendor.read_bytes())
+        canonical = vendor.read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+        encodings = []
+        for newline in (b"\n", b"\r\n", b"\r"):
+            with self.subTest(newline=newline):
+                with patch.object(Path, "read_bytes", return_value=canonical.replace(b"\n", newline)):
+                    encodings.append(BUILDER.data_module(vendor))
+        self.assertEqual(len(set(encodings)), 1)
+
+    def test_vendor_normalization_preserves_license_unicode_bom_and_code(self):
+        canonical = (
+            b"\xef\xbb\xbf/*!\n * @license\n * Copyright 2010-2026 Three.js Authors\n * SPDX-License-Identifier: MIT\n */\n"
+            + "export const label = 'βiology';\nexport const escaped = '\\r\\n';".encode("utf-8")
+        )
+        with patch.object(Path, "read_bytes", return_value=canonical.replace(b"\n", b"\r\n")):
+            encoded = BUILDER.data_module(Path("fixture-vendor.js"))
+        self.assertEqual(base64.b64decode(encoded.split(",", 1)[1]), canonical)
+
+    def test_assembly_is_identical_across_vendor_checkout_line_endings(self):
+        # Model Linux and Windows vendor checkouts without writing any source or
+        # generated artifact. All remaining assembly inputs stay exactly equal.
+        read_bytes = Path.read_bytes
+
+        def vendor_with_newlines(path, newline):
+            source = read_bytes(path)
+            if path.parent.name == "vendor" and path.suffix == ".js":
+                source = source.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+                return source.replace(b"\n", newline)
+            return source
+
+        existing = BUILDER.LAB.read_text(encoding="utf-8")
+        with patch.object(Path, "read_bytes", lambda path: vendor_with_newlines(path, b"\n")):
+            linux = BUILDER.assemble_html(existing)
+        with patch.object(Path, "read_bytes", lambda path: vendor_with_newlines(path, b"\r\n")):
+            windows = BUILDER.assemble_html(existing)
+        self.assertEqual(linux, windows)
 
     def test_only_public_output_is_current_repository_lab(self):
         self.assertEqual(BUILDER.LAB.resolve(), (ROOT / "lab.html").resolve())

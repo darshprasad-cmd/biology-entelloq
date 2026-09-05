@@ -59,7 +59,8 @@ def load(name):
             print("  (skipping optional %s — not written yet)" % name)
             return ""
         raise SystemExit("missing module: %s — the build workflow has not finished" % name)
-    src = open(path, encoding="utf-8").read()
+    with open(path, encoding="utf-8") as source_file:
+        src = source_file.read()
 
     # Static imports would break concatenation. Dynamic import() is fine and is
     # how the hands module lazily fetches MediaPipe, so only strip the static form.

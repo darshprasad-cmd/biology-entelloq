@@ -54,7 +54,12 @@ def integration_tail(existing: str) -> str:
 
 
 def data_module(path: Path) -> str:
-    return "data:text/javascript;base64," + base64.b64encode(path.read_bytes()).decode("ascii")
+    # Git may check JavaScript out with CRLF on Windows and LF in CI. Normalize
+    # line endings before encoding so the data URI is identical on both hosts.
+    # Work in bytes: preserve every other byte, including vendor license notices,
+    # Unicode, and any BOM, without parsing or rewriting third-party code.
+    source = path.read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    return "data:text/javascript;base64," + base64.b64encode(source).decode("ascii")
 
 
 def preserve_head_integrations(existing: str, generated: str) -> str:

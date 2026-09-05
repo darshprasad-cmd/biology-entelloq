@@ -62,7 +62,7 @@ body.frog-lab #dock .tname{font-size:9px;letter-spacing:0;text-transform:none;ma
 body.frog-lab #dock{left:12px!important;right:12px!important;bottom:76px!important;top:auto!important;max-height:none;flex-direction:row!important;justify-content:center;padding:5px;gap:4px}
 body.frog-lab .eqx-fab,body.frog-lab .eqx-panel{bottom:calc(12px + env(safe-area-inset-bottom,0px))!important}
 body.frog-lab #dock .tool{width:calc((100vw - 68px)/6);max-width:70px;height:52px}.fw-viewbar{bottom:12px;left:auto;right:12px;max-width:calc(100vw - 140px);transform:none;padding:3px;gap:1px}.fw-viewbar button{font-size:10px!important;padding:5px 7px!important}.fw-viewbar .fw-wide{display:none}
-.fw-orientation{top:252px;left:50%;transform:translateX(-50%);font-size:8px;white-space:nowrap}.fw-drawer{top:68px;left:12px;right:12px;width:auto;max-height:calc(100dvh - 90px)}.fw-atlas{inset:244px 12px 139px}.fw-atlas .fw-atlas-caption{font-size:9px;bottom:4px}
+.fw-orientation{top:252px;left:50%;transform:translateX(-50%);font-size:8px;white-space:nowrap}.fw-drawer{top:68px;left:12px;right:12px;width:auto;max-height:calc(100dvh - 236px)}.fw-atlas{inset:244px 12px 139px}.fw-atlas .fw-atlas-caption{font-size:9px;bottom:4px}
 }
 @media(prefers-reduced-motion:reduce){#frog-workspace *,body.frog-lab .tool{animation:none!important;transition:none!important;scroll-behavior:auto!important}#frog-workspace button:active{transform:none}}
 `;
