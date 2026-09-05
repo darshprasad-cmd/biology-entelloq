@@ -114,3 +114,8 @@ Part of the Entelloq family — Physics Entelloq · Quant Entelloq · Biology En
 ### Shared Entelloq navigation
 
 The founder details and cross-app launcher are authored in `src/_switcher.html`. After regenerating pages, run `node src/ecosystem/sync.cjs`, then `node scripts/check-network.cjs`. The launcher stays above mobile navigation and is available on all product pages.
+
+### Flagship feature tutorial
+
+The replayable guide lives in `assets/feature-tutorials.js` and `.css`. Launch it from the Entelloq menu → Feature tutorial, or the landing-page guide link. The guide navigates and highlights real controls; it never requests camera permission or resets the experiment. Run `node tests/check-feature-tutorials.cjs` when changing tutorial targets.
+After rebuilding the dissection HTML, run `node src/tutorials/sync.cjs` to retain tutorial assets in both app and standalone lab pages.
