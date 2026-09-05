@@ -18,6 +18,11 @@ jobs:
         with:
           python-version: "3.x"
       - run: python -m unittest discover -s tests
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Learning workflow and original-lab boundary
+        run: node scripts/check-learning.cjs
       - name: Preserve deploy invariants
         run: |
           test -f index.html

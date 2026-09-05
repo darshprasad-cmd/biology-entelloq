@@ -1,0 +1,341 @@
+{
+  "phase": "after",
+  "base": "http://127.0.0.1:3002",
+  "completed": true,
+  "reducedMotion": true,
+  "labRequestsBlocked": 2,
+  "observations": [
+    {
+      "name": "home-desktop",
+      "title": "Biology Entelloq",
+      "headings": [
+        "Good evening.",
+        "A thread for today",
+        "Your learning space",
+        "Step inside"
+      ],
+      "inputLabels": [
+        {
+          "id": "cmdkInput",
+          "label": "Search"
+        }
+      ],
+      "width": 1440,
+      "scrollWidth": 1440,
+      "horizontalOverflow": false
+    },
+    {
+      "name": "lessons-desktop",
+      "title": "Lessons — Biology Entelloq",
+      "headings": [
+        "See every concept fromstory to frontier.",
+        "No lessons match these filters."
+      ],
+      "inputLabels": [
+        {
+          "id": "lesson-search",
+          "label": "Try osmosis, enzymes, or pressure…"
+        }
+      ],
+      "width": 1184,
+      "scrollWidth": 1184,
+      "horizontalOverflow": false
+    },
+    {
+      "name": "reason-desktop",
+      "title": "Think Like a Biologist · Biology Entelloq",
+      "headings": [
+        "Don't memorise answers.Build the reasoning.",
+        "The mountaineer's blood",
+        "The antibiotic that stopped working",
+        "The sugar that came back down",
+        "No matching workouts"
+      ],
+      "inputLabels": [
+        {
+          "id": "rzSearch",
+          "label": "Try feedback, glucose or evolution"
+        }
+      ],
+      "width": 1184,
+      "scrollWidth": 1184,
+      "horizontalOverflow": false
+    },
+    {
+      "name": "learn-desktop",
+      "title": "Learn — Biology Entelloq",
+      "headings": [
+        "Experience biology.Don't just read it.",
+        "Pick something and do it",
+        "The interactive cell",
+        "The virtual microscope",
+        "The table is set. Pick up the scalpel."
+      ],
+      "inputLabels": [
+        {
+          "id": "magR",
+          "label": "Magnification"
+        },
+        {
+          "id": "focR",
+          "label": "Fine focus"
+        },
+        {
+          "id": "cmdkInput",
+          "label": "Search experiences and pages"
+        }
+      ],
+      "width": 1184,
+      "scrollWidth": 1184,
+      "horizontalOverflow": false
+    },
+    {
+      "name": "solve-desktop",
+      "title": "Biology Entelloq — Solve · Practice engine",
+      "headings": [
+        "Solve biologyuntil it's instinct.",
+        "Set it up"
+      ],
+      "inputLabels": [],
+      "width": 1184,
+      "scrollWidth": 1184,
+      "horizontalOverflow": false
+    },
+    {
+      "name": "explore-desktop",
+      "title": "Explore — Biology Entelloq",
+      "headings": [
+        "All of life, on one map you can touch.",
+        "Three domains. Eight ranks. One ancestor.",
+        "What goes wrong, and why.",
+        "3.8 billion years, in twelve moments.",
+        "Ten systems, one body.",
+        "Biology is one connected story.",
+        "The rest of the atlas."
+      ],
+      "inputLabels": [
+        {
+          "id": "dzSearch",
+          "label": "Search diseases"
+        }
+      ],
+      "width": 1184,
+      "scrollWidth": 1184,
+      "horizontalOverflow": false
+    },
+    {
+      "name": "me-desktop",
+      "title": "Biology Entelloq — Me",
+      "headings": [
+        "Your biology, so far.",
+        "Activity on this device",
+        "Mastery by topic",
+        "A good next step"
+      ],
+      "inputLabels": [],
+      "width": 1184,
+      "scrollWidth": 1184,
+      "horizontalOverflow": false
+    },
+    {
+      "name": "home-mobile",
+      "title": "Biology Entelloq",
+      "headings": [
+        "Good evening.",
+        "A thread for today",
+        "Your learning space",
+        "Step inside"
+      ],
+      "inputLabels": [
+        {
+          "id": "cmdkInput",
+          "label": "Search"
+        }
+      ],
+      "width": 390,
+      "scrollWidth": 390,
+      "horizontalOverflow": false
+    },
+    {
+      "name": "lessons-mobile",
+      "title": "Lessons — Biology Entelloq",
+      "headings": [
+        "See every concept fromstory to frontier.",
+        "No lessons match these filters."
+      ],
+      "inputLabels": [
+        {
+          "id": "lesson-search",
+          "label": "Try osmosis, enzymes, or pressure…"
+        }
+      ],
+      "width": 390,
+      "scrollWidth": 390,
+      "horizontalOverflow": false
+    },
+    {
+      "name": "reason-mobile",
+      "title": "Think Like a Biologist · Biology Entelloq",
+      "headings": [
+        "Don't memorise answers.Build the reasoning.",
+        "The mountaineer's blood",
+        "The antibiotic that stopped working",
+        "The sugar that came back down",
+        "No matching workouts"
+      ],
+      "inputLabels": [
+        {
+          "id": "rzSearch",
+          "label": "Try feedback, glucose or evolution"
+        }
+      ],
+      "width": 390,
+      "scrollWidth": 390,
+      "horizontalOverflow": false
+    },
+    {
+      "name": "learn-mobile",
+      "title": "Learn — Biology Entelloq",
+      "headings": [
+        "Experience biology.Don't just read it.",
+        "Pick something and do it",
+        "The interactive cell",
+        "The virtual microscope",
+        "The table is set. Pick up the scalpel."
+      ],
+      "inputLabels": [
+        {
+          "id": "magR",
+          "label": "Magnification"
+        },
+        {
+          "id": "focR",
+          "label": "Fine focus"
+        },
+        {
+          "id": "cmdkInput",
+          "label": "Search experiences and pages"
+        }
+      ],
+      "width": 390,
+      "scrollWidth": 390,
+      "horizontalOverflow": false
+    },
+    {
+      "name": "solve-mobile",
+      "title": "Biology Entelloq — Solve · Practice engine",
+      "headings": [
+        "Solve biologyuntil it's instinct.",
+        "Set it up"
+      ],
+      "inputLabels": [],
+      "width": 390,
+      "scrollWidth": 390,
+      "horizontalOverflow": false
+    },
+    {
+      "name": "explore-mobile",
+      "title": "Explore — Biology Entelloq",
+      "headings": [
+        "All of life, on one map you can touch.",
+        "Three domains. Eight ranks. One ancestor.",
+        "What goes wrong, and why.",
+        "3.8 billion years, in twelve moments.",
+        "Ten systems, one body.",
+        "Biology is one connected story.",
+        "The rest of the atlas."
+      ],
+      "inputLabels": [
+        {
+          "id": "dzSearch",
+          "label": "Search diseases"
+        }
+      ],
+      "width": 390,
+      "scrollWidth": 390,
+      "horizontalOverflow": false
+    },
+    {
+      "name": "me-mobile",
+      "title": "Biology Entelloq — Me",
+      "headings": [
+        "Your biology, so far.",
+        "Activity on this device",
+        "Mastery by topic",
+        "A good next step"
+      ],
+      "inputLabels": [],
+      "width": 390,
+      "scrollWidth": 390,
+      "horizontalOverflow": false
+    },
+    {
+      "name": "home-tablet",
+      "title": "Biology Entelloq",
+      "headings": [
+        "Good evening.",
+        "A thread for today",
+        "Your learning space",
+        "Step inside"
+      ],
+      "inputLabels": [
+        {
+          "id": "cmdkInput",
+          "label": "Search"
+        }
+      ],
+      "width": 900,
+      "scrollWidth": 900,
+      "horizontalOverflow": false
+    },
+    {
+      "name": "lessons-tablet",
+      "title": "Lessons — Biology Entelloq",
+      "headings": [
+        "See every concept fromstory to frontier.",
+        "No lessons match these filters."
+      ],
+      "inputLabels": [
+        {
+          "id": "lesson-search",
+          "label": "Try osmosis, enzymes, or pressure…"
+        }
+      ],
+      "width": 644,
+      "scrollWidth": 644,
+      "horizontalOverflow": false
+    },
+    {
+      "name": "reason-tablet",
+      "title": "Think Like a Biologist · Biology Entelloq",
+      "headings": [
+        "Don't memorise answers.Build the reasoning.",
+        "The mountaineer's blood",
+        "The antibiotic that stopped working",
+        "The sugar that came back down",
+        "No matching workouts"
+      ],
+      "inputLabels": [
+        {
+          "id": "rzSearch",
+          "label": "Try feedback, glucose or evolution"
+        }
+      ],
+      "width": 644,
+      "scrollWidth": 644,
+      "horizontalOverflow": false
+    }
+  ],
+  "checks": [
+    "Embedded sections use one parent ecosystem switcher; child switcher is hidden without modifying standalone pages.",
+    "Shell search: literal markup input, Escape focus restore and keyboard deep link to osmosis lesson.",
+    "Lessons: 9 originals, intersecting search/domain filters, safe empty state, reset focus and Arrow/Home/End lens navigation.",
+    "Reason: recoverable empty filters, preserved workout flow, keyboard multi-select, textual feedback and accurate current step.",
+    "Shell search: literal markup input, Escape focus restore and keyboard deep link to osmosis lesson.",
+    "Home: all route groups, pressed-state feedback, in-page jump focus and recovery from null/malformed local activity.",
+    "Learn/Explore: supported Cell and Anatomy cards open real destinations; reference-only card is not a dead control; disease filters recover and restore focus.",
+    "Solve: Cell Biology deep link, radio arrow keys/roving focus, keyboard session start/skip and no in-flight reset when topic changes.",
+    "All seven non-lab sections render at desktop/mobile, plus home/lessons/reason on tablet, without uncaught errors or horizontal overflow."
+  ],
+  "errors": []
+}

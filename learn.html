@@ -543,8 +543,8 @@ input[type=range].rng::-moz-range-thumb{width:22px;height:22px;border-radius:50%
     <div class="sec-head reveal">
       <div class="eyebrow">The catalog</div>
       <h2 class="h2">Pick something and <span class="grad">do it</span></h2>
-      <p class="lead">Every tile is an experience, not a chapter. Three are live today — the rest are in the
-        pipeline, each one a real interactive we're building, not a stock photo.</p>
+      <p class="lead">Choose a Live card to open an experience. The collection connects the cell, microscope,
+        atlases and working benches; reference topics are clearly marked when no dedicated interactive is available.</p>
     </div>
     <div id="catalog"><!-- categories injected by page-js, then reveals observed --></div>
   </section>
@@ -982,37 +982,37 @@ const CATS=[
   {name:"Cells & Molecules", icon:"cell", items:[
     {t:"DNA & Molecular Explorer", ic:"dna", live:true, href:UNIVERSE,
       d:"Fall past the cell membrane, into the nucleus, down to the double helix and the atoms that spell out life."},
-    {t:"Interactive Cell Explorer", ic:"cell",
-      d:"Peel a cell apart organelle by organelle — nucleus, mitochondria, Golgi — with every job explained in place."},
+    {t:"Interactive Cell Explorer", ic:"cell", live:true, href:"#cell",
+      d:"Select a structure in the illustrated animal cell — nucleus, mitochondria, Golgi — and read its name and job in place."},
     {t:"Histology Viewer", ic:"tissue",
-      d:"Stained tissue slides at real magnification: epithelium, muscle, nerve and bone, annotated as you scan."},
-    {t:"Microbiology Lab", ic:"micro",
-      d:"Streak a plate, stain a smear and watch bacteria, protists and fungi under a virtual scope."}
+      d:"A dedicated viewer for annotated tissue slides is not included in this collection. This is a reference topic, not an openable tool."},
+    {t:"Microbiology Lab", ic:"micro", live:true, href:"./labs.html#microscope",
+      d:"Open the microscope bench and choose Bacteria (mixed) to compare magnification, focus and staining in an illustrated specimen."}
   ]},
   {name:"Anatomy & Physiology", icon:"body", items:[
     {t:"Virtual Dissection Theatre", ic:"scalpel", live:true, href:LAB,
       d:"A real specimen on the table. Cut, retract and identify structures layer by layer, at your own pace."},
-    {t:"Human Anatomy Explorer", ic:"body",
-      d:"Spin a full human body and fade through skin, muscle, vessels and skeleton to any structure you name."},
-    {t:"Organ Systems", ic:"heart",
-      d:"Follow blood through the heart, air through the lungs and signals down a nerve — eleven systems, one flow."},
-    {t:"Physiology Simulations", ic:"pulse",
-      d:"Change a variable — adrenaline, altitude, blood sugar — and watch the whole body respond in real time."}
+    {t:"Human Anatomy Explorer", ic:"body", live:true, href:"./explore.html#atlas",
+      d:"Choose a body system in the illustrated human atlas to identify its organs and read what each system does."},
+    {t:"Organ Systems", ic:"heart", live:true, href:"./explore.html#atlas",
+      d:"Compare the ten systems in the body atlas, from circulation to the nervous system, with their structures and functions explained."},
+    {t:"Physiology Simulations", ic:"pulse", live:true, href:"./labs.html#heart-rate",
+      d:"Use the cardiac output bench to change exercise and adrenaline, then inspect heart rate, stroke volume and output in the model."}
   ]},
   {name:"Life & Ecosystems", icon:"globe", items:[
     {t:"The Biology Universe", ic:"globe", live:true, href:UNIVERSE,
       d:"One continuous zoom from the observable universe all the way down to a single atom — every scale of life between."},
-    {t:"Evolution Explorer", ic:"tree",
-      d:"Walk the tree of life, branch by branch, and replay how a fin became a limb across deep time."},
-    {t:"Ecology Simulations", ic:"leaf",
-      d:"Tune predators, prey and climate on a living island and watch populations boom, crash and rebalance."}
+    {t:"Evolution Explorer", ic:"tree", live:true, href:"./explore.html#tree",
+      d:"Expand the tree of life branch by branch, trace the path to humans, and inspect the information attached to each group."},
+    {t:"Ecology Simulations", ic:"leaf", live:true, href:"./labs.html#predator-prey",
+      d:"Change predator and prey variables on the population bench, then compare their population curves over time."}
   ]},
   {name:"Lab Skills", icon:"micro", items:[
-    {t:"Virtual Microscope", ic:"eye",
-      d:"Master magnification, focus and staining on real specimen slides — a live preview runs on this very page."},
+    {t:"Virtual Microscope", ic:"eye", live:true, href:"#microscope",
+      d:"Adjust magnification and fine focus, and switch between illustrated specimen slides in the mini-experience on this page."},
     {t:"Gram Staining Lab", ic:"drop",
-      d:"Run the four-step stain and read the result: crystal-violet purple or safranin pink, and what it means."},
-    {t:"Gel Electrophoresis", ic:"chart",
+      d:"A dedicated four-step Gram-staining practical is not included in this collection. The microscope's stain toggle is not a substitute for that procedure."},
+    {t:"Gel Electrophoresis", ic:"chart", live:true, href:"./labs.html#gel-electrophoresis",
       d:"Load your samples, run the current and read DNA fragments as they separate into glowing bands."}
   ]}
 ];
@@ -1040,10 +1040,10 @@ function buildCatalog(){
       }else{
         // No href and no handler — so it stays out of the tab order. A focus stop
         // that does nothing is worse than no focus stop.
-        html+='<article class="card lift exp'+dcls+'" aria-label="'+it.t+'">'
+        html+='<article class="card exp'+dcls+'" aria-label="'+it.t+' — reference topic, no dedicated interactive">'
           +'<div class="glow"></div><div class="ico">'+I[it.ic]+'</div>'
           +'<h4>'+it.t+'</h4><p>'+it.d+'</p>'
-          +'<div class="foot"><span class="chip live"><span class="d"></span>Open bench</span></div></article>';
+          +'<div class="foot"><span class="chip">Reference topic · no interactive</span></div></article>';
       }
     });
     html+='</div></div>';

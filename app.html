@@ -70,7 +70,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);letter-spacin
 .navi.launch .tag{margin-left:auto;font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;
   color:var(--em);border:1px solid color-mix(in srgb,var(--em) 30%,transparent);border-radius:5px;padding:2px 6px}
 .side-sp{flex:1}
-.side-foot{display:flex;gap:8px;padding-top:12px;border-top:1px solid var(--line)}
+.side-foot{display:flex;gap:8px;padding-top:12px;margin-bottom:58px;border-top:1px solid var(--line)}
 .sbtn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;border-radius:11px;
   border:1px solid var(--line);color:var(--dim);cursor:pointer;font-size:12.5px;transition:color .2s,border-color .2s,transform .1s var(--ease)}
 .sbtn:hover{color:var(--ink);border-color:var(--hair)} .sbtn:active{transform:scale(.96)} .sbtn svg{width:15px;height:15px}
@@ -187,6 +187,31 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);letter-spacin
 .home-foot{position:relative;z-index:1;margin-top:34px;padding-top:24px;border-top:1px solid var(--line);
   color:var(--faint);font-size:13px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between}
 
+/* Learning organisation is scoped to Home; immersive presentation is unchanged. */
+.home .path-filters{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:8px;margin:-2px 0 18px}
+.home .path-filter{border:1px solid var(--line);border-radius:999px;padding:9px 15px;min-height:40px;color:var(--dim);font-size:12px;cursor:pointer}
+.home .path-filter[aria-pressed="true"]{color:var(--em);border-color:color-mix(in srgb,var(--em) 38%,var(--line));background:color-mix(in srgb,var(--em) 9%,var(--panel))}
+.home #learningPaths .tile[hidden]{display:none}
+.home .hsec{flex-wrap:wrap;gap:6px 12px}
+.home .greet .hi{font-size:clamp(1.9rem,4vw,3rem);line-height:1.06;margin-bottom:10px}
+.home .jump-paths{display:inline-block;color:var(--em);font-size:13px;margin-top:14px;text-underline-offset:4px;text-decoration:underline}
+.home .resume>div:nth-child(2){min-width:0;overflow-wrap:anywhere}
+.home .resume p{line-height:1.5}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+@media(max-width:820px){
+  .home .home-in{padding-top:28px}
+  .home .greet{margin-bottom:20px}
+  .home .resume{padding:18px;gap:14px;margin-bottom:24px}
+  .home .resume .rico{width:42px;height:42px;border-radius:13px}
+  .home .thread{margin-bottom:26px}
+  .home .thread-hd{flex-wrap:wrap;gap:5px;margin-bottom:12px}
+  .home .thread-row{gap:8px}
+  .home .tstep{display:grid;grid-template-columns:65px minmax(0,1fr);gap:3px 10px;padding:12px 14px;border-radius:14px}
+  .home .tstep .tn{grid-row:1 / 3;align-self:center;font-size:9px;letter-spacing:.07em}
+  .home .tstep b{font-size:13px}
+  .home .tstep span:not(.tn){font-size:12px}
+}
+
 /* ── launch overlay (immersive full-screen) ─────────────────────────────── */
 #launcher{position:fixed;inset:0;z-index:60;background:var(--bg);display:none}
 #launcher.on{display:block;animation:lin .4s var(--ease)}
@@ -219,6 +244,14 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);letter-spacin
 .cmdk-item .kind{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--faint);border:1px solid var(--line);border-radius:5px;padding:2px 7px}
 .cmdk-item.sel,.cmdk-item:hover{background:color-mix(in srgb,var(--em) 12%,transparent)}
 .cmdk-empty{padding:28px;text-align:center;color:var(--faint);font-size:14px}
+#cmdk.keyboard-open{animation:none}
+#cmdk .cmdk-box{max-height:80dvh;display:flex;flex-direction:column}
+#cmdk .cmdk-list{min-height:0;overscroll-behavior:contain}
+#cmdk .cmdk-in input{min-width:0;min-height:36px}
+#cmdk .cmdk-close{flex:none;border:1px solid var(--line);border-radius:8px;min-width:44px;min-height:40px;color:var(--dim);font-size:12px;cursor:pointer}
+#cmdk .cmdk-footer{padding:10px 18px;display:flex;justify-content:space-between;gap:10px;border-top:1px solid var(--line);font-size:11px;color:var(--dim)}
+#cmdk .cmdk-item>div:nth-child(2){min-width:0;overflow-wrap:anywhere}
+#cmdk .cmdk-item .kind{flex:none}
 
 /* ── mobile ──────────────────────────────────────────────────────────────── */
 .mtop{display:none} .mtabs{display:none}
@@ -271,8 +304,8 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);letter-spacin
 <div class="mtop">
   <div class="brand"><svg viewBox="0 0 100 100" fill="none"><use href="#lg"/><path d="M32 16c20 9 16 28 0 34 20 6 24 24 0 34" stroke="url(#lg)" stroke-width="5" stroke-linecap="round"/><path d="M68 16C48 25 52 44 68 50 48 56 44 75 68 84" stroke="url(#lg)" stroke-width="5" stroke-linecap="round"/></svg><span>Biology <b>Entelloq</b></span></div>
   <div class="mspacer"></div>
-  <button class="sbtn" id="searchBtnM" style="flex:none;border:none"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20l-3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
-  <button class="sbtn" id="themeBtnM" style="flex:none;border:none"><svg viewBox="0 0 24 24" fill="none"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></button>
+  <button class="sbtn" id="searchBtnM" aria-label="Search Biology Entelloq" style="flex:none;border:none"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20l-3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+  <button class="sbtn" id="themeBtnM" aria-label="Toggle theme" aria-pressed="false" style="flex:none;border:none"><svg viewBox="0 0 24 24" fill="none"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></button>
 </div>
 
 <!-- stage -->
@@ -309,8 +342,10 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);letter-spacin
 <div id="cmdk" role="dialog" aria-modal="true" aria-label="Search Biology Entelloq">
   <div class="cmdk-box">
     <div class="cmdk-in"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20l-3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      <input id="cmdkInput" placeholder="Go to a section, lesson, or lab…" autocomplete="off" spellcheck="false" aria-label="Search"></div>
-    <div class="cmdk-list" id="cmdkList"></div>
+      <input id="cmdkInput" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="cmdkList" placeholder="Try a topic, skill, or section…" autocomplete="off" spellcheck="false" aria-label="Search">
+      <button class="cmdk-close" id="cmdkClose" aria-label="Close search">Esc</button></div>
+    <div class="cmdk-list" id="cmdkList" role="listbox" aria-label="Search results"></div>
+    <div class="cmdk-footer"><span id="cmdkCount" role="status" aria-live="polite"></span><span aria-hidden="true">↑ ↓ choose · Enter open</span></div>
   </div>
 </div>
 
@@ -334,13 +369,13 @@ const IC={
 // sections (embedded views) and immersive launches
 const VIEWS=[
   {k:"home",label:"Home",desc:"Your front door to all of biology."},
-  {k:"learn",label:"Learn",file:"learn.html",desc:"Experience biology — dissection, cells, anatomy, more.",tc:"var(--em)"},
-  {k:"lessons",label:"Lessons",file:"lessons.html",desc:"Every concept through six lenses, story to frontier.",tc:"var(--cy)"},
-  {k:"reason",label:"Reason",file:"reason.html",desc:"Think like a biologist — guided reasoning workouts.",tc:"var(--violet)"},
+  {k:"learn",label:"Learn",file:"learn.html",desc:"Find your topic — cells, anatomy, genetics and the living world.",tc:"var(--em)"},
+  {k:"lessons",label:"Lessons",file:"lessons.html",desc:"Understand an idea through six lenses, from intuition to a working model.",tc:"var(--cy)"},
+  {k:"reason",label:"Reason",file:"reason.html",desc:"Build an explanation — predict, test evidence and connect the mechanism.",tc:"var(--violet)"},
   {k:"labs",label:"Labs",file:"labs.html",desc:"Working benches — microscope, gels, kinetics, ecology.",tc:"var(--amber)"},
   {k:"solve",label:"Solve",file:"solve.html",desc:"Practice — NEET · CBSE · AP Bio · Olympiad.",tc:"var(--indigo)"},
   {k:"explore",label:"Explore",file:"explore.html",desc:"Atlases, the tree of life, diseases, discoveries.",tc:"var(--amber)"},
-  {k:"me",label:"Me",file:"me.html",desc:"Your journey, quietly tracked.",tc:"var(--dim)"},
+  {k:"me",label:"Me",file:"me.html",desc:"Your practice history and topic map, with a useful next step.",tc:"var(--dim)"},
   {k:"about",label:"About",file:"about.html",desc:"The mission, the ecosystem, the founder.",tc:"var(--em)"},
 ];
 const LAUNCH=[
@@ -370,7 +405,7 @@ const mtabs=$("#mtabs");
 
 // ── activity: the app should remember you, quietly and locally ─────────────
 const ACT={
-  get(){ try{ return JSON.parse(localStorage.getItem("bioq_activity")||"{}"); }catch(e){ return {}; } },
+  get(){ try{ return cleanActivity(JSON.parse(localStorage.getItem("bioq_activity")||"{}")); }catch(e){ return {counts:{}}; } },
   set(o){ try{ localStorage.setItem("bioq_activity",JSON.stringify(o)); }catch(e){} },
   visit(k,sub){ if(k==="home")return; const a=this.get();
     a.last={k,sub:sub||null,t:Date.now()};
@@ -378,13 +413,41 @@ const ACT={
     this.set(a); },
 };
 
+// Local data can be stale or malformed; never let it break the front door.
+function cleanActivity(value){
+  const clean={counts:{}};
+  if(!value||typeof value!=="object"||Array.isArray(value))return clean;
+  for(const key of Object.keys(BYKEY)){
+    const count=value.counts&&value.counts[key];
+    if(Number.isSafeInteger(count)&&count>0)clean.counts[key]=count;
+  }
+  const last=value.last;
+  if(last&&Object.hasOwn(BYKEY,last.k)&&last.k!=="home"){
+    clean.last={k:last.k,sub:typeof last.sub==="string"&&/^[a-z0-9-]{1,80}$/i.test(last.sub)?last.sub:null,t:last.t};
+  }
+  return clean;
+}
+function escapeHTML(value){return String(value).replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));}
+function matchCommands(commands,query){
+  const words=query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  return commands.filter(c=>{const text=[c.label,c.desc,c.kw,c.kind].join(" ").toLowerCase();return words.every(word=>text.includes(word));});
+}
+const PATH_GROUPS={all:VIEWS.slice(1).map(v=>v.k),understand:["learn","lessons","explore"],practise:["reason","labs","solve"],personal:["me","about"]};
+let pathGroup="all";
+function filterPaths(group){
+  pathGroup=Object.hasOwn(PATH_GROUPS,group)?group:"all";
+  $$("#learningPaths .tile").forEach(tile=>{tile.hidden=!PATH_GROUPS[pathGroup].includes(tile.dataset.go);});
+  $$("[data-path-group]").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.pathGroup===pathGroup)));
+  $("#pathCount").textContent=PATH_GROUPS[pathGroup].length+" sections shown";
+}
+
 // Curated threads — the antidote to a dead end: one idea carried from learning it,
 // to practising it, to seeing it at its real scale. Each step deep-links.
 const THREADS=[
   { topic:"Diffusion & Osmosis",
     steps:[
       {k:"lessons",sub:"diffusion",n:"Learn it",b:"Diffusion & Osmosis",s:"Six lenses, from the feel of it to the frontier.",tc:"var(--cy)"},
-      {k:"solve",n:"Practise it",b:"Cell Biology questions",s:"Test it — NEET, CBSE, AP or Olympiad.",tc:"var(--indigo)"},
+      {k:"solve",sub:"cell",n:"Practise it",b:"Cell Biology questions",s:"Test it — NEET, CBSE, AP or Olympiad.",tc:"var(--indigo)"},
       {k:"universe",n:"See it",b:"Down to the cell",s:"Zoom until the membrane is all there is.",tc:"var(--em)"},
     ]},
   { topic:"Enzyme Action",
@@ -408,24 +471,25 @@ function buildHome(){
   const greet = h<5?"Still up?" : h<12?"Good morning." : h<17?"Good afternoon." : h<22?"Good evening." : "Late one.";
   const visits=Object.values(a.counts||{}).reduce((x,y)=>x+y,0);
   const sub = visits===0
-    ? "You're at the front door of everything alive. Start anywhere — nothing here is a dead end."
+    ? "Understand an idea. Put it to the test. See how it connects to the living world."
     : visits<5 ? "Good to see you again. Here's a thread worth pulling today."
     : "Welcome back. Pick up where you were, or follow something new.";
 
   // continue card — real if we have history, an invitation if not
   const last=a.last&&BYKEY[a.last.k]?a.last:null;
+  const lastTopic=last&&CMDS.find(c=>c.k===last.k&&c.sub===last.sub);
   const resume = last
     ? `<button class="resume" data-go="${last.k}"${last.sub?` data-sub="${last.sub}"`:""}>
         <div class="rico">${IC[last.k]||IC.learn}</div>
         <div><div class="rlbl">Pick up where you left off</div>
-          <h3>${BYKEY[last.k].label}${last.sub?` · ${last.sub.replace(/^\w/,c=>c.toUpperCase())}`:""}</h3>
+          <h3>${BYKEY[last.k].label}${last.sub?` · ${escapeHTML(lastTopic?lastTopic.label:last.sub.replace(/-/g," "))}`:""}</h3>
           <p>${BYKEY[last.k].desc}</p></div>
         <div class="rgo">→</div></button>`
     : `<button class="resume" data-go="lessons" data-sub="diffusion">
         <div class="rico">${IC.lessons}</div>
         <div><div class="rlbl">Start here</div>
           <h3>Diffusion & Osmosis</h3>
-          <p>A first lesson, seen six ways — it takes about five minutes.</p></div>
+          <p>Start with the intuition, then test your prediction in the simulation.</p></div>
         <div class="rgo">→</div></button>`;
 
   // today's thread — rotates by day so it feels alive, not random
@@ -444,14 +508,23 @@ function buildHome(){
       <div class="ic">${IC[v.k]}</div><h3>${v.label}</h3><p>${v.desc}</p></button>`).join("")}</div>`;
 
   $("#homeIn").innerHTML=`
-    <div class="greet"><div class="hi">${greet}</div><div class="sub">${sub}</div></div>
+    <div class="greet"><h1 class="hi">${greet}</h1><div class="sub">${sub}</div><a class="jump-paths" href="#learning-paths">Choose your next step ↓</a></div>
     ${resume}
     ${thread}
-    <div class="hsec"><h2>Everything else</h2><span>Eight ways into the same living world.</span></div>
-    ${tiles(VIEWS.slice(1))}
+    <div class="hsec" id="learning-paths" tabindex="-1"><h2>Your learning space</h2><span>Choose what you want to do next.</span></div>
+    <div class="path-filters" role="group" aria-label="Find a learning path">
+      <button class="path-filter" data-path-group="all" aria-pressed="true">All paths</button>
+      <button class="path-filter" data-path-group="understand" aria-pressed="false">Understand</button>
+      <button class="path-filter" data-path-group="practise" aria-pressed="false">Practise</button>
+      <button class="path-filter" data-path-group="personal" aria-pressed="false">Your space</button>
+    </div><span class="sr-only" id="pathCount" role="status"></span>
+    <div id="learningPaths">${tiles(VIEWS.slice(1))}</div>
     <div class="hsec" style="margin-top:26px"><h2>Step inside</h2><span>Full-screen, and alive.</span></div>
     ${tiles(LAUNCH,'big')}
-    <div class="home-foot"><span>Biology Entelloq — by Darsh Prasad. Part of the Entelloq ecosystem.</span><span>Press <b style="color:var(--ink)">⌘K</b> to jump anywhere.</span></div>`;
+    <div class="home-foot"><span>Biology Entelloq — by Darsh Prasad. Part of the Entelloq ecosystem.</span><span>Press <b style="color:var(--ink)">Ctrl / ⌘ K</b> to find a topic.</span></div>`;
+  filterPaths(pathGroup);
+  $(".jump-paths").addEventListener("click",event=>{event.preventDefault();$("#learning-paths").scrollIntoView({block:"start"});$("#learning-paths").focus({preventScroll:true});});
+  $$("[data-path-group]").forEach(button=>button.addEventListener("click",()=>filterPaths(button.dataset.pathGroup)));
 }
 
 // ── ambient life behind the dashboard ──────────────────────────────────────
@@ -491,10 +564,21 @@ function loadSection(k, sub, force){
     try{ const d=frame.contentDocument; if(d&&d.body) ok=d.body.children.length>1||d.body.innerHTML.length>400; }
     catch(e){ ok=true; }                       // cross-origin: trust it
     if(!ok){ failSection(k,sub,"It loaded, but came back empty."); return; }
-    skel.classList.remove("on"); postTheme(frame);
+    skel.classList.remove("on"); postTheme(frame); useShellNavigation();
   };
   frame.onerror=()=>{ clearTimeout(loadTimer); pending=null; failSection(k,sub,"The file could not be opened."); };
   frame.src=src; loadedSrc=src;
+}
+function useShellNavigation(){
+  // Only normal embedded sections use this iframe. The immersive launchFrame
+  // and standalone pages keep their original navigation and presentation.
+  try{
+    const doc=frame.contentDocument;
+    if(!doc?.body.classList.contains("embed")||doc.getElementById("shell-navigation-owner"))return;
+    const style=doc.createElement("style");style.id="shell-navigation-owner";
+    style.textContent="body.embed #eqx-fab,body.embed #eqx-panel{display:none!important}";
+    doc.head.appendChild(style);
+  }catch(error){/* Standalone file previews may disallow same-origin access. */}
 }
 function failSection(k, sub, why){
   skel.classList.remove("on");
@@ -505,8 +589,10 @@ function failSection(k, sub, why){
   oops.dataset.k=k; oops.dataset.sub=sub||"";
 }
 function setActive(k){
-  $$(".navi").forEach(n=>n.classList.toggle("on",n.dataset.go===k));
-  $$(".mtab").forEach(n=>n.classList.toggle("on",n.dataset.go===k));
+  $$(".navi,.mtab").forEach(n=>{
+    const active=n.dataset.go===k;n.classList.toggle("on",active);
+    if(active)n.setAttribute("aria-current","page");else n.removeAttribute("aria-current");
+  });
 }
 // The Living Field is one continuous piece of tissue behind the whole app; moving
 // between sections re-stains it rather than cutting to a new background. It eases
@@ -663,7 +749,7 @@ function themeIcon(t){const s=t==="light"
   $("#themeIcon").innerHTML=s; const m=$("#themeBtnM svg"); if(m)m.innerHTML=s;}
 function postTheme(fr){ try{ fr.contentWindow.postMessage({bioqTheme:root.getAttribute("data-theme")},"*"); }catch(e){} }
 function setTheme(t){ root.setAttribute("data-theme",t); try{localStorage.setItem("bioq_theme",t);}catch(e){}
-  $("#themeBtn").setAttribute("aria-pressed",t==="light"?"true":"false"); themeIcon(t);
+  $$("#themeBtn,#themeBtnM").forEach(button=>button.setAttribute("aria-pressed",t==="light"?"true":"false")); themeIcon(t);
   postTheme(frame); postTheme(lframe); }
 try{setTheme(localStorage.getItem("bioq_theme")||"dark");}catch(e){setTheme("dark");}
 function toggleTheme(){ setTheme(root.getAttribute("data-theme")==="light"?"dark":"light"); }
@@ -685,6 +771,18 @@ const CMDS=[
    kw:"catalysis active site induced fit denature substrate michaelis menten km vmax inhibition protein"},
   {k:"lessons",sub:"population",label:"Population Growth",desc:"6-Lens lesson · Ecology",kind:"Lesson",
    kw:"exponential logistic carrying capacity j curve s curve r k selection fisheries"},
+  {k:"lessons",sub:"photosynthesis",label:"Photosynthesis",desc:"6-Lens lesson · Plant Biology",kind:"Lesson",
+   kw:"light reactions calvin cycle chloroplast carbon dioxide limiting factors plant"},
+  {k:"lessons",sub:"respiration",label:"Cellular Respiration",desc:"6-Lens lesson · Cell Biology",kind:"Lesson",
+   kw:"glycolysis krebs cycle electron transport mitochondria atp oxygen"},
+  {k:"lessons",sub:"replication",label:"DNA Replication",desc:"6-Lens lesson · Genetics & DNA",kind:"Lesson",
+   kw:"semiconservative leading lagging okazaki fragments polymerase genetics"},
+  {k:"lessons",sub:"selection",label:"Natural Selection",desc:"6-Lens lesson · Evolution",kind:"Lesson",
+   kw:"variation heredity differential survival evolution adaptation darwin"},
+  {k:"lessons",sub:"actionpotential",label:"The Action Potential",desc:"6-Lens lesson · Neuroscience",kind:"Lesson",
+   kw:"neuron nerve sodium potassium voltage membrane depolarisation threshold impulse"},
+  {k:"lessons",sub:"cardiac",label:"The Cardiac Cycle",desc:"6-Lens lesson · Human Physiology",kind:"Lesson",
+   kw:"heart valves pressure blood atria ventricle systole diastole circulation"},
   // reasoning workouts
   {k:"reason",sub:"altitude",label:"The mountaineer's blood",desc:"Reasoning workout · Physiology",kind:"Reason",
    kw:"altitude hypoxia erythropoietin epo red blood cells homeostasis negative feedback kidney bone marrow"},
@@ -693,9 +791,9 @@ const CMDS=[
   {k:"reason",sub:"glucose",label:"The sugar that came back down",desc:"Reasoning workout · Physiology",kind:"Reason",
    kw:"glucose insulin glucagon pancreas glycogen homeostasis blood sugar diabetes antagonistic"},
   // practice topics
-  {k:"solve",label:"Practice: Cell Biology",desc:"Question bank",kind:"Practice",kw:"cells organelles membrane mitosis quiz mcq"},
-  {k:"solve",label:"Practice: Genetics & DNA",desc:"Question bank",kind:"Practice",kw:"dna genes heredity mendel replication quiz"},
-  {k:"solve",label:"Practice: Human Physiology",desc:"Question bank",kind:"Practice",kw:"nephron heart circulation respiration quiz neet"},
+  {k:"solve",sub:"cell",label:"Practice: Cell Biology",desc:"Question bank",kind:"Practice",kw:"cells organelles membrane mitosis quiz mcq"},
+  {k:"solve",sub:"genetics",label:"Practice: Genetics & DNA",desc:"Question bank",kind:"Practice",kw:"dna genes heredity mendel replication quiz"},
+  {k:"solve",sub:"physiology",label:"Practice: Human Physiology",desc:"Question bank",kind:"Practice",kw:"nephron heart circulation respiration quiz neet"},
   {k:"solve",label:"NEET · CBSE · AP · Olympiad",desc:"Exam-board practice",kind:"Practice",kw:"neet cbse ap biology olympiad exam board timed adaptive"},
   // explore tools — each one is a real section of Explore, so it deep-links there
   {k:"explore",sub:"tree",label:"Tree of Life",desc:"Domains & kingdoms",kind:"Explore",kw:"taxonomy classification bacteria archaea eukarya kingdom species phylogeny"},
@@ -720,24 +818,46 @@ const CMDS=[
    kw:"dissection frog heart fish earthworm cockroach human scalpel anatomy specimen"},
 ];
 let csel=0,cflat=[],ctrig=null;
-function openCmdk(){ctrig=document.activeElement;cmdk.classList.add("on");cin.value="";render("");setTimeout(()=>cin.focus(),30);}
-function closeCmdk(){cmdk.classList.remove("on");if(ctrig&&ctrig.focus)ctrig.focus();}
-function render(q){q=q.trim().toLowerCase();
-  cflat=CMDS.filter(c=>!q||(c.label+" "+(c.desc||"")+" "+(c.kw||"")+" "+c.kind).toLowerCase().includes(q));
-  clist.innerHTML=cflat.length?cflat.map((c,i)=>`<div class="cmdk-item" data-i="${i}"><div class="ci">${IC[c.k]||IC.explore}</div>
-    <div><b>${c.label}</b><span>${c.desc||''}</span></div><span class="kind">${c.kind}</span></div>`).join("")
-    :`<div class="cmdk-empty">Nothing for “${q}”.</div>`; csel=0;hl();}
-function hl(){$$(".cmdk-item",clist).forEach((el,i)=>el.classList.toggle("sel",i===csel));const s=$$(".cmdk-item",clist)[csel];if(s)s.scrollIntoView({block:"nearest"});}
+function openCmdk(event){
+  if(cmdk.classList.contains("on"))return;
+  ctrig=document.activeElement;
+  cmdk.classList.toggle("keyboard-open",event?.type==="keydown"||event?.detail===0);
+  cmdk.classList.add("on");cin.setAttribute("aria-expanded","true");cin.value="";render("");cin.focus();
+}
+function closeCmdk(){
+  if(!cmdk.classList.contains("on"))return;
+  cmdk.classList.remove("on");cin.setAttribute("aria-expanded","false");cin.removeAttribute("aria-activedescendant");
+  if(ctrig?.isConnected)ctrig.focus({preventScroll:true});ctrig=null;
+}
+function render(q){
+  cflat=matchCommands(CMDS,q);
+  clist.innerHTML=cflat.length?cflat.map((c,i)=>`<div class="cmdk-item" id="cmdk-result-${i}" role="option" aria-selected="false" data-i="${i}"><div class="ci" aria-hidden="true">${IC[c.k]||IC.explore}</div>
+    <div><b>${escapeHTML(c.label)}</b><span>${escapeHTML(c.desc||'')}</span></div><span class="kind">${c.kind}</span></div>`).join("")
+    :`<div class="cmdk-empty" role="presentation">No matches for “${escapeHTML(q.trim())}”.<br>Try a broader topic, such as cells, genetics or ecology.</div>`;
+  $("#cmdkCount").textContent=cflat.length+" result"+(cflat.length===1?"":"s");csel=0;hl();
+}
+function hl(){
+  $$(".cmdk-item",clist).forEach((el,i)=>{el.classList.toggle("sel",i===csel);el.setAttribute("aria-selected",String(i===csel));});
+  const selected=$$(".cmdk-item",clist)[csel];
+  if(selected){cin.setAttribute("aria-activedescendant",selected.id);selected.scrollIntoView({block:"nearest"});}
+  else cin.removeAttribute("aria-activedescendant");
+}
 function run(c){if(!c)return;closeCmdk();go(c.k,{sub:c.sub||null});}
 cin.addEventListener("input",e=>render(e.target.value));
 clist.addEventListener("click",e=>{const it=e.target.closest(".cmdk-item");if(it)run(cflat[+it.dataset.i]);});
 $("#searchBtn").addEventListener("click",openCmdk); $("#searchBtnM").addEventListener("click",openCmdk);
+$("#cmdkClose").addEventListener("click",closeCmdk);
 cmdk.addEventListener("click",e=>{if(e.target===cmdk)closeCmdk();});
 addEventListener("keydown",e=>{
-  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();cmdk.classList.contains("on")?closeCmdk():openCmdk();return;}
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();cmdk.classList.contains("on")?closeCmdk():openCmdk(e);return;}
   if(!cmdk.classList.contains("on"))return;
-  if(e.key==="Escape")closeCmdk();
-  else if(e.key==="ArrowDown"){e.preventDefault();csel=Math.min(csel+1,cflat.length-1);hl();}
+  if(e.key==="Escape"){e.preventDefault();closeCmdk();}
+  else if(e.key==="Tab"){
+    // The input and close button are the palette's only tab stops.
+    e.preventDefault();(document.activeElement===cin?$("#cmdkClose"):cin).focus();
+  }
+  else if(e.target!==cin)return;
+  else if(e.key==="ArrowDown"){e.preventDefault();csel=Math.max(0,Math.min(csel+1,cflat.length-1));hl();}
   else if(e.key==="ArrowUp"){e.preventDefault();csel=Math.max(csel-1,0);hl();}
   else if(e.key==="Enter"){e.preventDefault();run(cflat[csel]);}
 });

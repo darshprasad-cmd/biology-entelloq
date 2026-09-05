@@ -176,6 +176,33 @@
     },
   ];
 
+  // Orientation summarises the existing activities; it is not a completion score.
+  const LESSON_AIMS = {
+    diffusion: "Predict water movement across a membrane and explain what changes diffusion rate.",
+    enzyme: "Connect an enzyme's shape to its activity, then interpret a rate graph.",
+    population: "Compare exponential and logistic growth and explain the role of carrying capacity.",
+    photosynthesis: "Identify the limiting factor and connect the two stages of photosynthesis.",
+    respiration: "Trace the three stages of respiration and predict the effect of removing oxygen.",
+    replication: "Explain semiconservative replication and why leading and lagging strands are built differently.",
+    selection: "Use variation, heredity and reproductive success to explain a population change.",
+    actionpotential: "Read the phases of a nerve impulse and explain all-or-nothing signalling.",
+    cardiac: "Use pressure differences to explain valve movement through one heartbeat.",
+  };
+  const catalogue = { query: "", domain: "", level: "" };
+  function searchText(value) {
+    return String(value).normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[–—−]/g, "-");
+  }
+  function matchingLessons(filters) {
+    const terms = searchText(filters.query || "").trim().split(/\s+/).filter(Boolean);
+    return LESSONS.filter((lesson) => {
+      if (filters.domain && lesson.domain !== filters.domain) return false;
+      if (filters.level && lesson.diff !== filters.level) return false;
+      const text = searchText([lesson.title, lesson.domain, lesson.diff, lesson.intuition,
+        ...lesson.chips, ...lesson.connections].join(" "));
+      return terms.every((term) => text.includes(term));
+    });
+  }
+
   // ── shell chrome ────────────────────────────────────────────────────────────
   const app = document.getElementById("lessonApp");
   let animStop = null;              // cancel fn for the active lens animation
@@ -187,7 +214,7 @@
     const lesson = LESSONS.find((l) => l.id === id);
     clearAnim();
     if (lesson) renderLesson(lesson); else renderList();
-    scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
+    scrollTo({ top: 0, behavior: "auto" });
     if (window.__observeReveals) window.__observeReveals();
   }
   addEventListener("hashchange", route);
@@ -200,19 +227,55 @@
       <h1 class="h1" style="margin:16px 0 16px">See every concept from<br><span class="grad">story to frontier.</span></h1>
       <p class="lead" style="max-width:640px">Every idea, through six lenses — felt, tested, drawn, quantified, pushed to the research edge, and grounded in your life. Pick one and step in.</p>`);
     app.appendChild(head);
-    const grid = el("div", "wrap"); const g = el("div", "grid g3"); grid.appendChild(g);
-    LESSONS.forEach((l, i) => {
-      const card = el("a", "card lift les-card reveal d" + ((i % 3) + 1));
+    const grid = el("div", "wrap");
+    const filters = el("section", "les-filters");
+    filters.setAttribute("aria-label", "Find a lesson");
+    filters.innerHTML = `<div class="les-filterfields">
+      <label class="les-search"><span>Find a concept</span><input id="lesson-search" type="search" placeholder="Try osmosis, enzymes, or pressure…" autocomplete="off" aria-controls="lesson-results"></label>
+      <label><span>Biology area</span><select id="lesson-domain" aria-controls="lesson-results"><option value="">All areas</option>${[...new Set(LESSONS.map((l) => l.domain))].sort().map((domain) => `<option>${domain}</option>`).join("")}</select></label>
+      <label><span>Level</span><select id="lesson-level" aria-controls="lesson-results"><option value="">All levels</option>${["Foundation", "Core", "Advanced"].map((level) => `<option>${level}</option>`).join("")}</select></label>
+      <button class="btn ghost les-clear" id="lesson-clear" type="button">Clear filters</button>
+      </div><div class="les-filtermeta"><p id="lesson-result-count" role="status" aria-live="polite" aria-atomic="true"></p><span>Every lesson includes all six lenses.</span></div>`;
+    grid.appendChild(filters);
+    const g = el("div", "grid g3"); g.id = "lesson-results"; grid.appendChild(g);
+    const empty = el("div", "les-empty"); empty.hidden = true;
+    empty.innerHTML = `<h2 class="h3">No lessons match these filters.</h2><p>Try a broader concept or choose a different area. Your current lesson collection is still here.</p><button class="btn ghost" type="button">Show all lessons</button>`;
+    grid.appendChild(empty);
+    const search = $("#lesson-search", filters), domain = $("#lesson-domain", filters), level = $("#lesson-level", filters);
+    search.value = catalogue.query; domain.value = catalogue.domain; level.value = catalogue.level;
+    const cards = LESSONS.map((l) => {
+      // No stagger on filtering: results should respond as immediately as typing.
+      const card = el("a", "card lift les-card");
       card.href = "#" + l.id;
+      card.dataset.lesson = l.id;
       card.style.setProperty("--lc", l.color);
       card.innerHTML = `<div class="glow"></div>
         <div class="les-dom" style="color:${l.color}">${l.domain} · ${l.diff}</div>
         <h3 class="h3" style="margin:6px 0 10px">${l.title}</h3>
         <p>${l.intuition}</p>
-        <div class="les-lensrow">${LENSES.map((x) => `<span class="les-lensdot" style="--dc:${x.c}" title="${x.n}">${x.g}</span>`).join("")}</div>`;
+        <div class="les-lensrow" aria-label="Six lenses: Experience, Predict, Visual, Math, Frontier, Real World">${LENSES.map((x) => `<span class="les-lensdot" aria-hidden="true" style="--dc:${x.c}" title="${x.n}">${x.g}</span>`).join("")}</div>
+        <span class="les-cardroute">Explore the concept <span aria-hidden="true">→</span></span>`;
       g.appendChild(card);
+      return card;
     });
     app.appendChild(grid);
+    function applyFilters() {
+      catalogue.query = search.value; catalogue.domain = domain.value; catalogue.level = level.value;
+      const matches = new Set(matchingLessons(catalogue).map((lesson) => lesson.id));
+      cards.forEach((card) => { card.hidden = !matches.has(card.dataset.lesson); });
+      $("#lesson-result-count", filters).textContent = `${matches.size} of ${LESSONS.length} lessons`;
+      $("#lesson-clear", filters).disabled = !catalogue.query && !catalogue.domain && !catalogue.level;
+      empty.hidden = matches.size !== 0;
+    }
+    function clearFilters() {
+      search.value = ""; domain.value = ""; level.value = "";
+      applyFilters(); search.focus();
+    }
+    search.addEventListener("input", applyFilters);
+    domain.addEventListener("change", applyFilters); level.addEventListener("change", applyFilters);
+    $("#lesson-clear", filters).addEventListener("click", clearFilters);
+    $("button", empty).addEventListener("click", clearFilters);
+    applyFilters();
   }
 
   // ── lesson view ──────────────────────────────────────────────────────────────
@@ -228,37 +291,49 @@
         <h1 class="h1" style="margin:10px 0 14px">${l.title}</h1>
         <div class="les-chips">${l.chips.map((c) => `<span class="chip">${c}</span>`).join("")}</div>
         <p class="lead les-intu">${l.intuition}</p>
+        <div class="les-orientation">
+          <span class="les-guide-label">Your aim</span><p>${LESSON_AIMS[l.id]}</p>
+          <div class="les-readingroute"><span>First time? Follow A → F.</span><span>Revising? Start with Predict, then check the explanation.</span></div>
+        </div>
       </div>
       <div class="les-rail" role="tablist" aria-label="Lenses">
-        ${LENSES.map((x) => `<button class="les-tab" role="tab" data-lens="${x.k}" style="--dc:${x.c}">
+        ${LENSES.map((x) => `<button class="les-tab" role="tab" id="lesson-tab-${x.k}" aria-label="${x.n}" aria-controls="lensStage" data-lens="${x.k}" style="--dc:${x.c}">
           <span class="les-g">${x.g}</span><span class="les-ic">${x.ic}</span><span class="les-nm">${x.n}</span></button>`).join("")}
       </div>
-      <div class="les-stage" id="lensStage"></div>
+      <div class="les-stage" id="lensStage" role="tabpanel" tabindex="0"></div>
       <div class="les-foot reveal">
         <div class="les-sec"><h4>Key facts</h4><ul>${l.facts.map((f) => `<li>${f}</li>`).join("")}</ul></div>
         <div class="les-sec les-exam"><h4>★ Exam focus</h4><p>${l.exam}</p></div>
         <div class="les-sec"><h4>Connects to</h4><div class="les-conn">${l.connections.map((c) => `<span class="chip">${c}</span>`).join("")}</div></div>
         <div class="les-next">
-          <a class="btn ghost" href="./Biology Entelloq - Solve.html">Practise this →</a>
-          <a class="btn ghost" href="./Biology Universe.html">See it in the Universe →</a>
-          <a class="btn primary" href="./Biology Entelloq - Dissection Lab.html">Open the Lab →</a>
+          <a class="btn ghost" href="./solve.html">Practise this →</a>
+          <a class="btn ghost" href="./universe.html">See it in the Universe →</a>
+          <a class="btn primary" href="./lab.html">Open the Lab →</a>
         </div>
       </div>`;
     app.appendChild(root);
     const stage = $("#lensStage", root);
     const tabs = [...root.querySelectorAll(".les-tab")];
-    function show(k) {
+    function show(k, keyboard = false) {
       active = k; clearAnim();
-      tabs.forEach((t) => t.classList.toggle("on", t.dataset.lens === k));
+      tabs.forEach((t) => {
+        const selected = t.dataset.lens === k;
+        t.classList.toggle("on", selected); t.setAttribute("aria-selected", String(selected)); t.tabIndex = selected ? 0 : -1;
+      });
+      stage.setAttribute("aria-labelledby", "lesson-tab-" + k);
+      stage.classList.toggle("les-instant", keyboard);
       stage.innerHTML = ""; stage.appendChild(renderLens(l, k));
       if (window.__observeReveals) window.__observeReveals();
     }
-    tabs.forEach((t) => t.addEventListener("click", () => show(t.dataset.lens)));
-    // keyboard: A-F or arrows across lenses
-    root.addEventListener("keydown", (e) => {
+    tabs.forEach((t) => t.addEventListener("click", (e) => show(t.dataset.lens, e.detail === 0)));
+    // Keep slider arrow keys in their simulation; only the lens rail navigates tabs.
+    $(".les-rail", root).addEventListener("keydown", (e) => {
       const i = LENSES.findIndex((x) => x.k === active);
-      if (e.key === "ArrowRight") { e.preventDefault(); show(LENSES[(i + 1) % LENSES.length].k); tabs[(i + 1) % LENSES.length].focus(); }
-      else if (e.key === "ArrowLeft") { e.preventDefault(); show(LENSES[(i + LENSES.length - 1) % LENSES.length].k); tabs[(i + LENSES.length - 1) % LENSES.length].focus(); }
+      const next = e.key === "ArrowRight" ? (i + 1) % LENSES.length
+        : e.key === "ArrowLeft" ? (i + LENSES.length - 1) % LENSES.length
+        : e.key === "Home" ? 0 : e.key === "End" ? LENSES.length - 1 : -1;
+      if (next < 0) return;
+      e.preventDefault(); show(LENSES[next].k, true); tabs[next].focus();
     });
     show("experience");
   }
@@ -274,9 +349,9 @@
 
     if (k === "experience") {
       box.innerHTML = headHTML + `<p class="les-blurb">${d.blurb}</p><div class="les-mount" id="mnt"></div>`;
-      queueMicrotask(() => { const host = $("#mnt", box); animStop = (BUILD[d.mount] || (() => {}))(host, l); });
+      queueMicrotask(() => { if (!box.isConnected) return; const host = $("#mnt", box); animStop = (BUILD[d.mount] || (() => {}))(host, l); });
     } else if (k === "predict") {
-      box.innerHTML = headHTML + `<div class="les-q">${d.q}</div><div class="les-opts">${d.o.map((o, i) => `<button class="les-opt" data-i="${i}">${o}</button>`).join("")}</div><div class="les-why" id="why"></div>`;
+      box.innerHTML = headHTML + `<div class="les-q">${d.q}</div><div class="les-opts">${d.o.map((o, i) => `<button class="les-opt" data-i="${i}">${o}</button>`).join("")}</div><div class="les-why" id="why" role="status" aria-live="polite"></div>`;
       const opts = [...box.querySelectorAll(".les-opt")]; let done = false;
       opts.forEach((b) => b.addEventListener("click", () => {
         if (done) return; done = true; const i = +b.dataset.i;
@@ -288,7 +363,7 @@
       box.innerHTML = headHTML + `<h3 class="h3" style="margin-bottom:14px">${d.title}</h3><ul class="les-vis">${d.pts.map((p) => `<li>${p}</li>`).join("")}</ul>`;
     } else if (k === "math") {
       box.innerHTML = headHTML + `<div class="les-eq">${d.equation}</div><p class="les-blurb">${d.blurb}</p><div class="les-mount" id="mnt"></div>`;
-      queueMicrotask(() => { const host = $("#mnt", box); animStop = (BUILD[d.mount] || (() => {}))(host, l); });
+      queueMicrotask(() => { if (!box.isConnected) return; const host = $("#mnt", box); animStop = (BUILD[d.mount] || (() => {}))(host, l); });
     } else if (k === "frontier") {
       box.innerHTML = headHTML + `
         <div class="les-fr"><span class="les-frtag">Landmark</span><p>${d.experiment}</p></div>
@@ -314,7 +389,7 @@
   }
   function control(host, label, min, max, val, step, fmt, on) {
     const row = el("div", "les-ctl");
-    row.innerHTML = `<label>${label}</label><input type="range" min="${min}" max="${max}" value="${val}" step="${step || 1}"><output></output>`;
+    row.innerHTML = `<label>${label}</label><input aria-label="${label}" type="range" min="${min}" max="${max}" value="${val}" step="${step || 1}"><output></output>`;
     const inp = row.querySelector("input"), out = row.querySelector("output");
     const upd = () => { out.textContent = fmt ? fmt(+inp.value) : inp.value; on(+inp.value); };
     inp.addEventListener("input", upd); host.appendChild(row); upd(); return inp;

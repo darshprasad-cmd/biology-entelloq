@@ -1,0 +1,144 @@
+{
+  "phase": "before",
+  "base": "http://127.0.0.1:3002",
+  "reducedMotion": true,
+  "labRequestsBlocked": 1,
+  "observations": [
+    {
+      "name": "home-desktop",
+      "title": "Biology Entelloq",
+      "headings": [
+        "A thread for today",
+        "Everything else",
+        "Step inside"
+      ],
+      "inputLabels": [
+        {
+          "id": "cmdkInput",
+          "label": "Search"
+        }
+      ],
+      "width": 1440,
+      "scrollWidth": 1440,
+      "horizontalOverflow": false
+    },
+    {
+      "name": "lessons-desktop",
+      "title": "Lessons — Biology Entelloq",
+      "headings": [
+        "See every concept fromstory to frontier."
+      ],
+      "inputLabels": [],
+      "width": 1184,
+      "scrollWidth": 1184,
+      "horizontalOverflow": false
+    },
+    {
+      "name": "reason-desktop",
+      "title": "Think Like a Biologist · Biology Entelloq",
+      "headings": [
+        "Don't memorise answers.Build the reasoning."
+      ],
+      "inputLabels": [],
+      "width": 1184,
+      "scrollWidth": 1184,
+      "horizontalOverflow": false
+    },
+    {
+      "name": "learn-desktop",
+      "title": "Learn — Biology Entelloq",
+      "headings": [
+        "Experience biology.Don't just read it.",
+        "Pick something and do it",
+        "The interactive cell",
+        "The virtual microscope",
+        "The table is set. Pick up the scalpel."
+      ],
+      "inputLabels": [
+        {
+          "id": "magR",
+          "label": "Magnification"
+        },
+        {
+          "id": "focR",
+          "label": "Fine focus"
+        },
+        {
+          "id": "cmdkInput",
+          "label": "Search experiences and pages"
+        }
+      ],
+      "width": 1184,
+      "scrollWidth": 1184,
+      "horizontalOverflow": false
+    },
+    {
+      "name": "solve-desktop",
+      "title": "Biology Entelloq — Solve · Practice engine",
+      "headings": [
+        "Solve biologyuntil it's instinct.",
+        "Set it up"
+      ],
+      "inputLabels": [],
+      "width": 1184,
+      "scrollWidth": 1184,
+      "horizontalOverflow": false
+    },
+    {
+      "name": "explore-desktop",
+      "title": "Explore — Biology Entelloq",
+      "headings": [
+        "All of life, on one map you can touch.",
+        "Three domains. Eight ranks. One ancestor.",
+        "What goes wrong, and why.",
+        "3.8 billion years, in twelve moments.",
+        "Ten systems, one body.",
+        "Biology is one connected story.",
+        "The rest of the atlas."
+      ],
+      "inputLabels": [
+        {
+          "id": "dzSearch",
+          "label": "Search diseases"
+        }
+      ],
+      "width": 1184,
+      "scrollWidth": 1184,
+      "horizontalOverflow": false
+    },
+    {
+      "name": "me-desktop",
+      "title": "Biology Entelloq — Me",
+      "headings": [
+        "Your biology, so far.",
+        "Activity on this device",
+        "Mastery by topic",
+        "A good next step"
+      ],
+      "inputLabels": [],
+      "width": 1184,
+      "scrollWidth": 1184,
+      "horizontalOverflow": false
+    },
+    {
+      "name": "home-mobile",
+      "title": "Biology Entelloq",
+      "headings": [
+        "A thread for today",
+        "Everything else",
+        "Step inside"
+      ],
+      "inputLabels": [
+        {
+          "id": "cmdkInput",
+          "label": "Search"
+        }
+      ],
+      "width": 390,
+      "scrollWidth": 390,
+      "horizontalOverflow": false
+    }
+  ],
+  "checks": [],
+  "errors": []
+}
