@@ -29955,6 +29955,7 @@ function buildShell(root) {
       // The legacy Close was phone-only. The frog Help route also needs an
       // explicit way out on desktop, where legacy keyboard shortcuts are off.
       let close = rec.querySelector('#recclose');
+      rec.querySelector('.lbl').textContent = 'Attempt record';
       if (!close) {
         close = el('<button class="minibtn" id="recclose">Close</button>');
         close.onclick = () => rec.classList.remove('on');
@@ -30255,7 +30256,8 @@ const FROG_WORKSPACE_CSS = `
 body.frog-lab{--ink:#e6eee9;--dim:#b5c5be;--faint:#a1b1a9;--em:#8cd5b1;--cy:#9ed3c4;--glass:rgba(13,24,22,.95)}
 body.frog-lab #obj,body.frog-lab #hint,body.frog-lab #topright,body.frog-lab #systems,body.frog-lab #rail,body.frog-lab #say,body.frog-lab #coach{display:none!important}
 body.frog-lab #pick.gone{visibility:hidden}
-body.frog-lab #recclose{display:block}
+body.frog-lab #recclose{display:block;min-width:64px;min-height:44px}
+body.frog-lab.bioq-phone #rec{top:72px;bottom:72px}
 #frog-workspace{position:fixed;inset:0;pointer-events:none;z-index:22;font:14px/1.5 var(--sans);color:var(--ink)}
 #frog-workspace *{box-sizing:border-box}
 #frog-workspace button,#frog-workspace select,#frog-workspace a{font:inherit;min-height:44px;border:1px solid #3b5047;border-radius:9px;background:#182a24;color:var(--ink);padding:8px 12px;cursor:pointer;text-decoration:none;touch-action:manipulation}

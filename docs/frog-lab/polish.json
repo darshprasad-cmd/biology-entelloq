@@ -1,0 +1,306 @@
+{
+  "capturedAt": "2026-09-05T14:51:45.004Z",
+  "localLabSha256": "eac049301e2f7beab510821bedbebf511e360d483eb502ac57e0b9a9bf92f1ba",
+  "results": [
+    {
+      "name": "desktop",
+      "controls": [
+        {
+          "name": "Probe",
+          "width": 70,
+          "height": 66,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": "10px"
+        },
+        {
+          "name": "Scalpel",
+          "width": 70,
+          "height": 66,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": "10px"
+        },
+        {
+          "name": "Forceps",
+          "width": 70,
+          "height": 66,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": "10px"
+        },
+        {
+          "name": "Pins",
+          "width": 70,
+          "height": 66,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": "10px"
+        },
+        {
+          "name": "Retractor",
+          "width": 70,
+          "height": 66,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": "10px"
+        },
+        {
+          "name": "Swab",
+          "width": 70,
+          "height": 66,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": "10px"
+        },
+        {
+          "name": "Anatomy",
+          "width": 81.859375,
+          "height": 44,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": null
+        },
+        {
+          "name": "Settings",
+          "width": 75.75,
+          "height": 44,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": null
+        },
+        {
+          "name": "Help",
+          "width": 54.890625,
+          "height": 44,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": null
+        }
+      ],
+      "helpRecordAndReview": true,
+      "cameraRequests": 0,
+      "ok": true
+    },
+    {
+      "name": "tablet",
+      "controls": [
+        {
+          "name": "Probe",
+          "width": 70,
+          "height": 66,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": "10px"
+        },
+        {
+          "name": "Scalpel",
+          "width": 70,
+          "height": 66,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": "10px"
+        },
+        {
+          "name": "Forceps",
+          "width": 70,
+          "height": 66,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": "10px"
+        },
+        {
+          "name": "Pins",
+          "width": 70,
+          "height": 66,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": "10px"
+        },
+        {
+          "name": "Retractor",
+          "width": 70,
+          "height": 66,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": "10px"
+        },
+        {
+          "name": "Swab",
+          "width": 70,
+          "height": 66,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": "10px"
+        },
+        {
+          "name": "Anatomy",
+          "width": 67.890625,
+          "height": 44,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": null
+        },
+        {
+          "name": "Settings",
+          "width": 62.640625,
+          "height": 44,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": null
+        },
+        {
+          "name": "Help",
+          "width": 44.765625,
+          "height": 44,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": null
+        }
+      ],
+      "cameraRequests": 0,
+      "ok": false,
+      "error": "Error: Pointer action exceeded 30 seconds: locator('#specbtn')\n    at Timeout.<anonymous> (C:\\Users\\darsh\\biology-entelloq-frog\\scripts\\frog-lab\\check-journeys.cjs:77:68)\n    at listOnTimeout (node:internal/timers:605:17)\n    at process.processTimers (node:internal/timers:541:7)"
+    },
+    {
+      "name": "mobile",
+      "controls": [
+        {
+          "name": "Probe",
+          "width": 55.65625,
+          "height": 52,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": "9px"
+        },
+        {
+          "name": "Scalpel",
+          "width": 55.671875,
+          "height": 52,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": "9px"
+        },
+        {
+          "name": "Forceps",
+          "width": 55.65625,
+          "height": 52,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": "9px"
+        },
+        {
+          "name": "Pins",
+          "width": 55.671875,
+          "height": 52,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": "9px"
+        },
+        {
+          "name": "Retractor",
+          "width": 55.671875,
+          "height": 52,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": "9px"
+        },
+        {
+          "name": "Swab",
+          "width": 55.671875,
+          "height": 52,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": "9px"
+        },
+        {
+          "name": "Anatomy",
+          "width": 55.90625,
+          "height": 44,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": null
+        },
+        {
+          "name": "Settings",
+          "width": 51.546875,
+          "height": 44,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": null
+        }
+      ],
+      "ok": false,
+      "error": "AssertionError [ERR_ASSERTION]: The control center must not be covered in either its own document or its host\n    at performClick (C:\\Users\\darsh\\biology-entelloq-frog\\scripts\\frog-lab\\check-journeys.cjs:98:3)\n    at async click (C:\\Users\\darsh\\biology-entelloq-frog\\scripts\\frog-lab\\check-journeys.cjs:75:5)\n    at async checkViewport (C:\\Users\\darsh\\biology-entelloq-frog\\scripts\\frog-lab\\check-polish.cjs:64:7)\n    at async main (C:\\Users\\darsh\\biology-entelloq-frog\\scripts\\frog-lab\\check-polish.cjs:184:22)"
+    },
+    {
+      "name": "nine-step feature tutorial compatibility",
+      "titles": [],
+      "ok": false,
+      "error": "Error: Pointer action exceeded 30 seconds: locator('#eqx-fab')\n    at Timeout.<anonymous> (C:\\Users\\darsh\\biology-entelloq-frog\\scripts\\frog-lab\\check-journeys.cjs:77:68)\n    at listOnTimeout (node:internal/timers:605:17)\n    at process.processTimers (node:internal/timers:541:7)"
+    },
+    {
+      "name": "final direct lab axe",
+      "ok": true,
+      "violations": 0
+    },
+    {
+      "name": "final 2D view and host switcher restoration",
+      "ok": false,
+      "error": "Error: expect(locator).not.toHaveClass(expected) failed\n\nLocator: locator('#launcher')\nExpected pattern: not /\\bon\\b/\nReceived string: \"on\"\nTimeout: 5000ms\n\nCall log:\n  - Expect \"to.have.class\" with timeout 5000ms\n  - waiting for locator('#launcher')\n    14 × locator resolved to <div class=\"on\" id=\"launcher\">…</div>\n       - unexpected value \"on\"\n\n    at captureRawStack (C:\\Users\\darsh\\biology-entelloq\\node_modules\\playwright-core\\lib\\coreBundle.js:9681:17)\n    at callMatcherAsStep (C:\\Users\\darsh\\biology-entelloq\\node_modules\\playwright\\lib\\matchers\\expect.js:13310:57)\n    at Object.toHaveClass (C:\\Users\\darsh\\biology-entelloq\\node_modules\\playwright\\lib\\matchers\\expect.js:13300:23)\n    at checkRecoveryIntegration (C:\\Users\\darsh\\biology-entelloq-frog\\scripts\\frog-lab\\check-polish.cjs:166:57)\n    at async main (C:\\Users\\darsh\\biology-entelloq-frog\\scripts\\frog-lab\\check-polish.cjs:188:22)"
+    }
+  ],
+  "resumedFrom": "2026-09-05T14:42:36.123Z"
+}

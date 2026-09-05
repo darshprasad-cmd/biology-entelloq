@@ -1,0 +1,60 @@
+[
+  {
+    "name": "desktop pointer pinning, rejection, undo and resume",
+    "ok": true,
+    "durationMs": 128993,
+    "details": {
+      "pinned": 4,
+      "exactAnchorsRestored": true,
+      "errors": []
+    }
+  },
+  {
+    "name": "tablet touch pinning, rejection, undo and resume",
+    "ok": true,
+    "durationMs": 104032,
+    "details": {
+      "pinned": 4,
+      "exactAnchorsRestored": true,
+      "errors": []
+    }
+  },
+  {
+    "name": "phone touch pinning, rejection, undo and resume",
+    "ok": true,
+    "durationMs": 87884,
+    "details": {
+      "pinned": 4,
+      "exactAnchorsRestored": true,
+      "errors": []
+    }
+  },
+  {
+    "name": "keyboard anchor adjustment, confirmation and reset",
+    "ok": true,
+    "durationMs": 91216
+  },
+  {
+    "name": "accessible 2D practical and exploration prerequisites",
+    "ok": true,
+    "durationMs": 31601
+  },
+  {
+    "name": "WebGL failure recovers to usable 2D pinning",
+    "ok": true,
+    "durationMs": 1176
+  },
+  {
+    "name": "unavailable storage remains honest and session-usable",
+    "ok": true,
+    "durationMs": 1083
+  },
+  {
+    "name": "reduced motion, settings and workspace accessibility",
+    "ok": true,
+    "durationMs": 62401,
+    "details": {
+      "violations": 0
+    }
+  }
+]

@@ -649,7 +649,9 @@ function closeLaunch(){
     lframe.src="about:blank"; lframe.dataset.src=""; lframe.dataset.ready="";
   },60000);
 }
-$("#launchX").addEventListener("click",()=>{ history.length>1?history.back():closeLaunch(); if(launcherOpen)closeLaunch(); });
+// Explicit Exit closes once. Combining history.back() with closeLaunch() can
+// restore a direct-link #lab entry asynchronously and immediately reopen it.
+$("#launchX").addEventListener("click",closeLaunch);
 // retry a failed section from the error boundary
 $("#oopsRetry").addEventListener("click",()=>{
   const k=oops.dataset.k||"home", sub=oops.dataset.sub||null;

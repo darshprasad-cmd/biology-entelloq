@@ -1704,6 +1704,7 @@ export function buildShell(root) {
       // The legacy Close was phone-only. The frog Help route also needs an
       // explicit way out on desktop, where legacy keyboard shortcuts are off.
       let close = rec.querySelector('#recclose');
+      rec.querySelector('.lbl').textContent = 'Attempt record';
       if (!close) {
         close = el('<button class="minibtn" id="recclose">Close</button>');
         close.onclick = () => rec.classList.remove('on');

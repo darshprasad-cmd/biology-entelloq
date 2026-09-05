@@ -1,0 +1,105 @@
+{
+  "capturedAt": "2026-09-05T15:03:01.305Z",
+  "artifactFingerprints": {
+    "lab.html": "5d97892b5813bf9de6a92d3d1701414a162f5ac55b5431e1041e47a1a9bf7060",
+    "app.html": "575018fe808a4fbd274bb118b856ace48a1f52537958587effd0e12a06f50c5d",
+    "assets/feature-tutorials.js": "1a1f44ea15a1799c8d8c25702c80f014328162f9e85135c0c51ff751e515621c",
+    "assets/feature-tutorials.css": "600820764501b4c2525990bdb3da2e17cba2e8bf92fe9abfbe2ed1040e19d790"
+  },
+  "localLabSha256": "5d97892b5813bf9de6a92d3d1701414a162f5ac55b5431e1041e47a1a9bf7060",
+  "results": [
+    {
+      "name": "mobile",
+      "controls": [
+        {
+          "name": "Probe",
+          "width": 55.65625,
+          "height": 52,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": "9px"
+        },
+        {
+          "name": "Scalpel",
+          "width": 55.671875,
+          "height": 52,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": "9px"
+        },
+        {
+          "name": "Forceps",
+          "width": 55.65625,
+          "height": 52,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": "9px"
+        },
+        {
+          "name": "Pins",
+          "width": 55.671875,
+          "height": 52,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": "9px"
+        },
+        {
+          "name": "Retractor",
+          "width": 55.671875,
+          "height": 52,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": "9px"
+        },
+        {
+          "name": "Swab",
+          "width": 55.671875,
+          "height": 52,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": "9px"
+        },
+        {
+          "name": "Anatomy",
+          "width": 55.90625,
+          "height": 44,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": null
+        },
+        {
+          "name": "Settings",
+          "width": 51.546875,
+          "height": 44,
+          "ownCenterClear": true,
+          "hostCenterClear": true,
+          "exitOverlapArea": 0,
+          "labelClipped": false,
+          "labelFont": null
+        }
+      ],
+      "helpRecordAndReview": true,
+      "probeToScalpelTransition": true,
+      "cameraRequests": 0,
+      "ok": true
+    },
+    {
+      "name": "final 2D view and host switcher restoration",
+      "ok": true
+    }
+  ]
+}

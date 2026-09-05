@@ -1,0 +1,123 @@
+{
+  "capturedAt": "2026-09-05T14:26:17.386Z",
+  "route": "http://127.0.0.1:3001/lab.html?instant=1",
+  "methodology": "One Chromium context, default quality. Initial specimen plus five loadSpecimen('frog') replacements. Two animation frames after each replacement. Geometry/texture counts are renderer allocations, not bytes. JS heap is unforced-GC observation, not retained-memory proof.",
+  "samples": [
+    {
+      "cycle": 0,
+      "renderer": {
+        "memory": {
+          "geometries": 27,
+          "textures": 6
+        },
+        "render": {
+          "frame": 20,
+          "calls": 52,
+          "triangles": 84488,
+          "points": 0,
+          "lines": 0
+        }
+      },
+      "specimenMeshes": 124,
+      "workspaceCount": 1,
+      "heapUsed": 21496089
+    },
+    {
+      "cycle": 1,
+      "renderer": {
+        "memory": {
+          "geometries": 27,
+          "textures": 6
+        },
+        "render": {
+          "frame": 22,
+          "calls": 52,
+          "triangles": 84488,
+          "points": 0,
+          "lines": 0
+        }
+      },
+      "specimenMeshes": 124,
+      "workspaceCount": 1,
+      "heapUsed": 34022852
+    },
+    {
+      "cycle": 2,
+      "renderer": {
+        "memory": {
+          "geometries": 27,
+          "textures": 6
+        },
+        "render": {
+          "frame": 24,
+          "calls": 52,
+          "triangles": 84488,
+          "points": 0,
+          "lines": 0
+        }
+      },
+      "specimenMeshes": 124,
+      "workspaceCount": 1,
+      "heapUsed": 41215212
+    },
+    {
+      "cycle": 3,
+      "renderer": {
+        "memory": {
+          "geometries": 27,
+          "textures": 6
+        },
+        "render": {
+          "frame": 26,
+          "calls": 52,
+          "triangles": 84488,
+          "points": 0,
+          "lines": 0
+        }
+      },
+      "specimenMeshes": 124,
+      "workspaceCount": 1,
+      "heapUsed": 50936032
+    },
+    {
+      "cycle": 4,
+      "renderer": {
+        "memory": {
+          "geometries": 27,
+          "textures": 6
+        },
+        "render": {
+          "frame": 28,
+          "calls": 52,
+          "triangles": 84488,
+          "points": 0,
+          "lines": 0
+        }
+      },
+      "specimenMeshes": 124,
+      "workspaceCount": 1,
+      "heapUsed": 36155097
+    },
+    {
+      "cycle": 5,
+      "renderer": {
+        "memory": {
+          "geometries": 27,
+          "textures": 6
+        },
+        "render": {
+          "frame": 30,
+          "calls": 52,
+          "triangles": 84488,
+          "points": 0,
+          "lines": 0
+        }
+      },
+      "specimenMeshes": 124,
+      "workspaceCount": 1,
+      "heapUsed": 35675153
+    }
+  ],
+  "errors": [],
+  "passed": true
+}
