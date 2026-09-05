@@ -63,6 +63,9 @@ button{font-family:inherit; cursor:pointer; border:0; background:none; color:inh
 h1,h2,h3,h4{font-family:var(--display); font-weight:600; letter-spacing:-0.03em; line-height:1.04; margin:0}
 p{margin:0}
 :focus-visible{outline:2px solid var(--blue-2); outline-offset:3px; border-radius:6px}
+.landing-skip{position:fixed;top:12px;left:12px;z-index:1200;padding:12px 18px;border:1px solid var(--blue-2);border-radius:10px;background:var(--bg);color:var(--ink);font-weight:600;transform:translateY(-180%)}
+.landing-skip:focus{transform:none}
+#main-content:focus{outline:none}
 
 /* ============================================================
    ATMOSPHERE — WebGL field, equations, spotlight, grain
@@ -141,6 +144,13 @@ body.has-cursor .spotlight{opacity:1}
 @media(max-width:860px){
   .nav-links{display:none}
   .nav-cta .ghost-link{display:none}
+}
+@media(max-width:560px){
+  .nav-inner{gap:8px;padding:12px 10px}
+  .nav .brand{gap:7px;font-size:13px;min-width:0}
+  .nav .brand .logo,.nav .brand .mark{width:24px;height:24px;flex:none}
+  .nav-cta{gap:6px;flex:none}
+  .nav-cta>.btn{white-space:nowrap;padding:11px 9px;font-size:12px;gap:5px;min-height:44px}
 }
 
 /* ============================================================
@@ -350,6 +360,11 @@ section{position:relative; padding:clamp(80px,12vh,140px) 0}
 .qa[open] .pm{transform:rotate(180deg)}
 .qa[open] .pm::after{transform:scaleY(0)}
 .qa .ans{padding:0 0 24px; color:var(--ink-dim); font-size:15px; max-width:64ch; line-height:1.65}
+/* The shipped disclosures use .q and native summary markers, not .qa/.ans. */
+.faq>.q{border-bottom:1px solid var(--line-2)}
+.faq>.q>summary{min-height:44px;padding:22px 4px;cursor:pointer;font-family:var(--display);font-weight:500;font-size:18px;line-height:1.4;letter-spacing:-.01em}
+.faq>.q>summary::marker{color:var(--blue-2)}
+.faq>.q>p{padding:0 4px 24px;color:var(--ink-dim);font-size:15px;max-width:64ch;line-height:1.65}
 
 /* FINAL CTA */
 .final{text-align:center; position:relative; overflow:hidden; border-top:1px solid var(--line-2)}
@@ -446,6 +461,7 @@ footer{border-top:1px solid var(--line-2); padding:60px 0 40px}
 </style>
 </head>
 <body>
+<a class="landing-skip" id="landingSkip" href="#main-content">Skip to content</a>
 
 <div class="atmo vignette" aria-hidden="true"></div>
 <div class="atmo grain" aria-hidden="true"></div>
@@ -475,6 +491,7 @@ footer{border-top:1px solid var(--line-2); padding:60px 0 40px}
   </div>
 </nav>
 
+<main id="main-content" tabindex="-1">
 <header class="hero wrap" id="top">
   <div class="hero-grid">
     <div class="hero-copy" data-parallax="0.06">
@@ -713,9 +730,10 @@ footer{border-top:1px solid var(--line-2); padding:60px 0 40px}
         <div class="mrow"><span class="nm" style="width:auto;color:var(--ink)">↺ Reviewed</span><span style="color:var(--ink-dim);font-size:14px">The mistakes you came back to and fixed</span></div>
         <div class="mrow"><span class="nm" style="width:auto;color:var(--ink)">◇ Untouched</span><span style="color:var(--ink-dim);font-size:14px">What you have not opened yet, stated plainly</span></div>
       </div>
+      <a class="btn btn-ghost" href="./app.html#me" style="margin-top:24px">Open your actual activity →</a>
     </div>
     <div class="dash reveal holo" data-d="2" id="dash">
-      <div class="dash-top"><span class="t">your_record · on this device</span><span class="t" style="color:var(--emerald)">● local</span></div>
+      <div class="dash-top"><span class="t">Example · not your activity</span><span class="t" style="color:var(--emerald)">● preview</span></div>
       <div class="bars">
         <div class="bar" style="height:34%"></div><div class="bar" style="height:52%"></div>
         <div class="bar" style="height:44%"></div><div class="bar" style="height:70%"></div>
@@ -891,6 +909,7 @@ footer{border-top:1px solid var(--line-2); padding:60px 0 40px}
   </div>
 </section>
 
+</main>
 <footer class="wrap">
   <div class="foot-grid">
     <div>
@@ -946,6 +965,17 @@ footer{border-top:1px solid var(--line-2); padding:60px 0 40px}
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var raf = window.requestAnimationFrame || function (f) { return setTimeout(f, 16); };
+
+  /* A keyboard skip transfers focus as well as position, without smooth scroll. */
+  var skipLink = $("#landingSkip"), mainContent = $("#main-content");
+  if (skipLink && mainContent) skipLink.addEventListener("click", function (event) {
+    event.preventDefault();
+    var html = document.documentElement, alreadyInstant = html.classList.contains("no-smooth");
+    html.classList.add("no-smooth");
+    mainContent.focus({ preventScroll: true });
+    mainContent.scrollIntoView({ block: "start", behavior: "auto" });
+    if (!alreadyInstant) raf(function () { html.classList.remove("no-smooth"); });
+  });
 
   /* ── nav, scroll progress, spotlight ─────────────────────────────────── */
   var nav = $("#nav"), bar = $("#scrollbar");

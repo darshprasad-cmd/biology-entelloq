@@ -49,3 +49,33 @@ test('practice search and home paths resolve to supported sections', () => {
   assert.match(html, /id="cmdkInput" role="combobox"/);
   assert.match(html, /id="cmdkClose" aria-label="Close search"/);
 });
+
+test('embedded keyboard search uses the shell and restores the exact child focus target', () => {
+  const shellSource = html.slice(html.indexOf('function useShellNavigation(){'), html.indexOf('function failSection('));
+  const styles = [];
+  const listeners = [];
+  const input = { id: 'lesson-search' };
+  const doc = {
+    body: { classList: { contains: name => name === 'embed' } },
+    getElementById: id => styles.find(style => style.id === id),
+    createElement: () => ({}), head: { appendChild: style => styles.push(style) },
+    activeElement: input,
+    defaultView: { addEventListener: (...args) => listeners.push(args) },
+  };
+  const calls = [];
+  const bridge = vm.createContext({ frame: { contentDocument: doc }, openCmdk: (...args) => calls.push(args) });
+  vm.runInContext(shellSource + ';useShellNavigation();useShellNavigation();', bridge);
+  assert.equal(styles.length, 1, 'Only one shell integration per embedded document');
+  assert.equal(listeners.length, 1);
+  const [eventName, handle, capture] = listeners[0];
+  assert.equal(eventName, 'keydown');
+  assert.equal(capture, true, 'Run before the standalone section key handler');
+  let prevented = 0, stopped = 0;
+  const event = { key: 'K', ctrlKey: true, preventDefault: () => prevented++, stopImmediatePropagation: () => stopped++ };
+  handle(event);
+  assert.equal(prevented, 1);assert.equal(stopped, 1);
+  assert.equal(calls[0][0], event);assert.equal(calls[0][1], input);
+  handle({ ...event, altKey: true });handle({ ...event, ctrlKey: false });handle({ ...event, key: 'ArrowRight' });
+  assert.equal(calls.length, 1, 'Do not intercept typing, lesson keys or unrelated shortcuts');
+  assert.doesNotMatch(shellSource, /lframe|launchFrame\./, 'The immersive frame is not modified');
+});

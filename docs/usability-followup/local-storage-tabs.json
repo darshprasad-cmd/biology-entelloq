@@ -1,0 +1,64 @@
+{
+  "base": "http://127.0.0.1:3002",
+  "baseCommit": "50bcfb0ea089199f74a51472105e6c3f16d557d4",
+  "phase": "local-storage-tabs",
+  "timestamp": "2026-09-05T16:33:30.791Z",
+  "complete": true,
+  "http": [],
+  "checks": [
+    "Final landing header: single-line 44-pixel entry CTA, no brand/sign-in overlap or horizontal overflow at 320 and 390 pixels.",
+    "Two preloaded pages: Enzyme Math change preserves the other page's saved Diffusion prediction.",
+    "Two preloaded pages on one lesson: a stale lens-only change preserves the other page's newer prediction while saving the new lens.",
+    "Stale answer attempt shows the retained first prediction; explicit retake saves a new prediction visible after the other page reloads."
+  ],
+  "errors": [],
+  "blockedLabRequests": 5,
+  "navigation": [
+    {
+      "width": 320,
+      "overflow": false,
+      "brand": {
+        "left": 10,
+        "right": 85.390625,
+        "width": 75.390625,
+        "height": 41.59375
+      },
+      "signIn": {
+        "left": 93.390625,
+        "right": 190.03125,
+        "width": 96.640625,
+        "height": 42
+      },
+      "cta": {
+        "left": 196.03125,
+        "right": 310,
+        "width": 113.96875,
+        "height": 44
+      },
+      "ctaWhiteSpace": "nowrap"
+    },
+    {
+      "width": 390,
+      "overflow": false,
+      "brand": {
+        "left": 10,
+        "right": 137.921875,
+        "width": 127.921875,
+        "height": 24
+      },
+      "signIn": {
+        "left": 163.390625,
+        "right": 260.03125,
+        "width": 96.640625,
+        "height": 42
+      },
+      "cta": {
+        "left": 266.03125,
+        "right": 380,
+        "width": 113.96875,
+        "height": 44
+      },
+      "ctaWhiteSpace": "nowrap"
+    }
+  ]
+}
