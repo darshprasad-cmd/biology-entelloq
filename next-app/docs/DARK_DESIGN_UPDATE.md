@@ -1,5 +1,7 @@
 # Dark botanical design update
 
+This records the earlier palette-restoration pass. The current launch experience is documented in [the immersive launch update](LAUNCH_EXPERIENCE.md).
+
 The landing page now uses the same near-black and emerald palette as the practical workspace. The warm cream surfaces were removed at the user's request.
 
 ## Changes

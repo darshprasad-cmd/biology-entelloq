@@ -31,6 +31,8 @@ Install Playwright's browser once on a new machine with `npx playwright install 
 
 ## Documentation
 
+- [Immersive launch-page update](docs/LAUNCH_EXPERIENCE.md)
+- [Original hero artwork and generation prompt](docs/HERO_ARTWORK.md)
 - [Dark-green design update and publishing status](docs/DARK_DESIGN_UPDATE.md)
 - [Implementation and measured performance](docs/IMPLEMENTATION_REPORT.md)
 - [Add a specimen](docs/ADDING_A_SPECIMEN.md)

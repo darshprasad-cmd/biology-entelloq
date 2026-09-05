@@ -12,9 +12,9 @@ describe("primary product journeys", () => {
 
   it("presents a clear launch-page value proposition and primary action", () => {
     render(<Landing />);
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Understand living systems");
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Don’t just study life.");
     expect(screen.getAllByRole("link", { name: /Explore a dissection/i })[0]).toHaveAttribute("href", "/lab");
-    expect(screen.getByText("Reviewed content stays reviewed.")).toBeVisible();
+    expect(screen.getByRole("group", { name: "Anatomy layer" })).toBeVisible();
   });
 
   it("lets keyboard and pointer users select a structure in the 2D fallback", async () => {
