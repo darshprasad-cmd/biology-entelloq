@@ -19,7 +19,7 @@ fs.mkdirSync(output, { recursive: true });
 
 async function shell(page, view) {
   await page.goto(base + '/app.html#' + view, { waitUntil: 'domcontentloaded', timeout: 20000 });
-  await page.locator('#homeIn .tiles').first().waitFor({ state: 'attached', timeout: 15000 });
+  await page.locator('#homeIn .cc-map-grid .cc-node').first().waitFor({ state: 'attached', timeout: 15000 });
   if (view === 'home') return page;
   const iframe = page.locator('#viewFrame');
   await iframe.waitFor({ state: 'visible', timeout: 15000 });
@@ -98,16 +98,30 @@ async function checkReason(page) {
   report.checks.push('Reason: recoverable empty filters, preserved workout flow, keyboard multi-select, textual feedback and accurate current step.');
 }
 
+async function openShellSearch(page) {
+  const topSearch = page.locator('#topSearch');
+  if (await topSearch.isVisible()) {
+    await topSearch.click();
+    return topSearch;
+  }
+  // The mobile header keeps Explore visible; its Search Biology action opens
+  // the same shell palette and returns focus to that visible header control.
+  const explore = page.locator('#exploreBtn');
+  await explore.click();
+  await page.locator('#bq-explore[open]').waitFor({ state: 'visible' });
+  await page.locator('#exploreSearch').click();
+  await page.locator('#bq-explore').waitFor({ state: 'hidden' });
+  return explore;
+}
+
 async function checkSearch(page) {
   await shell(page, 'home');
-  const mobile = page.viewportSize().width < 821;
-  const trigger = page.locator(mobile ? '#searchBtnM' : '#searchBtn');
-  await trigger.click();
+  const trigger = await openShellSearch(page);
   await page.locator('#cmdkInput').fill('<img src=x onerror=alert(1)>');
   assert.equal(await page.locator('#cmdkList img').count(), 0, 'Search string cannot become HTML');
   await page.locator('#cmdkInput').press('Escape');
   assert.equal(await trigger.evaluate(el => el === document.activeElement), true, 'Search closes back to its trigger');
-  await trigger.click();
+  await openShellSearch(page);
   await page.locator('#cmdkInput').fill('osmosis');
   assert.ok(await page.locator('#cmdkInput').getAttribute('aria-activedescendant'));
   await page.locator('#cmdkInput').press('Tab');
@@ -122,30 +136,46 @@ async function checkSearch(page) {
 async function checkHome(page) {
   await shell(page, 'home');
   const hash = new URL(page.url()).hash;
-  await page.locator('.jump-paths').click();
-  assert.equal(new URL(page.url()).hash, hash, 'Jump must not invoke the section router');
-  assert.equal(await page.locator('#learning-paths').evaluate(el => el === document.activeElement), true);
+  const map = page.locator('#homeIn .cc-map');
+  assert.equal(await map.locator('.cc-node').count(), 8, 'All Biology fields are available in the map');
+  assert.equal(await map.getByRole('heading', { name: 'Your Biology Map', exact: true }).count(), 1);
+  const choosePath = page.locator('#choosePath');
+  await choosePath.click();
+  const dialog = page.locator('#bq-explore');
+  await dialog.waitFor({ state: 'visible' });
+  assert.equal(new URL(page.url()).hash, hash, 'Opening Explore must not invoke the section router');
+  assert.equal(await dialog.evaluate(el => el.contains(document.activeElement)), true, 'Explore owns keyboard focus while open');
   for (const [group, count] of [['understand', 3], ['practise', 3], ['personal', 2], ['all', 8]]) {
-    await page.locator('[data-path-group="' + group + '"]').click();
-    assert.equal(await page.locator('#learningPaths .tile:not([hidden])').count(), count);
-    assert.equal(await page.locator('[data-path-group][aria-pressed="true"]').count(), 1);
-    assert.equal(await page.locator('[data-path-group="' + group + '"]').getAttribute('aria-pressed'), 'true');
+    await dialog.locator('[data-path-group="' + group + '"]').click();
+    assert.equal(await dialog.locator('#learningPaths .tile:not([hidden])').count(), count);
+    assert.equal(await dialog.locator('[data-path-group][aria-pressed="true"]').count(), 1);
+    assert.equal(await dialog.locator('[data-path-group="' + group + '"]').getAttribute('aria-pressed'), 'true');
   }
+  await dialog.locator('#exploreClose').press('Escape');
+  await dialog.waitFor({ state: 'hidden' });
+  assert.equal(await choosePath.evaluate(el => el === document.activeElement), true, 'Closing Explore returns focus to its opener');
   const activity = await page.evaluate(() => localStorage.getItem('bioq_activity'));
   try {
     for (const value of ['null', '{"counts":{"learn":"oops","solve":-9},"last":{"k":"constructor","sub":"<img>"}}']) {
       await page.evaluate(data => localStorage.setItem('bioq_activity', data), value);
       await page.reload({ waitUntil: 'domcontentloaded' });
-      await page.locator('#learningPaths .tile').first().waitFor();
-      assert.equal(await page.locator('#learningPaths .tile').count(), 8);
-      assert.equal(await page.locator('#homeIn .resume img').count(), 0);
+      await page.locator('#homeIn .cc-map-grid .cc-node').first().waitFor();
+      assert.equal(await page.locator('#homeIn .cc-map-grid .cc-node').count(), 8);
+      const resume = page.locator('#homeIn .cc-hero [data-go]');
+      assert.equal(await resume.getAttribute('data-go'), 'lessons');
+      assert.equal(await resume.getAttribute('data-sub'), 'diffusion');
+      assert.match(await resume.textContent(), /Start exploring/);
+      assert.equal(await page.locator('#homeIn .cc-hero img').count(), 0);
       assert.equal(await page.locator('#launcher.on').count(), 0);
       assert.ok(!(await page.locator('#homeIn').textContent()).includes('NaN'));
+      await page.locator('#exploreBtn').click();
+      assert.equal(await page.locator('#learningPaths .tile').count(), 8);
+      await page.locator('#exploreClose').click();
     }
   } finally {
     await page.evaluate(value => value === null ? localStorage.removeItem('bioq_activity') : localStorage.setItem('bioq_activity', value), activity);
   }
-  report.checks.push('Home: all route groups, pressed-state feedback, in-page jump focus and recovery from null/malformed local activity.');
+  report.checks.push('Home: eight Biology fields, all Explore route groups, pressed-state feedback, modal opener focus and a safe first lesson after null/malformed local activity.');
 }
 
 async function checkExploreAndLearn(page) {

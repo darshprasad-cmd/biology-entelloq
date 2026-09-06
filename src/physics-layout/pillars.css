@@ -1,0 +1,153 @@
+/* Physics Entelloq's reading surfaces, adapted to Biology's existing pillars.
+   Keep this layer separate from authored lessons, scientific models and shared chrome. */
+html:root{
+  --bg:#050b08;--bg-2:#09100a;--panel:#0d180f;--raise:#16251a;
+  --ink:#e9ece5;--dim:#b2bdb0;--faint:#91a48a;
+  --line:rgba(166,197,162,.19);--line-2:rgba(166,197,162,.12);--hair:#38523c;
+  --em:#a8d8b3;--em-2:#c5f2c7;--cy:#b6d9b8;--cy-2:#a1c0a6;
+  --indigo:#b7b5df;--indigo-2:#b7b5df;--amber:#e8bc86;--rose:#e7a6b6;
+  --glass:#09100a;--glass-strong:#09100a;
+  --shadow-1:none;--shadow-2:none;--shadow-glow:none;--spot:transparent;
+  --sans:'Inter',system-ui,-apple-system,sans-serif;
+  --display:'Space Grotesk','Inter',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --r-sm:6px;--r:8px;--r-lg:9px;--r-xl:10px;
+  --edge:clamp(24px,4vw,64px);--maxw:1200px;
+}
+html:root[data-theme=light]{
+  --bg:#f1f5ed;--bg-2:#e8eee3;--panel:#f8fbf5;--raise:#e1eadb;
+  --ink:#172c1b;--dim:#415b44;--faint:#567052;
+  --line:#c4d3bc;--line-2:#d9e2d3;--hair:#a9bda2;
+  --em:#32683f;--em-2:#2b5936;--cy:#386642;--cy-2:#386642;
+  --indigo:#665c92;--indigo-2:#665c92;--amber:#885a24;--rose:#a04660;
+  --glass:#e8eee3;--glass-strong:#e8eee3;
+}
+/* Outrank the authored light-theme blue button gradient without changing its shape. */
+html:root[data-theme=light] body .btn.primary{background:var(--cy);color:var(--bg);border-color:var(--cy)}
+html:root[data-theme=light] body main .btn.primary:hover{background:var(--em);border-color:var(--em)}
+body #launch{background:#050b08}
+html:root,html body{background:var(--bg)!important;color:var(--ink)}
+html body{font:16px/1.65 var(--sans);letter-spacing:0}
+body>#fx,body>#atmo,body>.bg-veil{display:none!important}
+body main{padding-top:112px;padding-bottom:60px;min-width:0}
+html body.embed main{padding-top:42px!important;padding-bottom:65px}
+body main .wrap{width:100%;max-width:var(--maxw);padding-inline:var(--edge);margin-inline:auto;min-width:0}
+body main .wrap .wrap{padding-inline:0}
+body main .band{padding-block:36px}
+body main>:is(.band,.lrn-hero,.sv-hero,.ex-hero,.me-hero):first-child,
+body main>:is(#lessonApp,#reasonApp,#labsApp)>:first-child,
+body main>.page>.band:first-child{padding-top:0}
+body main :is(.lrn-hero,.sv-hero,.ex-hero,.me-hero,.hero){min-height:0;padding-block:0 32px}
+body main .lrn-hero-orb,body main .hero-orb,body main .hero-glow{display:none}
+body main :is(.lrn-hero-content,.hero-content){max-width:900px}
+body main :is(h1,h2,h3,h4,.display,.h1,.h2,.h3){font-family:var(--display);font-weight:450;color:var(--ink);text-shadow:none}
+body main :is(h1,.display,.h1){font-size:44px;line-height:1.1;letter-spacing:-1.8px}
+body main :is(h2,.h2){font-size:30px;line-height:1.2;letter-spacing:-1px}
+body main :is(h3,.h3){font-size:21px;line-height:1.35;letter-spacing:-.6px}
+body main h4{font-size:18px;line-height:1.4;letter-spacing:-.4px}
+body main :is(.grad,.grad-mind,.lrn-hero h1 em){background:none;color:var(--cy);-webkit-text-fill-color:currentColor}
+body main .eyebrow{font:500 10px/1.6 var(--mono);letter-spacing:1.8px;color:var(--cy)}
+body main .eyebrow::before{display:none}
+body main .lead{font-size:16px;line-height:1.8;font-weight:400;max-width:70ch;color:var(--dim)}
+body main :is(.lrn-hero,.sv-hero,.ex-hero,.me-hero) h1{margin:12px 0 20px;max-width:24ch}
+body main :is(.lrn-hero,.sv-hero,.ex-hero,.me-hero) .lead{margin-bottom:24px}
+body main :is(.lrn-hero,.sv-hero,.me-hero) .badge{
+  padding:0;margin-bottom:0;border:0;border-radius:0;background:none;backdrop-filter:none;
+  color:var(--cy);font:500 10px/1.6 var(--mono);letter-spacing:1.3px;
+}
+body main .badge .dot{width:5px;height:5px;box-shadow:none;animation:none}
+body main .sec-head{max-width:750px;margin-bottom:28px}
+body main .sec-head .eyebrow{margin-bottom:12px}
+body main .sec-head h2{margin-bottom:14px}
+body main .sec-head p{font-size:16px;line-height:1.8}
+body main :is(.grid,.exp-grid){gap:15px}
+body main :is(.card,.ex-frame,.sv-qcard,.sv-stat,.sv-scorecard,.sv-mrow,.les-lens,.lb-stage){
+  background:var(--panel);border:1px solid var(--line);border-radius:9px;box-shadow:none;
+}
+body main :is(.card,.ex-frame,.sv-qcard,.lb-stage){padding:24px}
+body main .card p,body main .exp p{font-size:14px;line-height:1.75;color:var(--dim)}
+body main .card :is(h2,h3,h4){font-size:21px;font-weight:450;line-height:1.35;letter-spacing:-.6px}
+body main .card .glow,body main .exp .liveband{display:none}
+body main .card.lift:hover,body main .dz-item:hover{transform:none;box-shadow:none;border-color:var(--hair)}
+body main .card .ico{width:34px;height:34px;margin-bottom:18px;border:0;border-radius:0;background:none}
+body main .card .ico svg{width:26px;height:26px}
+body main .exp{min-height:228px}
+body main .exp .open{opacity:1;transform:none;font-size:12px;font-weight:450}
+body main .cat-head{margin-bottom:20px}
+body main .cat-head h3{font:450 23px/1.4 var(--display);letter-spacing:-.5px}
+body main :is(.btn,.bx-btn,.sv-ghostbtn,.ghostbtn){
+  min-height:42px;padding:10px 16px;font:450 13px/1.4 var(--sans);border:1px solid var(--hair);
+  border-radius:6px;box-shadow:none;transition:background 140ms,transform 140ms;
+}
+body main :is(.btn.primary,.bx-btn.pri){background:var(--cy);color:var(--bg);border-color:var(--cy);font-weight:550}
+body main .btn.ghost{background:transparent;color:var(--ink)}
+body main .btn.primary:hover{background:var(--em);border-color:var(--em);box-shadow:none}
+body main .btn:hover .arr{transform:none}
+body main :is(.chip,.dz-sys,.notyet){border-radius:4px;font-size:10px;letter-spacing:.3px;box-shadow:none}
+body main :is(.les-filterfields input,.les-filterfields select,.dz-search,.fbtn,.sv-opt,.spec-tab,.sys-btn){border-radius:6px;min-height:42px}
+body main :is(input,textarea,select){font-family:var(--sans);color:var(--ink);accent-color:var(--cy)}
+body main input::placeholder,body main textarea::placeholder{color:var(--faint)}
+body main input[type=range]{min-height:28px}
+body main .fbtn{font:450 12px/1.4 var(--sans);text-transform:none;letter-spacing:0}
+body main :is(.sv-opt.on,.fbtn.on,.sys-btn.on){background:var(--raise);border-color:var(--hair);color:var(--ink);box-shadow:none}
+body main .sys-btn:hover{transform:none}
+body main :is(.sv-choice,.sv-item,.les-opt,.rz-opt){border-radius:7px;font-size:15px;line-height:1.7;min-height:44px}
+body main :is(.les-blurb,.les-read,.rz-prompt,.rz-q,.sv-feedback .ex,.sv-passage){font-size:16px;line-height:1.8}
+body main :is(.les-eq,.les-fr,.rz-step,.rz-rc,.sv-passage,.atlas-detail,.tl-detail,.dz-item){border-radius:7px;box-shadow:none}
+body main :is(.les-rail,.rz-rail){gap:6px}
+body main .les-rail{flex-wrap:nowrap;overflow-x:auto;max-width:100%;background:var(--bg);backdrop-filter:none;scrollbar-width:thin}
+html body.embed .les-rail{top:0}
+body main .les-tab{min-height:44px;border-radius:5px;box-shadow:none}
+body main .les-tab{flex:none}
+body main .les-tab .les-nm{display:block;font-size:12px;font-weight:450}
+body main .les-tab.on{background:var(--raise);color:var(--ink);box-shadow:inset 0 -2px var(--cy)}
+body main .les-card::before{width:2px;opacity:.6}
+body main .les-filters{border-radius:8px;background:var(--panel);padding:20px}
+body main .lrn-meta{margin-top:28px;padding-top:20px;gap:28px}
+body main :is(.lrn-meta .stat b,.sv-stat b,.fact b,.sv-verdict .vt){font-family:var(--display);font-weight:450;font-size:27px;letter-spacing:-.6px}
+body main :is(.lrn-meta .stat span,.sv-stat span){font-size:10px;letter-spacing:0}
+body main .sv-stats{gap:12px;margin-top:26px}
+body main .cta-band,body main .vision{border:1px solid var(--line);border-radius:9px;padding:32px;background:var(--panel)}
+body main .reveal{opacity:1;transform:none;filter:none;transition:none}
+body main :focus-visible{outline:2px solid var(--cy);outline-offset:4px;box-shadow:none}
+body main .about-hero{text-align:left;max-width:900px;margin-inline:0}
+body main .about-hero .eyebrow{justify-content:flex-start!important}
+body main .about-hero p{margin-inline:0}
+/* Standalone entry keeps its existing navigation; the embedded shell owns its header. */
+body:not(.embed) header.nav{background:var(--bg-2);border-bottom:1px solid var(--line);backdrop-filter:none}
+body:not(.embed) .nav-in{min-height:70px;padding-block:12px}
+body:not(.embed) .nav-links a{font-size:13px;border-radius:6px}
+body:not(.embed) .brand{font-size:16px;font-weight:450;letter-spacing:-.6px}
+body:not(.embed) .brand b{font-weight:650}
+body:not(.embed) :is(.search-pill,.iconbtn){border-radius:6px;background:transparent}
+body:not(.embed) header .btn.primary{background:var(--cy);color:var(--bg);border-radius:6px;box-shadow:none;font-size:13px}
+@media(max-width:1100px){
+  body main :is(.g3,.g4,.exp-grid){grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:850px){
+  html:root{--edge:22px}
+  body main{padding-top:100px}
+  html body.embed main{padding-top:30px!important;padding-bottom:40px}
+  body main .band{padding-block:28px}
+  body main :is(h1,.display,.h1){font-size:34px;letter-spacing:-1.25px}
+  body main :is(h2,.h2){font-size:27px;letter-spacing:-.8px}
+  body main :is(.card,.ex-frame,.sv-qcard,.lb-stage){padding:22px}
+  body main .card p,body main .exp p{font-size:16px;line-height:1.8}
+  body main .lead{font-size:16px}
+  body main :is(.btn,.bx-btn,.sv-ghostbtn,.ghostbtn,.fbtn,.sv-opt,.sys-btn){min-height:44px}
+  body main :is(input:not([type=range]),textarea,select){font-size:16px;min-width:0}
+  body main .les-filterfields input,body main .les-filterfields select{font-size:16px}
+  body main .lrn-meta{gap:20px}
+  body main .exp{min-height:0}
+}
+@media(max-width:550px){
+  body main :is(.g2,.g3,.g4,.exp-grid,.sv-topics){grid-template-columns:1fr}
+  body main .sv-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  body main :is(.lrn-cta,.ex-hero .cta){gap:10px}
+  body main :is(.cta-band,.vision){padding:24px}
+  body main .les-filterfields{grid-template-columns:1fr}
+  body main .les-filterfields>*{min-width:0}
+}
+@media(prefers-reduced-motion:reduce){
+  body main *,body main *::before,body main *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}

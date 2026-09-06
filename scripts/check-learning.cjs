@@ -37,6 +37,8 @@ const checks = [
 ];
 if (unitFiles.length) checks.push(['Learning unit tests', process.execPath, ['--test', ...unitFiles]]);
 if (fs.existsSync(path.join(root, 'scripts/build-learning.py'))) checks.push(['Targeted build drift', python, ['scripts/build-learning.py', '--check']]);
+checks.push(['Physics shell style drift', python, ['scripts/sync-physics-shell.py', '--check']]);
+checks.push(['Physics pillar style drift', python, ['scripts/sync-physics-pillars.py', '--check']]);
 
 const started = Date.now();
 Promise.all(checks.map(([name, command, args]) => new Promise(resolve => {
