@@ -1,5 +1,5 @@
 {
-  "at": "2026-09-06T13:25:24.056Z",
+  "at": "2026-09-06T13:58:48.888Z",
   "kind": "real-shell-layout-harness-no-renderer-no-camera",
   "complete": true,
   "observations": [
@@ -422,9 +422,9 @@
           "x": 22,
           "y": 383,
           "width": 162,
-          "height": 220.296875,
+          "height": 212,
           "right": 184,
-          "bottom": 603.296875,
+          "bottom": 595,
           "centerClickable": true,
           "overflow": true,
           "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
@@ -2962,9 +2962,9 @@
           "x": 22,
           "y": 433,
           "width": 162,
-          "height": 232.578125,
+          "height": 212,
           "right": 184,
-          "bottom": 665.578125,
+          "bottom": 645,
           "centerClickable": true,
           "overflow": false,
           "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "

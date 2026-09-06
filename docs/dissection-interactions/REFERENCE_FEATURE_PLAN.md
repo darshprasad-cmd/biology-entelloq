@@ -2,7 +2,7 @@
 
 **PROPOSED — NOT IMPLEMENTED. Architecture review and original 3D source files are required before the major rebuild.**
 
-Read-only inventory dated 2026-09-06, against the working source on `codex/biology-dissection-interactions`. This document is a future backlog, not the release notes for the separate, bounded interaction fixes. No new asset was downloaded or incorporated for this inventory. No GPU, camera, AR, or headset test was run for this review.
+Read-only inventory dated 2026-09-06, against the source snapshot committed as `a730507` on `codex/biology-dissection-interactions`, before integrating upstream main's separate public-page changes. Source line references describe that snapshot. This document is a future backlog, not the release notes for the separate, bounded interaction fixes. No new asset was downloaded or incorporated for this inventory. No GPU, camera, AR, or headset test was run for this review.
 
 ## Scope and prerequisites
 

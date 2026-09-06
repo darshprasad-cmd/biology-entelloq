@@ -55,9 +55,12 @@ page-wrapper boundaries remain enforced.
 ## Verification
 
 `python scripts/build-dissection.py --check` verifies exact source/artifact sync.
-`node scripts/check-learning.cjs` runs all eight required local check groups,
+`node scripts/check-learning.cjs` runs all ten required local check groups,
 including the original preservation boundaries and all Node/Python contracts.
-The final release check results are recorded below after integration with main.
+After integrating main at `d74a50e`, all ten groups passed; 142 Node tests and
+12 Python tests passed. The new main's public landing page, app layout and
+original dissection fingerprint are identical to that upstream commit. This
+release changes only the lab's approved source slots and their checks/evidence.
 
 Focused automated checks cover left/right tracking slots, two-hand span, loss
 handoff, camera cancellation/restart, case resets, all-five cut geometry,
@@ -84,7 +87,9 @@ desktop/tablet/phone/landscape sizes, with keyboard, off/loading/failure/live,
 expanded/collapsed and camera-hidden states. See `hand-layout/hand-layout.json`.
 These are application and layout checks, **not** webcam recognition tests.
 Current layout result: all 60 observations across six sizes passed, with no
-overlap/interaction errors; active control height is 60–61 pixels.
+overlap/interaction errors; active control height is 60–61 pixels. These were
+rerun after integrating the current main's shared styling. The focused bench
+regression also passed with zero page errors and no camera request.
 
 ## Scientific and visual limits
 
