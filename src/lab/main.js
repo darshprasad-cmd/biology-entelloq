@@ -24,6 +24,7 @@ let env = null, handViz = null, soft = null, instr = null, narrator = null;
 let postfx = null, sfx = null, surface = null, intro = null, dust = null;
 // Phase 2 — the tissue gets real.
 let strata = null, cutting = null, blood = null, constraints = null;
+const cutRest = new Map();
 // Phase 3 — the clinical layer.
 let histology = null, imaging = null, pathology = null;
 // Phase 4 — alive.
@@ -39,6 +40,11 @@ const input = { x: 0.5, y: 0.5, grip: 0, gripping: false, span: 0, source: 'mous
 // Mouse state, kept separate so a hand can take over mid-stroke and back again.
 const mouse = { x: 0.5, y: 0.5, down: false };
 let handMode = false;
+let handRequest = 0;
+let handStartPromise = null;
+// Tracker slots are anatomical left/right, not primary/secondary. Keep the
+// working hand stable through a grip; either hand can operate every instrument.
+const handDrive = { slot: -1 };
 let currentTool = 'probe';
 
 // Phone or not, decided by the shell (SH_PHONE — a coarse pointer plus a short
@@ -494,6 +500,19 @@ function tchUp(e) {
 }
 
 /* ---- input router ------------------------------------------------------ */
+function drivingHandSlot(snap) {
+  if (!handMode || !snap || !snap.active || !Array.isArray(snap.hands)) return -1;
+  const available = (i) => {
+    const h = snap.hands[i], p = h && (h.cursorS || h.cursor);
+    return h && h.present && p && Number.isFinite(p.x) && Number.isFinite(p.y);
+  };
+  const previous = handDrive.slot;
+  if (available(previous) && snap.hands[previous].isPinching) return previous;
+  const pinching = snap.hands.findIndex((h, i) => available(i) && h.isPinching);
+  if (pinching >= 0) return pinching;
+  return available(previous) ? previous : snap.hands.findIndex((h, i) => available(i));
+}
+
 function routeInput() {
   // VR outranks everything: if a headset is presenting, its controller or tracked
   // hand IS the instrument and the desktop pointer is not even on screen.
@@ -511,10 +530,25 @@ function routeInput() {
   }
 
   const snap = hands && hands.snapshot;
-  const live = handMode && snap && snap.active && snap.hands[0] && snap.hands[0].present;
+  const previousSlot = handDrive.slot;
+  const slot = drivingHandSlot(snap);
+  const live = slot >= 0;
+  handDrive.slot = slot;
+  // Finish the old stroke at its LAST contact before a different hand or mouse
+  // takes over. Never join two input sources with a slash across the specimen.
+  const nextSource = live ? 'hand' : 'mouse';
+  const changedDriver = input.source !== nextSource || previousSlot !== slot;
+  if (changedDriver) { dialReset(); flickReset(); }
+  if (input.gripping && changedDriver) {
+    input.grip = 0; input.gripping = false; input.span = 0;
+    drawCursor(false); controls.enabled = false;
+    dialReset(); flickReset();
+    if (handViz && handViz.setDial) handViz.setDial({ active: false });
+    return;
+  }
 
   if (live) {
-    const h = snap.hands[0];
+    const h = snap.hands[slot];
     // Aim from the RENDER-RATE cursor. `h.cursor` is only rewritten when a camera
     // frame lands, so at 30fps detection on a 60-144Hz screen it is the same value
     // for two to five consecutive frames — the instrument stair-steps across the
@@ -524,11 +558,13 @@ function routeInput() {
     // about actual detections — grip reacquisition especially — must not be done
     // against a prediction.) Falls back if an older hands.js is assembled in.
     const hp = h.cursorS || h.cursor;
-    input.x = hp.x;
-    input.y = hp.y;
+    input.x = Math.max(0, Math.min(1, hp.x));
+    input.y = Math.max(0, Math.min(1, hp.y));
     input.grip = h.pinchStrength;
     input.gripping = h.isPinching;
-    input.span = snap.hands[1] && snap.hands[1].present ? (snap.span || 0) : 0;
+    // hands.js publishes separation on each hand, NOT snapshot.span.
+    input.span = snap.hands.filter((other) => other.present).length > 1
+      ? (Number.isFinite(h.span) ? h.span : 0) : 0;
     input.source = 'hand';
     const nowP = performance.now();
     // A flick changes the instrument. Measured on the SMOOTHED cursor, not raw
@@ -613,11 +649,15 @@ function onEvent(evt) {
       cutting.open({
         partId: part.id, mesh: part.mesh, points: inc.points,
         system: part.system, depth: 0.55, amount: 0.62,
+        rest: cutRest.get(part.id),
       });
     }
   }
   if (cutting && evt.kind === 'retract') cutting.gape(dissection.hovered, evt.meta.open || 1);
-  if (cutting && evt.kind === 'peel') cutting.gape(evt.partId, 1);
+  if (cutting && evt.kind === 'peel') {
+    cutting.releaseSurface(evt.partId);
+    cutting.remove(evt.partId);
+  }
 
   // Injury bleeds harder than a clean cut, and a torn artery is not a graze.
   if (blood && dissection && dissection.contact && /damage|incise/.test(evt.kind)) {
@@ -750,18 +790,35 @@ function doAction(id) {
  */
 function setCase(caseId) {
   if (!pathology) return null;
+  // A case describes a fresh specimen. Reusing cut indices, removed sheets or
+  // residual rims would author the new pathology against the previous anatomy.
+  const attempt = dissection && dissection.state;
+  if (attempt && (attempt.pinned.size || attempt.incisions.size || attempt.removed.size || (cutting && cutting.count))) {
+    loadSpecimen(specimenId);
+    if (!pathology) return null;
+  }
   if (soft) { soft.dispose(); soft = null; }
   const r = caseId ? pathology.apply(caseId) : (pathology.clear(), null);
   if (typeof createSoftBody === 'function') {
     try { soft = createSoftBody(THREE, parts); soft.setLife(!!(physio && physio.running())); }
     catch (e) { console.warn('softbody rebuild failed', e); soft = null; }
   }
+  captureCutRest();
   if (shell.setVignette) shell.setVignette(pathology.vignette());
   if (r) shell.say('New specimen on the table. Read the history, then dissect.');
   return r;
 }
 
 /* ---- specimen lifecycle ------------------------------------------------ */
+function captureCutRest() {
+  cutRest.clear();
+  if (!parts) return;
+  parts.forEach((part) => {
+    const positions = part.mesh.geometry && part.mesh.geometry.attributes.position;
+    if (positions && part.cuttable) cutRest.set(part.id, new Float32Array(positions.array));
+  });
+}
+
 function loadSpecimen(id) {
   if (group) { scene.remove(group); group = null; }
   if (dissection) { dissection.dispose(); dissection = null; }
@@ -831,10 +888,19 @@ function loadSpecimen(id) {
     catch (e) { console.warn('softbody failed', e); soft = null; }
   }
 
+  // Cached before any tool deformation. Live wounds must not treat a pressed
+  // surface as a new rest shape or accumulate frame-to-frame displacement.
+  captureCutRest();
   dissection = createDissection(THREE, {
     scene, camera, group, parts, onEvent,
     requiresPinning: SPECIMENS[id].requiresPinning !== false,
     getRemovalSupport: env && env.getRemovalSupport,
+    onCutProgress: (part, points) => {
+      if (!cutting) return;
+      if (cutting.has(part.id)) cutting.grow(part.id, points);
+      else cutting.open({ partId: part.id, mesh: part.mesh, points,
+        system: part.system, depth: 0.55, amount: 0.62, rest: cutRest.get(part.id) });
+    },
   });
   dissection.setTool(currentTool === 'swab' ? 'probe' : currentTool);
 
@@ -912,7 +978,7 @@ function tick(t) {
     // gesture come from hand 0 so the panel meter tracks the driving hand.
     if (!tick._hs || t - tick._hs > 140) {
       tick._hs = t;
-      const h0 = hands.snapshot.hands[0];
+      const h0 = hands.snapshot.hands[drivingHandSlot(hands.snapshot)];
       shell.setHandState({
         on: true, status: 'tracking', health: hands.snapshot.health, video: hands.videoEl,
         gesture: h0 && h0.present ? h0.gesture : 'none',
@@ -1371,8 +1437,10 @@ export function startApp() {
   }
 
   shell.on('hands', async (want) => {
+    const request = ++handRequest;
     if (!want) {
       handMode = false;
+      handDrive.slot = -1;
       document.body.classList.remove('handmode');
       if (hands) hands.stop();
       if (handViz) handViz.setEnabled(false);
@@ -1381,8 +1449,18 @@ export function startApp() {
       return;
     }
     shell.setHandState({ on: true, status: 'starting' });
+    // Stop can interrupt a model download/permission prompt. A fresh opt-in
+    // queues behind that cancellation, rather than failing "already starting".
+    if (handStartPromise) {
+      await handStartPromise;
+      if (request !== handRequest) return;
+    }
     if (!hands) hands = createHands();
-    const res = await hands.start();
+    const pending = hands.start();
+    handStartPromise = pending;
+    const res = await pending;
+    if (handStartPromise === pending) handStartPromise = null;
+    if (request !== handRequest) return;
     if (res.ok) {
       handMode = true;
       document.body.classList.add('handmode');
@@ -1399,7 +1477,10 @@ export function startApp() {
       // only way to change instrument, and no one discovers a motion gesture by
       // accident — the flick shipped undiscovered for exactly that reason. Both
       // are named here, both with the direction that makes them work.
-      shell.say('Camera on. Pinch to grip. Two ways to change instrument without the dock: '
+      shell.say('Camera on. Either hand works. '
+        + (specimenId === 'frog' ? 'Choose Pins (4) to secure the four limbs first. ' : '')
+        + 'Choose Scalpel (2) to pinch and draw a cut, then Forceps (3) to pinch and pull the cut layer away. '
+        + 'Two ways to change instrument without the dock: '
         + 'twist your open hand like a dial, or flick it sharply up for the next instrument '
         + 'and down for the previous. Press U to re-centre tracking on your hand, or E to '
         + 'retune the smoothing. Nothing is recorded.');
@@ -1453,6 +1534,7 @@ export function startApp() {
     handsApi:   { get: () => hands,      configurable: true },
     shell:      { get: () => shell,      configurable: true },
     tool:       { get: () => currentTool, configurable: true },
+    drivingHandSlot: { get: () => handDrive.slot, configurable: true },
   });
   window.__LAB.loadSpecimen = loadSpecimen;
   window.__LAB.setCase = setCase;
@@ -1462,6 +1544,17 @@ export function startApp() {
     input.x = x; input.y = y; input.grip = grip;
     input.gripping = gripping; input.span = span || 0; input.source = 'test';
     if (dissection) dissection.update(input, 16);
+  };
+  // Synthetic tracking verification goes through the SAME router as a camera.
+  // This does not start a camera or replace a live tracker snapshot.
+  window.__LAB.feedHandSnapshot = (snapshot, dt = 16) => {
+    if (handMode) throw new Error('Stop the camera before synthetic tracking verification.');
+    const previousHands = hands;
+    try {
+      hands = { snapshot }; handMode = true;
+      routeInput();
+      if (dissection) dissection.update(input, dt);
+    } finally { hands = previousHands; handMode = false; }
   };
   window.__LAB.THREE = THREE;
   window.__LAB.camera = camera;

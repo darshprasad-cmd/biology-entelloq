@@ -119,15 +119,42 @@ function buildFrog(THREE) {
     childMesh(parent, d, x, y, z, Math.PI / 2 + tilt, 0, spread);
     return d;
   }
+  // Derive the shoulder/hip insertion from the actual deformed flank. A fixed
+  // x coordinate only grazed that surface, exposing the open end of each tube.
+  // Bury the proximal ring, then carry a continuous taper out to the hand/foot.
+  skin.updateMatrixWorld(true);
+  function limbRoot(side, y, z, inset) {
+    const ray = new THREE.Raycaster(new THREE.Vector3(side * 6, y, z), new THREE.Vector3(-side, 0, 0));
+    const hit = ray.intersectObject(skin, false)[0];
+    const flank = hit ? Math.abs(hit.point.x) : 1.85;
+    return [side * Math.max(0.85, flank - inset), y, z];
+  }
+  function taperLimb(mesh, radii) {
+    const geo = mesh.geometry, params = geo.parameters, pos = geo.attributes.position;
+    const v = new THREE.Vector3();
+    for (let i = 0; i < pos.count; i++) {
+      const t = Math.floor(i / (params.radialSegments + 1)) / params.tubularSegments;
+      let k = 1;
+      while (k < radii.length - 1 && t > radii[k][0]) k++;
+      const a = radii[k - 1], b = radii[k];
+      const f = smooth(Math.max(0, Math.min(1, (t - a[0]) / (b[0] - a[0]))));
+      const radius = a[1] + (b[1] - a[1]) * f;
+      // TubeGeometry places rings at arc-length fractions, not spline time.
+      const center = params.path.getPointAt(t);
+      v.fromBufferAttribute(pos, i).sub(center).multiplyScalar(radius / params.radius).add(center);
+      pos.setXYZ(i, v.x, v.y, v.z);
+    }
+    seal(geo);
+  }
   function limb(lid, nm, sx, long, seed) {
     let path, r, foot, footPos, footRot, nDig, digLen, webW, webL;
     if (long) {
       // hindlimb: long, sharply folded — thigh forward, shank back, big webbed foot
       path = [
-        [sx * 1.85, 0.05, -2.25],
+        limbRoot(sx, 0.05, -2.25, 0.74),
         [sx * 3.05, -0.12, -1.25],   // knee (thrust forward)
         [sx * 2.7, -0.2, -3.35],     // ankle (folded back)
-        [sx * 2.15, -0.16, -4.4],    // heel
+        [sx * 2.05, -0.17, -4.65],   // heel, seated inside the long foot
       ];
       r = 0.34;
       foot = new THREE.Mesh(new THREE.SphereGeometry(1, 18, 12), mat(THREE, 0x54682f, { rough: 0.62, sheen: 0xaec07a }));
@@ -137,9 +164,10 @@ function buildFrog(THREE) {
     } else {
       // forelimb: shorter, folded, small 4-digit hand
       path = [
-        [sx * 1.85, 0.06, 2.05],
+        limbRoot(sx, 0.06, 2.05, 0.48),
         [sx * 2.6, -0.06, 2.6],      // elbow
         [sx * 2.3, -0.12, 3.35],     // wrist
+        [sx * 2.15, -0.14, 3.64],    // continue inside the palm, not short of it
       ];
       r = 0.26;
       foot = new THREE.Mesh(new THREE.SphereGeometry(1, 16, 10), mat(THREE, 0x54682f, { rough: 0.62, sheen: 0xaec07a }));
@@ -147,7 +175,10 @@ function buildFrog(THREE) {
       footPos = [sx * 2.15, -0.14, 3.85]; footRot = [0.1, sx * 0.4, 0];
       nDig = 4; digLen = 0.34; webW = 0; webL = 0;
     }
-    const m = tube(THREE, 0x5a6b33, path, r, { rough: 0.62, sheen: 0xaec07a, clear: 0.4, seg: 40, rad: 9, seed });
+    const m = tube(THREE, 0x5a6b33, path, r, { rough: 0.62, sheen: 0xaec07a, clear: 0.4, seg: 40, rad: 16, seed });
+    taperLimb(m, long
+      ? [[0, 0.47], [0.18, 0.57], [0.42, 0.32], [0.74, 0.24], [1, 0.19]]
+      : [[0, 0.32], [0.25, 0.34], [0.7, 0.22], [1, 0.16]]);
     childMesh(m, foot, ...footPos, ...footRot);
     // splayed digits fanning off the far end of the foot
     for (let i = 0; i < nDig; i++) {

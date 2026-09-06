@@ -172,7 +172,10 @@ export function setupEnvironment(THREE, deps, refs) {
   })();
 
   const table = new THREE.Mesh(
-    track(new THREE.PlaneGeometry(70, 70)),
+    // The original two huge triangles produced a diagonal depth/rasterization
+    // artifact over the earthworm tray in the real renderer. A modest grid fixes
+    // that at identical size/material/placement: 288 triangles instead of two.
+    track(new THREE.PlaneGeometry(70, 70, 12, 12)),
     track(new THREE.MeshPhysicalMaterial({
       color: 0x090d11, roughness: 0.55, metalness: 0.52,
       roughnessMap: steelRough,

@@ -9,8 +9,8 @@
  * user's explicit ask to "show the actual hand thing" — turns the hand panel
  * into a live cockpit: a mirrored self-view with a glowing hand skeleton drawn
  * from the tracker's published landmarks, a status dot, a gesture chip, a grip
- * meter driven by pinchStrength, a one/two-hand indicator, and a first-run
- * coach card. The specimen still dominates; every panel floats and recedes.
+ * meter driven by pinchStrength and a one/two-hand indicator. Active tracking
+ * recedes into a status strip; the full settings/preview open only on request.
  *
  * The public contract is unchanged. buildShell(root) returns the same handles
  * main.js calls, and setHandState still accepts {on,status,health,video,reason}
@@ -213,13 +213,14 @@ body:not(.bioq-phone).physio-on #hand{max-height:calc(100dvh - 340px)}
 .handhead{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .handhead .lbl{color:var(--em);letter-spacing:.13em}
 .handtools{display:flex;align-items:center;gap:6px;flex:none}
-#handpreview{display:none}
+#handpreview{display:none;min-width:44px;min-height:44px;padding:8px;align-items:center;justify-content:center}
+#hand.live #handpreview{display:inline-flex}
 .hcount{font-family:var(--mono);font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);
         border:1px solid var(--line);border-radius:6px;padding:2px 7px}
 #hand.live .hcount{color:var(--em);border-color:rgba(52,211,153,.35)}
 #hand #selfwrap,#hand #handlive{display:none}
-#hand.live #selfwrap{display:block}
-#hand.live #handlive{display:flex}
+#hand.live.preview-open #selfwrap:not(.nocam){display:block}
+#hand.live.preview-open #handlive{display:flex}
 #selfwrap{position:relative;width:100%;aspect-ratio:4/3;border-radius:10px;overflow:hidden;
           border:1px solid rgba(52,211,153,.3);
           box-shadow:0 0 0 1px rgba(0,0,0,.4),0 10px 26px -12px rgba(52,211,153,.4)}
@@ -254,10 +255,10 @@ body:not(.bioq-phone).physio-on #hand{max-height:calc(100dvh - 340px)}
 #gripfill{position:absolute;inset:0;transform-origin:left center;transform:scaleX(0);
           background:linear-gradient(90deg,var(--em),var(--cy));transition:transform .06s linear}
 #gripfill[data-on="1"]{box-shadow:0 0 10px rgba(56,224,216,.7)}
-/* Show-camera switch. Hidden with the rest of the live readouts until the camera
-   is actually running, because it is meaningless before that. */
+/* Show-camera switch. Available in explicitly opened tracking settings, not
+   in the compact active strip or the off-state invitation. */
 #hand #camrow{display:none}
-#hand.live #camrow{display:flex;align-items:center;justify-content:space-between;gap:9px}
+#hand.live.preview-open #camrow{display:flex;align-items:center;justify-content:space-between;gap:9px}
 .tgl{position:relative;width:34px;height:18px;flex:none;padding:0;border-radius:10px;cursor:pointer;
      border:1px solid var(--line);background:rgba(255,255,255,.05);transition:.18s}
 .tgl i{position:absolute;left:2px;top:2px;width:12px;height:12px;border-radius:50%;
@@ -265,16 +266,23 @@ body:not(.bioq-phone).physio-on #hand{max-height:calc(100dvh - 340px)}
 .tgl[aria-checked="true"]{border-color:rgba(52,211,153,.45);background:rgba(52,211,153,.16)}
 .tgl[aria-checked="true"] i{left:18px;background:var(--em);box-shadow:0 0 8px rgba(52,211,153,.8)}
 .tgl:hover{border-color:rgba(52,211,153,.5)}
-/* Camera hidden: the video goes, the tracked skeleton stays on a dark plate so
-   the panel still shows that tracking is live. */
-#selfwrap.nocam{background:rgba(4,7,10,.85);border-color:rgba(52,211,153,.16)}
+/* Camera visibility off removes the whole preview, not just the video. Live
+   status and gesture feedback remain, without reserving an empty black plate. */
+#hand #selfwrap.nocam{display:none}
 #selfwrap.nocam #selfview{display:none}
+#cambtn{width:44px;height:44px;border:0;background:transparent;border-radius:12px}
+#cambtn::before{content:"";position:absolute;left:5px;top:13px;width:34px;height:18px;
+  border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.05)}
+#cambtn[aria-checked="true"]::before{border-color:rgba(52,211,153,.45);background:rgba(52,211,153,.16)}
+#cambtn i{top:16px;left:8px}
+#cambtn[aria-checked="true"] i{left:24px}
 #handbtn{margin-top:1px;width:100%;min-height:44px;padding:11px 12px;border:1px solid rgba(52,211,153,.62);border-radius:9px;
          cursor:pointer;color:#ddfff0;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
          text-transform:uppercase;transition:.16s;
          background:linear-gradient(135deg,rgba(52,211,153,.3),rgba(52,211,153,.12))}
 #handbtn:hover{background:rgba(52,211,153,.24);box-shadow:0 0 18px -4px rgba(52,211,153,.6)}
 #handbtn:focus-visible,#handpreview:focus-visible,#cambtn:focus-visible{outline:2px solid var(--em);outline-offset:3px}
+#handbtn:active,#handpreview:active,#cambtn:active{transform:scale(.97)}
 #handbtn:not(.off){border-color:rgba(232,115,94,.42);color:#f0a494;
          background:linear-gradient(180deg,rgba(232,115,94,.14),rgba(232,115,94,.06))}
 #handbtn:not(.off):hover{background:rgba(232,115,94,.18);box-shadow:0 0 18px -6px rgba(232,115,94,.6)}
@@ -654,7 +662,7 @@ body.bioq-phone .handhead .lbl{font-size:9px;letter-spacing:.1em}
 body.bioq-phone #handbtn{margin:0;min-height:44px}
 body.bioq-phone #handstat{font-size:8px;letter-spacing:.06em;line-height:1.4}
 body.bioq-phone #handnote{font-size:10px;line-height:1.4}
-body.bioq-phone #hand.live #handpreview{display:inline-flex;min-height:32px;padding:6px 8px;align-items:center}
+body.bioq-phone #hand.live #handpreview{display:inline-flex;min-height:44px;padding:6px 8px;align-items:center}
 body.bioq-phone #hand:not(.preview-open) #selfwrap,
 body.bioq-phone #hand:not(.preview-open) #handlive,
 body.bioq-phone #hand:not(.preview-open) #camrow{display:none}
@@ -724,10 +732,23 @@ body.bioq-phone #phy-mon{display:none}
   body.bioq-phone #hand #selfwrap{grid-column:1;grid-row:3 / span 2;width:96px;height:64px}
   body.bioq-phone #hand #handlive{grid-column:2;grid-row:3}
   body.bioq-phone #hand #camrow{grid-column:2;grid-row:4}
+  body.bioq-phone #hand.camera-hidden #handlive{grid-column:1;grid-row:3}
+  body.bioq-phone #hand.camera-hidden #camrow{grid-column:2;grid-row:3}
 }
 @media (min-width:521px) and (max-width:1100px){
   body:not(.bioq-phone) #hint{left:468px;right:22px;transform:none;font-size:11px}
 }
+/* Active tracking should leave the specimen exposed. These are state rules,
+   deliberately shared by desktop, tablet and phone, with no size animation. */
+body #hand.compact{display:grid;grid-template-columns:minmax(0,1fr) 74px 60px;gap:6px;
+  width:260px;padding:7px 8px;border-radius:14px;overflow:visible}
+body.bioq-phone #hand.compact{width:100%}
+#hand.compact .handhead,#hand.compact .handtools{display:contents}
+#hand.compact .handhead>.lbl,#hand.compact #handcount,#hand.compact #handnote,
+#hand.compact #selfwrap,#hand.compact #handlive,#hand.compact #camrow{display:none}
+#hand.compact #handstat{grid-column:1;grid-row:1;min-width:0;font-size:8px;line-height:1.4;letter-spacing:.04em}
+#hand.compact #handpreview{grid-column:2;grid-row:1;font-size:8px;letter-spacing:.05em}
+#hand.compact #handbtn{grid-column:3;grid-row:1;width:60px;min-height:44px;padding:8px;font-size:9px;letter-spacing:.07em}
 @media (prefers-reduced-motion:reduce){
   #hand *,#coach{transition:none!important;animation:none!important}
   #selflabel::before{animation:none}
@@ -862,17 +883,17 @@ const OBJECTIVES = {
       hint: 'Pins tool (4). Grip on each limb.',
       done: (s) => s.pinned.size >= 4 },
     { id: 'skin', text: 'Make a <b>midline incision</b> through the skin, from chest to vent.',
-      hint: 'Scalpel (3). Hold your grip and draw one smooth stroke — do not saw.',
+      hint: 'Scalpel (2). Hold your grip and draw one smooth stroke — do not saw.',
       done: (s) => s.incisions.has('skin') && s.incisions.get('skin').length > 1.1 },
-    { id: 'reflect', text: 'Reflect the skin flaps to expose the muscle wall.',
-      hint: 'Forceps (2 hands: 3). Grip the cut edge and draw it aside.',
-      done: (s) => s.opened.has('skin') },
+    { id: 'reflect', text: 'Remove the cut skin, then open and remove the <b>subcutaneous fascia</b> beneath it.',
+      hint: 'Forceps (3) on the skin. Scalpel (2), then Forceps (3), on the fascia.',
+      done: (s) => s.removed.has('skin') && s.removed.has('subcutaneous-fascia') },
     { id: 'wall', text: 'Open the <b>muscle wall</b> — and watch for the ventral abdominal vein in the midline.',
       hint: 'Scalpel. A shallow first stroke; plunging cuts the vein beneath.',
       done: (s) => s.incisions.has('muscle-wall') },
-    { id: 'open', text: 'Reflect the body wall and look into the cavity.',
-      hint: 'Forceps on the cut edge, or the retractor with two hands.',
-      done: (s) => s.opened.has('muscle-wall') },
+    { id: 'open', text: 'Reflect the muscle wall, then open and remove the <b>parietal peritoneum</b> to expose the cavity.',
+      hint: 'Forceps (3) on the muscle wall. Scalpel (2), then Forceps (3), on the peritoneum.',
+      done: (s) => s.opened.has('muscle-wall') && s.opened.has('parietal-peritoneum') },
     { id: 'identify', text: 'Identify the <b>liver</b>, <b>heart</b>, <b>lungs</b> and <b>intestine</b>.',
       hint: 'Probe (1) on each organ to identify it.',
       done: (s, seen) => ['liver-median', 'frog-heart', 'lung-left', 'small-intestine']
@@ -885,9 +906,9 @@ const OBJECTIVES = {
       done: (s, seen) => seen.has('kidney-left') || seen.has('kidney-right') },
   ],
   heart: [
-    { id: 'peri', text: 'Open the <b>pericardium</b> and trim the epicardial fat.',
-      hint: 'Scalpel (3) on the sac, then forceps to reflect it.',
-      done: (s) => s.incisions.has('pericardium') },
+    { id: 'peri', text: 'Open the <b>pericardium</b>, lift the fat covering, then open the <b>epicardium</b> beneath it.',
+      hint: 'Scalpel (2) and Forceps (3) on the membranes; Forceps (3) to lift the intervening fat.',
+      done: (s) => s.opened.has('pericardium') && s.opened.has('epicardium') },
     { id: 'vessels', text: 'Identify the <b>aorta</b> — probe it, do not name it from the stump.',
       hint: 'Probe (1) on each great vessel.',
       done: (s, seen) => seen.has('aorta') },
@@ -950,7 +971,7 @@ export function buildShell(root) {
   const say = el(`<div id="say" class="chrome"><span class="lbl">Demonstrator</span><div class="t"></div></div>`);
   const handBox = el(`<section id="hand" class="chrome" aria-label="Hand controls">
       <div class="handhead"><span class="lbl">Hands-on dissection</span><div class="handtools"><span id="handcount" class="hcount">—</span>
-        <button id="handpreview" class="minibtn" type="button" aria-expanded="false" aria-controls="selfwrap handlive camrow">Preview</button></div></div>
+        <button id="handpreview" class="minibtn" type="button" aria-expanded="false" aria-label="Open hand settings" aria-controls="selfwrap handlive camrow handnote">Settings</button></div></div>
       <button id="handbtn" class="off" type="button" aria-describedby="handnote">Use my hands</button>
       <div id="handstat" role="status" aria-live="polite"><span class="dot"></span><span class="stxt">Camera off</span></div>
       <div id="handnote" class="hnote">Pinch to grip. Move to aim. Camera stays on-device — nothing is recorded.</div>
@@ -1121,7 +1142,11 @@ export function buildShell(root) {
     }
     objBar.querySelector('#objn').textContent = 'Step ' + (objIdx + 1) + ' / ' + list.length;
     objBar.querySelector('#objtxt').innerHTML = list[objIdx].text;
-    hint.innerHTML = list[objIdx].hint;
+    // Older specimen guides predate the shared dock order. Resolve their
+    // displayed shortcuts from that same order so an instruction cannot select
+    // Forceps when it tells the student to choose the Scalpel (or vice versa).
+    hint.innerHTML = (list[objIdx].hint || '').replace(/\b(Probe|Scalpel|Forceps|Pins|Retractor|Swab)\s*\(\d+\)/g,
+      (match, name) => name + ' (' + (SHELL_TOOLS.findIndex(tool => tool.id === name.toLowerCase()) + 1) + ')');
     if (objHint) objHint.innerHTML = hint.innerHTML;
   }
 
@@ -1501,12 +1526,24 @@ export function buildShell(root) {
   /* ── hand cockpit ─────────────────────────────────────────────────────── */
   let handOn = false;
   handBtn.onclick = () => { handOn = !handOn; fire('hands', handOn); };
-  handPreview.onclick = () => {
-    const expanded = handBox.classList.toggle('preview-open');
+  function setHandExpanded(expanded) {
+    handBox.classList.toggle('preview-open', !!expanded);
     handPreview.setAttribute('aria-expanded', String(expanded));
-    handPreview.textContent = expanded ? 'Hide' : 'Preview';
-    handPreview.setAttribute('aria-label', expanded ? 'Hide tracking preview' : 'Show tracking preview');
+    handPreview.textContent = expanded ? 'Close' : 'Settings';
+    handPreview.setAttribute('aria-label', expanded ? 'Close hand settings' : 'Open hand settings');
+    handBox.scrollTop = 0;
+    if (!expanded) hideCoach();
+  }
+  handPreview.onclick = () => {
+    setHandExpanded(!handBox.classList.contains('preview-open'));
+    renderHand();
   };
+  handBox.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && handBox.classList.contains('preview-open')) {
+      event.preventDefault(); event.stopPropagation();
+      setHandExpanded(false); renderHand(); handPreview.focus();
+    }
+  });
 
   /* ── show-camera preference ────────────────────────────────────────────
      Hand tracking and the camera PICTURE are two different things: the tracker
@@ -1525,6 +1562,7 @@ export function buildShell(root) {
   function renderCam() {
     camBtn.setAttribute('aria-checked', camOn ? 'true' : 'false');
     selfwrap.classList.toggle('nocam', !camOn);
+    handBox.classList.toggle('camera-hidden', !camOn);
     // The label is a claim about what you are looking at, so it has to change too.
     selflabel.textContent = camOn ? 'You · live' : 'Tracking · live';
   }
@@ -1542,7 +1580,6 @@ export function buildShell(root) {
   // is reachable, writes the fast-moving bits (gesture/grip/count) and the
   // skeleton. Both drive one render — there is no second source of truth.
   const H = { on: false, status: 'off', health: 3, gesture: 'none', grip: 0, count: 0, reason: '' };
-  let coachShown = false;
 
   // The tracker publishes its snapshot on window.__LAB (the app's introspection
   // surface). Reading it is optional: if it is absent the panel still works from
@@ -1550,6 +1587,16 @@ export function buildShell(root) {
   function getSnap() {
     try { const l = typeof window !== 'undefined' && window.__LAB; return l && l.handsApi && l.handsApi.snapshot; }
     catch (e) { return null; }
+  }
+
+  function getDrivingHand(snap) {
+    const hs = snap && Array.isArray(snap.hands) ? snap.hands : [];
+    let slot = -1;
+    try { slot = window.__LAB && window.__LAB.drivingHandSlot; } catch (e) { /* standalone shell */ }
+    // The router owns selection. Read its slot without changing it; an older
+    // host or shell-only preview can still display whichever hand is present.
+    return Number.isInteger(slot) && hs[slot] && hs[slot].present
+      ? hs[slot] : hs.find((hand) => hand && hand.present) || null;
   }
 
   function clearSkel() { if (skelCtx) skelCtx.clearRect(0, 0, skel.width, skel.height); }
@@ -1602,9 +1649,8 @@ export function buildShell(root) {
       for (let i = 0; i < hs.length; i++) {
         if (hs[i] && hs[i].present) { present++; if (hs[i].isPinching) anyPinch = true; }
       }
-      // The input router and main.js both report the FIRST slot as the driving
-      // hand — mirror that so the meter reflects what is actually moving the tool.
-      const driver = hs[0] && hs[0].present ? hs[0] : null;
+      // Keep the fast meter on the same hand that is actually driving the tool.
+      const driver = getDrivingHand(snap);
       H.count = present;
       H.health = snap.health;
       if (H.status !== 'failed') H.status = 'tracking';
@@ -1620,18 +1666,16 @@ export function buildShell(root) {
   function startPoll() { if (!pollRAF) pollRAF = requestAnimationFrame(pollHands); }
   function stopPoll() { if (pollRAF) { cancelAnimationFrame(pollRAF); pollRAF = 0; } clearSkel(); }
 
-  function showCoach() {
-    coach.classList.add('on');
-    clearTimeout(showCoach._t);
-    showCoach._t = setTimeout(hideCoach, 7000);
-  }
-  function hideCoach() { coach.classList.remove('on'); clearTimeout(showCoach._t); }
+  function hideCoach() { coach.classList.remove('on'); }
   coachOk.onclick = hideCoach;
 
   function renderHand() {
     const tracking = H.on && H.status === 'tracking';
     handBox.classList.toggle('live', H.on && H.status !== 'failed');
-    handBtn.textContent = H.on ? 'Stop camera' : 'Use my hands';
+    const compact = H.on && H.status !== 'failed' && !handBox.classList.contains('preview-open');
+    handBox.classList.toggle('compact', compact);
+    handBtn.textContent = H.on ? (compact ? 'Stop' : 'Stop camera') : 'Use my hands';
+    handBtn.setAttribute('aria-label', H.on ? 'Stop camera' : 'Use my hands');
     handBtn.classList.toggle('off', !H.on);
 
     // status dot + text
@@ -1639,8 +1683,8 @@ export function buildShell(root) {
     if (!H.on) { txt = H.reason || 'Camera off'; }
     else if (H.status === 'starting') { cls = 'warm'; txt = 'Starting camera…'; }
     else if (H.status === 'failed') { cls = 'lost'; txt = H.reason || 'Could not start'; }
-    else if (H.health >= 3) { cls = 'lost'; txt = 'Hand lost — show your hand'; }
-    else if (H.health === 2) { cls = 'deg'; txt = 'Tracking degraded'; }
+    else if (H.health >= 3) { cls = 'lost'; txt = compact ? 'No hand detected' : 'Hand lost — show your hand'; }
+    else if (H.health === 2) { cls = 'deg'; txt = compact ? 'Tracking limited' : 'Tracking degraded'; }
     else { cls = 'ok'; txt = 'Tracking'; }
     handStat.className = cls;
     // The status is a live region, unlike the fast-moving grip meter. Only
@@ -1667,12 +1711,13 @@ export function buildShell(root) {
     handNote.textContent = SH_PHONE
       ? 'Prop your phone up. Pinch to grip, move to aim. On-device camera; performance varies. Touch still works.'
       : H.on
-        ? 'Nothing is recorded. Keyboard 1–6 and the mouse still work.'
+        ? 'Pinch to grip, move to aim, open to release. Nothing is recorded. Keyboard 1–6 and mouse still work.'
         : 'Pinch to grip. Move to aim. Camera stays on-device — nothing is recorded.';
   }
 
   function setHandState(s) {
     s = s || {};
+    const wasOn = H.on;
     H.on = !!s.on;
     handOn = H.on;
     H.status = !s.on ? 'off' : (s.status || 'tracking');
@@ -1693,11 +1738,9 @@ export function buildShell(root) {
 
     if (s.on && s.status !== 'failed') startPoll(); else stopPoll();
 
-    // First time hands come alive: the one-off coach card.
-    if (s.on && (s.status === undefined || s.status === 'tracking') && !coachShown) {
-      coachShown = true;
-      showCoach();
-    }
+    // Collapse once at a session boundary, not on every tracker update. An
+    // explicitly opened settings panel must stay open while hands move.
+    if (H.on !== wasOn) setHandExpanded(false);
     renderHand();
   }
 

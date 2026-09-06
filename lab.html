@@ -1224,6 +1224,7 @@ function createHands(options) {
   let stream = null;
   let running = false;
   let starting = false;
+  let startGeneration = 0;
   let lastVideoTime = -1;
   let lastDetectTs = -1;
   let lastAnySeenMs = 0;
@@ -1314,6 +1315,9 @@ function createHands(options) {
       return hndFailure("already-starting", "Camera is already starting up.");
     }
     starting = true;
+    const generation = ++startGeneration;
+    const cancelled = () => generation !== startGeneration;
+    const cancellation = () => ({ ok: false, code: "cancelled", reason: "Camera start cancelled." });
     try {
       if (typeof navigator === "undefined" || !navigator.mediaDevices ||
           !navigator.mediaDevices.getUserMedia) {
@@ -1384,6 +1388,8 @@ function createHands(options) {
       }
 
       // ── Camera. Nothing before this line has touched it.
+      // A stop during a model download must not prompt for a camera later.
+      if (cancelled()) return cancellation();
       try {
         stream = await navigator.mediaDevices.getUserMedia({
           // `ideal`, not exact: a webcam that cannot do 720p should hand back its
@@ -1397,6 +1403,7 @@ function createHands(options) {
           audio: false,
         });
       } catch (err) {
+        if (cancelled()) return cancellation();
         if (err && err.name === "OverconstrainedError") {
           // Some webcams refuse the exact size; retry with no constraints.
           try {
@@ -1412,6 +1419,9 @@ function createHands(options) {
         }
       }
 
+      // A permission prompt can resolve after Stop. Release those late tracks
+      // before binding/playing the video or publishing an active snapshot.
+      if (cancelled()) { hndReleaseCamera(); return cancellation(); }
       videoEl.srcObject = stream;
       try {
         await videoEl.play();
@@ -1444,6 +1454,7 @@ function createHands(options) {
         }
       }
 
+      if (cancelled()) { hndReleaseCamera(); return cancellation(); }
       lastVideoTime = -1;
       lastDetectTs = -1;
       lastAnySeenMs = typeof performance !== "undefined" ? performance.now() : Date.now();
@@ -1486,6 +1497,7 @@ function createHands(options) {
   }
 
   function stop() {
+    startGeneration++;
     running = false;
     hndReleaseCamera();
     snapshot.active = false;
@@ -2864,15 +2876,42 @@ function buildFrog(THREE) {
     childMesh(parent, d, x, y, z, Math.PI / 2 + tilt, 0, spread);
     return d;
   }
+  // Derive the shoulder/hip insertion from the actual deformed flank. A fixed
+  // x coordinate only grazed that surface, exposing the open end of each tube.
+  // Bury the proximal ring, then carry a continuous taper out to the hand/foot.
+  skin.updateMatrixWorld(true);
+  function limbRoot(side, y, z, inset) {
+    const ray = new THREE.Raycaster(new THREE.Vector3(side * 6, y, z), new THREE.Vector3(-side, 0, 0));
+    const hit = ray.intersectObject(skin, false)[0];
+    const flank = hit ? Math.abs(hit.point.x) : 1.85;
+    return [side * Math.max(0.85, flank - inset), y, z];
+  }
+  function taperLimb(mesh, radii) {
+    const geo = mesh.geometry, params = geo.parameters, pos = geo.attributes.position;
+    const v = new THREE.Vector3();
+    for (let i = 0; i < pos.count; i++) {
+      const t = Math.floor(i / (params.radialSegments + 1)) / params.tubularSegments;
+      let k = 1;
+      while (k < radii.length - 1 && t > radii[k][0]) k++;
+      const a = radii[k - 1], b = radii[k];
+      const f = smooth(Math.max(0, Math.min(1, (t - a[0]) / (b[0] - a[0]))));
+      const radius = a[1] + (b[1] - a[1]) * f;
+      // TubeGeometry places rings at arc-length fractions, not spline time.
+      const center = params.path.getPointAt(t);
+      v.fromBufferAttribute(pos, i).sub(center).multiplyScalar(radius / params.radius).add(center);
+      pos.setXYZ(i, v.x, v.y, v.z);
+    }
+    seal(geo);
+  }
   function limb(lid, nm, sx, long, seed) {
     let path, r, foot, footPos, footRot, nDig, digLen, webW, webL;
     if (long) {
       // hindlimb: long, sharply folded — thigh forward, shank back, big webbed foot
       path = [
-        [sx * 1.85, 0.05, -2.25],
+        limbRoot(sx, 0.05, -2.25, 0.74),
         [sx * 3.05, -0.12, -1.25],   // knee (thrust forward)
         [sx * 2.7, -0.2, -3.35],     // ankle (folded back)
-        [sx * 2.15, -0.16, -4.4],    // heel
+        [sx * 2.05, -0.17, -4.65],   // heel, seated inside the long foot
       ];
       r = 0.34;
       foot = new THREE.Mesh(new THREE.SphereGeometry(1, 18, 12), mat(THREE, 0x54682f, { rough: 0.62, sheen: 0xaec07a }));
@@ -2882,9 +2921,10 @@ function buildFrog(THREE) {
     } else {
       // forelimb: shorter, folded, small 4-digit hand
       path = [
-        [sx * 1.85, 0.06, 2.05],
+        limbRoot(sx, 0.06, 2.05, 0.48),
         [sx * 2.6, -0.06, 2.6],      // elbow
         [sx * 2.3, -0.12, 3.35],     // wrist
+        [sx * 2.15, -0.14, 3.64],    // continue inside the palm, not short of it
       ];
       r = 0.26;
       foot = new THREE.Mesh(new THREE.SphereGeometry(1, 16, 10), mat(THREE, 0x54682f, { rough: 0.62, sheen: 0xaec07a }));
@@ -2892,7 +2932,10 @@ function buildFrog(THREE) {
       footPos = [sx * 2.15, -0.14, 3.85]; footRot = [0.1, sx * 0.4, 0];
       nDig = 4; digLen = 0.34; webW = 0; webL = 0;
     }
-    const m = tube(THREE, 0x5a6b33, path, r, { rough: 0.62, sheen: 0xaec07a, clear: 0.4, seg: 40, rad: 9, seed });
+    const m = tube(THREE, 0x5a6b33, path, r, { rough: 0.62, sheen: 0xaec07a, clear: 0.4, seg: 40, rad: 16, seed });
+    taperLimb(m, long
+      ? [[0, 0.47], [0.18, 0.57], [0.42, 0.32], [0.74, 0.24], [1, 0.19]]
+      : [[0, 0.32], [0.25, 0.34], [0.7, 0.22], [1, 0.16]]);
     childMesh(m, foot, ...footPos, ...footRot);
     // splayed digits fanning off the far end of the foot
     for (let i = 0; i < nDig; i++) {
@@ -3303,6 +3346,18 @@ function buildHeart(THREE) {
   function heartWall(prof, seg, phiStart, phiLen, color, o) {
     o = o || {};
     const g = new THREE.LatheGeometry(prof, seg, phiStart, phiLen);
+    // Our ventricular profiles run from base to apex (descending Y), opposite
+    // LatheGeometry's outward winding. Reverse faces, not the authored points:
+    // shape, displacement, UVs and transforms stay exact, while the front wall
+    // becomes the visible/pickable surface instead of the far inner wall.
+    if (prof.length > 1 && prof[0].y > prof[prof.length - 1].y) {
+      const indices = g.index.array;
+      for (let i = 0; i < indices.length; i += 3) {
+        const second = indices[i + 1]; indices[i + 1] = indices[i + 2]; indices[i + 2] = second;
+      }
+      g.index.needsUpdate = true;
+    }
+    // displace/seal recompute normals from the corrected faces.
     displace(THREE, g, o.amp != null ? o.amp : 0.024, o.freq || 2.4, o.seed || 0);
     seal(g);
     return new THREE.Mesh(g, mat(THREE, color, {
@@ -5881,11 +5936,92 @@ function SUR_match(id) {
   return null;
 }
 
+/* Preserved-tissue art direction, not a species- or fixative-calibrated colour
+ * standard. Keep the builders' anatomical colour differences; blend, never
+ * replace them with one universal brown. Named nerves/bones/vessels retain their
+ * instructional colours. These finishes intentionally avoid a uniform lacquer. */
+function SUR_finishProfile(specimen, part) {
+  const id = part.id;
+  const profile = (kind, tone, blend, rough, coat, coatRough, kids = false) =>
+    ({ kind, tone, blend, rough, coat, coatRough, kids });
+  if (specimen === 'frog' && (id === 'skin' || /^(fore|hind)limb-/.test(id)))
+    return profile('frog-hide', 0x7b7850, id === 'skin' ? 0.10 : 0.34, 0.72, 0.20, 0.50, id !== 'skin');
+  if (specimen === 'fish' && /^(body-wall|operculum)$/.test(id))
+    return profile('scales', 0xaaa18b, 0.12, 0.65, 0.26, 0.42);
+  if (specimen === 'cockroach' && part.system === 'integument')
+    return profile('chitin', 0x956735, 0.24, 0.57, 0.34, 0.38);
+  if (specimen === 'earthworm' && (part.system === 'integument' || id === 'anal-segment'))
+    return profile('hide', 0xa78270, id === 'body-wall' ? 0.09 : 0.30, 0.71, 0.23, 0.46);
+  if (/fat-body|epicardial-fat/.test(id))
+    return profile('fat', specimen === 'frog' ? 0xb6a66b : 0xd3c4a0, 0.58, 0.82, 0.12, 0.56, true);
+  if (specimen === 'heart') {
+    // The 10%-opacity outer sac must not become a frosted shell that conceals
+    // the myocardium. Do not apply this to opaque access membranes or valves.
+    if (/pericardium/.test(id) && part.mesh.material.transparent && part.mesh.material.opacity <= 0.2)
+      return profile('serous', 0xd2c5aa, 0.12, 0.32, 0.18, 0.48);
+    if (/free-wall|atrium|auricle|^septum$|papillary|moderator/.test(id))
+      return profile('flesh', 0xa38d70, 0.64, 0.74, 0.22, 0.48);
+    if (/pericardium|leaflet|chordae|cusp/.test(id))
+      return profile('serous', 0xd2c5aa, 0.28, 0.65, 0.24, 0.44);
+    return null;
+  }
+  if (part.system === 'nervous' || part.system === 'skeletal') return null;
+  if (/liver|kidney|spleen/.test(id))
+    return profile('flesh', specimen === 'frog' ? 0x7c795e : 0x897562, 0.46, 0.73, 0.24, 0.46);
+  if (part.system === 'digestive' || part.system === 'muscular' || part.system === 'urogenital' || part.system === 'excretory')
+    return profile('flesh', specimen === 'fish' ? 0xb9afa0 : 0xb3a084, 0.42, 0.75, 0.20, 0.48);
+  if (/lung|bladder|tracheae/.test(id))
+    return profile('serous', 0xc5bb9f, 0.28, 0.64, 0.26, 0.43);
+  return null;
+}
+
+// Small, repeatable CPU-generated maps: no photo textures, image downloads,
+// canvas/readback or per-frame work. Shared by finish class inside one specimen.
+function SUR_finishMaps(THREE, kind) {
+  const size = 128, rough = new Uint8Array(size * size * 4), tint = new Uint8Array(rough.length);
+  const height = kind === 'scales' ? new Float32Array(size * size) : null;
+  for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
+    const u = x / size, v = y / size, i = (y * size + x) * 4;
+    const n = tisFbm(u, v, kind.length * 13 + 7);
+    const grain = tisNoise(u, v, 32, 19);
+    const r = Math.round(255 * (0.74 + n * 0.24 + grain * 0.02));
+    const c = Math.round(255 * (kind === 'frog-hide'
+      ? 0.78 + n * 0.19 + grain * 0.03 // visible, soft mottling across the pale belly
+      : 0.89 + n * 0.09 + grain * 0.02));
+    rough.set([r, r, r, 255], i); tint.set([c, c, c, 255], i);
+    if (height) {
+      const row = Math.floor(v * 12), fy = v * 12 - row;
+      const dx = ((u * 14 + (row % 2) * 0.5) % 1) - 0.5;
+      const arc = 0.27 + 0.46 * Math.sqrt(Math.max(0, 1 - 4 * dx * dx));
+      height[y * size + x] = n * 0.12 + Math.exp(-Math.pow((fy - arc) / 0.075, 2)) * 0.07;
+    }
+  }
+  function texture(data) {
+    const t = new THREE.DataTexture(data, size, size, THREE.RGBAFormat);
+    t.wrapS = t.wrapT = THREE.RepeatWrapping;
+    t.magFilter = t.minFilter = THREE.LinearFilter;
+    t.needsUpdate = true;
+    return t;
+  }
+  const maps = { rough: texture(rough), tint: texture(tint), normal: null };
+  if (height) {
+    const normals = new Uint8Array(rough.length), n = new THREE.Vector3();
+    const at = (x, y) => height[((y + size) % size) * size + ((x + size) % size)];
+    for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
+      n.set((at(x - 1, y) - at(x + 1, y)) * 3, (at(x, y - 1) - at(x, y + 1)) * 3, 1).normalize();
+      normals.set([Math.round((n.x * 0.5 + 0.5) * 255), Math.round((n.y * 0.5 + 0.5) * 255), Math.round((n.z * 0.5 + 0.5) * 255), 255], (y * size + x) * 4);
+    }
+    maps.normal = texture(normals);
+  }
+  return maps;
+}
+
 /* ========================================================================== */
 function createSurfaceDetail(THREE, parts, specimenId, group) {
   const added = [];                 // decorative meshes ONLY — never part descriptors
   const owned = [];                 // {mesh} we must remove and dispose
-  const sheenSaved = [];            // {mat, clearcoat, clearcoatRoughness}
+  const finishSaved = [];           // original materials; never dispose builder-owned maps
+  const finishMaps = new Map();     // one tiny procedural map set per finish class
   const projectors = new Map();     // partId -> projector (built once, after displacement)
   const tubes = new Map();          // partId -> {info, cfg}
   const byId = new Map();
@@ -5933,26 +6069,42 @@ function createSurfaceDetail(THREE, parts, specimenId, group) {
     });
   }
 
-  /* --- step 2: serosal sheen ------------------------------------------------- */
+  /* --- step 2: preserved-tissue finishes ------------------------------------- */
   function sheenAll() {
-    // Guarded against re-entry: sheenAll mutates the organ's own material and
-    // saves the ORIGINAL clearcoat for dispose() to restore. A second run would
-    // save the already-modified value as the "original" and dispose() would then
-    // restore to the sheened value, never the true original. apply()'s owned.length
-    // guard only covers the case where vessels were built; this covers the rest.
+    // apply() can re-enter with no decorative vessels. Do not clone/tint twice.
     if (sheened) return;
     sheened = true;
-    byId.forEach((p, id) => {
-      const rec = SUR_match(id);
-      if (!rec || !rec.sheen) return;
-      const m = p.mesh.material;
-      if (!m || m.clearcoat == null) return;
-      sheenSaved.push({ mat: m, cc: m.clearcoat, cr: m.clearcoatRoughness });
-      // A peritoneal surface is wetter than the parenchyma under it. This is the
-      // whole "glistening serosa" effect: no geometry, one clearcoat nudge.
-      m.clearcoat = rec.sheen[0];
-      m.clearcoatRoughness = rec.sheen[1];
-      m.needsUpdate = true;
+    byId.forEach((p) => {
+      const cfg = SUR_finishProfile(specimenId, p);
+      if (!cfg) return;
+      if (!finishMaps.has(cfg.kind)) finishMaps.set(cfg.kind, SUR_finishMaps(THREE, cfg.kind));
+      const maps = finishMaps.get(cfg.kind);
+      function finish(mesh) {
+        const original = mesh.material;
+        if (!mesh.isMesh || !original || original.clearcoat == null) return;
+        const m = original.clone();
+        finishSaved.push({ mesh, original, applied: m });
+        mesh.material = m;
+        // Vertex-coloured hide keeps its dorsal/ventral pattern. A gentle warm
+        // multiplier is enough; blending its white material all the way to an
+        // organ colour would obliterate the pale belly and segment distinctions.
+        m.color.lerp(new THREE.Color(cfg.tone), cfg.blend);
+        m.roughness = cfg.rough;
+        m.clearcoat = cfg.coat;
+        m.clearcoatRoughness = cfg.coatRough;
+        m.sheen = Math.min(m.sheen, 0.24);
+        m.sheenColor.lerp(new THREE.Color(cfg.tone), 0.5);
+        m.roughnessMap = maps.rough;
+        m.clearcoatRoughnessMap = maps.rough;
+        if (!m.map) m.map = maps.tint;
+        if (maps.normal) { m.normalMap = maps.normal; m.normalScale.set(0.28, 0.28); }
+        else m.normalScale.multiplyScalar(0.65);
+        m.needsUpdate = true;
+      }
+      finish(p.mesh);
+      // Only known same-tissue children. Skin children include eyes and fins;
+      // tinting an entire specimen traversal would turn those into opaque flesh.
+      if (cfg.kids) p.mesh.children.forEach(finish);
     });
   }
 
@@ -6006,10 +6158,10 @@ function createSurfaceDetail(THREE, parts, specimenId, group) {
 
       tris += bA.tris + bV.tris;
       attach(p, SUR_finish(THREE, bA), SUR_ART,
-        { tissue: 'vessel', rough: 0.40, clear: 0.62, clearRough: 0.22,
+        { tissue: 'vessel', rough: 0.57, clear: 0.30, clearRough: 0.40,
           sheen: 0xe07a64, transmission: 0.10, thickness: 0.22 });
       attach(p, SUR_finish(THREE, bV), SUR_VEIN,
-        { tissue: 'vessel', rough: 0.50, clear: 0.44, clearRough: 0.34,
+        { tissue: 'vessel', rough: 0.62, clear: 0.24, clearRough: 0.44,
           sheen: 0x9a6a90, transmission: 0.06, thickness: 0.3 });
     });
   }
@@ -6145,15 +6297,17 @@ function createSurfaceDetail(THREE, parts, specimenId, group) {
       return { tris, meshes: added.length };
     },
     get triangles() { return tris; },
-    /* Removes the decoration and restores the clearcoat nudge. Vertex displacement
+    /* Removes decoration and restores builder materials. Vertex displacement
      * is deliberately NOT undone: softbody has already snapshotted the displaced
      * shape as rest, so restoring here would only fight it. loadSpecimen() rebuilds
      * the specimen from scratch, which is the real undo. */
     dispose() {
       clearDecor();
-      sheenSaved.forEach((s) => { s.mat.clearcoat = s.cc; s.mat.clearcoatRoughness = s.cr; s.mat.needsUpdate = true; });
-      sheenSaved.length = 0;
-      sheened = false;   // sheen restored above; keep the guard consistent with state
+      finishSaved.forEach((s) => { s.mesh.material = s.original; s.applied.dispose(); });
+      finishSaved.length = 0;
+      finishMaps.forEach((maps) => Object.values(maps).forEach((t) => { if (t) t.dispose(); }));
+      finishMaps.clear();
+      sheened = false;
       projectors.clear();
       tubes.clear();
       byId.clear();
@@ -6833,9 +6987,12 @@ function createDissection(THREE, ctx) {
     ray.setFromCamera(ndc, camera);
     const candidates = meshes.filter((m) => {
       const id = m.userData.partId;
-      // A reflected flap is still rendered (faded) but must no longer be
-      // pickable, or it shields the layer it was just peeled off.
-      return m.visible && !state.removed.has(id) && !state.opened.has(id);
+      // Completed access sheets are absent, not translucent pick shields.
+      // Some specimens intentionally preview deeper anatomy through membranes.
+      // Rendering that preview does not make an unexposed layer tool-accessible.
+      const part = byId.get(id);
+      return m.visible && part.layer <= state.maxLayerRevealed
+        && !state.removed.has(id) && !state.opened.has(id);
     });
     const hits = ray.intersectObjects(candidates, false);
     return hits.length ? hits[0] : null;
@@ -6851,7 +7008,7 @@ function createDissection(THREE, ctx) {
     state.maxLayerRevealed = n;
     let count = 0;
     parts.forEach((p) => {
-      if (p.layer === n && !p.mesh.visible) { p.mesh.visible = true; count++; }
+      if (p.layer === n && !p.mesh.visible && !state.removed.has(p.id)) { p.mesh.visible = true; count++; }
     });
     if (count) emit('discover', null, 'The layer beneath is exposed — ' + count + ' structures now visible.',
       { layer: n, count });
@@ -6884,9 +7041,6 @@ function createDissection(THREE, ctx) {
       speeds: [],
       lastT: performance.now(),
       lastP: point.clone(),
-      maxGrip: grip,
-      firstGrip: grip,
-      line: null,
     };
   }
 
@@ -6900,14 +7054,12 @@ function createDissection(THREE, ctx) {
     stroke.pts.push(point.clone());
     stroke.lastP.copy(point);
     stroke.lastT = now;
-    stroke.maxGrip = Math.max(stroke.maxGrip, grip);
 
-    if (stroke.pts.length >= 2) {
-      if (stroke.line) { scene.remove(stroke.line); stroke.line.geometry.dispose(); }
-      const curve = new THREE.CatmullRomCurve3(stroke.pts);
-      const g = new THREE.TubeGeometry(curve, Math.max(8, stroke.pts.length * 3), 0.045, 6, false);
-      stroke.line = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ color: 0x2a0d10 }));
-      scene.add(stroke.line);
+    // The wound module owns the real cut edges. Do not paint a second dark tube
+    // over them, or leave that tube hanging after the access sheet is removed.
+    if (stroke.pts.length >= 3 && typeof ctx.onCutProgress === 'function') {
+      const part = byId.get(stroke.partId);
+      ctx.onCutProgress(part, stroke.pts);
     }
   }
 
@@ -6924,7 +7076,10 @@ function createDissection(THREE, ctx) {
     const mean = stroke.speeds.reduce((a, b) => a + b, 0) / (stroke.speeds.length || 1);
     const variance = stroke.speeds.reduce((a, b) => a + Math.abs(b - mean), 0) / (stroke.speeds.length || 1);
     const sawing = variance > 6.5 && stroke.speeds.length > 4;
-    const plunged = stroke.firstGrip > 0.8;
+    // Mouse buttons and camera pinch strength measure a grip, NOT tissue depth.
+    // Only an explicit depth control may supply evidence of a deep cut.
+    const depth = typeof ctx.getCutDepth === 'function' ? ctx.getCutDepth(part) : null;
+    const plunged = Number.isFinite(depth) && depth > 0.8;
 
     state.incisions.set(part.id, { points: pts, length, opened: false });
 
@@ -6967,7 +7122,6 @@ function createDissection(THREE, ctx) {
   }
 
   function discardStroke() {
-    if (stroke && stroke.line) { scene.remove(stroke.line); stroke.line.geometry.dispose(); }
     stroke = null;
   }
 
@@ -6981,51 +7135,69 @@ function createDissection(THREE, ctx) {
   }
 
   /* ---- peeling a flap --------------------------------------------------- */
-  const peeling = new Map();   // partId -> {t, axis, pivot, home, scale, liftOffset}
-  function beginPeel(part) {
-    if (peeling.has(part.id) || !part.mesh.userData.peelable) return false;
+  const peeling = new Map();   // active, deliberately unfinished forceps pulls
+  function beginPeel(part, point) {
+    if (!part.mesh.userData.peelable || state.removed.has(part.id)) return false;
     const inc = state.incisions.get(part.id);
     if (!inc) return false;
-    const a = inc.points[0], b = inc.points[inc.points.length - 1];
-    const axis = new THREE.Vector3().subVectors(b, a).normalize();
     const parent = part.mesh.parent || group;
     part.mesh.updateWorldMatrix(true, false);
-    const worldHome = part.mesh.getWorldPosition(new THREE.Vector3());
-    const liftedHome = parent.worldToLocal(worldHome.add(new THREE.Vector3(0, 0.9, 0)));
-    peeling.set(part.id, {
-      t: 0, axis, pivot: a.clone(), target: 0,
-      home: part.mesh.position.clone(), scale: part.mesh.scale.clone(),
-      liftOffset: liftedHome.sub(part.mesh.position),
-    });
+    let st = peeling.get(part.id);
+    if (!st) {
+      const worldHome = part.mesh.getWorldPosition(new THREE.Vector3());
+      const liftedHome = parent.worldToLocal(worldHome.add(new THREE.Vector3(0, 0.9, 0)));
+      st = { t: 0, target: 0, committed: false,
+        home: part.mesh.position.clone(), scale: part.mesh.scale.clone(),
+        liftOffset: liftedHome.sub(part.mesh.position) };
+      peeling.set(part.id, st);
+    }
+    camera.updateMatrixWorld();
+    st.grabStart = point.clone();
+    st.startT = st.t;
+    st.plane = new THREE.Plane().setFromNormalAndCoplanarPoint(
+      camera.getWorldDirection(new THREE.Vector3()), point);
     return true;
   }
-  function updatePeel(part, amount) {
+  function updatePeel(part, nx, ny) {
     const st = peeling.get(part.id);
     if (!st) return;
-    st.target = Math.max(0, Math.min(1, amount));
+    ndc.set(nx * 2 - 1, -(ny * 2 - 1));
+    camera.updateMatrixWorld();
+    ray.setFromCamera(ndc, camera);
+    const point = ray.ray.intersectPlane(st.plane, new THREE.Vector3());
+    if (!point) return;
+    st.target = Math.min(1, st.startT + point.distanceTo(st.grabStart) / 1.4);
+    // Only a deliberate forceps pull commits removal; a cut or retractor alone
+    // never removes anatomy. Once committed, finish the short lift smoothly.
+    if (st.target >= 0.98) st.committed = true;
   }
   function stepPeels(dt) {
     peeling.forEach((st, pid) => {
       const part = byId.get(pid);
       if (!part) return;
       const k = Math.min(1, dt / 140);
-      // Once the flap has been drawn far enough to count as reflected, drive it
-      // fully open on its own — for a flat specimen viewed from above, a
-      // half-lifted flap still hides the cavity, and the teaching payoff is
-      // seeing the organs. So `opened` parts ease to a hard target of 1.
-      const target = state.opened.has(pid) ? 1 : st.target;
+      const target = st.committed ? 1 : st.target;
       st.t += (target - st.t) * k;
-      // This is a lift-and-fade reveal, not a simulated mesh split. Lift away
-      // from the world-horizontal tray, retaining the authored local position
-      // and scale even when a specimen is rolled onto its side.
-      part.mesh.material.transparent = true;
-      part.mesh.material.opacity = 1 - st.t * 0.9;      // -> 0.10 fully open
-      part.mesh.material.depthWrite = st.t < 0.5;        // stop it occluding once faded
+      // Keep the material's real opacity throughout the pull. The access surface
+      // is removed at completion; no 10%-opaque sheet remains over the cavity.
       part.mesh.position.copy(st.home).addScaledVector(st.liftOffset, st.t);
-      part.mesh.scale.copy(st.scale).multiplyScalar(1 + st.t * 0.06);
-      if (st.t > 0.5 && !state.opened.has(pid)) {
+      part.mesh.scale.copy(st.scale);
+      if (st.committed && st.t >= 0.98) {
+        // The wound module retains uncut backing/head/tail geometry at HOME.
+        // Return the hidden source there before the completion event so its
+        // residual surface never inherits the temporary lift.
+        part.mesh.position.copy(st.home);
+        part.mesh.visible = false;
         state.opened.add(pid);
-        emit('peel', pid, part.name + ' reflected. What is underneath is now exposed.', {});
+        state.removed.add(pid);
+        const incision = state.incisions.get(pid);
+        if (incision) incision.opened = true;
+        peeling.delete(pid);
+        if (grabbed === pid) grabbed = null;
+        if (hovered === part) { setEmissive(part, 0x000000); hovered = null; }
+        if (contact && contact.partId === pid) contact = null;
+        emit('peel', pid, part.name + ' access sheet removed. What is underneath is now exposed.',
+          { removed: true, accessWindow: true });
         revealLayer(part.layer + 1);
       }
     });
@@ -7157,7 +7329,7 @@ function createDissection(THREE, ctx) {
         }
       } else if (tool === 'forceps') {
         if (part.mesh.userData.peelable && !state.opened.has(part.id)) {
-          if (beginPeel(part)) grabbed = part.id;
+          if (beginPeel(part, hit.point)) grabbed = part.id;
         } else if (beginLift(part, hit.point)) {
           grabbed = part.id;
         }
@@ -7167,19 +7339,19 @@ function createDissection(THREE, ctx) {
     }
 
     if (input.gripping) {
-      if (stroke && hit) growStroke(hit.point, input.grip);
+      // Crossing an edge must not join a stroke to an unrelated/deeper organ.
+      if (stroke && hit && part && part.id === stroke.partId) growStroke(hit.point, input.grip);
       if (grabbed && peeling.has(grabbed)) {
-        // Drag distance from the incision drives how far the flap folds back.
-        const st = peeling.get(grabbed);
         const p = byId.get(grabbed);
-        if (hit) updatePeel(p, Math.min(1, hit.point.distanceTo(st.pivot) / 2.2));
+        // Continue on the fixed grab plane even after the cursor leaves tissue.
+        updatePeel(p, input.x, input.y);
       }
       if (lift) updateLift(input.x, input.y);
     }
 
     if (tool === 'retractor' && input.span > 0.18) {
       const open = Math.min(1, (input.span - 0.18) / 0.42);
-      peeling.forEach((st) => { st.target = Math.max(st.target, open); });
+      peeling.forEach((st) => { st.target = Math.max(st.target, Math.min(open, 0.85)); });
       if (open > 0.5) emit('retract', null, 'Body wall retracted.', { open: +open.toFixed(2) });
     }
 
@@ -7618,6 +7790,11 @@ const CUT_OPEN_MS = 500;        // tissue does not snap open
 const CUT_EPS = 0.010;          // lining stand-off along the surface normal
 const CUT_GAPE_MAX = 0.12;      // world units of lateral parting at amount = 1
 const CUT_RN = 0.42;            // reject the far side of a closed shell
+// These are removable access films, not structural body walls or head-bearing
+// skin. Retaining half a transparent sac with an opaque rim makes a false hoop.
+const CUT_COMPLETE_SHEETS = new Set([
+  'pericardium', 'epicardium', 'parietal-peritoneum', 'subcutaneous-fascia',
+]);
 
 const CUT_clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 // Decreasing smoothstep: 1 at the cut line, 0 at the edge of influence.
@@ -7699,6 +7876,7 @@ function createCutting(THREE, scene) {
                                      // two records sharing a geometry would each
                                      // see the other's write and double-apply.
   const rests = new Map();           // partId -> pristine Float32Array of positions
+  const remnants = new Map();        // uncut backing retained after access-sheet removal
 
   // Orphan parent, only used when a caller hands us a mesh with no parent. Never
   // registered as a part, never given a partId; nothing can pick out of it.
@@ -7795,7 +7973,7 @@ function createCutting(THREE, scene) {
     if (geo.boundingSphere) _ctr.copy(geo.boundingSphere.center); else _ctr.set(0, 0, 0);
     const ctr = _ctr;
     const rest = rec.rest;
-    const nrm = geo.attributes.normal;
+    const nrm = rec.restNormals || geo.attributes.normal;
     const vcount = rest.length / 3;
     // Sub-sample dense geometry: we only need the nearest vertex's NORMAL, and a
     // stride of a few thousand candidates is indistinguishable at this scale.
@@ -8000,6 +8178,56 @@ function createCutting(THREE, scene) {
     if (rec.moving) geo.computeVertexNormals();
   }
 
+  /* ---- an actual opening in the surface topology ------------------------- */
+  // The old displacement parted vertices but their triangles still bridged the
+  // incision. Remove only faces crossed by the blade on the contacted side.
+  // Position/normal/colour attributes never change length: softbody retains its
+  // rest arrays. The reusable index buffer is rebuilt on stroke growth, never
+  // in update(); the original index and draw range are restored by remove().
+  function buildOpening(rec) {
+    const geo = rec.mesh.geometry, src = rec.originalIndices, rest = rec.rest;
+    const out = rec.openIndex.array, K = rec.K;
+    let kept = 0;
+    const centroid = new THREE.Vector3(), a = new THREE.Vector3(), b = new THREE.Vector3(), c = new THREE.Vector3();
+    const ab = new THREE.Vector3(), ac = new THREE.Vector3();
+    const step = rec.length / Math.max(1, K - 1);
+    for (let j = 0; j < src.length; j += 3) {
+      const ia = src[j], ib = src[j + 1], ic = src[j + 2];
+      a.fromArray(rest, ia * 3); b.fromArray(rest, ib * 3); c.fromArray(rest, ic * 3);
+      centroid.copy(a).add(b).add(c).multiplyScalar(1 / 3);
+      let nearest = 0, distance = Infinity;
+      for (let i = 0; i < K; i++) {
+        const d = centroid.distanceToSquared(_p.fromArray(rec.O, i * 3));
+        if (d < distance) { distance = d; nearest = i; }
+      }
+      const i3 = nearest * 3;
+      _p.fromArray(rec.O, i3); _n.fromArray(rec.N, i3);
+      _b.fromArray(rec.B, i3); _t.fromArray(rec.T, i3);
+      let minU = Infinity, maxU = -Infinity, minT = Infinity, maxT = -Infinity, maxN = 0;
+      for (const vertex of [a, b, c]) {
+        _v.copy(vertex).sub(_p);
+        const u = _v.dot(_b), t = _v.dot(_t);
+        minU = Math.min(minU, u); maxU = Math.max(maxU, u);
+        minT = Math.min(minT, t); maxT = Math.max(maxT, t);
+        maxN = Math.max(maxN, Math.abs(_v.dot(_n)));
+      }
+      ab.subVectors(b, a); ac.subVectors(c, a);
+      const facing = ab.cross(ac).normalize().dot(_n);
+      const crossed = minU <= 0.002 && maxU >= -0.002 && minT <= step * 0.55 && maxT >= -step * 0.55;
+      // Exclude the first/last tapered sample so a nick never tears an entire
+      // annular row beyond its ends, and reject the back of a thin closed shell.
+      const removeFace = nearest > 0 && nearest < K - 1 && crossed && maxN < CUT_RN && facing > 0.05;
+      if (!removeFace) { out[kept++] = ia; out[kept++] = ib; out[kept++] = ic; }
+    }
+    // computeVertexNormals visits the entire index capacity, not drawRange.
+    // Degenerate unused triples contribute no normals and keep that pass honest.
+    out.fill(0, kept);
+    rec.openIndex.needsUpdate = true;
+    geo.setIndex(rec.openIndex);
+    geo.setDrawRange(0, kept);
+    rec.openedFaces = (src.length - kept) / 3;
+  }
+
   /* ---- the lining -------------------------------------------------------- */
   // Two vertex arrays: `base` is the wound fully CLOSED (a hairline score lying on
   // the surface) and `delta` carries it to fully open. Animating is then a scaled
@@ -8138,6 +8366,7 @@ function createCutting(THREE, scene) {
     buildProfile(rec);
     buildParentOffsets(rec);
     buildLining(rec);
+    buildOpening(rec);
     rec.linDirty = true;
     return true;
   }
@@ -8209,6 +8438,11 @@ function createCutting(THREE, scene) {
       rec.lining = null;
     }
     if (rec.group.parent) rec.group.parent.remove(rec.group);
+    if (rec.mesh.geometry === rec.geometry) {
+      rec.geometry.setIndex(rec.originalIndex);
+      rec.geometry.setDrawRange(rec.originalDrawRange.start, rec.originalDrawRange.count);
+      rec.geometry.computeVertexNormals();
+    }
   }
 
   /* ---- public ------------------------------------------------------------- */
@@ -8249,12 +8483,17 @@ function createCutting(THREE, scene) {
       (opts.mesh || root).add(group);
       rec = {
         partId, mesh: opts.mesh, group,
+        geometry: geo, originalIndex: geo.index,
+        originalDrawRange: { ...geo.drawRange },
+        originalIndices: geo.index ? new Uint32Array(geo.index.array) : Uint32Array.from({ length: geo.attributes.position.count }, (_, i) => i),
+        restNormals: geo.attributes.normal && geo.attributes.normal.clone(),
         pos: geo.attributes.position,
         rest: rests.get(partId),
         lining: null, linBase: null, linDelta: null, linDirty: false,
         idx: null, off: null, applied: null, probeAt: -1, probeVal: NaN,
         k: 0, kFrom: 0, kTo: 0, phase: 1, moving: false, grewAt: 0,
       };
+      rec.openIndex = new THREE.BufferAttribute(new Uint32Array(rec.originalIndices.length), 1);
       wounds.set(partId, rec);
     }
 
@@ -8325,6 +8564,166 @@ function createCutting(THREE, scene) {
   // line, which is exactly what a scalpel leaves before you retract. Use clear()
   // to actually free it.
   function close(partId) { return gape(partId, 0); }
+
+  // Finish a forceps access-window removal, retaining only the uncut back and
+  // anatomical ends. This is a bounded teaching window, not a full tissue-tear
+  // solver. The original pickable sheet is hidden by dissect.js; the residual
+  // contains NO faces on the removed access side and has no part ID/raycast.
+  function releaseSurface(partId) {
+    const rec = wounds.get(partId);
+    if (!rec || remnants.has(partId)) return false;
+    // Forceps completion has already hidden the original and all its children.
+    // A supplemental film is fully removed: no backing, rim, or faded substitute.
+    // remove() still restores its hidden source topology and disposes the wound.
+    if (CUT_COMPLETE_SHEETS.has(partId)) return true;
+    applyParent(rec, 0);
+    const mesh = rec.mesh, rest = rec.rest;
+    const center = new THREE.Box3().setFromBufferAttribute(new THREE.BufferAttribute(rest, 3)).getCenter(new THREE.Vector3());
+    const normal = new THREE.Vector3();
+    for (let i = 0; i < rec.K; i++) normal.add(_n.fromArray(rec.N, i * 3));
+    if (normal.lengthSq() < 1e-8) return false;
+    normal.normalize();
+    const box = new THREE.Box3().setFromBufferAttribute(new THREE.BufferAttribute(rest, 3));
+    const spanZ = box.max.z - box.min.z;
+    // Frog and fish carry their head and fins on one closed exterior mesh.
+    // Earthworm uses an open CylinderGeometry and separate head/tail parts.
+    const preserveEnds = partId === 'skin' || (partId === 'body-wall' && mesh.geometry.type === 'SphereGeometry');
+    const tailZ = box.min.z + spanZ * 0.14, headZ = box.min.z + spanZ * 0.74;
+    const attributes = ['position', ...Object.keys(mesh.geometry.attributes).filter(name => name !== 'position')];
+    const layout = [], output = {};
+    let stride = 0, normalOffset = -1;
+    attributes.forEach(name => {
+      const attribute = name === 'normal' && rec.restNormals ? rec.restNormals : mesh.geometry.attributes[name];
+      layout.push({ name, attribute, offset: stride, size: attribute.itemSize });
+      if (name === 'normal') normalOffset = stride;
+      stride += attribute.itemSize;
+      output[name] = [];
+    });
+    const readVertex = index => {
+      const packed = new Array(stride);
+      layout.forEach(({ name, attribute, offset, size }) => {
+        for (let c = 0; c < size; c++) packed[offset + c] = name === 'position' ? rest[index * 3 + c] : attribute.array[index * size + c];
+      });
+      return packed;
+    };
+    const interpolate = (a, b, t) => a.map((value, i) => value + (b[i] - value) * t);
+    const clip = (polygon, distance, positive) => {
+      const result = [], crossings = [];
+      if (!polygon.length) return { polygon: result, crossings };
+      let a = polygon[polygon.length - 1], da = distance(a);
+      for (const b of polygon) {
+        const db = distance(b), keepA = positive ? da >= 0 : da <= 0, keepB = positive ? db >= 0 : db <= 0;
+        if (keepA !== keepB) {
+          const intersection = interpolate(a, b, da / (da - db));
+          result.push(intersection); crossings.push(intersection);
+        }
+        if (keepB) result.push(b);
+        a = b; da = db;
+      }
+      return { polygon: result, crossings };
+    };
+    const append = polygon => {
+      for (let i = 1; i < polygon.length - 1; i++) {
+        for (const vertex of [polygon[0], polygon[i], polygon[i + 1]]) {
+          layout.forEach(({ name, offset, size }) => {
+            for (let c = 0; c < size; c++) output[name].push(vertex[offset + c]);
+          });
+        }
+      }
+    };
+    const rimPositions = [], rimColours = [];
+    const rimColour = new THREE.Color((CUT_STRATA[rec.tissue] || CUT_STRATA.muscle)[1].c);
+    function addRim(a, b, trimEnds) {
+      if (!a || !b) return;
+      if (trimEnds && preserveEnds) {
+        const dz = b[2] - a[2];
+        if (Math.abs(dz) < 1e-8) { if (a[2] < tailZ || a[2] > headZ) return; }
+        else {
+          const ta = (tailZ - a[2]) / dz, tb = (headZ - a[2]) / dz;
+          const lo = Math.max(0, Math.min(ta, tb)), hi = Math.min(1, Math.max(ta, tb));
+          if (lo >= hi) return;
+          const start = a, end = b;
+          a = interpolate(start, end, lo); b = interpolate(start, end, hi);
+        }
+      }
+      const pa = new THREE.Vector3().fromArray(a), pb = new THREE.Vector3().fromArray(b);
+      if (pa.distanceToSquared(pb) < 1e-10) return;
+      const na = normalOffset >= 0 ? new THREE.Vector3().fromArray(a, normalOffset).normalize() : pa.clone().sub(center).normalize();
+      const nb = normalOffset >= 0 ? new THREE.Vector3().fromArray(b, normalOffset).normalize() : pb.clone().sub(center).normalize();
+      // A narrow geometric cut face, not an opaque sheet across the opening.
+      const ia = pa.clone().addScaledVector(na, -0.045), ib = pb.clone().addScaledVector(nb, -0.045);
+      for (const p of [pa, pb, ia, pb, ib, ia]) {
+        rimPositions.push(p.x, p.y, p.z);
+        rimColours.push(rimColour.r, rimColour.g, rimColour.b);
+      }
+    }
+    const accessDistance = vertex => (vertex[0] - center.x) * normal.x
+      + (vertex[1] - center.y) * normal.y + (vertex[2] - center.z) * normal.z + 0.025;
+    for (let j = 0; j < rec.originalIndices.length; j += 3) {
+      const triangle = [0, 1, 2].map(i => readVertex(rec.originalIndices[j + i]));
+      const back = clip(triangle, accessDistance, false);
+      append(back.polygon);
+      addRim(back.crossings[0], back.crossings[1], true);
+      if (preserveEnds) {
+        const front = clip(triangle, accessDistance, true).polygon;
+        const tail = clip(front, vertex => vertex[2] - tailZ, false);
+        const head = clip(front, vertex => vertex[2] - headZ, true);
+        append(tail.polygon); append(head.polygon);
+        addRim(tail.crossings[0], tail.crossings[1], false);
+        addRim(head.crossings[0], head.crossings[1], false);
+      }
+    }
+    if (!output.position.length) return false;
+    const geometry = new THREE.BufferGeometry();
+    layout.forEach(({ name, size }) => geometry.setAttribute(name, new THREE.Float32BufferAttribute(output[name], size)));
+    geometry.setIndex(Array.from({ length: output.position.length / 3 }, (_, i) => i));
+    // Preserve the interpolated smooth surface normals. Recomputing on freshly
+    // clipped, unshared vertices would turn the rounded skin into flat facets.
+    if (geometry.attributes.normal) geometry.normalizeNormals(); else geometry.computeVertexNormals();
+    geometry.computeBoundingSphere(); geometry.computeBoundingBox();
+    const materials = (Array.isArray(mesh.material) ? mesh.material : [mesh.material]).map(material => {
+      const copy = material.clone(); copy.side = THREE.DoubleSide; return copy;
+    });
+    const residual = new THREE.Mesh(geometry, Array.isArray(mesh.material) ? materials : materials[0]);
+    residual.name = 'uncut:' + partId;
+    residual.userData.noPick = true;
+    residual.userData.accessWindow = {
+      normal: normal.toArray(), constant: 0.025 - center.dot(normal),
+      preserveEnds, tailZ, headZ,
+    };
+    residual.raycast = CUT_noRaycast;
+    residual.position.copy(mesh.position); residual.quaternion.copy(mesh.quaternion); residual.scale.copy(mesh.scale);
+    residual.castShadow = mesh.castShadow; residual.receiveShadow = mesh.receiveShadow;
+    const children = [];
+    for (const child of [...mesh.children]) {
+      if (child === rec.group || child.userData.noPick) continue;
+      children.push(child);
+      residual.add(child);
+    }
+    let rim = null;
+    if (rimPositions.length) {
+      const rimGeometry = new THREE.BufferGeometry();
+      rimGeometry.setAttribute('position', new THREE.Float32BufferAttribute(rimPositions, 3));
+      rimGeometry.setAttribute('color', new THREE.Float32BufferAttribute(rimColours, 3));
+      rimGeometry.computeVertexNormals(); rimGeometry.computeBoundingSphere();
+      const material = baseMaterial.clone(); material.roughness = 0.68; material.clearcoat = 0.35;
+      rim = new THREE.Mesh(rimGeometry, material);
+      rim.name = 'access-rim'; rim.userData.noPick = true; rim.raycast = CUT_noRaycast;
+      residual.add(rim);
+    }
+    (mesh.parent || root).add(residual);
+    remnants.set(partId, { residual, source: mesh, children, materials, rim });
+    return true;
+  }
+
+  function remove(partId) {
+    const rec = wounds.get(partId);
+    if (!rec) return false;
+    destroy(rec);
+    wounds.delete(partId);
+    rests.delete(partId);
+    return true;
+  }
 
   /* Frame state hoisted to closure scope. `stepWound` is ONE function object
    * created once, not an arrow literal rebuilt on every call to update() — at
@@ -8419,6 +8818,14 @@ function createCutting(THREE, scene) {
     wounds.forEach((rec) => destroy(rec));
     wounds.clear();
     rests.clear();
+    remnants.forEach(({ residual, source, children, materials, rim }) => {
+      children.forEach((child) => source.add(child));
+      if (residual.parent) residual.parent.remove(residual);
+      residual.geometry.dispose();
+      materials.forEach(material => material.dispose());
+      if (rim) { rim.geometry.dispose(); rim.material.dispose(); }
+    });
+    remnants.clear();
   }
 
   function dispose() {
@@ -8428,7 +8835,7 @@ function createCutting(THREE, scene) {
   }
 
   return {
-    open, grow, gape, close, update, setQuality, clear, dispose,
+    open, grow, gape, close, releaseSurface, remove, update, setQuality, clear, dispose,
     get count() { return wounds.size; },
     has: (partId) => wounds.has(partId),
     // Read-only peek for the shell / viva: which strata the blade actually
@@ -24435,7 +24842,10 @@ function setupEnvironment(THREE, deps, refs) {
   })();
 
   const table = new THREE.Mesh(
-    track(new THREE.PlaneGeometry(70, 70)),
+    // The original two huge triangles produced a diagonal depth/rasterization
+    // artifact over the earthworm tray in the real renderer. A modest grid fixes
+    // that at identical size/material/placement: 288 triangles instead of two.
+    track(new THREE.PlaneGeometry(70, 70, 12, 12)),
     track(new THREE.MeshPhysicalMaterial({
       color: 0x090d11, roughness: 0.55, metalness: 0.52,
       roughnessMap: steelRough,
@@ -27028,8 +27438,8 @@ function createHandViz(root) {
  * user's explicit ask to "show the actual hand thing" — turns the hand panel
  * into a live cockpit: a mirrored self-view with a glowing hand skeleton drawn
  * from the tracker's published landmarks, a status dot, a gesture chip, a grip
- * meter driven by pinchStrength, a one/two-hand indicator, and a first-run
- * coach card. The specimen still dominates; every panel floats and recedes.
+ * meter driven by pinchStrength and a one/two-hand indicator. Active tracking
+ * recedes into a status strip; the full settings/preview open only on request.
  *
  * The public contract is unchanged. buildShell(root) returns the same handles
  * main.js calls, and setHandState still accepts {on,status,health,video,reason}
@@ -27232,13 +27642,14 @@ body:not(.bioq-phone).physio-on #hand{max-height:calc(100dvh - 340px)}
 .handhead{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .handhead .lbl{color:var(--em);letter-spacing:.13em}
 .handtools{display:flex;align-items:center;gap:6px;flex:none}
-#handpreview{display:none}
+#handpreview{display:none;min-width:44px;min-height:44px;padding:8px;align-items:center;justify-content:center}
+#hand.live #handpreview{display:inline-flex}
 .hcount{font-family:var(--mono);font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);
         border:1px solid var(--line);border-radius:6px;padding:2px 7px}
 #hand.live .hcount{color:var(--em);border-color:rgba(52,211,153,.35)}
 #hand #selfwrap,#hand #handlive{display:none}
-#hand.live #selfwrap{display:block}
-#hand.live #handlive{display:flex}
+#hand.live.preview-open #selfwrap:not(.nocam){display:block}
+#hand.live.preview-open #handlive{display:flex}
 #selfwrap{position:relative;width:100%;aspect-ratio:4/3;border-radius:10px;overflow:hidden;
           border:1px solid rgba(52,211,153,.3);
           box-shadow:0 0 0 1px rgba(0,0,0,.4),0 10px 26px -12px rgba(52,211,153,.4)}
@@ -27273,10 +27684,10 @@ body:not(.bioq-phone).physio-on #hand{max-height:calc(100dvh - 340px)}
 #gripfill{position:absolute;inset:0;transform-origin:left center;transform:scaleX(0);
           background:linear-gradient(90deg,var(--em),var(--cy));transition:transform .06s linear}
 #gripfill[data-on="1"]{box-shadow:0 0 10px rgba(56,224,216,.7)}
-/* Show-camera switch. Hidden with the rest of the live readouts until the camera
-   is actually running, because it is meaningless before that. */
+/* Show-camera switch. Available in explicitly opened tracking settings, not
+   in the compact active strip or the off-state invitation. */
 #hand #camrow{display:none}
-#hand.live #camrow{display:flex;align-items:center;justify-content:space-between;gap:9px}
+#hand.live.preview-open #camrow{display:flex;align-items:center;justify-content:space-between;gap:9px}
 .tgl{position:relative;width:34px;height:18px;flex:none;padding:0;border-radius:10px;cursor:pointer;
      border:1px solid var(--line);background:rgba(255,255,255,.05);transition:.18s}
 .tgl i{position:absolute;left:2px;top:2px;width:12px;height:12px;border-radius:50%;
@@ -27284,16 +27695,23 @@ body:not(.bioq-phone).physio-on #hand{max-height:calc(100dvh - 340px)}
 .tgl[aria-checked="true"]{border-color:rgba(52,211,153,.45);background:rgba(52,211,153,.16)}
 .tgl[aria-checked="true"] i{left:18px;background:var(--em);box-shadow:0 0 8px rgba(52,211,153,.8)}
 .tgl:hover{border-color:rgba(52,211,153,.5)}
-/* Camera hidden: the video goes, the tracked skeleton stays on a dark plate so
-   the panel still shows that tracking is live. */
-#selfwrap.nocam{background:rgba(4,7,10,.85);border-color:rgba(52,211,153,.16)}
+/* Camera visibility off removes the whole preview, not just the video. Live
+   status and gesture feedback remain, without reserving an empty black plate. */
+#hand #selfwrap.nocam{display:none}
 #selfwrap.nocam #selfview{display:none}
+#cambtn{width:44px;height:44px;border:0;background:transparent;border-radius:12px}
+#cambtn::before{content:"";position:absolute;left:5px;top:13px;width:34px;height:18px;
+  border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.05)}
+#cambtn[aria-checked="true"]::before{border-color:rgba(52,211,153,.45);background:rgba(52,211,153,.16)}
+#cambtn i{top:16px;left:8px}
+#cambtn[aria-checked="true"] i{left:24px}
 #handbtn{margin-top:1px;width:100%;min-height:44px;padding:11px 12px;border:1px solid rgba(52,211,153,.62);border-radius:9px;
          cursor:pointer;color:#ddfff0;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
          text-transform:uppercase;transition:.16s;
          background:linear-gradient(135deg,rgba(52,211,153,.3),rgba(52,211,153,.12))}
 #handbtn:hover{background:rgba(52,211,153,.24);box-shadow:0 0 18px -4px rgba(52,211,153,.6)}
 #handbtn:focus-visible,#handpreview:focus-visible,#cambtn:focus-visible{outline:2px solid var(--em);outline-offset:3px}
+#handbtn:active,#handpreview:active,#cambtn:active{transform:scale(.97)}
 #handbtn:not(.off){border-color:rgba(232,115,94,.42);color:#f0a494;
          background:linear-gradient(180deg,rgba(232,115,94,.14),rgba(232,115,94,.06))}
 #handbtn:not(.off):hover{background:rgba(232,115,94,.18);box-shadow:0 0 18px -6px rgba(232,115,94,.6)}
@@ -27673,7 +28091,7 @@ body.bioq-phone .handhead .lbl{font-size:9px;letter-spacing:.1em}
 body.bioq-phone #handbtn{margin:0;min-height:44px}
 body.bioq-phone #handstat{font-size:8px;letter-spacing:.06em;line-height:1.4}
 body.bioq-phone #handnote{font-size:10px;line-height:1.4}
-body.bioq-phone #hand.live #handpreview{display:inline-flex;min-height:32px;padding:6px 8px;align-items:center}
+body.bioq-phone #hand.live #handpreview{display:inline-flex;min-height:44px;padding:6px 8px;align-items:center}
 body.bioq-phone #hand:not(.preview-open) #selfwrap,
 body.bioq-phone #hand:not(.preview-open) #handlive,
 body.bioq-phone #hand:not(.preview-open) #camrow{display:none}
@@ -27743,10 +28161,23 @@ body.bioq-phone #phy-mon{display:none}
   body.bioq-phone #hand #selfwrap{grid-column:1;grid-row:3 / span 2;width:96px;height:64px}
   body.bioq-phone #hand #handlive{grid-column:2;grid-row:3}
   body.bioq-phone #hand #camrow{grid-column:2;grid-row:4}
+  body.bioq-phone #hand.camera-hidden #handlive{grid-column:1;grid-row:3}
+  body.bioq-phone #hand.camera-hidden #camrow{grid-column:2;grid-row:3}
 }
 @media (min-width:521px) and (max-width:1100px){
   body:not(.bioq-phone) #hint{left:468px;right:22px;transform:none;font-size:11px}
 }
+/* Active tracking should leave the specimen exposed. These are state rules,
+   deliberately shared by desktop, tablet and phone, with no size animation. */
+body #hand.compact{display:grid;grid-template-columns:minmax(0,1fr) 74px 60px;gap:6px;
+  width:260px;padding:7px 8px;border-radius:14px;overflow:visible}
+body.bioq-phone #hand.compact{width:100%}
+#hand.compact .handhead,#hand.compact .handtools{display:contents}
+#hand.compact .handhead>.lbl,#hand.compact #handcount,#hand.compact #handnote,
+#hand.compact #selfwrap,#hand.compact #handlive,#hand.compact #camrow{display:none}
+#hand.compact #handstat{grid-column:1;grid-row:1;min-width:0;font-size:8px;line-height:1.4;letter-spacing:.04em}
+#hand.compact #handpreview{grid-column:2;grid-row:1;font-size:8px;letter-spacing:.05em}
+#hand.compact #handbtn{grid-column:3;grid-row:1;width:60px;min-height:44px;padding:8px;font-size:9px;letter-spacing:.07em}
 @media (prefers-reduced-motion:reduce){
   #hand *,#coach{transition:none!important;animation:none!important}
   #selflabel::before{animation:none}
@@ -27881,17 +28312,17 @@ const OBJECTIVES = {
       hint: 'Pins tool (4). Grip on each limb.',
       done: (s) => s.pinned.size >= 4 },
     { id: 'skin', text: 'Make a <b>midline incision</b> through the skin, from chest to vent.',
-      hint: 'Scalpel (3). Hold your grip and draw one smooth stroke — do not saw.',
+      hint: 'Scalpel (2). Hold your grip and draw one smooth stroke — do not saw.',
       done: (s) => s.incisions.has('skin') && s.incisions.get('skin').length > 1.1 },
-    { id: 'reflect', text: 'Reflect the skin flaps to expose the muscle wall.',
-      hint: 'Forceps (2 hands: 3). Grip the cut edge and draw it aside.',
-      done: (s) => s.opened.has('skin') },
+    { id: 'reflect', text: 'Remove the cut skin, then open and remove the <b>subcutaneous fascia</b> beneath it.',
+      hint: 'Forceps (3) on the skin. Scalpel (2), then Forceps (3), on the fascia.',
+      done: (s) => s.removed.has('skin') && s.removed.has('subcutaneous-fascia') },
     { id: 'wall', text: 'Open the <b>muscle wall</b> — and watch for the ventral abdominal vein in the midline.',
       hint: 'Scalpel. A shallow first stroke; plunging cuts the vein beneath.',
       done: (s) => s.incisions.has('muscle-wall') },
-    { id: 'open', text: 'Reflect the body wall and look into the cavity.',
-      hint: 'Forceps on the cut edge, or the retractor with two hands.',
-      done: (s) => s.opened.has('muscle-wall') },
+    { id: 'open', text: 'Reflect the muscle wall, then open and remove the <b>parietal peritoneum</b> to expose the cavity.',
+      hint: 'Forceps (3) on the muscle wall. Scalpel (2), then Forceps (3), on the peritoneum.',
+      done: (s) => s.opened.has('muscle-wall') && s.opened.has('parietal-peritoneum') },
     { id: 'identify', text: 'Identify the <b>liver</b>, <b>heart</b>, <b>lungs</b> and <b>intestine</b>.',
       hint: 'Probe (1) on each organ to identify it.',
       done: (s, seen) => ['liver-median', 'frog-heart', 'lung-left', 'small-intestine']
@@ -27904,9 +28335,9 @@ const OBJECTIVES = {
       done: (s, seen) => seen.has('kidney-left') || seen.has('kidney-right') },
   ],
   heart: [
-    { id: 'peri', text: 'Open the <b>pericardium</b> and trim the epicardial fat.',
-      hint: 'Scalpel (3) on the sac, then forceps to reflect it.',
-      done: (s) => s.incisions.has('pericardium') },
+    { id: 'peri', text: 'Open the <b>pericardium</b>, lift the fat covering, then open the <b>epicardium</b> beneath it.',
+      hint: 'Scalpel (2) and Forceps (3) on the membranes; Forceps (3) to lift the intervening fat.',
+      done: (s) => s.opened.has('pericardium') && s.opened.has('epicardium') },
     { id: 'vessels', text: 'Identify the <b>aorta</b> — probe it, do not name it from the stump.',
       hint: 'Probe (1) on each great vessel.',
       done: (s, seen) => seen.has('aorta') },
@@ -27969,7 +28400,7 @@ function buildShell(root) {
   const say = el(`<div id="say" class="chrome"><span class="lbl">Demonstrator</span><div class="t"></div></div>`);
   const handBox = el(`<section id="hand" class="chrome" aria-label="Hand controls">
       <div class="handhead"><span class="lbl">Hands-on dissection</span><div class="handtools"><span id="handcount" class="hcount">—</span>
-        <button id="handpreview" class="minibtn" type="button" aria-expanded="false" aria-controls="selfwrap handlive camrow">Preview</button></div></div>
+        <button id="handpreview" class="minibtn" type="button" aria-expanded="false" aria-label="Open hand settings" aria-controls="selfwrap handlive camrow handnote">Settings</button></div></div>
       <button id="handbtn" class="off" type="button" aria-describedby="handnote">Use my hands</button>
       <div id="handstat" role="status" aria-live="polite"><span class="dot"></span><span class="stxt">Camera off</span></div>
       <div id="handnote" class="hnote">Pinch to grip. Move to aim. Camera stays on-device — nothing is recorded.</div>
@@ -28140,7 +28571,11 @@ function buildShell(root) {
     }
     objBar.querySelector('#objn').textContent = 'Step ' + (objIdx + 1) + ' / ' + list.length;
     objBar.querySelector('#objtxt').innerHTML = list[objIdx].text;
-    hint.innerHTML = list[objIdx].hint;
+    // Older specimen guides predate the shared dock order. Resolve their
+    // displayed shortcuts from that same order so an instruction cannot select
+    // Forceps when it tells the student to choose the Scalpel (or vice versa).
+    hint.innerHTML = (list[objIdx].hint || '').replace(/\b(Probe|Scalpel|Forceps|Pins|Retractor|Swab)\s*\(\d+\)/g,
+      (match, name) => name + ' (' + (SHELL_TOOLS.findIndex(tool => tool.id === name.toLowerCase()) + 1) + ')');
     if (objHint) objHint.innerHTML = hint.innerHTML;
   }
 
@@ -28520,12 +28955,24 @@ function buildShell(root) {
   /* ── hand cockpit ─────────────────────────────────────────────────────── */
   let handOn = false;
   handBtn.onclick = () => { handOn = !handOn; fire('hands', handOn); };
-  handPreview.onclick = () => {
-    const expanded = handBox.classList.toggle('preview-open');
+  function setHandExpanded(expanded) {
+    handBox.classList.toggle('preview-open', !!expanded);
     handPreview.setAttribute('aria-expanded', String(expanded));
-    handPreview.textContent = expanded ? 'Hide' : 'Preview';
-    handPreview.setAttribute('aria-label', expanded ? 'Hide tracking preview' : 'Show tracking preview');
+    handPreview.textContent = expanded ? 'Close' : 'Settings';
+    handPreview.setAttribute('aria-label', expanded ? 'Close hand settings' : 'Open hand settings');
+    handBox.scrollTop = 0;
+    if (!expanded) hideCoach();
+  }
+  handPreview.onclick = () => {
+    setHandExpanded(!handBox.classList.contains('preview-open'));
+    renderHand();
   };
+  handBox.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && handBox.classList.contains('preview-open')) {
+      event.preventDefault(); event.stopPropagation();
+      setHandExpanded(false); renderHand(); handPreview.focus();
+    }
+  });
 
   /* ── show-camera preference ────────────────────────────────────────────
      Hand tracking and the camera PICTURE are two different things: the tracker
@@ -28544,6 +28991,7 @@ function buildShell(root) {
   function renderCam() {
     camBtn.setAttribute('aria-checked', camOn ? 'true' : 'false');
     selfwrap.classList.toggle('nocam', !camOn);
+    handBox.classList.toggle('camera-hidden', !camOn);
     // The label is a claim about what you are looking at, so it has to change too.
     selflabel.textContent = camOn ? 'You · live' : 'Tracking · live';
   }
@@ -28561,7 +29009,6 @@ function buildShell(root) {
   // is reachable, writes the fast-moving bits (gesture/grip/count) and the
   // skeleton. Both drive one render — there is no second source of truth.
   const H = { on: false, status: 'off', health: 3, gesture: 'none', grip: 0, count: 0, reason: '' };
-  let coachShown = false;
 
   // The tracker publishes its snapshot on window.__LAB (the app's introspection
   // surface). Reading it is optional: if it is absent the panel still works from
@@ -28569,6 +29016,16 @@ function buildShell(root) {
   function getSnap() {
     try { const l = typeof window !== 'undefined' && window.__LAB; return l && l.handsApi && l.handsApi.snapshot; }
     catch (e) { return null; }
+  }
+
+  function getDrivingHand(snap) {
+    const hs = snap && Array.isArray(snap.hands) ? snap.hands : [];
+    let slot = -1;
+    try { slot = window.__LAB && window.__LAB.drivingHandSlot; } catch (e) { /* standalone shell */ }
+    // The router owns selection. Read its slot without changing it; an older
+    // host or shell-only preview can still display whichever hand is present.
+    return Number.isInteger(slot) && hs[slot] && hs[slot].present
+      ? hs[slot] : hs.find((hand) => hand && hand.present) || null;
   }
 
   function clearSkel() { if (skelCtx) skelCtx.clearRect(0, 0, skel.width, skel.height); }
@@ -28621,9 +29078,8 @@ function buildShell(root) {
       for (let i = 0; i < hs.length; i++) {
         if (hs[i] && hs[i].present) { present++; if (hs[i].isPinching) anyPinch = true; }
       }
-      // The input router and main.js both report the FIRST slot as the driving
-      // hand — mirror that so the meter reflects what is actually moving the tool.
-      const driver = hs[0] && hs[0].present ? hs[0] : null;
+      // Keep the fast meter on the same hand that is actually driving the tool.
+      const driver = getDrivingHand(snap);
       H.count = present;
       H.health = snap.health;
       if (H.status !== 'failed') H.status = 'tracking';
@@ -28639,18 +29095,16 @@ function buildShell(root) {
   function startPoll() { if (!pollRAF) pollRAF = requestAnimationFrame(pollHands); }
   function stopPoll() { if (pollRAF) { cancelAnimationFrame(pollRAF); pollRAF = 0; } clearSkel(); }
 
-  function showCoach() {
-    coach.classList.add('on');
-    clearTimeout(showCoach._t);
-    showCoach._t = setTimeout(hideCoach, 7000);
-  }
-  function hideCoach() { coach.classList.remove('on'); clearTimeout(showCoach._t); }
+  function hideCoach() { coach.classList.remove('on'); }
   coachOk.onclick = hideCoach;
 
   function renderHand() {
     const tracking = H.on && H.status === 'tracking';
     handBox.classList.toggle('live', H.on && H.status !== 'failed');
-    handBtn.textContent = H.on ? 'Stop camera' : 'Use my hands';
+    const compact = H.on && H.status !== 'failed' && !handBox.classList.contains('preview-open');
+    handBox.classList.toggle('compact', compact);
+    handBtn.textContent = H.on ? (compact ? 'Stop' : 'Stop camera') : 'Use my hands';
+    handBtn.setAttribute('aria-label', H.on ? 'Stop camera' : 'Use my hands');
     handBtn.classList.toggle('off', !H.on);
 
     // status dot + text
@@ -28658,8 +29112,8 @@ function buildShell(root) {
     if (!H.on) { txt = H.reason || 'Camera off'; }
     else if (H.status === 'starting') { cls = 'warm'; txt = 'Starting camera…'; }
     else if (H.status === 'failed') { cls = 'lost'; txt = H.reason || 'Could not start'; }
-    else if (H.health >= 3) { cls = 'lost'; txt = 'Hand lost — show your hand'; }
-    else if (H.health === 2) { cls = 'deg'; txt = 'Tracking degraded'; }
+    else if (H.health >= 3) { cls = 'lost'; txt = compact ? 'No hand detected' : 'Hand lost — show your hand'; }
+    else if (H.health === 2) { cls = 'deg'; txt = compact ? 'Tracking limited' : 'Tracking degraded'; }
     else { cls = 'ok'; txt = 'Tracking'; }
     handStat.className = cls;
     // The status is a live region, unlike the fast-moving grip meter. Only
@@ -28686,12 +29140,13 @@ function buildShell(root) {
     handNote.textContent = SH_PHONE
       ? 'Prop your phone up. Pinch to grip, move to aim. On-device camera; performance varies. Touch still works.'
       : H.on
-        ? 'Nothing is recorded. Keyboard 1–6 and the mouse still work.'
+        ? 'Pinch to grip, move to aim, open to release. Nothing is recorded. Keyboard 1–6 and mouse still work.'
         : 'Pinch to grip. Move to aim. Camera stays on-device — nothing is recorded.';
   }
 
   function setHandState(s) {
     s = s || {};
+    const wasOn = H.on;
     H.on = !!s.on;
     handOn = H.on;
     H.status = !s.on ? 'off' : (s.status || 'tracking');
@@ -28712,11 +29167,9 @@ function buildShell(root) {
 
     if (s.on && s.status !== 'failed') startPoll(); else stopPoll();
 
-    // First time hands come alive: the one-off coach card.
-    if (s.on && (s.status === undefined || s.status === 'tracking') && !coachShown) {
-      coachShown = true;
-      showCoach();
-    }
+    // Collapse once at a session boundary, not on every tracker update. An
+    // explicitly opened settings panel must stay open while hands move.
+    if (H.on !== wasOn) setHandExpanded(false);
     renderHand();
   }
 
@@ -28833,6 +29286,7 @@ let env = null, handViz = null, soft = null, instr = null, narrator = null;
 let postfx = null, sfx = null, surface = null, intro = null, dust = null;
 // Phase 2 — the tissue gets real.
 let strata = null, cutting = null, blood = null, constraints = null;
+const cutRest = new Map();
 // Phase 3 — the clinical layer.
 let histology = null, imaging = null, pathology = null;
 // Phase 4 — alive.
@@ -28848,6 +29302,11 @@ const input = { x: 0.5, y: 0.5, grip: 0, gripping: false, span: 0, source: 'mous
 // Mouse state, kept separate so a hand can take over mid-stroke and back again.
 const mouse = { x: 0.5, y: 0.5, down: false };
 let handMode = false;
+let handRequest = 0;
+let handStartPromise = null;
+// Tracker slots are anatomical left/right, not primary/secondary. Keep the
+// working hand stable through a grip; either hand can operate every instrument.
+const handDrive = { slot: -1 };
 let currentTool = 'probe';
 
 // Phone or not, decided by the shell (SH_PHONE — a coarse pointer plus a short
@@ -29303,6 +29762,19 @@ function tchUp(e) {
 }
 
 /* ---- input router ------------------------------------------------------ */
+function drivingHandSlot(snap) {
+  if (!handMode || !snap || !snap.active || !Array.isArray(snap.hands)) return -1;
+  const available = (i) => {
+    const h = snap.hands[i], p = h && (h.cursorS || h.cursor);
+    return h && h.present && p && Number.isFinite(p.x) && Number.isFinite(p.y);
+  };
+  const previous = handDrive.slot;
+  if (available(previous) && snap.hands[previous].isPinching) return previous;
+  const pinching = snap.hands.findIndex((h, i) => available(i) && h.isPinching);
+  if (pinching >= 0) return pinching;
+  return available(previous) ? previous : snap.hands.findIndex((h, i) => available(i));
+}
+
 function routeInput() {
   // VR outranks everything: if a headset is presenting, its controller or tracked
   // hand IS the instrument and the desktop pointer is not even on screen.
@@ -29320,10 +29792,25 @@ function routeInput() {
   }
 
   const snap = hands && hands.snapshot;
-  const live = handMode && snap && snap.active && snap.hands[0] && snap.hands[0].present;
+  const previousSlot = handDrive.slot;
+  const slot = drivingHandSlot(snap);
+  const live = slot >= 0;
+  handDrive.slot = slot;
+  // Finish the old stroke at its LAST contact before a different hand or mouse
+  // takes over. Never join two input sources with a slash across the specimen.
+  const nextSource = live ? 'hand' : 'mouse';
+  const changedDriver = input.source !== nextSource || previousSlot !== slot;
+  if (changedDriver) { dialReset(); flickReset(); }
+  if (input.gripping && changedDriver) {
+    input.grip = 0; input.gripping = false; input.span = 0;
+    drawCursor(false); controls.enabled = false;
+    dialReset(); flickReset();
+    if (handViz && handViz.setDial) handViz.setDial({ active: false });
+    return;
+  }
 
   if (live) {
-    const h = snap.hands[0];
+    const h = snap.hands[slot];
     // Aim from the RENDER-RATE cursor. `h.cursor` is only rewritten when a camera
     // frame lands, so at 30fps detection on a 60-144Hz screen it is the same value
     // for two to five consecutive frames — the instrument stair-steps across the
@@ -29333,11 +29820,13 @@ function routeInput() {
     // about actual detections — grip reacquisition especially — must not be done
     // against a prediction.) Falls back if an older hands.js is assembled in.
     const hp = h.cursorS || h.cursor;
-    input.x = hp.x;
-    input.y = hp.y;
+    input.x = Math.max(0, Math.min(1, hp.x));
+    input.y = Math.max(0, Math.min(1, hp.y));
     input.grip = h.pinchStrength;
     input.gripping = h.isPinching;
-    input.span = snap.hands[1] && snap.hands[1].present ? (snap.span || 0) : 0;
+    // hands.js publishes separation on each hand, NOT snapshot.span.
+    input.span = snap.hands.filter((other) => other.present).length > 1
+      ? (Number.isFinite(h.span) ? h.span : 0) : 0;
     input.source = 'hand';
     const nowP = performance.now();
     // A flick changes the instrument. Measured on the SMOOTHED cursor, not raw
@@ -29422,11 +29911,15 @@ function onEvent(evt) {
       cutting.open({
         partId: part.id, mesh: part.mesh, points: inc.points,
         system: part.system, depth: 0.55, amount: 0.62,
+        rest: cutRest.get(part.id),
       });
     }
   }
   if (cutting && evt.kind === 'retract') cutting.gape(dissection.hovered, evt.meta.open || 1);
-  if (cutting && evt.kind === 'peel') cutting.gape(evt.partId, 1);
+  if (cutting && evt.kind === 'peel') {
+    cutting.releaseSurface(evt.partId);
+    cutting.remove(evt.partId);
+  }
 
   // Injury bleeds harder than a clean cut, and a torn artery is not a graze.
   if (blood && dissection && dissection.contact && /damage|incise/.test(evt.kind)) {
@@ -29559,18 +30052,35 @@ function doAction(id) {
  */
 function setCase(caseId) {
   if (!pathology) return null;
+  // A case describes a fresh specimen. Reusing cut indices, removed sheets or
+  // residual rims would author the new pathology against the previous anatomy.
+  const attempt = dissection && dissection.state;
+  if (attempt && (attempt.pinned.size || attempt.incisions.size || attempt.removed.size || (cutting && cutting.count))) {
+    loadSpecimen(specimenId);
+    if (!pathology) return null;
+  }
   if (soft) { soft.dispose(); soft = null; }
   const r = caseId ? pathology.apply(caseId) : (pathology.clear(), null);
   if (typeof createSoftBody === 'function') {
     try { soft = createSoftBody(THREE, parts); soft.setLife(!!(physio && physio.running())); }
     catch (e) { console.warn('softbody rebuild failed', e); soft = null; }
   }
+  captureCutRest();
   if (shell.setVignette) shell.setVignette(pathology.vignette());
   if (r) shell.say('New specimen on the table. Read the history, then dissect.');
   return r;
 }
 
 /* ---- specimen lifecycle ------------------------------------------------ */
+function captureCutRest() {
+  cutRest.clear();
+  if (!parts) return;
+  parts.forEach((part) => {
+    const positions = part.mesh.geometry && part.mesh.geometry.attributes.position;
+    if (positions && part.cuttable) cutRest.set(part.id, new Float32Array(positions.array));
+  });
+}
+
 function loadSpecimen(id) {
   if (group) { scene.remove(group); group = null; }
   if (dissection) { dissection.dispose(); dissection = null; }
@@ -29640,10 +30150,19 @@ function loadSpecimen(id) {
     catch (e) { console.warn('softbody failed', e); soft = null; }
   }
 
+  // Cached before any tool deformation. Live wounds must not treat a pressed
+  // surface as a new rest shape or accumulate frame-to-frame displacement.
+  captureCutRest();
   dissection = createDissection(THREE, {
     scene, camera, group, parts, onEvent,
     requiresPinning: SPECIMENS[id].requiresPinning !== false,
     getRemovalSupport: env && env.getRemovalSupport,
+    onCutProgress: (part, points) => {
+      if (!cutting) return;
+      if (cutting.has(part.id)) cutting.grow(part.id, points);
+      else cutting.open({ partId: part.id, mesh: part.mesh, points,
+        system: part.system, depth: 0.55, amount: 0.62, rest: cutRest.get(part.id) });
+    },
   });
   dissection.setTool(currentTool === 'swab' ? 'probe' : currentTool);
 
@@ -29721,7 +30240,7 @@ function tick(t) {
     // gesture come from hand 0 so the panel meter tracks the driving hand.
     if (!tick._hs || t - tick._hs > 140) {
       tick._hs = t;
-      const h0 = hands.snapshot.hands[0];
+      const h0 = hands.snapshot.hands[drivingHandSlot(hands.snapshot)];
       shell.setHandState({
         on: true, status: 'tracking', health: hands.snapshot.health, video: hands.videoEl,
         gesture: h0 && h0.present ? h0.gesture : 'none',
@@ -30180,8 +30699,10 @@ function startApp() {
   }
 
   shell.on('hands', async (want) => {
+    const request = ++handRequest;
     if (!want) {
       handMode = false;
+      handDrive.slot = -1;
       document.body.classList.remove('handmode');
       if (hands) hands.stop();
       if (handViz) handViz.setEnabled(false);
@@ -30190,8 +30711,18 @@ function startApp() {
       return;
     }
     shell.setHandState({ on: true, status: 'starting' });
+    // Stop can interrupt a model download/permission prompt. A fresh opt-in
+    // queues behind that cancellation, rather than failing "already starting".
+    if (handStartPromise) {
+      await handStartPromise;
+      if (request !== handRequest) return;
+    }
     if (!hands) hands = createHands();
-    const res = await hands.start();
+    const pending = hands.start();
+    handStartPromise = pending;
+    const res = await pending;
+    if (handStartPromise === pending) handStartPromise = null;
+    if (request !== handRequest) return;
     if (res.ok) {
       handMode = true;
       document.body.classList.add('handmode');
@@ -30208,7 +30739,10 @@ function startApp() {
       // only way to change instrument, and no one discovers a motion gesture by
       // accident — the flick shipped undiscovered for exactly that reason. Both
       // are named here, both with the direction that makes them work.
-      shell.say('Camera on. Pinch to grip. Two ways to change instrument without the dock: '
+      shell.say('Camera on. Either hand works. '
+        + (specimenId === 'frog' ? 'Choose Pins (4) to secure the four limbs first. ' : '')
+        + 'Choose Scalpel (2) to pinch and draw a cut, then Forceps (3) to pinch and pull the cut layer away. '
+        + 'Two ways to change instrument without the dock: '
         + 'twist your open hand like a dial, or flick it sharply up for the next instrument '
         + 'and down for the previous. Press U to re-centre tracking on your hand, or E to '
         + 'retune the smoothing. Nothing is recorded.');
@@ -30262,6 +30796,7 @@ function startApp() {
     handsApi:   { get: () => hands,      configurable: true },
     shell:      { get: () => shell,      configurable: true },
     tool:       { get: () => currentTool, configurable: true },
+    drivingHandSlot: { get: () => handDrive.slot, configurable: true },
   });
   window.__LAB.loadSpecimen = loadSpecimen;
   window.__LAB.setCase = setCase;
@@ -30271,6 +30806,17 @@ function startApp() {
     input.x = x; input.y = y; input.grip = grip;
     input.gripping = gripping; input.span = span || 0; input.source = 'test';
     if (dissection) dissection.update(input, 16);
+  };
+  // Synthetic tracking verification goes through the SAME router as a camera.
+  // This does not start a camera or replace a live tracker snapshot.
+  window.__LAB.feedHandSnapshot = (snapshot, dt = 16) => {
+    if (handMode) throw new Error('Stop the camera before synthetic tracking verification.');
+    const previousHands = hands;
+    try {
+      hands = { snapshot }; handMode = true;
+      routeInput();
+      if (dissection) dissection.update(input, dt);
+    } finally { hands = previousHands; handMode = false; }
   };
   window.__LAB.THREE = THREE;
   window.__LAB.camera = camera;

@@ -44,3 +44,10 @@ test('resting tissue is not animated independently of optional physiology', () =
   assert.ok(load.indexOf('env.fitSpecimen(group)') < load.indexOf('dissection = createDissection'));
   assert.match(main, /if \(soft\) soft\.setLife\(!!on\)/);
 });
+
+test('large bench uses bounded tessellation without removing the original lamp', () => {
+  const env = fs.readFileSync(path.join(root, 'src/lab/env.js'), 'utf8');
+  assert.match(env, /new THREE\.PlaneGeometry\(70,\s*70,\s*12,\s*12\)/);
+  assert.doesNotMatch(env, /fixture\.visible = false/);
+  assert.match(env, /lamp\.castShadow = true/);
+});

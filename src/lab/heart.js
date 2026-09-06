@@ -48,6 +48,18 @@ function buildHeart(THREE) {
   function heartWall(prof, seg, phiStart, phiLen, color, o) {
     o = o || {};
     const g = new THREE.LatheGeometry(prof, seg, phiStart, phiLen);
+    // Our ventricular profiles run from base to apex (descending Y), opposite
+    // LatheGeometry's outward winding. Reverse faces, not the authored points:
+    // shape, displacement, UVs and transforms stay exact, while the front wall
+    // becomes the visible/pickable surface instead of the far inner wall.
+    if (prof.length > 1 && prof[0].y > prof[prof.length - 1].y) {
+      const indices = g.index.array;
+      for (let i = 0; i < indices.length; i += 3) {
+        const second = indices[i + 1]; indices[i + 1] = indices[i + 2]; indices[i + 2] = second;
+      }
+      g.index.needsUpdate = true;
+    }
+    // displace/seal recompute normals from the corrected faces.
     displace(THREE, g, o.amp != null ? o.amp : 0.024, o.freq || 2.4, o.seed || 0);
     seal(g);
     return new THREE.Mesh(g, mat(THREE, color, {

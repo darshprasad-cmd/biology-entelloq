@@ -1,0 +1,231 @@
+{
+  "base": "http://127.0.0.1:3002",
+  "specimens": [
+    {
+      "id": "frog",
+      "pinned": 4,
+      "layers": [
+        {
+          "part": "skin",
+          "incisionLength": 1.6765201620552634,
+          "cutIndexCount": 10053,
+          "opened": true,
+          "removed": true,
+          "hidden": true,
+          "nextLayer": 1
+        },
+        {
+          "part": "subcutaneous-fascia",
+          "incisionLength": 1.5513710089934798,
+          "cutIndexCount": 31035,
+          "opened": true,
+          "removed": true,
+          "hidden": true,
+          "nextLayer": 2
+        },
+        {
+          "part": "muscle-wall",
+          "incisionLength": 1.6573102433351157,
+          "cutIndexCount": 10038,
+          "opened": true,
+          "removed": true,
+          "hidden": true,
+          "nextLayer": 3
+        },
+        {
+          "part": "parietal-peritoneum",
+          "incisionLength": 1.5949986779924765,
+          "cutIndexCount": 25332,
+          "opened": true,
+          "removed": true,
+          "hidden": true,
+          "nextLayer": 4
+        }
+      ],
+      "damage": 0,
+      "inputSource": "mouse",
+      "lifted": [],
+      "visibleInternal": [
+        "ventral-abdominal-vein",
+        "liver-right",
+        "liver-left",
+        "liver-median",
+        "gall-bladder",
+        "frog-heart",
+        "lung-left",
+        "lung-right",
+        "stomach",
+        "oesophagus",
+        "small-intestine",
+        "large-intestine",
+        "cloaca",
+        "urinary-bladder",
+        "spleen",
+        "fat-body-left",
+        "fat-body-right"
+      ]
+    },
+    {
+      "id": "cockroach",
+      "pinned": 4,
+      "layers": [
+        {
+          "part": "exoskeleton",
+          "incisionLength": 1.5607912841748737,
+          "cutIndexCount": 7101,
+          "opened": true,
+          "removed": true,
+          "hidden": true,
+          "nextLayer": 1
+        }
+      ],
+      "damage": 0,
+      "inputSource": "mouse",
+      "lifted": [
+        "wing-left",
+        "wing-right",
+        "fat-body-l-0"
+      ],
+      "visibleInternal": [
+        "fat-body-l-0",
+        "fat-body-r-1",
+        "fat-body-l-2",
+        "fat-body-r-3",
+        "fat-body-c-4",
+        "fat-body-l-5",
+        "fat-body-r-6",
+        "fat-body-c-7",
+        "dorsal-heart",
+        "oesophagus",
+        "crop",
+        "gizzard",
+        "midgut",
+        "gastric-caeca",
+        "hindgut",
+        "malpighian-tubules",
+        "salivary-gland-l",
+        "salivary-gland-r"
+      ]
+    },
+    {
+      "id": "earthworm",
+      "pinned": 4,
+      "layers": [
+        {
+          "part": "body-wall",
+          "incisionLength": 1.8300218687354328,
+          "cutIndexCount": 30903,
+          "opened": true,
+          "removed": true,
+          "hidden": true,
+          "nextLayer": 1
+        }
+      ],
+      "damage": 0,
+      "inputSource": "mouse",
+      "lifted": [],
+      "visibleInternal": [
+        "dorsal-blood-vessel",
+        "septa"
+      ]
+    },
+    {
+      "id": "fish",
+      "pinned": 2,
+      "layers": [
+        {
+          "part": "body-wall",
+          "incisionLength": 1.5428551716346037,
+          "cutIndexCount": 11520,
+          "opened": true,
+          "removed": true,
+          "hidden": true,
+          "nextLayer": 1
+        },
+        {
+          "part": "myotome-wall",
+          "incisionLength": 1.579616571124839,
+          "cutIndexCount": 11517,
+          "opened": true,
+          "removed": true,
+          "hidden": true,
+          "nextLayer": 2
+        }
+      ],
+      "damage": 0,
+      "inputSource": "mouse",
+      "lifted": [
+        "operculum"
+      ],
+      "visibleInternal": [
+        "gill-arch-1",
+        "gill-arch-2",
+        "gill-arch-3",
+        "gill-arch-4",
+        "gill-filaments",
+        "gill-rakers",
+        "fish-heart",
+        "liver",
+        "oesophagus",
+        "stomach",
+        "pyloric-caeca",
+        "intestine",
+        "spleen",
+        "swim-bladder"
+      ]
+    },
+    {
+      "id": "heart",
+      "pinned": 1,
+      "layers": [
+        {
+          "part": "pericardium",
+          "incisionLength": 1.5224632742441977,
+          "cutIndexCount": 6942,
+          "opened": true,
+          "removed": true,
+          "hidden": true,
+          "nextLayer": 1
+        },
+        {
+          "part": "epicardium",
+          "incisionLength": 1.5384906048878715,
+          "cutIndexCount": 21126,
+          "opened": true,
+          "removed": true,
+          "hidden": true,
+          "nextLayer": 2
+        }
+      ],
+      "damage": 0,
+      "inputSource": "mouse",
+      "lifted": [
+        "epicardial-fat"
+      ],
+      "visibleInternal": [
+        "lv-free-wall",
+        "rv-free-wall",
+        "right-atrium",
+        "left-atrium",
+        "right-auricle",
+        "left-auricle",
+        "pulmonary-trunk",
+        "aorta",
+        "svc",
+        "ivc",
+        "pulmonary-veins",
+        "lad",
+        "rca",
+        "circumflex",
+        "posterior-iv-branch",
+        "coronary-sinus",
+        "av-groove-fat",
+        "iv-groove-fat"
+      ]
+    }
+  ],
+  "errors": [],
+  "cameraRequests": 0,
+  "complete": true,
+  "limit": "Synthetic tracker snapshots verify application routing, not webcam recognition or measured physical tissue fidelity."
+}

@@ -774,11 +774,92 @@ function SUR_match(id) {
   return null;
 }
 
+/* Preserved-tissue art direction, not a species- or fixative-calibrated colour
+ * standard. Keep the builders' anatomical colour differences; blend, never
+ * replace them with one universal brown. Named nerves/bones/vessels retain their
+ * instructional colours. These finishes intentionally avoid a uniform lacquer. */
+function SUR_finishProfile(specimen, part) {
+  const id = part.id;
+  const profile = (kind, tone, blend, rough, coat, coatRough, kids = false) =>
+    ({ kind, tone, blend, rough, coat, coatRough, kids });
+  if (specimen === 'frog' && (id === 'skin' || /^(fore|hind)limb-/.test(id)))
+    return profile('frog-hide', 0x7b7850, id === 'skin' ? 0.10 : 0.34, 0.72, 0.20, 0.50, id !== 'skin');
+  if (specimen === 'fish' && /^(body-wall|operculum)$/.test(id))
+    return profile('scales', 0xaaa18b, 0.12, 0.65, 0.26, 0.42);
+  if (specimen === 'cockroach' && part.system === 'integument')
+    return profile('chitin', 0x956735, 0.24, 0.57, 0.34, 0.38);
+  if (specimen === 'earthworm' && (part.system === 'integument' || id === 'anal-segment'))
+    return profile('hide', 0xa78270, id === 'body-wall' ? 0.09 : 0.30, 0.71, 0.23, 0.46);
+  if (/fat-body|epicardial-fat/.test(id))
+    return profile('fat', specimen === 'frog' ? 0xb6a66b : 0xd3c4a0, 0.58, 0.82, 0.12, 0.56, true);
+  if (specimen === 'heart') {
+    // The 10%-opacity outer sac must not become a frosted shell that conceals
+    // the myocardium. Do not apply this to opaque access membranes or valves.
+    if (/pericardium/.test(id) && part.mesh.material.transparent && part.mesh.material.opacity <= 0.2)
+      return profile('serous', 0xd2c5aa, 0.12, 0.32, 0.18, 0.48);
+    if (/free-wall|atrium|auricle|^septum$|papillary|moderator/.test(id))
+      return profile('flesh', 0xa38d70, 0.64, 0.74, 0.22, 0.48);
+    if (/pericardium|leaflet|chordae|cusp/.test(id))
+      return profile('serous', 0xd2c5aa, 0.28, 0.65, 0.24, 0.44);
+    return null;
+  }
+  if (part.system === 'nervous' || part.system === 'skeletal') return null;
+  if (/liver|kidney|spleen/.test(id))
+    return profile('flesh', specimen === 'frog' ? 0x7c795e : 0x897562, 0.46, 0.73, 0.24, 0.46);
+  if (part.system === 'digestive' || part.system === 'muscular' || part.system === 'urogenital' || part.system === 'excretory')
+    return profile('flesh', specimen === 'fish' ? 0xb9afa0 : 0xb3a084, 0.42, 0.75, 0.20, 0.48);
+  if (/lung|bladder|tracheae/.test(id))
+    return profile('serous', 0xc5bb9f, 0.28, 0.64, 0.26, 0.43);
+  return null;
+}
+
+// Small, repeatable CPU-generated maps: no photo textures, image downloads,
+// canvas/readback or per-frame work. Shared by finish class inside one specimen.
+function SUR_finishMaps(THREE, kind) {
+  const size = 128, rough = new Uint8Array(size * size * 4), tint = new Uint8Array(rough.length);
+  const height = kind === 'scales' ? new Float32Array(size * size) : null;
+  for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
+    const u = x / size, v = y / size, i = (y * size + x) * 4;
+    const n = tisFbm(u, v, kind.length * 13 + 7);
+    const grain = tisNoise(u, v, 32, 19);
+    const r = Math.round(255 * (0.74 + n * 0.24 + grain * 0.02));
+    const c = Math.round(255 * (kind === 'frog-hide'
+      ? 0.78 + n * 0.19 + grain * 0.03 // visible, soft mottling across the pale belly
+      : 0.89 + n * 0.09 + grain * 0.02));
+    rough.set([r, r, r, 255], i); tint.set([c, c, c, 255], i);
+    if (height) {
+      const row = Math.floor(v * 12), fy = v * 12 - row;
+      const dx = ((u * 14 + (row % 2) * 0.5) % 1) - 0.5;
+      const arc = 0.27 + 0.46 * Math.sqrt(Math.max(0, 1 - 4 * dx * dx));
+      height[y * size + x] = n * 0.12 + Math.exp(-Math.pow((fy - arc) / 0.075, 2)) * 0.07;
+    }
+  }
+  function texture(data) {
+    const t = new THREE.DataTexture(data, size, size, THREE.RGBAFormat);
+    t.wrapS = t.wrapT = THREE.RepeatWrapping;
+    t.magFilter = t.minFilter = THREE.LinearFilter;
+    t.needsUpdate = true;
+    return t;
+  }
+  const maps = { rough: texture(rough), tint: texture(tint), normal: null };
+  if (height) {
+    const normals = new Uint8Array(rough.length), n = new THREE.Vector3();
+    const at = (x, y) => height[((y + size) % size) * size + ((x + size) % size)];
+    for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
+      n.set((at(x - 1, y) - at(x + 1, y)) * 3, (at(x, y - 1) - at(x, y + 1)) * 3, 1).normalize();
+      normals.set([Math.round((n.x * 0.5 + 0.5) * 255), Math.round((n.y * 0.5 + 0.5) * 255), Math.round((n.z * 0.5 + 0.5) * 255), 255], (y * size + x) * 4);
+    }
+    maps.normal = texture(normals);
+  }
+  return maps;
+}
+
 /* ========================================================================== */
 export function createSurfaceDetail(THREE, parts, specimenId, group) {
   const added = [];                 // decorative meshes ONLY — never part descriptors
   const owned = [];                 // {mesh} we must remove and dispose
-  const sheenSaved = [];            // {mat, clearcoat, clearcoatRoughness}
+  const finishSaved = [];           // original materials; never dispose builder-owned maps
+  const finishMaps = new Map();     // one tiny procedural map set per finish class
   const projectors = new Map();     // partId -> projector (built once, after displacement)
   const tubes = new Map();          // partId -> {info, cfg}
   const byId = new Map();
@@ -826,26 +907,42 @@ export function createSurfaceDetail(THREE, parts, specimenId, group) {
     });
   }
 
-  /* --- step 2: serosal sheen ------------------------------------------------- */
+  /* --- step 2: preserved-tissue finishes ------------------------------------- */
   function sheenAll() {
-    // Guarded against re-entry: sheenAll mutates the organ's own material and
-    // saves the ORIGINAL clearcoat for dispose() to restore. A second run would
-    // save the already-modified value as the "original" and dispose() would then
-    // restore to the sheened value, never the true original. apply()'s owned.length
-    // guard only covers the case where vessels were built; this covers the rest.
+    // apply() can re-enter with no decorative vessels. Do not clone/tint twice.
     if (sheened) return;
     sheened = true;
-    byId.forEach((p, id) => {
-      const rec = SUR_match(id);
-      if (!rec || !rec.sheen) return;
-      const m = p.mesh.material;
-      if (!m || m.clearcoat == null) return;
-      sheenSaved.push({ mat: m, cc: m.clearcoat, cr: m.clearcoatRoughness });
-      // A peritoneal surface is wetter than the parenchyma under it. This is the
-      // whole "glistening serosa" effect: no geometry, one clearcoat nudge.
-      m.clearcoat = rec.sheen[0];
-      m.clearcoatRoughness = rec.sheen[1];
-      m.needsUpdate = true;
+    byId.forEach((p) => {
+      const cfg = SUR_finishProfile(specimenId, p);
+      if (!cfg) return;
+      if (!finishMaps.has(cfg.kind)) finishMaps.set(cfg.kind, SUR_finishMaps(THREE, cfg.kind));
+      const maps = finishMaps.get(cfg.kind);
+      function finish(mesh) {
+        const original = mesh.material;
+        if (!mesh.isMesh || !original || original.clearcoat == null) return;
+        const m = original.clone();
+        finishSaved.push({ mesh, original, applied: m });
+        mesh.material = m;
+        // Vertex-coloured hide keeps its dorsal/ventral pattern. A gentle warm
+        // multiplier is enough; blending its white material all the way to an
+        // organ colour would obliterate the pale belly and segment distinctions.
+        m.color.lerp(new THREE.Color(cfg.tone), cfg.blend);
+        m.roughness = cfg.rough;
+        m.clearcoat = cfg.coat;
+        m.clearcoatRoughness = cfg.coatRough;
+        m.sheen = Math.min(m.sheen, 0.24);
+        m.sheenColor.lerp(new THREE.Color(cfg.tone), 0.5);
+        m.roughnessMap = maps.rough;
+        m.clearcoatRoughnessMap = maps.rough;
+        if (!m.map) m.map = maps.tint;
+        if (maps.normal) { m.normalMap = maps.normal; m.normalScale.set(0.28, 0.28); }
+        else m.normalScale.multiplyScalar(0.65);
+        m.needsUpdate = true;
+      }
+      finish(p.mesh);
+      // Only known same-tissue children. Skin children include eyes and fins;
+      // tinting an entire specimen traversal would turn those into opaque flesh.
+      if (cfg.kids) p.mesh.children.forEach(finish);
     });
   }
 
@@ -899,10 +996,10 @@ export function createSurfaceDetail(THREE, parts, specimenId, group) {
 
       tris += bA.tris + bV.tris;
       attach(p, SUR_finish(THREE, bA), SUR_ART,
-        { tissue: 'vessel', rough: 0.40, clear: 0.62, clearRough: 0.22,
+        { tissue: 'vessel', rough: 0.57, clear: 0.30, clearRough: 0.40,
           sheen: 0xe07a64, transmission: 0.10, thickness: 0.22 });
       attach(p, SUR_finish(THREE, bV), SUR_VEIN,
-        { tissue: 'vessel', rough: 0.50, clear: 0.44, clearRough: 0.34,
+        { tissue: 'vessel', rough: 0.62, clear: 0.24, clearRough: 0.44,
           sheen: 0x9a6a90, transmission: 0.06, thickness: 0.3 });
     });
   }
@@ -1038,15 +1135,17 @@ export function createSurfaceDetail(THREE, parts, specimenId, group) {
       return { tris, meshes: added.length };
     },
     get triangles() { return tris; },
-    /* Removes the decoration and restores the clearcoat nudge. Vertex displacement
+    /* Removes decoration and restores builder materials. Vertex displacement
      * is deliberately NOT undone: softbody has already snapshotted the displaced
      * shape as rest, so restoring here would only fight it. loadSpecimen() rebuilds
      * the specimen from scratch, which is the real undo. */
     dispose() {
       clearDecor();
-      sheenSaved.forEach((s) => { s.mat.clearcoat = s.cc; s.mat.clearcoatRoughness = s.cr; s.mat.needsUpdate = true; });
-      sheenSaved.length = 0;
-      sheened = false;   // sheen restored above; keep the guard consistent with state
+      finishSaved.forEach((s) => { s.mesh.material = s.original; s.applied.dispose(); });
+      finishSaved.length = 0;
+      finishMaps.forEach((maps) => Object.values(maps).forEach((t) => { if (t) t.dispose(); }));
+      finishMaps.clear();
+      sheened = false;
       projectors.clear();
       tubes.clear();
       byId.clear();
