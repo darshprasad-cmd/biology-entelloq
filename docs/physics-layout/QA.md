@@ -18,3 +18,9 @@ The app shell follows the currently deployed Physics layout (verified against Ph
 - App checks: desktop/mobile Home, real lesson navigation, mobile Explore group filtering, Ctrl+K search, Escape/focus restoration, an enzyme-kinetics deep link, and exploration counts derived from a real visited lesson.
 
 The optional standalone browser script is maintained for the new shell but was not executed in this session; the checks above used the Codex browser. Existing camera tracking, Google sign-in completion, external AI and every scientific model were not re-audited by this presentation change. Local preview is not a deployment.
+
+## Launch palette follow-up
+
+The app and eight pillar pages now use the launch page's near-black green surfaces, sage accents and warm white text, with matching green tones in light mode. Changes are restricted to color tokens and targeted decorative color overrides; original layout declarations, typography, HTML content and scripts remain identical. Scientific category/feedback accents are retained.
+
+Verified desktop Home in dark/light themes and fresh mobile Lessons over HTTP; the sidebar remains 224px, header 76px and desktop heading 44px. Mobile Lessons has no horizontal overflow. All 10 project check groups passed. A previously prefetched lesson document was stale during preview; a fresh document URL verified the new palette.
