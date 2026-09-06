@@ -1154,6 +1154,7 @@ export function createHands(options) {
   let stream = null;
   let running = false;
   let starting = false;
+  let startGeneration = 0;
   let lastVideoTime = -1;
   let lastDetectTs = -1;
   let lastAnySeenMs = 0;
@@ -1244,6 +1245,9 @@ export function createHands(options) {
       return hndFailure("already-starting", "Camera is already starting up.");
     }
     starting = true;
+    const generation = ++startGeneration;
+    const cancelled = () => generation !== startGeneration;
+    const cancellation = () => ({ ok: false, code: "cancelled", reason: "Camera start cancelled." });
     try {
       if (typeof navigator === "undefined" || !navigator.mediaDevices ||
           !navigator.mediaDevices.getUserMedia) {
@@ -1314,6 +1318,8 @@ export function createHands(options) {
       }
 
       // ── Camera. Nothing before this line has touched it.
+      // A stop during a model download must not prompt for a camera later.
+      if (cancelled()) return cancellation();
       try {
         stream = await navigator.mediaDevices.getUserMedia({
           // `ideal`, not exact: a webcam that cannot do 720p should hand back its
@@ -1327,6 +1333,7 @@ export function createHands(options) {
           audio: false,
         });
       } catch (err) {
+        if (cancelled()) return cancellation();
         if (err && err.name === "OverconstrainedError") {
           // Some webcams refuse the exact size; retry with no constraints.
           try {
@@ -1342,6 +1349,9 @@ export function createHands(options) {
         }
       }
 
+      // A permission prompt can resolve after Stop. Release those late tracks
+      // before binding/playing the video or publishing an active snapshot.
+      if (cancelled()) { hndReleaseCamera(); return cancellation(); }
       videoEl.srcObject = stream;
       try {
         await videoEl.play();
@@ -1374,6 +1384,7 @@ export function createHands(options) {
         }
       }
 
+      if (cancelled()) { hndReleaseCamera(); return cancellation(); }
       lastVideoTime = -1;
       lastDetectTs = -1;
       lastAnySeenMs = typeof performance !== "undefined" ? performance.now() : Date.now();
@@ -1416,6 +1427,7 @@ export function createHands(options) {
   }
 
   function stop() {
+    startGeneration++;
     running = false;
     hndReleaseCamera();
     snapshot.active = false;

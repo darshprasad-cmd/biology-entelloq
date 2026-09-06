@@ -1,0 +1,83 @@
+{
+  "base": "http://127.0.0.1:3002",
+  "requestedSpecimens": [
+    "heart"
+  ],
+  "specimens": [
+    {
+      "id": "heart",
+      "pinned": 1,
+      "layers": [
+        {
+          "part": "pericardium",
+          "incisionLength": 1.5224632742441977,
+          "cutIndexCount": 6942,
+          "opened": true,
+          "removed": true,
+          "hidden": true,
+          "nextLayer": 1
+        },
+        {
+          "part": "epicardium",
+          "incisionLength": 1.5384906048878715,
+          "cutIndexCount": 21126,
+          "opened": true,
+          "removed": true,
+          "hidden": true,
+          "nextLayer": 2
+        },
+        {
+          "part": "lv-free-wall",
+          "incisionLength": 1.5410635481100567,
+          "cutIndexCount": 9672,
+          "opened": true,
+          "removed": true,
+          "hidden": true,
+          "nextLayer": 3
+        }
+      ],
+      "damage": 0,
+      "inputSource": "mouse",
+      "lifted": [
+        "epicardial-fat"
+      ],
+      "visibleInternal": [
+        "rv-free-wall",
+        "right-atrium",
+        "left-atrium",
+        "right-auricle",
+        "left-auricle",
+        "pulmonary-trunk",
+        "aorta",
+        "svc",
+        "ivc",
+        "pulmonary-veins",
+        "lad",
+        "rca",
+        "circumflex",
+        "posterior-iv-branch",
+        "coronary-sinus",
+        "septum",
+        "papillary-a",
+        "papillary-b",
+        "mitral-leaflet",
+        "chordae-1",
+        "chordae-2",
+        "chordae-3",
+        "chordae-4",
+        "chordae-5",
+        "aortic-cusp-1",
+        "aortic-cusp-2",
+        "aortic-cusp-3",
+        "tricuspid-leaflet",
+        "moderator-band",
+        "av-groove-fat",
+        "iv-groove-fat"
+      ]
+    }
+  ],
+  "errors": [],
+  "cameraRequests": 0,
+  "complete": true,
+  "limit": "Synthetic tracker snapshots verify application routing, not webcam recognition or measured physical tissue fidelity."
+}

@@ -9,7 +9,9 @@ const { createRequire } = require('node:module');
 const root = path.resolve(__dirname, '..');
 const modules = process.env.BIOLOGY_PLAYWRIGHT_MODULES || path.resolve(root, '../biology-entelloq/node_modules');
 const { chromium } = createRequire(path.join(modules, '__hand_layout__.cjs'))('playwright');
-const output = path.join(root, 'docs/dissection-realism');
+const output = process.env.BIOLOGY_HAND_LAYOUT_OUTPUT
+  ? path.resolve(process.env.BIOLOGY_HAND_LAYOUT_OUTPUT)
+  : path.join(root, 'docs/dissection-interactions/hand-layout');
 fs.mkdirSync(output, { recursive: true });
 const lab = fs.readFileSync(path.join(root, 'lab.html'), 'utf8');
 const shellSource = fs.readFileSync(path.join(root, 'src/lab/shell.js'), 'utf8').replace(/^export /gm, '');
@@ -49,8 +51,9 @@ async function inspect(page, size, state) {
         centerClickable: !!hit && (hit === el || el.contains(hit)),
         overflow: el.scrollWidth > el.clientWidth + 1, text: el.textContent.trim().replace(/\s+/g, ' ').slice(0, 140) };
     };
-    const names = ['#hand', '#handbtn', '#handstat', '#handpreview', '#selfwrap', '#dock', '#railfoot', '#eqx-fab', '#helpbtn', '#specbtn', '#coach', '#obj'];
+    const names = ['#hand', '#handbtn', '#handstat', '#handpreview', '#selfwrap', '#cambtn', '#dock', '#railfoot', '#eqx-fab', '#helpbtn', '#specbtn', '#coach', '#obj'];
     return { viewport: { width: innerWidth, height: innerHeight }, phone: document.body.classList.contains('bioq-phone'),
+      compact: document.querySelector('#hand').classList.contains('compact'),
       overflow: document.documentElement.scrollWidth > innerWidth + 1,
       rects: Object.fromEntries(names.map(name => [name, rect(name)])) };
   });
@@ -64,6 +67,11 @@ async function inspect(page, size, state) {
     if (!control || !control.centerClickable) issue(selector + ' center is not clickable');
   }
   if (!rects['#handbtn'] || rects['#handbtn'].height < 44) issue('main hand control is smaller than 44px');
+  for (const name of ['#handpreview', '#cambtn']) {
+    if (rects[name] && (rects[name].width < 44 || rects[name].height < 44 || !rects[name].centerClickable)) issue(name + ' must be a reachable 44px control');
+  }
+  if (item.compact && rects['#hand'].height > 70) issue('active status strip is taller than 70px');
+  if (item.compact && rects['#selfwrap']) issue('compact state still reserves camera preview');
   if (item.overflow || rects['#hand']?.overflow) issue('horizontal overflow');
   for (const [a, b] of [['#hand', '#dock'], ['#hand', '#eqx-fab'], ['#hand', '#railfoot'], ['#eqx-fab', '#helpbtn'], ['#eqx-fab', '#specbtn'], ['#handbtn', '#coach']]) {
     if (overlap(rects[a], rects[b])) issue(a + ' overlaps ' + b);
@@ -94,7 +102,7 @@ async function inspect(page, size, state) {
         const test = window.__shellLayout;
         test.shell.mountCards(specimens, id => test.shell.setSpecimen(specimens[id], []));
         test.shell.setSpecimen(specimens.frog, []);
-        test.shell.on('hands', want => { test.events.push(want); if (!want) test.shell.setHandState({ on: false }); });
+        test.shell.on('hands', want => { test.events.push(want); if (!want) { test.shell.setHandState({ on: false }); document.body.classList.remove('handmode'); } });
       }, metadata);
       await page.waitForFunction(() => Number(getComputedStyle(document.querySelector('#pick')).opacity) === 0);
       await inspect(page, size, 'off');
@@ -103,25 +111,47 @@ async function inspect(page, size, state) {
       await inspect(page, size, 'failed');
       await page.locator('#handbtn').click();
       assert.equal(await page.evaluate(() => window.__shellLayout.events.at(-1)), true);
+      await page.evaluate(() => window.__shellLayout.shell.setHandState({ on: true, status: 'starting' }));
+      await inspect(page, size, 'starting-compact');
       await page.evaluate(() => {
         window.__shellLayout.shell.setHandState({ on: true, status: 'tracking', health: 0, hands: 2, gesture: 'pinch', grip: .7 });
         document.body.classList.add('handmode');
       });
-      await inspect(page, size, 'live-coach');
-      await page.locator('#coachok').click();
-      await inspect(page, size, 'live-preview-closed');
-      if (await page.locator('#handpreview').isVisible()) await page.locator('#handpreview').click();
-      await inspect(page, size, 'live-preview-open');
-      await page.screenshot({ path: path.join(output, 'hand-' + size.name + '-live.png'), timeout: 15000 });
+      assert.equal(await page.locator('#coach').evaluate(el => el.classList.contains('on')), false);
+      await inspect(page, size, 'live-compact');
+      await page.screenshot({ path: path.join(output, 'hand-' + size.name + '-compact.png'), timeout: 15000 });
+      await page.evaluate(() => window.__shellLayout.shell.setHandState({ on: true, status: 'tracking', health: 3, hands: 0 }));
+      await inspect(page, size, 'no-hand-compact');
+      assert.equal(await page.locator('#handstat .stxt').textContent(), 'No hand detected');
+      await page.locator('#handpreview').click();
+      await page.evaluate(() => {
+        for (let i = 0; i < 20; i++) window.__shellLayout.shell.setHandState({ on: true, status: 'tracking', health: 0, hands: 2, grip: i / 20 });
+      });
+      assert.equal(await page.locator('#handpreview').getAttribute('aria-expanded'), 'true');
+      const expanded = await inspect(page, size, 'live-settings-open');
+      await page.screenshot({ path: path.join(output, 'hand-' + size.name + '-settings.png'), timeout: 15000 });
+      await page.locator('#cambtn').click();
+      const cameraHidden = await inspect(page, size, 'live-camera-hidden');
+      assert.equal(cameraHidden.rects['#selfwrap'], null, 'camera-off must remove the entire preview plate');
+      assert.ok(expanded.rects['#hand'].height > cameraHidden.rects['#hand'].height + 20, 'disabled preview must reclaim vertical space');
+      await page.screenshot({ path: path.join(output, 'hand-' + size.name + '-camera-hidden.png'), timeout: 15000 });
       await page.evaluate(() => window.__shellLayout.shell.setConsoleOpen(true));
       await inspect(page, size, 'live-console-open');
       await page.evaluate(() => window.__shellLayout.shell.setConsoleOpen(false));
+      await page.locator('#cambtn').focus();
+      await page.keyboard.press('Escape');
+      assert.equal(await page.locator('#handpreview').getAttribute('aria-expanded'), 'false');
+      assert.equal(await page.evaluate(() => document.activeElement.id), 'handpreview');
+      await inspect(page, size, 'live-settings-reclosed');
       await page.locator('#handbtn').click();
       assert.equal(await page.evaluate(() => window.__shellLayout.events.at(-1)), false);
       assert.equal(await page.locator('#handbtn').textContent(), 'Use my hands');
       await page.locator('#handbtn').focus();
       await page.keyboard.press('Enter');
       assert.equal(await page.evaluate(() => window.__shellLayout.events.at(-1)), true);
+      await page.evaluate(() => window.__shellLayout.shell.setHandState({ on: true, status: 'tracking', health: 0 }));
+      await page.keyboard.press('Space');
+      assert.equal(await page.evaluate(() => window.__shellLayout.events.at(-1)), false);
       await page.locator('#eqx-fab').click();
       assert.equal(await page.locator('#eqx-fab').getAttribute('aria-expanded'), 'true');
       await page.locator('#eqx-close').click();
@@ -130,15 +160,18 @@ async function inspect(page, size, state) {
       await page.keyboard.press('Escape');
       await page.locator('#specbtn').click();
       assert.equal(await page.locator('#pick').evaluate(el => el.classList.contains('gone')), false);
-      await page.locator('#cards .card').first().click();
+      await page.locator('#cards .card').nth(1).click();
+      await page.waitForFunction(() => Number(getComputedStyle(document.querySelector('#pick')).opacity) === 0);
+      await inspect(page, size, 'heart-long-specimen-name');
       await context.close();
     }
     assert.deepEqual(report.errors, []);
     assert.deepEqual(report.issues, []);
     report.complete = true;
-    report.checks = ['Six viewport families and off/failed/live/preview/console states', 'Main camera button at least 44px and center-hit-test clickable',
+    report.checks = ['Six viewport families; off/failed/starting/live/no-hand/settings/camera-hidden/console states', 'Stop, Settings and camera switch at least 44px and center-hit-test clickable',
       'Hand panel does not overlap tools, shared FAB or console footer', 'FAB/help/specimen chooser open and close',
-      'Original hands event dispatch by pointer and keyboard; Stop remains reachable', 'No renderer loaded or camera requested'];
+      'Active strip at most 70px high with no camera plate; no automatic coach overlay', 'Settings persist across 20 updates and Escape restores focus',
+      'Camera visibility off removes preview and reclaims space', 'Original hands event dispatch by pointer, Enter and Space; Stop remains reachable', 'No renderer loaded or camera requested'];
   } catch (error) { report.failure = error.message; throw error; }
   finally {
     await browser.close();

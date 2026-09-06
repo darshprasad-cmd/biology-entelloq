@@ -1,0 +1,51 @@
+{
+  "errors": [],
+  "points": [
+    [
+      800,
+      300
+    ],
+    [
+      800,
+      350
+    ],
+    [
+      850,
+      350
+    ]
+  ],
+  "cameraRequests": 0,
+  "scene": {
+    "width": 70,
+    "height": 70,
+    "widthSegments": 12,
+    "heightSegments": 12,
+    "triangles": 288,
+    "hitsPad": [
+      true,
+      true,
+      true
+    ]
+  },
+  "fixedPixels": [
+    [
+      18,
+      36,
+      31,
+      255
+    ],
+    [
+      30,
+      50,
+      41,
+      255
+    ],
+    [
+      28,
+      48,
+      40,
+      255
+    ]
+  ],
+  "complete": true
+}

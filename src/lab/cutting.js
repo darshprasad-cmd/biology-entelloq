@@ -165,6 +165,11 @@ const CUT_OPEN_MS = 500;        // tissue does not snap open
 const CUT_EPS = 0.010;          // lining stand-off along the surface normal
 const CUT_GAPE_MAX = 0.12;      // world units of lateral parting at amount = 1
 const CUT_RN = 0.42;            // reject the far side of a closed shell
+// These are removable access films, not structural body walls or head-bearing
+// skin. Retaining half a transparent sac with an opaque rim makes a false hoop.
+const CUT_COMPLETE_SHEETS = new Set([
+  'pericardium', 'epicardium', 'parietal-peritoneum', 'subcutaneous-fascia',
+]);
 
 const CUT_clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 // Decreasing smoothstep: 1 at the cut line, 0 at the edge of influence.
@@ -246,6 +251,7 @@ export function createCutting(THREE, scene) {
                                      // two records sharing a geometry would each
                                      // see the other's write and double-apply.
   const rests = new Map();           // partId -> pristine Float32Array of positions
+  const remnants = new Map();        // uncut backing retained after access-sheet removal
 
   // Orphan parent, only used when a caller hands us a mesh with no parent. Never
   // registered as a part, never given a partId; nothing can pick out of it.
@@ -342,7 +348,7 @@ export function createCutting(THREE, scene) {
     if (geo.boundingSphere) _ctr.copy(geo.boundingSphere.center); else _ctr.set(0, 0, 0);
     const ctr = _ctr;
     const rest = rec.rest;
-    const nrm = geo.attributes.normal;
+    const nrm = rec.restNormals || geo.attributes.normal;
     const vcount = rest.length / 3;
     // Sub-sample dense geometry: we only need the nearest vertex's NORMAL, and a
     // stride of a few thousand candidates is indistinguishable at this scale.
@@ -547,6 +553,56 @@ export function createCutting(THREE, scene) {
     if (rec.moving) geo.computeVertexNormals();
   }
 
+  /* ---- an actual opening in the surface topology ------------------------- */
+  // The old displacement parted vertices but their triangles still bridged the
+  // incision. Remove only faces crossed by the blade on the contacted side.
+  // Position/normal/colour attributes never change length: softbody retains its
+  // rest arrays. The reusable index buffer is rebuilt on stroke growth, never
+  // in update(); the original index and draw range are restored by remove().
+  function buildOpening(rec) {
+    const geo = rec.mesh.geometry, src = rec.originalIndices, rest = rec.rest;
+    const out = rec.openIndex.array, K = rec.K;
+    let kept = 0;
+    const centroid = new THREE.Vector3(), a = new THREE.Vector3(), b = new THREE.Vector3(), c = new THREE.Vector3();
+    const ab = new THREE.Vector3(), ac = new THREE.Vector3();
+    const step = rec.length / Math.max(1, K - 1);
+    for (let j = 0; j < src.length; j += 3) {
+      const ia = src[j], ib = src[j + 1], ic = src[j + 2];
+      a.fromArray(rest, ia * 3); b.fromArray(rest, ib * 3); c.fromArray(rest, ic * 3);
+      centroid.copy(a).add(b).add(c).multiplyScalar(1 / 3);
+      let nearest = 0, distance = Infinity;
+      for (let i = 0; i < K; i++) {
+        const d = centroid.distanceToSquared(_p.fromArray(rec.O, i * 3));
+        if (d < distance) { distance = d; nearest = i; }
+      }
+      const i3 = nearest * 3;
+      _p.fromArray(rec.O, i3); _n.fromArray(rec.N, i3);
+      _b.fromArray(rec.B, i3); _t.fromArray(rec.T, i3);
+      let minU = Infinity, maxU = -Infinity, minT = Infinity, maxT = -Infinity, maxN = 0;
+      for (const vertex of [a, b, c]) {
+        _v.copy(vertex).sub(_p);
+        const u = _v.dot(_b), t = _v.dot(_t);
+        minU = Math.min(minU, u); maxU = Math.max(maxU, u);
+        minT = Math.min(minT, t); maxT = Math.max(maxT, t);
+        maxN = Math.max(maxN, Math.abs(_v.dot(_n)));
+      }
+      ab.subVectors(b, a); ac.subVectors(c, a);
+      const facing = ab.cross(ac).normalize().dot(_n);
+      const crossed = minU <= 0.002 && maxU >= -0.002 && minT <= step * 0.55 && maxT >= -step * 0.55;
+      // Exclude the first/last tapered sample so a nick never tears an entire
+      // annular row beyond its ends, and reject the back of a thin closed shell.
+      const removeFace = nearest > 0 && nearest < K - 1 && crossed && maxN < CUT_RN && facing > 0.05;
+      if (!removeFace) { out[kept++] = ia; out[kept++] = ib; out[kept++] = ic; }
+    }
+    // computeVertexNormals visits the entire index capacity, not drawRange.
+    // Degenerate unused triples contribute no normals and keep that pass honest.
+    out.fill(0, kept);
+    rec.openIndex.needsUpdate = true;
+    geo.setIndex(rec.openIndex);
+    geo.setDrawRange(0, kept);
+    rec.openedFaces = (src.length - kept) / 3;
+  }
+
   /* ---- the lining -------------------------------------------------------- */
   // Two vertex arrays: `base` is the wound fully CLOSED (a hairline score lying on
   // the surface) and `delta` carries it to fully open. Animating is then a scaled
@@ -685,6 +741,7 @@ export function createCutting(THREE, scene) {
     buildProfile(rec);
     buildParentOffsets(rec);
     buildLining(rec);
+    buildOpening(rec);
     rec.linDirty = true;
     return true;
   }
@@ -756,6 +813,11 @@ export function createCutting(THREE, scene) {
       rec.lining = null;
     }
     if (rec.group.parent) rec.group.parent.remove(rec.group);
+    if (rec.mesh.geometry === rec.geometry) {
+      rec.geometry.setIndex(rec.originalIndex);
+      rec.geometry.setDrawRange(rec.originalDrawRange.start, rec.originalDrawRange.count);
+      rec.geometry.computeVertexNormals();
+    }
   }
 
   /* ---- public ------------------------------------------------------------- */
@@ -796,12 +858,17 @@ export function createCutting(THREE, scene) {
       (opts.mesh || root).add(group);
       rec = {
         partId, mesh: opts.mesh, group,
+        geometry: geo, originalIndex: geo.index,
+        originalDrawRange: { ...geo.drawRange },
+        originalIndices: geo.index ? new Uint32Array(geo.index.array) : Uint32Array.from({ length: geo.attributes.position.count }, (_, i) => i),
+        restNormals: geo.attributes.normal && geo.attributes.normal.clone(),
         pos: geo.attributes.position,
         rest: rests.get(partId),
         lining: null, linBase: null, linDelta: null, linDirty: false,
         idx: null, off: null, applied: null, probeAt: -1, probeVal: NaN,
         k: 0, kFrom: 0, kTo: 0, phase: 1, moving: false, grewAt: 0,
       };
+      rec.openIndex = new THREE.BufferAttribute(new Uint32Array(rec.originalIndices.length), 1);
       wounds.set(partId, rec);
     }
 
@@ -872,6 +939,166 @@ export function createCutting(THREE, scene) {
   // line, which is exactly what a scalpel leaves before you retract. Use clear()
   // to actually free it.
   function close(partId) { return gape(partId, 0); }
+
+  // Finish a forceps access-window removal, retaining only the uncut back and
+  // anatomical ends. This is a bounded teaching window, not a full tissue-tear
+  // solver. The original pickable sheet is hidden by dissect.js; the residual
+  // contains NO faces on the removed access side and has no part ID/raycast.
+  function releaseSurface(partId) {
+    const rec = wounds.get(partId);
+    if (!rec || remnants.has(partId)) return false;
+    // Forceps completion has already hidden the original and all its children.
+    // A supplemental film is fully removed: no backing, rim, or faded substitute.
+    // remove() still restores its hidden source topology and disposes the wound.
+    if (CUT_COMPLETE_SHEETS.has(partId)) return true;
+    applyParent(rec, 0);
+    const mesh = rec.mesh, rest = rec.rest;
+    const center = new THREE.Box3().setFromBufferAttribute(new THREE.BufferAttribute(rest, 3)).getCenter(new THREE.Vector3());
+    const normal = new THREE.Vector3();
+    for (let i = 0; i < rec.K; i++) normal.add(_n.fromArray(rec.N, i * 3));
+    if (normal.lengthSq() < 1e-8) return false;
+    normal.normalize();
+    const box = new THREE.Box3().setFromBufferAttribute(new THREE.BufferAttribute(rest, 3));
+    const spanZ = box.max.z - box.min.z;
+    // Frog and fish carry their head and fins on one closed exterior mesh.
+    // Earthworm uses an open CylinderGeometry and separate head/tail parts.
+    const preserveEnds = partId === 'skin' || (partId === 'body-wall' && mesh.geometry.type === 'SphereGeometry');
+    const tailZ = box.min.z + spanZ * 0.14, headZ = box.min.z + spanZ * 0.74;
+    const attributes = ['position', ...Object.keys(mesh.geometry.attributes).filter(name => name !== 'position')];
+    const layout = [], output = {};
+    let stride = 0, normalOffset = -1;
+    attributes.forEach(name => {
+      const attribute = name === 'normal' && rec.restNormals ? rec.restNormals : mesh.geometry.attributes[name];
+      layout.push({ name, attribute, offset: stride, size: attribute.itemSize });
+      if (name === 'normal') normalOffset = stride;
+      stride += attribute.itemSize;
+      output[name] = [];
+    });
+    const readVertex = index => {
+      const packed = new Array(stride);
+      layout.forEach(({ name, attribute, offset, size }) => {
+        for (let c = 0; c < size; c++) packed[offset + c] = name === 'position' ? rest[index * 3 + c] : attribute.array[index * size + c];
+      });
+      return packed;
+    };
+    const interpolate = (a, b, t) => a.map((value, i) => value + (b[i] - value) * t);
+    const clip = (polygon, distance, positive) => {
+      const result = [], crossings = [];
+      if (!polygon.length) return { polygon: result, crossings };
+      let a = polygon[polygon.length - 1], da = distance(a);
+      for (const b of polygon) {
+        const db = distance(b), keepA = positive ? da >= 0 : da <= 0, keepB = positive ? db >= 0 : db <= 0;
+        if (keepA !== keepB) {
+          const intersection = interpolate(a, b, da / (da - db));
+          result.push(intersection); crossings.push(intersection);
+        }
+        if (keepB) result.push(b);
+        a = b; da = db;
+      }
+      return { polygon: result, crossings };
+    };
+    const append = polygon => {
+      for (let i = 1; i < polygon.length - 1; i++) {
+        for (const vertex of [polygon[0], polygon[i], polygon[i + 1]]) {
+          layout.forEach(({ name, offset, size }) => {
+            for (let c = 0; c < size; c++) output[name].push(vertex[offset + c]);
+          });
+        }
+      }
+    };
+    const rimPositions = [], rimColours = [];
+    const rimColour = new THREE.Color((CUT_STRATA[rec.tissue] || CUT_STRATA.muscle)[1].c);
+    function addRim(a, b, trimEnds) {
+      if (!a || !b) return;
+      if (trimEnds && preserveEnds) {
+        const dz = b[2] - a[2];
+        if (Math.abs(dz) < 1e-8) { if (a[2] < tailZ || a[2] > headZ) return; }
+        else {
+          const ta = (tailZ - a[2]) / dz, tb = (headZ - a[2]) / dz;
+          const lo = Math.max(0, Math.min(ta, tb)), hi = Math.min(1, Math.max(ta, tb));
+          if (lo >= hi) return;
+          const start = a, end = b;
+          a = interpolate(start, end, lo); b = interpolate(start, end, hi);
+        }
+      }
+      const pa = new THREE.Vector3().fromArray(a), pb = new THREE.Vector3().fromArray(b);
+      if (pa.distanceToSquared(pb) < 1e-10) return;
+      const na = normalOffset >= 0 ? new THREE.Vector3().fromArray(a, normalOffset).normalize() : pa.clone().sub(center).normalize();
+      const nb = normalOffset >= 0 ? new THREE.Vector3().fromArray(b, normalOffset).normalize() : pb.clone().sub(center).normalize();
+      // A narrow geometric cut face, not an opaque sheet across the opening.
+      const ia = pa.clone().addScaledVector(na, -0.045), ib = pb.clone().addScaledVector(nb, -0.045);
+      for (const p of [pa, pb, ia, pb, ib, ia]) {
+        rimPositions.push(p.x, p.y, p.z);
+        rimColours.push(rimColour.r, rimColour.g, rimColour.b);
+      }
+    }
+    const accessDistance = vertex => (vertex[0] - center.x) * normal.x
+      + (vertex[1] - center.y) * normal.y + (vertex[2] - center.z) * normal.z + 0.025;
+    for (let j = 0; j < rec.originalIndices.length; j += 3) {
+      const triangle = [0, 1, 2].map(i => readVertex(rec.originalIndices[j + i]));
+      const back = clip(triangle, accessDistance, false);
+      append(back.polygon);
+      addRim(back.crossings[0], back.crossings[1], true);
+      if (preserveEnds) {
+        const front = clip(triangle, accessDistance, true).polygon;
+        const tail = clip(front, vertex => vertex[2] - tailZ, false);
+        const head = clip(front, vertex => vertex[2] - headZ, true);
+        append(tail.polygon); append(head.polygon);
+        addRim(tail.crossings[0], tail.crossings[1], false);
+        addRim(head.crossings[0], head.crossings[1], false);
+      }
+    }
+    if (!output.position.length) return false;
+    const geometry = new THREE.BufferGeometry();
+    layout.forEach(({ name, size }) => geometry.setAttribute(name, new THREE.Float32BufferAttribute(output[name], size)));
+    geometry.setIndex(Array.from({ length: output.position.length / 3 }, (_, i) => i));
+    // Preserve the interpolated smooth surface normals. Recomputing on freshly
+    // clipped, unshared vertices would turn the rounded skin into flat facets.
+    if (geometry.attributes.normal) geometry.normalizeNormals(); else geometry.computeVertexNormals();
+    geometry.computeBoundingSphere(); geometry.computeBoundingBox();
+    const materials = (Array.isArray(mesh.material) ? mesh.material : [mesh.material]).map(material => {
+      const copy = material.clone(); copy.side = THREE.DoubleSide; return copy;
+    });
+    const residual = new THREE.Mesh(geometry, Array.isArray(mesh.material) ? materials : materials[0]);
+    residual.name = 'uncut:' + partId;
+    residual.userData.noPick = true;
+    residual.userData.accessWindow = {
+      normal: normal.toArray(), constant: 0.025 - center.dot(normal),
+      preserveEnds, tailZ, headZ,
+    };
+    residual.raycast = CUT_noRaycast;
+    residual.position.copy(mesh.position); residual.quaternion.copy(mesh.quaternion); residual.scale.copy(mesh.scale);
+    residual.castShadow = mesh.castShadow; residual.receiveShadow = mesh.receiveShadow;
+    const children = [];
+    for (const child of [...mesh.children]) {
+      if (child === rec.group || child.userData.noPick) continue;
+      children.push(child);
+      residual.add(child);
+    }
+    let rim = null;
+    if (rimPositions.length) {
+      const rimGeometry = new THREE.BufferGeometry();
+      rimGeometry.setAttribute('position', new THREE.Float32BufferAttribute(rimPositions, 3));
+      rimGeometry.setAttribute('color', new THREE.Float32BufferAttribute(rimColours, 3));
+      rimGeometry.computeVertexNormals(); rimGeometry.computeBoundingSphere();
+      const material = baseMaterial.clone(); material.roughness = 0.68; material.clearcoat = 0.35;
+      rim = new THREE.Mesh(rimGeometry, material);
+      rim.name = 'access-rim'; rim.userData.noPick = true; rim.raycast = CUT_noRaycast;
+      residual.add(rim);
+    }
+    (mesh.parent || root).add(residual);
+    remnants.set(partId, { residual, source: mesh, children, materials, rim });
+    return true;
+  }
+
+  function remove(partId) {
+    const rec = wounds.get(partId);
+    if (!rec) return false;
+    destroy(rec);
+    wounds.delete(partId);
+    rests.delete(partId);
+    return true;
+  }
 
   /* Frame state hoisted to closure scope. `stepWound` is ONE function object
    * created once, not an arrow literal rebuilt on every call to update() — at
@@ -966,6 +1193,14 @@ export function createCutting(THREE, scene) {
     wounds.forEach((rec) => destroy(rec));
     wounds.clear();
     rests.clear();
+    remnants.forEach(({ residual, source, children, materials, rim }) => {
+      children.forEach((child) => source.add(child));
+      if (residual.parent) residual.parent.remove(residual);
+      residual.geometry.dispose();
+      materials.forEach(material => material.dispose());
+      if (rim) { rim.geometry.dispose(); rim.material.dispose(); }
+    });
+    remnants.clear();
   }
 
   function dispose() {
@@ -975,7 +1210,7 @@ export function createCutting(THREE, scene) {
   }
 
   return {
-    open, grow, gape, close, update, setQuality, clear, dispose,
+    open, grow, gape, close, releaseSurface, remove, update, setQuality, clear, dispose,
     get count() { return wounds.size; },
     has: (partId) => wounds.has(partId),
     // Read-only peek for the shell / viva: which strata the blade actually

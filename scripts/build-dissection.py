@@ -10,7 +10,8 @@ import re
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULES = ("anatomy.js", "frog.js", "heart.js", "fish.js",
-           "cockroach.js", "dissect.js", "env.js", "shell.js", "main.js")
+           "cockroach.js", "dissect.js", "env.js", "shell.js", "main.js",
+           "cutting.js", "surface.js", "hands.js")
 STARTUP = "// Module-scoped bindings are invisible to an injected eval"
 
 

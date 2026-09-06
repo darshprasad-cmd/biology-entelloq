@@ -101,7 +101,7 @@ for (const kind of ['flat', 'fish', 'heart']) {
     s.api.dispose();
   });
 
-  test(`${kind}: peeling rises in world up while preserving authored base position and non-uniform scale`, () => {
+  test(`${kind}: forceps lifts in world up then removes the sheet without a ghost or transform drift`, () => {
     const s = scenario(kind), home = s.mesh.position.clone(), worldHome = s.world(), scale = s.mesh.scale.clone();
     const pivot = s.contact.clone().addScaledVector(s.right, -3);
     s.mesh.userData.peelable = true;
@@ -110,12 +110,20 @@ for (const kind of ['flat', 'fish', 'heart']) {
     s.act(s.start, true, 0);
     close(s.mesh.position, home, 'peel begins at base position');
     close(s.mesh.scale, scale, 'peel begins at base scale');
-    s.act(s.start, false, 140);
-    close(s.world(), worldHome.clone().add(new THREE.Vector3(0, 0.9, 0)), 'flap rises away from tray after any specimen rotation');
-    close(s.mesh.scale, scale.clone().multiplyScalar(1.06), 'swell preserves non-uniform proportions');
-    s.act(s.start, false, 140);
-    close(s.world(), worldHome.clone().add(new THREE.Vector3(0, 0.9, 0)), 'peel does not accumulate offsets');
+    assert.equal(s.api.state.opened.size, 0, 'clicking far from the incision start is not a pull');
+    const partial = s.screen(s.contact.clone().addScaledVector(s.right, 0.7));
+    s.act(partial, true, 140);
+    close(s.world(), worldHome.clone().add(new THREE.Vector3(0, 0.45, 0)), 'partial flap rises in world up');
+    close(s.mesh.scale, scale, 'peeling does not inflate tissue');
+    assert.equal(s.mesh.material.opacity, 1, 'pulling does not fade the material');
+    const full = s.screen(s.contact.clone().addScaledVector(s.right, 1.6));
+    s.act(full, true, 140);
+    close(s.mesh.position, home, 'hidden source returns home for its uncut residual');
+    assert.equal(s.mesh.visible, false, 'completed sheet is absent, not a pale overlay');
+    s.act(full, false, 140);
+    close(s.mesh.position, home, 'completion does not accumulate offsets');
     assert.ok(s.api.state.opened.has(s.part.id));
+    assert.ok(s.api.state.removed.has(s.part.id));
     assert.ok(s.deeper.mesh.visible);
     assert.equal(s.events.filter((e) => e.kind === 'peel').length, 1);
     s.api.dispose();

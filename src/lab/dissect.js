@@ -56,9 +56,12 @@ export function createDissection(THREE, ctx) {
     ray.setFromCamera(ndc, camera);
     const candidates = meshes.filter((m) => {
       const id = m.userData.partId;
-      // A reflected flap is still rendered (faded) but must no longer be
-      // pickable, or it shields the layer it was just peeled off.
-      return m.visible && !state.removed.has(id) && !state.opened.has(id);
+      // Completed access sheets are absent, not translucent pick shields.
+      // Some specimens intentionally preview deeper anatomy through membranes.
+      // Rendering that preview does not make an unexposed layer tool-accessible.
+      const part = byId.get(id);
+      return m.visible && part.layer <= state.maxLayerRevealed
+        && !state.removed.has(id) && !state.opened.has(id);
     });
     const hits = ray.intersectObjects(candidates, false);
     return hits.length ? hits[0] : null;
@@ -74,7 +77,7 @@ export function createDissection(THREE, ctx) {
     state.maxLayerRevealed = n;
     let count = 0;
     parts.forEach((p) => {
-      if (p.layer === n && !p.mesh.visible) { p.mesh.visible = true; count++; }
+      if (p.layer === n && !p.mesh.visible && !state.removed.has(p.id)) { p.mesh.visible = true; count++; }
     });
     if (count) emit('discover', null, 'The layer beneath is exposed — ' + count + ' structures now visible.',
       { layer: n, count });
@@ -107,9 +110,6 @@ export function createDissection(THREE, ctx) {
       speeds: [],
       lastT: performance.now(),
       lastP: point.clone(),
-      maxGrip: grip,
-      firstGrip: grip,
-      line: null,
     };
   }
 
@@ -123,14 +123,12 @@ export function createDissection(THREE, ctx) {
     stroke.pts.push(point.clone());
     stroke.lastP.copy(point);
     stroke.lastT = now;
-    stroke.maxGrip = Math.max(stroke.maxGrip, grip);
 
-    if (stroke.pts.length >= 2) {
-      if (stroke.line) { scene.remove(stroke.line); stroke.line.geometry.dispose(); }
-      const curve = new THREE.CatmullRomCurve3(stroke.pts);
-      const g = new THREE.TubeGeometry(curve, Math.max(8, stroke.pts.length * 3), 0.045, 6, false);
-      stroke.line = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ color: 0x2a0d10 }));
-      scene.add(stroke.line);
+    // The wound module owns the real cut edges. Do not paint a second dark tube
+    // over them, or leave that tube hanging after the access sheet is removed.
+    if (stroke.pts.length >= 3 && typeof ctx.onCutProgress === 'function') {
+      const part = byId.get(stroke.partId);
+      ctx.onCutProgress(part, stroke.pts);
     }
   }
 
@@ -147,7 +145,10 @@ export function createDissection(THREE, ctx) {
     const mean = stroke.speeds.reduce((a, b) => a + b, 0) / (stroke.speeds.length || 1);
     const variance = stroke.speeds.reduce((a, b) => a + Math.abs(b - mean), 0) / (stroke.speeds.length || 1);
     const sawing = variance > 6.5 && stroke.speeds.length > 4;
-    const plunged = stroke.firstGrip > 0.8;
+    // Mouse buttons and camera pinch strength measure a grip, NOT tissue depth.
+    // Only an explicit depth control may supply evidence of a deep cut.
+    const depth = typeof ctx.getCutDepth === 'function' ? ctx.getCutDepth(part) : null;
+    const plunged = Number.isFinite(depth) && depth > 0.8;
 
     state.incisions.set(part.id, { points: pts, length, opened: false });
 
@@ -190,7 +191,6 @@ export function createDissection(THREE, ctx) {
   }
 
   function discardStroke() {
-    if (stroke && stroke.line) { scene.remove(stroke.line); stroke.line.geometry.dispose(); }
     stroke = null;
   }
 
@@ -204,51 +204,69 @@ export function createDissection(THREE, ctx) {
   }
 
   /* ---- peeling a flap --------------------------------------------------- */
-  const peeling = new Map();   // partId -> {t, axis, pivot, home, scale, liftOffset}
-  function beginPeel(part) {
-    if (peeling.has(part.id) || !part.mesh.userData.peelable) return false;
+  const peeling = new Map();   // active, deliberately unfinished forceps pulls
+  function beginPeel(part, point) {
+    if (!part.mesh.userData.peelable || state.removed.has(part.id)) return false;
     const inc = state.incisions.get(part.id);
     if (!inc) return false;
-    const a = inc.points[0], b = inc.points[inc.points.length - 1];
-    const axis = new THREE.Vector3().subVectors(b, a).normalize();
     const parent = part.mesh.parent || group;
     part.mesh.updateWorldMatrix(true, false);
-    const worldHome = part.mesh.getWorldPosition(new THREE.Vector3());
-    const liftedHome = parent.worldToLocal(worldHome.add(new THREE.Vector3(0, 0.9, 0)));
-    peeling.set(part.id, {
-      t: 0, axis, pivot: a.clone(), target: 0,
-      home: part.mesh.position.clone(), scale: part.mesh.scale.clone(),
-      liftOffset: liftedHome.sub(part.mesh.position),
-    });
+    let st = peeling.get(part.id);
+    if (!st) {
+      const worldHome = part.mesh.getWorldPosition(new THREE.Vector3());
+      const liftedHome = parent.worldToLocal(worldHome.add(new THREE.Vector3(0, 0.9, 0)));
+      st = { t: 0, target: 0, committed: false,
+        home: part.mesh.position.clone(), scale: part.mesh.scale.clone(),
+        liftOffset: liftedHome.sub(part.mesh.position) };
+      peeling.set(part.id, st);
+    }
+    camera.updateMatrixWorld();
+    st.grabStart = point.clone();
+    st.startT = st.t;
+    st.plane = new THREE.Plane().setFromNormalAndCoplanarPoint(
+      camera.getWorldDirection(new THREE.Vector3()), point);
     return true;
   }
-  function updatePeel(part, amount) {
+  function updatePeel(part, nx, ny) {
     const st = peeling.get(part.id);
     if (!st) return;
-    st.target = Math.max(0, Math.min(1, amount));
+    ndc.set(nx * 2 - 1, -(ny * 2 - 1));
+    camera.updateMatrixWorld();
+    ray.setFromCamera(ndc, camera);
+    const point = ray.ray.intersectPlane(st.plane, new THREE.Vector3());
+    if (!point) return;
+    st.target = Math.min(1, st.startT + point.distanceTo(st.grabStart) / 1.4);
+    // Only a deliberate forceps pull commits removal; a cut or retractor alone
+    // never removes anatomy. Once committed, finish the short lift smoothly.
+    if (st.target >= 0.98) st.committed = true;
   }
   function stepPeels(dt) {
     peeling.forEach((st, pid) => {
       const part = byId.get(pid);
       if (!part) return;
       const k = Math.min(1, dt / 140);
-      // Once the flap has been drawn far enough to count as reflected, drive it
-      // fully open on its own — for a flat specimen viewed from above, a
-      // half-lifted flap still hides the cavity, and the teaching payoff is
-      // seeing the organs. So `opened` parts ease to a hard target of 1.
-      const target = state.opened.has(pid) ? 1 : st.target;
+      const target = st.committed ? 1 : st.target;
       st.t += (target - st.t) * k;
-      // This is a lift-and-fade reveal, not a simulated mesh split. Lift away
-      // from the world-horizontal tray, retaining the authored local position
-      // and scale even when a specimen is rolled onto its side.
-      part.mesh.material.transparent = true;
-      part.mesh.material.opacity = 1 - st.t * 0.9;      // -> 0.10 fully open
-      part.mesh.material.depthWrite = st.t < 0.5;        // stop it occluding once faded
+      // Keep the material's real opacity throughout the pull. The access surface
+      // is removed at completion; no 10%-opaque sheet remains over the cavity.
       part.mesh.position.copy(st.home).addScaledVector(st.liftOffset, st.t);
-      part.mesh.scale.copy(st.scale).multiplyScalar(1 + st.t * 0.06);
-      if (st.t > 0.5 && !state.opened.has(pid)) {
+      part.mesh.scale.copy(st.scale);
+      if (st.committed && st.t >= 0.98) {
+        // The wound module retains uncut backing/head/tail geometry at HOME.
+        // Return the hidden source there before the completion event so its
+        // residual surface never inherits the temporary lift.
+        part.mesh.position.copy(st.home);
+        part.mesh.visible = false;
         state.opened.add(pid);
-        emit('peel', pid, part.name + ' reflected. What is underneath is now exposed.', {});
+        state.removed.add(pid);
+        const incision = state.incisions.get(pid);
+        if (incision) incision.opened = true;
+        peeling.delete(pid);
+        if (grabbed === pid) grabbed = null;
+        if (hovered === part) { setEmissive(part, 0x000000); hovered = null; }
+        if (contact && contact.partId === pid) contact = null;
+        emit('peel', pid, part.name + ' access sheet removed. What is underneath is now exposed.',
+          { removed: true, accessWindow: true });
         revealLayer(part.layer + 1);
       }
     });
@@ -380,7 +398,7 @@ export function createDissection(THREE, ctx) {
         }
       } else if (tool === 'forceps') {
         if (part.mesh.userData.peelable && !state.opened.has(part.id)) {
-          if (beginPeel(part)) grabbed = part.id;
+          if (beginPeel(part, hit.point)) grabbed = part.id;
         } else if (beginLift(part, hit.point)) {
           grabbed = part.id;
         }
@@ -390,19 +408,19 @@ export function createDissection(THREE, ctx) {
     }
 
     if (input.gripping) {
-      if (stroke && hit) growStroke(hit.point, input.grip);
+      // Crossing an edge must not join a stroke to an unrelated/deeper organ.
+      if (stroke && hit && part && part.id === stroke.partId) growStroke(hit.point, input.grip);
       if (grabbed && peeling.has(grabbed)) {
-        // Drag distance from the incision drives how far the flap folds back.
-        const st = peeling.get(grabbed);
         const p = byId.get(grabbed);
-        if (hit) updatePeel(p, Math.min(1, hit.point.distanceTo(st.pivot) / 2.2));
+        // Continue on the fixed grab plane even after the cursor leaves tissue.
+        updatePeel(p, input.x, input.y);
       }
       if (lift) updateLift(input.x, input.y);
     }
 
     if (tool === 'retractor' && input.span > 0.18) {
       const open = Math.min(1, (input.span - 0.18) / 0.42);
-      peeling.forEach((st) => { st.target = Math.max(st.target, open); });
+      peeling.forEach((st) => { st.target = Math.max(st.target, Math.min(open, 0.85)); });
       if (open > 0.5) emit('retract', null, 'Body wall retracted.', { open: +open.toFixed(2) });
     }
 
