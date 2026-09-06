@@ -308,12 +308,12 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);background:v
 /* Physics Entelloq's reading surfaces, adapted to Biology's existing pillars.
    Keep this layer separate from authored lessons, scientific models and shared chrome. */
 html:root{
-  --bg:#09121a;--bg-2:#0c1720;--panel:#101e29;--raise:#152631;
-  --ink:#e4edea;--dim:#b0c1c9;--faint:#8fa5b1;
-  --line:rgba(170,200,211,.19);--line-2:rgba(170,200,211,.12);--hair:#2c424f;
-  --em:#a1cebc;--em-2:#a1cebc;--cy:#a1d4db;--cy-2:#94cfd4;
+  --bg:#050b08;--bg-2:#09100a;--panel:#0d180f;--raise:#16251a;
+  --ink:#e9ece5;--dim:#b2bdb0;--faint:#91a48a;
+  --line:rgba(166,197,162,.19);--line-2:rgba(166,197,162,.12);--hair:#38523c;
+  --em:#a8d8b3;--em-2:#c5f2c7;--cy:#b6d9b8;--cy-2:#a1c0a6;
   --indigo:#b7b5df;--indigo-2:#b7b5df;--amber:#e8bc86;--rose:#e7a6b6;
-  --glass:#0c1720;--glass-strong:#0c1720;
+  --glass:#09100a;--glass-strong:#09100a;
   --shadow-1:none;--shadow-2:none;--shadow-glow:none;--spot:transparent;
   --sans:'Inter',system-ui,-apple-system,sans-serif;
   --display:'Space Grotesk','Inter',system-ui,sans-serif;
@@ -322,13 +322,17 @@ html:root{
   --edge:clamp(24px,4vw,64px);--maxw:1200px;
 }
 html:root[data-theme=light]{
-  --bg:#f3f4ee;--bg-2:#edf0eb;--panel:#fafbf6;--raise:#e9eee8;
-  --ink:#162d36;--dim:#425d66;--faint:#516c74;
-  --line:#cbd6d2;--line-2:#dce3dc;--hair:#bacbc7;
-  --em:#356d58;--em-2:#356d58;--cy:#2c6974;--cy-2:#2c6974;
+  --bg:#f1f5ed;--bg-2:#e8eee3;--panel:#f8fbf5;--raise:#e1eadb;
+  --ink:#172c1b;--dim:#415b44;--faint:#567052;
+  --line:#c4d3bc;--line-2:#d9e2d3;--hair:#a9bda2;
+  --em:#32683f;--em-2:#2b5936;--cy:#386642;--cy-2:#386642;
   --indigo:#665c92;--indigo-2:#665c92;--amber:#885a24;--rose:#a04660;
-  --glass:#edf0eb;--glass-strong:#edf0eb;
+  --glass:#e8eee3;--glass-strong:#e8eee3;
 }
+/* Outrank the authored light-theme blue button gradient without changing its shape. */
+html:root[data-theme=light] body .btn.primary{background:var(--cy);color:var(--bg);border-color:var(--cy)}
+html:root[data-theme=light] body main .btn.primary:hover{background:var(--em);border-color:var(--em)}
+body #launch{background:#050b08}
 html:root,html body{background:var(--bg)!important;color:var(--ink)}
 html body{font:16px/1.65 var(--sans);letter-spacing:0}
 body>#fx,body>#atmo,body>.bg-veil{display:none!important}
