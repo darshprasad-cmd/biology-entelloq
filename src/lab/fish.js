@@ -67,9 +67,11 @@ function buildFish(THREE) {
       const ux = v.x, uy = v.y, uz = v.z;         // unit coords, pre-scale
       const t = Math.max(0, Math.min(1, (uz + 1) / 2)); // 0 tail .. 1 snout
       // Girth: deepest just behind the head. pow(t,1.15) skews the peak forward.
-      let girth = Math.sin(Math.PI * Math.pow(t, 1.15));
+      // Sphere radii already taper. A second vanishing sine produced a pointed
+      // leaf and left the mouth/fin attachments outside the body silhouette.
+      let girth = 0.72 + 0.28 * Math.sin(Math.PI * Math.pow(t, 1.15));
       if (t < 0.2) girth *= 0.28 + t * 3.6;        // thin caudal peduncle
-      if (t > 0.88) girth *= 1 - (t - 0.88) / 0.12 * 0.6; // blunt snout
+      if (t > 0.88) girth *= 1 - (t - 0.88) / 0.12 * 0.15; // rounded snout
       const ydome = uy >= 0 ? 1.06 : 0.99;         // dorsum a touch more arched
       p.setXYZ(i, ux * girth * sx, uy * girth * sy * ydome, uz * sz);
       if (colors) {
@@ -99,7 +101,9 @@ function buildFish(THREE) {
     for (let i = 0; i < p.count; i++) {
       v.fromBufferAttribute(p, i);
       const tx = (v.x / len) + 0.5;                 // 0 root .. 1 free edge
-      p.setXYZ(i, v.x, v.y * (0.55 + tx * 0.7), Math.sin(v.y * 2.4) * 0.05 * tx);
+      // Attachment is the origin; rays fan out from a narrow root, not a
+      // rectangular sheet floating half a fin-length away from its insertion.
+      p.setXYZ(i, tx * len, v.y * (0.08 + tx * 1.02), Math.sin(v.y * 2.4) * 0.05 * tx);
     }
     seal(g);
     const m = new THREE.Mesh(g, mat(THREE, o.color || 0xa7b4a2, {
@@ -109,10 +113,9 @@ function buildFish(THREE) {
     const nr = o.rays || 6;                          // fin rays as fine child struts
     for (let i = 0; i < nr; i++) {
       const yy = (i / (nr - 1) - 0.5) * wide * 0.82;
-      const ray = new THREE.Mesh(new THREE.CylinderGeometry(0.009, 0.014, len * 0.94, 4),
-        mat(THREE, o.rayColor || 0x8a9885, { rough: 0.6 }));
-      ray.position.set(0, yy, 0.012);
-      ray.rotation.z = Math.PI / 2;
+      const ray = tube(THREE, o.rayColor || 0x8a9885,
+        [[0, yy * 0.08, 0.012], [len * 0.5, yy * 0.59, 0.012], [len, yy * 1.1, 0.012]],
+        0.009, { rough: 0.6, rad: 4, seg: 6 });
       m.add(ray);
     }
     return m;
@@ -187,9 +190,11 @@ function buildFish(THREE) {
   const analFin = fin(1.0, 0.5, { rays: 7, color: 0x9fae98 });
   childMesh(skin, analFin, 0, -1.15, -1.9, 0, -Math.PI / 2, Math.PI / 2);
   const caudalUp = fin(1.5, 0.7, { rays: 9, color: 0x93a48c, opacity: 0.52 });
-  childMesh(skin, caudalUp, 0, 0.55, -3.9, 0, -Math.PI / 2, 0.55);
+  caudalUp.name = 'caudal-upper';
+  childMesh(skin, caudalUp, 0, 0, -3.1, 0, Math.PI / 2, 0.55);
   const caudalLo = fin(1.5, 0.7, { rays: 9, color: 0x93a48c, opacity: 0.52 });
-  childMesh(skin, caudalLo, 0, -0.55, -3.9, 0, -Math.PI / 2, -0.55);
+  caudalLo.name = 'caudal-lower';
+  childMesh(skin, caudalLo, 0, 0, -3.1, 0, Math.PI / 2, -0.55);
 
   add({
     id: 'body-wall', name: 'Skin & flank body wall', layer: 0, system: 'integument',
@@ -429,12 +434,13 @@ function buildFish(THREE) {
     transmission: 0.34, thickness: 0.6, atten: 0xcfe0e6, sheen: 0xbcd2e2, sheenAmt: 0.72, amp: 0.05 };
   const swimBladder = sac(THREE, 0xd9dee2, 1.0, 0.42, { ...sbOpts, seed: 12 });
   swimBladder.position.set(0, 0.78, 0.55);
-  swimBladder.rotation.set(0, 0, Math.PI / 2);        // long axis along z
+  // sac() is already z-long. Keep every chamber dorsal and extend toward -z,
+  // the tail; the former rotated -x offset put the second chamber in the belly.
   const sbPost = sac(THREE, 0xd6dce0, 1.4, 0.5, { ...sbOpts, seed: 13 });
-  childMesh(swimBladder, sbPost, -1.55, 0, -0.05, 0, 0, 0);   // posterior chamber, larger
+  childMesh(swimBladder, sbPost, 0, 0, -2.05);        // posterior chamber, larger
   const sbNeck = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 0.4, 14),
     mat(THREE, 0xd2d8dc, sbOpts));
-  childMesh(swimBladder, sbNeck, -0.85, 0, 0, 0, 0, Math.PI / 2);
+  childMesh(swimBladder, sbNeck, 0, 0, -0.825, Math.PI / 2, 0, 0);
   swimBladder.renderOrder = 1;
   add({
     id: 'swim-bladder', name: 'Swim bladder', layer: 2, system: 'respiratory', cuttable: true, detachable: true,

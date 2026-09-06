@@ -101,9 +101,14 @@ a non-mutating `--check` mode and rejects missing or ambiguous source slots.
 Home, Learn, Solve, Explore and Me are currently authored in their root HTML
 files. Do not run a whole-site rebuild for changes to these pages.
 
-The original dissection files, shared dependencies and app launcher are locked
-by `tests/test_lab_unchanged.py`. Do not regenerate its fingerprint fixture to
-make a non-lab change pass. See `docs/learning-polish/QA.md` for the bounded,
+The original shared dependencies and app launcher are locked by
+`tests/test_lab_unchanged.py`. The September 6 dissection-realism request explicitly
+reopens only the source slots listed in `scripts/build-dissection.py`; all other
+lab bytes remain protected by the original, unchanged fingerprint fixture.
+Use `python scripts/build-dissection.py` for those slots and `--check` to verify
+them. This preserves offline imports and shared chrome without a site rebuild.
+Do not regenerate the fingerprint fixture to make a change pass.
+See `docs/learning-polish/QA.md` for the bounded,
 optional browser workflow, which does not enter or interact with the lab.
 
 The full-product assemblers below are separate tools, not part of that workflow.

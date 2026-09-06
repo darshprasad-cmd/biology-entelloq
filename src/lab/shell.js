@@ -204,8 +204,16 @@ body.handmode #dock{display:grid;grid-template-columns:repeat(2,60px);gap:14px;p
 #say.warn .lbl{color:var(--warn)}
 
 /* ── hand cockpit ──────────────────────────────────────────────────────── */
-#hand{left:22px;bottom:22px;width:222px;padding:14px;display:flex;flex-direction:column;gap:11px}
+#hand{left:194px;bottom:22px;width:260px;padding:15px;display:flex;flex-direction:column;gap:10px;
+      border-color:rgba(52,211,153,.36);background:linear-gradient(145deg,rgba(19,42,33,.94),rgba(7,14,17,.94));
+      max-height:calc(100dvh - 200px);overflow-y:auto;overscroll-behavior:contain}
+/* Beside the widest instrument dock, not stacked above it. This also leaves
+   the bottom-left Entelloq launcher uncovered when the camera preview expands. */
+body:not(.bioq-phone).physio-on #hand{max-height:calc(100dvh - 340px)}
 .handhead{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.handhead .lbl{color:var(--em);letter-spacing:.13em}
+.handtools{display:flex;align-items:center;gap:6px;flex:none}
+#handpreview{display:none}
 .hcount{font-family:var(--mono);font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);
         border:1px solid var(--line);border-radius:6px;padding:2px 7px}
 #hand.live .hcount{color:var(--em);border-color:rgba(52,211,153,.35)}
@@ -261,18 +269,19 @@ body.handmode #dock{display:grid;grid-template-columns:repeat(2,60px);gap:14px;p
    the panel still shows that tracking is live. */
 #selfwrap.nocam{background:rgba(4,7,10,.85);border-color:rgba(52,211,153,.16)}
 #selfwrap.nocam #selfview{display:none}
-#handbtn{margin-top:1px;width:100%;padding:9px 12px;border:1px solid rgba(52,211,153,.42);border-radius:9px;
-         cursor:pointer;color:var(--em);font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+#handbtn{margin-top:1px;width:100%;min-height:44px;padding:11px 12px;border:1px solid rgba(52,211,153,.62);border-radius:9px;
+         cursor:pointer;color:#ddfff0;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
          text-transform:uppercase;transition:.16s;
-         background:linear-gradient(180deg,rgba(52,211,153,.16),rgba(52,211,153,.07))}
+         background:linear-gradient(135deg,rgba(52,211,153,.3),rgba(52,211,153,.12))}
 #handbtn:hover{background:rgba(52,211,153,.24);box-shadow:0 0 18px -4px rgba(52,211,153,.6)}
+#handbtn:focus-visible,#handpreview:focus-visible,#cambtn:focus-visible{outline:2px solid var(--em);outline-offset:3px}
 #handbtn:not(.off){border-color:rgba(232,115,94,.42);color:#f0a494;
          background:linear-gradient(180deg,rgba(232,115,94,.14),rgba(232,115,94,.06))}
 #handbtn:not(.off):hover{background:rgba(232,115,94,.18);box-shadow:0 0 18px -6px rgba(232,115,94,.6)}
-.hnote{font-size:10px;line-height:1.5;color:var(--faint)}
+.hnote{font-size:10px;line-height:1.5;color:var(--dim)}
 
 /* ── first-run coach ───────────────────────────────────────────────────── */
-#coach{left:252px;bottom:var(--edge);width:238px;z-index:24;padding:14px 15px;opacity:0;transform:translateY(10px);
+#coach{left:468px;bottom:var(--edge);width:238px;z-index:24;padding:14px 15px;opacity:0;transform:translateY(10px);
        pointer-events:none;transition:.32s cubic-bezier(.2,.7,.3,1)}
 #coach.on{opacity:1;transform:none}
 #coach ul{margin:9px 0 11px;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px}
@@ -612,7 +621,7 @@ body.bioq-phone #rail{left:0;right:0;top:auto;bottom:var(--above-dock);width:aut
 body.bioq-phone #rail #struct{max-height:30vh;overflow-y:auto;padding:12px 14px}
 body.bioq-phone #struct .n{font-size:14px}
 body.bioq-phone #vig{max-height:30vh}
-body.bioq-phone #drawbody{max-height:40vh;gap:14px}
+body.bioq-phone #drawbody{max-height:30vh;gap:14px}
 body.bioq-phone #railfoot{justify-content:flex-start;gap:6px;padding:7px}
 /* Everything you tap grows to something a thumb can actually land on. */
 body.bioq-phone .minibtn,body.bioq-phone .bchip{padding:9px 12px;font-size:9.5px}
@@ -636,11 +645,29 @@ body.bioq-phone #recl{font-size:11px}
 body.bioq-phone #recclose{position:absolute;right:10px;top:10px}
 body.bioq-phone .mobonly{display:inline-flex}
 
-/* hand tracking is not offered here at all (see buildShell for why), so the
-   cockpit goes rather than sitting there as a control that would not work.
-   The coach card is positioned defensively anyway — it costs one rule. */
-body.bioq-phone #hand{display:none}
-body.bioq-phone #coach{left:var(--pl);right:var(--pr);width:auto;bottom:var(--above-dock)}
+/* The same hand control is available on a propped-up phone. It lives in the
+   rail's normal flow above the dock, so its height never overlaps Console.
+   Preview is opt-in on a small screen; stopping the camera is always visible. */
+body.bioq-phone #hand{position:relative;left:auto;bottom:auto;width:100%;padding:11px 12px;
+  flex:none;gap:7px;display:flex;max-height:none;overflow:visible}
+body.bioq-phone .handhead .lbl{font-size:9px;letter-spacing:.1em}
+body.bioq-phone #handbtn{margin:0;min-height:44px}
+body.bioq-phone #handstat{font-size:8px;letter-spacing:.06em;line-height:1.4}
+body.bioq-phone #handnote{font-size:10px;line-height:1.4}
+body.bioq-phone #hand.live #handpreview{display:inline-flex;min-height:32px;padding:6px 8px;align-items:center}
+body.bioq-phone #hand:not(.preview-open) #selfwrap,
+body.bioq-phone #hand:not(.preview-open) #handlive,
+body.bioq-phone #hand:not(.preview-open) #camrow{display:none}
+body.bioq-phone #selfwrap{height:108px;aspect-ratio:auto}
+body.bioq-phone #handlive{flex-direction:row;align-items:center;gap:8px}
+body.bioq-phone .gripwrap{flex:1}
+body.bioq-phone #coach{position:relative;left:auto;right:auto;bottom:auto;width:100%;
+  display:none;flex:none;max-height:20vh;overflow-y:auto;z-index:28;transform:none}
+body.bioq-phone #coach.on{display:block}
+/* Lab-only positioning: the shared launcher otherwise lands over the tools
+   and hand card. Its existing top-level menu and cross-app links are unchanged. */
+body.bioq-phone #eqx-fab{left:var(--pl);top:calc(var(--sat) + 8px);bottom:auto;min-height:44px;
+  padding:7px 10px;font-size:11px}
 
 /* the viva and the keyboard reference stop being dialogs and become the screen */
 body.bioq-phone #viva,body.bioq-phone #keys{padding:0}
@@ -686,8 +713,24 @@ body.bioq-phone #phy-mon{display:none}
   body.bioq-phone #obj{padding:8px 12px}
   body.bioq-phone #rail{max-height:46vh}
   body.bioq-phone #rail #struct{max-height:26vh}
-  body.bioq-phone #drawbody{max-height:34vh}
+  body.bioq-phone #drawbody{max-height:24vh}
   body.bioq-phone #vig{max-height:24vh}
+  body.bioq-phone #hand{display:grid;grid-template-columns:minmax(0,1fr) 148px;gap:5px 10px;padding:8px 11px}
+  body.bioq-phone #handbtn{grid-column:2;grid-row:1 / span 2}
+  body.bioq-phone #handstat{grid-column:1;grid-row:2}
+  body.bioq-phone #handnote{display:none}
+  body.bioq-phone #hand #selfwrap,body.bioq-phone #hand #handlive,body.bioq-phone #hand #camrow{grid-column:1 / -1}
+  body.bioq-phone #selfwrap{height:80px}
+  body.bioq-phone #hand #selfwrap{grid-column:1;grid-row:3 / span 2;width:96px;height:64px}
+  body.bioq-phone #hand #handlive{grid-column:2;grid-row:3}
+  body.bioq-phone #hand #camrow{grid-column:2;grid-row:4}
+}
+@media (min-width:521px) and (max-width:1100px){
+  body:not(.bioq-phone) #hint{left:468px;right:22px;transform:none;font-size:11px}
+}
+@media (prefers-reduced-motion:reduce){
+  #hand *,#coach{transition:none!important;animation:none!important}
+  #selflabel::before{animation:none}
 }
 `;
 
@@ -905,19 +948,20 @@ export function buildShell(root) {
                      <div class="acts"></div></div>`);
   const hint = el(`<div id="hint" class="chrome">—</div>`);
   const say = el(`<div id="say" class="chrome"><span class="lbl">Demonstrator</span><div class="t"></div></div>`);
-  const handBox = el(`<div id="hand" class="chrome">
-      <div class="handhead"><span class="lbl">Hand tracking</span><span id="handcount" class="hcount">—</span></div>
+  const handBox = el(`<section id="hand" class="chrome" aria-label="Hand controls">
+      <div class="handhead"><span class="lbl">Hands-on dissection</span><div class="handtools"><span id="handcount" class="hcount">—</span>
+        <button id="handpreview" class="minibtn" type="button" aria-expanded="false" aria-controls="selfwrap handlive camrow">Preview</button></div></div>
+      <button id="handbtn" class="off" type="button" aria-describedby="handnote">Use my hands</button>
+      <div id="handstat" role="status" aria-live="polite"><span class="dot"></span><span class="stxt">Camera off</span></div>
+      <div id="handnote" class="hnote">Pinch to grip. Move to aim. Camera stays on-device — nothing is recorded.</div>
       <div id="selfwrap"><video id="selfview" muted playsinline></video><canvas id="skel"></canvas><span id="selflabel">You · live</span></div>
       <div id="handlive">
-        <div id="handstat"><span class="dot"></span><span class="stxt">Camera off</span></div>
         <span id="gesturechip" class="gchip" data-k="dim">—</span>
         <div class="gripwrap"><span class="lbl">Grip</span><div class="griptrack"><div id="gripfill"></div></div></div>
       </div>
       <div id="camrow"><span class="lbl">Show camera</span>
         <button id="cambtn" class="tgl" role="switch" aria-checked="true"
-          aria-label="Show camera"><i></i></button></div>
-      <button id="handbtn" class="off">Use my hands</button>
-      <div id="handnote" class="hnote">Drive the instruments with a pinch. Runs on-device — nothing is recorded.</div></div>`);
+          aria-label="Show camera"><i></i></button></div></section>`);
   const coach = el(`<div id="coach" class="chrome">
       <span class="lbl em">Your hands</span>
       <ul>
@@ -992,6 +1036,7 @@ export function buildShell(root) {
 
   /* hand-cockpit element refs */
   const handBtn = handBox.querySelector('#handbtn');
+  const handPreview = handBox.querySelector('#handpreview');
   const selfview = handBox.querySelector('#selfview');
   const skel = handBox.querySelector('#skel');
   const handStat = handBox.querySelector('#handstat');
@@ -1167,6 +1212,7 @@ export function buildShell(root) {
      find in a hurry, and its current setting is mirrored on the always-visible
      chip in the rail foot so it is one click away with the drawer shut. */
   const drawBody = drawer.querySelector('#drawbody');
+  drawBody.appendChild(el(`<div class="dsec"><div class="dnote">Illustrative teaching anatomy. Species-specific details and tissue behaviour remain simplified; not for clinical use.</div></div>`));
   const railFoot = drawer.querySelector('#railfoot');
   const secBlood = drawer.querySelector('#secblood');
   const secImg = drawer.querySelector('#secimg');
@@ -1455,6 +1501,12 @@ export function buildShell(root) {
   /* ── hand cockpit ─────────────────────────────────────────────────────── */
   let handOn = false;
   handBtn.onclick = () => { handOn = !handOn; fire('hands', handOn); };
+  handPreview.onclick = () => {
+    const expanded = handBox.classList.toggle('preview-open');
+    handPreview.setAttribute('aria-expanded', String(expanded));
+    handPreview.textContent = expanded ? 'Hide' : 'Preview';
+    handPreview.setAttribute('aria-label', expanded ? 'Hide tracking preview' : 'Show tracking preview');
+  };
 
   /* ── show-camera preference ────────────────────────────────────────────
      Hand tracking and the camera PICTURE are two different things: the tracker
@@ -1591,7 +1643,10 @@ export function buildShell(root) {
     else if (H.health === 2) { cls = 'deg'; txt = 'Tracking degraded'; }
     else { cls = 'ok'; txt = 'Tracking'; }
     handStat.className = cls;
-    handStat.querySelector('.stxt').textContent = txt;
+    // The status is a live region, unlike the fast-moving grip meter. Only
+    // announce a lifecycle/health change, not an identical label every frame.
+    const statusText = handStat.querySelector('.stxt');
+    if (statusText.textContent !== txt) statusText.textContent = txt;
 
     // hand count
     handCount.textContent = !tracking ? '—'
@@ -1609,9 +1664,11 @@ export function buildShell(root) {
     gripfill.dataset.on = grip > 0.55 ? '1' : '0';
 
     // note
-    handNote.textContent = H.on
-      ? 'Nothing is recorded. Keyboard 1–5 and the mouse still work.'
-      : 'Drive the instruments with a pinch. Runs on-device — nothing is recorded.';
+    handNote.textContent = SH_PHONE
+      ? 'Prop your phone up. Pinch to grip, move to aim. On-device camera; performance varies. Touch still works.'
+      : H.on
+        ? 'Nothing is recorded. Keyboard 1–6 and the mouse still work.'
+        : 'Pinch to grip. Move to aim. Camera stays on-device — nothing is recorded.';
   }
 
   function setHandState(s) {
@@ -1648,7 +1705,7 @@ export function buildShell(root) {
      Nearly all of the phone layout is CSS (the body.bioq-phone block in
      SHELL_CSS). This is the part that cannot be: three surfaces that on a
      desktop are reachable only because there is a keyboard or a spare corner,
-     and one that is honestly withdrawn.
+     and the compact hand panel that stays within the bottom stack.
 
      Guarded by SH_PHONE, which is false on every desktop, so none of this can
      reach one. */
@@ -1662,19 +1719,15 @@ export function buildShell(root) {
     secSys.appendChild(systems);
     drawBody.appendChild(secSys);
 
-    // Hand tracking, honestly. The camera is on the same side of the phone as
-    // your face; you are holding the thing you would have to gesture at; and
-    // the landmark detector would be competing for the GPU with the specimen it
-    // is meant to be pointing at. Offering a switch that started a camera and
-    // then tracked badly would be worse than not offering one. Nothing is
-    // really lost either: tracking was only ever an approximation of touching
-    // the specimen, and this screen does that directly. So the cockpit is gone
-    // (CSS) and this says why, where the settings are.
+    // Reuse the same control and permission request. A phone is a valid camera
+    // when it is propped up, but performance and lighting still matter.
+    rail.appendChild(handBox);
+    rail.insertBefore(coach, handBox);
     const secHand = el(`<div class="dsec" id="sechand"><span class="lbl">Hand tracking</span>
-        <div class="dnote">Hand tracking is a desktop feature. It wants a camera you are not
-        holding, and running the detector alongside the specimen costs the frame rate of
-        both. Here your finger is the instrument: touch a structure to use the instrument
-        you have selected, drag anywhere else to turn the specimen, pinch to zoom.</div></div>`);
+        <div class="dnote">Prop your phone securely with its front camera facing you, leave room for your hand,
+        and use even lighting. Tap Use my hands to allow the camera. Tracking runs on-device and nothing is
+        recorded. Performance depends on your phone; Stop camera returns to touch-only use. Touch a structure
+        to use the selected instrument, drag elsewhere to turn the specimen, or pinch the screen to zoom.</div></div>`);
     drawBody.appendChild(secHand);
 
     // The attempt record and the viva are the L and V keys on a desktop. Without
@@ -1693,6 +1746,7 @@ export function buildShell(root) {
     recClose.onclick = () => rec.classList.remove('on');
     rec.appendChild(recClose);
   }
+  renderHand();
 
   return {
     on, setTool, setStructure, setSpecimen, setHandState, showViva,

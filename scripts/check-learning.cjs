@@ -29,7 +29,7 @@ if (process.argv.includes('--syntax-only')) {
 const unitFiles = fs.readdirSync(path.join(root, 'tests')).filter(name => /\.test\.(?:mjs|cjs)$/.test(name)).map(name => 'tests/' + name);
 const checks = [
   ['Python contracts', python, ['-m', 'unittest', 'discover', '-s', 'tests']],
-  ['Lab unchanged', python, ['-m', 'unittest', 'discover', '-s', 'tests', '-p', 'test_lab_unchanged.py']],
+  ['Dissection boundaries', python, ['-m', 'unittest', 'discover', '-s', 'tests', '-p', 'test_lab_unchanged.py']],
   ['Shared navigation', process.execPath, ['scripts/check-network.cjs']],
   ['Tutorial contract', process.execPath, ['tests/check-feature-tutorials.cjs']],
   ['Non-lab syntax', process.execPath, ['scripts/check-learning.cjs', '--syntax-only']],

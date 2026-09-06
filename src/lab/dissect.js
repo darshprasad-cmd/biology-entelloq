@@ -204,14 +204,22 @@ export function createDissection(THREE, ctx) {
   }
 
   /* ---- peeling a flap --------------------------------------------------- */
-  const peeling = new Map();   // partId -> {t, axis, pivot}
+  const peeling = new Map();   // partId -> {t, axis, pivot, home, scale, liftOffset}
   function beginPeel(part) {
     if (peeling.has(part.id) || !part.mesh.userData.peelable) return false;
     const inc = state.incisions.get(part.id);
     if (!inc) return false;
     const a = inc.points[0], b = inc.points[inc.points.length - 1];
     const axis = new THREE.Vector3().subVectors(b, a).normalize();
-    peeling.set(part.id, { t: 0, axis, pivot: a.clone(), target: 0 });
+    const parent = part.mesh.parent || group;
+    part.mesh.updateWorldMatrix(true, false);
+    const worldHome = part.mesh.getWorldPosition(new THREE.Vector3());
+    const liftedHome = parent.worldToLocal(worldHome.add(new THREE.Vector3(0, 0.9, 0)));
+    peeling.set(part.id, {
+      t: 0, axis, pivot: a.clone(), target: 0,
+      home: part.mesh.position.clone(), scale: part.mesh.scale.clone(),
+      liftOffset: liftedHome.sub(part.mesh.position),
+    });
     return true;
   }
   function updatePeel(part, amount) {
@@ -230,15 +238,14 @@ export function createDissection(THREE, ctx) {
       // seeing the organs. So `opened` parts ease to a hard target of 1.
       const target = state.opened.has(pid) ? 1 : st.target;
       st.t += (target - st.t) * k;
-      // Reflect the flap by folding it back about the incision axis (so it lifts
-      // to the side rather than straight up) and fading it to near-transparent so
-      // the layer beneath reads clearly. A true mesh split is a geometry-authoring
-      // problem; for teaching, a convincing reveal is what matters.
+      // This is a lift-and-fade reveal, not a simulated mesh split. Lift away
+      // from the world-horizontal tray, retaining the authored local position
+      // and scale even when a specimen is rolled onto its side.
       part.mesh.material.transparent = true;
       part.mesh.material.opacity = 1 - st.t * 0.9;      // -> 0.10 fully open
       part.mesh.material.depthWrite = st.t < 0.5;        // stop it occluding once faded
-      part.mesh.position.y = st.t * 0.9;                 // lift clear of the cavity
-      part.mesh.scale.setScalar(1 + st.t * 0.06);        // slight fold-back swell
+      part.mesh.position.copy(st.home).addScaledVector(st.liftOffset, st.t);
+      part.mesh.scale.copy(st.scale).multiplyScalar(1 + st.t * 0.06);
       if (st.t > 0.5 && !state.opened.has(pid)) {
         state.opened.add(pid);
         emit('peel', pid, part.name + ' reflected. What is underneath is now exposed.', {});
@@ -251,32 +258,73 @@ export function createDissection(THREE, ctx) {
   let lift = null;
   function beginLift(part, point) {
     if (!part.detachable) return false;
+    part.mesh.updateWorldMatrix(true, false);
+    camera.updateMatrixWorld();
+    const worldHome = part.mesh.getWorldPosition(new THREE.Vector3());
     lift = {
       partId: part.id,
       home: part.mesh.position.clone(),
-      grabOffset: new THREE.Vector3().subVectors(part.mesh.position, point),
+      // Keep the actual grabbed surface point under the cursor, not the mesh
+      // origin. Both values are world-space; the parent transform is applied
+      // only when writing the resulting position back to the mesh.
+      grabOffset: worldHome.sub(point),
+      plane: new THREE.Plane().setFromNormalAndCoplanarPoint(
+        camera.getWorldDirection(new THREE.Vector3()), point),
     };
     return true;
   }
   function updateLift(nx, ny) {
     if (!lift) return;
     const part = byId.get(lift.partId);
-    // Move in the camera plane through the organ's own depth: the ray gives
-    // direction, the organ's existing distance gives the depth. Never hand-Z.
+    // A fixed camera-facing plane through the initial contact keeps depth
+    // consistent throughout a drag. A distance along each ray would describe a
+    // sphere instead, and mixing camera-world with home-local caused jumps.
     ndc.x = nx * 2 - 1; ndc.y = -(ny * 2 - 1);
+    camera.updateMatrixWorld();
     ray.setFromCamera(ndc, camera);
-    const dist = camera.position.distanceTo(lift.home);
-    const p = new THREE.Vector3().copy(ray.ray.direction).multiplyScalar(dist).add(camera.position);
-    part.mesh.position.copy(group.worldToLocal(p.clone()));
+    const p = ray.ray.intersectPlane(lift.plane, new THREE.Vector3());
+    if (!p) return;
+    const parent = part.mesh.parent || group;
+    parent.updateWorldMatrix(true, false);
+    part.mesh.position.copy(parent.worldToLocal(p.add(lift.grabOffset)));
+  }
+  function placeOnTray(part, slot) {
+    // Optional environment contract: getRemovalSupport(part, zeroBasedSlot)
+    // returns {x,y,z} in WORLD units; y is the tray surface, not the organ origin.
+    // Old embedders without an environment retain their original local layout.
+    if (typeof ctx.getRemovalSupport !== 'function') {
+      part.mesh.position.set(4.6, lift.home.y, -1.2 + (slot + 1) * 0.9);
+      return true;
+    }
+    let support;
+    try { support = ctx.getRemovalSupport(part, slot); } catch (_) { return false; }
+    if (!support || ![support.x, support.y, support.z].every(Number.isFinite)) return false;
+
+    part.mesh.updateWorldMatrix(true, true);
+    const bounds = new THREE.Box3(), point = new THREE.Vector3();
+    part.mesh.traverseVisible((mesh) => {
+      const positions = mesh.isMesh && mesh.geometry && mesh.geometry.attributes.position;
+      if (!positions) return;
+      for (let i = 0; i < positions.count; i++) {
+        point.fromBufferAttribute(positions, i).applyMatrix4(mesh.matrixWorld);
+        bounds.expandByPoint(point);
+      }
+    });
+    if (bounds.isEmpty()) return false;
+    const center = bounds.getCenter(new THREE.Vector3());
+    const worldPosition = part.mesh.getWorldPosition(new THREE.Vector3()).add(new THREE.Vector3(
+      support.x - center.x, support.y + 0.015 - bounds.min.y, support.z - center.z));
+    const parent = part.mesh.parent || group;
+    part.mesh.position.copy(parent.worldToLocal(worldPosition));
+    return true;
   }
   function endLift() {
     if (!lift) return;
     const part = byId.get(lift.partId);
     const moved = part.mesh.position.distanceTo(lift.home);
-    if (moved > 2.6) {
+    if (moved > 2.6 && placeOnTray(part, state.removed.size)) {
       state.removed.add(part.id);
-      part.mesh.position.set(4.6, lift.home.y, -1.2 + state.removed.size * 0.9);
-      emit('lift', part.id, part.name + ' removed and set on the tray.', { removed: state.removed.size });
+      emit('lift', part.id, part.name + ' removed and set on the work surface.', { removed: state.removed.size });
       revealLayer(part.layer + 1);
     } else {
       part.mesh.position.copy(lift.home);

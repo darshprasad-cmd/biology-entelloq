@@ -227,6 +227,75 @@ export function setupEnvironment(THREE, deps, refs) {
   contactMesh.renderOrder = -1;
   addTo(contactMesh);
 
+  // A shallow steel specimen tray with a matte reusable dissection pad. Geometry
+  // is original; dimensions are model units, not a claim of physical scale.
+  const specimenTray = addTo(new THREE.Group());
+  specimenTray.name = 'specimen-tray';
+  const traySteel = track(new THREE.MeshStandardMaterial({
+    color: 0x667675, metalness: 0.78, roughness: 0.46, roughnessMap: steelRough,
+  }));
+  const padMaterial = track(new THREE.MeshStandardMaterial({
+    color: 0x364c44, metalness: 0, roughness: 0.94,
+  }));
+  const slabGeometry = track(new THREE.BoxGeometry(1, 1, 1));
+  const trayBase = new THREE.Mesh(slabGeometry, traySteel);
+  const pad = new THREE.Mesh(slabGeometry, padMaterial);
+  pad.name = 'dissection-pad';
+  const rims = Array.from({ length: 4 }, () => new THREE.Mesh(slabGeometry, traySteel));
+  specimenTray.add(trayBase, pad, ...rims);
+  specimenTray.traverse(o => { if (o.isMesh) { o.receiveShadow = true; o.castShadow = true; } });
+  const supportY = TABLE_Y + 0.32;
+  let placement = null;
+  let removalZ = -8;
+  let removalX = 0, removalColumnWidth = 0;
+
+  function fitSpecimen(group) {
+    // Visible external geometry only. Hidden deep anatomy is not a support
+    // surface, and Box3.setFromObject would incorrectly include it.
+    group.updateMatrixWorld(true);
+    const bounds = new THREE.Box3();
+    const point = new THREE.Vector3();
+    group.traverseVisible(o => {
+      const positions = o.isMesh && o.geometry && o.geometry.attributes.position;
+      if (!positions) return;
+      for (let i = 0; i < positions.count; i++) {
+        point.fromBufferAttribute(positions, i).applyMatrix4(o.matrixWorld);
+        bounds.expandByPoint(point);
+      }
+    });
+    if (bounds.isEmpty() || !Number.isFinite(bounds.min.y)) {
+      throw new Error('Cannot place a specimen without finite exterior bounds');
+    }
+    const offsetY = supportY - bounds.min.y;
+    group.position.y += offsetY;
+    group.updateMatrixWorld(true);
+    const width = Math.max(7.5, bounds.max.x - bounds.min.x + 2.2);
+    const length = Math.max(10, bounds.max.z - bounds.min.z + 2.2);
+    const x = (bounds.min.x + bounds.max.x) / 2;
+    const z = (bounds.min.z + bounds.max.z) / 2;
+    removalZ = -8;
+    removalX = 0; removalColumnWidth = 0;
+    // Keep instruments on the opposite side of the removed-organ work area.
+    tray.position.set(x - width / 2 - 4.4, TABLE_Y + 0.08, 0);
+    specimenTray.position.set(x, TABLE_Y, z);
+    trayBase.scale.set(width + 0.32, 0.18, length + 0.32);
+    trayBase.position.y = 0.09;
+    pad.scale.set(width, 0.14, length);
+    pad.position.y = 0.25;
+    rims.forEach((rim, i) => {
+      const alongX = i < 2;
+      rim.scale.set(alongX ? width + 0.32 : 0.16, 0.34, alongX ? 0.16 : length);
+      rim.position.set(alongX ? 0 : (i === 2 ? -1 : 1) * (width + 0.16) / 2,
+        0.17, alongX ? (i === 0 ? -1 : 1) * (length + 0.16) / 2 : 0);
+    });
+    // Move the fallback contact shadow onto the pad and fit its footprint.
+    contactMesh.position.set(x, supportY + 0.004, z);
+    contactMesh.scale.set((width - 1.8) / 13, (length - 1.8) / 13, 1);
+    contactMesh.material.opacity = 0.5;
+    placement = { offsetY, supportY, minY: bounds.min.y + offsetY, width, length, x, z };
+    return { ...placement };
+  }
+
   /* ---- instrument tray, off to the side ---------------------------------- */
   const trayMat = track(new THREE.MeshPhysicalMaterial({
     color: 0x2c343b, roughness: 0.28, metalness: 0.92, clearcoat: 0.3 }));
@@ -318,6 +387,27 @@ export function setupEnvironment(THREE, deps, refs) {
     get composer() { return composer; },
     get bloom() { return bloom; },
     tableY: TABLE_Y,
+    fitSpecimen,
+    getRemovalSupport(part, slot) {
+      // Detached structures remain in world space on the steel work surface,
+      // beyond the specimen tray, rather than inheriting a rotated local plane.
+      const width = placement ? placement.width : 10;
+      const x = placement ? placement.x : 0;
+      part.mesh.updateWorldMatrix(true, true);
+      const size = new THREE.Box3().setFromObject(part.mesh, true).getSize(new THREE.Vector3());
+      const depth = Math.max(1, size.z);
+      const organWidth = Math.max(1, size.x);
+      if (removalZ + depth > 8 && removalZ > -8) {
+        removalZ = -8;
+        removalX += removalColumnWidth + 0.6;
+        removalColumnWidth = 0;
+      }
+      const z = removalZ + depth / 2;
+      removalZ += depth + 0.6;
+      removalColumnWidth = Math.max(removalColumnWidth, organWidth);
+      return { x: x + width / 2 + removalX + organWidth / 2 + 0.6, y: TABLE_Y + 0.02, z };
+    },
+    get placement() { return placement && { ...placement }; },
     dispose() {
       added.forEach((o) => scene.remove(o));
       owned.forEach((o) => { try { o.dispose && o.dispose(); } catch (e) {} });

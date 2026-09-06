@@ -124,6 +124,12 @@ function buildCockroach(THREE) {
   }
   const pron = new THREE.Mesh(pronG, mat(THREE, CHITIN, { rough: 0.3, clear: 0.72, sheen: 0x8a5a34 }));
   pron.position.set(0, 0.16, 2.7);
+  // The meso/metathorax joins the abdominal shell to the prothoracic shield.
+  // Keep this unpickable bridge with the shield; the former empty gap exposed
+  // the bench through an intact insect before any dissection step.
+  const thorax = organ(THREE, CHITIN_D, 1.15, 0.26, 1.05, { rough: 0.5, clear: 0.3, seed: 21 });
+  thorax.name = 'thoracic-bridge';
+  childMesh(pron, thorax, 0, -0.12, -1.4);
   add({
     id: 'pronotum', name: 'Pronotum (thoracic shield)', layer: 0, system: 'integument',
     cuttable: false, detachable: false,
@@ -134,6 +140,9 @@ function buildCockroach(THREE) {
   // Head capsule with antennae and compound eyes (decorative children).
   const head = organ(THREE, CHITIN_D, 0.6, 0.34, 0.5, { rough: 0.4, clear: 0.5, seed: 3 });
   head.position.set(0, 0.14, 4.9);
+  const neck = organ(THREE, CHITIN_D, 0.3, 0.2, 0.45, { rough: 0.6, clear: 0.2, seed: 22 });
+  neck.name = 'cervical-connection';
+  childMesh(head, neck, 0, -0.02, -0.57);
   add({
     id: 'head', name: 'Head capsule', layer: 0, system: 'integument',
     cuttable: false, detachable: false,
@@ -163,7 +172,9 @@ function buildCockroach(THREE) {
         [s * 2.3, -0.2, z - 0.35], [s * 2.7, -0.5, z - 0.7],
       ];
       const leg = tube(THREE, CHITIN_D, lpts, 0.06, { rough: 0.55, rad: 6, seg: 20 });
-      childMesh(abd, leg, 0, 0.02, 0);
+      // Leg paths above are specimen-local. Compensate for the abdominal
+      // parent's offset so the three pairs attach to the thorax, not the tail.
+      childMesh(abd, leg, 0, 0.02, -abd.position.z);
     }
   }
 
@@ -257,8 +268,10 @@ function buildCockroach(THREE) {
   });
   // Crop — a large thin-walled distensible sac (foregut storage), the biggest gut
   // structure, sitting in the thorax/anterior abdomen.
-  const crop = bag(THREE, CROP_C, 1.5, 0.5, { amp: 0.06, rough: 0.5, clear: 0.45, trans: 0.32, thickness: 0.5, atten: 0xcaa878, sheen: 0xe0c090 });
-  crop.position.set(0, -0.02, 1.5); crop.rotation.x = Math.PI / 2;
+  const crop = bag(THREE, CROP_C, 1.5, 0.5, { bend: 0, amp: 0.06, rough: 0.5, clear: 0.45, trans: 0.32, thickness: 0.5, atten: 0xcaa878, sheen: 0xe0c090 });
+  // The bag helper is z-long: keep the storage sac along the foregut, with its
+  // narrow end posterior toward the gizzard, not standing through the dorsum.
+  crop.position.set(0, -0.02, 1.5); crop.rotation.y = Math.PI;
   add({
     id: 'crop', name: 'Crop', layer: 2, system: 'digestive', cuttable: true, detachable: true,
     note: 'A thin-walled distensible storage sac of the foregut. Food is held and partly digested here by enzymes carried forward from the midgut.',
@@ -400,9 +413,8 @@ function buildCockroach(THREE) {
     mesh: gonad,
   });
 
-  // Lay the insect dorsum-up on the tray for a top-down camera (already built with
-  // +y dorsal, so only a slight tilt to sit it flat and square to the lens).
-  group.rotation.x = -Math.PI / 2;
+  // +y is already dorsal. Keep it up; a quarter turn stood the abdomen on end.
+  group.rotation.x = 0;
   return { group, parts };
 }
 
