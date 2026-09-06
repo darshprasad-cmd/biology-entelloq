@@ -42,12 +42,12 @@ real variables. Nothing here is a video of someone else doing the experiment.
 
 ## Design notes
 
-**The Living Field.** Every page sits on a slow shader of living tissue — a
-Worley cell field with real membranes, drifting capillaries, and a breath at
-about seven cycles a minute. The cursor is a nutrient source: cells near it swell
-and the vasculature grows toward it. It restains as you move between sections, so
-the whole product feels like one continuous space rather than a stack of pages.
-Physics Entelloq bends spacetime around your cursor; biology reaches for it.
+**A shared Entelloq workspace.** The app follows Physics Entelloq's layout:
+a 224px desktop sidebar, a 76px header, a featured experiment, three experiment
+entries and a Biology Map. Space Grotesk headings, restrained cyan and green
+accents, and solid reading surfaces continue through the eight pillars. Phones
+use five bottom navigation tabs and an Explore sheet. The original Living Field
+source remains available; the reading layout suppresses its decorative canvas.
 
 **No gamification.** Deliberately. No XP, no badges, no streaks, no leaderboards.
 Progress is shown because it is useful to you, never to make you come back.
@@ -72,6 +72,7 @@ universe.html           Biology Universe
 CNAME .nojekyll 404.html
 
 src/
+  physics-layout/       shared app and pillar presentation layers
   _atmo.js              the Living Field shader, self-installing
   _lessons.js/.css      the six-lens lesson engine + every lesson
   _labs.js _lab_*.js    the bench registry and each working bench
@@ -100,6 +101,27 @@ their generated root HTML is committed for deployment. The learning builder has
 a non-mutating `--check` mode and rejects missing or ambiguous source slots.
 Home, Learn, Solve, Explore and Me are currently authored in their root HTML
 files. Do not run a whole-site rebuild for changes to these pages.
+
+For the Physics-matched presentation, edit `src/physics-layout/app.css` or
+`src/physics-layout/pillars.css`, then sync only their generated style slots:
+
+```bash
+python scripts/sync-physics-shell.py     # app.html stylesheet only
+python scripts/sync-physics-pillars.py   # eight pillar style/font blocks only
+node scripts/check-learning.cjs         # includes both style drift checks
+```
+
+Both sync commands accept `--check` for verification without writes. They retain
+existing lesson content, behavior, navigation and storage; neither targets
+`lab.html`, `universe.html`, their sources, or the original shared template.
+App markup and routing remain authored in `app.html`. The Biology Map reads the
+existing versioned lesson journal and reports exploration, not mastery.
+
+The launch page is authored directly in `index.html`. Its realistic artwork ships
+as five optimized WebP files in `assets/`; generation prompts and bounded visual
+verification are recorded in `docs/physics-layout/image-prompts.md` and
+`docs/physics-layout/QA.md`. Background motion can be paused and follows reduced
+motion preferences; the embedded enzyme preview remains independently controllable.
 
 The original shared dependencies and app launcher are locked by
 `tests/test_lab_unchanged.py`. The September 6 dissection-realism request explicitly
