@@ -2718,7 +2718,7 @@ const SPECIMENS = {
     id: 'heart',
     name: 'Mammalian heart',
     blurb: 'Trace the circulation. Open the left ventricle, meet the chordae tendineae, and test the valves.',
-    camera: { pos: [0.4, 1.8, 15.5], target: [0, 0.7, 0] },
+    camera: { pos: [0.4, 12.8, 8.5], target: [0, 0, -0.4] },
     requiresPinning: false,
   },
 };
@@ -2793,15 +2793,18 @@ function buildFrog(THREE) {
       v.fromBufferAttribute(p, i);
       const uy = v.y, uz = v.z;                   // unit coords, pre-scale
       const t = Math.max(0, Math.min(1, (uz + 1) / 2)); // 0 vent .. 1 snout
-      let prof = Math.sin(t * Math.PI * 0.97 + 0.09);
+      // The sphere already supplies the rounded longitudinal taper. Multiplying
+      // by another vanishing sine pinched both ends into a leaf-shaped point.
+      // Keep the trunk near its original ellipsoid radius, then shape the neck.
+      let prof = 1;
       prof *= 1 - 0.17 * Math.exp(-Math.pow((t - 0.73) / 0.055, 2)); // neck pinch
-      if (t < 0.08) prof *= 0.5 + t * 4.0;         // vent taper
+      if (t < 0.08) prof *= 0.92 + t;             // gentle posterior rounding
       // Head: broad triangle. Cheeks flare just ahead of the neck pinch, then the
       // profile tapers to a blunt (not pointed) snout.
       let xprof = prof;
       const cheek = 0.2 * Math.exp(-Math.pow((t - 0.84) / 0.075, 2)); // jaw flare
       xprof *= 1 + cheek;
-      if (t > 0.9) { const s = (t - 0.9) / 0.1; prof *= 1 - s * 0.34; xprof *= 1 - s * 0.28; }
+      if (t > 0.9) { const s = (t - 0.9) / 0.1; prof *= 1 - s * 0.15; xprof *= 1 - s * 0.12; }
       const yscale = uy >= 0 ? 0.58 : 1.0;         // ventral flat, dorsal domed
       p.setXYZ(i, v.x * xprof * sx, uy * prof * yscale * sy, uz * sz);
       if (colors) {
@@ -3056,6 +3059,18 @@ function buildFrog(THREE) {
     { seed: 7, rough: 0.55, clear: 0.45, sheen: 0xe8c8a8, bend: 0.55 });
   stomach.position.set(-0.5, 0.0, 0.35);
   stomach.rotation.set(0.1, 2.25, 0.2);            // narrow (pyloric) end points back
+  // Attach the gut to the actual deformed surface, in specimen-local space.
+  // Hand-written coordinates drifted away after the bag was bent and rotated.
+  stomach.updateMatrix();
+  const stomachEnd = (direction) => {
+    const vertices = stomach.geometry.attributes.position;
+    let end = 0;
+    for (let i = 1; i < vertices.count; i++) {
+      if (vertices.getZ(i) * direction > vertices.getZ(end) * direction) end = i;
+    }
+    return new THREE.Vector3().fromBufferAttribute(vertices, end).applyMatrix4(stomach.matrix).toArray();
+  };
+  const cardiacEnd = stomachEnd(-1), pyloricEnd = stomachEnd(1);
   add({
     id: 'stomach', name: 'Stomach', layer: 2, system: 'digestive', cuttable: true, detachable: true,
     note: 'A curved, whitish J-shaped bag on the animal\'s left. Wide cardiac end above, narrowing to the pylorus below. You only see it once the liver is lifted.',
@@ -3065,7 +3080,7 @@ function buildFrog(THREE) {
   // Oesophagus (added): a short pale tube from the pharynx down to the cardiac end
   // of the stomach, lying dorsal to the liver.
   const oeso = tube(THREE, 0xd8c0a8,
-    [[0, 0.22, 2.65], [-0.14, 0.12, 1.9], [-0.3, 0.06, 1.25], [-0.42, 0.02, 0.78]], 0.11,
+    [[0, 0.22, 2.65], [-0.14, 0.12, 1.9], [-0.3, 0.06, 1.25], cardiacEnd], 0.11,
     { rough: 0.55, clear: 0.35, sheen: 0xe8d0b8, rad: 8, seg: 22 });
   add({
     id: 'oesophagus', name: 'Oesophagus', layer: 2, system: 'digestive', cuttable: true, detachable: true,
@@ -3077,7 +3092,7 @@ function buildFrog(THREE) {
   // parallel to the stomach (the U-loop), then a long, highly-coiled ILEUM held in
   // a translucent mesentery, enlarging posteriorly to join the rectum.
   const siPts = [
-    [-0.42, 0.02, -0.35],   // pylorus
+    pyloricEnd,            // begins on the stomach, not at an estimated position
     [-0.18, 0.0, 0.05],     // duodenum ascending
     [0.12, -0.01, 0.48],    // duodenal apex (U-turn)
     [0.46, -0.02, 0.46],
@@ -3230,7 +3245,9 @@ function buildFrog(THREE) {
     note: 'Short and stiff — a frog has only nine presacral vertebrae plus the rod-like urostyle.', mesh: spine,
   });
 
-  group.rotation.x = -Math.PI / 2.35;   // lay it supine (ventral up) on the tray
+  // Already authored with +y ventral: rotating about x stood the trunk upright.
+  // Keep the complete anatomy in its authored frame, ventral surface facing up.
+  group.rotation.x = 0;
   return { group, parts };
 }
 
@@ -3250,7 +3267,7 @@ function buildFrog(THREE) {
  *    reaching the apex (the apex is all LV);
  *  - great vessels correctly arranged: the PULMONARY TRUNK front-most, spiralling
  *    up and to the left off the RV; the AORTA immediately behind it, arching to
- *    the right with its brachiocephalic branches; SVC and IVC into the right
+ *    the anatomical left with illustrative human-pattern branches; SVC and IVC into the right
  *    atrium; pulmonary veins into the left atrium; the two ear-like AURICLES;
  *  - the coronary tree lying in the grooves: LAD in the anterior interventricular
  *    groove, circumflex in the left AV groove, RCA in the right AV groove to the
@@ -3421,13 +3438,14 @@ function buildHeart(THREE) {
         note: 'The front-most vessel. It leaves the right ventricle, spirals around the aorta and forks to both lungs — deoxygenated, so duskier.' });
 
   // Aorta — immediately behind the pulmonary trunk, ascending then arching to the
-  // right and back, giving off the brachiocephalic branches.
+  // anatomical LEFT (-x) and back. The three branches illustrate the human
+  // pattern, not every mammalian species; the brachiocephalic trunk heads right.
   const aorta = vessel(THREE, 0xcbb49b,
-    [[-0.1, 2.9, 0.05], [-0.05, 4.05, -0.15], [0.4, 4.95, -0.35], [1.15, 4.95, -0.7], [1.7, 4.4, -0.95]], 0.42, 0.34,
+    [[-0.1, 2.9, 0.05], [-0.05, 4.05, -0.15], [-0.4, 4.95, -0.35], [-1.15, 4.95, -0.7], [-1.7, 4.4, -0.95]], 0.42, 0.34,
     { rough: 0.5, clear: 0.5, clearRough: 0.4, sheen: 0xead8c0, rad: 16, seg: 32 });
-  [ [[0.35, 4.9, -0.4], [0.4, 5.7, -0.45]],                         // brachiocephalic trunk
-    [[0.75, 5.0, -0.55], [0.85, 5.75, -0.6]],                       // left common carotid
-    [[1.2, 4.9, -0.7], [1.35, 5.6, -0.75]] ]                        // left subclavian
+  [ [[-0.35, 4.9, -0.4], [0.4, 5.7, -0.45]],                        // brachiocephalic trunk
+    [[-0.75, 5.0, -0.55], [-0.85, 5.75, -0.6]],                    // left common carotid
+    [[-1.2, 4.9, -0.7], [-1.35, 5.6, -0.75]] ]                     // left subclavian
     .forEach((bp) => aorta.add(vessel(THREE, 0xcbb49b, bp, 0.14, 0.11,
       { rough: 0.5, clear: 0.5, sheen: 0xead8c0, rad: 10, seg: 12 })));
   add({ id: 'aorta', name: 'Aorta', layer: 1, system: 'circulatory', cuttable: true, detachable: false,
@@ -3591,7 +3609,9 @@ function buildHeart(THREE) {
         cuttable: true, detachable: false, mesh: modBand,
         note: 'A muscular band spanning the right ventricle, carrying part of the conduction system to the anterior papillary muscle.' });
 
-  group.position.y = 0.3;
+  // Rest on the posterior surface, with the anterior face (+z locally) up.
+  // One whole-specimen transform preserves every vessel/valve relationship.
+  group.rotation.x = -Math.PI / 2;
   group.scale.setScalar(0.9);
   return { group, parts };
 }
@@ -4145,9 +4165,11 @@ function buildFish(THREE) {
       const ux = v.x, uy = v.y, uz = v.z;         // unit coords, pre-scale
       const t = Math.max(0, Math.min(1, (uz + 1) / 2)); // 0 tail .. 1 snout
       // Girth: deepest just behind the head. pow(t,1.15) skews the peak forward.
-      let girth = Math.sin(Math.PI * Math.pow(t, 1.15));
+      // Sphere radii already taper. A second vanishing sine produced a pointed
+      // leaf and left the mouth/fin attachments outside the body silhouette.
+      let girth = 0.72 + 0.28 * Math.sin(Math.PI * Math.pow(t, 1.15));
       if (t < 0.2) girth *= 0.28 + t * 3.6;        // thin caudal peduncle
-      if (t > 0.88) girth *= 1 - (t - 0.88) / 0.12 * 0.6; // blunt snout
+      if (t > 0.88) girth *= 1 - (t - 0.88) / 0.12 * 0.15; // rounded snout
       const ydome = uy >= 0 ? 1.06 : 0.99;         // dorsum a touch more arched
       p.setXYZ(i, ux * girth * sx, uy * girth * sy * ydome, uz * sz);
       if (colors) {
@@ -4177,7 +4199,9 @@ function buildFish(THREE) {
     for (let i = 0; i < p.count; i++) {
       v.fromBufferAttribute(p, i);
       const tx = (v.x / len) + 0.5;                 // 0 root .. 1 free edge
-      p.setXYZ(i, v.x, v.y * (0.55 + tx * 0.7), Math.sin(v.y * 2.4) * 0.05 * tx);
+      // Attachment is the origin; rays fan out from a narrow root, not a
+      // rectangular sheet floating half a fin-length away from its insertion.
+      p.setXYZ(i, tx * len, v.y * (0.08 + tx * 1.02), Math.sin(v.y * 2.4) * 0.05 * tx);
     }
     seal(g);
     const m = new THREE.Mesh(g, mat(THREE, o.color || 0xa7b4a2, {
@@ -4187,10 +4211,9 @@ function buildFish(THREE) {
     const nr = o.rays || 6;                          // fin rays as fine child struts
     for (let i = 0; i < nr; i++) {
       const yy = (i / (nr - 1) - 0.5) * wide * 0.82;
-      const ray = new THREE.Mesh(new THREE.CylinderGeometry(0.009, 0.014, len * 0.94, 4),
-        mat(THREE, o.rayColor || 0x8a9885, { rough: 0.6 }));
-      ray.position.set(0, yy, 0.012);
-      ray.rotation.z = Math.PI / 2;
+      const ray = tube(THREE, o.rayColor || 0x8a9885,
+        [[0, yy * 0.08, 0.012], [len * 0.5, yy * 0.59, 0.012], [len, yy * 1.1, 0.012]],
+        0.009, { rough: 0.6, rad: 4, seg: 6 });
       m.add(ray);
     }
     return m;
@@ -4265,9 +4288,11 @@ function buildFish(THREE) {
   const analFin = fin(1.0, 0.5, { rays: 7, color: 0x9fae98 });
   childMesh(skin, analFin, 0, -1.15, -1.9, 0, -Math.PI / 2, Math.PI / 2);
   const caudalUp = fin(1.5, 0.7, { rays: 9, color: 0x93a48c, opacity: 0.52 });
-  childMesh(skin, caudalUp, 0, 0.55, -3.9, 0, -Math.PI / 2, 0.55);
+  caudalUp.name = 'caudal-upper';
+  childMesh(skin, caudalUp, 0, 0, -3.1, 0, Math.PI / 2, 0.55);
   const caudalLo = fin(1.5, 0.7, { rays: 9, color: 0x93a48c, opacity: 0.52 });
-  childMesh(skin, caudalLo, 0, -0.55, -3.9, 0, -Math.PI / 2, -0.55);
+  caudalLo.name = 'caudal-lower';
+  childMesh(skin, caudalLo, 0, 0, -3.1, 0, Math.PI / 2, -0.55);
 
   add({
     id: 'body-wall', name: 'Skin & flank body wall', layer: 0, system: 'integument',
@@ -4507,12 +4532,13 @@ function buildFish(THREE) {
     transmission: 0.34, thickness: 0.6, atten: 0xcfe0e6, sheen: 0xbcd2e2, sheenAmt: 0.72, amp: 0.05 };
   const swimBladder = sac(THREE, 0xd9dee2, 1.0, 0.42, { ...sbOpts, seed: 12 });
   swimBladder.position.set(0, 0.78, 0.55);
-  swimBladder.rotation.set(0, 0, Math.PI / 2);        // long axis along z
+  // sac() is already z-long. Keep every chamber dorsal and extend toward -z,
+  // the tail; the former rotated -x offset put the second chamber in the belly.
   const sbPost = sac(THREE, 0xd6dce0, 1.4, 0.5, { ...sbOpts, seed: 13 });
-  childMesh(swimBladder, sbPost, -1.55, 0, -0.05, 0, 0, 0);   // posterior chamber, larger
+  childMesh(swimBladder, sbPost, 0, 0, -2.05);        // posterior chamber, larger
   const sbNeck = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 0.4, 14),
     mat(THREE, 0xd2d8dc, sbOpts));
-  childMesh(swimBladder, sbNeck, -0.85, 0, 0, 0, 0, Math.PI / 2);
+  childMesh(swimBladder, sbNeck, 0, 0, -0.825, Math.PI / 2, 0, 0);
   swimBladder.renderOrder = 1;
   add({
     id: 'swim-bladder', name: 'Swim bladder', layer: 2, system: 'respiratory', cuttable: true, detachable: true,
@@ -4748,6 +4774,12 @@ function buildCockroach(THREE) {
   }
   const pron = new THREE.Mesh(pronG, mat(THREE, CHITIN, { rough: 0.3, clear: 0.72, sheen: 0x8a5a34 }));
   pron.position.set(0, 0.16, 2.7);
+  // The meso/metathorax joins the abdominal shell to the prothoracic shield.
+  // Keep this unpickable bridge with the shield; the former empty gap exposed
+  // the bench through an intact insect before any dissection step.
+  const thorax = organ(THREE, CHITIN_D, 1.15, 0.26, 1.05, { rough: 0.5, clear: 0.3, seed: 21 });
+  thorax.name = 'thoracic-bridge';
+  childMesh(pron, thorax, 0, -0.12, -1.4);
   add({
     id: 'pronotum', name: 'Pronotum (thoracic shield)', layer: 0, system: 'integument',
     cuttable: false, detachable: false,
@@ -4758,6 +4790,9 @@ function buildCockroach(THREE) {
   // Head capsule with antennae and compound eyes (decorative children).
   const head = organ(THREE, CHITIN_D, 0.6, 0.34, 0.5, { rough: 0.4, clear: 0.5, seed: 3 });
   head.position.set(0, 0.14, 4.9);
+  const neck = organ(THREE, CHITIN_D, 0.3, 0.2, 0.45, { rough: 0.6, clear: 0.2, seed: 22 });
+  neck.name = 'cervical-connection';
+  childMesh(head, neck, 0, -0.02, -0.57);
   add({
     id: 'head', name: 'Head capsule', layer: 0, system: 'integument',
     cuttable: false, detachable: false,
@@ -4787,7 +4822,9 @@ function buildCockroach(THREE) {
         [s * 2.3, -0.2, z - 0.35], [s * 2.7, -0.5, z - 0.7],
       ];
       const leg = tube(THREE, CHITIN_D, lpts, 0.06, { rough: 0.55, rad: 6, seg: 20 });
-      childMesh(abd, leg, 0, 0.02, 0);
+      // Leg paths above are specimen-local. Compensate for the abdominal
+      // parent's offset so the three pairs attach to the thorax, not the tail.
+      childMesh(abd, leg, 0, 0.02, -abd.position.z);
     }
   }
 
@@ -4881,8 +4918,10 @@ function buildCockroach(THREE) {
   });
   // Crop — a large thin-walled distensible sac (foregut storage), the biggest gut
   // structure, sitting in the thorax/anterior abdomen.
-  const crop = bag(THREE, CROP_C, 1.5, 0.5, { amp: 0.06, rough: 0.5, clear: 0.45, trans: 0.32, thickness: 0.5, atten: 0xcaa878, sheen: 0xe0c090 });
-  crop.position.set(0, -0.02, 1.5); crop.rotation.x = Math.PI / 2;
+  const crop = bag(THREE, CROP_C, 1.5, 0.5, { bend: 0, amp: 0.06, rough: 0.5, clear: 0.45, trans: 0.32, thickness: 0.5, atten: 0xcaa878, sheen: 0xe0c090 });
+  // The bag helper is z-long: keep the storage sac along the foregut, with its
+  // narrow end posterior toward the gizzard, not standing through the dorsum.
+  crop.position.set(0, -0.02, 1.5); crop.rotation.y = Math.PI;
   add({
     id: 'crop', name: 'Crop', layer: 2, system: 'digestive', cuttable: true, detachable: true,
     note: 'A thin-walled distensible storage sac of the foregut. Food is held and partly digested here by enzymes carried forward from the midgut.',
@@ -5024,9 +5063,8 @@ function buildCockroach(THREE) {
     mesh: gonad,
   });
 
-  // Lay the insect dorsum-up on the tray for a top-down camera (already built with
-  // +y dorsal, so only a slight tilt to sit it flat and square to the lens).
-  group.rotation.x = -Math.PI / 2;
+  // +y is already dorsal. Keep it up; a quarter turn stood the abdomen on end.
+  group.rotation.x = 0;
   return { group, parts };
 }
 
@@ -6943,14 +6981,22 @@ function createDissection(THREE, ctx) {
   }
 
   /* ---- peeling a flap --------------------------------------------------- */
-  const peeling = new Map();   // partId -> {t, axis, pivot}
+  const peeling = new Map();   // partId -> {t, axis, pivot, home, scale, liftOffset}
   function beginPeel(part) {
     if (peeling.has(part.id) || !part.mesh.userData.peelable) return false;
     const inc = state.incisions.get(part.id);
     if (!inc) return false;
     const a = inc.points[0], b = inc.points[inc.points.length - 1];
     const axis = new THREE.Vector3().subVectors(b, a).normalize();
-    peeling.set(part.id, { t: 0, axis, pivot: a.clone(), target: 0 });
+    const parent = part.mesh.parent || group;
+    part.mesh.updateWorldMatrix(true, false);
+    const worldHome = part.mesh.getWorldPosition(new THREE.Vector3());
+    const liftedHome = parent.worldToLocal(worldHome.add(new THREE.Vector3(0, 0.9, 0)));
+    peeling.set(part.id, {
+      t: 0, axis, pivot: a.clone(), target: 0,
+      home: part.mesh.position.clone(), scale: part.mesh.scale.clone(),
+      liftOffset: liftedHome.sub(part.mesh.position),
+    });
     return true;
   }
   function updatePeel(part, amount) {
@@ -6969,15 +7015,14 @@ function createDissection(THREE, ctx) {
       // seeing the organs. So `opened` parts ease to a hard target of 1.
       const target = state.opened.has(pid) ? 1 : st.target;
       st.t += (target - st.t) * k;
-      // Reflect the flap by folding it back about the incision axis (so it lifts
-      // to the side rather than straight up) and fading it to near-transparent so
-      // the layer beneath reads clearly. A true mesh split is a geometry-authoring
-      // problem; for teaching, a convincing reveal is what matters.
+      // This is a lift-and-fade reveal, not a simulated mesh split. Lift away
+      // from the world-horizontal tray, retaining the authored local position
+      // and scale even when a specimen is rolled onto its side.
       part.mesh.material.transparent = true;
       part.mesh.material.opacity = 1 - st.t * 0.9;      // -> 0.10 fully open
       part.mesh.material.depthWrite = st.t < 0.5;        // stop it occluding once faded
-      part.mesh.position.y = st.t * 0.9;                 // lift clear of the cavity
-      part.mesh.scale.setScalar(1 + st.t * 0.06);        // slight fold-back swell
+      part.mesh.position.copy(st.home).addScaledVector(st.liftOffset, st.t);
+      part.mesh.scale.copy(st.scale).multiplyScalar(1 + st.t * 0.06);
       if (st.t > 0.5 && !state.opened.has(pid)) {
         state.opened.add(pid);
         emit('peel', pid, part.name + ' reflected. What is underneath is now exposed.', {});
@@ -6990,32 +7035,73 @@ function createDissection(THREE, ctx) {
   let lift = null;
   function beginLift(part, point) {
     if (!part.detachable) return false;
+    part.mesh.updateWorldMatrix(true, false);
+    camera.updateMatrixWorld();
+    const worldHome = part.mesh.getWorldPosition(new THREE.Vector3());
     lift = {
       partId: part.id,
       home: part.mesh.position.clone(),
-      grabOffset: new THREE.Vector3().subVectors(part.mesh.position, point),
+      // Keep the actual grabbed surface point under the cursor, not the mesh
+      // origin. Both values are world-space; the parent transform is applied
+      // only when writing the resulting position back to the mesh.
+      grabOffset: worldHome.sub(point),
+      plane: new THREE.Plane().setFromNormalAndCoplanarPoint(
+        camera.getWorldDirection(new THREE.Vector3()), point),
     };
     return true;
   }
   function updateLift(nx, ny) {
     if (!lift) return;
     const part = byId.get(lift.partId);
-    // Move in the camera plane through the organ's own depth: the ray gives
-    // direction, the organ's existing distance gives the depth. Never hand-Z.
+    // A fixed camera-facing plane through the initial contact keeps depth
+    // consistent throughout a drag. A distance along each ray would describe a
+    // sphere instead, and mixing camera-world with home-local caused jumps.
     ndc.x = nx * 2 - 1; ndc.y = -(ny * 2 - 1);
+    camera.updateMatrixWorld();
     ray.setFromCamera(ndc, camera);
-    const dist = camera.position.distanceTo(lift.home);
-    const p = new THREE.Vector3().copy(ray.ray.direction).multiplyScalar(dist).add(camera.position);
-    part.mesh.position.copy(group.worldToLocal(p.clone()));
+    const p = ray.ray.intersectPlane(lift.plane, new THREE.Vector3());
+    if (!p) return;
+    const parent = part.mesh.parent || group;
+    parent.updateWorldMatrix(true, false);
+    part.mesh.position.copy(parent.worldToLocal(p.add(lift.grabOffset)));
+  }
+  function placeOnTray(part, slot) {
+    // Optional environment contract: getRemovalSupport(part, zeroBasedSlot)
+    // returns {x,y,z} in WORLD units; y is the tray surface, not the organ origin.
+    // Old embedders without an environment retain their original local layout.
+    if (typeof ctx.getRemovalSupport !== 'function') {
+      part.mesh.position.set(4.6, lift.home.y, -1.2 + (slot + 1) * 0.9);
+      return true;
+    }
+    let support;
+    try { support = ctx.getRemovalSupport(part, slot); } catch (_) { return false; }
+    if (!support || ![support.x, support.y, support.z].every(Number.isFinite)) return false;
+
+    part.mesh.updateWorldMatrix(true, true);
+    const bounds = new THREE.Box3(), point = new THREE.Vector3();
+    part.mesh.traverseVisible((mesh) => {
+      const positions = mesh.isMesh && mesh.geometry && mesh.geometry.attributes.position;
+      if (!positions) return;
+      for (let i = 0; i < positions.count; i++) {
+        point.fromBufferAttribute(positions, i).applyMatrix4(mesh.matrixWorld);
+        bounds.expandByPoint(point);
+      }
+    });
+    if (bounds.isEmpty()) return false;
+    const center = bounds.getCenter(new THREE.Vector3());
+    const worldPosition = part.mesh.getWorldPosition(new THREE.Vector3()).add(new THREE.Vector3(
+      support.x - center.x, support.y + 0.015 - bounds.min.y, support.z - center.z));
+    const parent = part.mesh.parent || group;
+    part.mesh.position.copy(parent.worldToLocal(worldPosition));
+    return true;
   }
   function endLift() {
     if (!lift) return;
     const part = byId.get(lift.partId);
     const moved = part.mesh.position.distanceTo(lift.home);
-    if (moved > 2.6) {
+    if (moved > 2.6 && placeOnTray(part, state.removed.size)) {
       state.removed.add(part.id);
-      part.mesh.position.set(4.6, lift.home.y, -1.2 + state.removed.size * 0.9);
-      emit('lift', part.id, part.name + ' removed and set on the tray.', { removed: state.removed.size });
+      emit('lift', part.id, part.name + ' removed and set on the work surface.', { removed: state.removed.size });
       revealLayer(part.layer + 1);
     } else {
       part.mesh.position.copy(lift.home);
@@ -24404,6 +24490,75 @@ function setupEnvironment(THREE, deps, refs) {
   contactMesh.renderOrder = -1;
   addTo(contactMesh);
 
+  // A shallow steel specimen tray with a matte reusable dissection pad. Geometry
+  // is original; dimensions are model units, not a claim of physical scale.
+  const specimenTray = addTo(new THREE.Group());
+  specimenTray.name = 'specimen-tray';
+  const traySteel = track(new THREE.MeshStandardMaterial({
+    color: 0x667675, metalness: 0.78, roughness: 0.46, roughnessMap: steelRough,
+  }));
+  const padMaterial = track(new THREE.MeshStandardMaterial({
+    color: 0x364c44, metalness: 0, roughness: 0.94,
+  }));
+  const slabGeometry = track(new THREE.BoxGeometry(1, 1, 1));
+  const trayBase = new THREE.Mesh(slabGeometry, traySteel);
+  const pad = new THREE.Mesh(slabGeometry, padMaterial);
+  pad.name = 'dissection-pad';
+  const rims = Array.from({ length: 4 }, () => new THREE.Mesh(slabGeometry, traySteel));
+  specimenTray.add(trayBase, pad, ...rims);
+  specimenTray.traverse(o => { if (o.isMesh) { o.receiveShadow = true; o.castShadow = true; } });
+  const supportY = TABLE_Y + 0.32;
+  let placement = null;
+  let removalZ = -8;
+  let removalX = 0, removalColumnWidth = 0;
+
+  function fitSpecimen(group) {
+    // Visible external geometry only. Hidden deep anatomy is not a support
+    // surface, and Box3.setFromObject would incorrectly include it.
+    group.updateMatrixWorld(true);
+    const bounds = new THREE.Box3();
+    const point = new THREE.Vector3();
+    group.traverseVisible(o => {
+      const positions = o.isMesh && o.geometry && o.geometry.attributes.position;
+      if (!positions) return;
+      for (let i = 0; i < positions.count; i++) {
+        point.fromBufferAttribute(positions, i).applyMatrix4(o.matrixWorld);
+        bounds.expandByPoint(point);
+      }
+    });
+    if (bounds.isEmpty() || !Number.isFinite(bounds.min.y)) {
+      throw new Error('Cannot place a specimen without finite exterior bounds');
+    }
+    const offsetY = supportY - bounds.min.y;
+    group.position.y += offsetY;
+    group.updateMatrixWorld(true);
+    const width = Math.max(7.5, bounds.max.x - bounds.min.x + 2.2);
+    const length = Math.max(10, bounds.max.z - bounds.min.z + 2.2);
+    const x = (bounds.min.x + bounds.max.x) / 2;
+    const z = (bounds.min.z + bounds.max.z) / 2;
+    removalZ = -8;
+    removalX = 0; removalColumnWidth = 0;
+    // Keep instruments on the opposite side of the removed-organ work area.
+    tray.position.set(x - width / 2 - 4.4, TABLE_Y + 0.08, 0);
+    specimenTray.position.set(x, TABLE_Y, z);
+    trayBase.scale.set(width + 0.32, 0.18, length + 0.32);
+    trayBase.position.y = 0.09;
+    pad.scale.set(width, 0.14, length);
+    pad.position.y = 0.25;
+    rims.forEach((rim, i) => {
+      const alongX = i < 2;
+      rim.scale.set(alongX ? width + 0.32 : 0.16, 0.34, alongX ? 0.16 : length);
+      rim.position.set(alongX ? 0 : (i === 2 ? -1 : 1) * (width + 0.16) / 2,
+        0.17, alongX ? (i === 0 ? -1 : 1) * (length + 0.16) / 2 : 0);
+    });
+    // Move the fallback contact shadow onto the pad and fit its footprint.
+    contactMesh.position.set(x, supportY + 0.004, z);
+    contactMesh.scale.set((width - 1.8) / 13, (length - 1.8) / 13, 1);
+    contactMesh.material.opacity = 0.5;
+    placement = { offsetY, supportY, minY: bounds.min.y + offsetY, width, length, x, z };
+    return { ...placement };
+  }
+
   /* ---- instrument tray, off to the side ---------------------------------- */
   const trayMat = track(new THREE.MeshPhysicalMaterial({
     color: 0x2c343b, roughness: 0.28, metalness: 0.92, clearcoat: 0.3 }));
@@ -24495,6 +24650,27 @@ function setupEnvironment(THREE, deps, refs) {
     get composer() { return composer; },
     get bloom() { return bloom; },
     tableY: TABLE_Y,
+    fitSpecimen,
+    getRemovalSupport(part, slot) {
+      // Detached structures remain in world space on the steel work surface,
+      // beyond the specimen tray, rather than inheriting a rotated local plane.
+      const width = placement ? placement.width : 10;
+      const x = placement ? placement.x : 0;
+      part.mesh.updateWorldMatrix(true, true);
+      const size = new THREE.Box3().setFromObject(part.mesh, true).getSize(new THREE.Vector3());
+      const depth = Math.max(1, size.z);
+      const organWidth = Math.max(1, size.x);
+      if (removalZ + depth > 8 && removalZ > -8) {
+        removalZ = -8;
+        removalX += removalColumnWidth + 0.6;
+        removalColumnWidth = 0;
+      }
+      const z = removalZ + depth / 2;
+      removalZ += depth + 0.6;
+      removalColumnWidth = Math.max(removalColumnWidth, organWidth);
+      return { x: x + width / 2 + removalX + organWidth / 2 + 0.6, y: TABLE_Y + 0.02, z };
+    },
+    get placement() { return placement && { ...placement }; },
     dispose() {
       added.forEach((o) => scene.remove(o));
       owned.forEach((o) => { try { o.dispose && o.dispose(); } catch (e) {} });
@@ -27047,8 +27223,16 @@ body.handmode #dock{display:grid;grid-template-columns:repeat(2,60px);gap:14px;p
 #say.warn .lbl{color:var(--warn)}
 
 /* ── hand cockpit ──────────────────────────────────────────────────────── */
-#hand{left:22px;bottom:22px;width:222px;padding:14px;display:flex;flex-direction:column;gap:11px}
+#hand{left:194px;bottom:22px;width:260px;padding:15px;display:flex;flex-direction:column;gap:10px;
+      border-color:rgba(52,211,153,.36);background:linear-gradient(145deg,rgba(19,42,33,.94),rgba(7,14,17,.94));
+      max-height:calc(100dvh - 200px);overflow-y:auto;overscroll-behavior:contain}
+/* Beside the widest instrument dock, not stacked above it. This also leaves
+   the bottom-left Entelloq launcher uncovered when the camera preview expands. */
+body:not(.bioq-phone).physio-on #hand{max-height:calc(100dvh - 340px)}
 .handhead{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.handhead .lbl{color:var(--em);letter-spacing:.13em}
+.handtools{display:flex;align-items:center;gap:6px;flex:none}
+#handpreview{display:none}
 .hcount{font-family:var(--mono);font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);
         border:1px solid var(--line);border-radius:6px;padding:2px 7px}
 #hand.live .hcount{color:var(--em);border-color:rgba(52,211,153,.35)}
@@ -27104,18 +27288,19 @@ body.handmode #dock{display:grid;grid-template-columns:repeat(2,60px);gap:14px;p
    the panel still shows that tracking is live. */
 #selfwrap.nocam{background:rgba(4,7,10,.85);border-color:rgba(52,211,153,.16)}
 #selfwrap.nocam #selfview{display:none}
-#handbtn{margin-top:1px;width:100%;padding:9px 12px;border:1px solid rgba(52,211,153,.42);border-radius:9px;
-         cursor:pointer;color:var(--em);font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+#handbtn{margin-top:1px;width:100%;min-height:44px;padding:11px 12px;border:1px solid rgba(52,211,153,.62);border-radius:9px;
+         cursor:pointer;color:#ddfff0;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
          text-transform:uppercase;transition:.16s;
-         background:linear-gradient(180deg,rgba(52,211,153,.16),rgba(52,211,153,.07))}
+         background:linear-gradient(135deg,rgba(52,211,153,.3),rgba(52,211,153,.12))}
 #handbtn:hover{background:rgba(52,211,153,.24);box-shadow:0 0 18px -4px rgba(52,211,153,.6)}
+#handbtn:focus-visible,#handpreview:focus-visible,#cambtn:focus-visible{outline:2px solid var(--em);outline-offset:3px}
 #handbtn:not(.off){border-color:rgba(232,115,94,.42);color:#f0a494;
          background:linear-gradient(180deg,rgba(232,115,94,.14),rgba(232,115,94,.06))}
 #handbtn:not(.off):hover{background:rgba(232,115,94,.18);box-shadow:0 0 18px -6px rgba(232,115,94,.6)}
-.hnote{font-size:10px;line-height:1.5;color:var(--faint)}
+.hnote{font-size:10px;line-height:1.5;color:var(--dim)}
 
 /* ── first-run coach ───────────────────────────────────────────────────── */
-#coach{left:252px;bottom:var(--edge);width:238px;z-index:24;padding:14px 15px;opacity:0;transform:translateY(10px);
+#coach{left:468px;bottom:var(--edge);width:238px;z-index:24;padding:14px 15px;opacity:0;transform:translateY(10px);
        pointer-events:none;transition:.32s cubic-bezier(.2,.7,.3,1)}
 #coach.on{opacity:1;transform:none}
 #coach ul{margin:9px 0 11px;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px}
@@ -27455,7 +27640,7 @@ body.bioq-phone #rail{left:0;right:0;top:auto;bottom:var(--above-dock);width:aut
 body.bioq-phone #rail #struct{max-height:30vh;overflow-y:auto;padding:12px 14px}
 body.bioq-phone #struct .n{font-size:14px}
 body.bioq-phone #vig{max-height:30vh}
-body.bioq-phone #drawbody{max-height:40vh;gap:14px}
+body.bioq-phone #drawbody{max-height:30vh;gap:14px}
 body.bioq-phone #railfoot{justify-content:flex-start;gap:6px;padding:7px}
 /* Everything you tap grows to something a thumb can actually land on. */
 body.bioq-phone .minibtn,body.bioq-phone .bchip{padding:9px 12px;font-size:9.5px}
@@ -27479,11 +27664,29 @@ body.bioq-phone #recl{font-size:11px}
 body.bioq-phone #recclose{position:absolute;right:10px;top:10px}
 body.bioq-phone .mobonly{display:inline-flex}
 
-/* hand tracking is not offered here at all (see buildShell for why), so the
-   cockpit goes rather than sitting there as a control that would not work.
-   The coach card is positioned defensively anyway — it costs one rule. */
-body.bioq-phone #hand{display:none}
-body.bioq-phone #coach{left:var(--pl);right:var(--pr);width:auto;bottom:var(--above-dock)}
+/* The same hand control is available on a propped-up phone. It lives in the
+   rail's normal flow above the dock, so its height never overlaps Console.
+   Preview is opt-in on a small screen; stopping the camera is always visible. */
+body.bioq-phone #hand{position:relative;left:auto;bottom:auto;width:100%;padding:11px 12px;
+  flex:none;gap:7px;display:flex;max-height:none;overflow:visible}
+body.bioq-phone .handhead .lbl{font-size:9px;letter-spacing:.1em}
+body.bioq-phone #handbtn{margin:0;min-height:44px}
+body.bioq-phone #handstat{font-size:8px;letter-spacing:.06em;line-height:1.4}
+body.bioq-phone #handnote{font-size:10px;line-height:1.4}
+body.bioq-phone #hand.live #handpreview{display:inline-flex;min-height:32px;padding:6px 8px;align-items:center}
+body.bioq-phone #hand:not(.preview-open) #selfwrap,
+body.bioq-phone #hand:not(.preview-open) #handlive,
+body.bioq-phone #hand:not(.preview-open) #camrow{display:none}
+body.bioq-phone #selfwrap{height:108px;aspect-ratio:auto}
+body.bioq-phone #handlive{flex-direction:row;align-items:center;gap:8px}
+body.bioq-phone .gripwrap{flex:1}
+body.bioq-phone #coach{position:relative;left:auto;right:auto;bottom:auto;width:100%;
+  display:none;flex:none;max-height:20vh;overflow-y:auto;z-index:28;transform:none}
+body.bioq-phone #coach.on{display:block}
+/* Lab-only positioning: the shared launcher otherwise lands over the tools
+   and hand card. Its existing top-level menu and cross-app links are unchanged. */
+body.bioq-phone #eqx-fab{left:var(--pl);top:calc(var(--sat) + 8px);bottom:auto;min-height:44px;
+  padding:7px 10px;font-size:11px}
 
 /* the viva and the keyboard reference stop being dialogs and become the screen */
 body.bioq-phone #viva,body.bioq-phone #keys{padding:0}
@@ -27529,8 +27732,24 @@ body.bioq-phone #phy-mon{display:none}
   body.bioq-phone #obj{padding:8px 12px}
   body.bioq-phone #rail{max-height:46vh}
   body.bioq-phone #rail #struct{max-height:26vh}
-  body.bioq-phone #drawbody{max-height:34vh}
+  body.bioq-phone #drawbody{max-height:24vh}
   body.bioq-phone #vig{max-height:24vh}
+  body.bioq-phone #hand{display:grid;grid-template-columns:minmax(0,1fr) 148px;gap:5px 10px;padding:8px 11px}
+  body.bioq-phone #handbtn{grid-column:2;grid-row:1 / span 2}
+  body.bioq-phone #handstat{grid-column:1;grid-row:2}
+  body.bioq-phone #handnote{display:none}
+  body.bioq-phone #hand #selfwrap,body.bioq-phone #hand #handlive,body.bioq-phone #hand #camrow{grid-column:1 / -1}
+  body.bioq-phone #selfwrap{height:80px}
+  body.bioq-phone #hand #selfwrap{grid-column:1;grid-row:3 / span 2;width:96px;height:64px}
+  body.bioq-phone #hand #handlive{grid-column:2;grid-row:3}
+  body.bioq-phone #hand #camrow{grid-column:2;grid-row:4}
+}
+@media (min-width:521px) and (max-width:1100px){
+  body:not(.bioq-phone) #hint{left:468px;right:22px;transform:none;font-size:11px}
+}
+@media (prefers-reduced-motion:reduce){
+  #hand *,#coach{transition:none!important;animation:none!important}
+  #selflabel::before{animation:none}
 }
 `;
 
@@ -27748,19 +27967,20 @@ function buildShell(root) {
                      <div class="acts"></div></div>`);
   const hint = el(`<div id="hint" class="chrome">—</div>`);
   const say = el(`<div id="say" class="chrome"><span class="lbl">Demonstrator</span><div class="t"></div></div>`);
-  const handBox = el(`<div id="hand" class="chrome">
-      <div class="handhead"><span class="lbl">Hand tracking</span><span id="handcount" class="hcount">—</span></div>
+  const handBox = el(`<section id="hand" class="chrome" aria-label="Hand controls">
+      <div class="handhead"><span class="lbl">Hands-on dissection</span><div class="handtools"><span id="handcount" class="hcount">—</span>
+        <button id="handpreview" class="minibtn" type="button" aria-expanded="false" aria-controls="selfwrap handlive camrow">Preview</button></div></div>
+      <button id="handbtn" class="off" type="button" aria-describedby="handnote">Use my hands</button>
+      <div id="handstat" role="status" aria-live="polite"><span class="dot"></span><span class="stxt">Camera off</span></div>
+      <div id="handnote" class="hnote">Pinch to grip. Move to aim. Camera stays on-device — nothing is recorded.</div>
       <div id="selfwrap"><video id="selfview" muted playsinline></video><canvas id="skel"></canvas><span id="selflabel">You · live</span></div>
       <div id="handlive">
-        <div id="handstat"><span class="dot"></span><span class="stxt">Camera off</span></div>
         <span id="gesturechip" class="gchip" data-k="dim">—</span>
         <div class="gripwrap"><span class="lbl">Grip</span><div class="griptrack"><div id="gripfill"></div></div></div>
       </div>
       <div id="camrow"><span class="lbl">Show camera</span>
         <button id="cambtn" class="tgl" role="switch" aria-checked="true"
-          aria-label="Show camera"><i></i></button></div>
-      <button id="handbtn" class="off">Use my hands</button>
-      <div id="handnote" class="hnote">Drive the instruments with a pinch. Runs on-device — nothing is recorded.</div></div>`);
+          aria-label="Show camera"><i></i></button></div></section>`);
   const coach = el(`<div id="coach" class="chrome">
       <span class="lbl em">Your hands</span>
       <ul>
@@ -27835,6 +28055,7 @@ function buildShell(root) {
 
   /* hand-cockpit element refs */
   const handBtn = handBox.querySelector('#handbtn');
+  const handPreview = handBox.querySelector('#handpreview');
   const selfview = handBox.querySelector('#selfview');
   const skel = handBox.querySelector('#skel');
   const handStat = handBox.querySelector('#handstat');
@@ -28010,6 +28231,7 @@ function buildShell(root) {
      find in a hurry, and its current setting is mirrored on the always-visible
      chip in the rail foot so it is one click away with the drawer shut. */
   const drawBody = drawer.querySelector('#drawbody');
+  drawBody.appendChild(el(`<div class="dsec"><div class="dnote">Illustrative teaching anatomy. Species-specific details and tissue behaviour remain simplified; not for clinical use.</div></div>`));
   const railFoot = drawer.querySelector('#railfoot');
   const secBlood = drawer.querySelector('#secblood');
   const secImg = drawer.querySelector('#secimg');
@@ -28298,6 +28520,12 @@ function buildShell(root) {
   /* ── hand cockpit ─────────────────────────────────────────────────────── */
   let handOn = false;
   handBtn.onclick = () => { handOn = !handOn; fire('hands', handOn); };
+  handPreview.onclick = () => {
+    const expanded = handBox.classList.toggle('preview-open');
+    handPreview.setAttribute('aria-expanded', String(expanded));
+    handPreview.textContent = expanded ? 'Hide' : 'Preview';
+    handPreview.setAttribute('aria-label', expanded ? 'Hide tracking preview' : 'Show tracking preview');
+  };
 
   /* ── show-camera preference ────────────────────────────────────────────
      Hand tracking and the camera PICTURE are two different things: the tracker
@@ -28434,7 +28662,10 @@ function buildShell(root) {
     else if (H.health === 2) { cls = 'deg'; txt = 'Tracking degraded'; }
     else { cls = 'ok'; txt = 'Tracking'; }
     handStat.className = cls;
-    handStat.querySelector('.stxt').textContent = txt;
+    // The status is a live region, unlike the fast-moving grip meter. Only
+    // announce a lifecycle/health change, not an identical label every frame.
+    const statusText = handStat.querySelector('.stxt');
+    if (statusText.textContent !== txt) statusText.textContent = txt;
 
     // hand count
     handCount.textContent = !tracking ? '—'
@@ -28452,9 +28683,11 @@ function buildShell(root) {
     gripfill.dataset.on = grip > 0.55 ? '1' : '0';
 
     // note
-    handNote.textContent = H.on
-      ? 'Nothing is recorded. Keyboard 1–5 and the mouse still work.'
-      : 'Drive the instruments with a pinch. Runs on-device — nothing is recorded.';
+    handNote.textContent = SH_PHONE
+      ? 'Prop your phone up. Pinch to grip, move to aim. On-device camera; performance varies. Touch still works.'
+      : H.on
+        ? 'Nothing is recorded. Keyboard 1–6 and the mouse still work.'
+        : 'Pinch to grip. Move to aim. Camera stays on-device — nothing is recorded.';
   }
 
   function setHandState(s) {
@@ -28491,7 +28724,7 @@ function buildShell(root) {
      Nearly all of the phone layout is CSS (the body.bioq-phone block in
      SHELL_CSS). This is the part that cannot be: three surfaces that on a
      desktop are reachable only because there is a keyboard or a spare corner,
-     and one that is honestly withdrawn.
+     and the compact hand panel that stays within the bottom stack.
 
      Guarded by SH_PHONE, which is false on every desktop, so none of this can
      reach one. */
@@ -28505,19 +28738,15 @@ function buildShell(root) {
     secSys.appendChild(systems);
     drawBody.appendChild(secSys);
 
-    // Hand tracking, honestly. The camera is on the same side of the phone as
-    // your face; you are holding the thing you would have to gesture at; and
-    // the landmark detector would be competing for the GPU with the specimen it
-    // is meant to be pointing at. Offering a switch that started a camera and
-    // then tracked badly would be worse than not offering one. Nothing is
-    // really lost either: tracking was only ever an approximation of touching
-    // the specimen, and this screen does that directly. So the cockpit is gone
-    // (CSS) and this says why, where the settings are.
+    // Reuse the same control and permission request. A phone is a valid camera
+    // when it is propped up, but performance and lighting still matter.
+    rail.appendChild(handBox);
+    rail.insertBefore(coach, handBox);
     const secHand = el(`<div class="dsec" id="sechand"><span class="lbl">Hand tracking</span>
-        <div class="dnote">Hand tracking is a desktop feature. It wants a camera you are not
-        holding, and running the detector alongside the specimen costs the frame rate of
-        both. Here your finger is the instrument: touch a structure to use the instrument
-        you have selected, drag anywhere else to turn the specimen, pinch to zoom.</div></div>`);
+        <div class="dnote">Prop your phone securely with its front camera facing you, leave room for your hand,
+        and use even lighting. Tap Use my hands to allow the camera. Tracking runs on-device and nothing is
+        recorded. Performance depends on your phone; Stop camera returns to touch-only use. Touch a structure
+        to use the selected instrument, drag elsewhere to turn the specimen, or pinch the screen to zoom.</div></div>`);
     drawBody.appendChild(secHand);
 
     // The attempt record and the viva are the L and V keys on a desktop. Without
@@ -28536,6 +28765,7 @@ function buildShell(root) {
     recClose.onclick = () => rec.classList.remove('on');
     rec.appendChild(recClose);
   }
+  renderHand();
 
   return {
     on, setTool, setStructure, setSpecimen, setHandState, showViva,
@@ -28661,6 +28891,8 @@ function bootScene(root) {
   controls.enableDamping = true;
   controls.dampingFactor = 0.08;
   controls.enablePan = false;
+  // This is a bench, not a free-floating turntable. Never orbit below its top.
+  controls.maxPolarAngle = Math.PI * 0.47;
 
   // Premium lighting + a lit tray + bloom, if env.js is present. Falls back to a
   // basic rig and plain rendering otherwise, so the app runs at any build stage.
@@ -28677,11 +28909,7 @@ function bootScene(root) {
     const r = new THREE.DirectionalLight(0x38e0d8, 1.4); r.position.set(-6, 3, -6); scene.add(r);
   }
 
-  // Ambient dust in the lit air — atmosphere the specimen sits inside. Additive,
-  // so it can only ever add a faint glint; safe to ship unseen.
-  if (typeof createDust === 'function') {
-    try { dust = createDust(THREE, scene); } catch (e) { console.warn('dust failed', e); dust = null; }
-  }
+  // No drifting particles over the working field: they obscure fine anatomy.
 
   // The cinematic stack — SSAO, depth of field, grain, chromatic aberration,
   // vignette — layered ON TOP of env's bloom chain. It probes GPU capability and
@@ -29286,6 +29514,8 @@ function actionsFor(partId) {
 function setPhysiology(on) {
   if (!physio) return;
   physio.setRunning(on);
+  if (soft) soft.setLife(!!on);
+  if (sfx) sfx.setBreathing(!!on);
   if (on) physio.mountMonitor(document.body); else physio.unmountMonitor();
   // The dock's top boundary depends on whether the monitor is occupying the
   // corner; shell.js reads this class to pick its floor.
@@ -29332,7 +29562,7 @@ function setCase(caseId) {
   if (soft) { soft.dispose(); soft = null; }
   const r = caseId ? pathology.apply(caseId) : (pathology.clear(), null);
   if (typeof createSoftBody === 'function') {
-    try { soft = createSoftBody(THREE, parts); soft.setLife(true); }
+    try { soft = createSoftBody(THREE, parts); soft.setLife(!!(physio && physio.running())); }
     catch (e) { console.warn('softbody rebuild failed', e); soft = null; }
   }
   if (shell.setVignette) shell.setVignette(pathology.vignette());
@@ -29397,14 +29627,23 @@ function loadSpecimen(id) {
   }
 
   if (soft) { soft.dispose(); soft = null; }
+  // Fit once, after authored surface detail and before interaction systems cache
+  // rest positions. Never re-fit as a student lifts or removes an organ.
+  if (env && env.fitSpecimen) {
+    const placement = env.fitSpecimen(group);
+    camera.position.y += placement.offsetY;
+    controls.target.y += placement.offsetY;
+    controls.update();
+  }
   if (typeof createSoftBody === 'function') {
-    try { soft = createSoftBody(THREE, parts); soft.setLife(true); }
+    try { soft = createSoftBody(THREE, parts); soft.setLife(false); }
     catch (e) { console.warn('softbody failed', e); soft = null; }
   }
 
   dissection = createDissection(THREE, {
     scene, camera, group, parts, onEvent,
     requiresPinning: SPECIMENS[id].requiresPinning !== false,
+    getRemovalSupport: env && env.getRemovalSupport,
   });
   dissection.setTool(currentTool === 'swab' ? 'probe' : currentTool);
 
@@ -29436,7 +29675,7 @@ function loadSpecimen(id) {
       if (blood && blood.setPhaseSource) blood.setPhaseSource(physio.phase);
       // One clock: the heartbeat sound, the visible squeeze and the ECG all read
       // physio.phase, so the lub-dub cannot drift from the beat you can see.
-      if (sfx) { sfx.setPhaseSource(physio.phase); sfx.setBreathing(true); }
+      if (sfx) { sfx.setPhaseSource(physio.phase); sfx.setBreathing(false); }
     } catch (e) { console.warn('physiology failed', e); physio = null; }
   }
 
@@ -29589,15 +29828,7 @@ function tick(t) {
       intro.update(dt);
     } else {
       controls.update();
-      // Still whenever anything is being touched — a drag, a grip, or a tracked
-      // hand present — so idle drift never compounds with hand-tracking jitter or
-      // nudges a live incision.
-      // TCH.ids covers the touch case the other two miss: an orbit drag sets
-      // neither mouse.down nor gripping, and letting the idle drift ride along
-      // on top of it makes the camera feel like it is sliding out of your hand.
-      const busy = mouse.down || input.gripping || TCH.ids.size > 0
-        || (handMode && hands && hands.snapshot && hands.snapshot.active);
-      applyCameraLife(dt, busy);
+      // A dissection specimen stays still unless the learner moves the camera.
     }
     if (postfx) {
       // Focus follows the blade: whatever the instrument is touching is what the
@@ -30043,6 +30274,7 @@ function startApp() {
   };
   window.__LAB.THREE = THREE;
   window.__LAB.camera = camera;
+  window.__LAB.environment = () => env;
   // The flick detector is otherwise only reachable behind a live webcam, which no
   // automated check has. Exposed so its thresholds can be regression-tested.
   // NOTE for anyone driving this from a test: the snap gate needs TWO calls with

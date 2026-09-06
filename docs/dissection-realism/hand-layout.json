@@ -1,0 +1,4482 @@
+{
+  "at": "2026-09-06T12:08:04.328Z",
+  "kind": "real-shell-layout-harness-no-renderer-no-camera",
+  "complete": true,
+  "observations": [
+    {
+      "name": "desktop",
+      "state": "off",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "phone": false,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 194,
+          "y": 815,
+          "width": 260,
+          "height": 163,
+          "right": 454,
+          "bottom": 978,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection— Preview Use my hands Camera off Pinch to grip. Move to aim. Camera stays on-device — nothing is recorded. You · live — "
+        },
+        "#handbtn": {
+          "x": 210,
+          "y": 858,
+          "width": 228,
+          "height": 44,
+          "right": 438,
+          "bottom": 902,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Use my hands"
+        },
+        "#handstat": {
+          "x": 210,
+          "y": 912,
+          "width": 228,
+          "height": 10,
+          "right": 438,
+          "bottom": 922,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Camera off"
+        },
+        "#handpreview": null,
+        "#selfwrap": null,
+        "#dock": {
+          "x": 22,
+          "y": 300,
+          "width": 76,
+          "height": 391,
+          "right": 98,
+          "bottom": 691,
+          "centerClickable": true,
+          "overflow": true,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 1098,
+          "y": 848,
+          "width": 320,
+          "height": 40,
+          "right": 1418,
+          "bottom": 888,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsole"
+        },
+        "#eqx-fab": {
+          "x": 18,
+          "y": 938,
+          "width": 102.28125,
+          "height": 44,
+          "right": 120.28125,
+          "bottom": 982,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 1231.984375,
+          "y": 22,
+          "width": 37,
+          "height": 37,
+          "right": 1268.984375,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 1277.984375,
+          "y": 22,
+          "width": 140.015625,
+          "height": 37,
+          "right": 1418,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 444.6171875,
+          "y": 22,
+          "width": 550.765625,
+          "height": 55.5625,
+          "right": 995.3828125,
+          "bottom": 77.5625,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "desktop",
+      "state": "failed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "phone": false,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 194,
+          "y": 805,
+          "width": 260,
+          "height": 173,
+          "right": 454,
+          "bottom": 978,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection— Preview Use my hands Camera permission denied. You can still use touch or mouse. Pinch to grip. Move to aim. Camera sta"
+        },
+        "#handbtn": {
+          "x": 210,
+          "y": 848,
+          "width": 228,
+          "height": 44,
+          "right": 438,
+          "bottom": 892,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Use my hands"
+        },
+        "#handstat": {
+          "x": 210,
+          "y": 902,
+          "width": 228,
+          "height": 20,
+          "right": 438,
+          "bottom": 922,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Camera permission denied. You can still use touch or mouse."
+        },
+        "#handpreview": null,
+        "#selfwrap": null,
+        "#dock": {
+          "x": 22,
+          "y": 300,
+          "width": 76,
+          "height": 391,
+          "right": 98,
+          "bottom": 691,
+          "centerClickable": true,
+          "overflow": true,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 1098,
+          "y": 848,
+          "width": 320,
+          "height": 40,
+          "right": 1418,
+          "bottom": 888,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsole"
+        },
+        "#eqx-fab": {
+          "x": 18,
+          "y": 938,
+          "width": 102.28125,
+          "height": 44,
+          "right": 120.28125,
+          "bottom": 982,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 1231.984375,
+          "y": 22,
+          "width": 37,
+          "height": 37,
+          "right": 1268.984375,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 1277.984375,
+          "y": 22,
+          "width": 140.015625,
+          "height": 37,
+          "right": 1418,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 444.6171875,
+          "y": 22,
+          "width": 550.765625,
+          "height": 55.5625,
+          "right": 995.3828125,
+          "bottom": 77.5625,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "desktop",
+      "state": "live-coach",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "phone": false,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 194,
+          "y": 556,
+          "width": 260,
+          "height": 422,
+          "right": 454,
+          "bottom": 978,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection2 hands Preview Stop camera Tracking Nothing is recorded. Keyboard 1–6 and the mouse still work. You · live Pinch — grip "
+        },
+        "#handbtn": {
+          "x": 210,
+          "y": 599,
+          "width": 228,
+          "height": 44,
+          "right": 438,
+          "bottom": 643,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Stop camera"
+        },
+        "#handstat": {
+          "x": 210,
+          "y": 653,
+          "width": 228,
+          "height": 10,
+          "right": 438,
+          "bottom": 663,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Tracking"
+        },
+        "#handpreview": null,
+        "#selfwrap": {
+          "x": 210,
+          "y": 713,
+          "width": 228,
+          "height": 171,
+          "right": 438,
+          "bottom": 884,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "You · live"
+        },
+        "#dock": {
+          "x": 22,
+          "y": 383,
+          "width": 162,
+          "height": 212,
+          "right": 184,
+          "bottom": 595,
+          "centerClickable": true,
+          "overflow": true,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 1098,
+          "y": 848,
+          "width": 320,
+          "height": 40,
+          "right": 1418,
+          "bottom": 888,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsole"
+        },
+        "#eqx-fab": {
+          "x": 18,
+          "y": 938,
+          "width": 102.28125,
+          "height": 44,
+          "right": 120.28125,
+          "bottom": 982,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 1231.984375,
+          "y": 22,
+          "width": 37,
+          "height": 37,
+          "right": 1268.984375,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 1277.984375,
+          "y": 22,
+          "width": 140.015625,
+          "height": 37,
+          "right": 1418,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": {
+          "x": 468,
+          "y": 724.25,
+          "width": 238,
+          "height": 253.75,
+          "right": 706,
+          "bottom": 978,
+          "centerClickable": false,
+          "overflow": false,
+          "text": "Your hands Pinch your fingers to grip Move your hand to aim the instrument Open your hand to let go Twist your open hand like a dial to chan"
+        },
+        "#obj": {
+          "x": 444.6171875,
+          "y": 22,
+          "width": 550.765625,
+          "height": 55.5625,
+          "right": 995.3828125,
+          "bottom": 77.5625,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "desktop",
+      "state": "live-preview-closed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "phone": false,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 194,
+          "y": 556,
+          "width": 260,
+          "height": 422,
+          "right": 454,
+          "bottom": 978,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection2 hands Preview Stop camera Tracking Nothing is recorded. Keyboard 1–6 and the mouse still work. You · live Pinch — grip "
+        },
+        "#handbtn": {
+          "x": 210,
+          "y": 599,
+          "width": 228,
+          "height": 44,
+          "right": 438,
+          "bottom": 643,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Stop camera"
+        },
+        "#handstat": {
+          "x": 210,
+          "y": 653,
+          "width": 228,
+          "height": 10,
+          "right": 438,
+          "bottom": 663,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Tracking"
+        },
+        "#handpreview": null,
+        "#selfwrap": {
+          "x": 210,
+          "y": 713,
+          "width": 228,
+          "height": 171,
+          "right": 438,
+          "bottom": 884,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "You · live"
+        },
+        "#dock": {
+          "x": 22,
+          "y": 383,
+          "width": 162,
+          "height": 226.4375,
+          "right": 184,
+          "bottom": 609.4375,
+          "centerClickable": true,
+          "overflow": true,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 1098,
+          "y": 848,
+          "width": 320,
+          "height": 40,
+          "right": 1418,
+          "bottom": 888,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsole"
+        },
+        "#eqx-fab": {
+          "x": 18,
+          "y": 938,
+          "width": 102.28125,
+          "height": 44,
+          "right": 120.28125,
+          "bottom": 982,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 1231.984375,
+          "y": 22,
+          "width": 37,
+          "height": 37,
+          "right": 1268.984375,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 1277.984375,
+          "y": 22,
+          "width": 140.015625,
+          "height": 37,
+          "right": 1418,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 444.6171875,
+          "y": 22,
+          "width": 550.765625,
+          "height": 55.5625,
+          "right": 995.3828125,
+          "bottom": 77.5625,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "desktop",
+      "state": "live-preview-open",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "phone": false,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 194,
+          "y": 556,
+          "width": 260,
+          "height": 422,
+          "right": 454,
+          "bottom": 978,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection2 hands Preview Stop camera Tracking Nothing is recorded. Keyboard 1–6 and the mouse still work. You · live Pinch — grip "
+        },
+        "#handbtn": {
+          "x": 210,
+          "y": 599,
+          "width": 228,
+          "height": 44,
+          "right": 438,
+          "bottom": 643,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Stop camera"
+        },
+        "#handstat": {
+          "x": 210,
+          "y": 653,
+          "width": 228,
+          "height": 10,
+          "right": 438,
+          "bottom": 663,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Tracking"
+        },
+        "#handpreview": null,
+        "#selfwrap": {
+          "x": 210,
+          "y": 713,
+          "width": 228,
+          "height": 171,
+          "right": 438,
+          "bottom": 884,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "You · live"
+        },
+        "#dock": {
+          "x": 22,
+          "y": 383,
+          "width": 162,
+          "height": 226.4375,
+          "right": 184,
+          "bottom": 609.4375,
+          "centerClickable": true,
+          "overflow": true,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 1098,
+          "y": 848,
+          "width": 320,
+          "height": 40,
+          "right": 1418,
+          "bottom": 888,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsole"
+        },
+        "#eqx-fab": {
+          "x": 18,
+          "y": 938,
+          "width": 102.28125,
+          "height": 44,
+          "right": 120.28125,
+          "bottom": 982,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 1231.984375,
+          "y": 22,
+          "width": 37,
+          "height": 37,
+          "right": 1268.984375,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 1277.984375,
+          "y": 22,
+          "width": 140.015625,
+          "height": 37,
+          "right": 1418,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 444.6171875,
+          "y": 22,
+          "width": 550.765625,
+          "height": 55.5625,
+          "right": 995.3828125,
+          "bottom": 77.5625,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "desktop",
+      "state": "live-console-open",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "phone": false,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 194,
+          "y": 556,
+          "width": 260,
+          "height": 422,
+          "right": 454,
+          "bottom": 978,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection2 hands Preview Stop camera Tracking Nothing is recorded. Keyboard 1–6 and the mouse still work. You · live Pinch — grip "
+        },
+        "#handbtn": {
+          "x": 210,
+          "y": 599,
+          "width": 228,
+          "height": 44,
+          "right": 438,
+          "bottom": 643,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Stop camera"
+        },
+        "#handstat": {
+          "x": 210,
+          "y": 653,
+          "width": 228,
+          "height": 10,
+          "right": 438,
+          "bottom": 663,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Tracking"
+        },
+        "#handpreview": null,
+        "#selfwrap": {
+          "x": 210,
+          "y": 713,
+          "width": 228,
+          "height": 171,
+          "right": 438,
+          "bottom": 884,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "You · live"
+        },
+        "#dock": {
+          "x": 22,
+          "y": 383,
+          "width": 162,
+          "height": 236,
+          "right": 184,
+          "bottom": 619,
+          "centerClickable": true,
+          "overflow": true,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 1098,
+          "y": 848,
+          "width": 320,
+          "height": 40,
+          "right": 1418,
+          "bottom": 888,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRClose"
+        },
+        "#eqx-fab": {
+          "x": 18,
+          "y": 938,
+          "width": 102.28125,
+          "height": 44,
+          "right": 120.28125,
+          "bottom": 982,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 1231.984375,
+          "y": 22,
+          "width": 37,
+          "height": 37,
+          "right": 1268.984375,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 1277.984375,
+          "y": 22,
+          "width": 140.015625,
+          "height": 37,
+          "right": 1418,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 444.6171875,
+          "y": 22,
+          "width": 550.765625,
+          "height": 55.5625,
+          "right": 995.3828125,
+          "bottom": 77.5625,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "laptop",
+      "state": "off",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "phone": false,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 194,
+          "y": 583,
+          "width": 260,
+          "height": 163,
+          "right": 454,
+          "bottom": 746,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection— Preview Use my hands Camera off Pinch to grip. Move to aim. Camera stays on-device — nothing is recorded. You · live — "
+        },
+        "#handbtn": {
+          "x": 210,
+          "y": 626,
+          "width": 228,
+          "height": 44,
+          "right": 438,
+          "bottom": 670,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Use my hands"
+        },
+        "#handstat": {
+          "x": 210,
+          "y": 680,
+          "width": 228,
+          "height": 10,
+          "right": 438,
+          "bottom": 690,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Camera off"
+        },
+        "#handpreview": null,
+        "#selfwrap": null,
+        "#dock": {
+          "x": 22,
+          "y": 274,
+          "width": 138,
+          "height": 200,
+          "right": 160,
+          "bottom": 474,
+          "centerClickable": true,
+          "overflow": true,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 1024,
+          "y": 616,
+          "width": 320,
+          "height": 40,
+          "right": 1344,
+          "bottom": 656,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsole"
+        },
+        "#eqx-fab": {
+          "x": 18,
+          "y": 706,
+          "width": 102.28125,
+          "height": 44,
+          "right": 120.28125,
+          "bottom": 750,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 1157.984375,
+          "y": 22,
+          "width": 37,
+          "height": 37,
+          "right": 1194.984375,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 1203.984375,
+          "y": 22,
+          "width": 140.015625,
+          "height": 37,
+          "right": 1344,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 407.6171875,
+          "y": 22,
+          "width": 550.765625,
+          "height": 55.5625,
+          "right": 958.3828125,
+          "bottom": 77.5625,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "laptop",
+      "state": "failed",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "phone": false,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 194,
+          "y": 573,
+          "width": 260,
+          "height": 173,
+          "right": 454,
+          "bottom": 746,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection— Preview Use my hands Camera permission denied. You can still use touch or mouse. Pinch to grip. Move to aim. Camera sta"
+        },
+        "#handbtn": {
+          "x": 210,
+          "y": 616,
+          "width": 228,
+          "height": 44,
+          "right": 438,
+          "bottom": 660,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Use my hands"
+        },
+        "#handstat": {
+          "x": 210,
+          "y": 670,
+          "width": 228,
+          "height": 20,
+          "right": 438,
+          "bottom": 690,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Camera permission denied. You can still use touch or mouse."
+        },
+        "#handpreview": null,
+        "#selfwrap": null,
+        "#dock": {
+          "x": 22,
+          "y": 274,
+          "width": 138,
+          "height": 200,
+          "right": 160,
+          "bottom": 474,
+          "centerClickable": true,
+          "overflow": true,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 1024,
+          "y": 616,
+          "width": 320,
+          "height": 40,
+          "right": 1344,
+          "bottom": 656,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsole"
+        },
+        "#eqx-fab": {
+          "x": 18,
+          "y": 706,
+          "width": 102.28125,
+          "height": 44,
+          "right": 120.28125,
+          "bottom": 750,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 1157.984375,
+          "y": 22,
+          "width": 37,
+          "height": 37,
+          "right": 1194.984375,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 1203.984375,
+          "y": 22,
+          "width": 140.015625,
+          "height": 37,
+          "right": 1344,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 407.6171875,
+          "y": 22,
+          "width": 550.765625,
+          "height": 55.5625,
+          "right": 958.3828125,
+          "bottom": 77.5625,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "laptop",
+      "state": "live-coach",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "phone": false,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 194,
+          "y": 324,
+          "width": 260,
+          "height": 422,
+          "right": 454,
+          "bottom": 746,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection2 hands Preview Stop camera Tracking Nothing is recorded. Keyboard 1–6 and the mouse still work. You · live Pinch — grip "
+        },
+        "#handbtn": {
+          "x": 210,
+          "y": 367,
+          "width": 228,
+          "height": 44,
+          "right": 438,
+          "bottom": 411,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Stop camera"
+        },
+        "#handstat": {
+          "x": 210,
+          "y": 421,
+          "width": 228,
+          "height": 10,
+          "right": 438,
+          "bottom": 431,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Tracking"
+        },
+        "#handpreview": null,
+        "#selfwrap": {
+          "x": 210,
+          "y": 481,
+          "width": 228,
+          "height": 171,
+          "right": 438,
+          "bottom": 652,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "You · live"
+        },
+        "#dock": {
+          "x": 22,
+          "y": 267,
+          "width": 162,
+          "height": 212,
+          "right": 184,
+          "bottom": 479,
+          "centerClickable": true,
+          "overflow": true,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 1024,
+          "y": 616,
+          "width": 320,
+          "height": 40,
+          "right": 1344,
+          "bottom": 656,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsole"
+        },
+        "#eqx-fab": {
+          "x": 18,
+          "y": 706,
+          "width": 102.28125,
+          "height": 44,
+          "right": 120.28125,
+          "bottom": 750,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 1157.984375,
+          "y": 22,
+          "width": 37,
+          "height": 37,
+          "right": 1194.984375,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 1203.984375,
+          "y": 22,
+          "width": 140.015625,
+          "height": 37,
+          "right": 1344,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": {
+          "x": 468,
+          "y": 492.25,
+          "width": 238,
+          "height": 253.75,
+          "right": 706,
+          "bottom": 746,
+          "centerClickable": false,
+          "overflow": false,
+          "text": "Your hands Pinch your fingers to grip Move your hand to aim the instrument Open your hand to let go Twist your open hand like a dial to chan"
+        },
+        "#obj": {
+          "x": 407.6171875,
+          "y": 22,
+          "width": 550.765625,
+          "height": 55.5625,
+          "right": 958.3828125,
+          "bottom": 77.5625,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "laptop",
+      "state": "live-preview-closed",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "phone": false,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 194,
+          "y": 324,
+          "width": 260,
+          "height": 422,
+          "right": 454,
+          "bottom": 746,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection2 hands Preview Stop camera Tracking Nothing is recorded. Keyboard 1–6 and the mouse still work. You · live Pinch — grip "
+        },
+        "#handbtn": {
+          "x": 210,
+          "y": 367,
+          "width": 228,
+          "height": 44,
+          "right": 438,
+          "bottom": 411,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Stop camera"
+        },
+        "#handstat": {
+          "x": 210,
+          "y": 421,
+          "width": 228,
+          "height": 10,
+          "right": 438,
+          "bottom": 431,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Tracking"
+        },
+        "#handpreview": null,
+        "#selfwrap": {
+          "x": 210,
+          "y": 481,
+          "width": 228,
+          "height": 171,
+          "right": 438,
+          "bottom": 652,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "You · live"
+        },
+        "#dock": {
+          "x": 22,
+          "y": 267,
+          "width": 162,
+          "height": 220.25,
+          "right": 184,
+          "bottom": 487.25,
+          "centerClickable": true,
+          "overflow": true,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 1024,
+          "y": 616,
+          "width": 320,
+          "height": 40,
+          "right": 1344,
+          "bottom": 656,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsole"
+        },
+        "#eqx-fab": {
+          "x": 18,
+          "y": 706,
+          "width": 102.28125,
+          "height": 44,
+          "right": 120.28125,
+          "bottom": 750,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 1157.984375,
+          "y": 22,
+          "width": 37,
+          "height": 37,
+          "right": 1194.984375,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 1203.984375,
+          "y": 22,
+          "width": 140.015625,
+          "height": 37,
+          "right": 1344,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 407.6171875,
+          "y": 22,
+          "width": 550.765625,
+          "height": 55.5625,
+          "right": 958.3828125,
+          "bottom": 77.5625,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "laptop",
+      "state": "live-preview-open",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "phone": false,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 194,
+          "y": 324,
+          "width": 260,
+          "height": 422,
+          "right": 454,
+          "bottom": 746,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection2 hands Preview Stop camera Tracking Nothing is recorded. Keyboard 1–6 and the mouse still work. You · live Pinch — grip "
+        },
+        "#handbtn": {
+          "x": 210,
+          "y": 367,
+          "width": 228,
+          "height": 44,
+          "right": 438,
+          "bottom": 411,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Stop camera"
+        },
+        "#handstat": {
+          "x": 210,
+          "y": 421,
+          "width": 228,
+          "height": 10,
+          "right": 438,
+          "bottom": 431,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Tracking"
+        },
+        "#handpreview": null,
+        "#selfwrap": {
+          "x": 210,
+          "y": 481,
+          "width": 228,
+          "height": 171,
+          "right": 438,
+          "bottom": 652,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "You · live"
+        },
+        "#dock": {
+          "x": 22,
+          "y": 267,
+          "width": 162,
+          "height": 220.25,
+          "right": 184,
+          "bottom": 487.25,
+          "centerClickable": true,
+          "overflow": true,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 1024,
+          "y": 616,
+          "width": 320,
+          "height": 40,
+          "right": 1344,
+          "bottom": 656,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsole"
+        },
+        "#eqx-fab": {
+          "x": 18,
+          "y": 706,
+          "width": 102.28125,
+          "height": 44,
+          "right": 120.28125,
+          "bottom": 750,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 1157.984375,
+          "y": 22,
+          "width": 37,
+          "height": 37,
+          "right": 1194.984375,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 1203.984375,
+          "y": 22,
+          "width": 140.015625,
+          "height": 37,
+          "right": 1344,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 407.6171875,
+          "y": 22,
+          "width": 550.765625,
+          "height": 55.5625,
+          "right": 958.3828125,
+          "bottom": 77.5625,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "laptop",
+      "state": "live-console-open",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "phone": false,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 194,
+          "y": 324,
+          "width": 260,
+          "height": 422,
+          "right": 454,
+          "bottom": 746,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection2 hands Preview Stop camera Tracking Nothing is recorded. Keyboard 1–6 and the mouse still work. You · live Pinch — grip "
+        },
+        "#handbtn": {
+          "x": 210,
+          "y": 367,
+          "width": 228,
+          "height": 44,
+          "right": 438,
+          "bottom": 411,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Stop camera"
+        },
+        "#handstat": {
+          "x": 210,
+          "y": 421,
+          "width": 228,
+          "height": 10,
+          "right": 438,
+          "bottom": 431,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Tracking"
+        },
+        "#handpreview": null,
+        "#selfwrap": {
+          "x": 210,
+          "y": 481,
+          "width": 228,
+          "height": 171,
+          "right": 438,
+          "bottom": 652,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "You · live"
+        },
+        "#dock": {
+          "x": 22,
+          "y": 267,
+          "width": 162,
+          "height": 235.953125,
+          "right": 184,
+          "bottom": 502.953125,
+          "centerClickable": true,
+          "overflow": true,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 1024,
+          "y": 616,
+          "width": 320,
+          "height": 40,
+          "right": 1344,
+          "bottom": 656,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRClose"
+        },
+        "#eqx-fab": {
+          "x": 18,
+          "y": 706,
+          "width": 102.28125,
+          "height": 44,
+          "right": 120.28125,
+          "bottom": 750,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 1157.984375,
+          "y": 22,
+          "width": 37,
+          "height": 37,
+          "right": 1194.984375,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 1203.984375,
+          "y": 22,
+          "width": 140.015625,
+          "height": 37,
+          "right": 1344,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 407.6171875,
+          "y": 22,
+          "width": 550.765625,
+          "height": 55.5625,
+          "right": 958.3828125,
+          "bottom": 77.5625,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "tablet",
+      "state": "off",
+      "viewport": {
+        "width": 900,
+        "height": 1100
+      },
+      "phone": false,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 194,
+          "y": 915,
+          "width": 260,
+          "height": 163,
+          "right": 454,
+          "bottom": 1078,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection— Preview Use my hands Camera off Pinch to grip. Move to aim. Camera stays on-device — nothing is recorded. You · live — "
+        },
+        "#handbtn": {
+          "x": 210,
+          "y": 958,
+          "width": 228,
+          "height": 44,
+          "right": 438,
+          "bottom": 1002,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Use my hands"
+        },
+        "#handstat": {
+          "x": 210,
+          "y": 1012,
+          "width": 228,
+          "height": 10,
+          "right": 438,
+          "bottom": 1022,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Camera off"
+        },
+        "#handpreview": null,
+        "#selfwrap": null,
+        "#dock": {
+          "x": 22,
+          "y": 350,
+          "width": 76,
+          "height": 391,
+          "right": 98,
+          "bottom": 741,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 558,
+          "y": 948,
+          "width": 320,
+          "height": 40,
+          "right": 878,
+          "bottom": 988,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsole"
+        },
+        "#eqx-fab": {
+          "x": 18,
+          "y": 1038,
+          "width": 102.28125,
+          "height": 44,
+          "right": 120.28125,
+          "bottom": 1082,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 691.984375,
+          "y": 22,
+          "width": 37,
+          "height": 37,
+          "right": 728.984375,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 737.984375,
+          "y": 22,
+          "width": 140.015625,
+          "height": 37,
+          "right": 878,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 225,
+          "y": 22,
+          "width": 450,
+          "height": 75.125,
+          "right": 675,
+          "bottom": 97.125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "tablet",
+      "state": "failed",
+      "viewport": {
+        "width": 900,
+        "height": 1100
+      },
+      "phone": false,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 194,
+          "y": 905,
+          "width": 260,
+          "height": 173,
+          "right": 454,
+          "bottom": 1078,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection— Preview Use my hands Camera permission denied. You can still use touch or mouse. Pinch to grip. Move to aim. Camera sta"
+        },
+        "#handbtn": {
+          "x": 210,
+          "y": 948,
+          "width": 228,
+          "height": 44,
+          "right": 438,
+          "bottom": 992,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Use my hands"
+        },
+        "#handstat": {
+          "x": 210,
+          "y": 1002,
+          "width": 228,
+          "height": 20,
+          "right": 438,
+          "bottom": 1022,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Camera permission denied. You can still use touch or mouse."
+        },
+        "#handpreview": null,
+        "#selfwrap": null,
+        "#dock": {
+          "x": 22,
+          "y": 350,
+          "width": 76,
+          "height": 391,
+          "right": 98,
+          "bottom": 741,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 558,
+          "y": 948,
+          "width": 320,
+          "height": 40,
+          "right": 878,
+          "bottom": 988,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsole"
+        },
+        "#eqx-fab": {
+          "x": 18,
+          "y": 1038,
+          "width": 102.28125,
+          "height": 44,
+          "right": 120.28125,
+          "bottom": 1082,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 691.984375,
+          "y": 22,
+          "width": 37,
+          "height": 37,
+          "right": 728.984375,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 737.984375,
+          "y": 22,
+          "width": 140.015625,
+          "height": 37,
+          "right": 878,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 225,
+          "y": 22,
+          "width": 450,
+          "height": 75.125,
+          "right": 675,
+          "bottom": 97.125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "tablet",
+      "state": "live-coach",
+      "viewport": {
+        "width": 900,
+        "height": 1100
+      },
+      "phone": false,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 194,
+          "y": 656,
+          "width": 260,
+          "height": 422,
+          "right": 454,
+          "bottom": 1078,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection2 hands Preview Stop camera Tracking Nothing is recorded. Keyboard 1–6 and the mouse still work. You · live Pinch — grip "
+        },
+        "#handbtn": {
+          "x": 210,
+          "y": 699,
+          "width": 228,
+          "height": 44,
+          "right": 438,
+          "bottom": 743,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Stop camera"
+        },
+        "#handstat": {
+          "x": 210,
+          "y": 753,
+          "width": 228,
+          "height": 10,
+          "right": 438,
+          "bottom": 763,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Tracking"
+        },
+        "#handpreview": null,
+        "#selfwrap": {
+          "x": 210,
+          "y": 813,
+          "width": 228,
+          "height": 171,
+          "right": 438,
+          "bottom": 984,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "You · live"
+        },
+        "#dock": {
+          "x": 22,
+          "y": 433,
+          "width": 162,
+          "height": 212,
+          "right": 184,
+          "bottom": 645,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 558,
+          "y": 948,
+          "width": 320,
+          "height": 40,
+          "right": 878,
+          "bottom": 988,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsole"
+        },
+        "#eqx-fab": {
+          "x": 18,
+          "y": 1038,
+          "width": 102.28125,
+          "height": 44,
+          "right": 120.28125,
+          "bottom": 1082,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 691.984375,
+          "y": 22,
+          "width": 37,
+          "height": 37,
+          "right": 728.984375,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 737.984375,
+          "y": 22,
+          "width": 140.015625,
+          "height": 37,
+          "right": 878,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": {
+          "x": 468,
+          "y": 824.25,
+          "width": 238,
+          "height": 253.75,
+          "right": 706,
+          "bottom": 1078,
+          "centerClickable": false,
+          "overflow": false,
+          "text": "Your hands Pinch your fingers to grip Move your hand to aim the instrument Open your hand to let go Twist your open hand like a dial to chan"
+        },
+        "#obj": {
+          "x": 225,
+          "y": 22,
+          "width": 450,
+          "height": 75.125,
+          "right": 675,
+          "bottom": 97.125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "tablet",
+      "state": "live-preview-closed",
+      "viewport": {
+        "width": 900,
+        "height": 1100
+      },
+      "phone": false,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 194,
+          "y": 656,
+          "width": 260,
+          "height": 422,
+          "right": 454,
+          "bottom": 1078,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection2 hands Preview Stop camera Tracking Nothing is recorded. Keyboard 1–6 and the mouse still work. You · live Pinch — grip "
+        },
+        "#handbtn": {
+          "x": 210,
+          "y": 699,
+          "width": 228,
+          "height": 44,
+          "right": 438,
+          "bottom": 743,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Stop camera"
+        },
+        "#handstat": {
+          "x": 210,
+          "y": 753,
+          "width": 228,
+          "height": 10,
+          "right": 438,
+          "bottom": 763,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Tracking"
+        },
+        "#handpreview": null,
+        "#selfwrap": {
+          "x": 210,
+          "y": 813,
+          "width": 228,
+          "height": 171,
+          "right": 438,
+          "bottom": 984,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "You · live"
+        },
+        "#dock": {
+          "x": 22,
+          "y": 433,
+          "width": 162,
+          "height": 220.25,
+          "right": 184,
+          "bottom": 653.25,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 558,
+          "y": 948,
+          "width": 320,
+          "height": 40,
+          "right": 878,
+          "bottom": 988,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsole"
+        },
+        "#eqx-fab": {
+          "x": 18,
+          "y": 1038,
+          "width": 102.28125,
+          "height": 44,
+          "right": 120.28125,
+          "bottom": 1082,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 691.984375,
+          "y": 22,
+          "width": 37,
+          "height": 37,
+          "right": 728.984375,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 737.984375,
+          "y": 22,
+          "width": 140.015625,
+          "height": 37,
+          "right": 878,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 225,
+          "y": 22,
+          "width": 450,
+          "height": 75.125,
+          "right": 675,
+          "bottom": 97.125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "tablet",
+      "state": "live-preview-open",
+      "viewport": {
+        "width": 900,
+        "height": 1100
+      },
+      "phone": false,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 194,
+          "y": 656,
+          "width": 260,
+          "height": 422,
+          "right": 454,
+          "bottom": 1078,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection2 hands Preview Stop camera Tracking Nothing is recorded. Keyboard 1–6 and the mouse still work. You · live Pinch — grip "
+        },
+        "#handbtn": {
+          "x": 210,
+          "y": 699,
+          "width": 228,
+          "height": 44,
+          "right": 438,
+          "bottom": 743,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Stop camera"
+        },
+        "#handstat": {
+          "x": 210,
+          "y": 753,
+          "width": 228,
+          "height": 10,
+          "right": 438,
+          "bottom": 763,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Tracking"
+        },
+        "#handpreview": null,
+        "#selfwrap": {
+          "x": 210,
+          "y": 813,
+          "width": 228,
+          "height": 171,
+          "right": 438,
+          "bottom": 984,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "You · live"
+        },
+        "#dock": {
+          "x": 22,
+          "y": 433,
+          "width": 162,
+          "height": 220.25,
+          "right": 184,
+          "bottom": 653.25,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 558,
+          "y": 948,
+          "width": 320,
+          "height": 40,
+          "right": 878,
+          "bottom": 988,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsole"
+        },
+        "#eqx-fab": {
+          "x": 18,
+          "y": 1038,
+          "width": 102.28125,
+          "height": 44,
+          "right": 120.28125,
+          "bottom": 1082,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 691.984375,
+          "y": 22,
+          "width": 37,
+          "height": 37,
+          "right": 728.984375,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 737.984375,
+          "y": 22,
+          "width": 140.015625,
+          "height": 37,
+          "right": 878,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 225,
+          "y": 22,
+          "width": 450,
+          "height": 75.125,
+          "right": 675,
+          "bottom": 97.125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "tablet",
+      "state": "live-console-open",
+      "viewport": {
+        "width": 900,
+        "height": 1100
+      },
+      "phone": false,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 194,
+          "y": 656,
+          "width": 260,
+          "height": 422,
+          "right": 454,
+          "bottom": 1078,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection2 hands Preview Stop camera Tracking Nothing is recorded. Keyboard 1–6 and the mouse still work. You · live Pinch — grip "
+        },
+        "#handbtn": {
+          "x": 210,
+          "y": 699,
+          "width": 228,
+          "height": 44,
+          "right": 438,
+          "bottom": 743,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Stop camera"
+        },
+        "#handstat": {
+          "x": 210,
+          "y": 753,
+          "width": 228,
+          "height": 10,
+          "right": 438,
+          "bottom": 763,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Tracking"
+        },
+        "#handpreview": null,
+        "#selfwrap": {
+          "x": 210,
+          "y": 813,
+          "width": 228,
+          "height": 171,
+          "right": 438,
+          "bottom": 984,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "You · live"
+        },
+        "#dock": {
+          "x": 22,
+          "y": 433,
+          "width": 162,
+          "height": 235.953125,
+          "right": 184,
+          "bottom": 668.953125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 558,
+          "y": 948,
+          "width": 320,
+          "height": 40,
+          "right": 878,
+          "bottom": 988,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRClose"
+        },
+        "#eqx-fab": {
+          "x": 18,
+          "y": 1038,
+          "width": 102.28125,
+          "height": 44,
+          "right": 120.28125,
+          "bottom": 1082,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 691.984375,
+          "y": 22,
+          "width": 37,
+          "height": 37,
+          "right": 728.984375,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 737.984375,
+          "y": 22,
+          "width": 140.015625,
+          "height": 37,
+          "right": 878,
+          "bottom": 59,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 225,
+          "y": 22,
+          "width": 450,
+          "height": 75.125,
+          "right": 675,
+          "bottom": 97.125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "phone",
+      "state": "off",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "phone": true,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 10,
+          "y": 609.8125,
+          "width": 370,
+          "height": 144.1875,
+          "right": 380,
+          "bottom": 754,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection— Preview Use my hands Camera off Prop your phone up. Pinch to grip, move to aim. On-device camera; performance varies. T"
+        },
+        "#handbtn": {
+          "x": 23,
+          "y": 644.8125,
+          "width": 344,
+          "height": 44,
+          "right": 367,
+          "bottom": 688.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Use my hands"
+        },
+        "#handstat": {
+          "x": 23,
+          "y": 695.8125,
+          "width": 344,
+          "height": 11.1875,
+          "right": 367,
+          "bottom": 707,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Camera off"
+        },
+        "#handpreview": null,
+        "#selfwrap": null,
+        "#dock": {
+          "x": 10,
+          "y": 760,
+          "width": 370,
+          "height": 74,
+          "right": 380,
+          "bottom": 834,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 10,
+          "y": 555.8125,
+          "width": 370,
+          "height": 47,
+          "right": 380,
+          "bottom": 602.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsoleRecordViva"
+        },
+        "#eqx-fab": {
+          "x": 10,
+          "y": 8,
+          "width": 88.703125,
+          "height": 44,
+          "right": 98.703125,
+          "bottom": 52,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 266.453125,
+          "y": 10,
+          "width": 38,
+          "height": 34,
+          "right": 304.453125,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 311.453125,
+          "y": 10,
+          "width": 68.546875,
+          "height": 34,
+          "right": 380,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 10,
+          "y": 54,
+          "width": 370,
+          "height": 90.671875,
+          "right": 380,
+          "bottom": 144.671875,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "phone",
+      "state": "failed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "phone": true,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 10,
+          "y": 609.8125,
+          "width": 370,
+          "height": 144.1875,
+          "right": 380,
+          "bottom": 754,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection— Preview Use my hands Camera permission denied. You can still use touch or mouse. Prop your phone up. Pinch to grip, mov"
+        },
+        "#handbtn": {
+          "x": 23,
+          "y": 644.8125,
+          "width": 344,
+          "height": 44,
+          "right": 367,
+          "bottom": 688.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Use my hands"
+        },
+        "#handstat": {
+          "x": 23,
+          "y": 695.8125,
+          "width": 344,
+          "height": 11.1875,
+          "right": 367,
+          "bottom": 707,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Camera permission denied. You can still use touch or mouse."
+        },
+        "#handpreview": null,
+        "#selfwrap": null,
+        "#dock": {
+          "x": 10,
+          "y": 760,
+          "width": 370,
+          "height": 74,
+          "right": 380,
+          "bottom": 834,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 10,
+          "y": 555.8125,
+          "width": 370,
+          "height": 47,
+          "right": 380,
+          "bottom": 602.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsoleRecordViva"
+        },
+        "#eqx-fab": {
+          "x": 10,
+          "y": 8,
+          "width": 88.703125,
+          "height": 44,
+          "right": 98.703125,
+          "bottom": 52,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 266.453125,
+          "y": 10,
+          "width": 38,
+          "height": 34,
+          "right": 304.453125,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 311.453125,
+          "y": 10,
+          "width": 68.546875,
+          "height": 34,
+          "right": 380,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 10,
+          "y": 54,
+          "width": 370,
+          "height": 90.671875,
+          "right": 380,
+          "bottom": 144.671875,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "phone",
+      "state": "live-coach",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "phone": true,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 10,
+          "y": 593.8125,
+          "width": 370,
+          "height": 160.1875,
+          "right": 380,
+          "bottom": 754,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection2 hands Preview Stop camera Tracking Prop your phone up. Pinch to grip, move to aim. On-device camera; performance varies"
+        },
+        "#handbtn": {
+          "x": 23,
+          "y": 644.8125,
+          "width": 344,
+          "height": 44,
+          "right": 367,
+          "bottom": 688.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Stop camera"
+        },
+        "#handstat": {
+          "x": 23,
+          "y": 695.8125,
+          "width": 344,
+          "height": 11.1875,
+          "right": 367,
+          "bottom": 707,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Tracking"
+        },
+        "#handpreview": {
+          "x": 304.453125,
+          "y": 605.8125,
+          "width": 62.546875,
+          "height": 32,
+          "right": 367,
+          "bottom": 637.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Preview"
+        },
+        "#selfwrap": null,
+        "#dock": {
+          "x": 10,
+          "y": 760,
+          "width": 370,
+          "height": 74,
+          "right": 380,
+          "bottom": 834,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 10,
+          "y": 364.015625,
+          "width": 370,
+          "height": 47,
+          "right": 380,
+          "bottom": 411.015625,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsoleRecordViva"
+        },
+        "#eqx-fab": {
+          "x": 10,
+          "y": 8,
+          "width": 88.703125,
+          "height": 44,
+          "right": 98.703125,
+          "bottom": 52,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 266.453125,
+          "y": 10,
+          "width": 38,
+          "height": 34,
+          "right": 304.453125,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 311.453125,
+          "y": 10,
+          "width": 68.546875,
+          "height": 34,
+          "right": 380,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": {
+          "x": 10,
+          "y": 418.015625,
+          "width": 370,
+          "height": 168.796875,
+          "right": 380,
+          "bottom": 586.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Your hands Pinch your fingers to grip Move your hand to aim the instrument Open your hand to let go Twist your open hand like a dial to chan"
+        },
+        "#obj": {
+          "x": 10,
+          "y": 54,
+          "width": 370,
+          "height": 90.671875,
+          "right": 380,
+          "bottom": 144.671875,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "phone",
+      "state": "live-preview-closed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "phone": true,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 10,
+          "y": 593.8125,
+          "width": 370,
+          "height": 160.1875,
+          "right": 380,
+          "bottom": 754,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection2 hands Preview Stop camera Tracking Prop your phone up. Pinch to grip, move to aim. On-device camera; performance varies"
+        },
+        "#handbtn": {
+          "x": 23,
+          "y": 644.8125,
+          "width": 344,
+          "height": 44,
+          "right": 367,
+          "bottom": 688.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Stop camera"
+        },
+        "#handstat": {
+          "x": 23,
+          "y": 695.8125,
+          "width": 344,
+          "height": 11.1875,
+          "right": 367,
+          "bottom": 707,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Tracking"
+        },
+        "#handpreview": {
+          "x": 304.453125,
+          "y": 605.8125,
+          "width": 62.546875,
+          "height": 32,
+          "right": 367,
+          "bottom": 637.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Preview"
+        },
+        "#selfwrap": null,
+        "#dock": {
+          "x": 10,
+          "y": 760,
+          "width": 370,
+          "height": 74,
+          "right": 380,
+          "bottom": 834,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 10,
+          "y": 539.8125,
+          "width": 370,
+          "height": 47,
+          "right": 380,
+          "bottom": 586.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsoleRecordViva"
+        },
+        "#eqx-fab": {
+          "x": 10,
+          "y": 8,
+          "width": 88.703125,
+          "height": 44,
+          "right": 98.703125,
+          "bottom": 52,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 266.453125,
+          "y": 10,
+          "width": 38,
+          "height": 34,
+          "right": 304.453125,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 311.453125,
+          "y": 10,
+          "width": 68.546875,
+          "height": 34,
+          "right": 380,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 10,
+          "y": 54,
+          "width": 370,
+          "height": 90.671875,
+          "right": 380,
+          "bottom": 144.671875,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "phone",
+      "state": "live-preview-open",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "phone": true,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 10,
+          "y": 425.8125,
+          "width": 370,
+          "height": 328.1875,
+          "right": 380,
+          "bottom": 754,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection2 hands Hide Stop camera Tracking Prop your phone up. Pinch to grip, move to aim. On-device camera; performance varies. T"
+        },
+        "#handbtn": {
+          "x": 23,
+          "y": 476.8125,
+          "width": 344,
+          "height": 44,
+          "right": 367,
+          "bottom": 520.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Stop camera"
+        },
+        "#handstat": {
+          "x": 23,
+          "y": 527.8125,
+          "width": 344,
+          "height": 11.1875,
+          "right": 367,
+          "bottom": 539,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Tracking"
+        },
+        "#handpreview": {
+          "x": 323.546875,
+          "y": 437.8125,
+          "width": 43.453125,
+          "height": 32,
+          "right": 367,
+          "bottom": 469.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hide"
+        },
+        "#selfwrap": {
+          "x": 23,
+          "y": 581,
+          "width": 344,
+          "height": 108,
+          "right": 367,
+          "bottom": 689,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "You · live"
+        },
+        "#dock": {
+          "x": 10,
+          "y": 760,
+          "width": 370,
+          "height": 74,
+          "right": 380,
+          "bottom": 834,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 10,
+          "y": 371.8125,
+          "width": 370,
+          "height": 47,
+          "right": 380,
+          "bottom": 418.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsoleRecordViva"
+        },
+        "#eqx-fab": {
+          "x": 10,
+          "y": 8,
+          "width": 88.703125,
+          "height": 44,
+          "right": 98.703125,
+          "bottom": 52,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 266.453125,
+          "y": 10,
+          "width": 38,
+          "height": 34,
+          "right": 304.453125,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 311.453125,
+          "y": 10,
+          "width": 68.546875,
+          "height": 34,
+          "right": 380,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 10,
+          "y": 54,
+          "width": 370,
+          "height": 90.671875,
+          "right": 380,
+          "bottom": 144.671875,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "phone",
+      "state": "live-console-open",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "phone": true,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 10,
+          "y": 425.8125,
+          "width": 370,
+          "height": 328.1875,
+          "right": 380,
+          "bottom": 754,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection2 hands Hide Stop camera Tracking Prop your phone up. Pinch to grip, move to aim. On-device camera; performance varies. T"
+        },
+        "#handbtn": {
+          "x": 23,
+          "y": 476.8125,
+          "width": 344,
+          "height": 44,
+          "right": 367,
+          "bottom": 520.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Stop camera"
+        },
+        "#handstat": {
+          "x": 23,
+          "y": 527.8125,
+          "width": 344,
+          "height": 11.1875,
+          "right": 367,
+          "bottom": 539,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Tracking"
+        },
+        "#handpreview": {
+          "x": 323.546875,
+          "y": 437.8125,
+          "width": 43.453125,
+          "height": 32,
+          "right": 367,
+          "bottom": 469.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hide"
+        },
+        "#selfwrap": {
+          "x": 23,
+          "y": 581,
+          "width": 344,
+          "height": 108,
+          "right": 367,
+          "bottom": 689,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "You · live"
+        },
+        "#dock": {
+          "x": 10,
+          "y": 760,
+          "width": 370,
+          "height": 74,
+          "right": 380,
+          "bottom": 834,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 10,
+          "y": 371.8125,
+          "width": 370,
+          "height": 47,
+          "right": 380,
+          "bottom": 418.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRCloseRecordViva"
+        },
+        "#eqx-fab": {
+          "x": 10,
+          "y": 8,
+          "width": 88.703125,
+          "height": 44,
+          "right": 98.703125,
+          "bottom": 52,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 266.453125,
+          "y": 10,
+          "width": 38,
+          "height": 34,
+          "right": 304.453125,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 311.453125,
+          "y": 10,
+          "width": 68.546875,
+          "height": 34,
+          "right": 380,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 10,
+          "y": 54,
+          "width": 370,
+          "height": 90.671875,
+          "right": 380,
+          "bottom": 144.671875,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "phone-small",
+      "state": "off",
+      "viewport": {
+        "width": 320,
+        "height": 640
+      },
+      "phone": true,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 10,
+          "y": 405.8125,
+          "width": 300,
+          "height": 144.1875,
+          "right": 310,
+          "bottom": 550,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection— Preview Use my hands Camera off Prop your phone up. Pinch to grip, move to aim. On-device camera; performance varies. T"
+        },
+        "#handbtn": {
+          "x": 23,
+          "y": 440.8125,
+          "width": 274,
+          "height": 44,
+          "right": 297,
+          "bottom": 484.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Use my hands"
+        },
+        "#handstat": {
+          "x": 23,
+          "y": 491.8125,
+          "width": 274,
+          "height": 11.1875,
+          "right": 297,
+          "bottom": 503,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Camera off"
+        },
+        "#handpreview": null,
+        "#selfwrap": null,
+        "#dock": {
+          "x": 10,
+          "y": 558,
+          "width": 300,
+          "height": 72,
+          "right": 310,
+          "bottom": 630,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 10,
+          "y": 314.8125,
+          "width": 300,
+          "height": 84,
+          "right": 310,
+          "bottom": 398.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsoleRecordViva"
+        },
+        "#eqx-fab": {
+          "x": 10,
+          "y": 8,
+          "width": 88.703125,
+          "height": 44,
+          "right": 98.703125,
+          "bottom": 52,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 196.453125,
+          "y": 10,
+          "width": 38,
+          "height": 34,
+          "right": 234.453125,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 241.453125,
+          "y": 10,
+          "width": 68.546875,
+          "height": 34,
+          "right": 310,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 10,
+          "y": 54,
+          "width": 300,
+          "height": 108.171875,
+          "right": 310,
+          "bottom": 162.171875,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "phone-small",
+      "state": "failed",
+      "viewport": {
+        "width": 320,
+        "height": 640
+      },
+      "phone": true,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 10,
+          "y": 394.625,
+          "width": 300,
+          "height": 155.375,
+          "right": 310,
+          "bottom": 550,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection— Preview Use my hands Camera permission denied. You can still use touch or mouse. Prop your phone up. Pinch to grip, mov"
+        },
+        "#handbtn": {
+          "x": 23,
+          "y": 429.625,
+          "width": 274,
+          "height": 44,
+          "right": 297,
+          "bottom": 473.625,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Use my hands"
+        },
+        "#handstat": {
+          "x": 23,
+          "y": 480.625,
+          "width": 274,
+          "height": 22.375,
+          "right": 297,
+          "bottom": 503,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Camera permission denied. You can still use touch or mouse."
+        },
+        "#handpreview": null,
+        "#selfwrap": null,
+        "#dock": {
+          "x": 10,
+          "y": 558,
+          "width": 300,
+          "height": 72,
+          "right": 310,
+          "bottom": 630,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 10,
+          "y": 303.625,
+          "width": 300,
+          "height": 84,
+          "right": 310,
+          "bottom": 387.625,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsoleRecordViva"
+        },
+        "#eqx-fab": {
+          "x": 10,
+          "y": 8,
+          "width": 88.703125,
+          "height": 44,
+          "right": 98.703125,
+          "bottom": 52,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 196.453125,
+          "y": 10,
+          "width": 38,
+          "height": 34,
+          "right": 234.453125,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 241.453125,
+          "y": 10,
+          "width": 68.546875,
+          "height": 34,
+          "right": 310,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 10,
+          "y": 54,
+          "width": 300,
+          "height": 108.171875,
+          "right": 310,
+          "bottom": 162.171875,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "phone-small",
+      "state": "live-coach",
+      "viewport": {
+        "width": 320,
+        "height": 640
+      },
+      "phone": true,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 10,
+          "y": 389.8125,
+          "width": 300,
+          "height": 160.1875,
+          "right": 310,
+          "bottom": 550,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection2 hands Preview Stop camera Tracking Prop your phone up. Pinch to grip, move to aim. On-device camera; performance varies"
+        },
+        "#handbtn": {
+          "x": 23,
+          "y": 440.8125,
+          "width": 274,
+          "height": 44,
+          "right": 297,
+          "bottom": 484.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Stop camera"
+        },
+        "#handstat": {
+          "x": 23,
+          "y": 491.8125,
+          "width": 274,
+          "height": 11.1875,
+          "right": 297,
+          "bottom": 503,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Tracking"
+        },
+        "#handpreview": {
+          "x": 234.453125,
+          "y": 401.8125,
+          "width": 62.546875,
+          "height": 32,
+          "right": 297,
+          "bottom": 433.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Preview"
+        },
+        "#selfwrap": null,
+        "#dock": {
+          "x": 10,
+          "y": 558,
+          "width": 300,
+          "height": 72,
+          "right": 310,
+          "bottom": 630,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 10,
+          "y": 163.8125,
+          "width": 300,
+          "height": 84,
+          "right": 310,
+          "bottom": 247.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsoleRecordViva"
+        },
+        "#eqx-fab": {
+          "x": 10,
+          "y": 8,
+          "width": 88.703125,
+          "height": 44,
+          "right": 98.703125,
+          "bottom": 52,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 196.453125,
+          "y": 10,
+          "width": 38,
+          "height": 34,
+          "right": 234.453125,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 241.453125,
+          "y": 10,
+          "width": 68.546875,
+          "height": 34,
+          "right": 310,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": {
+          "x": 10,
+          "y": 254.8125,
+          "width": 300,
+          "height": 128,
+          "right": 310,
+          "bottom": 382.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Your hands Pinch your fingers to grip Move your hand to aim the instrument Open your hand to let go Twist your open hand like a dial to chan"
+        },
+        "#obj": {
+          "x": 10,
+          "y": 54,
+          "width": 300,
+          "height": 108.171875,
+          "right": 310,
+          "bottom": 162.171875,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "phone-small",
+      "state": "live-preview-closed",
+      "viewport": {
+        "width": 320,
+        "height": 640
+      },
+      "phone": true,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 10,
+          "y": 389.8125,
+          "width": 300,
+          "height": 160.1875,
+          "right": 310,
+          "bottom": 550,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection2 hands Preview Stop camera Tracking Prop your phone up. Pinch to grip, move to aim. On-device camera; performance varies"
+        },
+        "#handbtn": {
+          "x": 23,
+          "y": 440.8125,
+          "width": 274,
+          "height": 44,
+          "right": 297,
+          "bottom": 484.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Stop camera"
+        },
+        "#handstat": {
+          "x": 23,
+          "y": 491.8125,
+          "width": 274,
+          "height": 11.1875,
+          "right": 297,
+          "bottom": 503,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Tracking"
+        },
+        "#handpreview": {
+          "x": 234.453125,
+          "y": 401.8125,
+          "width": 62.546875,
+          "height": 32,
+          "right": 297,
+          "bottom": 433.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Preview"
+        },
+        "#selfwrap": null,
+        "#dock": {
+          "x": 10,
+          "y": 558,
+          "width": 300,
+          "height": 72,
+          "right": 310,
+          "bottom": 630,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 10,
+          "y": 298.8125,
+          "width": 300,
+          "height": 84,
+          "right": 310,
+          "bottom": 382.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsoleRecordViva"
+        },
+        "#eqx-fab": {
+          "x": 10,
+          "y": 8,
+          "width": 88.703125,
+          "height": 44,
+          "right": 98.703125,
+          "bottom": 52,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 196.453125,
+          "y": 10,
+          "width": 38,
+          "height": 34,
+          "right": 234.453125,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 241.453125,
+          "y": 10,
+          "width": 68.546875,
+          "height": 34,
+          "right": 310,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 10,
+          "y": 54,
+          "width": 300,
+          "height": 108.171875,
+          "right": 310,
+          "bottom": 162.171875,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "phone-small",
+      "state": "live-preview-open",
+      "viewport": {
+        "width": 320,
+        "height": 640
+      },
+      "phone": true,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 10,
+          "y": 221.8125,
+          "width": 300,
+          "height": 328.1875,
+          "right": 310,
+          "bottom": 550,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection2 hands Hide Stop camera Tracking Prop your phone up. Pinch to grip, move to aim. On-device camera; performance varies. T"
+        },
+        "#handbtn": {
+          "x": 23,
+          "y": 272.8125,
+          "width": 274,
+          "height": 44,
+          "right": 297,
+          "bottom": 316.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Stop camera"
+        },
+        "#handstat": {
+          "x": 23,
+          "y": 323.8125,
+          "width": 274,
+          "height": 11.1875,
+          "right": 297,
+          "bottom": 335,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Tracking"
+        },
+        "#handpreview": {
+          "x": 253.546875,
+          "y": 233.8125,
+          "width": 43.453125,
+          "height": 32,
+          "right": 297,
+          "bottom": 265.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hide"
+        },
+        "#selfwrap": {
+          "x": 23,
+          "y": 377,
+          "width": 274,
+          "height": 108,
+          "right": 297,
+          "bottom": 485,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "You · live"
+        },
+        "#dock": {
+          "x": 10,
+          "y": 558,
+          "width": 300,
+          "height": 72,
+          "right": 310,
+          "bottom": 630,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 10,
+          "y": 130.8125,
+          "width": 300,
+          "height": 84,
+          "right": 310,
+          "bottom": 214.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsoleRecordViva"
+        },
+        "#eqx-fab": {
+          "x": 10,
+          "y": 8,
+          "width": 88.703125,
+          "height": 44,
+          "right": 98.703125,
+          "bottom": 52,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 196.453125,
+          "y": 10,
+          "width": 38,
+          "height": 34,
+          "right": 234.453125,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 241.453125,
+          "y": 10,
+          "width": 68.546875,
+          "height": 34,
+          "right": 310,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 10,
+          "y": 54,
+          "width": 300,
+          "height": 108.171875,
+          "right": 310,
+          "bottom": 162.171875,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "phone-small",
+      "state": "live-console-open",
+      "viewport": {
+        "width": 320,
+        "height": 640
+      },
+      "phone": true,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 10,
+          "y": 221.8125,
+          "width": 300,
+          "height": 328.1875,
+          "right": 310,
+          "bottom": 550,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection2 hands Hide Stop camera Tracking Prop your phone up. Pinch to grip, move to aim. On-device camera; performance varies. T"
+        },
+        "#handbtn": {
+          "x": 23,
+          "y": 272.8125,
+          "width": 274,
+          "height": 44,
+          "right": 297,
+          "bottom": 316.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Stop camera"
+        },
+        "#handstat": {
+          "x": 23,
+          "y": 323.8125,
+          "width": 274,
+          "height": 11.1875,
+          "right": 297,
+          "bottom": 335,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Tracking"
+        },
+        "#handpreview": {
+          "x": 253.546875,
+          "y": 233.8125,
+          "width": 43.453125,
+          "height": 32,
+          "right": 297,
+          "bottom": 265.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hide"
+        },
+        "#selfwrap": {
+          "x": 23,
+          "y": 377,
+          "width": 274,
+          "height": 108,
+          "right": 297,
+          "bottom": 485,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "You · live"
+        },
+        "#dock": {
+          "x": 10,
+          "y": 558,
+          "width": 300,
+          "height": 72,
+          "right": 310,
+          "bottom": 630,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 10,
+          "y": 130.8125,
+          "width": 300,
+          "height": 84,
+          "right": 310,
+          "bottom": 214.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRCloseRecordViva"
+        },
+        "#eqx-fab": {
+          "x": 10,
+          "y": 8,
+          "width": 88.703125,
+          "height": 44,
+          "right": 98.703125,
+          "bottom": 52,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 196.453125,
+          "y": 10,
+          "width": 38,
+          "height": 34,
+          "right": 234.453125,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 241.453125,
+          "y": 10,
+          "width": 68.546875,
+          "height": 34,
+          "right": 310,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 10,
+          "y": 54,
+          "width": 300,
+          "height": 108.171875,
+          "right": 310,
+          "bottom": 162.171875,
+          "centerClickable": false,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "landscape",
+      "state": "off",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "phone": true,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 10,
+          "y": 252,
+          "width": 824,
+          "height": 62,
+          "right": 834,
+          "bottom": 314,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection— Preview Use my hands Camera off Prop your phone up. Pinch to grip, move to aim. On-device camera; performance varies. T"
+        },
+        "#handbtn": {
+          "x": 674,
+          "y": 261,
+          "width": 148,
+          "height": 44,
+          "right": 822,
+          "bottom": 305,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Use my hands"
+        },
+        "#handstat": {
+          "x": 22,
+          "y": 287.90625,
+          "width": 642,
+          "height": 17.09375,
+          "right": 664,
+          "bottom": 305,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Camera off"
+        },
+        "#handpreview": null,
+        "#selfwrap": null,
+        "#dock": {
+          "x": 10,
+          "y": 318,
+          "width": 824,
+          "height": 62,
+          "right": 834,
+          "bottom": 380,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 10,
+          "y": 198,
+          "width": 824,
+          "height": 47,
+          "right": 834,
+          "bottom": 245,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsoleRecordViva"
+        },
+        "#eqx-fab": {
+          "x": 10,
+          "y": 8,
+          "width": 88.703125,
+          "height": 44,
+          "right": 98.703125,
+          "bottom": 52,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 720.453125,
+          "y": 10,
+          "width": 38,
+          "height": 34,
+          "right": 758.453125,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 765.453125,
+          "y": 10,
+          "width": 68.546875,
+          "height": 34,
+          "right": 834,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 10,
+          "y": 54,
+          "width": 824,
+          "height": 35.5,
+          "right": 834,
+          "bottom": 89.5,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "landscape",
+      "state": "failed",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "phone": true,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 10,
+          "y": 252,
+          "width": 824,
+          "height": 62,
+          "right": 834,
+          "bottom": 314,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection— Preview Use my hands Camera permission denied. You can still use touch or mouse. Prop your phone up. Pinch to grip, mov"
+        },
+        "#handbtn": {
+          "x": 674,
+          "y": 261,
+          "width": 148,
+          "height": 44,
+          "right": 822,
+          "bottom": 305,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Use my hands"
+        },
+        "#handstat": {
+          "x": 22,
+          "y": 287.90625,
+          "width": 642,
+          "height": 17.09375,
+          "right": 664,
+          "bottom": 305,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Camera permission denied. You can still use touch or mouse."
+        },
+        "#handpreview": null,
+        "#selfwrap": null,
+        "#dock": {
+          "x": 10,
+          "y": 318,
+          "width": 824,
+          "height": 62,
+          "right": 834,
+          "bottom": 380,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 10,
+          "y": 198,
+          "width": 824,
+          "height": 47,
+          "right": 834,
+          "bottom": 245,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsoleRecordViva"
+        },
+        "#eqx-fab": {
+          "x": 10,
+          "y": 8,
+          "width": 88.703125,
+          "height": 44,
+          "right": 98.703125,
+          "bottom": 52,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 720.453125,
+          "y": 10,
+          "width": 38,
+          "height": 34,
+          "right": 758.453125,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 765.453125,
+          "y": 10,
+          "width": 68.546875,
+          "height": 34,
+          "right": 834,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 10,
+          "y": 54,
+          "width": 824,
+          "height": 35.5,
+          "right": 834,
+          "bottom": 89.5,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "landscape",
+      "state": "live-coach",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "phone": true,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 10,
+          "y": 247.8125,
+          "width": 824,
+          "height": 66.1875,
+          "right": 834,
+          "bottom": 314,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection2 hands Preview Stop camera Tracking Prop your phone up. Pinch to grip, move to aim. On-device camera; performance varies"
+        },
+        "#handbtn": {
+          "x": 674,
+          "y": 256.8125,
+          "width": 148,
+          "height": 48.1875,
+          "right": 822,
+          "bottom": 305,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Stop camera"
+        },
+        "#handstat": {
+          "x": 22,
+          "y": 293.8125,
+          "width": 642,
+          "height": 11.1875,
+          "right": 664,
+          "bottom": 305,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Tracking"
+        },
+        "#handpreview": {
+          "x": 601.453125,
+          "y": 256.8125,
+          "width": 62.546875,
+          "height": 32,
+          "right": 664,
+          "bottom": 288.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Preview"
+        },
+        "#selfwrap": null,
+        "#dock": {
+          "x": 10,
+          "y": 318,
+          "width": 824,
+          "height": 62,
+          "right": 834,
+          "bottom": 380,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 10,
+          "y": 108.8125,
+          "width": 824,
+          "height": 47,
+          "right": 834,
+          "bottom": 155.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsoleRecordViva"
+        },
+        "#eqx-fab": {
+          "x": 10,
+          "y": 8,
+          "width": 88.703125,
+          "height": 44,
+          "right": 98.703125,
+          "bottom": 52,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 720.453125,
+          "y": 10,
+          "width": 38,
+          "height": 34,
+          "right": 758.453125,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 765.453125,
+          "y": 10,
+          "width": 68.546875,
+          "height": 34,
+          "right": 834,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": {
+          "x": 10,
+          "y": 162.8125,
+          "width": 824,
+          "height": 78,
+          "right": 834,
+          "bottom": 240.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Your hands Pinch your fingers to grip Move your hand to aim the instrument Open your hand to let go Twist your open hand like a dial to chan"
+        },
+        "#obj": {
+          "x": 10,
+          "y": 54,
+          "width": 824,
+          "height": 35.5,
+          "right": 834,
+          "bottom": 89.5,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "landscape",
+      "state": "live-preview-closed",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "phone": true,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 10,
+          "y": 247.8125,
+          "width": 824,
+          "height": 66.1875,
+          "right": 834,
+          "bottom": 314,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection2 hands Preview Stop camera Tracking Prop your phone up. Pinch to grip, move to aim. On-device camera; performance varies"
+        },
+        "#handbtn": {
+          "x": 674,
+          "y": 256.8125,
+          "width": 148,
+          "height": 48.1875,
+          "right": 822,
+          "bottom": 305,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Stop camera"
+        },
+        "#handstat": {
+          "x": 22,
+          "y": 293.8125,
+          "width": 642,
+          "height": 11.1875,
+          "right": 664,
+          "bottom": 305,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Tracking"
+        },
+        "#handpreview": {
+          "x": 601.453125,
+          "y": 256.8125,
+          "width": 62.546875,
+          "height": 32,
+          "right": 664,
+          "bottom": 288.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Preview"
+        },
+        "#selfwrap": null,
+        "#dock": {
+          "x": 10,
+          "y": 318,
+          "width": 824,
+          "height": 62,
+          "right": 834,
+          "bottom": 380,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 10,
+          "y": 193.8125,
+          "width": 824,
+          "height": 47,
+          "right": 834,
+          "bottom": 240.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsoleRecordViva"
+        },
+        "#eqx-fab": {
+          "x": 10,
+          "y": 8,
+          "width": 88.703125,
+          "height": 44,
+          "right": 98.703125,
+          "bottom": 52,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 720.453125,
+          "y": 10,
+          "width": 38,
+          "height": 34,
+          "right": 758.453125,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 765.453125,
+          "y": 10,
+          "width": 68.546875,
+          "height": 34,
+          "right": 834,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 10,
+          "y": 54,
+          "width": 824,
+          "height": 35.5,
+          "right": 834,
+          "bottom": 89.5,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "landscape",
+      "state": "live-preview-open",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "phone": true,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 10,
+          "y": 178.8125,
+          "width": 824,
+          "height": 135.1875,
+          "right": 834,
+          "bottom": 314,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection2 hands Hide Stop camera Tracking Prop your phone up. Pinch to grip, move to aim. On-device camera; performance varies. T"
+        },
+        "#handbtn": {
+          "x": 674,
+          "y": 187.8125,
+          "width": 148,
+          "height": 48.1875,
+          "right": 822,
+          "bottom": 236,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Stop camera"
+        },
+        "#handstat": {
+          "x": 22,
+          "y": 224.8125,
+          "width": 642,
+          "height": 11.1875,
+          "right": 664,
+          "bottom": 236,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Tracking"
+        },
+        "#handpreview": {
+          "x": 620.546875,
+          "y": 187.8125,
+          "width": 43.453125,
+          "height": 32,
+          "right": 664,
+          "bottom": 219.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hide"
+        },
+        "#selfwrap": {
+          "x": 22,
+          "y": 241,
+          "width": 96,
+          "height": 64,
+          "right": 118,
+          "bottom": 305,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "You · live"
+        },
+        "#dock": {
+          "x": 10,
+          "y": 318,
+          "width": 824,
+          "height": 62,
+          "right": 834,
+          "bottom": 380,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 10,
+          "y": 124.8125,
+          "width": 824,
+          "height": 47,
+          "right": 834,
+          "bottom": 171.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRConsoleRecordViva"
+        },
+        "#eqx-fab": {
+          "x": 10,
+          "y": 8,
+          "width": 88.703125,
+          "height": 44,
+          "right": 98.703125,
+          "bottom": 52,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 720.453125,
+          "y": 10,
+          "width": 38,
+          "height": 34,
+          "right": 758.453125,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 765.453125,
+          "y": 10,
+          "width": 68.546875,
+          "height": 34,
+          "right": 834,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 10,
+          "y": 54,
+          "width": 824,
+          "height": 35.5,
+          "right": 834,
+          "bottom": 89.5,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    },
+    {
+      "name": "landscape",
+      "state": "live-console-open",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "phone": true,
+      "overflow": false,
+      "rects": {
+        "#hand": {
+          "x": 10,
+          "y": 178.8125,
+          "width": 824,
+          "height": 135.1875,
+          "right": 834,
+          "bottom": 314,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hands-on dissection2 hands Hide Stop camera Tracking Prop your phone up. Pinch to grip, move to aim. On-device camera; performance varies. T"
+        },
+        "#handbtn": {
+          "x": 674,
+          "y": 187.8125,
+          "width": 148,
+          "height": 48.1875,
+          "right": 822,
+          "bottom": 236,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Stop camera"
+        },
+        "#handstat": {
+          "x": 22,
+          "y": 224.8125,
+          "width": 642,
+          "height": 11.1875,
+          "right": 664,
+          "bottom": 236,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Tracking"
+        },
+        "#handpreview": {
+          "x": 620.546875,
+          "y": 187.8125,
+          "width": 43.453125,
+          "height": 32,
+          "right": 664,
+          "bottom": 219.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Hide"
+        },
+        "#selfwrap": {
+          "x": 22,
+          "y": 241,
+          "width": 96,
+          "height": 64,
+          "right": 118,
+          "bottom": 305,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "You · live"
+        },
+        "#dock": {
+          "x": 10,
+          "y": 318,
+          "width": 824,
+          "height": 62,
+          "right": 834,
+          "bottom": 380,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "1 Probe ProbeTouch a structure to identify itKey 1 2 Scalpel ScalpelOne drawn stroke to inciseKey 2 3 Forceps ForcepsGrip and reflect a cut "
+        },
+        "#railfoot": {
+          "x": 10,
+          "y": 124.8125,
+          "width": 824,
+          "height": 47,
+          "right": 834,
+          "bottom": 171.8125,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Blood · ModerateEnter VRCloseRecordViva"
+        },
+        "#eqx-fab": {
+          "x": 10,
+          "y": 8,
+          "width": 88.703125,
+          "height": 44,
+          "right": 98.703125,
+          "bottom": 52,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "Entelloq"
+        },
+        "#helpbtn": {
+          "x": 720.453125,
+          "y": 10,
+          "width": 38,
+          "height": 34,
+          "right": 758.453125,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "?"
+        },
+        "#specbtn": {
+          "x": 765.453125,
+          "y": 10,
+          "width": 68.546875,
+          "height": 34,
+          "right": 834,
+          "bottom": 44,
+          "centerClickable": true,
+          "overflow": false,
+          "text": "SpecimenFrog"
+        },
+        "#coach": null,
+        "#obj": {
+          "x": 10,
+          "y": 54,
+          "width": 824,
+          "height": 35.5,
+          "right": 834,
+          "bottom": 89.5,
+          "centerClickable": false,
+          "overflow": false,
+          "text": "Step 1 / 8Pin the frog out by its four limbs so the body wall comes under tension. Pins tool (4). Grip on each limb."
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "issues": [],
+  "checks": [
+    "Six viewport families and off/failed/live/preview/console states",
+    "Main camera button at least 44px and center-hit-test clickable",
+    "Hand panel does not overlap tools, shared FAB or console footer",
+    "FAB/help/specimen chooser open and close",
+    "Original hands event dispatch by pointer and keyboard; Stop remains reachable",
+    "No renderer loaded or camera requested"
+  ],
+  "blockedRequests": 0
+}

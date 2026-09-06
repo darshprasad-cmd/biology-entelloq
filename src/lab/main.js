@@ -82,6 +82,8 @@ function bootScene(root) {
   controls.enableDamping = true;
   controls.dampingFactor = 0.08;
   controls.enablePan = false;
+  // This is a bench, not a free-floating turntable. Never orbit below its top.
+  controls.maxPolarAngle = Math.PI * 0.47;
 
   // Premium lighting + a lit tray + bloom, if env.js is present. Falls back to a
   // basic rig and plain rendering otherwise, so the app runs at any build stage.
@@ -98,11 +100,7 @@ function bootScene(root) {
     const r = new THREE.DirectionalLight(0x38e0d8, 1.4); r.position.set(-6, 3, -6); scene.add(r);
   }
 
-  // Ambient dust in the lit air — atmosphere the specimen sits inside. Additive,
-  // so it can only ever add a faint glint; safe to ship unseen.
-  if (typeof createDust === 'function') {
-    try { dust = createDust(THREE, scene); } catch (e) { console.warn('dust failed', e); dust = null; }
-  }
+  // No drifting particles over the working field: they obscure fine anatomy.
 
   // The cinematic stack — SSAO, depth of field, grain, chromatic aberration,
   // vignette — layered ON TOP of env's bloom chain. It probes GPU capability and
@@ -707,6 +705,8 @@ function actionsFor(partId) {
 function setPhysiology(on) {
   if (!physio) return;
   physio.setRunning(on);
+  if (soft) soft.setLife(!!on);
+  if (sfx) sfx.setBreathing(!!on);
   if (on) physio.mountMonitor(document.body); else physio.unmountMonitor();
   // The dock's top boundary depends on whether the monitor is occupying the
   // corner; shell.js reads this class to pick its floor.
@@ -753,7 +753,7 @@ function setCase(caseId) {
   if (soft) { soft.dispose(); soft = null; }
   const r = caseId ? pathology.apply(caseId) : (pathology.clear(), null);
   if (typeof createSoftBody === 'function') {
-    try { soft = createSoftBody(THREE, parts); soft.setLife(true); }
+    try { soft = createSoftBody(THREE, parts); soft.setLife(!!(physio && physio.running())); }
     catch (e) { console.warn('softbody rebuild failed', e); soft = null; }
   }
   if (shell.setVignette) shell.setVignette(pathology.vignette());
@@ -818,14 +818,23 @@ function loadSpecimen(id) {
   }
 
   if (soft) { soft.dispose(); soft = null; }
+  // Fit once, after authored surface detail and before interaction systems cache
+  // rest positions. Never re-fit as a student lifts or removes an organ.
+  if (env && env.fitSpecimen) {
+    const placement = env.fitSpecimen(group);
+    camera.position.y += placement.offsetY;
+    controls.target.y += placement.offsetY;
+    controls.update();
+  }
   if (typeof createSoftBody === 'function') {
-    try { soft = createSoftBody(THREE, parts); soft.setLife(true); }
+    try { soft = createSoftBody(THREE, parts); soft.setLife(false); }
     catch (e) { console.warn('softbody failed', e); soft = null; }
   }
 
   dissection = createDissection(THREE, {
     scene, camera, group, parts, onEvent,
     requiresPinning: SPECIMENS[id].requiresPinning !== false,
+    getRemovalSupport: env && env.getRemovalSupport,
   });
   dissection.setTool(currentTool === 'swab' ? 'probe' : currentTool);
 
@@ -857,7 +866,7 @@ function loadSpecimen(id) {
       if (blood && blood.setPhaseSource) blood.setPhaseSource(physio.phase);
       // One clock: the heartbeat sound, the visible squeeze and the ECG all read
       // physio.phase, so the lub-dub cannot drift from the beat you can see.
-      if (sfx) { sfx.setPhaseSource(physio.phase); sfx.setBreathing(true); }
+      if (sfx) { sfx.setPhaseSource(physio.phase); sfx.setBreathing(false); }
     } catch (e) { console.warn('physiology failed', e); physio = null; }
   }
 
@@ -1010,15 +1019,7 @@ function tick(t) {
       intro.update(dt);
     } else {
       controls.update();
-      // Still whenever anything is being touched — a drag, a grip, or a tracked
-      // hand present — so idle drift never compounds with hand-tracking jitter or
-      // nudges a live incision.
-      // TCH.ids covers the touch case the other two miss: an orbit drag sets
-      // neither mouse.down nor gripping, and letting the idle drift ride along
-      // on top of it makes the camera feel like it is sliding out of your hand.
-      const busy = mouse.down || input.gripping || TCH.ids.size > 0
-        || (handMode && hands && hands.snapshot && hands.snapshot.active);
-      applyCameraLife(dt, busy);
+      // A dissection specimen stays still unless the learner moves the camera.
     }
     if (postfx) {
       // Focus follows the blade: whatever the instrument is touching is what the
@@ -1464,6 +1465,7 @@ export function startApp() {
   };
   window.__LAB.THREE = THREE;
   window.__LAB.camera = camera;
+  window.__LAB.environment = () => env;
   // The flick detector is otherwise only reachable behind a live webcam, which no
   // automated check has. Exposed so its thresholds can be regression-tested.
   // NOTE for anyone driving this from a test: the snap gate needs TWO calls with

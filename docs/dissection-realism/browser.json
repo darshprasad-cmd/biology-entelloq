@@ -1,0 +1,94 @@
+{
+  "base": "http://127.0.0.1:3002",
+  "specimens": [
+    {
+      "id": "frog",
+      "minY": -1.38,
+      "placement": {
+        "offsetY": 0.09182023525238048,
+        "supportY": -1.38,
+        "minY": -1.38,
+        "width": 9.0800048828125,
+        "length": 13.207040107250215,
+        "x": 0,
+        "z": -0.9314799726009371
+      },
+      "upwardAxis": 1,
+      "parts": 29
+    },
+    {
+      "id": "cockroach",
+      "minY": -1.38,
+      "placement": {
+        "offsetY": -0.930796604156494,
+        "supportY": -1.38,
+        "minY": -1.38,
+        "width": 8.04638500213623,
+        "length": 15.417899894714356,
+        "x": 0,
+        "z": 1.3126059532165528
+      },
+      "upwardAxis": 1,
+      "parts": 27
+    },
+    {
+      "id": "earthworm",
+      "minY": -1.38,
+      "placement": {
+        "offsetY": -0.7459327030181884,
+        "supportY": -1.38,
+        "minY": -1.38,
+        "width": 7.5,
+        "length": 17.184105873234657,
+        "x": 0.0011644363403320312,
+        "z": 0.101956439081623
+      },
+      "upwardAxis": 1,
+      "parts": 18
+    },
+    {
+      "id": "fish",
+      "minY": -1.38,
+      "placement": {
+        "offsetY": -0.8789963769912719,
+        "supportY": -1.38,
+        "minY": -1.38,
+        "width": 7.940519022941589,
+        "length": 10.1041468895784,
+        "x": 1.1811760544776915,
+        "z": -0.6279479164536288
+      },
+      "upwardAxis": 1,
+      "parts": 22
+    },
+    {
+      "id": "heart",
+      "minY": -1.38,
+      "placement": {
+        "offsetY": 2.053786232471466,
+        "supportY": -1.38,
+        "minY": -1.38,
+        "width": 9.416906070709228,
+        "length": 11.03076868724823,
+        "x": 0.01653013229370126,
+        "z": -0.027827858448028486
+      },
+      "upwardAxis": 1,
+      "parts": 35
+    }
+  ],
+  "layouts": [],
+  "errors": [],
+  "warnings": [
+    "post-processing addons unavailable; running without bloom TypeError: Failed to fetch dynamically imported module: https://unpkg.com/three@0.160.0/examples/jsm/postprocessing/EffectComposer.js",
+    "[.WebGL-0x36b4001c2000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x36b4001c2000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x36b4001c2000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x36b4001c2000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  ],
+  "checks": [
+    "All five specimens contact pad; authored dissection axes face up; preserved tissue does not idle-pulse.",
+    "Responsive hand-panel state coverage runs separately in check-hand-layout-browser.cjs without GPU rendering."
+  ],
+  "complete": true
+}

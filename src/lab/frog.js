@@ -48,15 +48,18 @@ function buildFrog(THREE) {
       v.fromBufferAttribute(p, i);
       const uy = v.y, uz = v.z;                   // unit coords, pre-scale
       const t = Math.max(0, Math.min(1, (uz + 1) / 2)); // 0 vent .. 1 snout
-      let prof = Math.sin(t * Math.PI * 0.97 + 0.09);
+      // The sphere already supplies the rounded longitudinal taper. Multiplying
+      // by another vanishing sine pinched both ends into a leaf-shaped point.
+      // Keep the trunk near its original ellipsoid radius, then shape the neck.
+      let prof = 1;
       prof *= 1 - 0.17 * Math.exp(-Math.pow((t - 0.73) / 0.055, 2)); // neck pinch
-      if (t < 0.08) prof *= 0.5 + t * 4.0;         // vent taper
+      if (t < 0.08) prof *= 0.92 + t;             // gentle posterior rounding
       // Head: broad triangle. Cheeks flare just ahead of the neck pinch, then the
       // profile tapers to a blunt (not pointed) snout.
       let xprof = prof;
       const cheek = 0.2 * Math.exp(-Math.pow((t - 0.84) / 0.075, 2)); // jaw flare
       xprof *= 1 + cheek;
-      if (t > 0.9) { const s = (t - 0.9) / 0.1; prof *= 1 - s * 0.34; xprof *= 1 - s * 0.28; }
+      if (t > 0.9) { const s = (t - 0.9) / 0.1; prof *= 1 - s * 0.15; xprof *= 1 - s * 0.12; }
       const yscale = uy >= 0 ? 0.58 : 1.0;         // ventral flat, dorsal domed
       p.setXYZ(i, v.x * xprof * sx, uy * prof * yscale * sy, uz * sz);
       if (colors) {
@@ -311,6 +314,18 @@ function buildFrog(THREE) {
     { seed: 7, rough: 0.55, clear: 0.45, sheen: 0xe8c8a8, bend: 0.55 });
   stomach.position.set(-0.5, 0.0, 0.35);
   stomach.rotation.set(0.1, 2.25, 0.2);            // narrow (pyloric) end points back
+  // Attach the gut to the actual deformed surface, in specimen-local space.
+  // Hand-written coordinates drifted away after the bag was bent and rotated.
+  stomach.updateMatrix();
+  const stomachEnd = (direction) => {
+    const vertices = stomach.geometry.attributes.position;
+    let end = 0;
+    for (let i = 1; i < vertices.count; i++) {
+      if (vertices.getZ(i) * direction > vertices.getZ(end) * direction) end = i;
+    }
+    return new THREE.Vector3().fromBufferAttribute(vertices, end).applyMatrix4(stomach.matrix).toArray();
+  };
+  const cardiacEnd = stomachEnd(-1), pyloricEnd = stomachEnd(1);
   add({
     id: 'stomach', name: 'Stomach', layer: 2, system: 'digestive', cuttable: true, detachable: true,
     note: 'A curved, whitish J-shaped bag on the animal\'s left. Wide cardiac end above, narrowing to the pylorus below. You only see it once the liver is lifted.',
@@ -320,7 +335,7 @@ function buildFrog(THREE) {
   // Oesophagus (added): a short pale tube from the pharynx down to the cardiac end
   // of the stomach, lying dorsal to the liver.
   const oeso = tube(THREE, 0xd8c0a8,
-    [[0, 0.22, 2.65], [-0.14, 0.12, 1.9], [-0.3, 0.06, 1.25], [-0.42, 0.02, 0.78]], 0.11,
+    [[0, 0.22, 2.65], [-0.14, 0.12, 1.9], [-0.3, 0.06, 1.25], cardiacEnd], 0.11,
     { rough: 0.55, clear: 0.35, sheen: 0xe8d0b8, rad: 8, seg: 22 });
   add({
     id: 'oesophagus', name: 'Oesophagus', layer: 2, system: 'digestive', cuttable: true, detachable: true,
@@ -332,7 +347,7 @@ function buildFrog(THREE) {
   // parallel to the stomach (the U-loop), then a long, highly-coiled ILEUM held in
   // a translucent mesentery, enlarging posteriorly to join the rectum.
   const siPts = [
-    [-0.42, 0.02, -0.35],   // pylorus
+    pyloricEnd,            // begins on the stomach, not at an estimated position
     [-0.18, 0.0, 0.05],     // duodenum ascending
     [0.12, -0.01, 0.48],    // duodenal apex (U-turn)
     [0.46, -0.02, 0.46],
@@ -485,6 +500,8 @@ function buildFrog(THREE) {
     note: 'Short and stiff — a frog has only nine presacral vertebrae plus the rod-like urostyle.', mesh: spine,
   });
 
-  group.rotation.x = -Math.PI / 2.35;   // lay it supine (ventral up) on the tray
+  // Already authored with +y ventral: rotating about x stood the trunk upright.
+  // Keep the complete anatomy in its authored frame, ventral surface facing up.
+  group.rotation.x = 0;
   return { group, parts };
 }

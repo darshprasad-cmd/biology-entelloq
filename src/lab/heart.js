@@ -12,7 +12,7 @@
  *    reaching the apex (the apex is all LV);
  *  - great vessels correctly arranged: the PULMONARY TRUNK front-most, spiralling
  *    up and to the left off the RV; the AORTA immediately behind it, arching to
- *    the right with its brachiocephalic branches; SVC and IVC into the right
+ *    the anatomical left with illustrative human-pattern branches; SVC and IVC into the right
  *    atrium; pulmonary veins into the left atrium; the two ear-like AURICLES;
  *  - the coronary tree lying in the grooves: LAD in the anterior interventricular
  *    groove, circumflex in the left AV groove, RCA in the right AV groove to the
@@ -183,13 +183,14 @@ function buildHeart(THREE) {
         note: 'The front-most vessel. It leaves the right ventricle, spirals around the aorta and forks to both lungs — deoxygenated, so duskier.' });
 
   // Aorta — immediately behind the pulmonary trunk, ascending then arching to the
-  // right and back, giving off the brachiocephalic branches.
+  // anatomical LEFT (-x) and back. The three branches illustrate the human
+  // pattern, not every mammalian species; the brachiocephalic trunk heads right.
   const aorta = vessel(THREE, 0xcbb49b,
-    [[-0.1, 2.9, 0.05], [-0.05, 4.05, -0.15], [0.4, 4.95, -0.35], [1.15, 4.95, -0.7], [1.7, 4.4, -0.95]], 0.42, 0.34,
+    [[-0.1, 2.9, 0.05], [-0.05, 4.05, -0.15], [-0.4, 4.95, -0.35], [-1.15, 4.95, -0.7], [-1.7, 4.4, -0.95]], 0.42, 0.34,
     { rough: 0.5, clear: 0.5, clearRough: 0.4, sheen: 0xead8c0, rad: 16, seg: 32 });
-  [ [[0.35, 4.9, -0.4], [0.4, 5.7, -0.45]],                         // brachiocephalic trunk
-    [[0.75, 5.0, -0.55], [0.85, 5.75, -0.6]],                       // left common carotid
-    [[1.2, 4.9, -0.7], [1.35, 5.6, -0.75]] ]                        // left subclavian
+  [ [[-0.35, 4.9, -0.4], [0.4, 5.7, -0.45]],                        // brachiocephalic trunk
+    [[-0.75, 5.0, -0.55], [-0.85, 5.75, -0.6]],                    // left common carotid
+    [[-1.2, 4.9, -0.7], [-1.35, 5.6, -0.75]] ]                     // left subclavian
     .forEach((bp) => aorta.add(vessel(THREE, 0xcbb49b, bp, 0.14, 0.11,
       { rough: 0.5, clear: 0.5, sheen: 0xead8c0, rad: 10, seg: 12 })));
   add({ id: 'aorta', name: 'Aorta', layer: 1, system: 'circulatory', cuttable: true, detachable: false,
@@ -353,7 +354,9 @@ function buildHeart(THREE) {
         cuttable: true, detachable: false, mesh: modBand,
         note: 'A muscular band spanning the right ventricle, carrying part of the conduction system to the anterior papillary muscle.' });
 
-  group.position.y = 0.3;
+  // Rest on the posterior surface, with the anterior face (+z locally) up.
+  // One whole-specimen transform preserves every vessel/valve relationship.
+  group.rotation.x = -Math.PI / 2;
   group.scale.setScalar(0.9);
   return { group, parts };
 }

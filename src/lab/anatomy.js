@@ -499,7 +499,7 @@ export const SPECIMENS = {
     id: 'heart',
     name: 'Mammalian heart',
     blurb: 'Trace the circulation. Open the left ventricle, meet the chordae tendineae, and test the valves.',
-    camera: { pos: [0.4, 1.8, 15.5], target: [0, 0.7, 0] },
+    camera: { pos: [0.4, 12.8, 8.5], target: [0, 0, -0.4] },
     requiresPinning: false,
   },
 };
