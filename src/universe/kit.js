@@ -105,7 +105,11 @@ const KIT = (function () {
   // remember each material's intended opacity as `userData.baseOpacity` at build
   // time, then multiply by the stage's fade in setGroupFade(). Use these makers so
   // every material is fade-aware and disposal-tracked.
-  function track(mat) { if (mat.userData.baseOpacity == null) mat.userData.baseOpacity = mat.opacity != null ? mat.opacity : 1; return mat; }
+  function track(mat) {
+    if (mat.userData.baseOpacity == null) mat.userData.baseOpacity = mat.opacity != null ? mat.opacity : 1;
+    if (mat.userData.baseDepthWrite == null) mat.userData.baseDepthWrite = mat.depthWrite;
+    return mat;
+  }
 
   function emissive(colorHex, opts) {
     opts = opts || {};
@@ -157,10 +161,16 @@ const KIT = (function () {
   }
 
   // ── organic realism ────────────────────────────────────────────────────────
-  // Living things are never perfect spheres and never matte. These two helpers do
-  // most of the work of making a procedural model stop looking like programmer art:
-  // `displace` breaks the mathematical symmetry of a primitive, and `wet` gives it
-  // the layered, slightly translucent, faintly glossy surface real tissue has.
+  // Coherent broad variation avoids a jagged per-vertex noise surface. Materials
+  // remain illustrative tissue finishes, not a claim of measured optical data.
+  function tissueNoise(x, y, z) {
+    const ix = Math.floor(x), iy = Math.floor(y), iz = Math.floor(z);
+    const u = smoothstep(0, 1, x - ix), v = smoothstep(0, 1, y - iy), w = smoothstep(0, 1, z - iz);
+    return lerp(lerp(lerp(hash3(ix, iy, iz), hash3(ix + 1, iy, iz), u),
+      lerp(hash3(ix, iy + 1, iz), hash3(ix + 1, iy + 1, iz), u), v),
+      lerp(lerp(hash3(ix, iy, iz + 1), hash3(ix + 1, iy, iz + 1), u),
+      lerp(hash3(ix, iy + 1, iz + 1), hash3(ix + 1, iy + 1, iz + 1), u), v), w);
+  }
 
   /**
    * Push every vertex along its own normal by layered value-noise, so a sphere
@@ -174,8 +184,8 @@ const KIT = (function () {
     for (let i = 0; i < p.count; i++) {
       const x = p.getX(i), y = p.getY(i), z = p.getZ(i);
       // two octaves: broad lobes + finer surface texture
-      const a = hash3(x * f + s, y * f, z * f) - 0.5;
-      const b = (hash3(x * f * 2.7 + s, y * f * 2.7, z * f * 2.7) - 0.5) * 0.45;
+      const a = tissueNoise(x * f + s, y * f, z * f) - 0.5;
+      const b = (tissueNoise(x * f * 2.7 + s, y * f * 2.7, z * f * 2.7) - 0.5) * 0.35;
       const d = (a + b) * amp;
       p.setXYZ(i, x + n.getX(i) * d, y + n.getY(i) * d, z + n.getZ(i) * d);
     }
@@ -185,30 +195,41 @@ const KIT = (function () {
   }
 
   /**
-   * A wet biological surface. MeshPhysical gives us a clearcoat — the thin specular
-   * film that reads as "moist" and is the single biggest cue that something is
-   * living tissue rather than plastic — plus a procedural bump so the surface has
-   * grain under raking light.
+   * Restrained moist tissue. A roughness map near white preserves authored
+   * roughness; the old 50% grey map halved it, making everything look lacquered.
    */
   function wet(colorHex, opts) {
     opts = opts || {};
     const m = new THREE.MeshPhysicalMaterial({
       color: colorHex,
-      roughness: opts.rough != null ? opts.rough : 0.52,
+      roughness: opts.rough != null ? opts.rough : 0.62,
       metalness: 0,
-      clearcoat: opts.clear != null ? opts.clear : 0.65,
-      clearcoatRoughness: opts.clearRough != null ? opts.clearRough : 0.32,
-      sheen: opts.sheen != null ? opts.sheen : 0.35,
+      clearcoat: opts.clear != null ? opts.clear : 0.25,
+      clearcoatRoughness: opts.clearRough != null ? opts.clearRough : 0.44,
+      sheen: opts.sheen != null ? opts.sheen : 0.12,
       sheenColor: new THREE.Color(opts.sheenColor || 0xff9c86),
-      emissive: opts.emissive != null ? opts.emissive : colorHex,
-      emissiveIntensity: opts.glow != null ? opts.glow : 0.12,
+      emissive: opts.emissive != null ? opts.emissive : 0x000000,
+      emissiveIntensity: opts.glow != null ? opts.glow : 0,
       transparent: true,
       opacity: opts.opacity != null ? opts.opacity : 1,
       side: opts.side || THREE.FrontSide,
     });
     const bump = noiseTex(256, opts.seed || 5, 5);
-    m.bumpMap = bump; m.bumpScale = opts.bump != null ? opts.bump : 0.015;
-    m.roughnessMap = bump;
+    m.bumpMap = bump; m.bumpScale = opts.bump != null ? opts.bump : 0.006;
+    const roughKey = 'tissueRoughness' + (opts.seed || 5);
+    if (!_cache[roughKey]) {
+      const bytes = new Uint8Array(64 * 64 * 4);
+      for (let i = 0; i < 64 * 64; i++) {
+        const value = Math.round(218 + 34 * tissueNoise(i % 64 / 5 + (opts.seed || 5), Math.floor(i / 64) / 5, 0));
+        bytes.set([value, value, value, 255], i * 4);
+      }
+      const rough = new THREE.DataTexture(bytes, 64, 64, THREE.RGBAFormat);
+      rough.wrapS = rough.wrapT = THREE.RepeatWrapping;
+      rough.magFilter = rough.minFilter = THREE.LinearFilter;
+      rough.colorSpace = THREE.NoColorSpace; rough.needsUpdate = true;
+      _cache[roughKey] = rough;
+    }
+    m.roughnessMap = _cache[roughKey];
     if (opts.translucent) { m.transmission = opts.translucent; m.thickness = opts.thickness || 0.5; m.ior = 1.38; }
     return track(m);
   }
@@ -248,7 +269,13 @@ const KIT = (function () {
     root.traverse((o) => {
       const m = o.material; if (!m) return;
       const mats = Array.isArray(m) ? m : [m];
-      for (const mm of mats) { const b = mm.userData.baseOpacity != null ? mm.userData.baseOpacity : 1; mm.opacity = b * fade; }
+      for (const mm of mats) {
+        track(mm);
+        mm.opacity = mm.userData.baseOpacity * clamp(fade, 0, 1);
+        // Dissolving shells must not punch opaque holes in the approaching stage.
+        // Authored transparent shells/additive glows stay non-writing at rest.
+        mm.depthWrite = mm.userData.baseDepthWrite && mm.opacity >= 0.995;
+      }
     });
   }
 

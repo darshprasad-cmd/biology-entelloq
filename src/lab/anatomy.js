@@ -288,10 +288,34 @@ function displace(THREE, geo, amp, freq, seed = 0) {
   return geo;
 }
 
+/* Opt-in smoothing for the duplicate UV boundary of a closed ventricular lathe. */
+function smoothClosedLatheSeam(geo) {
+  if (!geo.userData?.smoothClosedLathe || geo.type !== 'LatheGeometry') return;
+  const cfg = geo.parameters, p = geo.attributes.position, n = geo.attributes.normal;
+  if (!cfg || !p || !n || Math.abs(cfg.phiLength - Math.PI * 2) > 1e-8) return;
+  const rows = cfg.points.length, last = cfg.segments * rows;
+  if (p.count !== last + rows || n.count !== p.count) return;
+  for (let a = 0; a < rows; a++) {
+    const b = last + a;
+    const dx = p.getX(a) - p.getX(b), dy = p.getY(a) - p.getY(b), dz = p.getZ(a) - p.getZ(b);
+    // A cutting deformation can separate these vertices into real wound edges.
+    if (dx * dx + dy * dy + dz * dz > 1e-10) continue;
+    const ax = n.getX(a), ay = n.getY(a), az = n.getZ(a);
+    const bx = n.getX(b), by = n.getY(b), bz = n.getZ(b);
+    if (ax * ax + ay * ay + az * az < .25 || bx * bx + by * by + bz * bz < .25) continue;
+    const x = ax + bx, y = ay + by, z = az + bz, length = Math.hypot(x, y, z);
+    if (length < 1e-6) continue;
+    n.setXYZ(a, x / length, y / length, z / length);
+    n.setXYZ(b, x / length, y / length, z / length);
+  }
+  n.needsUpdate = true;
+}
+
 /* Finalise a geometry after the LAST vertex edit (scale/bend/deform). */
 function seal(geo) {
   geo.attributes.position.needsUpdate = true;
   geo.computeVertexNormals();
+  smoothClosedLatheSeam(geo);
   geo.computeBoundingSphere();
   geo.computeBoundingBox();
   return geo;
@@ -505,13 +529,28 @@ export const SPECIMENS = {
 };
 
 /* ========================================================================== */
+// The five teaching specimens retain their original builders and interactions.
+// Prepared exterior assets are an independent, explicitly validated capability;
+// a specimen does not need one to remain available in this catalog.
+const LAB_ACTIVE_SPECIMEN_IDS = Object.freeze(['frog', 'heart', 'fish', 'earthworm', 'cockroach']);
+export function getAvailableSpecimens(specs = SPECIMENS) {
+  return Object.fromEntries(LAB_ACTIVE_SPECIMEN_IDS
+    .filter(id => Object.prototype.hasOwnProperty.call(specs, id) && specs[id]?.id === id)
+    .map(id => [id, specs[id]]));
+}
+export function normalizeSpecimenId(id) {
+  return LAB_ACTIVE_SPECIMEN_IDS.includes(id) && Object.prototype.hasOwnProperty.call(SPECIMENS, id)
+    ? id : 'frog';
+}
+
+/* ========================================================================== */
 // Registries new specimens self-register into (fish.js, earthworm.js, …). frog and
 // heart stay hardcoded below so their verified builders are never touched; anything
 // else looks itself up here. A builder module, at eval time, does:
 //   SPECIMEN_BUILDERS.fish = buildFish;
 //   SPECIMENS.fish = { id:'fish', name:'…', blurb:'…', camera:{…}, requiresPinning };
 //   SPECIMEN_OBJECTIVES.fish = [ {id,text,hint,done}, … ];
-// The shell's card list iterates SPECIMENS, so the card appears for free; its
+// The shell filters this registry through getAvailableSpecimens(); its
 // objective panel falls back to SPECIMEN_OBJECTIVES when a specimen is not in its
 // own built-in OBJECTIVES table.
 const SPECIMEN_BUILDERS = {};

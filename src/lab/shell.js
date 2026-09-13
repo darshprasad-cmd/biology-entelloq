@@ -1036,7 +1036,10 @@ export function buildShell(root) {
       <div class="k">Enter · send &nbsp; Esc · skip</div></div>`);
   const keysEl = el(`<div id="keys"><div id="kbox"><span class="lbl">Reference</span>
       <h2>Keyboard</h2><div id="kgrps"></div>
-      <div class="foot">? or Esc to close</div></div></div>`);
+      <div class="foot">Prepared exterior credits:
+        <a href="./assets/specimens/FROG-ATTRIBUTION.md" target="_blank" rel="noopener">Frog — ffish.asia / floraZia (CC0)</a> ·
+        <a href="./assets/specimens/COCKROACH-ATTRIBUTION.md" target="_blank" rel="noopener">Cockroach — CK (modified, CC BY 4.0)</a><br>
+        Teaching-model interiors are illustrative. ? or Esc to close</div></div></div>`);
 
   [objBar, topRight, dock, hint, say, handBox, systems, rec, viva, coach, rail, ask, keysEl]
     .forEach((n) => root.appendChild(n));
@@ -1819,7 +1822,7 @@ export function buildShell(root) {
     mountCards: (specs, cb) => {
       const c = pick.querySelector('#cards');
       c.innerHTML = '';
-      Object.values(specs).forEach((s) => {
+      Object.values(getAvailableSpecimens(specs)).forEach((s) => {
         const card = el(`<div class="card"><span class="lbl">Specimen</span>
           <h2>${s.name}</h2><p>${s.blurb}</p></div>`);
         card.onclick = () => cb(s.id);

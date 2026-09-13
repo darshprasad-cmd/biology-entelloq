@@ -113,8 +113,8 @@ export function setupEnvironment(THREE, deps, refs) {
   lamp2.target.position.set(0, 0, 0);
   addTo(lamp2.target);
 
-  // Dim cyan rim, to peel the specimen off the background.
-  const rim = addTo(new THREE.DirectionalLight(0x38e0d8, 0.7));
+  // A dim neutral-green rim separates the specimen without staining the tissue cyan.
+  const rim = addTo(new THREE.DirectionalLight(0xc1d8d2, 0.45));
   rim.position.set(-6, 3.5, -7);
 
   /* ---- the visible lamp fixture ------------------------------------------ */

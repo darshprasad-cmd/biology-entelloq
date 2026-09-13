@@ -478,6 +478,7 @@ function SUR_grow(THREE, proj, b, cfg) {
  * end the hilum sits on — a liver's vessels run toward the free tip, a kidney's
  * run up and down the organ from the notch. */
 function SUR_seedTree(THREE, proj, b, spec, density, seed, radius) {
+  const substeps = Math.max(1, Math.min(3, spec.substeps || 1));
   const start = new THREE.Vector3(
     proj.center.x + spec.hilum[0] * proj.half.x,
     proj.center.y + spec.hilum[1] * proj.half.y,
@@ -503,9 +504,9 @@ function SUR_seedTree(THREE, proj, b, spec, density, seed, radius) {
     d.multiplyScalar(Math.cos(a)).addScaledVector(side, Math.sin(a)).normalize();
     SUR_grow(THREE, proj, b, {
       start: p, normal: n, dir: d, r: radius,
-      gens: spec.gens || 3, steps: spec.steps || 5,
-      step: proj.scale * (spec.stepK || 0.12),
-      tort: spec.tort, taper: spec.taper || 0.94,
+      gens: spec.gens || 3, steps: (spec.steps || 5) * substeps,
+      step: proj.scale * (spec.stepK || 0.12) / substeps,
+      tort: spec.tort / substeps, taper: Math.pow(spec.taper || 0.94, 1 / substeps),
       split: spec.split || 0.5, rMin: radius * 0.16, seed: seed + k * 13.7,
     });
   }
@@ -736,11 +737,11 @@ const SUR_REC = [
   // because heart.js already builds the named coronaries.
   { m: /^lv-free-wall$/, sheen: [0.62, 0.28],
     disp: { fine: 0.007, fineFreq: 13, lob: 0.008, lobFreq: 2.6, rim: 0.2 },
-    tree: { hilum: [-0.15, 0.92, 0.55], seeds: 3, spread: 1.3, gens: 3, steps: 5,
+    tree: { hilum: [-0.15, 0.92, 0.55], seeds: 3, spread: 1.3, gens: 3, steps: 5, substeps: 3,
             stepK: 0.11, art: 0.014, vein: 0.030 } },
   { m: /^rv-free-wall$/, sheen: [0.62, 0.28],
     disp: { fine: 0.007, fineFreq: 13, lob: 0.008, lobFreq: 2.6, rim: 0.2 },
-    tree: { hilum: [0.25, 0.92, 0.6], seeds: 2, spread: 1.2, gens: 3, steps: 5,
+    tree: { hilum: [0.25, 0.92, 0.6], seeds: 2, spread: 1.2, gens: 3, steps: 5, substeps: 3,
             stepK: 0.12, art: 0.012, vein: 0.026 } },
   { m: /^(right|left)-atrium$/, sheen: [0.58, 0.30],
     disp: { fine: 0.010, fineFreq: 14, lob: 0.014, lobFreq: 3.4, rim: 0.3 },
@@ -783,13 +784,13 @@ function SUR_finishProfile(specimen, part) {
   const profile = (kind, tone, blend, rough, coat, coatRough, kids = false) =>
     ({ kind, tone, blend, rough, coat, coatRough, kids });
   if (specimen === 'frog' && (id === 'skin' || /^(fore|hind)limb-/.test(id)))
-    return profile('frog-hide', 0x7b7850, id === 'skin' ? 0.10 : 0.34, 0.72, 0.20, 0.50, id !== 'skin');
+    return profile(id === 'skin' ? 'frog-belly' : 'frog-hide', 0x938b55, id === 'skin' ? 0.04 : 0.32, 0.48, 0.22, 0.34, id !== 'skin');
   if (specimen === 'fish' && /^(body-wall|operculum)$/.test(id))
-    return profile('scales', 0xaaa18b, 0.12, 0.65, 0.26, 0.42);
+    return profile(id === 'operculum' ? 'fin' : 'scales', 0xc8c7b4, 0.08, 0.43, 0.26, 0.30);
   if (specimen === 'cockroach' && part.system === 'integument')
-    return profile('chitin', 0x956735, 0.24, 0.57, 0.34, 0.38);
+    return profile('chitin', 0x894825, 0.12, 0.40, 0.30, 0.28);
   if (specimen === 'earthworm' && (part.system === 'integument' || id === 'anal-segment'))
-    return profile('hide', 0xa78270, id === 'body-wall' ? 0.09 : 0.30, 0.71, 0.23, 0.46);
+    return profile('worm-cuticle', 0xb7806c, 0.06, 0.46, 0.23, 0.32);
   if (/fat-body|epicardial-fat/.test(id))
     return profile('fat', specimen === 'frog' ? 0xb6a66b : 0xd3c4a0, 0.58, 0.82, 0.12, 0.56, true);
   if (specimen === 'heart') {
@@ -798,7 +799,7 @@ function SUR_finishProfile(specimen, part) {
     if (/pericardium/.test(id) && part.mesh.material.transparent && part.mesh.material.opacity <= 0.2)
       return profile('serous', 0xd2c5aa, 0.12, 0.32, 0.18, 0.48);
     if (/free-wall|atrium|auricle|^septum$|papillary|moderator/.test(id))
-      return profile('flesh', 0xa38d70, 0.64, 0.74, 0.22, 0.48);
+      return profile('myocardium', 0xa9584d, 0.62, 0.46, 0.22, 0.32);
     if (/pericardium|leaflet|chordae|cusp/.test(id))
       return profile('serous', 0xd2c5aa, 0.28, 0.65, 0.24, 0.44);
     return null;
@@ -813,31 +814,64 @@ function SUR_finishProfile(specimen, part) {
   return null;
 }
 
-// Small, repeatable CPU-generated maps: no photo textures, image downloads,
-// canvas/readback or per-frame work. Shared by finish class inside one specimen.
+// Original periodic pigment/relief fields, not photographic anatomy. Features
+// live at several scales: broad colour variation, spots/scales and fine pores.
+// All maps are generated once and shared by finish class, never per frame.
 function SUR_finishMaps(THREE, kind) {
-  const size = 128, rough = new Uint8Array(size * size * 4), tint = new Uint8Array(rough.length);
-  const height = kind === 'scales' ? new Float32Array(size * size) : null;
+  const exterior = /^(frog-hide|frog-belly|scales|chitin|worm-cuticle|myocardium|fin)$/.test(kind);
+  const size = exterior ? 256 : 128, rough = new Uint8Array(size * size * 4), tint = new Uint8Array(rough.length);
+  const height = exterior ? new Float32Array(size * size) : null;
+  const clamp = x => Math.max(0, Math.min(1, x));
   for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
     const u = x / size, v = y / size, i = (y * size + x) * 4;
     const n = tisFbm(u, v, kind.length * 13 + 7);
-    const grain = tisNoise(u, v, 32, 19);
-    const r = Math.round(255 * (0.74 + n * 0.24 + grain * 0.02));
-    const c = Math.round(255 * (kind === 'frog-hide'
-      ? 0.78 + n * 0.19 + grain * 0.03 // visible, soft mottling across the pale belly
-      : 0.89 + n * 0.09 + grain * 0.02));
-    rough.set([r, r, r, 255], i); tint.set([c, c, c, 255], i);
-    if (height) {
-      const row = Math.floor(v * 12), fy = v * 12 - row;
-      const dx = ((u * 14 + (row % 2) * 0.5) % 1) - 0.5;
-      const arc = 0.27 + 0.46 * Math.sqrt(Math.max(0, 1 - 4 * dx * dx));
-      height[y * size + x] = n * 0.12 + Math.exp(-Math.pow((fy - arc) / 0.075, 2)) * 0.07;
+    const grain = tisNoise(u, v, 64, 19);
+    let c = 0.89 + n * 0.09 + grain * 0.02, h = grain * 0.10;
+    let rr = c, gg = c, bb = c, r = 0.68 + n * 0.28 + grain * 0.04;
+    if (kind === 'frog-hide' || kind === 'frog-belly') {
+      const pigment = tisNoise(u, v, 18, 31) * 0.75 + tisNoise(u, v, 36, 11) * 0.25;
+      const spot = smooth(clamp((pigment - 0.57) / 0.18));
+      // The ventral field is pale; strong mottling belongs on the flanks/limbs.
+      const k = kind === 'frog-belly' ? 0.09 : 0.51;
+      c = 0.91 + n * 0.08 - spot * k;
+      rr = c; gg = c * 0.99; bb = c * (1 - spot * 0.12);
+      h = grain * 0.11 + pigment * 0.05; r = 0.67 + n * 0.22 + spot * 0.09;
+    } else if (kind === 'scales') {
+      const row = Math.floor(v * 26), fy = v * 26 - row;
+      const dx = ((u * 36 + (row % 2) * 0.5) % 1) - 0.5;
+      const arc = 0.25 + 0.49 * Math.sqrt(Math.max(0, 1 - 4 * dx * dx));
+      const edge = Math.exp(-Math.pow((fy - arc) / 0.065, 2));
+      const plate = tisNoise((Math.floor(u * 36) + 0.5) / 36, (row + 0.5) / 26, 26, 47);
+      c = 0.76 + plate * 0.20 + n * 0.04 - edge * 0.18;
+      rr = c * 0.98; gg = c; bb = c * (0.95 + n * 0.04);
+      h = edge * 0.20 + grain * 0.035; r = 0.52 + plate * 0.24 + edge * 0.22;
+    } else if (kind === 'chitin') {
+      const hair = Math.pow(0.5 + 0.5 * Math.sin(u * 156 * Math.PI + tisNoise(u, v, 8, 3) * 4), 16);
+      c = 0.70 + n * 0.27 - hair * 0.028;
+      rr = c; gg = c * (0.91 + n * 0.08); bb = c * (0.82 + n * 0.13);
+      h = grain * 0.045 + hair * 0.023; r = 0.58 + n * 0.30 + grain * 0.08;
+    } else if (kind === 'worm-cuticle') {
+      c = 0.85 + n * 0.13; rr = c; gg = c * 0.97; bb = c * 0.95;
+      h = grain * 0.028; r = 0.60 + n * 0.29 + grain * 0.06;
+    } else if (kind === 'myocardium') {
+      // Epicardial surface is smooth and mottled; exposed muscle striations
+      // must not look like thick parallel corrugations through the outer wall.
+      c = 0.74 + n * 0.23; rr = c; gg = c * (0.89 + n * 0.1); bb = c * (0.87 + n * 0.1);
+      h = grain * 0.05 + tisNoise(u, v, 24, 8) * 0.028;
+      r = 0.60 + n * 0.29 + grain * 0.07;
+    } else if (kind === 'fin') {
+      rr = gg = bb = 0.91 + n * 0.08; h = grain * 0.025;
     }
+    rough[i] = rough[i + 1] = rough[i + 2] = Math.round(clamp(r) * 255); rough[i + 3] = 255;
+    tint[i] = Math.round(clamp(rr) * 255); tint[i + 1] = Math.round(clamp(gg) * 255);
+    tint[i + 2] = Math.round(clamp(bb) * 255); tint[i + 3] = 255;
+    if (height) height[y * size + x] = h;
   }
   function texture(data) {
     const t = new THREE.DataTexture(data, size, size, THREE.RGBAFormat);
     t.wrapS = t.wrapT = THREE.RepeatWrapping;
-    t.magFilter = t.minFilter = THREE.LinearFilter;
+    t.magFilter = THREE.LinearFilter; t.minFilter = THREE.LinearMipmapLinearFilter;
+    t.generateMipmaps = true; t.anisotropy = 2;
     t.needsUpdate = true;
     return t;
   }
@@ -870,12 +904,21 @@ export function createSurfaceDetail(THREE, parts, specimenId, group) {
   let sheened = false;
   let tris = 0;
 
+  // Installed scans own their baked relief and calibrated texture maps. Only
+  // the validated adapter writes this marker; organ detailing remains active.
+  function preparedPart(p) {
+    const tag = p.mesh.userData.preparedExterior;
+    return tag && tag.schemaVersion === 1 && tag.role === 'part'
+      && tag.specimenId === specimenId && tag.partId === p.id;
+  }
+
   /* --- step 1: silhouette ---------------------------------------------------- */
   function displaceAll() {
     if (displaced) return;
     displaced = true;
     let seed = 3.1;
     byId.forEach((p, id) => {
+      if (preparedPart(p)) return;
       const rec = SUR_match(id);
       if (!rec) return;
       const geo = p.mesh.geometry;
@@ -893,7 +936,11 @@ export function createSurfaceDetail(THREE, parts, specimenId, group) {
         SUR_displaceBlob(THREE, geo, { fine: rec.gut.fine * 0.4, fineFreq: rec.gut.fineFreq, lob: 0.01, lobFreq: 3 }, seed);
         return;
       }
-      if (rec.disp) SUR_displaceBlob(THREE, geo, rec.disp, seed);
+      // Authored close-fitting exterior sheets/pads already have controlled
+      // relief. Whole-bounding-box displacement makes the separate pads tear
+      // and moves a conforming sac through the muscle it surrounds.
+      if (rec.disp && !['localized-fat', 'conforming-sac'].includes(p.mesh.userData.exteriorDetail))
+        SUR_displaceBlob(THREE, geo, rec.disp, seed);
       if (rec.kids) {
         // Fat bodies carry their finger lobes as children; lobulating only the
         // root would leave five smooth sausages sticking out of a bumpy bead.
@@ -913,6 +960,7 @@ export function createSurfaceDetail(THREE, parts, specimenId, group) {
     if (sheened) return;
     sheened = true;
     byId.forEach((p) => {
+      if (preparedPart(p)) return;
       const cfg = SUR_finishProfile(specimenId, p);
       if (!cfg) return;
       if (!finishMaps.has(cfg.kind)) finishMaps.set(cfg.kind, SUR_finishMaps(THREE, cfg.kind));
@@ -921,8 +969,11 @@ export function createSurfaceDetail(THREE, parts, specimenId, group) {
         const original = mesh.material;
         if (!mesh.isMesh || !original || original.clearcoat == null) return;
         const m = original.clone();
-        finishSaved.push({ mesh, original, applied: m });
+        finishSaved.push({ mesh, original, applied: m, castShadow: mesh.castShadow });
         mesh.material = m;
+        // A shadow map treats transparent meshes as opaque. The prepared sac
+        // must not project a solid dark copy over the visible myocardium.
+        if (p.id === 'pericardium' && m.transparent && m.opacity <= 0.2) mesh.castShadow = false;
         // Vertex-coloured hide keeps its dorsal/ventral pattern. A gentle warm
         // multiplier is enough; blending its white material all the way to an
         // organ colour would obliterate the pale belly and segment distinctions.
@@ -935,14 +986,30 @@ export function createSurfaceDetail(THREE, parts, specimenId, group) {
         m.roughnessMap = maps.rough;
         m.clearcoatRoughnessMap = maps.rough;
         if (!m.map) m.map = maps.tint;
-        if (maps.normal) { m.normalMap = maps.normal; m.normalScale.set(0.28, 0.28); }
+        if (maps.normal) { m.normalMap = maps.normal; m.normalScale.set(0.18, 0.18); }
         else m.normalScale.multiplyScalar(0.65);
         m.needsUpdate = true;
       }
       finish(p.mesh);
       // Only known same-tissue children. Skin children include eyes and fins;
       // tinting an entire specimen traversal would turn those into opaque flesh.
-      if (cfg.kids) p.mesh.children.forEach(finish);
+      if (cfg.kids) p.mesh.children.filter(c => !c.userData.exteriorTissue).forEach(finish);
+      // Explicit visual ownership, not blanket recolouring: pupils/irises,
+      // structures and vessel labels never inherit a neighbouring skin finish.
+      p.mesh.traverse(child => {
+        if (child === p.mesh || !child.isMesh || !child.userData.exteriorTissue) return;
+        const tissue = child.userData.exteriorTissue;
+        if (!['frog-hide', 'chitin', 'scales', 'fin'].includes(tissue)) return;
+        if (!finishMaps.has(tissue)) finishMaps.set(tissue, SUR_finishMaps(THREE, tissue));
+        const taggedMaps = finishMaps.get(tissue), original = child.material;
+        if (!original || original.clearcoat == null) return;
+        const m = original.clone(); finishSaved.push({ mesh: child, original, applied: m }); child.material = m;
+        m.roughnessMap = taggedMaps.rough; m.clearcoatRoughnessMap = taggedMaps.rough;
+        if (!m.map) m.map = taggedMaps.tint;
+        m.normalMap = taggedMaps.normal; m.normalScale.set(0.18, 0.18);
+        m.roughness = tissue === 'chitin' ? 0.4 : 0.48; m.clearcoat = 0.22; m.clearcoatRoughness = 0.32;
+        m.needsUpdate = true;
+      });
     });
   }
 
@@ -964,6 +1031,7 @@ export function createSurfaceDetail(THREE, parts, specimenId, group) {
 
   function buildVessels() {
     byId.forEach((p, id) => {
+      if (preparedPart(p)) return;
       const rec = SUR_match(id);
       if (!rec) return;
       const bA = SUR_builder(), bV = SUR_builder();
@@ -994,13 +1062,21 @@ export function createSurfaceDetail(THREE, parts, specimenId, group) {
         }, density * 0.8, seed + 101.7, s.vein * proj.scale * 1.0);
       } else return;
 
-      tris += bA.tris + bV.tris;
-      attach(p, SUR_finish(THREE, bA), SUR_ART,
-        { tissue: 'vessel', rough: 0.57, clear: 0.30, clearRough: 0.40,
-          sheen: 0xe07a64, transmission: 0.10, thickness: 0.22 });
-      attach(p, SUR_finish(THREE, bV), SUR_VEIN,
+      const namedCoronaries = specimenId === 'heart' && /^(lv|rv)-free-wall$/.test(id);
+      tris += (namedCoronaries ? 0 : bA.tris) + bV.tris;
+      // Named coronary arteries already belong to the heart builder. The
+      // separate generic arterial tree reads as angular orange incisions on
+      // these broad walls, and is not a validated extra coronary network.
+      if (!namedCoronaries) {
+        const artery = attach(p, SUR_finish(THREE, bA), SUR_ART,
+          { tissue: 'vessel', rough: 0.57, clear: 0.30, clearRough: 0.40,
+            sheen: 0xe07a64, transmission: 0.10, thickness: 0.22 });
+        if (artery) artery.userData.SUR_vesselClass = 'artery';
+      }
+      const vein = attach(p, SUR_finish(THREE, bV), SUR_VEIN,
         { tissue: 'vessel', rough: 0.62, clear: 0.24, clearRough: 0.44,
           sheen: 0x9a6a90, transmission: 0.06, thickness: 0.3 });
+      if (vein) vein.userData.SUR_vesselClass = 'vein';
     });
   }
 
@@ -1040,6 +1116,7 @@ export function createSurfaceDetail(THREE, parts, specimenId, group) {
     list.forEach(([ida, idb], pi) => {
       const A = byId.get(ida), B = byId.get(idb);
       if (!A || !B || !A.mesh.geometry || !B.mesh.geometry) return;
+      if (preparedPart(A) || preparedPart(B)) return;
       A.mesh.updateMatrixWorld(); B.mesh.updateMatrixWorld();
       if (!A.mesh.geometry.boundingSphere) A.mesh.geometry.computeBoundingSphere();
       if (!B.mesh.geometry.boundingSphere) B.mesh.geometry.computeBoundingSphere();
@@ -1141,7 +1218,11 @@ export function createSurfaceDetail(THREE, parts, specimenId, group) {
      * the specimen from scratch, which is the real undo. */
     dispose() {
       clearDecor();
-      finishSaved.forEach((s) => { s.mesh.material = s.original; s.applied.dispose(); });
+      finishSaved.forEach((s) => {
+        s.mesh.material = s.original;
+        if (s.castShadow !== undefined) s.mesh.castShadow = s.castShadow;
+        s.applied.dispose();
+      });
       finishSaved.length = 0;
       finishMaps.forEach((maps) => Object.values(maps).forEach((t) => { if (t) t.dispose(); }));
       finishMaps.clear();

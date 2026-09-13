@@ -116,7 +116,7 @@ UNI.register('nucleotide', ({ THREE, KIT, meta }) => {
   ].filter((h) => h.meta);
 
   let clock = 0;
-  function update(dt) { clock += dt; spin.rotation.y = Math.sin(clock * 0.3) * 0.4; spin.rotation.x = Math.sin(clock * 0.22) * 0.15; for (let i = 0; i < hbonds.length; i++) hbonds[i].material.opacity = 0.5 + 0.4 * Math.sin(clock * 4 + i); }
+  function update(dt, d, camera, fade = 1) { clock += dt; spin.rotation.y = Math.sin(clock * 0.3) * 0.4; spin.rotation.x = Math.sin(clock * 0.22) * 0.15; for (let i = 0; i < hbonds.length; i++) hbonds[i].material.opacity = fade * (0.5 + 0.4 * Math.sin(clock * 4 + i)); }
   return { root, update, hotspots, dispose: () => KIT.dispose(root) };
 });
 

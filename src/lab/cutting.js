@@ -960,6 +960,17 @@ export function createCutting(THREE, scene) {
     normal.normalize();
     const box = new THREE.Box3().setFromBufferAttribute(new THREE.BufferAttribute(rest, 3));
     const spanZ = box.max.z - box.min.z;
+    // The prepared cockroach's functional exoskeleton root also owns its six
+    // walking legs, thoracic connectors and posterior appendages. A whole
+    // half-space removal amputates those structures. These bounds are authored
+    // in the prepared root's LOCAL frame (existing translation 0,.08,-2.2):
+    // abdomen z ≈ -2.90..3.00; leg tops y <= .2895. Open only dorsal terga above
+    // y=.30, with a retained lateral/tail margin. Not a general anatomy solver.
+    const preparedTag = mesh.userData.preparedExterior;
+    const abdomenWindow = partId === 'exoskeleton' && preparedTag?.schemaVersion === 1
+      && preparedTag.specimenId === 'cockroach' && preparedTag.partId === partId
+      ? { minX: -1.18, maxX: 1.18, minZ: -2.55, maxZ: 3.05, minY: .30 } : null;
+    if (abdomenWindow) normal.set(0, 1, 0);
     // Frog and fish carry their head and fins on one closed exterior mesh.
     // Earthworm uses an open CylinderGeometry and separate head/tail parts.
     const preserveEnds = partId === 'skin' || (partId === 'body-wall' && mesh.geometry.type === 'SphereGeometry');
@@ -1034,8 +1045,45 @@ export function createCutting(THREE, scene) {
     }
     const accessDistance = vertex => (vertex[0] - center.x) * normal.x
       + (vertex[1] - center.y) * normal.y + (vertex[2] - center.z) * normal.z + 0.025;
+    const abdominalPlanes = abdomenWindow ? [
+      vertex => vertex[1] - abdomenWindow.minY,
+      vertex => vertex[0] - abdomenWindow.minX,
+      vertex => abdomenWindow.maxX - vertex[0],
+      vertex => vertex[2] - abdomenWindow.minZ,
+      vertex => abdomenWindow.maxZ - vertex[2],
+    ] : null;
+    function addAbdominalRim(a, b) {
+      if (!a || !b) return;
+      // Only the intersection of all five bounds is an actual cut edge. Trim
+      // every candidate segment to it; no decorative rim across retained legs.
+      for (const distance of abdominalPlanes) {
+        const da = distance(a), db = distance(b);
+        if (da < -1e-7 && db < -1e-7) return;
+        if ((da < 0) !== (db < 0)) {
+          const crossing = interpolate(a, b, da / (da - db));
+          if (da < 0) a = crossing; else b = crossing;
+        }
+      }
+      addRim(a, b, false);
+    }
     for (let j = 0; j < rec.originalIndices.length; j += 3) {
       const triangle = [0, 1, 2].map(i => readVertex(rec.originalIndices[j + i]));
+      if (abdominalPlanes) {
+        // Entirely outside any one bound means no part of this triangle can
+        // enter the window. Keep it whole, including original appendage UVs.
+        if (abdominalPlanes.some(distance => triangle.every(vertex => distance(vertex) <= 0))) {
+          append(triangle); continue;
+        }
+        let remaining = triangle;
+        for (const distance of abdominalPlanes) {
+          const outside = clip(remaining, distance, false);
+          append(outside.polygon);
+          addAbdominalRim(outside.crossings[0], outside.crossings[1]);
+          remaining = clip(remaining, distance, true).polygon;
+          if (!remaining.length) break;
+        }
+        continue;
+      }
       const back = clip(triangle, accessDistance, false);
       append(back.polygon);
       addRim(back.crossings[0], back.crossings[1], true);
@@ -1063,8 +1111,8 @@ export function createCutting(THREE, scene) {
     residual.name = 'uncut:' + partId;
     residual.userData.noPick = true;
     residual.userData.accessWindow = {
-      normal: normal.toArray(), constant: 0.025 - center.dot(normal),
-      preserveEnds, tailZ, headZ,
+      normal: normal.toArray(), constant: abdomenWindow ? -abdomenWindow.minY : 0.025 - center.dot(normal),
+      preserveEnds, tailZ, headZ, ...(abdomenWindow ? { abdomen: abdomenWindow } : {}),
     };
     residual.raycast = CUT_noRaycast;
     residual.position.copy(mesh.position); residual.quaternion.copy(mesh.quaternion); residual.scale.copy(mesh.scale);

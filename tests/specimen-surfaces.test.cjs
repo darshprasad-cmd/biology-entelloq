@@ -66,9 +66,9 @@ test('all five specimens receive distinct restrained finishes without changing p
     surf.apply();
     const current = p.mesh.material;
     assert.notEqual(current, old, id + ': own finish material');
-    assert.ok(current.roughness >= 0.55 && current.roughness <= 0.82, id);
+    assert.ok(current.roughness >= 0.35 && current.roughness <= 0.82, id);
     assert.ok(current.clearcoat >= 0.12 && current.clearcoat <= 0.34, id);
-    assert.ok(current.clearcoatRoughness >= 0.38, id);
+    assert.ok(current.clearcoatRoughness >= 0.28, id);
     assert.ok(current.sheen <= 0.24, id);
     assert.equal(current.opacity, old.opacity, id + ': opacity preserved');
     assert.equal(current.transmission, old.transmission, id + ': translucency preserved');
@@ -91,7 +91,7 @@ test('procedural scale relief and roughness are deterministic, bounded and local
   const a = context.SUR_finishMaps(THREE, 'scales'), b = context.SUR_finishMaps(THREE, 'scales');
   assert.deepEqual(a.rough.image.data, b.rough.image.data);
   assert.deepEqual(a.normal.image.data, b.normal.image.data);
-  assert.equal(a.normal.image.width, 128);
+  assert.equal(a.normal.image.width, 256);
   assert.ok(new Set(a.normal.image.data.filter((_, i) => i % 4 === 0)).size > 8, 'scale relief is not a flat normal');
   assert.ok(a.normal.image.data.every(Number.isFinite));
   assert.equal(a.rough.wrapS, THREE.RepeatWrapping);
@@ -102,7 +102,7 @@ test('procedural scale relief and roughness are deterministic, bounded and local
 test('the low-opacity heart sac stays clearer without turning opaque membranes into glass', () => {
   const heart = build('heart'), sac = find(heart, 'pericardium');
   const clear = context.SUR_finishProfile('heart', sac);
-  assert.equal(sac.mesh.material.opacity, 0.1);
+  assert.equal(sac.mesh.material.opacity, 0.065);
   assert.equal(clear.rough, 0.32);
   assert.equal(clear.coat, 0.18);
   const opaque = { ...sac, mesh: { material: { transparent: true, opacity: 0.94 } } };

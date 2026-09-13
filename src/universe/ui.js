@@ -32,7 +32,7 @@ body.immersed .hud.dim.rail{opacity:.25}
 
 /* top-left: brand + live scale readout */
 .u-top{top:0;left:0;padding:22px 26px;display:flex;align-items:center;gap:14px}
-.u-brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px}
+.u-brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;color:var(--ink);text-decoration:none}
 .u-brand svg{width:26px;height:26px}
 .u-brand b{font-weight:800}
 .u-readout{margin-left:8px;padding-left:16px;border-left:1px solid var(--line);display:flex;flex-direction:column;gap:2px}
@@ -40,10 +40,11 @@ body.immersed .hud.dim.rail{opacity:.25}
 .u-readout .s{font-family:var(--mono);font-size:11px;color:var(--cy);letter-spacing:.06em}
 
 /* scale readout number, bottom-left */
-.u-scale{left:26px;bottom:26px;font-family:var(--mono)}
+.u-scale{left:26px;bottom:88px;font-family:var(--mono);pointer-events:none}
 .u-scale .num{font-size:clamp(1.6rem,3.2vw,2.4rem);font-weight:800;letter-spacing:-.02em;
   background:linear-gradient(120deg,var(--em),var(--cy));-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
 .u-scale .lbl{font-size:11px;color:var(--faint);letter-spacing:.14em;text-transform:uppercase;margin-top:6px}
+.u-scale .note{max-width:265px;color:var(--dim);font:11px/1.5 var(--sans);margin-top:9px}
 
 /* bottom hint */
 .u-hint{left:50%;bottom:24px;transform:translateX(-50%);display:flex;gap:18px;align-items:center;
@@ -55,10 +56,12 @@ body.immersed .hud.dim.rail{opacity:.25}
 /* right scale rail */
 .u-rail{right:20px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:3px;align-items:flex-end}
 .u-rail button{display:flex;align-items:center;gap:10px;background:none;border:none;cursor:pointer;
-  padding:3px 2px;color:var(--faint);font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;
+  padding:6px 2px;min-height:28px;color:var(--faint);font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;
   transition:color .2s;justify-content:flex-end}
 .u-rail button .rl{opacity:0;transform:translateX(6px);transition:opacity .2s var(--ease),transform .2s var(--ease);white-space:nowrap;text-transform:uppercase}
 .u-rail button:hover .rl,.u-rail button.on .rl{opacity:1;transform:none}
+.u-rail button:focus-visible .rl{opacity:1;transform:none}
+.u-rail button:focus-visible{outline:2px solid var(--em);outline-offset:3px;border-radius:4px}
 .u-rail button:hover{color:var(--ink)}
 .u-rail button .rd{width:22px;height:3px;border-radius:3px;background:var(--line);transition:background .25s,width .25s var(--ease)}
 .u-rail button.on{color:var(--ink)}
@@ -88,11 +91,12 @@ body.immersed .hud.dim.rail{opacity:.25}
 .u-mark:hover .nm{opacity:1;transform:none}
 .u-mark:hover .ring{transform:scale(1.25)}
 @media (prefers-reduced-motion:reduce){.u-mark .ring::after{animation:none}}
+body.u-keyboard .hud,body.u-keyboard .u-panel,body.u-keyboard .u-ai .answer{transition:none}
 
 /* info panel */
 .u-panel{position:fixed;z-index:12;top:0;right:0;height:100%;width:min(420px,92vw);
   background:var(--glass-2);backdrop-filter:blur(24px) saturate(1.3);border-left:1px solid var(--line);
-  transform:translateX(102%);transition:transform .5s var(--ease);display:flex;flex-direction:column;
+  transform:translateX(102%);transition:transform .24s var(--ease);display:flex;flex-direction:column;
   padding:28px 26px;overflow-y:auto}
 .u-panel.open{transform:none}
 .u-panel .close{position:absolute;top:20px;right:20px;width:34px;height:34px;border-radius:10px;border:1px solid var(--line);
@@ -141,7 +145,9 @@ body.immersed .hud.dim.rail{opacity:.25}
   .u-panel{width:100%;height:70%;top:auto;bottom:0;border-left:none;border-top:1px solid var(--line);
     transform:translateY(102%);border-radius:22px 22px 0 0}
   .u-panel.open{transform:none}
-  .u-hint{font-size:11px;gap:12px}
+  .u-hint{font-size:11px;gap:12px;white-space:nowrap;bottom:24px}
+  .u-hint>span:not(:first-child){display:none}
+  .u-scale .note{max-width:230px}
   .u-top{padding:16px}
 }
 
@@ -153,7 +159,7 @@ body.immersed .hud.dim.rail{opacity:.25}
    from the 3D projection and has to stay welded to the canvas. */
 @supports (padding:env(safe-area-inset-top)){
   .u-top{padding:calc(22px + env(safe-area-inset-top)) 26px 22px calc(26px + env(safe-area-inset-left))}
-  .u-scale{left:calc(26px + env(safe-area-inset-left));bottom:calc(26px + env(safe-area-inset-bottom))}
+  .u-scale{left:calc(26px + env(safe-area-inset-left));bottom:calc(88px + env(safe-area-inset-bottom))}
   .u-hint{bottom:calc(24px + env(safe-area-inset-bottom))}
   .u-rail{right:calc(20px + env(safe-area-inset-right))}
   .u-help{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
@@ -164,7 +170,11 @@ body.immersed .hud.dim.rail{opacity:.25}
     .u-top{padding:calc(16px + env(safe-area-inset-top)) 16px 16px calc(16px + env(safe-area-inset-left))}
     /* on a phone the panel is a bottom sheet — nothing above it to clear */
     .u-panel{padding-top:28px}
+    .u-scale{bottom:calc(144px + env(safe-area-inset-bottom))}
   }
+}
+@media (prefers-reduced-motion:reduce){
+  .hud,.u-panel,.u-ai .answer,.u-rail button,.u-rail button .rl,.u-rail button .rd,.u-mark .ring,.u-mark .nm{transition:none}
 }
 `;
 
@@ -177,11 +187,13 @@ const UIC = {
   rel: '<svg viewBox="0 0 24 24" fill="none"><circle cx="6" cy="12" r="2.4" stroke="currentColor" stroke-width="1.7"/><circle cx="18" cy="6" r="2.4" stroke="currentColor" stroke-width="1.7"/><circle cx="18" cy="18" r="2.4" stroke="currentColor" stroke-width="1.7"/><path d="M8 11l8-4M8 13l8 4" stroke="currentColor" stroke-width="1.5"/></svg>',
 };
 
-const LAB_URL = './Biology Entelloq - Dissection Lab.html';
+const LAB_URL = './lab.html';
 
 function buildUniverseUI(core) {
   const data = UNI_DATA;
   const style = document.createElement('style'); style.textContent = UI_CSS; document.head.appendChild(style);
+  addEventListener('keydown', () => document.body.classList.add('u-keyboard'));
+  addEventListener('pointerdown', () => document.body.classList.remove('u-keyboard'));
 
   // ── top brand + readout ──────────────────────────────────────────────────
   const top = el('div', 'hud u-top dim');
@@ -197,12 +209,12 @@ function buildUniverseUI(core) {
 
   // ── scale number, bottom-left ────────────────────────────────────────────
   const scale = el('div', 'hud u-scale dim');
-  scale.innerHTML = `<div class="num" id="uSize">10²⁶ m</div><div class="lbl" id="uScaleLbl">the universe</div>`;
+  scale.innerHTML = `<div class="num" id="uSize">~10²⁶ m</div><div class="lbl" id="uScaleLbl">the universe</div><div class="note">Approximate scale · illustrative models.<br>Colours and motion aid understanding; zoom transitions are not to scale.</div>`;
   document.body.appendChild(scale);
 
   // ── hint ─────────────────────────────────────────────────────────────────
   const hint = el('div', 'hud u-hint dim');
-  hint.innerHTML = `<span><b>Scroll</b> or <b>drag</b> to zoom</span><span><b>Click</b> a marker to explore</span><span><kbd>?</kbd> shortcuts</span>`;
+  hint.innerHTML = `<span><b>Scroll</b> · <b>drag</b> · <b>pinch</b> to zoom</span><span><b>Click</b> a marker to explore</span><span><kbd>?</kbd> shortcuts</span>`;
   document.body.appendChild(hint);
 
   // ── scale rail ───────────────────────────────────────────────────────────
@@ -210,7 +222,7 @@ function buildUniverseUI(core) {
   UNI_ORDER.forEach((k, i) => {
     const b = el('button'); b.dataset.i = i;
     b.innerHTML = `<span class="rl">${(data[k] && data[k].title) || k}</span><span class="rd"></span>`;
-    b.addEventListener('click', () => core.jumpTo(i));
+    b.addEventListener('click', e => core.jumpTo(i, e.detail === 0));
     rail.appendChild(b);
   });
   document.body.appendChild(rail);
@@ -251,8 +263,8 @@ function buildUniverseUI(core) {
       ${related.length ? `<div class="sec"><h4>${UIC.rel} Connected scales</h4><div class="chips">${related.map((r) => `<button class="chip" data-jump="${r.k}">${r.t}</button>`).join('')}</div></div>` : ''}`;
 
     panel.querySelector('.close').addEventListener('click', closePanel);
-    panel.querySelectorAll('[data-jump]').forEach((c) => c.addEventListener('click', () => {
-      const i = UNI_ORDER.indexOf(c.dataset.jump); if (i >= 0) { core.jumpTo(i); closePanel(); }
+    panel.querySelectorAll('[data-jump]').forEach((c) => c.addEventListener('click', e => {
+      const i = UNI_ORDER.indexOf(c.dataset.jump); if (i >= 0) { core.jumpTo(i, e.detail === 0); closePanel(); }
     }));
     const aiBox = panel.querySelector('#uAi');
     if (aiBox) {
@@ -275,9 +287,9 @@ function buildUniverseUI(core) {
   }
 
   // typewriter that respects reduced motion
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   function typeInto(node, text, done) {
-    if (reduced) { node.textContent = text; if (done) done(); return; }
+    if (reduced.matches || document.body.classList.contains('u-keyboard')) { node.textContent = text; if (done) done(); return; }
     node.textContent = ''; let n = 0;
     (function t() {
       n += Math.max(1, Math.round(text.length / 90)); node.textContent = text.slice(0, n);
@@ -319,9 +331,9 @@ function buildUniverseUI(core) {
       const k = UNI_ORDER[idx], d = data[k] || {};
       uTitle.textContent = d.title || k;
       uSub.textContent = d.scaleLabel || '';
-      uSize.textContent = (d.size || '').replace(/~/, '');
+      uSize.textContent = d.size || '';
       uScaleLbl.textContent = d.scaleLabel || '';
-      railBtns.forEach((b, i) => b.classList.toggle('on', i === idx));
+      railBtns.forEach((b, i) => { b.classList.toggle('on', i === idx); b.setAttribute('aria-current', i === idx ? 'step' : 'false'); });
     }
     // markers: reconcile the DOM set with the currently projected hotspots
     const spots = core.projectedHotspots();

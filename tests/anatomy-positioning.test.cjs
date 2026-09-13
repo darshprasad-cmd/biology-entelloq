@@ -110,15 +110,17 @@ test('heart aorta arches anatomically left and posterior, with branches still co
   assert.ok(end.x < start.x - 1, '−x is anatomical left, not the viewer screen left');
   assert.ok(end.z < start.z, 'descending arch is posterior');
   assert.ok(curve(part('heart', 'pulmonary-trunk')).getPoint(0).z > start.z, 'pulmonary root stays anterior');
-  assert.equal(aorta.children.length, 3, 'keep the existing illustrative human branching pattern');
-  for (const branch of aorta.children) {
+  // Exterior rim/lumen meshes belong to the vessel, but are not new branches.
+  const branches = aorta.children.filter(mesh => mesh.geometry?.parameters?.path);
+  assert.equal(branches.length, 3, 'keep the existing illustrative human branching pattern');
+  for (const branch of branches) {
     const inlet = curve(branch).getPoint(0);
     let distance = Infinity;
     for (let i = 0; i <= 200; i++) distance = Math.min(distance, inlet.distanceTo(path.getPoint(i / 200)));
     assert.ok(distance < 0.34, 'branch inlet must intersect the parent vessel radius');
   }
-  assert.ok(curve(aorta.children[0]).getPoint(1).x > 0, 'brachiocephalic outlet heads right');
-  assert.ok(aorta.children.slice(1).every(mesh => curve(mesh).getPoint(1).x < 0), 'left branches stay left');
+  assert.ok(curve(branches[0]).getPoint(1).x > 0, 'brachiocephalic outlet heads right');
+  assert.ok(branches.slice(1).every(mesh => curve(mesh).getPoint(1).x < 0), 'left branches stay left');
 });
 
 test('fish swim-bladder chambers and neck run longitudinally beneath the kidney', () => {

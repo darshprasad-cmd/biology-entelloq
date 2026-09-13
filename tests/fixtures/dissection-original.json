@@ -50,5 +50,5 @@
     {"start": "<script id=\"atmo-js\">", "end": "<script id=\"auth-js\">", "sha256": "5064a351c77be43017903c58479b0996e8ad61f6bfdda07750faf6900b2e946a"},
     {"start": "<!-- ENTELLOQ-ECOSYSTEM-SWITCHER:START -->", "end": "<!-- ENTELLOQ-ECOSYSTEM-SWITCHER:END -->", "sha256": "338f2797b167f4b34cc6a5fc33b99d6b0b934cdc992f12b4bdfc7846a19688aa"}
   ],
-  "lab_entry": "{k:\"lab\",label:\"Dissection Lab\",file:\"lab.html\",desc:\"A living virtual dissection theatre — five specimens.\",tc:\"var(--rose)\"},"
+  "lab_entry": "{k:\"lab\",label:\"Dissection Lab\",file:\"lab.html\",desc:\"Explore frog, mammalian heart, fish, earthworm and cockroach anatomy in the virtual dissection theatre.\",tc:\"var(--rose)\"},"
 }

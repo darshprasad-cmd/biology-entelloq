@@ -48,6 +48,36 @@ export function createSoftBody(THREE, parts) {
   const _local = new THREE.Vector3();
   const _inv = new THREE.Matrix4();
 
+  // Split scanned surfaces still share one physical boundary. Anchor matching
+  // world-space seams and taper motion near them; otherwise a breathing skin
+  // root opens cracks against a limb that is not independently breathing.
+  const exterior = parts.filter(p => p.mesh?.userData.preparedExterior?.role === 'part');
+  const seams = new Map(), weights = new Map();
+  const keyOf = v => [v.x, v.y, v.z].map(n => Math.round(n * 1e5)).join(',');
+  for (const p of exterior) {
+    p.mesh.updateWorldMatrix(true, false);
+    const attr = p.mesh.geometry.attributes.position;
+    for (let i = 0; i < attr.count; i++) {
+      _v.fromBufferAttribute(attr, i).applyMatrix4(p.mesh.matrixWorld);
+      const key = keyOf(_v);
+      if (!seams.has(key)) seams.set(key, { owners: new Set(), point: _v.clone() });
+      seams.get(key).owners.add(p.id);
+    }
+  }
+  const shared = [...seams.values()].filter(s => s.owners.size > 1);
+  for (const p of exterior) {
+    const attr = p.mesh.geometry.attributes.position, influence = new Float32Array(attr.count).fill(1);
+    const boundary = shared.filter(s => s.owners.has(p.id));
+    for (let i = 0; i < attr.count && boundary.length; i++) {
+      _v.fromBufferAttribute(attr, i).applyMatrix4(p.mesh.matrixWorld);
+      let d2 = 0.30 * 0.30;
+      for (const s of boundary) d2 = Math.min(d2, _v.distanceToSquared(s.point));
+      const t = Math.sqrt(d2) / 0.30;
+      influence[i] = t * t * (3 - 2 * t);
+    }
+    weights.set(p.id, influence);
+  }
+
   for (const p of parts) {
     if (!p || !p.mesh || !p.mesh.geometry) continue;
     if (SB_RIGID_HINT.test(p.id)) continue;
@@ -59,6 +89,8 @@ export function createSoftBody(THREE, parts) {
       part: p,
       pos,
       rest: new Float32Array(pos.array),      // the shape everything springs back to
+      normalRest: p.mesh.geometry.attributes.normal?.array.slice(),
+      seamWeight: weights.get(p.id),
       // press
       dent: 0, dentTarget: 0, dentVel: 0,
       cx: 0, cy: 0, cz: 0, nx: 0, ny: 1, nz: 0, radius: 1,
@@ -136,7 +168,11 @@ export function createSoftBody(THREE, parts) {
       const active = it.dent !== 0 || it.dentVel !== 0 || it.ring > 0 || living;
       if (!active) {
         // Idle parts cost nothing. Write rest once if we were dirty.
-        if (it.dirty) { it.pos.array.set(it.rest); it.pos.needsUpdate = true; it.dirty = false; refreshBounds(it, true); }
+        if (it.dirty) {
+          it.pos.array.set(it.rest); it.pos.needsUpdate = true; it.dirty = false;
+          if (it.normalRest) { const normal = it.part.mesh.geometry.attributes.normal; normal.array.set(it.normalRest); normal.needsUpdate = true; }
+          refreshBounds(it, true);
+        }
         return;
       }
 
@@ -149,7 +185,7 @@ export function createSoftBody(THREE, parts) {
           // body span) — a deep, pronounced breath, the strongest "this is alive"
           // signal without the body ballooning. Still a slow soft sine so it reads
           // as respiration; push much past this and it becomes a pulsing balloon.
-          lifeAmp = 0.100 * (0.5 + 0.5 * Math.sin(it.lifePhase * 1.5));
+          lifeAmp = (it.seamWeight ? 0.018 : 0.100) * (0.5 + 0.5 * Math.sin(it.lifePhase * 1.5));
           lifeK = 1;
         } else if (it.life === 'beat') {
           // A quick systolic squeeze with a long diastolic rest, not a sine. Raised
@@ -194,13 +230,27 @@ export function createSoftBody(THREE, parts) {
           ox += rx * lifeAmp; oy += ry * lifeAmp; oz += rz * lifeAmp;
         }
 
-        arr[i3] = rx + ox; arr[i3 + 1] = ry + oy; arr[i3 + 2] = rz + oz;
+        const weight = it.seamWeight ? it.seamWeight[i] : 1;
+        arr[i3] = rx + ox * weight; arr[i3 + 1] = ry + oy * weight; arr[i3 + 2] = rz + oz * weight;
       }
 
       it.pos.needsUpdate = true;
       it.dirty = true;
       const geo = it.part.mesh.geometry;
       geo.computeVertexNormals();
+      // Preserve the opt-in closed ventricular UV seam while pressing/beating.
+      // The shared helper never welds positions or intentionally open edges.
+      if (typeof smoothClosedLatheSeam === 'function') smoothClosedLatheSeam(geo);
+      if (it.seamWeight && it.normalRest) {
+        const normal = geo.attributes.normal;
+        for (let i = 0; i < n; i++) {
+          const w = it.seamWeight[i], j = i * 3;
+          _v.set(normal.array[j], normal.array[j + 1], normal.array[j + 2]).multiplyScalar(w);
+          _local.set(it.normalRest[j], it.normalRest[j + 1], it.normalRest[j + 2]);
+          _v.addScaledVector(_local, 1 - w).normalize(); normal.setXYZ(i, _v.x, _v.y, _v.z);
+        }
+        normal.needsUpdate = true;
+      }
       refreshBounds(it, false);
     });
   }
@@ -221,7 +271,8 @@ export function createSoftBody(THREE, parts) {
     items.forEach((it) => {
       it.pos.array.set(it.rest);
       it.pos.needsUpdate = true;
-      it.part.mesh.geometry.computeVertexNormals();
+      if (it.normalRest) { const normal = it.part.mesh.geometry.attributes.normal; normal.array.set(it.normalRest); normal.needsUpdate = true; }
+      else it.part.mesh.geometry.computeVertexNormals();
       it.part.mesh.geometry.computeBoundingSphere();
     });
     items.clear();

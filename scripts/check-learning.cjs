@@ -35,6 +35,8 @@ const checks = [
   ['Non-lab syntax', process.execPath, ['scripts/check-learning.cjs', '--syntax-only']],
   ['Diff hygiene', 'git', ['diff', '--check']],
 ];
+// Asset parsing suites each hold a Three.js module and real GLB buffers. Bound
+// concurrency instead of starting one large parser process per test file.
 if (unitFiles.length) checks.push(['Learning unit tests', process.execPath, ['--test', '--test-concurrency=2', ...unitFiles]]);
 if (fs.existsSync(path.join(root, 'scripts/build-learning.py'))) checks.push(['Targeted build drift', python, ['scripts/build-learning.py', '--check']]);
 checks.push(['Physics shell style drift', python, ['scripts/sync-physics-shell.py', '--check']]);
@@ -49,11 +51,13 @@ Promise.all(checks.map(([name, command, args]) => new Promise(resolve => {
   let output = '';
   child.stdout.on('data', chunk => { output += chunk; });
   child.stderr.on('data', chunk => { output += chunk; });
-  const timeout = setTimeout(() => child.kill(), name === 'Learning unit tests' ? 90000 : 30000);
+  let timedOut = false;
+  const limit = name === 'Learning unit tests' ? 90000 : 30000;
+  const timeout = setTimeout(() => { timedOut = true; child.kill(); }, limit);
   child.on('error', error => { output += error.message; });
   child.on('close', code => {
     clearTimeout(timeout);
-    resolve({ name, code, durationMs: Date.now() - start, output: output.trim() });
+    resolve({ name, code, durationMs: Date.now() - start, output: output.trim() + (timedOut ? '\nCheck exceeded ' + limit + ' ms.' : '') });
   });
 }))).then(results => {
   for (const result of results) {

@@ -3,8 +3,9 @@
  * Concatenated into one module scope with anatomy.js (the shared geometry
  * toolkit, SPECIMENS and buildSpecimen dispatcher). Uses those helpers directly.
  *
- * Built to genuine mammalian (sheep / human teaching) heart anatomy, grounded in
- * dissection references rather than a symmetric lump:
+ * Generalized mammalian teaching heart with illustrative human arch branches.
+ * This is not a species-validated sheep reconstruction; see ANATOMY.md.
+ * Its authored relationships include:
  *  - a blunt cone: broad BASE superior (great vessels emerge), tapering to an
  *    APEX that points infero-LATERALLY (down and to the anatomical left);
  *  - the LEFT ventricle a thick, firm, full cone of revolution; the RIGHT
@@ -48,6 +49,9 @@ function buildHeart(THREE) {
   function heartWall(prof, seg, phiStart, phiLen, color, o) {
     o = o || {};
     const g = new THREE.LatheGeometry(prof, seg, phiStart, phiLen);
+    // Only the closed ventricular wall has a UV seam rather than a free edge.
+    // Keep both UV vertices, but share the lighting normal after deformation.
+    if (Math.abs(phiLen - Math.PI * 2) < 1e-8) g.userData.smoothClosedLathe = true;
     // Our ventricular profiles run from base to apex (descending Y), opposite
     // LatheGeometry's outward winding. Reverse faces, not the authored points:
     // shape, displacement, UVs and transforms stay exact, while the front wall
@@ -77,6 +81,30 @@ function buildHeart(THREE) {
     return seal(geo);
   }
 
+  // Spatial pigment belongs to the actual cuttable wall, not a decorative shell.
+  // Three-dimensional fields keep duplicate UV seam vertices the same colour.
+  // Muted variation is an art-directed preserved-tissue cue, not a histology map
+  // or an assertion about a particular fixative, disease or blood oxygenation.
+  function heartTissuePigment(mesh, fatty = false) {
+    const g = mesh.geometry, p = g.attributes.position;
+    const colors = new Float32Array(p.count * 3);
+    for (let i = 0; i < p.count; i++) {
+      const x = p.getX(i), y = p.getY(i), z = p.getZ(i);
+      const broad = vnoise(x * 1.9 + 2.7, y * 1.6 - 1.4, z * 1.8 + 4.1);
+      const fine = vnoise(x * 8.3 - 3.2, y * 7.9 + 6.1, z * 8.1 - 1.7);
+      const strands = 0.5 + 0.5 * Math.sin(y * 21 + x * 5 + z * 3 + broad * 2);
+      const shade = fatty ? 0.81 + broad * 0.16 + fine * 0.03
+        : 0.72 + broad * 0.23 + fine * 0.04 + strands * 0.01;
+      colors[i * 3] = shade;
+      colors[i * 3 + 1] = shade * (fatty ? 0.96 + fine * 0.04 : 0.93 + fine * 0.06);
+      colors[i * 3 + 2] = shade * (fatty ? 0.85 + broad * 0.10 : 0.90 + broad * 0.08);
+    }
+    g.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+    mesh.material.vertexColors = true;
+    mesh.material.needsUpdate = true;
+    mesh.userData.tissuePigment = fatty ? 'lobulated-fat' : 'preserved-myocardium';
+  }
+
   // A single tensile cord between two world-space points (chordae tendineae).
   function heartCord(from, to, r0, r1, color) {
     const dir = new THREE.Vector3().subVectors(to, from);
@@ -99,8 +127,8 @@ function buildHeart(THREE) {
   /* ---- LAYER 0 : pericardium + epicardial fat --------------------------------- */
 
   const peri = new THREE.Mesh(new THREE.SphereGeometry(4.0, 40, 30),
-    mat(THREE, 0xdce6e0, { trans: true, opacity: 0.1, rough: 0.14, clear: 1, clearRough: 0.1,
-      side: THREE.DoubleSide, transmission: 0.45, thickness: 0.3, atten: 0xdfeee8 }));
+    mat(THREE, 0xe4cfbc, { trans: true, opacity: 0.065, rough: 0.32, clear: 0.18, clearRough: 0.35,
+      side: THREE.DoubleSide, transmission: 0, noTex: true }));
   peri.scale.set(1, 1.22, 0.95); peri.material.depthWrite = false; peri.renderOrder = 3;
   add({ id: 'pericardium', name: 'Fibrous pericardium', layer: 0, system: 'circulatory',
         cuttable: true, detachable: false, mesh: peri,
@@ -365,6 +393,121 @@ function buildHeart(THREE) {
   add({ id: 'moderator-band', name: 'Moderator band', layer: 2, system: 'circulatory',
         cuttable: true, detachable: false, mesh: modBand,
         note: 'A muscular band spanning the right ventricle, carrying part of the conduction system to the anterior papillary muscle.' });
+
+  /* Exterior preparation. Keep every internal anchor and part ID, but replace
+   * the spherical outer veils with a conforming sac and localized fatty tissue.
+   * This is an authored visual approximation, not a measured preserved specimen. */
+  const radialAt = (profile, y) => {
+    if (y >= profile[0].y) return profile[0].x;
+    for (let i = 1; i < profile.length; i++) if (y >= profile[i].y) {
+      const a = profile[i - 1], b = profile[i], t = (a.y - y) / (a.y - b.y);
+      return a.x + (b.x - a.x) * t;
+    }
+    return profile[profile.length - 1].x;
+  };
+  function envelopeRadius(y, phi) {
+    let r = radialAt(lvProf, y);
+    const lo = -Math.PI * .12, hi = Math.PI * .58;
+    const band = Math.max(0, Math.min(1, (phi - lo) / .20, (hi - phi) / .20));
+    if (y >= -1.85 && y <= 2.9) r = Math.max(r, radialAt(rvProf, y) * smooth(band));
+    // Round over the atrial base, then close the sac at the vessel roots.
+    if (y > 2.0) r = Math.max(r, 2.7 * Math.sqrt(Math.max(0, 1 - Math.pow((y - 2.0) / 2.25, 2))));
+    if (y > 3.9) r *= Math.sqrt(Math.max(0, (4.25 - y) / .35));
+    if (y < -3.35) r *= Math.sqrt(Math.max(0, (y + 3.6) / .25));
+    return r;
+  }
+  const sac = new THREE.SphereGeometry(1, 48, 36), sp = sac.attributes.position;
+  for (let i = 0; i < sp.count; i++) {
+    const y = .325 + sp.getY(i) * 3.925, phi = Math.atan2(sp.getX(i), sp.getZ(i));
+    const r = envelopeRadius(y, phi) * 1.045;
+    const lean = Math.max(0, 1.4 - y) * .155;
+    sp.setXYZ(i, Math.sin(phi) * r - lean, y / peri.scale.y,
+      (Math.cos(phi) * r + lean * .32) / peri.scale.z);
+  }
+  seal(sac); peri.geometry.dispose(); peri.geometry = sac;
+  peri.userData.exteriorDetail = 'conforming-sac';
+
+  // Several irregular pads share one pickable fat mesh: no transparent ball
+  // wrapped around the heart, and forceps still removes the original fat ID.
+  const fatPositions = [], fatNormals = [], fatUvs = [], fatIndices = [];
+  group.updateMatrixWorld(true);
+  const fatRay = new THREE.Raycaster(), fatHosts = [lv, rv, ra, la, rAur, lAur];
+  for (const [y0, y1, phi0, phi1, radius] of [
+    [2.9, 1.1, -.95, -1.3, .17], [2.85, 1.35, .55, 1.45, .18],
+    [2.6, .45, -.1, -.2, .13], [3.0, 2.3, -1.0, .75, .19],
+  ]) {
+    const pts = [];
+    for (let i = 0; i <= 10; i++) {
+      const t = i / 10, y = y0 + (y1 - y0) * t, phi = phi0 + (phi1 - phi0) * t;
+      const lean = Math.max(0, 1.4 - y) * .155;
+      const out = new THREE.Vector3(Math.sin(phi), 0, Math.cos(phi));
+      const start = new THREE.Vector3(-lean, y, lean * .32).addScaledVector(out, 12);
+      fatRay.set(start, out.clone().negate());
+      const hit = fatRay.intersectObjects(fatHosts, false)[0];
+      if (hit) pts.push(hit.point.clone().addScaledVector(out, radius * .12));
+      else pts.push(new THREE.Vector3(-lean, y, lean * .32).addScaledVector(out, envelopeRadius(y, phi)));
+    }
+    const g = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 44, radius, 12, false);
+    const pos = g.attributes.position, normal = g.attributes.normal, uv = g.attributes.uv, offset = fatPositions.length / 3;
+    for (let i = 0; i < pos.count; i++) {
+      // Flattened, irregular pads follow the sampled myocardium. Correlated
+      // radius variation avoids the old uniformly round cable appearance.
+      // Ends taper into the host instead of finishing as an abrupt pipe stump.
+      const t = uv.getX(i), centre = g.parameters.path.getPointAt(t);
+      const offsetV = new THREE.Vector3(pos.getX(i), pos.getY(i), pos.getZ(i)).sub(centre);
+      const phi = phi0 + (phi1 - phi0) * t;
+      const outward = new THREE.Vector3(Math.sin(phi), 0, Math.cos(phi));
+      const relief = offsetV.dot(outward);
+      offsetV.addScaledVector(outward, -relief * 0.40);
+      const lobulation = 0.87 + 0.15 * Math.sin(t * 37 + y0)
+        + 0.09 * Math.sin(t * 79 + phi0 * 3);
+      const shoulder = 0.42 + 0.58 * Math.pow(Math.sin(Math.PI * t), 0.35);
+      offsetV.multiplyScalar(lobulation * shoulder);
+      const finalV = centre.add(offsetV);
+      const bulge = .007 * Math.sin(finalV.x * 25 + finalV.y * 17)
+        * Math.cos(finalV.z * 21 + finalV.y * 13);
+      fatPositions.push((finalV.x + normal.getX(i) * bulge) / fat.scale.x,
+        (finalV.y + normal.getY(i) * bulge) / fat.scale.y,
+        (finalV.z + normal.getZ(i) * bulge) / fat.scale.z);
+      fatNormals.push(normal.getX(i), normal.getY(i), normal.getZ(i));
+      fatUvs.push(uv.getX(i), uv.getY(i));
+    }
+    for (const index of g.index.array) fatIndices.push(index + offset);
+    g.dispose();
+  }
+  const fg = new THREE.BufferGeometry();
+  fg.setAttribute('position', new THREE.Float32BufferAttribute(fatPositions, 3));
+  fg.setAttribute('normal', new THREE.Float32BufferAttribute(fatNormals, 3));
+  fg.setAttribute('uv', new THREE.Float32BufferAttribute(fatUvs, 2));
+  fg.setIndex(fatIndices); seal(fg); fat.geometry.dispose(); fat.geometry = fg;
+  fat.material.opacity = 1; fat.material.transparent = false; fat.material.depthWrite = true;
+  fat.material.transmission = 0; fat.material.color.setHex(0xdbc493);
+  fat.userData.exteriorDetail = 'localized-fat';
+  heartTissuePigment(fat, true);
+  [lv, rv, ra, la, rAur, lAur].forEach(mesh => heartTissuePigment(mesh));
+
+  // A visible vessel stump needs a wall and a dark lumen, not an infinitely
+  // thin open polygon. Collars are children of their real vessel, never parts.
+  for (const p of parts.filter(p => /^(aorta|pulmonary-trunk|svc|ivc|pulmonary-veins)$/.test(p.id))) {
+    const stems = []; p.mesh.traverse(m => { if (m.isMesh && m.geometry.parameters?.path) stems.push(m); });
+    for (const stem of stems) {
+      const g = stem.geometry, prm = g.parameters, end = prm.path.getPointAt(1), axis = prm.path.getTangentAt(1);
+      const v = new THREE.Vector3().fromBufferAttribute(g.attributes.position, g.attributes.position.count - 1);
+      const r = v.distanceTo(end); if (!Number.isFinite(r) || r < .06) continue;
+      const collar = new THREE.Mesh(new THREE.RingGeometry(r * .73, r * 1.01, 24),
+        mat(THREE, 0xbd8a70, { rough: .46, clear: .18, side: THREE.DoubleSide, transmission: 0, noTex: true }));
+      collar.position.copy(end); collar.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), axis);
+      collar.userData.exteriorDetail = 'vessel-rim'; stem.add(collar);
+      const inner = new THREE.Mesh(new THREE.CylinderGeometry(r * .73, r * .68, r * .8, 20, 1, true),
+        mat(THREE, 0x542d2a, { rough: .60, clear: .12, side: THREE.DoubleSide, transmission: 0, noTex: true }));
+      inner.position.copy(end).addScaledVector(axis, -r * .4);
+      inner.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), axis);
+      inner.userData.exteriorDetail = 'vessel-lumen'; stem.add(inner);
+    }
+  }
+  // Surface anatomy can be seen through the prepared sac, but the dissection
+  // picker still gates access by layer. Internal valves/chordae stay hidden.
+  parts.forEach(p => { if (p.layer === 1) p.mesh.visible = true; });
 
   // Rest on the posterior surface, with the anterior face (+z locally) up.
   // One whole-specimen transform preserves every vessel/valve relationship.

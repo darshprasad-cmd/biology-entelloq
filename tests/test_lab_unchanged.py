@@ -10,6 +10,7 @@ import re
 import subprocess
 import unittest
 import importlib.util
+import os
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = "4dcb67d2b1654d74d065b588acbde7831e6f5737"
@@ -20,6 +21,17 @@ spec.loader.exec_module(BUILDER)
 # The user's September 6 instruction reopens these source slots only. The
 # original fingerprint fixture remains unchanged and protects every other byte.
 APPROVED = {"src/lab/" + name for name in BUILDER.MODULES} | {"lab.html"}
+# These are external ES modules/dependencies, not additional assembled slots.
+# Keep this closed list separate from the immutable original-blob inventory;
+# neither a vendor directory wildcard nor an arbitrary new module is approved.
+EXTERNAL_ASSET_FILES = {
+    "src/lab/specimen-assets.js",
+    "src/lab/prepared-loader.js",
+    "src/lab/vendor/loaders/GLTFLoader.js",
+    "src/lab/vendor/utils/BufferGeometryUtils.js",
+    "src/lab/vendor/THREE-LICENSE.txt",
+    "src/lab/vendor/PREPARED-LOADER-SOURCES.md",
+}
 
 
 def git(*args):
@@ -51,10 +63,16 @@ class DissectionUnchanged(unittest.TestCase):
                     self.assertEqual(actual, expected[name], f"Dissection boundary changed: {name}")
         tracked = set(git("ls-files", "src/lab").splitlines())
         original = {name for name in files if name.startswith("src/lab/")}
-        self.assertEqual(tracked, original, "Do not add or remove dissection modules")
+        permitted = original | EXTERNAL_ASSET_FILES
+        self.assertTrue(original <= tracked, "Do not remove original dissection modules")
+        self.assertFalse(tracked - permitted, "Unapproved tracked dissection modules")
+        # Local work may contain the specifically approved new files before
+        # staging. CI must prove every runtime dependency was actually committed.
+        if os.environ.get("CI", "").strip().lower() not in ("", "0", "false"):
+            self.assertEqual(tracked, permitted, "Commit every approved asset dependency before CI")
         actual = {item.relative_to(ROOT).as_posix() for item in (ROOT / "src/lab").rglob("*")
                   if item.is_file() and "__pycache__" not in item.parts and item.suffix != ".pyc"}
-        self.assertEqual(actual, original, "Do not add untracked dissection modules either")
+        self.assertEqual(actual, permitted, "Only the exact approved asset files may extend dissection sources")
 
     def test_lab_changes_are_limited_to_approved_source_slots(self):
         # Derived once from BASE:lab.html after replacing only the approved slot
@@ -83,7 +101,9 @@ class DissectionUnchanged(unittest.TestCase):
                     # photograph to continue throughout the app. Only this
                     # atmosphere slot changes; the immersive launcher stays exact.
                     expected = (ROOT / "src/library/backdrop.js").read_text(encoding="utf-8").strip()
-                    self.assertEqual(content.strip(), expected)
+                    script = re.search(r'<script id="atmo-js">([\s\S]*?)</script>', after)
+                    self.assertIsNotNone(script)
+                    self.assertEqual(script.group(1).strip(), expected)
                 else:
                     self.assertEqual(hashlib.sha256(content.encode("utf-8")).hexdigest(), boundary["sha256"])
         lab_entry = r'\{k:"lab",label:"Dissection Lab"[^\n]*'

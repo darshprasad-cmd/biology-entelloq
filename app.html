@@ -519,7 +519,7 @@ const VIEWS=[
   {k:"about",label:"About",file:"about.html",desc:"The mission, the ecosystem, the founder.",tc:"var(--em)"},
 ];
 const LAUNCH=[
-  {k:"lab",label:"Dissection Lab",file:"lab.html",desc:"A living virtual dissection theatre — five specimens.",tc:"var(--rose)"},
+  {k:"lab",label:"Dissection Lab",file:"lab.html",desc:"Explore frog, mammalian heart, fish, earthworm and cockroach anatomy in the virtual dissection theatre.",tc:"var(--rose)"},
   {k:"universe",label:"Biology Universe",file:"universe.html",desc:"A continuous zoom from the universe to a single atom.",tc:"var(--cy)"},
 ];
 const BYKEY={}; [...VIEWS,...LAUNCH].forEach(v=>BYKEY[v.k]=v);
@@ -959,8 +959,8 @@ const CMDS=[
   {k:"labs",sub:"predator-prey",label:"Predator & Prey",desc:"Lotka–Volterra, live",kind:"Bench",
    kw:"predator prey lotka volterra population oscillation ecology cycle"},
   // the dissection theatre
-  {k:"lab",label:"Dissect a specimen",desc:"Frog · heart · fish · earthworm · cockroach · human",kind:"Lab",
-   kw:"dissection frog heart fish earthworm cockroach human scalpel anatomy specimen"},
+  {k:"lab",label:"Dissect a specimen",desc:"Frog · mammalian heart · fish · earthworm · cockroach",kind:"Lab",
+   kw:"dissection frog mammalian heart fish earthworm cockroach scalpel anatomy specimen"},
 ];
 let csel=0,cflat=[],ctrig=null;
 function openCmdk(event,returnFocus=document.activeElement){
