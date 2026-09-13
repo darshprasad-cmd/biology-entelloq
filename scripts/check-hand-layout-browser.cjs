@@ -97,7 +97,7 @@ async function inspect(page, size, state) {
       await page.goto('http://lab-layout.test/', { waitUntil: 'domcontentloaded', timeout: 15000 });
       // The shell's source prefix includes ICONS, SHELL_TOOLS, SH_PHONE,
       // objective/gesture registries and escaping helpers. No main.js executes.
-      await page.addScriptTag({ content: shellSource + '\nwindow.__shellLayout = { shell: buildShell(document.body), events: [] }; document.getElementById("shellcss").textContent = SHELL_CSS;' });
+      await page.addScriptTag({ content: anatomy.replace(/^export /gm, '') + '\n' + shellSource + '\nwindow.__shellLayout = { shell: buildShell(document.body), events: [] }; document.getElementById("shellcss").textContent = SHELL_CSS;' });
       await page.evaluate(specimens => {
         const test = window.__shellLayout;
         test.shell.mountCards(specimens, id => test.shell.setSpecimen(specimens[id], []));

@@ -1,0 +1,101 @@
+{
+  "specimens": [
+    {
+      "id": "frog",
+      "buildMs": 339.30000019073486,
+      "partCount": 29,
+      "triangles": 111636,
+      "meshes": 100,
+      "finite": true,
+      "placement": {
+        "offsetY": 0.03999995708465587,
+        "supportY": -1.38,
+        "minY": -1.38,
+        "width": 16.127374839782714,
+        "length": 14.03823537826538,
+        "x": 0,
+        "z": -1.3691174983978271
+      }
+    },
+    {
+      "id": "fish",
+      "buildMs": 910.1999998092651,
+      "partCount": 22,
+      "triangles": 86394,
+      "meshes": 181,
+      "finite": true,
+      "placement": {
+        "offsetY": -0.7291363525390624,
+        "supportY": -1.38,
+        "minY": -1.38,
+        "width": 7.5,
+        "length": 10.00988585472107,
+        "x": 0.3755819797515869,
+        "z": -0.7167550897598267
+      }
+    },
+    {
+      "id": "cockroach",
+      "buildMs": 531.6999998092651,
+      "partCount": 27,
+      "triangles": 74328,
+      "meshes": 81,
+      "finite": true,
+      "placement": {
+        "offsetY": -0.5837580776214598,
+        "supportY": -1.38,
+        "minY": -1.38,
+        "width": 11.28517837524414,
+        "length": 18.211009311676026,
+        "x": 4.76837158203125e-7,
+        "z": 1.6286877155303956
+      }
+    },
+    {
+      "id": "earthworm",
+      "buildMs": 121.40000009536743,
+      "partCount": 18,
+      "triangles": 51148,
+      "meshes": 156,
+      "finite": true,
+      "placement": {
+        "offsetY": -0.7560276406823944,
+        "supportY": -1.38,
+        "minY": -1.38,
+        "width": 7.5,
+        "length": 16.86000033462223,
+        "x": 0,
+        "z": 0.029999964655324174
+      }
+    },
+    {
+      "id": "heart",
+      "buildMs": 259.3999996185303,
+      "partCount": 35,
+      "triangles": 56526,
+      "meshes": 88,
+      "finite": true,
+      "placement": {
+        "offsetY": 1.1385345053672786,
+        "supportY": -1.38,
+        "minY": -1.38,
+        "width": 7.5,
+        "length": 10.638244651573132,
+        "x": 0,
+        "z": -0.9791222614135493
+      }
+    }
+  ],
+  "errors": [],
+  "cameraRequests": 0,
+  "limitations": "Visual review capture, not proof of reference equivalence, measured anatomy or hardware tracking.",
+  "warnings": [
+    "post-processing addons unavailable; running without bloom TypeError: Failed to fetch dynamically imported module: https://unpkg.com/three@0.160.0/examples/jsm/postprocessing/EffectComposer.js",
+    "[.WebGL-0x2f7c03712400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x2f7c03712400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x2f7c03712400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x2f7c03712400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  ],
+  "artifactSha256": "0ded8fb31597f4c8b7ab7c56e10ea26083cb96950dddc3038609e7a239978b03",
+  "complete": true
+}

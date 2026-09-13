@@ -82,25 +82,93 @@ function buildFrog(THREE) {
     mat(THREE, 0xffffff, { vcol: true, rough: 0.5, clear: 0.6, clearRough: 0.5,
       sheen: 0xaec07a, sheenAmt: 0.72 }));
 
-  /* Head detail: dorsally-bulging eyes (low domes seen from the ventral side),
-   * a tympanum disc behind each eye, and a nostril near the snout. All decorative
-   * children of the skin — never picked. */
+  // Keep the cuttable trunk and its matched strata envelope unchanged. Exterior
+  // landmarks are seated on that actual surface, not on guessed sphere radii.
+  skin.updateMatrixWorld(true);
+  function skinHit(origin, direction) {
+    return new THREE.Raycaster(new THREE.Vector3(...origin), new THREE.Vector3(...direction)).intersectObject(skin, false)[0];
+  }
+  function hideDetail(mesh, name) {
+    mesh.name = name;
+    mesh.userData.exteriorTissue = 'frog-hide';
+    return mesh;
+  }
+  function seatOnSkin(mesh, hit, inset) {
+    mesh.position.copy(hit.point).addScaledVector(hit.face.normal, -inset);
+    mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), hit.face.normal.clone().normalize());
+    skin.add(mesh);
+  }
+
+  /* Smaller flattened orbital domes, inset into the dorsolateral head. The
+   * mottled iris and narrow pupil sit on the same dome, not on stalks. These
+   * remain inconspicuous from the ventral dissection view, as they should. */
   function frogEye(side) {
-    const iris = new THREE.Mesh(new THREE.SphereGeometry(0.36, 20, 16),
-      mat(THREE, 0xbf9a34, { rough: 0.28, clear: 0.9, clearRough: 0.15, sheen: 0xffe08a }));
-    iris.scale.set(1, 0.82, 1);
-    const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.2, 16, 12),
-      mat(THREE, 0x0a0d08, { rough: 0.2, clear: 1, clearRough: 0.08 }));
-    childMesh(iris, pupil, 0, 0.07, 0.22);
-    // Eyes bulge dorsally (-y), high on the widest part of the head.
-    childMesh(skin, iris, side * 0.86, -0.5, 3.05);
-    const tym = new THREE.Mesh(new THREE.CircleGeometry(0.28, 20),
-      mat(THREE, 0x475226, { rough: 0.8, clear: 0.2, side: THREE.DoubleSide }));
-    childMesh(skin, tym, side * 1.22, -0.28, 2.4, 0.15, side * 0.95, 0);
-    const nos = new THREE.Mesh(new THREE.SphereGeometry(0.055, 8, 6), mat(THREE, 0x1a1c12, { rough: 0.6 }));
-    childMesh(skin, nos, side * 0.24, -0.34, 4.2);
+    const suffix = side < 0 ? 'left' : 'right';
+    const hit = skinHit([side * 6, -0.42, 3.25], [-side, 0, 0]);
+    if (!hit) return;
+    const eyeGeo = new THREE.SphereGeometry(1, 28, 18);
+    eyeGeo.scale(0.25, 0.19, 0.12); seal(eyeGeo);
+    const eye = new THREE.Mesh(eyeGeo, mat(THREE, 0x413e28, { rough: 0.42, clear: 0.36, clearRough: 0.3, noTex: true }));
+    eye.name = 'eye-' + suffix;
+    seatOnSkin(eye, hit, 0.045);
+    const irisGeo = new THREE.SphereGeometry(1, 28, 14);
+    irisGeo.scale(0.13, 0.10, 0.026);
+    const ip = irisGeo.attributes.position, colours = new Float32Array(ip.count * 3), c = new THREE.Color();
+    const irisDark = new THREE.Color(0x5d502b), irisGold = new THREE.Color(0xa89958);
+    for (let i = 0; i < ip.count; i++) {
+      const a = Math.atan2(ip.getY(i) / 0.10, ip.getX(i) / 0.13);
+      const fibre = 0.5 + 0.5 * Math.sin(a * 23 + Math.sin(a * 7));
+      c.copy(irisDark).lerp(irisGold, 0.22 + fibre * 0.58);
+      colours.set([c.r, c.g, c.b], i * 3);
+    }
+    irisGeo.setAttribute('color', new THREE.Float32BufferAttribute(colours, 3)); seal(irisGeo);
+    const iris = new THREE.Mesh(irisGeo, mat(THREE, 0xffffff, { vcol: true, rough: 0.38, clear: 0.4, clearRough: 0.24, noTex: true }));
+    iris.name = 'iris-' + suffix; childMesh(eye, iris, 0, 0, 0.108);
+    const pupilGeo = new THREE.SphereGeometry(1, 24, 12);
+    pupilGeo.scale(0.078, 0.024, 0.012); seal(pupilGeo);
+    const pupil = new THREE.Mesh(pupilGeo, mat(THREE, 0x10140d, { rough: 0.3, clear: 0.48, clearRough: 0.2, noTex: true }));
+    pupil.name = 'pupil-' + suffix; childMesh(eye, pupil, 0, 0, 0.13);
+    for (const upper of [true, false]) {
+      const arc = [];
+      for (let i = 0; i <= 12; i++) {
+        const a = (i / 12 + (upper ? 0 : 1)) * Math.PI;
+        arc.push([Math.cos(a) * 0.255, Math.sin(a) * (upper ? 0.19 : 0.17), 0.025]);
+      }
+      const lid = hideDetail(tube(THREE, 0x727448, arc, upper ? 0.04 : 0.025,
+        { rough: 0.72, clear: 0.18, rad: 8, seg: 24 }), (upper ? 'upper' : 'lower') + '-eyelid-' + suffix);
+      lid.position.copy(eye.position); lid.quaternion.copy(eye.quaternion); skin.add(lid);
+    }
+    const tymHit = skinHit([side * 6, -0.32, 2.72], [-side, 0, 0]);
+    if (tymHit) {
+      const g = new THREE.SphereGeometry(1, 24, 14); g.scale(0.19, 0.17, 0.026); seal(g);
+      const tym = hideDetail(new THREE.Mesh(g, mat(THREE, 0x65643f, { rough: 0.76, clear: 0.12 })), 'tympanum-' + suffix);
+      seatOnSkin(tym, tymHit, 0.015);
+    }
+    const nostrilHit = skinHit([side * 0.34, -6, 4.06], [0, 1, 0]);
+    if (nostrilHit) {
+      const g = new THREE.SphereGeometry(1, 12, 8); g.scale(0.043, 0.022, 0.015); seal(g);
+      const nos = new THREE.Mesh(g, mat(THREE, 0x303523, { rough: 0.78, clear: 0.08, noTex: true }));
+      nos.name = 'nostril-' + suffix; seatOnSkin(nos, nostrilHit, 0.007);
+    }
   }
   frogEye(-1); frogEye(1);
+
+  // A closed jaw margin and a low labial fold give the otherwise blank ventral
+  // head a readable contour. Every centreline sample is projected onto skin.
+  for (const fold of [false, true]) {
+    const points = [];
+    for (let i = 0; i <= 30; i++) {
+      const x = (i / 30 * 2 - 1) * 1.43;
+      const z = 3.18 + 1.15 * Math.sqrt(Math.max(0, 1 - Math.pow(x / 1.46, 2))) - (fold ? 0.07 : 0);
+      const hit = skinHit([x, 6, z], [0, -1, 0]);
+      if (hit) points.push(hit.point.toArray());
+    }
+    const lip = tube(THREE, fold ? 0xb8b588 : 0x5a5c3d, points, fold ? 0.036 : 0.017,
+      { rough: 0.74, clear: 0.13, rad: 8, seg: 48 });
+    lip.name = fold ? 'labial-fold' : 'closed-mouth-seam';
+    if (fold) hideDetail(lip, lip.name);
+    skin.add(lip);
+  }
 
   add({
     id: 'skin', name: 'Skin', layer: 0, system: 'integument', cuttable: true, detachable: false,
@@ -113,11 +181,40 @@ function buildFrog(THREE) {
    * flattened webbed foot and splayed digits as decorative children. Forelimbs
    * are short with 4 digits; hindlimbs long, sharply folded, with 5 long webbed
    * digits. A frog at rest folds its limbs — it is not a starfish. */
-  function frogDigit(parent, x, y, z, len, rad, spread, tilt) {
-    const d = new THREE.Mesh(new THREE.CapsuleGeometry(rad, len, 4, 8),
-      mat(THREE, 0x54682f, { rough: 0.62, sheen: 0xaec07a }));
-    childMesh(parent, d, x, y, z, Math.PI / 2 + tilt, 0, spread);
+  function frogDigit(parent, points, radius, index) {
+    const d = hideDetail(tube(THREE, 0x7b7a4b, points, radius,
+      { rough: 0.7, clear: 0.18, seg: 14, rad: 8 }), 'digit-' + (index + 1));
+    taperLimb(d, [[0, radius], [0.55, radius * 0.78], [1, radius * 0.36]]);
+    const tip = hideDetail(new THREE.Mesh(new THREE.SphereGeometry(radius * 0.37, 10, 6),
+      mat(THREE, 0x7b7a4b, { rough: 0.7, clear: 0.18 })), 'digit-tip-' + (index + 1));
+    childMesh(d, tip, ...points[points.length - 1]);
+    parent.add(d);
     return d;
+  }
+  function frogWeb(foot, left, right, index) {
+    const a = left.geometry.parameters.path, b = right.geometry.parameters.path;
+    const positions = [], indices = [], rows = 8, columns = 4;
+    // Each edge follows a real toe centreline. The middle recedes into a soft
+    // notch, so this is between-digit webbing rather than a decorative circle.
+    for (let row = 0; row <= rows; row++) for (let col = 0; col <= columns; col++) {
+      const s = col / columns, t = row / rows * (0.68 - 0.19 * Math.sin(Math.PI * s));
+      const v = a.getPointAt(t).lerp(b.getPointAt(t), s);
+      v.y -= Math.sin(Math.PI * s) * Math.sin(Math.PI * row / rows) * 0.026;
+      positions.push(v.x, v.y, v.z);
+      if (row < rows && col < columns) {
+        const i = row * (columns + 1) + col;
+        indices.push(i, i + 1, i + columns + 1, i + 1, i + columns + 2, i + columns + 1);
+      }
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3)); g.setIndex(indices);
+    const uv = [];
+    for (let row = 0; row <= rows; row++) for (let col = 0; col <= columns; col++) uv.push(col / columns, row / rows);
+    g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); seal(g);
+    const web = hideDetail(new THREE.Mesh(g, mat(THREE, 0xa39f6c,
+      { rough: 0.72, clear: 0.16, side: THREE.DoubleSide, trans: true, opacity: 0.88, transmission: 0.12, thickness: 0.04 })), 'interdigital-web-' + (index + 1));
+    web.material.depthWrite = false;
+    foot.add(web);
   }
   // Derive the shoulder/hip insertion from the actual deformed flank. A fixed
   // x coordinate only grazed that surface, exposing the open end of each tube.
@@ -129,7 +226,7 @@ function buildFrog(THREE) {
     const flank = hit ? Math.abs(hit.point.x) : 1.85;
     return [side * Math.max(0.85, flank - inset), y, z];
   }
-  function taperLimb(mesh, radii) {
+  function taperLimb(mesh, radii, flatten = 1) {
     const geo = mesh.geometry, params = geo.parameters, pos = geo.attributes.position;
     const v = new THREE.Vector3();
     for (let i = 0; i < pos.count; i++) {
@@ -141,18 +238,21 @@ function buildFrog(THREE) {
       const radius = a[1] + (b[1] - a[1]) * f;
       // TubeGeometry places rings at arc-length fractions, not spline time.
       const center = params.path.getPointAt(t);
-      v.fromBufferAttribute(pos, i).sub(center).multiplyScalar(radius / params.radius).add(center);
+      v.fromBufferAttribute(pos, i).sub(center).multiplyScalar(radius / params.radius);
+      v.y *= flatten;
+      v.add(center);
       pos.setXYZ(i, v.x, v.y, v.z);
     }
     seal(geo);
   }
   function limb(lid, nm, sx, long, seed) {
-    let path, r, foot, footPos, footRot, nDig, digLen, webW, webL;
+    let path, r, foot, footPos, footRot, nDig;
     if (long) {
       // hindlimb: long, sharply folded — thigh forward, shank back, big webbed foot
       path = [
         limbRoot(sx, 0.05, -2.25, 0.74),
-        [sx * 3.05, -0.12, -1.25],   // knee (thrust forward)
+        [sx * 3.20, -0.12, -1.35],   // thigh into the rounded knee
+        [sx * 3.30, -0.14, -1.90],   // carry the bend rather than an acute corner
         [sx * 2.7, -0.2, -3.35],     // ankle (folded back)
         [sx * 2.05, -0.17, -4.65],   // heel, seated inside the long foot
       ];
@@ -160,12 +260,13 @@ function buildFrog(THREE) {
       foot = new THREE.Mesh(new THREE.SphereGeometry(1, 18, 12), mat(THREE, 0x54682f, { rough: 0.62, sheen: 0xaec07a }));
       foot.geometry.scale(0.24, 0.1, 0.85); seal(foot.geometry);
       footPos = [sx * 1.95, -0.18, -5.2]; footRot = [0.1, -sx * 0.26, 0];
-      nDig = 5; digLen = 0.95; webW = 0.9; webL = 1.05;
+      nDig = 5;
     } else {
       // forelimb: shorter, folded, small 4-digit hand
       path = [
         limbRoot(sx, 0.06, 2.05, 0.48),
-        [sx * 2.6, -0.06, 2.6],      // elbow
+        [sx * 2.78, -0.04, 2.48],    // upper arm into the elbow
+        [sx * 2.86, -0.06, 2.75],    // rounded elbow transition
         [sx * 2.3, -0.12, 3.35],     // wrist
         [sx * 2.15, -0.14, 3.64],    // continue inside the palm, not short of it
       ];
@@ -173,27 +274,28 @@ function buildFrog(THREE) {
       foot = new THREE.Mesh(new THREE.SphereGeometry(1, 16, 10), mat(THREE, 0x54682f, { rough: 0.62, sheen: 0xaec07a }));
       foot.geometry.scale(0.2, 0.09, 0.34); seal(foot.geometry);
       footPos = [sx * 2.15, -0.14, 3.85]; footRot = [0.1, sx * 0.4, 0];
-      nDig = 4; digLen = 0.34; webW = 0; webL = 0;
+      nDig = 4;
     }
     const m = tube(THREE, 0x5a6b33, path, r, { rough: 0.62, sheen: 0xaec07a, clear: 0.4, seg: 40, rad: 16, seed });
     taperLimb(m, long
       ? [[0, 0.47], [0.18, 0.57], [0.42, 0.32], [0.74, 0.24], [1, 0.19]]
-      : [[0, 0.32], [0.25, 0.34], [0.7, 0.22], [1, 0.16]]);
+      : [[0, 0.32], [0.25, 0.34], [0.7, 0.22], [1, 0.16]], long ? 0.82 : 0.88);
+    hideDetail(m, lid);
+    hideDetail(foot, long ? 'hind-foot' : 'fore-hand');
     childMesh(m, foot, ...footPos, ...footRot);
-    // splayed digits fanning off the far end of the foot
+    const digits = [];
+    const tipX = long ? [-0.50, -0.30, -0.05, 0.24, 0.45] : [-0.38, -0.14, 0.12, 0.35];
+    const tipZ = long ? [0.94, 1.23, 1.47, 1.53, 1.12] : [0.48, 0.69, 0.72, 0.56];
+    const direction = long ? -1 : 1;
+    // Unequal, gently jointed digits originate INSIDE the palm. All positions
+    // are foot-local, so the ankle, palm, toes and webs share the same rotation.
     for (let i = 0; i < nDig; i++) {
-      const f = (i - (nDig - 1) / 2) / Math.max(1, nDig - 1);   // -0.5 .. 0.5
-      const dz = (long ? -5.9 : 4.15);
-      frogDigit(m, footPos[0] + f * 0.34, footPos[1] + 0.02,
-        (footRot ? dz : dz), digLen, long ? 0.06 : 0.05, f * (long ? 0.55 : 0.5), 0);
+      const x0 = sx * (i / (nDig - 1) - 0.5) * (long ? 0.28 : 0.24);
+      const z0 = direction * (long ? 0.36 : 0.08), x1 = sx * tipX[i], z1 = direction * tipZ[i];
+      digits.push(frogDigit(foot, [[x0, 0, z0], [x0 * 0.44 + x1 * 0.56, 0.018, z0 * 0.46 + z1 * 0.54],
+        [x1 * 0.95, 0.005, z1 * 0.91], [x1, -0.01, z1]], long ? 0.046 : 0.038, i));
     }
-    if (long && webW) {
-      // toe webbing: a thin translucent triangular fan between the digits
-      const web = new THREE.Mesh(new THREE.CircleGeometry(webL, 5, Math.PI * 0.15, Math.PI * 0.7),
-        mat(THREE, 0x59692f, { trans: true, opacity: 0.5, rough: 0.6, side: THREE.DoubleSide }));
-      web.scale.set(webW, 1, 1);
-      childMesh(m, web, footPos[0], footPos[1] - 0.02, -5.75, Math.PI / 2, 0, 0);
-    }
+    if (long) for (let i = 0; i < digits.length - 1; i++) frogWeb(foot, digits[i], digits[i + 1], i);
     return add({
       id: lid, name: nm, layer: 0, system: 'muscular', cuttable: false, detachable: false,
       note: long ? 'Long and sharply folded — the powerhouse for the leap. Pin it out splayed so the body wall comes under tension.'

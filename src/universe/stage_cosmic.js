@@ -25,7 +25,7 @@ UNI.register('universe', ({ THREE, KIT, meta }) => {
   // a second, counter-rotating copy adds real parallax depth to the field
   const sky2Mat = KIT.track(new THREE.MeshBasicMaterial({
     map: texLoad(THREE, 'deepField'), side: THREE.BackSide, transparent: true,
-    opacity: 0.35, depthWrite: false, blending: THREE.AdditiveBlending,
+    opacity: 0.08, depthWrite: false, blending: THREE.AdditiveBlending,
   }));
   const sky2 = new THREE.Mesh(new THREE.SphereGeometry(3.6, 32, 24), sky2Mat);
   sky2.rotation.set(1.1, 2.2, 0.4); root.add(sky2);
@@ -49,16 +49,18 @@ UNI.register('universe', ({ THREE, KIT, meta }) => {
   const neb = new THREE.Mesh(new THREE.PlaneGeometry(2.6, 2.4), nebMat);
   neb.position.set(-2.1, 1.2, -2.4); neb.rotation.z = 0.5; root.add(neb);
   const neb2 = new THREE.Mesh(new THREE.PlaneGeometry(2.0, 1.9), nebMat.clone());
-  KIT.track(neb2.material); neb2.material.opacity = 0.3;
+  KIT.track(neb2.material); neb2.material.userData.baseOpacity = 0.3;
   neb2.position.set(2.4, -1.4, -2.0); neb2.rotation.z = -1.1; root.add(neb2);
 
   // ── foreground stars, so moving through the field has real depth
   const N = 900, sp = new Float32Array(N * 3);
   for (let i = 0; i < N; i++) {
-    const v = new THREE.Vector3().randomDirection().multiplyScalar(1.6 + Math.random() * 2.6);
+    const a = KIT.hash(i + 101) * KIT.TAU, y = KIT.hash(i + 211) * 2 - 1;
+    const r = 1.6 + KIT.hash(i + 313) * 2.6, radial = Math.sqrt(1 - y * y);
+    const v = new THREE.Vector3(Math.cos(a) * radial, y, Math.sin(a) * radial).multiplyScalar(r);
     sp[i * 3] = v.x; sp[i * 3 + 1] = v.y; sp[i * 3 + 2] = v.z;
   }
-  const stars = KIT.points(sp, H.ink, 0.016, { opacity: 0.75 });
+  const stars = KIT.points(sp, H.ink, 0.009, { opacity: 0.52 });
   root.add(stars);
 
   const HS = meta.hotspots || {};
@@ -90,7 +92,7 @@ UNI.register('earth', ({ THREE, KIT, meta }) => {
   const earthMat = KIT.track(new THREE.MeshStandardMaterial({
     map: texLoad(THREE, 'earthDay'),
     emissiveMap: texLoad(THREE, 'earthNight'),
-    emissive: 0xffd9a0, emissiveIntensity: 0.85,
+    emissive: 0xffd9a0, emissiveIntensity: 0.22,
     roughness: 0.82, metalness: 0.0, transparent: true,
   }));
   const earth = new THREE.Mesh(new THREE.SphereGeometry(1.35, 96, 64), earthMat);
@@ -100,20 +102,20 @@ UNI.register('earth', ({ THREE, KIT, meta }) => {
   // ── atmosphere: a rim-lit shell. Backside + additive gives the blue limb glow
   //    you see from orbit without needing a custom shader.
   const atmoMat = KIT.track(new THREE.MeshBasicMaterial({
-    color: 0x5fa8e8, transparent: true, opacity: 0.13,
+    color: 0x5fa8e8, transparent: true, opacity: 0.12,
     side: THREE.BackSide, blending: THREE.AdditiveBlending, depthWrite: false,
   }));
-  globe.add(new THREE.Mesh(new THREE.SphereGeometry(1.44, 48, 32), atmoMat));
+  globe.add(new THREE.Mesh(new THREE.SphereGeometry(1.38, 48, 32), atmoMat));
   const haloMat = KIT.track(new THREE.MeshBasicMaterial({
-    color: 0x2f7fd0, transparent: true, opacity: 0.06,
+    color: 0x2f7fd0, transparent: true, opacity: 0.025,
     side: THREE.BackSide, blending: THREE.AdditiveBlending, depthWrite: false,
   }));
-  globe.add(new THREE.Mesh(new THREE.SphereGeometry(1.62, 32, 24), haloMat));
+  globe.add(new THREE.Mesh(new THREE.SphereGeometry(1.42, 32, 24), haloMat));
 
   // ── cloud deck: a thin procedural shell that drifts against the surface
   const cloudTex = KIT.noiseTex(256, 11, 5);
   const cloudMat = KIT.track(new THREE.MeshStandardMaterial({
-    map: cloudTex, alphaMap: cloudTex, transparent: true, opacity: 0.30,
+    map: cloudTex, alphaMap: cloudTex, transparent: true, opacity: 0.16,
     roughness: 1, metalness: 0, depthWrite: false, color: 0xffffff,
   }));
   const clouds = new THREE.Mesh(new THREE.SphereGeometry(1.375, 64, 40), cloudMat);
@@ -122,7 +124,7 @@ UNI.register('earth', ({ THREE, KIT, meta }) => {
   // the deep field stays faintly behind the planet — we are still in space
   const bgMat = KIT.track(new THREE.MeshBasicMaterial({
     map: texLoad(THREE, 'deepField'), side: THREE.BackSide,
-    transparent: true, opacity: 0.5, depthWrite: false,
+    transparent: true, opacity: 0.12, depthWrite: false,
   }));
   root.add(new THREE.Mesh(new THREE.SphereGeometry(6, 32, 24), bgMat));
 
@@ -230,7 +232,7 @@ UNI.register('biome', ({ THREE, KIT, meta }) => {
     for (const o of trees) o.t.rotation.z = Math.sin(clock * 0.7 + o.ph) * 0.028;
     const pp = pollen.geometry.attributes.position.array;
     for (let i = 0; i < pp.length; i += 3) {
-      pp[i + 1] += dt * 0.055; pp[i] += Math.sin(clock + i) * 0.0008;
+      pp[i + 1] += dt * 0.055; pp[i] += Math.sin(clock + i) * dt * 0.048;
       if (pp[i + 1] > 2.4) pp[i + 1] = -0.5;
     }
     pollen.geometry.attributes.position.needsUpdate = true;
@@ -337,10 +339,10 @@ UNI.register('organism', ({ THREE, KIT, meta }) => {
   ].filter((h) => h.meta);
 
   let clock = 0;
-  function update(dt) {
+  function update(dt, d, camera, fade = 1) {
     clock += dt; body.rotation.y = Math.sin(clock * 0.14) * 0.42;
     const b = 1 + Math.sin(clock * 2.4) * 0.15; heart.scale.setScalar(b);
-    brain.material.opacity = 0.45 + 0.3 * Math.sin(clock * 3);
+    brain.material.opacity = fade * (0.45 + 0.3 * Math.sin(clock * 3));
     const arr = nervePulse.geometry.attributes.position.array;
     for (let i = 0; i < 40; i++) {
       const t = ((clock * 0.55 + i / 40) % 1);

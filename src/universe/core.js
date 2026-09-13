@@ -37,12 +37,89 @@ const UNI_FADE0 = 0.5;        // full opacity while |d| < FADE0, then fades to B
 const UNI_CAM_Z = 3.5;        // camera distance; stages authored to fill at scale 1
 const UNI_LAMBDA = 6.5;       // zoom easing rate (higher = snappier)
 
+// A single Pointer Events path owns drag and pinch, so a two-finger gesture can
+// never also move the scale as a one-finger drag. Kept separate for event tests.
+function bindUniverseInput(el, keyboardTarget, Z, api) {
+  const pointers = new Map(), listeners = [];
+  let lastT = 0, dragVel = 0, pinchPrev = 0;
+  const listen = (target, event, fn, options) => {
+    target.addEventListener(event, fn, options);
+    listeners.push(() => target.removeEventListener(event, fn, options));
+  };
+  const distance = () => {
+    const [a, b] = [...pointers.values()];
+    return Math.hypot(a.x - b.x, a.y - b.y);
+  };
+  listen(el, 'wheel', e => {
+    e.preventDefault();
+    const unit = e.deltaMode === 1 ? 1 : e.deltaMode === 2 ? 8 : 0.01;
+    // Trackpad spread emits negative ctrl+wheel: spread must move IN, not out.
+    const d = KIT.clamp(e.deltaY * unit * (e.ctrlKey ? -0.3 : 0.5), -0.9, 0.9);
+    Z.flingVel = api.reduced() ? 0 : KIT.clamp(Z.flingVel + d * 0.2, -2, 2);
+    api.nudge(d);
+  }, { passive: false });
+  listen(el, 'pointerdown', e => {
+    if ((e.pointerType === 'mouse' && e.button !== 0) || pointers.size >= 2) return;
+    pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    lastT = api.now(); dragVel = 0; Z.flingVel = 0;
+    pinchPrev = pointers.size === 2 ? distance() : 0;
+    el.setPointerCapture(e.pointerId);
+    api.wake();
+  });
+  listen(el, 'pointermove', e => {
+    if (!api.reduced() && e.pointerType !== 'touch') {
+      Z.pxT = (e.clientX / Math.max(1, innerWidth) - 0.5) * 0.16;
+      Z.pyT = (e.clientY / Math.max(1, innerHeight) - 0.5) * 0.16;
+    }
+    api.wake();
+    const prev = pointers.get(e.pointerId);
+    if (!prev) return;
+    pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pointers.size === 2) {
+      const next = distance();
+      if (pinchPrev > 0 && next > 0) api.nudge(Math.log(next / pinchPrev) * 1.8);
+      pinchPrev = next; dragVel = 0;
+    } else {
+      const d = -(e.clientY - prev.y) * 0.009;
+      dragVel = d / (Math.max(8, api.now() - lastT) / 1000);
+      api.nudge(d);
+    }
+    lastT = api.now();
+  });
+  function end(e, cancelled) {
+    if (!pointers.has(e.pointerId)) return;
+    const wasPinch = pointers.size > 1;
+    pointers.delete(e.pointerId);
+    if (el.hasPointerCapture?.(e.pointerId)) el.releasePointerCapture(e.pointerId);
+    Z.flingVel = cancelled || wasPinch || api.reduced() ? 0 : KIT.clamp(dragVel * 0.08, -2, 2);
+    dragVel = 0; pinchPrev = 0; lastT = api.now();
+  }
+  listen(el, 'pointerup', e => end(e, false));
+  listen(el, 'pointercancel', e => end(e, true));
+  listen(el, 'lostpointercapture', e => end(e, true));
+  listen(keyboardTarget, 'blur', () => { pointers.clear(); pinchPrev = dragVel = Z.flingVel = 0; });
+  listen(keyboardTarget, 'keydown', e => {
+    if (e.ctrlKey || e.metaKey || e.altKey || e.target?.isContentEditable || /INPUT|TEXTAREA|SELECT/.test(e.target?.tagName || '')) return;
+    if (e.key === 'ArrowUp' || e.key === '=' || e.key === '+') api.jumpTo(Z.posTarget + 0.5, true);
+    else if (e.key === 'ArrowDown' || e.key === '-' || e.key === '_') api.jumpTo(Z.posTarget - 0.5, true);
+    else if (e.key === 'Home') api.jumpTo(0, true);
+    else if (e.key === 'End') api.jumpTo(api.count - 1, true);
+    else if (/^[0-9]$/.test(e.key)) api.jumpTo(e.key === '0' ? 9 : +e.key - 1, true);
+    else return;
+    e.preventDefault();
+  });
+  return () => listeners.forEach(remove => remove());
+}
+
 function bootUniverse(mount) {
   // Guard against a zero-size viewport at construction (hidden tab / snapshot):
   // aspect = 0/0 = NaN poisons the projection matrix and nothing would render.
   const vw = () => Math.max(1, innerWidth), vh = () => Math.max(1, innerHeight);
+  // Preserve horizontal subject framing on narrow phones instead of cropping
+  // most of a cell or planet. The camera stays inside the authored sky shells.
+  const fieldOfView = () => 2 * Math.atan(Math.tan(25 * Math.PI / 180) / Math.min(1, vw() / vh())) * 180 / Math.PI;
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(50, vw() / vh(), 0.001, 100);
+  const camera = new THREE.PerspectiveCamera(fieldOfView(), vw() / vh(), 0.001, 100);
   camera.position.set(0, 0, UNI_CAM_Z);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' });
@@ -60,13 +137,12 @@ function bootUniverse(mount) {
   // gives every highlight something real to reflect. Without it PBR looks flat.
   try { scene.environment = KIT.studioEnv(renderer); } catch (e) { /* non-fatal */ }
 
-  scene.add(new THREE.AmbientLight(0x2a3a4c, 0.55));
-  // A three-point rig: warm key above-right, cool fill, and a strong cyan rim that
-  // separates organic silhouettes from the dark background.
-  const key = new THREE.DirectionalLight(0xfff0dc, 2.6); key.position.set(3.5, 5, 5); scene.add(key);
-  const fill = new THREE.DirectionalLight(0x9fc4ff, 0.85); fill.position.set(-4, 1.5, 4); scene.add(fill);
-  const rim = new THREE.DirectionalLight(0x7cffe0, 1.9); rim.position.set(-4.5, -1.5, -5); scene.add(rim);
-  const under = new THREE.PointLight(0x4a6cf0, 18, 26); under.position.set(0, -4, 2); scene.add(under);
+  scene.add(new THREE.AmbientLight(0xc2c9c4, 0.18));
+  // Broad neutral illumination preserves authored tissue colours. A faint cool
+  // rim separates form without painting every organism cyan or violet.
+  const key = new THREE.DirectionalLight(0xfff3e4, 2.2); key.position.set(3.5, 5, 5); scene.add(key);
+  const fill = new THREE.DirectionalLight(0xc4d4df, 0.45); fill.position.set(-4, 1.5, 4); scene.add(fill);
+  const rim = new THREE.DirectionalLight(0xc6ded8, 0.65); rim.position.set(-4.5, -1.5, -5); scene.add(rim);
 
   // ── post: bloom is what makes ATP, electrons, stars and the DNA glow read as
   //    light. Optional — a CDN hiccup degrades to a crisp un-bloomed frame.
@@ -76,7 +152,7 @@ function bootUniverse(mount) {
       const { EffectComposer, RenderPass, UnrealBloomPass, OutputPass } = POSTFX_DEPS;
       composer = new EffectComposer(renderer);
       composer.addPass(new RenderPass(scene, camera));
-      bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.62, 0.7, 0.85);
+      bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.25, 0.45, 1.0);
       composer.addPass(bloom);
       if (OutputPass) composer.addPass(new OutputPass());
     }
@@ -85,6 +161,7 @@ function bootUniverse(mount) {
   // ── build every registered stage, index-aligned with ORDER. A stage that throws
   //    during construction is skipped, not fatal — the relay just steps over it.
   const meta = (typeof UNI_DATA === 'object') ? UNI_DATA : {};
+  UNI.stages = [];
   UNI.ORDER.forEach((key) => {
     const factory = UNI._factories[key];
     if (!factory) { UNI.stages.push(null); return; }
@@ -97,6 +174,9 @@ function bootUniverse(mount) {
   });
 
   const N = UNI.ORDER.length;
+  const motion = matchMedia('(prefers-reduced-motion: reduce)');
+  let reducedMotion = motion.matches;
+  const initialized = new WeakSet();
 
   // ── zoom state. `pos` is eased toward `posTarget`; `flingVel` adds glide after
   //    a drag/wheel flick so momentum decays naturally instead of stopping dead.
@@ -108,77 +188,32 @@ function bootUniverse(mount) {
   };
 
   function clampTarget() { Z.posTarget = KIT.clamp(Z.posTarget, 0, N - 1); }
-  function nudge(delta) { Z.posTarget += delta; clampTarget(); Z.lastInput = now(); wake(); }
+  function nudge(delta) { Z.posTarget += delta; clampTarget(); if (reducedMotion) { Z.pos = Z.posTarget; Z.flingVel = 0; } Z.lastInput = now(); wake(); }
   function now() { return performance.now(); }
 
   // ── input ──────────────────────────────────────────────────────────────────
   const el = renderer.domElement;
-  // Wheel: normalise the three deltaModes to "lines", then to zoom units. Trackpad
-  // pinch arrives as ctrlKey+wheel on most browsers — treat it as a finer zoom.
-  el.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    const unit = e.deltaMode === 1 ? 1 : e.deltaMode === 2 ? 8 : 1 / 100;
-    let d = e.deltaY * unit * (e.ctrlKey ? 0.6 : 1) * 0.5;
-    Z.flingVel = KIT.clamp(Z.flingVel + d * 0.4, -6, 6);
-    nudge(d);
-  }, { passive: false });
-
-  // Drag to zoom (vertical) — a tactile way to fly, with flick momentum on release.
-  let dragging = false, lastY = 0, lastT = 0, dragVel = 0;
-  el.addEventListener('pointerdown', (e) => {
-    dragging = true; lastY = e.clientY; lastT = now(); dragVel = 0; Z.flingVel = 0;
-    el.setPointerCapture(e.pointerId);
+  const unbindInput = bindUniverseInput(el, window, Z, {
+    nudge, jumpTo, now, reduced: () => reducedMotion, count: N,
+    wake: () => { Z.lastInput = now(); wake(); },
   });
-  el.addEventListener('pointermove', (e) => {
-    // parallax target follows the pointer in all cases (subtle life).
-    Z.pxT = (e.clientX / innerWidth - 0.5) * 0.5;
-    Z.pyT = (e.clientY / innerHeight - 0.5) * 0.5;
-    if (dragging) {
-      const dy = e.clientY - lastY, dt = Math.max(1, now() - lastT);
-      const d = -dy * 0.012;            // drag up = zoom in
-      dragVel = d / (dt / 1000);
-      lastY = e.clientY; lastT = now();
-      nudge(d);
-    }
-  });
-  function endDrag() {
-    if (!dragging) return; dragging = false;
-    // Glide in the SAME direction as the drag. dragVel already carries the sign of
-    // the intended zoom (drag up → +), so no negation — matching the wheel path.
-    Z.flingVel = KIT.clamp(dragVel * 0.12, -6, 6);
+  function jumpTo(i, instant = false) {
+    Z.posTarget = KIT.clamp(i, 0, N - 1); Z.flingVel = 0;
+    if (instant || reducedMotion) Z.pos = Z.posTarget;
+    Z.lastInput = now(); wake(); if (onJump) onJump(Math.round(Z.posTarget));
   }
-  el.addEventListener('pointerup', endDrag);
-  el.addEventListener('pointercancel', endDrag);
-
-  // Pinch to zoom on touch.
-  let pinchPrev = 0;
-  el.addEventListener('touchmove', (e) => {
-    if (e.touches.length !== 2) return;
-    e.preventDefault();
-    const dx = e.touches[0].clientX - e.touches[1].clientX;
-    const dy = e.touches[0].clientY - e.touches[1].clientY;
-    const dist = Math.hypot(dx, dy);
-    if (pinchPrev) nudge((pinchPrev - dist) * 0.01);
-    pinchPrev = dist;
-  }, { passive: false });
-  el.addEventListener('touchend', () => { pinchPrev = 0; });
-
-  // Keyboard: arrows / +- to fly, number keys to jump, Home/End to the extremes.
-  addEventListener('keydown', (e) => {
-    if (e.target && /INPUT|TEXTAREA/.test(e.target.tagName)) return;
-    if (e.key === 'ArrowUp' || e.key === '=' || e.key === '+') { nudge(0.5); }
-    else if (e.key === 'ArrowDown' || e.key === '-' || e.key === '_') { nudge(-0.5); }
-    else if (e.key === 'Home') { Z.posTarget = 0; Z.flingVel = 0; wake(); }
-    else if (e.key === 'End') { Z.posTarget = N - 1; Z.flingVel = 0; wake(); }
-    else if (/^[0-9]$/.test(e.key)) { jumpTo(e.key === '0' ? 9 : +e.key - 1); }
-    else return;
-    Z.lastInput = now();
-  });
-
-  function jumpTo(i) { Z.posTarget = KIT.clamp(i, 0, N - 1); Z.flingVel = 0; Z.lastInput = now(); wake(); if (onJump) onJump(Math.round(Z.posTarget)); }
+  function motionChanged(e) {
+    reducedMotion = e.matches;
+    if (reducedMotion) {
+      Z.pos = Z.posTarget; Z.flingVel = 0;
+      Z.px = Z.py = Z.pxT = Z.pyT = 0;
+      wake();
+    }
+  }
+  motion.addEventListener?.('change', motionChanged);
 
   function relayout() {
-    camera.aspect = vw() / vh(); camera.updateProjectionMatrix();
+    camera.aspect = vw() / vh(); camera.fov = fieldOfView(); camera.updateProjectionMatrix();
     renderer.setSize(vw(), vh());
     if (composer) composer.setSize(vw(), vh());
   }
@@ -208,12 +243,12 @@ function bootUniverse(mount) {
     const t = now();
 
     // fling glide + ease toward target
-    if (Math.abs(Z.flingVel) > 0.0005) { Z.posTarget += Z.flingVel * dt; clampTarget(); Z.flingVel *= Math.exp(-3.5 * dt); }
+    if (!reducedMotion && Math.abs(Z.flingVel) > 0.0005) { Z.posTarget += Z.flingVel * dt; clampTarget(); Z.flingVel *= Math.exp(-5 * dt); }
     else Z.flingVel = 0;
-    Z.pos = KIT.damp(Z.pos, Z.posTarget, UNI_LAMBDA, dt);
+    Z.pos = reducedMotion ? Z.posTarget : KIT.damp(Z.pos, Z.posTarget, UNI_LAMBDA, dt);
 
     // parallax camera drift (spring toward pointer target), always looking at origin
-    Z.px = KIT.damp(Z.px, Z.pxT, 3, dt); Z.py = KIT.damp(Z.py, Z.pyT, 3, dt);
+    Z.px = reducedMotion ? 0 : KIT.damp(Z.px, Z.pxT, 3, dt); Z.py = reducedMotion ? 0 : KIT.damp(Z.py, Z.pyT, 3, dt);
     camera.position.set(Z.px, -Z.py, UNI_CAM_Z);
     camera.lookAt(0, 0, 0);
 
@@ -233,11 +268,13 @@ function bootUniverse(mount) {
       st.root.visible = true;
       st.root.scale.setScalar(scale);
       KIT.setGroupFade(st.root, fade);
-      if (st.update) st.update(dt, d, camera, fade);
+      if (st.update && (!reducedMotion || !initialized.has(st))) {
+        st.update(reducedMotion ? 0 : dt, d, camera, fade); initialized.add(st);
+      }
     }
 
     // auto-immerse after 2.6s idle
-    if (!immersed && t - Z.lastInput > 2600) { immersed = true; if (onImmersion) onImmersion(true); }
+    if (!reducedMotion && !immersed && t - Z.lastInput > 2600 && !document.activeElement?.closest?.('.hud,.u-panel,.u-help,.u-mark')) { immersed = true; if (onImmersion) onImmersion(true); }
 
     if (onFrame) onFrame(Z.pos);
 
@@ -285,8 +322,9 @@ function bootUniverse(mount) {
     onJump: (fn) => { onJump = fn; },
     onFrame: (fn) => { onFrame = fn; },
     get pos() { return Z.pos; },
+    get reducedMotion() { return reducedMotion; },
     count: N,
     _tick: tick,   // advance one frame manually (scripted verification without rAF)
-    dispose() { cancelAnimationFrame(raf); UNI.stages.forEach((s) => s && s.dispose && s.dispose()); renderer.dispose(); },
+    dispose() { cancelAnimationFrame(raf); unbindInput(); motion.removeEventListener?.('change', motionChanged); UNI.stages.forEach((s) => s && s.dispose && s.dispose()); renderer.dispose(); },
   };
 }

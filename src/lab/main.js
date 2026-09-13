@@ -31,6 +31,11 @@ let histology = null, imaging = null, pathology = null;
 let physio = null, tutor = null, xr = null, zoomverse = null;
 let specimenId = null;
 let lastT = 0;
+let preparedFrog = null, preparedInstall = null, installExterior = null;
+const preparedSpecimens = new Map();
+let specimenRequest = 0, specimenAbort = null;
+let specimenGripRelease = false;
+let cancelSpecimenLoad = null;
 
 // The abstract input the dissection engine consumes. Long-lived and mutated in
 // place — reallocating this every frame at 60fps is exactly the kind of garbage
@@ -471,6 +476,7 @@ function tchHitsSpecimen(clientX, clientY) {
 }
 
 function tchDown(e) {
+  if (specimenAbort) return;
   if (e.pointerType !== 'touch') return;   // a pen hovers and a mouse has a button
   if (!tchScene(e)) return;
   TCH.ids.add(e.pointerId);
@@ -514,6 +520,16 @@ function drivingHandSlot(snap) {
 }
 
 function routeInput() {
+  // A pinch held while switching specimens is not a new incision. Require one
+  // neutral input frame before the newly loaded preparation can accept a grip.
+  if (specimenAbort || specimenGripRelease) {
+    const heldHand = hands?.snapshot?.hands?.some(h => h.present && h.isPinching);
+    const heldXR = xr && xr.isPresenting() && xr.input()?.gripping;
+    if (!specimenAbort && !heldHand && !heldXR && !mouse.down) specimenGripRelease = false;
+    input.grip = 0; input.gripping = false; input.span = 0;
+    controls.enabled = false; drawCursor(false); dialReset(); flickReset();
+    return;
+  }
   // VR outranks everything: if a headset is presenting, its controller or tracked
   // hand IS the instrument and the desktop pointer is not even on screen.
   const xin = xr && xr.isPresenting() ? xr.input() : null;
@@ -819,7 +835,85 @@ function captureCutRest() {
   });
 }
 
+// Only the selected additional specimen is downloaded. Hold the current
+// attempt still while loading; a stale response must never replace a newer
+// selection, or install a new surface halfway through a cut.
+async function requestSpecimen(id) {
+  id = normalizeSpecimenId(id);
+  specimenGripRelease = true; mouse.down = false;
+  input.grip = 0; input.gripping = false; input.span = 0;
+  const request = ++specimenRequest;
+  if (specimenAbort) specimenAbort.abort();
+  specimenAbort = null;
+  cancelSpecimenLoad = null;
+  if (id !== 'cockroach' || preparedSpecimens.has(id)) {
+    loadSpecimen(id);
+    renderer.setAnimationLoop(tick);
+    window.__LAB.ready = true;
+    return;
+  }
+  const abort = new AbortController(); specimenAbort = abort;
+  // Free the render thread during local bitmap decode on low-end devices.
+  renderer.setAnimationLoop(null);
+  window.__LAB.ready = false;
+  const loading = document.createElement('div');
+  loading.setAttribute('role', 'status');
+  loading.textContent = 'Preparing the cockroach specimen…';
+  loading.style.cssText = 'position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;background:#080d0ce8;color:#a5d6bb;font:16px system-ui;z-index:9999';
+  document.body.appendChild(loading);
+  cancelSpecimenLoad = () => {
+    if (request !== specimenRequest) return;
+    ++specimenRequest; abort.abort(); specimenAbort = null; cancelSpecimenLoad = null;
+    loading.remove(); window.__LAB.ready = true; renderer.setAnimationLoop(tick);
+    shell.say('Preparation cancelled — your previous specimen is unchanged.');
+  };
+  const cancel = document.createElement('button');
+  cancel.textContent = 'Cancel and return';
+  cancel.style.cssText = 'background:#142a22;color:#c9e6d7;border:1px solid #39765a;border-radius:8px;padding:12px 22px;font:inherit;cursor:pointer';
+  cancel.onclick = cancelSpecimenLoad;
+  loading.appendChild(cancel);
+  let timeout;
+  const deadline = new Promise((resolve, reject) => {
+    abort.signal.addEventListener('abort', () => reject(new DOMException('Specimen preparation cancelled', 'AbortError')), { once: true });
+    timeout = setTimeout(() => abort.abort(), 20000);
+  });
+  const preparation = (async () => {
+    const [loader, adapter] = await Promise.all([
+      import('./src/lab/prepared-loader.js'), import('./src/lab/specimen-assets.js'),
+    ]);
+    if (abort.signal.aborted) throw new DOMException('Specimen preparation cancelled', 'AbortError');
+    const loaded = await loader.loadPreparedSpecimen(THREE, {
+      specimenId: id, url: './assets/specimens/' + id + '.glb', signal: abort.signal,
+    });
+    if (abort.signal.aborted || request !== specimenRequest) {
+      loaded.dispose();
+      throw new DOMException('Specimen preparation cancelled', 'AbortError');
+    }
+    return { loaded, install: adapter.installPreparedExterior };
+  })();
+  let failed = false;
+  try {
+    const result = await Promise.race([preparation, deadline]);
+    if (request !== specimenRequest || abort.signal.aborted) { result.loaded.dispose(); return; }
+    preparedSpecimens.set(id, result.loaded); installExterior = result.install;
+  } catch (error) {
+    failed = true;
+    if (request === specimenRequest) console.warn('Prepared specimen unavailable; interactive fallback retained.', error);
+  } finally {
+    clearTimeout(timeout); loading.remove();
+    if (request === specimenRequest) {
+      specimenAbort = null;
+      cancelSpecimenLoad = null;
+      loadSpecimen(id);
+      renderer.setAnimationLoop(tick);
+      window.__LAB.ready = true;
+      if (failed || !preparedInstall) shell.say('Original interactive cockroach — detailed exterior unavailable. Select it again to retry.');
+    }
+  }
+}
+
 function loadSpecimen(id) {
+  id = normalizeSpecimenId(id);
   if (group) { scene.remove(group); group = null; }
   if (dissection) { dissection.dispose(); dissection = null; }
   if (imaging) { imaging.dispose(); imaging = null; }          // it caches part meshes
@@ -830,11 +924,23 @@ function loadSpecimen(id) {
   if (strata) { strata.dispose(); strata = null; }
   if (cutting) cutting.clear();
   if (blood) blood.clear();
+  if (soft) { soft.dispose(); soft = null; }
+  // Stop geometry consumers before releasing the previous exterior's clones.
+  if (preparedInstall) { preparedInstall.restore(); preparedInstall = null; }
 
   specimenId = id;
   const built = buildSpecimen(THREE, id);
   group = built.group;
   parts = built.parts;
+  const preparedAsset = id === 'frog' ? preparedFrog : preparedSpecimens.get(id);
+  if (preparedAsset && installExterior) {
+    try {
+      preparedInstall = installExterior(THREE, { specimenId: id, parts, prepared: preparedAsset.prepared });
+    } catch (error) {
+      console.warn('Prepared exterior unavailable; original interactive specimen retained.', error);
+      if (id !== 'frog') { preparedSpecimens.delete(id); preparedAsset.dispose(); }
+    }
+  }
   scene.add(group);
 
   const spec = SPECIMENS[id];
@@ -881,6 +987,18 @@ function loadSpecimen(id) {
     const placement = env.fitSpecimen(group);
     camera.position.y += placement.offsetY;
     controls.target.y += placement.offsetY;
+    if ((preparedInstall && ['frog', 'cockroach'].includes(id)) || ['fish', 'earthworm'].includes(id)) {
+      // The photographed folded legs span more than the original procedural
+      // model. Frame the whole preparation cranial-end-up, not a cropped belly.
+      const horizontal = id === 'fish' || id === 'earthworm';
+      const span = horizontal
+        ? Math.max(placement.width, placement.length / Math.max(0.5, camera.aspect))
+        : Math.max(placement.length, placement.width / Math.max(0.5, camera.aspect));
+      const distance = span / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov * 0.5))) * 1.26;
+      controls.target.set(placement.x, placement.supportY + 0.8, placement.z);
+      camera.position.copy(controls.target).add(new THREE.Vector3(horizontal ? -0.46 : 0, 0.89, horizontal ? 0 : -0.46).normalize().multiplyScalar(distance));
+      if (xr) xr.setFocus(...controls.target.toArray());
+    }
     controls.update();
   }
   if (typeof createSoftBody === 'function') {
@@ -993,7 +1111,7 @@ function tick(t) {
   // you can see what is under the blade — and dissect.js picks on mesh.visible, so
   // leaving it live would let the probe hover organs three layers deep. It would
   // also let damage() write material.color onto a shader material that has none.
-  const scanning = imaging && imaging.mode() !== 'off';
+  const scanning = !!specimenAbort || (imaging && imaging.mode() !== 'off');
   if (dissection && !scanning) dissection.update(input, dt);
   if (imaging) imaging.update(dt);
 
@@ -1163,6 +1281,7 @@ function setTool(t) {
 }
 
 function onKey(e) {
+  if (specimenAbort) { if (e.key === 'Escape' && cancelSpecimenLoad) cancelSpecimenLoad(); return; }
   // The tutor's answer line takes prose. Typing "probe" must not fire p, r, o, b
   // and e as shortcuts.
   if (shell.inputOpen && shell.inputOpen()) return;
@@ -1349,7 +1468,63 @@ function onKey(e) {
 
 /* ---- wiring ------------------------------------------------------------ */
 export function startApp() {
+  window.__LAB = window.__LAB || {};
+  window.__LAB.ready = false;
+  return startPreparedApp().catch(error => {
+    window.__LAB.ready = false; window.__LAB.ok = false;
+    window.__LAB.error = String(error && error.message || error);
+    console.error('Dissection startup failed', error);
+    const message = document.createElement('p');
+    message.setAttribute('role', 'alert');
+    message.textContent = 'The lab could not start. Please reload to try again.';
+    message.style.cssText = 'position:fixed;inset:40% 10%;color:#c9e6d7;z-index:9999;text-align:center';
+    document.body.appendChild(message);
+  });
+}
+
+async function startPreparedApp() {
   const root = document.getElementById('stage');
+  // Prepare once, before students can begin an attempt. Never replace a surface
+  // asynchronously midway through a cut. Parsed maps are shared across resets.
+  const loading = document.createElement('div');
+  loading.setAttribute('role', 'status');
+  loading.textContent = 'Preparing the frog specimen…';
+  loading.style.cssText = 'position:fixed;inset:0;display:grid;place-items:center;background:#080d0c;color:#a5d6bb;font:16px system-ui;z-index:9999';
+  document.body.appendChild(loading);
+  const assetAbort = new AbortController();
+  let assetTimeout;
+  // Dynamic imports do not accept AbortSignal. Bound the entire preparation,
+  // not just fetch/decode, so a stalled local module cannot trap the student on
+  // this loading screen. A late result belongs to this expired attempt only.
+  const deadline = new Promise((resolve, reject) => {
+    assetTimeout = setTimeout(() => {
+      assetAbort.abort();
+      reject(new Error('Frog preparation timed out'));
+    }, 20000);
+  });
+  const preparation = (async () => {
+    const [loader, adapter] = await Promise.all([
+      import('./src/lab/prepared-loader.js'), import('./src/lab/specimen-assets.js'),
+    ]);
+    if (assetAbort.signal.aborted) throw new DOMException('Frog preparation cancelled', 'AbortError');
+    const loaded = await loader.loadPreparedSpecimen(THREE, {
+      specimenId: 'frog', url: './assets/specimens/frog.glb', signal: assetAbort.signal,
+    });
+    if (assetAbort.signal.aborted) {
+      loaded.dispose();
+      throw new DOMException('Frog preparation cancelled', 'AbortError');
+    }
+    return { loaded, install: adapter.installPreparedExterior };
+  })();
+  try {
+    const result = await Promise.race([preparation, deadline]);
+    preparedFrog = result.loaded;
+    installExterior = result.install;
+  } catch (error) {
+    console.warn('Frog scan could not load; using the original interactive specimen.', error);
+  } finally {
+    clearTimeout(assetTimeout); loading.remove();
+  }
   bootScene(root);
   shell = buildShell(document.body);
 
@@ -1397,8 +1572,8 @@ export function startApp() {
     }
   }
 
-  shell.mountCards(SPECIMENS, (id) => loadSpecimen(id));
-  shell.on('specimen', (id) => loadSpecimen(id));
+  shell.mountCards(SPECIMENS, (id) => requestSpecimen(id));
+  shell.on('specimen', (id) => requestSpecimen(id));
   shell.on('viva', () => {
     if (!dissection) return;
     // The viva now marks against the tutor transcript and, if a case is loaded,
@@ -1513,6 +1688,7 @@ export function startApp() {
     mouse.x = e.clientX / innerWidth; mouse.y = e.clientY / innerHeight;
   });
   addEventListener('pointerdown', (e) => {
+    if (specimenAbort) return;
     if (e.pointerType === 'touch') return;
     if (e.target.closest('.chrome')) return;
     mouse.down = true;
@@ -1537,6 +1713,7 @@ export function startApp() {
     drivingHandSlot: { get: () => handDrive.slot, configurable: true },
   });
   window.__LAB.loadSpecimen = loadSpecimen;
+  window.__LAB.requestSpecimen = requestSpecimen;
   window.__LAB.setCase = setCase;
   window.__LAB.setTool = setTool;
   // Drive the engine exactly as a hand or mouse would, for testing.
@@ -1639,4 +1816,6 @@ export function startApp() {
     if (renderer) renderer.toneMappingExposure = 1.15;
     loadSpecimen('frog');
   }
+  window.__LAB.ready = true;
+  if (!preparedInstall) shell.say('Original interactive frog — the scanned exterior is unavailable. Reload to retry.');
 }

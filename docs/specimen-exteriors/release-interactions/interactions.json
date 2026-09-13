@@ -1,0 +1,268 @@
+{
+  "base": "http://127.0.0.1:3003",
+  "requestedSpecimens": [
+    "frog",
+    "cockroach",
+    "earthworm",
+    "fish",
+    "heart"
+  ],
+  "specimens": [
+    {
+      "id": "frog",
+      "pinned": 4,
+      "layers": [
+        {
+          "part": "skin",
+          "incisionLength": 1.659064689844987,
+          "cutIndexCount": 20757,
+          "opened": true,
+          "removed": true,
+          "hidden": true,
+          "nextLayer": 1
+        },
+        {
+          "part": "subcutaneous-fascia",
+          "incisionLength": 1.5918020105154513,
+          "cutIndexCount": 31077,
+          "opened": true,
+          "removed": true,
+          "hidden": true,
+          "nextLayer": 2
+        },
+        {
+          "part": "muscle-wall",
+          "incisionLength": 1.6861608902033436,
+          "cutIndexCount": 10038,
+          "opened": true,
+          "removed": true,
+          "hidden": true,
+          "nextLayer": 3
+        },
+        {
+          "part": "parietal-peritoneum",
+          "incisionLength": 1.5420582594652545,
+          "cutIndexCount": 25341,
+          "opened": true,
+          "removed": true,
+          "hidden": true,
+          "nextLayer": 4
+        }
+      ],
+      "damage": 0,
+      "inputSource": "mouse",
+      "lifted": [],
+      "visibleInternal": [
+        "ventral-abdominal-vein",
+        "liver-right",
+        "liver-left",
+        "liver-median",
+        "gall-bladder",
+        "frog-heart",
+        "lung-left",
+        "lung-right",
+        "stomach",
+        "oesophagus",
+        "small-intestine",
+        "large-intestine",
+        "cloaca",
+        "urinary-bladder",
+        "spleen",
+        "fat-body-left",
+        "fat-body-right"
+      ]
+    },
+    {
+      "id": "cockroach",
+      "pinned": 4,
+      "layers": [
+        {
+          "part": "exoskeleton",
+          "incisionLength": 1.7018545316289697,
+          "cutIndexCount": 43473,
+          "opened": true,
+          "removed": true,
+          "hidden": true,
+          "nextLayer": 1
+        }
+      ],
+      "damage": 0,
+      "inputSource": "mouse",
+      "lifted": [
+        "wing-left",
+        "wing-right",
+        "fat-body-l-0"
+      ],
+      "visibleInternal": [
+        "fat-body-l-0",
+        "fat-body-r-1",
+        "fat-body-l-2",
+        "fat-body-r-3",
+        "fat-body-c-4",
+        "fat-body-l-5",
+        "fat-body-r-6",
+        "fat-body-c-7",
+        "dorsal-heart",
+        "oesophagus",
+        "crop",
+        "gizzard",
+        "midgut",
+        "gastric-caeca",
+        "hindgut",
+        "malpighian-tubules",
+        "salivary-gland-l",
+        "salivary-gland-r"
+      ]
+    },
+    {
+      "id": "earthworm",
+      "pinned": 4,
+      "layers": [
+        {
+          "part": "body-wall",
+          "incisionLength": 1.8196026103382303,
+          "cutIndexCount": 50493,
+          "opened": true,
+          "removed": true,
+          "hidden": true,
+          "nextLayer": 1
+        }
+      ],
+      "damage": 0,
+      "inputSource": "mouse",
+      "lifted": [],
+      "visibleInternal": [
+        "dorsal-blood-vessel",
+        "septa"
+      ]
+    },
+    {
+      "id": "fish",
+      "pinned": 2,
+      "layers": [
+        {
+          "part": "body-wall",
+          "incisionLength": 1.6054196533609013,
+          "cutIndexCount": 40845,
+          "opened": true,
+          "removed": true,
+          "hidden": true,
+          "nextLayer": 1
+        },
+        {
+          "part": "myotome-wall",
+          "incisionLength": 1.6382379198323909,
+          "cutIndexCount": 11514,
+          "opened": true,
+          "removed": true,
+          "hidden": true,
+          "nextLayer": 2
+        }
+      ],
+      "damage": 0,
+      "inputSource": "mouse",
+      "lifted": [
+        "operculum"
+      ],
+      "visibleInternal": [
+        "gill-arch-1",
+        "gill-arch-2",
+        "gill-arch-3",
+        "gill-arch-4",
+        "gill-filaments",
+        "gill-rakers",
+        "fish-heart",
+        "liver",
+        "oesophagus",
+        "stomach",
+        "pyloric-caeca",
+        "intestine",
+        "spleen",
+        "swim-bladder"
+      ]
+    },
+    {
+      "id": "heart",
+      "pinned": 2,
+      "layers": [
+        {
+          "part": "pericardium",
+          "incisionLength": 1.5635860579316254,
+          "cutIndexCount": 10053,
+          "opened": true,
+          "removed": true,
+          "hidden": true,
+          "nextLayer": 1
+        },
+        {
+          "part": "epicardium",
+          "incisionLength": 1.5384906048878702,
+          "cutIndexCount": 21126,
+          "opened": true,
+          "removed": true,
+          "hidden": true,
+          "nextLayer": 2
+        },
+        {
+          "part": "lv-free-wall",
+          "incisionLength": 1.541063548110058,
+          "cutIndexCount": 9672,
+          "opened": true,
+          "removed": true,
+          "hidden": true,
+          "nextLayer": 3
+        }
+      ],
+      "damage": 0,
+      "inputSource": "mouse",
+      "lifted": [
+        "epicardial-fat"
+      ],
+      "visibleInternal": [
+        "rv-free-wall",
+        "right-atrium",
+        "left-atrium",
+        "right-auricle",
+        "left-auricle",
+        "pulmonary-trunk",
+        "aorta",
+        "svc",
+        "ivc",
+        "pulmonary-veins",
+        "lad",
+        "rca",
+        "circumflex",
+        "posterior-iv-branch",
+        "coronary-sinus",
+        "septum",
+        "papillary-a",
+        "papillary-b",
+        "mitral-leaflet",
+        "chordae-1",
+        "chordae-2",
+        "chordae-3",
+        "chordae-4",
+        "chordae-5",
+        "aortic-cusp-1",
+        "aortic-cusp-2",
+        "aortic-cusp-3",
+        "tricuspid-leaflet",
+        "moderator-band",
+        "av-groove-fat",
+        "iv-groove-fat"
+      ]
+    }
+  ],
+  "errors": [],
+  "cameraRequests": 0,
+  "warnings": [
+    "post-processing addons unavailable; running without bloom TypeError: Failed to fetch dynamically imported module: https://unpkg.com/three@0.160.0/examples/jsm/postprocessing/EffectComposer.js",
+    "[.WebGL-0x3d8c03908c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x3d8c03908c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x3d8c03908c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x3d8c03908c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  ],
+  "artifactSha256": "0ded8fb31597f4c8b7ab7c56e10ea26083cb96950dddc3038609e7a239978b03",
+  "complete": true,
+  "limit": "Synthetic tracker snapshots verify application routing, not webcam recognition or measured physical tissue fidelity."
+}

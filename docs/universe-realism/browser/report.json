@@ -1,0 +1,61 @@
+{
+  "errors": [],
+  "stages": [
+    {
+      "key": "universe",
+      "title": "The Universe"
+    },
+    {
+      "key": "earth",
+      "title": "Earth"
+    },
+    {
+      "key": "biome",
+      "title": "A Biome"
+    },
+    {
+      "key": "ecosystem",
+      "title": "An Ecosystem"
+    },
+    {
+      "key": "organism",
+      "title": "An Organism"
+    },
+    {
+      "key": "organ",
+      "title": "The Heart"
+    },
+    {
+      "key": "tissue",
+      "title": "Cardiac Tissue"
+    },
+    {
+      "key": "cell",
+      "title": "The Cell"
+    },
+    {
+      "key": "organelle",
+      "title": "The Mitochondrion"
+    },
+    {
+      "key": "protein",
+      "title": "A Protein"
+    },
+    {
+      "key": "dna",
+      "title": "DNA"
+    },
+    {
+      "key": "nucleotide",
+      "title": "A Nucleotide"
+    },
+    {
+      "key": "atom",
+      "title": "The Atom"
+    }
+  ],
+  "limitations": "Software-rendered browser checks; not physical touch hardware, measured microscopy or GPU performance.",
+  "artifactSha256": "e25c789194a0c820d2c5ced74e69d627eb7bcd06ec5223ad191dfe4d583d91c8",
+  "controls": "Home, End, ArrowUp, numeric jump, real browser touch pinch, normal wheel, live reduced motion, keyboard hotspot panel, tablet and mobile passed",
+  "complete": true
+}

@@ -6,8 +6,9 @@
  * top-level names. The ONLY top-level names this file adds are `buildEarthworm`
  * and the single self-registration block at the bottom.
  *
- * Anatomy grounded in the standard annelid (Pheretima / Lumbricus) laboratory
- * dissection (CBSE/ICSE/IGCSE). A long, soft, METAMERICALLY SEGMENTED cylinder,
+ * Generalized annelid teaching model with mixed Pheretima / Lumbricus landmarks;
+ * see docs/dissection-realism/ANATOMY.md for the unresolved species limitations.
+ * A long, soft, METAMERICALLY SEGMENTED cylinder,
  * ~100+ segments in life; the anterior third (segments 1–~26) carries everything a
  * student examines, so it is modelled in detail and the rest tapers away. Dorsum is
  * darker (pigment / chloragogen over the dorsal vessel), venter paler; a swollen
@@ -56,55 +57,81 @@ function buildEarthworm(THREE) {
   // vertices still land where they were authored.
   const bakeChild = (root, m) => { m.position.copy(root.position).multiplyScalar(-1); root.add(m); return m; };
 
-  /* --- the segmented body wall ------------------------------------------------
-   * An OPEN-ended cylinder along its own y-axis (so every side vertex sits on a
-   * clean unit circle — no cap-vertex singularities), profiled into a worm: faint
-   * annular intersegmental grooves, tapered ends, a smooth clitellar swell, and a
-   * dorsal-dark / ventral-cream vertex tint. The whole geometry is finally rolled
-   * a quarter turn so its length runs along +z (anterior) and its dorsum along +y
-   * (up, toward the camera). */
+  /* --- one continuous exterior profile --------------------------------------
+   * The centreline and every internal anchor stay where they were authored.
+   * Only radius varies: displacing an unscaled cylinder in XYZ first perturbs
+   * each vertex's segment phase and amplifies its axial noise fourteen-fold.
+   * That creates corrugations rather than fine annulation. Ends and clitellum
+   * use the SAME profile as the body, with their open join rings buried inside
+   * it. They remain separate, pickable pin landmarks without separate bulbs. */
+  // A pinned specimen is extended, but its segments are not machined washers.
+  // Use one monotone phase field for the body, ends, band and their pigments.
+  // This changes external segment spacing without moving any internal anchor.
+  function ewAnnularPhase(t, annuli = 44) {
+    return 2 * Math.PI * (annuli * t + 0.22 * Math.sin(t * Math.PI * 5)
+      + 0.08 * Math.sin(t * Math.PI * 13));
+  }
+
+  function ewRadius(z, annuli = 44) {
+    const t = Math.max(0, Math.min(1, (z + HALF) / (2 * HALF)));
+    const anterior = Math.max(0, Math.min(1, (z - 5.25) / (7.36 - 5.25)));
+    const posterior = Math.max(0, Math.min(1, (-z - 5.1) / (7.30 - 5.1)));
+    const taper = Math.sqrt(Math.max(0, 1 - anterior * anterior))
+      * Math.sqrt(Math.max(0, 1 - posterior * posterior));
+    const clit = Math.exp(-Math.pow((z - 2.6) / 0.61, 4));
+    const groove = Math.pow(0.5 - 0.5 * Math.cos(ewAnnularPhase(t, annuli)), 2);
+    const fullness = 1 + 0.024 * Math.sin(t * Math.PI) + 0.012 * Math.sin(t * Math.PI * 3)
+      + 0.008 * Math.sin(t * Math.PI * 7) * Math.sin(t * Math.PI);
+    return taper * fullness * (1 + 0.068 * clit)
+      * (1 - 0.018 * groove * (1 - 0.94 * clit));
+  }
+
   function ewBody(rad, halfLen, o = {}) {
-    o = o || {};
-    const radialSeg = o.radialSeg || 26, lenSeg = o.lenSeg || 200;
-    const g = new THREE.CylinderGeometry(1, 1, 2, radialSeg, lenSeg, true); // axis y ∈ [-1,1]
-    displace(THREE, g, o.amp != null ? o.amp : 0.02, 3.0, o.seed || 0);     // faint organic lumpiness
+    // 8,745 vertices remain below the existing 9,000-vertex soft-body ceiling.
+    // 264 longitudinal intervals still resolve six samples per representative
+    // annulus; the former 10,197-vertex wall silently skipped tissue response.
+    const radialSeg = o.radialSeg || 32, lenSeg = o.lenSeg || 264;
+    const g = new THREE.CylinderGeometry(1, 1, 2, radialSeg, lenSeg, true);
     const p = g.attributes.position, v = new THREE.Vector3();
     const colors = new Float32Array(p.count * 3);
     const c = new THREE.Color();
-    const dorsal   = new THREE.Color(0x7d5342);   // pinkish-brown back
-    const dorsalDk = new THREE.Color(0x5c3a2e);   // darker mid-dorsal pigment stripe
-    const flank    = new THREE.Color(0xa9805f);
-    const ventral  = new THREE.Color(0xd8c2a1);   // cream underside
-    const nSeg  = o.nSeg  || 44;                  // number of visible annuli
-    const clitT = o.clitT != null ? o.clitT : 0.68; // clitellum centre, in length-fraction t
+    const dorsal   = new THREE.Color(0x946257);   // subdued rose-brown pigment
+    const dorsalDk = new THREE.Color(0x644139);   // darker mid-dorsal pigment stripe
+    const flank    = new THREE.Color(0xb17b70);
+    const ventral  = new THREE.Color(0xd4afa0);   // paler warm underside
+    const glandular = new THREE.Color(0xb68174);
+    const nSeg = o.nSeg || 44;
+    const z0 = o.z0 == null ? -halfLen : o.z0, z1 = o.z1 == null ? halfLen : o.z1;
     for (let i = 0; i < p.count; i++) {
       v.fromBufferAttribute(p, i);
-      const uy = v.y;                             // -1..1 along the body; +1 = anterior
-      const t = Math.max(0, Math.min(1, (uy + 1) / 2)); // 0 posterior .. 1 anterior
+      const u = (v.y + 1) / 2;
+      const z = z0 + u * (z1 - z0);
+      const t = Math.max(0, Math.min(1, (z + halfLen) / (2 * halfLen)));
       const rr = Math.hypot(v.x, v.z) || 1e-6;
-      const rz = v.z / rr;                        // radial z: -1 = dorsal (becomes +y up)
-      // longitudinal radius profile
-      let prof = 1;
-      if (t > 0.9)  prof *= Math.max(0.26, 1 - (t - 0.9) / 0.1 * 0.86);   // taper to the mouth
-      if (t < 0.05) prof *= 0.45 + (t / 0.05) * 0.55;                     // blunt posterior taper
-      prof *= 1 - 0.05 * (0.5 - 0.5 * Math.cos(2 * Math.PI * nSeg * t));  // faint annular grooves
-      prof *= 1 + 0.13 * Math.exp(-Math.pow((t - clitT) / 0.03, 2));      // smooth clitellar swell
-      p.setXYZ(i, v.x * prof, uy, v.z * prof);
+      const rz = v.z / rr;
+      // Radial-only variation keeps each ring closed and the centreline fixed.
+      const irregular = 1 + 0.004 * Math.sin(t * 17 + 0.3) * (v.x * v.x - v.z * v.z);
+      const cover = o.cover ? o.cover(z, u) : 1;
+      const prof = rad * ewRadius(z, nSeg) * irregular * cover;
+      p.setXYZ(i, v.x / rr * prof, -v.z / rr * prof, z);
       // vertex tint: dorsal dark → ventral cream
       const dorsalF = smooth(Math.max(0, Math.min(1, -rz * 0.5 + 0.5)));
       c.copy(ventral).lerp(flank, smooth(Math.max(0, Math.min(1, -rz * 0.85 + 0.5))));
       c.lerp(dorsal, dorsalF);
       const midline = Math.exp(-Math.pow((rz + 1) / 0.16, 2));            // darker over the dorsal vessel
       c.lerp(dorsalDk, midline * 0.55);
-      const banding = 0.5 - 0.5 * Math.cos(2 * Math.PI * nSeg * t);       // groove shadowing
-      c.multiplyScalar(1 - banding * 0.05);
-      const m = vnoise(v.x * 5 + 2, uy * 9, v.z * 5 + 6);                 // mottle
+      // The glandular band is pigment within the same skin, not an orange
+      // material pasted over it. A world-length field shared by body and sleeve
+      // keeps both shoulders continuous where the pickable sleeve emerges.
+      const clitTint = Math.exp(-Math.pow((z - 2.6) / 0.62, 4));
+      c.lerp(glandular, clitTint * 0.25);
+      const banding = 0.5 - 0.5 * Math.cos(ewAnnularPhase(t, nSeg));      // groove shadowing
+      c.multiplyScalar(1 - banding * 0.028);
+      const m = vnoise(v.x * 5 + 2, t * 18 - 9, v.z * 5 + 6);
       c.multiplyScalar(0.97 + m * 0.06);
       colors[i * 3] = c.r; colors[i * 3 + 1] = c.g; colors[i * 3 + 2] = c.b;
     }
     g.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-    g.scale(rad, halfLen, rad);        // radius on x/z, length on y
-    g.rotateX(Math.PI / 2);            // length y → +z; dorsal (-z) → +y (up)
     seal(g);
     return g;
   }
@@ -114,10 +141,20 @@ function buildEarthworm(THREE) {
 
   /* ---- LAYER 0 · integument / external landmarks --------------------------- */
 
+  function ewCuticle() {
+    // Same optical model on every external root. Flat brown/orange material
+    // multipliers used to suppress these meshes' shared vertex colours and
+    // make the terminal caps and clitellum look like separately painted pieces.
+    // Low transmission avoids showing the green tray through opaque body wall;
+    // the surface module supplies fine cuticle maps and final highlight finish.
+    return mat(THREE, 0xffffff, { tissue: 'skin', vcol: true,
+      rough: 0.52, clear: 0.26, clearRough: 0.38, sheen: 0xb17770, sheenAmt: 0.22,
+      transmission: 0.03, thickness: 0.8, atten: 0x97625b, attenDist: 0.8,
+      side: THREE.DoubleSide });
+  }
+
   const bodyGeo = ewBody(RAD, HALF, { seed: 1 });
-  const body = new THREE.Mesh(bodyGeo, mat(THREE, 0xffffff, {
-    vcol: true, rough: 0.6, clear: 0.5, clearRough: 0.45, sheen: 0xc79a72, sheenAmt: 0.5,
-    side: THREE.DoubleSide }));
+  const body = new THREE.Mesh(bodyGeo, ewCuticle());
 
   // Representative ventrolateral setae: four pairs of tiny chitinous bristles on a
   // handful of anterior segments (Lumbricus arrangement). Decorative children only.
@@ -129,8 +166,9 @@ function buildEarthworm(THREE) {
         const phi = deg * Math.PI / 180;
         [1, -1].forEach((side) => {
           const bxn = Math.sin(phi) * side, byn = -Math.cos(phi); // outward radial (ventrolateral)
-          const seta = new THREE.Mesh(new THREE.ConeGeometry(0.018, 0.15, 5), setaMat);
-          childMesh(parent, seta, bxn * RAD * 1.02, byn * RAD * 1.02, z);
+          const seta = new THREE.Mesh(new THREE.ConeGeometry(0.009, 0.07, 5), setaMat);
+          const seat = RAD * ewRadius(z) + 0.008;
+          childMesh(parent, seta, bxn * seat, byn * seat, z);
           seta.rotation.z = Math.atan2(-bxn, byn);        // point the cone outward along the radial
         });
       });
@@ -149,12 +187,15 @@ function buildEarthworm(THREE) {
 
   // Prostomium: a small fleshy lobe overhanging the mouth at the anterior tip — no
   // eyes, no jaws. A pin anchor for the anterior end.
-  const prostomium = organ(THREE, 0x8a5c49, 0.34, 0.30, 0.44,
-    { amp: 0.14, rough: 0.6, clear: 0.45, sheen: 0xc79a80, seed: 3 });
+  const lipGeo = ewBody(RAD, HALF, { z0: 6.78, z1: 7.36, lenSeg: 24,
+    cover: (z) => 0.985 + 0.019 * smooth(Math.max(0, Math.min(1, (z - 6.78) / 0.20))) });
+  // Bake inverse placement so the original pin anchor and orientation survive.
+  lipGeo.translate(0, -0.06, -7.15); lipGeo.rotateX(-0.25); seal(lipGeo);
+  const prostomium = new THREE.Mesh(lipGeo, ewCuticle());
   prostomium.position.set(0, 0.06, 7.15);
   prostomium.rotation.x = 0.25;                            // droops over the mouth
   // mouth crease as a dark child slit on the underside
-  const mouth = new THREE.Mesh(new THREE.CircleGeometry(0.12, 12),
+  const mouth = new THREE.Mesh(new THREE.CircleGeometry(0.075, 12),
     mat(THREE, 0x261a12, { rough: 0.7, side: THREE.DoubleSide, noTex: true }));
   childMesh(prostomium, mouth, 0, -0.24, -0.1, Math.PI / 2, 0, 0);
   add({
@@ -166,8 +207,10 @@ function buildEarthworm(THREE) {
   // Clitellum: the swollen, glandular, saddle-to-girdle band over segments 14–16 in
   // Pheretima — secretes the egg cocoon and marks sexual maturity. Smooth, distinctly
   // coloured, raised above the annulated body. A pin/identify landmark.
-  const clitellum = organ(THREE, 0xb5825e, 0.64, 0.63, 0.52,
-    { amp: 0.045, rough: 0.48, clear: 0.55, clearRough: 0.4, sheen: 0xd8b088, seed: 5 });
+  const clitGeo = ewBody(RAD, HALF, { z0: 1.94, z1: 3.26, lenSeg: 40,
+    cover: (z, u) => 0.994 + 0.032 * Math.pow(Math.sin(Math.PI * u), 2) });
+  clitGeo.translate(0, 0, -2.6); seal(clitGeo);
+  const clitellum = new THREE.Mesh(clitGeo, ewCuticle());
   clitellum.position.set(0, 0, 2.6);
   add({
     id: 'clitellum', name: 'Clitellum', layer: 0, system: 'integument', cuttable: false, detachable: false,
@@ -176,12 +219,14 @@ function buildEarthworm(THREE) {
   });
 
   // Terminal segment bearing the anus (periproct). A pin anchor for the posterior end.
-  const anal = organ(THREE, 0x835a48, 0.42, 0.40, 0.44,
-    { amp: 0.12, rough: 0.6, sheen: 0xbf9075, seed: 7 });
+  const analGeo = ewBody(RAD, HALF, { z0: -7.30, z1: -6.80, lenSeg: 24,
+    cover: (z) => 0.985 + 0.019 * smooth(Math.max(0, Math.min(1, (-z - 6.80) / 0.18))) });
+  analGeo.translate(0, 0, 6.95); seal(analGeo);
+  const anal = new THREE.Mesh(analGeo, ewCuticle());
   anal.position.set(0, 0, -6.95);
-  const anus = new THREE.Mesh(new THREE.CircleGeometry(0.14, 12),
+  const anus = new THREE.Mesh(new THREE.CircleGeometry(0.045, 12),
     mat(THREE, 0x2a1c14, { rough: 0.75, side: THREE.DoubleSide, noTex: true }));
-  childMesh(anal, anus, 0, 0, -0.42, 0, Math.PI, 0);      // faces posteriorly (-z)
+  childMesh(anal, anus, 0, 0, -0.34, 0, Math.PI, 0);      // seated at the tapered posterior tip
   add({
     id: 'anal-segment', name: 'Anal segment', layer: 0, system: 'digestive', cuttable: false, detachable: false,
     note: 'The last segment, the periproct, pierced by the terminal anus where the gut opens to the outside. Anchor a pin here to hold the posterior end taut.',
@@ -452,10 +497,10 @@ SPECIMEN_OBJECTIVES.earthworm = [
     hint: 'Pins tool (4). Grip on the prostomium, the clitellum band, the body and the anal end.',
     done: (s) => s.pinned.size >= 4 },
   { id: 'incise', text: 'Make a shallow <b>mid-dorsal incision</b>, kept just off the midline so the blade misses the dorsal blood vessel.',
-    hint: 'Scalpel (3). One smooth stroke down the dorsum from behind the clitellum — do not saw or plunge.',
+    hint: 'Scalpel (2). One smooth stroke down the dorsum from behind the clitellum — do not saw or plunge.',
     done: (s) => s.incisions.has('body-wall') && s.incisions.get('body-wall').length > 1.1 },
   { id: 'open', text: 'Reflect the <b>body wall</b> and pin the flaps back to open the coelom.',
-    hint: 'Forceps (2) on the cut edge, or the retractor with two hands.',
+    hint: 'Forceps (3) on the cut edge, or the retractor with two hands.',
     done: (s) => s.opened.has('body-wall') },
   { id: 'coelom', text: 'Identify the transverse <b>septa</b> and the <b>dorsal blood vessel</b> — the vessel you must never cut.',
     hint: 'Probe (1) each. The dark-red midline vessel over the gut is the dorsal vessel.',

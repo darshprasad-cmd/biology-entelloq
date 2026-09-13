@@ -1,6 +1,6 @@
 /* Real five-specimen WebGL + cut/forceps interaction check. Recorded tracker
    snapshots go through production routeInput; no camera is requested. */
-const fs = require('node:fs'), path = require('node:path'), assert = require('node:assert/strict');
+const fs = require('node:fs'), path = require('node:path'), assert = require('node:assert/strict'), crypto = require('node:crypto');
 const { createRequire } = require('node:module');
 const root = path.resolve(__dirname, '..');
 const modules = process.env.BIOLOGY_PLAYWRIGHT_MODULES || path.resolve(root, '../biology-entelloq/node_modules');
@@ -19,15 +19,24 @@ const save = () => fs.writeFileSync(path.join(output, 'interactions.json'), JSON
     await context.route('https://unpkg.com/**', route => route.abort());
     const page = await context.newPage(); page.setDefaultTimeout(30000);
     page.on('pageerror', e => report.errors.push(e.message));
+    report.warnings = [];
+    page.on('console', message => { if (message.type() === 'warning') report.warnings.push(message.text()); });
     await page.addInitScript(() => {
       window.__cameraRequests = 0;
       navigator.mediaDevices.getUserMedia = async () => { window.__cameraRequests++; throw new Error('Camera forbidden in synthetic test'); };
     });
     await page.goto(base + '/lab.html', { waitUntil: 'domcontentloaded' });
-    await page.waitForFunction(() => window.__LAB?.ok, null, { timeout: 45000 });
+    const served = await (await page.request.get(page.url())).body();
+    report.artifactSha256 = crypto.createHash('sha256').update(served).digest('hex');
+    assert.ok(served.equals(fs.readFileSync(path.join(root, 'lab.html'))), 'preview serves the current built artifact');
+    await page.waitForFunction(() => window.__LAB?.ok && window.__LAB.ready && window.__LAB.dissection, null, { timeout: 45000 });
+    if (process.env.BIOLOGY_REQUIRE_PREPARED_FROG === '1') {
+      assert.equal(await page.evaluate(() => window.__LAB.parts.find(p => p.id === 'skin')?.mesh.userData.preparedExterior?.specimenId), 'frog', 'actual prepared frog is installed, not fallback');
+    }
     await page.evaluate(() => window.__LAB.intro()?.skip());
     for (const id of specimenIds) {
-      await page.evaluate(id => window.__LAB.loadSpecimen(id), id);
+      await page.evaluate(id => window.__LAB.requestSpecimen(id), id);
+      if (['frog', 'cockroach'].includes(id)) assert.equal(await page.evaluate(id => window.__LAB.parts.some(p => p.mesh.userData.preparedExterior?.specimenId === id), id), true, id + ': actual prepared exterior required');
       await page.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
       await page.screenshot({ path: path.join(output, id + '-intact.png') });
       const result = await page.evaluate(async id => {
