@@ -856,7 +856,7 @@ const AIP=[
 ];
 const CMDK_DATA=[
   {g:"Labs",k:"lab",items:[
-    {t:"Virtual Dissection Lab",s:"Frog · heart · fish · earthworm · cockroach",kind:"Lab",href:LAB},
+    {t:"Virtual Dissection Lab",s:"Frog · mammalian heart · fish · earthworm · cockroach",kind:"Lab",href:LAB},
     {t:"Microscope & Histology",s:"Zoom from tissue to a single cell",kind:"Lab",go:"labs"},
     {t:"Seamless scale journey",s:"Organ → cell → DNA → atom",kind:"Lab",href:LAB},
   ]},
@@ -918,7 +918,7 @@ function homeHTML(){
         <button class="btn ghost" data-scroll="how">See how it works</button>
       </div>
       <div class="hero-meta reveal d4">
-        <div class="stat"><b class="grad">6</b><span>living specimens</span></div>
+        <div class="stat"><b class="grad">5</b><span>virtual specimens</span></div>
         <div class="stat"><b class="grad-mind">10⁸×</b><span>zoom, organ to atom</span></div>
         <div class="stat"><b>∞</b><span>questions, one tutor</span></div>
       </div>
@@ -1173,7 +1173,7 @@ function founderHTML(){
   const tl=[
     ["The spark","A frustration: the most fascinating subjects were taught in the least fascinating way. Why should learning a heartbeat feel like reading a filing cabinet?"],
     ["First worlds","Built single-file, browser-native prototypes across physics, finance and biology — proving that premium, alive software could teach better than any slide deck."],
-    ["The dissection theatre","Shipped a real virtual dissection lab: five specimens, hand tracking, living physiology, and a seamless zoom from an organ to a single atom."],
+    ["The dissection theatre","Explore frog, mammalian heart, fish, earthworm and cockroach anatomy in the virtual dissection lab, with optional hand tracking and a zoom from organs to microscopic structures."],
     ["The platform","Now — turning those worlds into one coherent ecosystem, with a launch experience and philosophy worthy of the science inside."],
   ].map(t=>`<div class="tl-item reveal"><div class="node">${I.spark}</div><div><h3 class="h3">${t[0]}</h3><p>${t[1]}</p></div></div>`).join("");
   const philosophy=[

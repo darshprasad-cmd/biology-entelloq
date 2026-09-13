@@ -14,6 +14,7 @@ function hand(x, y, gripping = false) {
 }
 function fixture(slots) {
   const ctx = { handMode: true, handDrive: { slot: -1 }, hands: { snapshot: { active: true, health: 0, hands: slots } },
+    specimenAbort: null, specimenGripRelease: false,
     input: { x: .5, y: .5, grip: 0, gripping: false, span: 0, source: 'mouse' }, mouse: { x: .1, y: .2, down: false },
     xr: null, controls: { enabled: true }, handViz: null, currentTool: 'scalpel', TCH: { claimed: -1 },
     performance, drawCursor() {}, dialReset() {}, flickReset() {}, detectToolFlick() { return 0; }, detectToolDial() { return 0; } };
@@ -67,6 +68,19 @@ test('non-finite tracking data cannot drive a tool; off camera never consumes a 
   const ctx = fixture([hand(NaN, .3), hand(.4, .6)]); ctx.routeInput();
   assert.equal(ctx.handDrive.slot, 1);
   ctx.handMode = false; ctx.routeInput(); assert.equal(ctx.input.source, 'mouse');
+});
+
+test('specimen loading and a held pinch cannot initiate a new cut until neutral handoff', () => {
+  const ctx = fixture([hand(.6, .4, true)]);
+  ctx.routeInput(); assert.equal(ctx.input.gripping, true);
+  ctx.specimenAbort = new AbortController(); ctx.specimenGripRelease = true;
+  ctx.routeInput(); assert.equal(ctx.input.gripping, false); assert.equal(ctx.input.grip, 0); assert.equal(ctx.controls.enabled, false);
+  ctx.specimenAbort = null;
+  ctx.routeInput(); assert.equal(ctx.input.gripping, false); assert.equal(ctx.specimenGripRelease, true);
+  ctx.hands.snapshot.hands[0].isPinching = false; ctx.hands.snapshot.hands[0].pinchStrength = 0;
+  ctx.routeInput(); assert.equal(ctx.input.gripping, false); assert.equal(ctx.specimenGripRelease, false);
+  ctx.hands.snapshot.hands[0].isPinching = true; ctx.hands.snapshot.hands[0].pinchStrength = .95;
+  ctx.routeInput(); assert.equal(ctx.input.gripping, true); assert.equal(ctx.input.x, .6);
 });
 
 test('snapshot test entry uses the actual router and refuses to override a live camera', () => {

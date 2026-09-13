@@ -1,0 +1,349 @@
+{
+  "source_sha256": "d03d6b33b1d64da045632e62fdb5202860ccb503f03ecc77532717cc4e924c26",
+  "output_sha256": "64ccc2056475153d70b5f68a2b3b94ff075f0491c63c76a65b7157e7f7c349bc",
+  "output": "C:\\Users\\darsh\\biology-entelloq-frog\\assets\\specimens\\frog.glb",
+  "source_url": "https://sketchfab.com/3d-models/cc0-black-spotted-pond-frog-8cfb74fe45684601863b8a43c8ed9373",
+  "author": "ffish.asia / floraZia.com",
+  "license": "CC0-1.0 (embedded source metadata; intake review retained separately)",
+  "operations": [
+    "Excluded calibration chart",
+    "Joined and position-welded export chunks",
+    "Globally decimated before five-region split",
+    "Colour-only baked from untouched original three-material source onto one 2048px low-poly UV map; no baked lighting",
+    "Static supine axis mapping; original folded pose retained"
+  ],
+  "frame": {
+    "source": "+X posterior; +Z dorsal",
+    "lab": "+Z anterior; +Y ventral",
+    "hip_source_x": 0.6358912086486819,
+    "scale": [
+      3.0903169262570342,
+      1.8710218770812128,
+      2.727730412065395
+    ],
+    "shoulder_range": [
+      -1.3604894495010376,
+      -0.7094957566261291
+    ],
+    "fore_seam": 0.6511953459858895
+  },
+  "roots": {
+    "skin": {
+      "mesh_vertices": 3577,
+      "triangles": 6939,
+      "bounds": {
+        "min": [
+          -3.617332867016235,
+          -1.42,
+          -3.6850816680088263
+        ],
+        "max": [
+          3.0407877612909813,
+          1.42,
+          4.55
+        ]
+      },
+      "exported_vertices": 5551,
+      "exported_indices": 20817
+    },
+    "forelimb-left": {
+      "mesh_vertices": 683,
+      "triangles": 1305,
+      "bounds": {
+        "min": [
+          -3.487234354544598,
+          -0.4497010153177266,
+          0.07882941267663757
+        ],
+        "max": [
+          -1.3217730729281916,
+          1.5121505164549327,
+          3.014651742989352
+        ]
+      },
+      "exported_vertices": 1352,
+      "exported_indices": 3915
+    },
+    "forelimb-right": {
+      "mesh_vertices": 529,
+      "triangles": 1029,
+      "bounds": {
+        "min": [
+          1.1137544297931394,
+          -0.2657044363604378,
+          0.06587168128778398
+        ],
+        "max": [
+          3.209081782389467,
+          1.415238808572398,
+          2.9496826162485785
+        ]
+      },
+      "exported_vertices": 1014,
+      "exported_indices": 3087
+    },
+    "hindlimb-left": {
+      "mesh_vertices": 2304,
+      "triangles": 4649,
+      "bounds": {
+        "min": [
+          -6.963687644477891,
+          -0.08216342311607042,
+          -6.881427757771008
+        ],
+        "max": [
+          0.11120130290612877,
+          1.9232899294429575,
+          -2.4658821076573663
+        ]
+      },
+      "exported_vertices": 5009,
+      "exported_indices": 13947
+    },
+    "hindlimb-right": {
+      "mesh_vertices": 2007,
+      "triangles": 3996,
+      "bounds": {
+        "min": [
+          -0.10185723005856898,
+          -0.028641477708246942,
+          -7.288235294117649
+        ],
+        "max": [
+          6.963687644477891,
+          2.109822955542152,
+          -2.4730635048749336
+        ]
+      },
+      "exported_vertices": 3875,
+      "exported_indices": 11988
+    }
+  },
+  "skin_shared_boundary_vertices": {
+    "forelimb-left": 63,
+    "forelimb-right": 27,
+    "hindlimb-left": 75,
+    "hindlimb-right": 58
+  },
+  "connectivity": {
+    "initial_components_triangles": {
+      "skin": [
+        6938,
+        316,
+        218,
+        130,
+        89,
+        56,
+        20,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "forelimb-left": [
+        900,
+        1,
+        1
+      ],
+      "forelimb-right": [
+        605,
+        1
+      ],
+      "hindlimb-left": [
+        4649,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "hindlimb-right": [
+        3996,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "disconnected_scan_triangles_omitted": 41,
+    "final_components_per_root": {
+      "skin": 1,
+      "forelimb-left": 1,
+      "forelimb-right": 1,
+      "hindlimb-left": 1,
+      "hindlimb-right": 1
+    }
+  },
+  "bake_statistics": {
+    "mean_rgb": [
+      0.31420037150382996,
+      0.23888520896434784,
+      0.17105430364608765
+    ],
+    "channel_std": [
+      0.3085364103317261,
+      0.25444090366363525,
+      0.21163654327392578
+    ]
+  },
+  "existing_root_matrices": {
+    "skin": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "forelimb-left": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "forelimb-right": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "hindlimb-left": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "hindlimb-right": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  },
+  "bytes": 6142084,
+  "limits": "Candidate only. Region assignment is authored geometric approximation, not a segmented scientific scan. Native folded pose retained. Require actual tool/cavity/organ clearance and visual acceptance before activation."
+}

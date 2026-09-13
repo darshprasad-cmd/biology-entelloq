@@ -1,15 +1,20 @@
 # Anatomy: what these models represent
 
-The five specimens are **generalized procedural teaching approximations**, not
-certified species-faithful anatomical reconstructions. Their dimensions are
+The five specimens have **generalized teaching-model internals**, not
+certified species-faithful anatomical reconstructions. Frog and cockroach now
+use prepared, freely licensed exterior assets; the other exteriors remain
+procedural. Their dimensions are
 illustrative model units, not calibrated millimetres. Surface shape, colour,
 tissue response and organ proportions should not be used for clinical work,
 specimen identification or assessment without educator review.
 
 This update corrects specific geometry errors. It does not establish that every
 organ, duct, vessel, valve or tissue layer is complete or correctly represented.
-No reference photographs, copyrighted diagrams or third-party model assets were
-copied into the product.
+The September 13 exterior pass incorporates a CC0 Pelophylax nigromaculatus
+surface scan and a CC BY 4.0 cockroach model. Attribution and modifications are
+recorded beside assets/specimens/frog.glb and cockroach.glb. These exterior
+assets do not validate the existing internal anatomy or make it species-exact.
+User-supplied reference images were not substituted for the interactive models.
 
 ## Corrections in this update
 

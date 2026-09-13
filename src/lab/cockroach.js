@@ -64,6 +64,31 @@ function buildCockroach(THREE) {
   const NERVE_C = 0xe9e4d6;     // ventral nerve cord, white
   const TRACHEA_C = 0xc6cfd4;   // silvery air tubes
 
+  // Same-material exterior pieces are batched at authoring time, with every
+  // temporary geometry disposed. Articulation does not add one draw call per
+  // spine, antennal ring or tarsal segment.
+  function exteriorBatch(name, geometries, color, detail = 'chitin') {
+    const positions = [], normals = [], indices = [];
+    geometries.forEach(g => {
+      const offset = positions.length / 3;
+      positions.push(...g.attributes.position.array); normals.push(...g.attributes.normal.array);
+      indices.push(...Array.from(g.index.array, i => i + offset)); g.dispose();
+    });
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    g.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3)); g.setIndex(indices); seal(g);
+    const mesh = new THREE.Mesh(g, mat(THREE, color, { rough: 0.46, clear: 0.38 }));
+    mesh.name = name; mesh.userData.exteriorTissue = 'chitin'; mesh.userData.exteriorDetail = detail;
+    return mesh;
+  }
+  function limbSegment(a, b, radiusA, radiusB, radial = 7) {
+    const start = new THREE.Vector3(...a), end = new THREE.Vector3(...b), direction = end.clone().sub(start);
+    const g = new THREE.CylinderGeometry(radiusB, radiusA, direction.length(), radial, 1);
+    g.applyQuaternion(new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.normalize()));
+    g.translate((start.x + end.x) / 2, (start.y + end.y) / 2, (start.z + end.z) / 2);
+    return g;
+  }
+
   // Whole-body span (local units before final lay-flat): head at z ~ +5.4, abdomen
   // tip at z ~ -6.2, so the insect is ~11.6 long, ~3.2 wide, ~1.1 tall (flat).
 
@@ -75,10 +100,10 @@ function buildCockroach(THREE) {
 
   // Abdominal terga — the broad, gently domed, segmented dorsal plate the incision
   // runs down. Ten overlapping segments suggested by transverse grooves.
-  const abdG = new THREE.SphereGeometry(1, 44, 28);
+  const abdG = new THREE.SphereGeometry(1, 72, 48);
   displace(THREE, abdG, 0.03, 3.0, 7);
   {
-    const p = abdG.attributes.position, v = new THREE.Vector3();
+    const p = abdG.attributes.position, v = new THREE.Vector3(), colors = [], color = new THREE.Color();
     for (let i = 0; i < p.count; i++) {
       v.fromBufferAttribute(p, i);
       const uz = v.z;
@@ -87,14 +112,22 @@ function buildCockroach(THREE) {
       v.x *= 1.55 * taper;
       v.y *= 0.42;                        // FLAT
       v.z *= 3.1;
-      // segment ridges
-      v.y += Math.sin(v.z * 3.1) * 0.018 * (v.y > 0 ? 1 : 0);
+      // Ten low overlapping terga: shallow geometric transverse sulci and
+      // scalloped lateral edges, not painted rings on a smooth oval.
+      const phase = ((v.z + 3.1) / 0.62) % 1;
+      const groove = Math.exp(-Math.pow((phase - 0.12) / 0.12, 2));
+      if (v.y > 0) v.y *= 1 - 0.18 * groove;
+      v.x *= 1 - 0.022 * groove;
       if (v.y < 0) v.y *= 0.5;            // shallow ventral
       p.setXYZ(i, v.x, v.y, v.z);
+      color.setHex(0x8a4021).lerp(new THREE.Color(0x382219), groove * 0.44 + Math.min(0.22, Math.abs(v.x) * 0.10));
+      colors.push(color.r, color.g, color.b);
     }
+    abdG.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
     p.needsUpdate = true; abdG.computeVertexNormals();
   }
-  const abd = new THREE.Mesh(abdG, mat(THREE, CHITIN, { rough: 0.32, clear: 0.7, clearRough: 0.2, sheen: 0x8a5a34 }));
+  const abd = new THREE.Mesh(abdG, mat(THREE, 0xffffff, { vcol: true, rough: 0.44, clear: 0.48, clearRough: 0.28, sheen: 0x9a6843 }));
+  abd.userData.exteriorDetail = 'segmented-abdomen';
   abd.position.set(0, 0.08, -2.2);
   add({
     id: 'exoskeleton', name: 'Abdominal terga (exoskeleton)', layer: 0, system: 'integument',
@@ -105,30 +138,46 @@ function buildCockroach(THREE) {
   });
   // cerci — two segmented sensory appendages at the tail tip
   for (let s = -1; s <= 1; s += 2) {
-    const cerc = new THREE.Mesh(new THREE.ConeGeometry(0.08, 0.9, 6),
-      mat(THREE, CHITIN_D, { rough: 0.6 }));
-    childMesh(abd, cerc, s * 0.22, 0.02, -1.62, Math.PI * 0.62, 0, s * 0.3);
+    const segments = [];
+    for (let i = 0; i < 10; i++) {
+      const t = i / 10, next = (i + 0.87) / 10;
+      segments.push(limbSegment([s * (0.23 + t * 0.25), 0.035 + t * 0.05, -2.93 - t * 0.78],
+        [s * (0.23 + next * 0.25), 0.035 + next * 0.05, -2.93 - next * 0.78], 0.065 * (1 - t * 0.8), 0.06 * (1 - next * 0.8), 6));
+    }
+    abd.add(exteriorBatch('cercus-' + s, segments, CHITIN_D, 'cercus'));
   }
 
   // Pronotum — the shield-shaped plate over the prothorax, a landmark.
   const pronG = new THREE.SphereGeometry(1, 32, 20);
   {
-    const p = pronG.attributes.position, v = new THREE.Vector3();
+    const p = pronG.attributes.position, v = new THREE.Vector3(), colors = [], color = new THREE.Color();
     for (let i = 0; i < p.count; i++) {
       v.fromBufferAttribute(p, i);
-      v.x *= 1.9; v.y *= 0.4; v.z *= 1.35;
+      const anterior = v.z;
+      // Broad posterior corners and a gently rolled anterior shield, not the
+      // former oversized spherical button wider than the abdomen.
+      v.x *= 1.40 * (1 - 0.13 * anterior); v.y *= 0.30;
+      // The anterior hood overlaps the cervical region; an exposed bead-like
+      // neck incorrectly separates the head from this protective shield.
+      v.z = anterior > 0 ? anterior * 1.10 + Math.pow(anterior, 3) * 0.85 : anterior * 1.48;
       if (v.y < 0) v.y *= 0.4;
       p.setXYZ(i, v.x, v.y, v.z);
+      const margin = Math.pow(Math.max(0, 1 - Math.abs(v.y) / 0.30), 4);
+      color.setHex(0x633421).lerp(new THREE.Color(0xbc8a50), margin * 0.75);
+      colors.push(color.r, color.g, color.b);
     }
+    pronG.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
     p.needsUpdate = true; pronG.computeVertexNormals();
   }
-  const pron = new THREE.Mesh(pronG, mat(THREE, CHITIN, { rough: 0.3, clear: 0.72, sheen: 0x8a5a34 }));
+  const pron = new THREE.Mesh(pronG, mat(THREE, 0xffffff, { vcol: true, rough: 0.38, clear: 0.48, sheen: 0x9b6e44 }));
+  pron.userData.exteriorDetail = 'pronotal-shield';
   pron.position.set(0, 0.16, 2.7);
   // The meso/metathorax joins the abdominal shell to the prothoracic shield.
   // Keep this unpickable bridge with the shield; the former empty gap exposed
   // the bench through an intact insect before any dissection step.
   const thorax = organ(THREE, CHITIN_D, 1.15, 0.26, 1.05, { rough: 0.5, clear: 0.3, seed: 21 });
   thorax.name = 'thoracic-bridge';
+  thorax.userData.exteriorTissue = 'chitin';
   childMesh(pron, thorax, 0, -0.12, -1.4);
   add({
     id: 'pronotum', name: 'Pronotum (thoracic shield)', layer: 0, system: 'integument',
@@ -139,9 +188,19 @@ function buildCockroach(THREE) {
 
   // Head capsule with antennae and compound eyes (decorative children).
   const head = organ(THREE, CHITIN_D, 0.6, 0.34, 0.5, { rough: 0.4, clear: 0.5, seed: 3 });
+  {
+    const p = head.geometry.attributes.position;
+    for (let i = 0; i < p.count; i++) {
+      const forward = Math.max(0, p.getZ(i) / 0.5);
+      p.setXYZ(i, p.getX(i) * (1 - 0.32 * forward), p.getY(i) - forward * 0.08, p.getZ(i));
+    }
+    seal(head.geometry);
+  }
   head.position.set(0, 0.14, 4.9);
   const neck = organ(THREE, CHITIN_D, 0.3, 0.2, 0.45, { rough: 0.6, clear: 0.2, seed: 22 });
+  neck.geometry.scale(1, 0.65, 1); seal(neck.geometry);
   neck.name = 'cervical-connection';
+  neck.userData.exteriorTissue = 'chitin';
   childMesh(head, neck, 0, -0.02, -0.57);
   add({
     id: 'head', name: 'Head capsule', layer: 0, system: 'integument',
@@ -149,29 +208,51 @@ function buildCockroach(THREE) {
     note: 'Bears the long segmented antennae, the compound eyes and the biting mouthparts. Hypognathous — held under the pronotum.',
     mesh: head,
   });
+  for (const side of [-1, 1]) {
+    const jaw = [limbSegment([side * 0.16, -0.03, 0.35], [side * 0.23, -0.11, 0.52], 0.10, 0.055),
+      limbSegment([side * 0.23, -0.11, 0.52], [side * 0.035, -0.14, 0.60], 0.055, 0.012)];
+    head.add(exteriorBatch('mandible-' + side, jaw, 0x352117, 'mouthpart'));
+  }
   for (let s = -1; s <= 1; s += 2) {
     const eye = new THREE.Mesh(new THREE.SphereGeometry(0.16, 12, 10),
       mat(THREE, 0x2a1c14, { rough: 0.25, clear: 0.9 }));
+    eye.scale.set(0.65, 1.10, 0.80); eye.userData.exteriorDetail = 'eye';
     childMesh(head, eye, s * 0.42, 0.12, 0.16);
-    // antenna — a long thin curved chain of many short segments
-    const apts = [];
-    for (let k = 0; k <= 14; k++) {
-      const t = k / 14;
-      apts.push([s * (0.5 + t * 2.4), 0.1 + Math.sin(t * 2.2) * 0.5 + t * 0.3, 0.4 + t * 2.6]);
+    // Tapered, visibly segmented flagellum with a thicker basal scape.
+    const antennaPoint = t => [s * (0.42 + t * 2.4), 0.1 + Math.sin(t * 2.2) * 0.24, 0.37 + t * 2.7];
+    const antenna = [];
+    for (let k = 0; k < 42; k++) {
+      const t = k / 42, next = (k + 0.94) / 42;
+      antenna.push(limbSegment(antennaPoint(t), antennaPoint(next), 0.040 * (1 - t * 0.80), 0.037 * (1 - next * 0.80), 5));
     }
-    const ant = tube(THREE, CHITIN_D, apts, 0.035, { rough: 0.55, rad: 6, seg: 40 });
-    childMesh(head, ant, 0, 0, 0);
+    head.add(exteriorBatch('antenna-' + s, antenna, CHITIN_D, 'antenna'));
   }
-  // three pairs of legs off the thorax (children of the pronotum region, purely
-  // decorative — flattened jointed spikes splayed to the sides)
+  // Six articulated walking legs. Distinct coxa/femur/tibia/tarsus proportions,
+  // knee joints, tibial spines and terminal claws replace the six curved sticks.
   for (let s = -1; s <= 1; s += 2) {
     for (let L = 0; L < 3; L++) {
       const z = 2.4 - L * 1.05;
-      const lpts = [
-        [s * 0.7, -0.1, z], [s * 1.5, 0.15, z - 0.1],
-        [s * 2.3, -0.2, z - 0.35], [s * 2.7, -0.5, z - 0.7],
-      ];
-      const leg = tube(THREE, CHITIN_D, lpts, 0.06, { rough: 0.55, rad: 6, seg: 20 });
+      const spread = L === 0 ? 0.62 : L === 1 ? -0.18 : -0.82;
+      const points = [[s * 0.70, -0.10, z], [s * 1.18, -0.02, z + 0.12],
+        [s * (1.95 + L * 0.12), -0.05, z + spread], [s * (2.60 + L * 0.17), -0.27, z + spread - 0.82]];
+      const segments = [limbSegment(points[0], points[1], 0.14, 0.12),
+        limbSegment(points[1], points[2], 0.12, 0.075), limbSegment(points[2], points[3], 0.065, 0.035)];
+      for (let joint = 1; joint <= 2; joint++) {
+        const g = new THREE.SphereGeometry(joint === 1 ? 0.125 : 0.085, 9, 6); g.translate(...points[joint]); segments.push(g);
+      }
+      for (let k = 1; k <= 6; k++) {
+        const t = k / 7, p = new THREE.Vector3(...points[2]).lerp(new THREE.Vector3(...points[3]), t);
+        for (const side of [-1, 1]) segments.push(limbSegment(p.toArray(),
+          [p.x + s * 0.11, p.y + side * 0.055, p.z + side * 0.13], 0.022, 0.003, 5));
+      }
+      let last = points[3];
+      for (let k = 0; k < 5; k++) {
+        const next = [last[0] + s * 0.105, last[1] - 0.012, last[2] - 0.085];
+        segments.push(limbSegment(last, next, 0.037 - k * 0.004, 0.030 - k * 0.004, 6)); last = next;
+      }
+      for (const side of [-1, 1]) segments.push(limbSegment(last, [last[0] + s * 0.13, last[1] + 0.025, last[2] + side * 0.075], 0.021, 0.002, 5));
+      const leg = exteriorBatch('walking-leg-' + (s < 0 ? 'left-' : 'right-') + L, segments, 0x714022, 'jointed-leg');
+      leg.userData.jointCount = 7; leg.userData.tarsalSegments = 5;
       // Leg paths above are specimen-local. Compensate for the abdominal
       // parent's offset so the three pairs attach to the thorax, not the tail.
       childMesh(abd, leg, 0, 0.02, -abd.position.z);
@@ -181,29 +262,61 @@ function buildCockroach(THREE) {
   // Wings — two pairs folded flat over the back: leathery brown tegmina over
   // membranous hindwings. Removable (the first real step of the dissection).
   const mkWing = (s, membranous) => {
-    const g = new THREE.PlaneGeometry(2.0, 4.6, 10, 22);
-    const p = g.attributes.position, v = new THREE.Vector3();
-    for (let i = 0; i < p.count; i++) {
-      v.fromBufferAttribute(p, i);
-      // taper to a rounded tip, curve down at the outer edge
-      const t = (v.y + 2.3) / 4.6;               // 0 base .. 1 tip
-      v.x *= (0.5 + 0.6 * Math.sin(t * Math.PI));
-      p.setXYZ(i, v.x, v.y, -Math.abs(v.x) * 0.06);
-    }
-    p.needsUpdate = true; g.computeVertexNormals();
+    const g = new THREE.BufferGeometry();
     const m = new THREE.Mesh(g, mat(THREE,
-      membranous ? 0x8a6a44 : 0x6f4526,
-      { rough: membranous ? 0.35 : 0.5, clear: 0.5, trans: membranous ? 0.5 : 0.12,
-        thickness: 0.3, side: THREE.DoubleSide, sheen: 0x9a6a3a }));
+      membranous ? 0x8a6a44 : 0xffffff,
+      { vcol: !membranous, rough: membranous ? 0.35 : 0.43, clear: 0.42, trans: membranous ? 0.5 : 0.06,
+        thickness: 0.12, side: THREE.DoubleSide, sheen: 0xa87748 }));
+    // Preserve the existing part transform and detachable-attachment contract;
+    // author the new cambered surface in specimen space, then inverse-transform.
     m.rotation.x = -Math.PI / 2;
     m.position.set(s * 0.85, 0.28 + (membranous ? -0.03 : 0), -1.9);
     m.rotation.z = s * 0.16;
-    // wing venation as fine raised veins
-    for (let k = -2; k <= 2; k++) {
-      const vpts = [[k * 0.28, 0.02, 2.2], [k * 0.34, 0.02, 0], [k * 0.26, 0.02, -2.2]];
-      const vein = tube(THREE, 0x4a2c16, vpts, 0.015, { rough: 0.6, rad: 4, seg: 16 });
-      childMesh(m, vein, 0, 0.01, 0, Math.PI / 2, 0, 0);
+    m.updateMatrix(); const inverse = m.matrix.clone().invert();
+    const wingPoint = (t, u, lift = 0) => {
+      // Broad insertion, mostly parallel costal margins, rounded distal edge.
+      // Slight overlap and unequal tip reach avoid two identical pointed leaves.
+      const width = 0.50 + 0.16 * Math.sin(Math.PI * t) - 0.15 * Math.pow(t, 6);
+      const x = s * (0.55 - 0.23 * t * t + u * width * (s > 0 ? 0.97 : 1));
+      const emergence = smooth(Math.min(1, t / 0.18));
+      const tip = smooth(Math.max(0, (t - 0.82) / 0.18));
+      const y = 0.59 - 0.28 * (1 - emergence) + 0.035 * Math.sin(Math.PI * t)
+        - 0.055 * Math.abs(u) - 0.09 * Math.pow(t, 8) + (s > 0 ? 0.008 : 0) + lift;
+      const z = 1.80 - t * (s > 0 ? 6.49 : 6.62) + 0.30 * u * u * tip;
+      return new THREE.Vector3(x, y, z).applyMatrix4(inverse);
+    };
+    const rows = 36, columns = 12, positions = [], uvs = [], colors = [], indices = [], color = new THREE.Color();
+    for (let i = 0; i <= rows; i++) for (let j = 0; j <= columns; j++) {
+      const t = i / rows, u = j / columns * 2 - 1;
+      positions.push(...wingPoint(t, u).toArray()); uvs.push((u + 1) / 2, t);
+      color.setHex(0x9b542c).lerp(new THREE.Color(0x4d2b1c), 0.22 * Math.abs(u) + 0.15 * t);
+      colors.push(color.r, color.g, color.b);
+      if (i < rows && j < columns) {
+        const a = i * (columns + 1) + j, b = a + columns + 1;
+        indices.push(a, b, a + 1, b, b + 1, a + 1);
+      }
     }
+    g.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    g.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+    g.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3)); g.setIndex(indices); seal(g);
+    m.userData.exteriorDetail = 'cambered-tegmen';
+    const veins = [];
+    for (let k = 0; k < 8; k++) {
+      const u = -0.88 + k * 1.76 / 7;
+      const path = new THREE.CatmullRomCurve3(Array.from({ length: 13 }, (_, i) => {
+        const t = i / 12; return wingPoint(t, u * (0.28 + t * 0.72), 0.012);
+      }));
+      veins.push(new THREE.TubeGeometry(path, 24, 0.009, 4, false));
+    }
+    for (let k = 0; k < 11; k++) {
+      const t = 0.14 + k * 0.065;
+      const path = new THREE.CatmullRomCurve3([-0.80, -0.3, 0.3, 0.80].map(u => wingPoint(t + u * 0.022, u, 0.009)));
+      veins.push(new THREE.TubeGeometry(path, 8, 0.0045, 3, false));
+    }
+    const venation = exteriorBatch('tegmen-venation', veins, 0x754328, 'wing-veins');
+    // Keep low-contrast veins distinct; do not apply the parent's scale-like map.
+    delete venation.userData.exteriorTissue;
+    m.add(venation);
     return m;
   };
   add({
@@ -428,10 +541,10 @@ SPECIMENS.cockroach = {
 };
 SPECIMEN_OBJECTIVES.cockroach = [
   { id: 'wings', text: 'Remove the <b>wings</b> to clear the back.',
-    hint: 'Forceps (2). Grip each tegmen and lift it away.',
+    hint: 'Forceps (3). Grip each tegmen and lift it away.',
     done: (s) => s.removed.has('wing-left') || s.removed.has('wing-right') },
   { id: 'terga', text: 'Cut the <b>abdominal terga</b> along the midline of the back.',
-    hint: 'Scalpel (3). One smooth stroke down the dorsal midline — do not saw.',
+    hint: 'Scalpel (2). One smooth stroke down the dorsal midline — do not saw.',
     done: (s) => s.incisions.has('exoskeleton') && s.incisions.get('exoskeleton').length > 1.1 },
   { id: 'open', text: 'Reflect the exoskeleton to open the body cavity.',
     hint: 'Forceps on the cut edge, folding the plate aside.',

@@ -6,8 +6,10 @@
  * with another module's top-level names. The only top-level names this file adds
  * are `buildFish` and the single self-registration block at the bottom.
  *
- * Anatomy grounded in a standard vertebrate (teleost / bony-fish, Labeo-type)
- * dissection — the CBSE/ICSE laboratory sequence: lay the fish on its side, lift
+ * A generalized mixed-teleost teaching model, not a species-accurate Labeo/carp.
+ * The retained stomach/pyloric caeca and two-chamber bladder combination needs
+ * a coherent species revision; see docs/dissection-realism/ANATOMY.md.
+ * Dissection sequence: lay the fish on its side, lift
  * the operculum to count the gill arches, then cut a flap of the LEFT flank wall
  * and reflect it to open the peritoneal cavity. No pinning (it lies on its side).
  *
@@ -52,16 +54,23 @@ function buildFish(THREE) {
    * sx (thickness) << sy (depth) is what makes the fish read as slab-sided. */
   function fishBody(sx, sy, sz, o) {
     o = o || {};
-    const seg = o.seg || 52, seg2 = o.seg2 || 38;
+    // Enough samples for shallow real scale relief while the cuttable root
+    // remains below the existing 9,000-vertex tissue-response ceiling.
+    const seg = o.seg || (o.vcol ? 96 : 52), seg2 = o.seg2 || (o.vcol ? 72 : 38);
     const g = new THREE.SphereGeometry(1, seg, seg2);
     displace(THREE, g, o.amp != null ? o.amp : 0.03, 2.2, o.seed || 0);
     const p = g.attributes.position, v = new THREE.Vector3();
     const colors = o.vcol ? new Float32Array(p.count * 3) : null;
     const c = new THREE.Color();
-    const dorsal = new THREE.Color(0x5c6a4a);   // olive-silver back
-    const flank  = new THREE.Color(0xacb6a6);   // silver flank
-    const belly  = new THREE.Color(0xdcdccc);   // pale cream underside
-    const line   = new THREE.Color(0x475138);   // faint lateral-line stripe
+    const dorsal = new THREE.Color(0x28383b);   // dark slate back
+    const flank  = new THREE.Color(0x778980);   // muted silver-olive flank
+    const belly  = new THREE.Color(0xbfb9a9);   // warm preserved underside
+    const line   = new THREE.Color(0x405255);   // faint lateral-line stripe
+    const stations = [
+      [0, 0.28, 0.30], [0.10, 0.42, 0.44], [0.22, 0.82, 0.80],
+      [0.40, 1.00, 1.02], [0.58, 1.13, 1.02], [0.76, 1.14, 1.00],
+      [0.90, 1.00, 0.94], [1, 0.90, 0.90],
+    ];
     for (let i = 0; i < p.count; i++) {
       v.fromBufferAttribute(p, i);
       const ux = v.x, uy = v.y, uz = v.z;         // unit coords, pre-scale
@@ -75,6 +84,31 @@ function buildFish(THREE) {
       const ydome = uy >= 0 ? 1.06 : 0.99;         // dorsum a touch more arched
       p.setXYZ(i, ux * girth * sx, uy * girth * sy * ydome, uz * sz);
       if (colors) {
+        // Exterior-only shoulder, peduncle and blunt cranial profile. Keep the
+        // internal myotome geometry exactly as authored in the non-vcol path.
+        let k = 1; while (k < stations.length - 1 && t > stations[k][0]) k++;
+        const lo = stations[k - 1], hi = stations[k], f = smooth((t - lo[0]) / (hi[0] - lo[0]));
+        const wide = lo[1] + (hi[1] - lo[1]) * f, deep = lo[2] + (hi[2] - lo[2]) * f;
+        // Gently shorten the extreme snout cap; this is not another vanishing
+        // sine that pinches both ends into a flat pointed leaf.
+        const z = uz > 0.87 ? 0.87 + (uz - 0.87) * 0.70 : uz;
+        p.setXYZ(i, ux * sx * wide * 1.16, uy * sy * deep * ydome, z * sz);
+        // Staggered, shallow overlapping scale edges are part of the actual
+        // flank, so incision triangles remove them along with the skin. Leave
+        // the cranial/opercular region smooth and fade relief at the peduncle.
+        // The relief is illustrative, not measured cycloid/ctenoid morphology.
+        const wrap = x => x - Math.floor(x);
+        const around = wrap(Math.atan2(uy, ux) / (Math.PI * 2) + 0.5) * 18;
+        const row = Math.floor(around), across = wrap(around);
+        const along = wrap(t * 24 + (row % 2) * 0.5);
+        const span = Math.pow(Math.sin(Math.PI * across), 2);
+        const edge = Math.exp(-Math.pow((along - (0.50 + 0.19 * Math.cos((across - 0.5) * Math.PI))) / 0.075, 2)) * span;
+        const mask = smooth(Math.max(0, Math.min(1, (t - 0.10) / 0.15)))
+          * smooth(Math.max(0, Math.min(1, (0.77 - t) / 0.13)));
+        const scaleRelief = mask * (0.006 * edge + 0.002 * span * Math.pow(Math.sin(Math.PI * along), 2));
+        const radial = Math.hypot(ux, uy) || 1;
+        p.setX(i, p.getX(i) + ux / radial * scaleRelief);
+        p.setY(i, p.getY(i) + uy / radial * scaleRelief);
         const up = Math.max(0, Math.min(1, (uy + 1) / 2));   // 0 belly .. 1 dorsal
         c.copy(belly).lerp(flank, smooth(Math.min(1, up * 1.7)));
         c.lerp(dorsal, smooth(Math.max(0, (up - 0.56) / 0.44)));
@@ -82,6 +116,7 @@ function buildFish(THREE) {
         c.lerp(line, ll * 0.22);
         const m = vnoise(ux * 11 + 2, uy * 6, uz * 6 + 5);      // faint scale mottle
         c.offsetHSL(0, 0, (m - 0.5) * 0.05);
+        c.multiplyScalar(1 - mask * edge * 0.10 + mask * span * 0.035);
         colors[i * 3] = c.r; colors[i * 3 + 1] = c.g; colors[i * 3 + 2] = c.b;
       }
     }
@@ -90,34 +125,66 @@ function buildFish(THREE) {
     return g;
   }
 
-  /* A thin translucent fin membrane on rays. Decorative only — always a child of
-   * the body wall, never a pickable part. Base runs along local -x..+x (the
-   * attached root at -x, the free scalloped edge at +x); the membrane spans local
-   * y. Orient with rotation when attaching. */
-  function fin(len, wide, o) {
-    o = o || {};
-    const g = new THREE.PlaneGeometry(len, wide, 6, 4);
-    const p = g.attributes.position, v = new THREE.Vector3();
-    for (let i = 0; i < p.count; i++) {
-      v.fromBufferAttribute(p, i);
-      const tx = (v.x / len) + 0.5;                 // 0 root .. 1 free edge
-      // Attachment is the origin; rays fan out from a narrow root, not a
-      // rectangular sheet floating half a fin-length away from its insertion.
-      p.setXYZ(i, tx * len, v.y * (0.08 + tx * 1.02), Math.sin(v.y * 2.4) * 0.05 * tx);
+  // Merge same-material ray geometry once at construction; fin detail costs one
+  // draw call per fin, not one per ray. No external geometry utility required.
+  function finRays(geometries) {
+    const positions = [], normals = [], indices = [];
+    geometries.forEach(g => {
+      const offset = positions.length / 3;
+      positions.push(...g.attributes.position.array); normals.push(...g.attributes.normal.array);
+      indices.push(...Array.from(g.index.array, index => index + offset)); g.dispose();
+    });
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    g.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3)); g.setIndex(indices); seal(g);
+    return g;
+  }
+
+  // Root and free edge are independently authored curves. A shallow camber and
+  // scalloped membrane between curved rays make an actual fin, not a plane fan.
+  function fin(name, roots, tips, o = {}) {
+    const rows = 8, positions = [], uvs = [], colors = [], indices = [], rayGeometries = [];
+    const point = (i, t) => new THREE.Vector3().fromArray(roots[i]).lerp(new THREE.Vector3().fromArray(tips[i]), t)
+      .add(new THREE.Vector3((o.camber || 0.055) * Math.sin(Math.PI * t), 0, 0));
+    const columns = roots.length * 2 - 1;
+    for (let column = 0; column < columns; column++) {
+      const i = Math.floor(column / 2), between = column % 2;
+      for (let j = 0; j <= rows; j++) {
+        const t = j / rows, v = point(i, t);
+        if (between) {
+          v.lerp(point(i + 1, t), 0.5);
+          const anchor = new THREE.Vector3().fromArray(roots[i]).lerp(new THREE.Vector3().fromArray(roots[i + 1]), 0.5);
+          // The free membrane edge recedes slightly between supporting rays.
+          v.lerp(anchor, 0.045 * Math.pow(t, 6));
+        }
+        positions.push(...v.toArray()); uvs.push(column / (columns - 1), t);
+        const shade = 0.76 + 0.18 * t + 0.035 * Math.sin(column * 0.71 + t * 3);
+        colors.push(shade, shade * 0.98, shade * (0.90 + 0.08 * t));
+      }
+      if (column < columns - 1) for (let j = 0; j < rows; j++) {
+        const a = column * (rows + 1) + j, b = a + rows + 1;
+        indices.push(a, b, a + 1, b, b + 1, a + 1);
+      }
     }
-    seal(g);
-    const m = new THREE.Mesh(g, mat(THREE, o.color || 0xa7b4a2, {
-      trans: true, opacity: o.opacity != null ? o.opacity : 0.48, rough: 0.5, clear: 0.4,
-      side: THREE.DoubleSide, transmission: 0.55, thickness: 0.12, sheen: 0xcdd6c6 }));
-    m.material.depthWrite = false;
-    const nr = o.rays || 6;                          // fin rays as fine child struts
-    for (let i = 0; i < nr; i++) {
-      const yy = (i / (nr - 1) - 0.5) * wide * 0.82;
-      const ray = tube(THREE, o.rayColor || 0x8a9885,
-        [[0, yy * 0.08, 0.012], [len * 0.5, yy * 0.59, 0.012], [len, yy * 1.1, 0.012]],
-        0.009, { rough: 0.6, rad: 4, seg: 6 });
-      m.add(ray);
+    for (let i = 0; i < roots.length; i++) {
+      const path = new THREE.CatmullRomCurve3([0, 0.3, 0.65, 1].map(t => point(i, t)));
+      const ray = new THREE.TubeGeometry(path, 10, 0.009, 4, false), rp = ray.attributes.position;
+      for (let k = 0; k < rp.count; k++) {
+        const t = ray.attributes.uv.getX(k), centre = path.getPointAt(t);
+        const v = new THREE.Vector3().fromBufferAttribute(rp, k).sub(centre).multiplyScalar(1 - t * 0.65).add(centre);
+        rp.setXYZ(k, v.x, v.y, v.z);
+      }
+      seal(ray); rayGeometries.push(ray);
     }
+    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    g.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+    g.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3)); g.setIndex(indices); seal(g);
+    const m = new THREE.Mesh(g, mat(THREE, 0x89989a, { vcol: true, trans: true, opacity: 0.74,
+      rough: 0.48, clear: 0.35, side: THREE.DoubleSide, transmission: 0.20, thickness: 0.06, sheen: 0xcbd1cb }));
+    m.name = name; m.userData.exteriorTissue = 'fin'; m.userData.exteriorDetail = 'fin';
+    m.userData.finRoots = roots.map(p => p.slice()); m.material.depthWrite = false;
+    const rays = new THREE.Mesh(finRays(rayGeometries), mat(THREE, 0x72817d, { rough: 0.58, clear: 0.28 }));
+    rays.name = name + '-rays'; rays.userData.exteriorDetail = 'fin-ray'; m.add(rays);
     return m;
   }
 
@@ -157,44 +224,76 @@ function buildFish(THREE) {
   const skinGeo = fishBody(0.5, 1.7, 3.3, { vcol: true, amp: 0.03 });
   const skin = new THREE.Mesh(skinGeo,
     mat(THREE, 0xffffff, { vcol: true, rough: 0.42, clear: 0.62, clearRough: 0.4,
-      sheen: 0xd6dcc8, sheenAmt: 0.7 }));
+      sheen: 0xd6dcc8, sheenAmt: 0.7, transmission: 0, specular: 0.55 }));
 
   // Head detail — a large lateral eye, a nostril, and the inferior mouth with the
   // fleshy lips typical of a bottom-feeding cyprinid. All decorative children.
   const iris = new THREE.Mesh(new THREE.SphereGeometry(0.2, 20, 16),
-    mat(THREE, 0xb59a3c, { rough: 0.26, clear: 0.9, clearRough: 0.14, sheen: 0xffe08a }));
-  iris.scale.set(0.7, 1, 1);
+    mat(THREE, 0xa39d76, { rough: 0.26, clear: 0.9, clearRough: 0.14, sheen: 0xd4d7bf }));
+  iris.scale.set(0.52, 0.9, 0.9); iris.userData.exteriorDetail = 'eye';
   const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.11, 16, 12),
     mat(THREE, 0x080a06, { rough: 0.18, clear: 1, clearRough: 0.08 }));
   childMesh(iris, pupil, -0.1, 0, 0);
   childMesh(skin, iris, -0.42, 0.42, 2.55);
+  // Both flanks must remain coherent when the student rotates the specimen.
+  // Mirror only the existing external detail; anatomy and pick targets stay put.
+  const farIris = iris.clone(true);
+  farIris.position.x = 0.42;
+  farIris.children[0].position.x = 0.1;
+  skin.add(farIris);
   const nostril = new THREE.Mesh(new THREE.SphereGeometry(0.03, 8, 6), mat(THREE, 0x15170f, { rough: 0.6 }));
   childMesh(skin, nostril, -0.34, 0.5, 2.95);
-  // inferior mouth: a dark ventral gape with a thick fleshy lower lip
-  const lip = new THREE.Mesh(new THREE.TorusGeometry(0.17, 0.05, 8, 18, Math.PI * 1.1),
-    mat(THREE, 0x8a5a4e, { rough: 0.5, clear: 0.4, sheen: 0xc08878 }));
-  childMesh(skin, lip, -0.18, -0.34, 3.02, 0.2, -0.5, 0.2);
-  const gape = new THREE.Mesh(new THREE.CircleGeometry(0.13, 16, 0, Math.PI),
-    mat(THREE, 0x120b09, { rough: 0.7, side: THREE.DoubleSide }));
-  childMesh(skin, gape, -0.14, -0.28, 3.06, 0, -0.9, 0.15);
+  const farNostril = nostril.clone(); farNostril.position.x = 0.34; skin.add(farNostril);
+  // Subterminal mouth follows the snout instead of a large pink hook off its tip.
+  const lip = tube(THREE, 0x777c70,
+    [[-0.23, -0.19, 3.10], [-0.20, -0.27, 3.13], [-0.07, -0.31, 3.14], [0.10, -0.28, 3.12]],
+    0.025, { rough: 0.48, clear: 0.4, rad: 5, seg: 14 });
+  lip.name = 'subterminal-lip'; skin.add(lip);
 
-  // Fins as thin translucent child meshes on rays. Paired fins (pectoral, pelvic)
-  // lie flat on the near LEFT flank facing the camera; median fins (dorsal, anal,
-  // caudal) stand in the sagittal plane. Caudal is a forked two-lobe tail.
-  const pectoral = fin(0.95, 0.62, { rays: 7, color: 0xb0bca6 });
-  childMesh(skin, pectoral, -0.44, -0.5, 1.15, 0.15, -Math.PI / 2, -0.7);
-  const pelvic = fin(0.6, 0.42, { rays: 5, color: 0xb0bca6 });
-  childMesh(skin, pelvic, -0.38, -1.02, -0.15, 0.1, -Math.PI / 2, -0.5);
-  const dorsalFin = fin(2.2, 0.85, { rays: 12, color: 0x9fae98, opacity: 0.5 });
-  childMesh(skin, dorsalFin, 0, 1.85, 0.2, 0, -Math.PI / 2, Math.PI / 2);
-  const analFin = fin(1.0, 0.5, { rays: 7, color: 0x9fae98 });
-  childMesh(skin, analFin, 0, -1.15, -1.9, 0, -Math.PI / 2, Math.PI / 2);
-  const caudalUp = fin(1.5, 0.7, { rays: 9, color: 0x93a48c, opacity: 0.52 });
-  caudalUp.name = 'caudal-upper';
-  childMesh(skin, caudalUp, 0, 0, -3.1, 0, Math.PI / 2, 0.55);
-  const caudalLo = fin(1.5, 0.7, { rays: 9, color: 0x93a48c, opacity: 0.52 });
-  caudalLo.name = 'caudal-lower';
-  childMesh(skin, caudalLo, 0, 0, -3.1, 0, Math.PI / 2, -0.55);
+  // Seat roots on the actual shaped skin. These queries run once at build time,
+  // before any child fins exist; no frame-time raycast or detached insertions.
+  const surfacePoint = (origin, direction) => {
+    const hit = new THREE.Raycaster(new THREE.Vector3(...origin), new THREE.Vector3(...direction)).intersectObject(skin, false)[0];
+    return hit ? hit.point.toArray() : [0, 0, origin[2]];
+  };
+  for (const s of [-1, 1]) {
+    for (const [name, y, z, length, spread] of [['pectoral', -0.45, 1.18, 1.05, 0.72], ['pelvic', -1.00, -0.15, 0.68, 0.47]]) {
+      const root = surfacePoint([s * 2, y, z], [-s, 0, 0]), roots = [], tips = [];
+      for (let i = 0; i < 8; i++) {
+        const t = i / 7;
+        roots.push([root[0], root[1] + (t - 0.5) * 0.08, root[2] - t * 0.10]);
+        // The tray-side paired fins lie against the right flank instead of
+        // acting as rigid stilts that lift the entire fish off its support.
+        const tipX = s < 0 ? root[0] - (0.16 + 0.18 * Math.sin(t * Math.PI))
+          : Math.min(root[0] + 0.025, skinGeo.boundingBox.max.x - 0.025);
+        tips.push([tipX, y - t * spread,
+          z - length * (0.48 + 0.52 * Math.sin(t * Math.PI * 0.85))]);
+      }
+      skin.add(fin(name + (s < 0 ? '-left' : '-right'), roots, tips, { camber: s < 0 ? -0.08 : -0.025 }));
+    }
+  }
+  for (const [name, sign, start, end, height, nr] of [['dorsal-fin', 1, 1.10, -1.65, 0.72, 14], ['anal-fin', -1, -1.00, -2.45, 0.56, 9]]) {
+    const roots = [], tips = [];
+    for (let i = 0; i < nr; i++) {
+      const t = i / (nr - 1), z = start + (end - start) * t;
+      const root = surfacePoint([0, sign * 4, z], [0, -sign, 0]); roots.push(root);
+      tips.push([0.025 * Math.sin(t * Math.PI), root[1] + sign * height * Math.pow(Math.sin(Math.PI * t), 0.65),
+        z - 0.28 * Math.sin(Math.PI * t)]);
+    }
+    skin.add(fin(name, roots, tips));
+  }
+  // A continuous forked caudal fan, split only at the center seam for the two
+  // lobes. Both share an embedded peduncle root, not two floating paper triangles.
+  for (const s of [-1, 1]) {
+    const roots = [], tips = [];
+    for (let i = 0; i < 12; i++) {
+      const t = i / 11;
+      roots.push([0, s * t * 0.12, 0]);
+      tips.push([0.018 * Math.sin(t * Math.PI), s * t * 1.08, -0.60 - 0.90 * smooth(t)]);
+    }
+    const caudal = fin(s > 0 ? 'caudal-upper' : 'caudal-lower', roots, tips, { camber: s * 0.045 });
+    childMesh(skin, caudal, 0, 0, -3.12);
+  }
 
   add({
     id: 'body-wall', name: 'Skin & flank body wall', layer: 0, system: 'integument',
@@ -205,23 +304,50 @@ function buildFish(THREE) {
                [-0.5, -1.05, -2.1], [-0.46, -0.25, -2.3]],
   });
 
-  // Operculum: the bony gill cover on the left flank, proud (lateral) of the skin
-  // so it is the pick target over the gill chamber. Lift it to expose the gills.
-  const opGeo = new THREE.SphereGeometry(1, 30, 22);
-  displace(THREE, opGeo, 0.03, 2.4, 3);
-  opGeo.scale(0.12, 1.05, 0.82);                    // a thin curved plate
-  seal(opGeo);
+  // The operculum is a fitted bony cover, not a domed circular medallion. Keep
+  // the original part transform while conforming its closed, thin surface to
+  // the actual left flank; the outer face stays just proud enough to be picked.
+  const opGeo = new THREE.SphereGeometry(1, 40, 28);
   const operculum = new THREE.Mesh(opGeo,
-    mat(THREE, 0xc7ccbf, { rough: 0.34, clear: 0.6, clearRough: 0.2, sheen: 0xdfe6da, sheenAmt: 0.7 }));
+    mat(THREE, 0xffffff, { vcol: true, rough: 0.48, clear: 0.32, clearRough: 0.35,
+      sheen: 0xdfe6da, sheenAmt: 0.45, transmission: 0, specular: 0.55 }));
   operculum.position.set(-0.62, 0.05, 1.62);
   operculum.rotation.set(0, 0.12, 0.05);
-  // faint radiating bony striae + the free posterior margin
-  for (let i = 0; i < 5; i++) {
-    const a = -0.6 + i * 0.3;
-    const stria = new THREE.Mesh(new THREE.CapsuleGeometry(0.012, 1.2, 3, 5),
-      mat(THREE, 0xb7bdb0, { rough: 0.5 }));
-    childMesh(operculum, stria, 0.13, 0.1, 0, 0, 0, a);
+  operculum.updateMatrix(); const opInverse = operculum.matrix.clone().invert();
+  const opRay = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(1, 0, 0)), opSamples = new Map();
+  const flankAt = (y, z) => {
+    const key = y.toFixed(5) + ':' + z.toFixed(5);
+    if (opSamples.has(key)) return opSamples.get(key);
+    opRay.ray.origin.set(-2, y, z);
+    const hit = opRay.intersectObject(skin, false)[0];
+    const color = new THREE.Color(0xa6b1b5);
+    if (hit) {
+      const c = skinGeo.attributes.color;
+      color.setRGB((c.getX(hit.face.a) + c.getX(hit.face.b) + c.getX(hit.face.c)) / 3,
+        (c.getY(hit.face.a) + c.getY(hit.face.b) + c.getY(hit.face.c)) / 3,
+        (c.getZ(hit.face.a) + c.getZ(hit.face.b) + c.getZ(hit.face.c)) / 3);
+    }
+    const sample = { x: hit ? hit.point.x : -0.40, color }; opSamples.set(key, sample); return sample;
+  };
+  const opPositions = opGeo.attributes.position, opColors = [], opPoint = new THREE.Vector3();
+  for (let i = 0; i < opPositions.count; i++) {
+    opPoint.fromBufferAttribute(opPositions, i);
+    const y = 0.035 + opPoint.y * (1.00 - 0.16 * Math.max(0, opPoint.z));
+    const z = 1.68 + opPoint.z * 0.72, sample = flankAt(y, z);
+    opPoint.set(sample.x - 0.012 + opPoint.x * 0.025, y, z).applyMatrix4(opInverse);
+    opPositions.setXYZ(i, opPoint.x, opPoint.y, opPoint.z);
+    opColors.push(sample.color.r, sample.color.g, sample.color.b);
   }
+  opGeo.setAttribute('color', new THREE.Float32BufferAttribute(opColors, 3)); seal(opGeo);
+  operculum.userData.exteriorDetail = 'conforming-operculum';
+  // The free posterior edge is a restrained crescent; no circular raised rim.
+  const seamPoints = [];
+  for (let i = 0; i <= 18; i++) {
+    const angle = i / 18 * Math.PI, y = 0.035 + Math.cos(angle), z = 1.68 - 0.72 * Math.sin(angle);
+    seamPoints.push(new THREE.Vector3(flankAt(y, z).x - 0.022, y, z).applyMatrix4(opInverse).toArray());
+  }
+  const seam = tube(THREE, 0x687674, seamPoints, 0.006, { rough: 0.58, clear: 0.25, rad: 4, seg: 28 });
+  seam.name = 'opercular-margin'; seam.userData.exteriorDetail = 'opercular-seam'; operculum.add(seam);
   add({
     id: 'operculum', name: 'Operculum (gill cover)', layer: 0, system: 'skeletal',
     cuttable: true, detachable: true,
@@ -522,14 +648,14 @@ SPECIMENS.fish = {
 };
 SPECIMEN_OBJECTIVES.fish = [
   { id: 'operculum', text: 'Lift the bony <b>operculum</b> to open the gill chamber.',
-    hint: 'Forceps (2). Grip the gill cover and draw it clear of the flank.',
+    hint: 'Forceps (3). Grip the gill cover and draw it clear of the flank.',
     done: (s) => s.removed.has('operculum') },
   { id: 'gills', text: 'Examine the <b>gills</b> — count the four arches and find the red <b>filaments</b> and white <b>rakers</b>.',
     hint: 'Probe (1) each of the four arches, then the filaments and the rakers.',
     done: (s, seen) => ['gill-arch-1', 'gill-arch-2', 'gill-arch-3', 'gill-arch-4', 'gill-filaments', 'gill-rakers']
       .every((id) => seen.has(id)) },
   { id: 'incise', text: 'Cut a flap of the <b>flank body wall</b>, from behind the operculum along the belly to the vent.',
-    hint: 'Scalpel (3). One smooth stroke — do not saw.',
+    hint: 'Scalpel (2). One smooth stroke — do not saw.',
     done: (s) => s.incisions.has('body-wall') && s.incisions.get('body-wall').length > 1.1 },
   { id: 'reflect', text: 'Reflect the flap to expose the muscular <b>body wall (myotomes)</b>.',
     hint: 'Forceps. Grip the cut edge and fold it back.',

@@ -2519,10 +2519,34 @@ function displace(THREE, geo, amp, freq, seed = 0) {
   return geo;
 }
 
+/* Opt-in smoothing for the duplicate UV boundary of a closed ventricular lathe. */
+function smoothClosedLatheSeam(geo) {
+  if (!geo.userData?.smoothClosedLathe || geo.type !== 'LatheGeometry') return;
+  const cfg = geo.parameters, p = geo.attributes.position, n = geo.attributes.normal;
+  if (!cfg || !p || !n || Math.abs(cfg.phiLength - Math.PI * 2) > 1e-8) return;
+  const rows = cfg.points.length, last = cfg.segments * rows;
+  if (p.count !== last + rows || n.count !== p.count) return;
+  for (let a = 0; a < rows; a++) {
+    const b = last + a;
+    const dx = p.getX(a) - p.getX(b), dy = p.getY(a) - p.getY(b), dz = p.getZ(a) - p.getZ(b);
+    // A cutting deformation can separate these vertices into real wound edges.
+    if (dx * dx + dy * dy + dz * dz > 1e-10) continue;
+    const ax = n.getX(a), ay = n.getY(a), az = n.getZ(a);
+    const bx = n.getX(b), by = n.getY(b), bz = n.getZ(b);
+    if (ax * ax + ay * ay + az * az < .25 || bx * bx + by * by + bz * bz < .25) continue;
+    const x = ax + bx, y = ay + by, z = az + bz, length = Math.hypot(x, y, z);
+    if (length < 1e-6) continue;
+    n.setXYZ(a, x / length, y / length, z / length);
+    n.setXYZ(b, x / length, y / length, z / length);
+  }
+  n.needsUpdate = true;
+}
+
 /* Finalise a geometry after the LAST vertex edit (scale/bend/deform). */
 function seal(geo) {
   geo.attributes.position.needsUpdate = true;
   geo.computeVertexNormals();
+  smoothClosedLatheSeam(geo);
   geo.computeBoundingSphere();
   geo.computeBoundingBox();
   return geo;
@@ -2736,13 +2760,28 @@ const SPECIMENS = {
 };
 
 /* ========================================================================== */
+// The five teaching specimens retain their original builders and interactions.
+// Prepared exterior assets are an independent, explicitly validated capability;
+// a specimen does not need one to remain available in this catalog.
+const LAB_ACTIVE_SPECIMEN_IDS = Object.freeze(['frog', 'heart', 'fish', 'earthworm', 'cockroach']);
+function getAvailableSpecimens(specs = SPECIMENS) {
+  return Object.fromEntries(LAB_ACTIVE_SPECIMEN_IDS
+    .filter(id => Object.prototype.hasOwnProperty.call(specs, id) && specs[id]?.id === id)
+    .map(id => [id, specs[id]]));
+}
+function normalizeSpecimenId(id) {
+  return LAB_ACTIVE_SPECIMEN_IDS.includes(id) && Object.prototype.hasOwnProperty.call(SPECIMENS, id)
+    ? id : 'frog';
+}
+
+/* ========================================================================== */
 // Registries new specimens self-register into (fish.js, earthworm.js, …). frog and
 // heart stay hardcoded below so their verified builders are never touched; anything
 // else looks itself up here. A builder module, at eval time, does:
 //   SPECIMEN_BUILDERS.fish = buildFish;
 //   SPECIMENS.fish = { id:'fish', name:'…', blurb:'…', camera:{…}, requiresPinning };
 //   SPECIMEN_OBJECTIVES.fish = [ {id,text,hint,done}, … ];
-// The shell's card list iterates SPECIMENS, so the card appears for free; its
+// The shell filters this registry through getAvailableSpecimens(); its
 // objective panel falls back to SPECIMEN_OBJECTIVES when a specimen is not in its
 // own built-in OBJECTIVES table.
 const SPECIMEN_BUILDERS = {};
@@ -2839,25 +2878,93 @@ function buildFrog(THREE) {
     mat(THREE, 0xffffff, { vcol: true, rough: 0.5, clear: 0.6, clearRough: 0.5,
       sheen: 0xaec07a, sheenAmt: 0.72 }));
 
-  /* Head detail: dorsally-bulging eyes (low domes seen from the ventral side),
-   * a tympanum disc behind each eye, and a nostril near the snout. All decorative
-   * children of the skin — never picked. */
+  // Keep the cuttable trunk and its matched strata envelope unchanged. Exterior
+  // landmarks are seated on that actual surface, not on guessed sphere radii.
+  skin.updateMatrixWorld(true);
+  function skinHit(origin, direction) {
+    return new THREE.Raycaster(new THREE.Vector3(...origin), new THREE.Vector3(...direction)).intersectObject(skin, false)[0];
+  }
+  function hideDetail(mesh, name) {
+    mesh.name = name;
+    mesh.userData.exteriorTissue = 'frog-hide';
+    return mesh;
+  }
+  function seatOnSkin(mesh, hit, inset) {
+    mesh.position.copy(hit.point).addScaledVector(hit.face.normal, -inset);
+    mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), hit.face.normal.clone().normalize());
+    skin.add(mesh);
+  }
+
+  /* Smaller flattened orbital domes, inset into the dorsolateral head. The
+   * mottled iris and narrow pupil sit on the same dome, not on stalks. These
+   * remain inconspicuous from the ventral dissection view, as they should. */
   function frogEye(side) {
-    const iris = new THREE.Mesh(new THREE.SphereGeometry(0.36, 20, 16),
-      mat(THREE, 0xbf9a34, { rough: 0.28, clear: 0.9, clearRough: 0.15, sheen: 0xffe08a }));
-    iris.scale.set(1, 0.82, 1);
-    const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.2, 16, 12),
-      mat(THREE, 0x0a0d08, { rough: 0.2, clear: 1, clearRough: 0.08 }));
-    childMesh(iris, pupil, 0, 0.07, 0.22);
-    // Eyes bulge dorsally (-y), high on the widest part of the head.
-    childMesh(skin, iris, side * 0.86, -0.5, 3.05);
-    const tym = new THREE.Mesh(new THREE.CircleGeometry(0.28, 20),
-      mat(THREE, 0x475226, { rough: 0.8, clear: 0.2, side: THREE.DoubleSide }));
-    childMesh(skin, tym, side * 1.22, -0.28, 2.4, 0.15, side * 0.95, 0);
-    const nos = new THREE.Mesh(new THREE.SphereGeometry(0.055, 8, 6), mat(THREE, 0x1a1c12, { rough: 0.6 }));
-    childMesh(skin, nos, side * 0.24, -0.34, 4.2);
+    const suffix = side < 0 ? 'left' : 'right';
+    const hit = skinHit([side * 6, -0.42, 3.25], [-side, 0, 0]);
+    if (!hit) return;
+    const eyeGeo = new THREE.SphereGeometry(1, 28, 18);
+    eyeGeo.scale(0.25, 0.19, 0.12); seal(eyeGeo);
+    const eye = new THREE.Mesh(eyeGeo, mat(THREE, 0x413e28, { rough: 0.42, clear: 0.36, clearRough: 0.3, noTex: true }));
+    eye.name = 'eye-' + suffix;
+    seatOnSkin(eye, hit, 0.045);
+    const irisGeo = new THREE.SphereGeometry(1, 28, 14);
+    irisGeo.scale(0.13, 0.10, 0.026);
+    const ip = irisGeo.attributes.position, colours = new Float32Array(ip.count * 3), c = new THREE.Color();
+    const irisDark = new THREE.Color(0x5d502b), irisGold = new THREE.Color(0xa89958);
+    for (let i = 0; i < ip.count; i++) {
+      const a = Math.atan2(ip.getY(i) / 0.10, ip.getX(i) / 0.13);
+      const fibre = 0.5 + 0.5 * Math.sin(a * 23 + Math.sin(a * 7));
+      c.copy(irisDark).lerp(irisGold, 0.22 + fibre * 0.58);
+      colours.set([c.r, c.g, c.b], i * 3);
+    }
+    irisGeo.setAttribute('color', new THREE.Float32BufferAttribute(colours, 3)); seal(irisGeo);
+    const iris = new THREE.Mesh(irisGeo, mat(THREE, 0xffffff, { vcol: true, rough: 0.38, clear: 0.4, clearRough: 0.24, noTex: true }));
+    iris.name = 'iris-' + suffix; childMesh(eye, iris, 0, 0, 0.108);
+    const pupilGeo = new THREE.SphereGeometry(1, 24, 12);
+    pupilGeo.scale(0.078, 0.024, 0.012); seal(pupilGeo);
+    const pupil = new THREE.Mesh(pupilGeo, mat(THREE, 0x10140d, { rough: 0.3, clear: 0.48, clearRough: 0.2, noTex: true }));
+    pupil.name = 'pupil-' + suffix; childMesh(eye, pupil, 0, 0, 0.13);
+    for (const upper of [true, false]) {
+      const arc = [];
+      for (let i = 0; i <= 12; i++) {
+        const a = (i / 12 + (upper ? 0 : 1)) * Math.PI;
+        arc.push([Math.cos(a) * 0.255, Math.sin(a) * (upper ? 0.19 : 0.17), 0.025]);
+      }
+      const lid = hideDetail(tube(THREE, 0x727448, arc, upper ? 0.04 : 0.025,
+        { rough: 0.72, clear: 0.18, rad: 8, seg: 24 }), (upper ? 'upper' : 'lower') + '-eyelid-' + suffix);
+      lid.position.copy(eye.position); lid.quaternion.copy(eye.quaternion); skin.add(lid);
+    }
+    const tymHit = skinHit([side * 6, -0.32, 2.72], [-side, 0, 0]);
+    if (tymHit) {
+      const g = new THREE.SphereGeometry(1, 24, 14); g.scale(0.19, 0.17, 0.026); seal(g);
+      const tym = hideDetail(new THREE.Mesh(g, mat(THREE, 0x65643f, { rough: 0.76, clear: 0.12 })), 'tympanum-' + suffix);
+      seatOnSkin(tym, tymHit, 0.015);
+    }
+    const nostrilHit = skinHit([side * 0.34, -6, 4.06], [0, 1, 0]);
+    if (nostrilHit) {
+      const g = new THREE.SphereGeometry(1, 12, 8); g.scale(0.043, 0.022, 0.015); seal(g);
+      const nos = new THREE.Mesh(g, mat(THREE, 0x303523, { rough: 0.78, clear: 0.08, noTex: true }));
+      nos.name = 'nostril-' + suffix; seatOnSkin(nos, nostrilHit, 0.007);
+    }
   }
   frogEye(-1); frogEye(1);
+
+  // A closed jaw margin and a low labial fold give the otherwise blank ventral
+  // head a readable contour. Every centreline sample is projected onto skin.
+  for (const fold of [false, true]) {
+    const points = [];
+    for (let i = 0; i <= 30; i++) {
+      const x = (i / 30 * 2 - 1) * 1.43;
+      const z = 3.18 + 1.15 * Math.sqrt(Math.max(0, 1 - Math.pow(x / 1.46, 2))) - (fold ? 0.07 : 0);
+      const hit = skinHit([x, 6, z], [0, -1, 0]);
+      if (hit) points.push(hit.point.toArray());
+    }
+    const lip = tube(THREE, fold ? 0xb8b588 : 0x5a5c3d, points, fold ? 0.036 : 0.017,
+      { rough: 0.74, clear: 0.13, rad: 8, seg: 48 });
+    lip.name = fold ? 'labial-fold' : 'closed-mouth-seam';
+    if (fold) hideDetail(lip, lip.name);
+    skin.add(lip);
+  }
 
   add({
     id: 'skin', name: 'Skin', layer: 0, system: 'integument', cuttable: true, detachable: false,
@@ -2870,11 +2977,40 @@ function buildFrog(THREE) {
    * flattened webbed foot and splayed digits as decorative children. Forelimbs
    * are short with 4 digits; hindlimbs long, sharply folded, with 5 long webbed
    * digits. A frog at rest folds its limbs — it is not a starfish. */
-  function frogDigit(parent, x, y, z, len, rad, spread, tilt) {
-    const d = new THREE.Mesh(new THREE.CapsuleGeometry(rad, len, 4, 8),
-      mat(THREE, 0x54682f, { rough: 0.62, sheen: 0xaec07a }));
-    childMesh(parent, d, x, y, z, Math.PI / 2 + tilt, 0, spread);
+  function frogDigit(parent, points, radius, index) {
+    const d = hideDetail(tube(THREE, 0x7b7a4b, points, radius,
+      { rough: 0.7, clear: 0.18, seg: 14, rad: 8 }), 'digit-' + (index + 1));
+    taperLimb(d, [[0, radius], [0.55, radius * 0.78], [1, radius * 0.36]]);
+    const tip = hideDetail(new THREE.Mesh(new THREE.SphereGeometry(radius * 0.37, 10, 6),
+      mat(THREE, 0x7b7a4b, { rough: 0.7, clear: 0.18 })), 'digit-tip-' + (index + 1));
+    childMesh(d, tip, ...points[points.length - 1]);
+    parent.add(d);
     return d;
+  }
+  function frogWeb(foot, left, right, index) {
+    const a = left.geometry.parameters.path, b = right.geometry.parameters.path;
+    const positions = [], indices = [], rows = 8, columns = 4;
+    // Each edge follows a real toe centreline. The middle recedes into a soft
+    // notch, so this is between-digit webbing rather than a decorative circle.
+    for (let row = 0; row <= rows; row++) for (let col = 0; col <= columns; col++) {
+      const s = col / columns, t = row / rows * (0.68 - 0.19 * Math.sin(Math.PI * s));
+      const v = a.getPointAt(t).lerp(b.getPointAt(t), s);
+      v.y -= Math.sin(Math.PI * s) * Math.sin(Math.PI * row / rows) * 0.026;
+      positions.push(v.x, v.y, v.z);
+      if (row < rows && col < columns) {
+        const i = row * (columns + 1) + col;
+        indices.push(i, i + 1, i + columns + 1, i + 1, i + columns + 2, i + columns + 1);
+      }
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3)); g.setIndex(indices);
+    const uv = [];
+    for (let row = 0; row <= rows; row++) for (let col = 0; col <= columns; col++) uv.push(col / columns, row / rows);
+    g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); seal(g);
+    const web = hideDetail(new THREE.Mesh(g, mat(THREE, 0xa39f6c,
+      { rough: 0.72, clear: 0.16, side: THREE.DoubleSide, trans: true, opacity: 0.88, transmission: 0.12, thickness: 0.04 })), 'interdigital-web-' + (index + 1));
+    web.material.depthWrite = false;
+    foot.add(web);
   }
   // Derive the shoulder/hip insertion from the actual deformed flank. A fixed
   // x coordinate only grazed that surface, exposing the open end of each tube.
@@ -2886,7 +3022,7 @@ function buildFrog(THREE) {
     const flank = hit ? Math.abs(hit.point.x) : 1.85;
     return [side * Math.max(0.85, flank - inset), y, z];
   }
-  function taperLimb(mesh, radii) {
+  function taperLimb(mesh, radii, flatten = 1) {
     const geo = mesh.geometry, params = geo.parameters, pos = geo.attributes.position;
     const v = new THREE.Vector3();
     for (let i = 0; i < pos.count; i++) {
@@ -2898,18 +3034,21 @@ function buildFrog(THREE) {
       const radius = a[1] + (b[1] - a[1]) * f;
       // TubeGeometry places rings at arc-length fractions, not spline time.
       const center = params.path.getPointAt(t);
-      v.fromBufferAttribute(pos, i).sub(center).multiplyScalar(radius / params.radius).add(center);
+      v.fromBufferAttribute(pos, i).sub(center).multiplyScalar(radius / params.radius);
+      v.y *= flatten;
+      v.add(center);
       pos.setXYZ(i, v.x, v.y, v.z);
     }
     seal(geo);
   }
   function limb(lid, nm, sx, long, seed) {
-    let path, r, foot, footPos, footRot, nDig, digLen, webW, webL;
+    let path, r, foot, footPos, footRot, nDig;
     if (long) {
       // hindlimb: long, sharply folded — thigh forward, shank back, big webbed foot
       path = [
         limbRoot(sx, 0.05, -2.25, 0.74),
-        [sx * 3.05, -0.12, -1.25],   // knee (thrust forward)
+        [sx * 3.20, -0.12, -1.35],   // thigh into the rounded knee
+        [sx * 3.30, -0.14, -1.90],   // carry the bend rather than an acute corner
         [sx * 2.7, -0.2, -3.35],     // ankle (folded back)
         [sx * 2.05, -0.17, -4.65],   // heel, seated inside the long foot
       ];
@@ -2917,12 +3056,13 @@ function buildFrog(THREE) {
       foot = new THREE.Mesh(new THREE.SphereGeometry(1, 18, 12), mat(THREE, 0x54682f, { rough: 0.62, sheen: 0xaec07a }));
       foot.geometry.scale(0.24, 0.1, 0.85); seal(foot.geometry);
       footPos = [sx * 1.95, -0.18, -5.2]; footRot = [0.1, -sx * 0.26, 0];
-      nDig = 5; digLen = 0.95; webW = 0.9; webL = 1.05;
+      nDig = 5;
     } else {
       // forelimb: shorter, folded, small 4-digit hand
       path = [
         limbRoot(sx, 0.06, 2.05, 0.48),
-        [sx * 2.6, -0.06, 2.6],      // elbow
+        [sx * 2.78, -0.04, 2.48],    // upper arm into the elbow
+        [sx * 2.86, -0.06, 2.75],    // rounded elbow transition
         [sx * 2.3, -0.12, 3.35],     // wrist
         [sx * 2.15, -0.14, 3.64],    // continue inside the palm, not short of it
       ];
@@ -2930,27 +3070,28 @@ function buildFrog(THREE) {
       foot = new THREE.Mesh(new THREE.SphereGeometry(1, 16, 10), mat(THREE, 0x54682f, { rough: 0.62, sheen: 0xaec07a }));
       foot.geometry.scale(0.2, 0.09, 0.34); seal(foot.geometry);
       footPos = [sx * 2.15, -0.14, 3.85]; footRot = [0.1, sx * 0.4, 0];
-      nDig = 4; digLen = 0.34; webW = 0; webL = 0;
+      nDig = 4;
     }
     const m = tube(THREE, 0x5a6b33, path, r, { rough: 0.62, sheen: 0xaec07a, clear: 0.4, seg: 40, rad: 16, seed });
     taperLimb(m, long
       ? [[0, 0.47], [0.18, 0.57], [0.42, 0.32], [0.74, 0.24], [1, 0.19]]
-      : [[0, 0.32], [0.25, 0.34], [0.7, 0.22], [1, 0.16]]);
+      : [[0, 0.32], [0.25, 0.34], [0.7, 0.22], [1, 0.16]], long ? 0.82 : 0.88);
+    hideDetail(m, lid);
+    hideDetail(foot, long ? 'hind-foot' : 'fore-hand');
     childMesh(m, foot, ...footPos, ...footRot);
-    // splayed digits fanning off the far end of the foot
+    const digits = [];
+    const tipX = long ? [-0.50, -0.30, -0.05, 0.24, 0.45] : [-0.38, -0.14, 0.12, 0.35];
+    const tipZ = long ? [0.94, 1.23, 1.47, 1.53, 1.12] : [0.48, 0.69, 0.72, 0.56];
+    const direction = long ? -1 : 1;
+    // Unequal, gently jointed digits originate INSIDE the palm. All positions
+    // are foot-local, so the ankle, palm, toes and webs share the same rotation.
     for (let i = 0; i < nDig; i++) {
-      const f = (i - (nDig - 1) / 2) / Math.max(1, nDig - 1);   // -0.5 .. 0.5
-      const dz = (long ? -5.9 : 4.15);
-      frogDigit(m, footPos[0] + f * 0.34, footPos[1] + 0.02,
-        (footRot ? dz : dz), digLen, long ? 0.06 : 0.05, f * (long ? 0.55 : 0.5), 0);
+      const x0 = sx * (i / (nDig - 1) - 0.5) * (long ? 0.28 : 0.24);
+      const z0 = direction * (long ? 0.36 : 0.08), x1 = sx * tipX[i], z1 = direction * tipZ[i];
+      digits.push(frogDigit(foot, [[x0, 0, z0], [x0 * 0.44 + x1 * 0.56, 0.018, z0 * 0.46 + z1 * 0.54],
+        [x1 * 0.95, 0.005, z1 * 0.91], [x1, -0.01, z1]], long ? 0.046 : 0.038, i));
     }
-    if (long && webW) {
-      // toe webbing: a thin translucent triangular fan between the digits
-      const web = new THREE.Mesh(new THREE.CircleGeometry(webL, 5, Math.PI * 0.15, Math.PI * 0.7),
-        mat(THREE, 0x59692f, { trans: true, opacity: 0.5, rough: 0.6, side: THREE.DoubleSide }));
-      web.scale.set(webW, 1, 1);
-      childMesh(m, web, footPos[0], footPos[1] - 0.02, -5.75, Math.PI / 2, 0, 0);
-    }
+    if (long) for (let i = 0; i < digits.length - 1; i++) frogWeb(foot, digits[i], digits[i + 1], i);
     return add({
       id: lid, name: nm, layer: 0, system: 'muscular', cuttable: false, detachable: false,
       note: long ? 'Long and sharply folded — the powerhouse for the leap. Pin it out splayed so the body wall comes under tension.'
@@ -3301,8 +3442,9 @@ function buildFrog(THREE) {
  * Concatenated into one module scope with anatomy.js (the shared geometry
  * toolkit, SPECIMENS and buildSpecimen dispatcher). Uses those helpers directly.
  *
- * Built to genuine mammalian (sheep / human teaching) heart anatomy, grounded in
- * dissection references rather than a symmetric lump:
+ * Generalized mammalian teaching heart with illustrative human arch branches.
+ * This is not a species-validated sheep reconstruction; see ANATOMY.md.
+ * Its authored relationships include:
  *  - a blunt cone: broad BASE superior (great vessels emerge), tapering to an
  *    APEX that points infero-LATERALLY (down and to the anatomical left);
  *  - the LEFT ventricle a thick, firm, full cone of revolution; the RIGHT
@@ -3346,6 +3488,9 @@ function buildHeart(THREE) {
   function heartWall(prof, seg, phiStart, phiLen, color, o) {
     o = o || {};
     const g = new THREE.LatheGeometry(prof, seg, phiStart, phiLen);
+    // Only the closed ventricular wall has a UV seam rather than a free edge.
+    // Keep both UV vertices, but share the lighting normal after deformation.
+    if (Math.abs(phiLen - Math.PI * 2) < 1e-8) g.userData.smoothClosedLathe = true;
     // Our ventricular profiles run from base to apex (descending Y), opposite
     // LatheGeometry's outward winding. Reverse faces, not the authored points:
     // shape, displacement, UVs and transforms stay exact, while the front wall
@@ -3375,6 +3520,30 @@ function buildHeart(THREE) {
     return seal(geo);
   }
 
+  // Spatial pigment belongs to the actual cuttable wall, not a decorative shell.
+  // Three-dimensional fields keep duplicate UV seam vertices the same colour.
+  // Muted variation is an art-directed preserved-tissue cue, not a histology map
+  // or an assertion about a particular fixative, disease or blood oxygenation.
+  function heartTissuePigment(mesh, fatty = false) {
+    const g = mesh.geometry, p = g.attributes.position;
+    const colors = new Float32Array(p.count * 3);
+    for (let i = 0; i < p.count; i++) {
+      const x = p.getX(i), y = p.getY(i), z = p.getZ(i);
+      const broad = vnoise(x * 1.9 + 2.7, y * 1.6 - 1.4, z * 1.8 + 4.1);
+      const fine = vnoise(x * 8.3 - 3.2, y * 7.9 + 6.1, z * 8.1 - 1.7);
+      const strands = 0.5 + 0.5 * Math.sin(y * 21 + x * 5 + z * 3 + broad * 2);
+      const shade = fatty ? 0.81 + broad * 0.16 + fine * 0.03
+        : 0.72 + broad * 0.23 + fine * 0.04 + strands * 0.01;
+      colors[i * 3] = shade;
+      colors[i * 3 + 1] = shade * (fatty ? 0.96 + fine * 0.04 : 0.93 + fine * 0.06);
+      colors[i * 3 + 2] = shade * (fatty ? 0.85 + broad * 0.10 : 0.90 + broad * 0.08);
+    }
+    g.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+    mesh.material.vertexColors = true;
+    mesh.material.needsUpdate = true;
+    mesh.userData.tissuePigment = fatty ? 'lobulated-fat' : 'preserved-myocardium';
+  }
+
   // A single tensile cord between two world-space points (chordae tendineae).
   function heartCord(from, to, r0, r1, color) {
     const dir = new THREE.Vector3().subVectors(to, from);
@@ -3397,8 +3566,8 @@ function buildHeart(THREE) {
   /* ---- LAYER 0 : pericardium + epicardial fat --------------------------------- */
 
   const peri = new THREE.Mesh(new THREE.SphereGeometry(4.0, 40, 30),
-    mat(THREE, 0xdce6e0, { trans: true, opacity: 0.1, rough: 0.14, clear: 1, clearRough: 0.1,
-      side: THREE.DoubleSide, transmission: 0.45, thickness: 0.3, atten: 0xdfeee8 }));
+    mat(THREE, 0xe4cfbc, { trans: true, opacity: 0.065, rough: 0.32, clear: 0.18, clearRough: 0.35,
+      side: THREE.DoubleSide, transmission: 0, noTex: true }));
   peri.scale.set(1, 1.22, 0.95); peri.material.depthWrite = false; peri.renderOrder = 3;
   add({ id: 'pericardium', name: 'Fibrous pericardium', layer: 0, system: 'circulatory',
         cuttable: true, detachable: false, mesh: peri,
@@ -3664,6 +3833,121 @@ function buildHeart(THREE) {
         cuttable: true, detachable: false, mesh: modBand,
         note: 'A muscular band spanning the right ventricle, carrying part of the conduction system to the anterior papillary muscle.' });
 
+  /* Exterior preparation. Keep every internal anchor and part ID, but replace
+   * the spherical outer veils with a conforming sac and localized fatty tissue.
+   * This is an authored visual approximation, not a measured preserved specimen. */
+  const radialAt = (profile, y) => {
+    if (y >= profile[0].y) return profile[0].x;
+    for (let i = 1; i < profile.length; i++) if (y >= profile[i].y) {
+      const a = profile[i - 1], b = profile[i], t = (a.y - y) / (a.y - b.y);
+      return a.x + (b.x - a.x) * t;
+    }
+    return profile[profile.length - 1].x;
+  };
+  function envelopeRadius(y, phi) {
+    let r = radialAt(lvProf, y);
+    const lo = -Math.PI * .12, hi = Math.PI * .58;
+    const band = Math.max(0, Math.min(1, (phi - lo) / .20, (hi - phi) / .20));
+    if (y >= -1.85 && y <= 2.9) r = Math.max(r, radialAt(rvProf, y) * smooth(band));
+    // Round over the atrial base, then close the sac at the vessel roots.
+    if (y > 2.0) r = Math.max(r, 2.7 * Math.sqrt(Math.max(0, 1 - Math.pow((y - 2.0) / 2.25, 2))));
+    if (y > 3.9) r *= Math.sqrt(Math.max(0, (4.25 - y) / .35));
+    if (y < -3.35) r *= Math.sqrt(Math.max(0, (y + 3.6) / .25));
+    return r;
+  }
+  const sac = new THREE.SphereGeometry(1, 48, 36), sp = sac.attributes.position;
+  for (let i = 0; i < sp.count; i++) {
+    const y = .325 + sp.getY(i) * 3.925, phi = Math.atan2(sp.getX(i), sp.getZ(i));
+    const r = envelopeRadius(y, phi) * 1.045;
+    const lean = Math.max(0, 1.4 - y) * .155;
+    sp.setXYZ(i, Math.sin(phi) * r - lean, y / peri.scale.y,
+      (Math.cos(phi) * r + lean * .32) / peri.scale.z);
+  }
+  seal(sac); peri.geometry.dispose(); peri.geometry = sac;
+  peri.userData.exteriorDetail = 'conforming-sac';
+
+  // Several irregular pads share one pickable fat mesh: no transparent ball
+  // wrapped around the heart, and forceps still removes the original fat ID.
+  const fatPositions = [], fatNormals = [], fatUvs = [], fatIndices = [];
+  group.updateMatrixWorld(true);
+  const fatRay = new THREE.Raycaster(), fatHosts = [lv, rv, ra, la, rAur, lAur];
+  for (const [y0, y1, phi0, phi1, radius] of [
+    [2.9, 1.1, -.95, -1.3, .17], [2.85, 1.35, .55, 1.45, .18],
+    [2.6, .45, -.1, -.2, .13], [3.0, 2.3, -1.0, .75, .19],
+  ]) {
+    const pts = [];
+    for (let i = 0; i <= 10; i++) {
+      const t = i / 10, y = y0 + (y1 - y0) * t, phi = phi0 + (phi1 - phi0) * t;
+      const lean = Math.max(0, 1.4 - y) * .155;
+      const out = new THREE.Vector3(Math.sin(phi), 0, Math.cos(phi));
+      const start = new THREE.Vector3(-lean, y, lean * .32).addScaledVector(out, 12);
+      fatRay.set(start, out.clone().negate());
+      const hit = fatRay.intersectObjects(fatHosts, false)[0];
+      if (hit) pts.push(hit.point.clone().addScaledVector(out, radius * .12));
+      else pts.push(new THREE.Vector3(-lean, y, lean * .32).addScaledVector(out, envelopeRadius(y, phi)));
+    }
+    const g = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 44, radius, 12, false);
+    const pos = g.attributes.position, normal = g.attributes.normal, uv = g.attributes.uv, offset = fatPositions.length / 3;
+    for (let i = 0; i < pos.count; i++) {
+      // Flattened, irregular pads follow the sampled myocardium. Correlated
+      // radius variation avoids the old uniformly round cable appearance.
+      // Ends taper into the host instead of finishing as an abrupt pipe stump.
+      const t = uv.getX(i), centre = g.parameters.path.getPointAt(t);
+      const offsetV = new THREE.Vector3(pos.getX(i), pos.getY(i), pos.getZ(i)).sub(centre);
+      const phi = phi0 + (phi1 - phi0) * t;
+      const outward = new THREE.Vector3(Math.sin(phi), 0, Math.cos(phi));
+      const relief = offsetV.dot(outward);
+      offsetV.addScaledVector(outward, -relief * 0.40);
+      const lobulation = 0.87 + 0.15 * Math.sin(t * 37 + y0)
+        + 0.09 * Math.sin(t * 79 + phi0 * 3);
+      const shoulder = 0.42 + 0.58 * Math.pow(Math.sin(Math.PI * t), 0.35);
+      offsetV.multiplyScalar(lobulation * shoulder);
+      const finalV = centre.add(offsetV);
+      const bulge = .007 * Math.sin(finalV.x * 25 + finalV.y * 17)
+        * Math.cos(finalV.z * 21 + finalV.y * 13);
+      fatPositions.push((finalV.x + normal.getX(i) * bulge) / fat.scale.x,
+        (finalV.y + normal.getY(i) * bulge) / fat.scale.y,
+        (finalV.z + normal.getZ(i) * bulge) / fat.scale.z);
+      fatNormals.push(normal.getX(i), normal.getY(i), normal.getZ(i));
+      fatUvs.push(uv.getX(i), uv.getY(i));
+    }
+    for (const index of g.index.array) fatIndices.push(index + offset);
+    g.dispose();
+  }
+  const fg = new THREE.BufferGeometry();
+  fg.setAttribute('position', new THREE.Float32BufferAttribute(fatPositions, 3));
+  fg.setAttribute('normal', new THREE.Float32BufferAttribute(fatNormals, 3));
+  fg.setAttribute('uv', new THREE.Float32BufferAttribute(fatUvs, 2));
+  fg.setIndex(fatIndices); seal(fg); fat.geometry.dispose(); fat.geometry = fg;
+  fat.material.opacity = 1; fat.material.transparent = false; fat.material.depthWrite = true;
+  fat.material.transmission = 0; fat.material.color.setHex(0xdbc493);
+  fat.userData.exteriorDetail = 'localized-fat';
+  heartTissuePigment(fat, true);
+  [lv, rv, ra, la, rAur, lAur].forEach(mesh => heartTissuePigment(mesh));
+
+  // A visible vessel stump needs a wall and a dark lumen, not an infinitely
+  // thin open polygon. Collars are children of their real vessel, never parts.
+  for (const p of parts.filter(p => /^(aorta|pulmonary-trunk|svc|ivc|pulmonary-veins)$/.test(p.id))) {
+    const stems = []; p.mesh.traverse(m => { if (m.isMesh && m.geometry.parameters?.path) stems.push(m); });
+    for (const stem of stems) {
+      const g = stem.geometry, prm = g.parameters, end = prm.path.getPointAt(1), axis = prm.path.getTangentAt(1);
+      const v = new THREE.Vector3().fromBufferAttribute(g.attributes.position, g.attributes.position.count - 1);
+      const r = v.distanceTo(end); if (!Number.isFinite(r) || r < .06) continue;
+      const collar = new THREE.Mesh(new THREE.RingGeometry(r * .73, r * 1.01, 24),
+        mat(THREE, 0xbd8a70, { rough: .46, clear: .18, side: THREE.DoubleSide, transmission: 0, noTex: true }));
+      collar.position.copy(end); collar.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), axis);
+      collar.userData.exteriorDetail = 'vessel-rim'; stem.add(collar);
+      const inner = new THREE.Mesh(new THREE.CylinderGeometry(r * .73, r * .68, r * .8, 20, 1, true),
+        mat(THREE, 0x542d2a, { rough: .60, clear: .12, side: THREE.DoubleSide, transmission: 0, noTex: true }));
+      inner.position.copy(end).addScaledVector(axis, -r * .4);
+      inner.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), axis);
+      inner.userData.exteriorDetail = 'vessel-lumen'; stem.add(inner);
+    }
+  }
+  // Surface anatomy can be seen through the prepared sac, but the dissection
+  // picker still gates access by layer. Internal valves/chordae stay hidden.
+  parts.forEach(p => { if (p.layer === 1) p.mesh.visible = true; });
+
   // Rest on the posterior surface, with the anterior face (+z locally) up.
   // One whole-specimen transform preserves every vessel/valve relationship.
   group.rotation.x = -Math.PI / 2;
@@ -3681,8 +3965,9 @@ function buildHeart(THREE) {
  * top-level names. The ONLY top-level names this file adds are `buildEarthworm`
  * and the single self-registration block at the bottom.
  *
- * Anatomy grounded in the standard annelid (Pheretima / Lumbricus) laboratory
- * dissection (CBSE/ICSE/IGCSE). A long, soft, METAMERICALLY SEGMENTED cylinder,
+ * Generalized annelid teaching model with mixed Pheretima / Lumbricus landmarks;
+ * see docs/dissection-realism/ANATOMY.md for the unresolved species limitations.
+ * A long, soft, METAMERICALLY SEGMENTED cylinder,
  * ~100+ segments in life; the anterior third (segments 1–~26) carries everything a
  * student examines, so it is modelled in detail and the rest tapers away. Dorsum is
  * darker (pigment / chloragogen over the dorsal vessel), venter paler; a swollen
@@ -3731,55 +4016,81 @@ function buildEarthworm(THREE) {
   // vertices still land where they were authored.
   const bakeChild = (root, m) => { m.position.copy(root.position).multiplyScalar(-1); root.add(m); return m; };
 
-  /* --- the segmented body wall ------------------------------------------------
-   * An OPEN-ended cylinder along its own y-axis (so every side vertex sits on a
-   * clean unit circle — no cap-vertex singularities), profiled into a worm: faint
-   * annular intersegmental grooves, tapered ends, a smooth clitellar swell, and a
-   * dorsal-dark / ventral-cream vertex tint. The whole geometry is finally rolled
-   * a quarter turn so its length runs along +z (anterior) and its dorsum along +y
-   * (up, toward the camera). */
+  /* --- one continuous exterior profile --------------------------------------
+   * The centreline and every internal anchor stay where they were authored.
+   * Only radius varies: displacing an unscaled cylinder in XYZ first perturbs
+   * each vertex's segment phase and amplifies its axial noise fourteen-fold.
+   * That creates corrugations rather than fine annulation. Ends and clitellum
+   * use the SAME profile as the body, with their open join rings buried inside
+   * it. They remain separate, pickable pin landmarks without separate bulbs. */
+  // A pinned specimen is extended, but its segments are not machined washers.
+  // Use one monotone phase field for the body, ends, band and their pigments.
+  // This changes external segment spacing without moving any internal anchor.
+  function ewAnnularPhase(t, annuli = 44) {
+    return 2 * Math.PI * (annuli * t + 0.22 * Math.sin(t * Math.PI * 5)
+      + 0.08 * Math.sin(t * Math.PI * 13));
+  }
+
+  function ewRadius(z, annuli = 44) {
+    const t = Math.max(0, Math.min(1, (z + HALF) / (2 * HALF)));
+    const anterior = Math.max(0, Math.min(1, (z - 5.25) / (7.36 - 5.25)));
+    const posterior = Math.max(0, Math.min(1, (-z - 5.1) / (7.30 - 5.1)));
+    const taper = Math.sqrt(Math.max(0, 1 - anterior * anterior))
+      * Math.sqrt(Math.max(0, 1 - posterior * posterior));
+    const clit = Math.exp(-Math.pow((z - 2.6) / 0.61, 4));
+    const groove = Math.pow(0.5 - 0.5 * Math.cos(ewAnnularPhase(t, annuli)), 2);
+    const fullness = 1 + 0.024 * Math.sin(t * Math.PI) + 0.012 * Math.sin(t * Math.PI * 3)
+      + 0.008 * Math.sin(t * Math.PI * 7) * Math.sin(t * Math.PI);
+    return taper * fullness * (1 + 0.068 * clit)
+      * (1 - 0.018 * groove * (1 - 0.94 * clit));
+  }
+
   function ewBody(rad, halfLen, o = {}) {
-    o = o || {};
-    const radialSeg = o.radialSeg || 26, lenSeg = o.lenSeg || 200;
-    const g = new THREE.CylinderGeometry(1, 1, 2, radialSeg, lenSeg, true); // axis y ∈ [-1,1]
-    displace(THREE, g, o.amp != null ? o.amp : 0.02, 3.0, o.seed || 0);     // faint organic lumpiness
+    // 8,745 vertices remain below the existing 9,000-vertex soft-body ceiling.
+    // 264 longitudinal intervals still resolve six samples per representative
+    // annulus; the former 10,197-vertex wall silently skipped tissue response.
+    const radialSeg = o.radialSeg || 32, lenSeg = o.lenSeg || 264;
+    const g = new THREE.CylinderGeometry(1, 1, 2, radialSeg, lenSeg, true);
     const p = g.attributes.position, v = new THREE.Vector3();
     const colors = new Float32Array(p.count * 3);
     const c = new THREE.Color();
-    const dorsal   = new THREE.Color(0x7d5342);   // pinkish-brown back
-    const dorsalDk = new THREE.Color(0x5c3a2e);   // darker mid-dorsal pigment stripe
-    const flank    = new THREE.Color(0xa9805f);
-    const ventral  = new THREE.Color(0xd8c2a1);   // cream underside
-    const nSeg  = o.nSeg  || 44;                  // number of visible annuli
-    const clitT = o.clitT != null ? o.clitT : 0.68; // clitellum centre, in length-fraction t
+    const dorsal   = new THREE.Color(0x946257);   // subdued rose-brown pigment
+    const dorsalDk = new THREE.Color(0x644139);   // darker mid-dorsal pigment stripe
+    const flank    = new THREE.Color(0xb17b70);
+    const ventral  = new THREE.Color(0xd4afa0);   // paler warm underside
+    const glandular = new THREE.Color(0xb68174);
+    const nSeg = o.nSeg || 44;
+    const z0 = o.z0 == null ? -halfLen : o.z0, z1 = o.z1 == null ? halfLen : o.z1;
     for (let i = 0; i < p.count; i++) {
       v.fromBufferAttribute(p, i);
-      const uy = v.y;                             // -1..1 along the body; +1 = anterior
-      const t = Math.max(0, Math.min(1, (uy + 1) / 2)); // 0 posterior .. 1 anterior
+      const u = (v.y + 1) / 2;
+      const z = z0 + u * (z1 - z0);
+      const t = Math.max(0, Math.min(1, (z + halfLen) / (2 * halfLen)));
       const rr = Math.hypot(v.x, v.z) || 1e-6;
-      const rz = v.z / rr;                        // radial z: -1 = dorsal (becomes +y up)
-      // longitudinal radius profile
-      let prof = 1;
-      if (t > 0.9)  prof *= Math.max(0.26, 1 - (t - 0.9) / 0.1 * 0.86);   // taper to the mouth
-      if (t < 0.05) prof *= 0.45 + (t / 0.05) * 0.55;                     // blunt posterior taper
-      prof *= 1 - 0.05 * (0.5 - 0.5 * Math.cos(2 * Math.PI * nSeg * t));  // faint annular grooves
-      prof *= 1 + 0.13 * Math.exp(-Math.pow((t - clitT) / 0.03, 2));      // smooth clitellar swell
-      p.setXYZ(i, v.x * prof, uy, v.z * prof);
+      const rz = v.z / rr;
+      // Radial-only variation keeps each ring closed and the centreline fixed.
+      const irregular = 1 + 0.004 * Math.sin(t * 17 + 0.3) * (v.x * v.x - v.z * v.z);
+      const cover = o.cover ? o.cover(z, u) : 1;
+      const prof = rad * ewRadius(z, nSeg) * irregular * cover;
+      p.setXYZ(i, v.x / rr * prof, -v.z / rr * prof, z);
       // vertex tint: dorsal dark → ventral cream
       const dorsalF = smooth(Math.max(0, Math.min(1, -rz * 0.5 + 0.5)));
       c.copy(ventral).lerp(flank, smooth(Math.max(0, Math.min(1, -rz * 0.85 + 0.5))));
       c.lerp(dorsal, dorsalF);
       const midline = Math.exp(-Math.pow((rz + 1) / 0.16, 2));            // darker over the dorsal vessel
       c.lerp(dorsalDk, midline * 0.55);
-      const banding = 0.5 - 0.5 * Math.cos(2 * Math.PI * nSeg * t);       // groove shadowing
-      c.multiplyScalar(1 - banding * 0.05);
-      const m = vnoise(v.x * 5 + 2, uy * 9, v.z * 5 + 6);                 // mottle
+      // The glandular band is pigment within the same skin, not an orange
+      // material pasted over it. A world-length field shared by body and sleeve
+      // keeps both shoulders continuous where the pickable sleeve emerges.
+      const clitTint = Math.exp(-Math.pow((z - 2.6) / 0.62, 4));
+      c.lerp(glandular, clitTint * 0.25);
+      const banding = 0.5 - 0.5 * Math.cos(ewAnnularPhase(t, nSeg));      // groove shadowing
+      c.multiplyScalar(1 - banding * 0.028);
+      const m = vnoise(v.x * 5 + 2, t * 18 - 9, v.z * 5 + 6);
       c.multiplyScalar(0.97 + m * 0.06);
       colors[i * 3] = c.r; colors[i * 3 + 1] = c.g; colors[i * 3 + 2] = c.b;
     }
     g.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-    g.scale(rad, halfLen, rad);        // radius on x/z, length on y
-    g.rotateX(Math.PI / 2);            // length y → +z; dorsal (-z) → +y (up)
     seal(g);
     return g;
   }
@@ -3789,10 +4100,20 @@ function buildEarthworm(THREE) {
 
   /* ---- LAYER 0 · integument / external landmarks --------------------------- */
 
+  function ewCuticle() {
+    // Same optical model on every external root. Flat brown/orange material
+    // multipliers used to suppress these meshes' shared vertex colours and
+    // make the terminal caps and clitellum look like separately painted pieces.
+    // Low transmission avoids showing the green tray through opaque body wall;
+    // the surface module supplies fine cuticle maps and final highlight finish.
+    return mat(THREE, 0xffffff, { tissue: 'skin', vcol: true,
+      rough: 0.52, clear: 0.26, clearRough: 0.38, sheen: 0xb17770, sheenAmt: 0.22,
+      transmission: 0.03, thickness: 0.8, atten: 0x97625b, attenDist: 0.8,
+      side: THREE.DoubleSide });
+  }
+
   const bodyGeo = ewBody(RAD, HALF, { seed: 1 });
-  const body = new THREE.Mesh(bodyGeo, mat(THREE, 0xffffff, {
-    vcol: true, rough: 0.6, clear: 0.5, clearRough: 0.45, sheen: 0xc79a72, sheenAmt: 0.5,
-    side: THREE.DoubleSide }));
+  const body = new THREE.Mesh(bodyGeo, ewCuticle());
 
   // Representative ventrolateral setae: four pairs of tiny chitinous bristles on a
   // handful of anterior segments (Lumbricus arrangement). Decorative children only.
@@ -3804,8 +4125,9 @@ function buildEarthworm(THREE) {
         const phi = deg * Math.PI / 180;
         [1, -1].forEach((side) => {
           const bxn = Math.sin(phi) * side, byn = -Math.cos(phi); // outward radial (ventrolateral)
-          const seta = new THREE.Mesh(new THREE.ConeGeometry(0.018, 0.15, 5), setaMat);
-          childMesh(parent, seta, bxn * RAD * 1.02, byn * RAD * 1.02, z);
+          const seta = new THREE.Mesh(new THREE.ConeGeometry(0.009, 0.07, 5), setaMat);
+          const seat = RAD * ewRadius(z) + 0.008;
+          childMesh(parent, seta, bxn * seat, byn * seat, z);
           seta.rotation.z = Math.atan2(-bxn, byn);        // point the cone outward along the radial
         });
       });
@@ -3824,12 +4146,15 @@ function buildEarthworm(THREE) {
 
   // Prostomium: a small fleshy lobe overhanging the mouth at the anterior tip — no
   // eyes, no jaws. A pin anchor for the anterior end.
-  const prostomium = organ(THREE, 0x8a5c49, 0.34, 0.30, 0.44,
-    { amp: 0.14, rough: 0.6, clear: 0.45, sheen: 0xc79a80, seed: 3 });
+  const lipGeo = ewBody(RAD, HALF, { z0: 6.78, z1: 7.36, lenSeg: 24,
+    cover: (z) => 0.985 + 0.019 * smooth(Math.max(0, Math.min(1, (z - 6.78) / 0.20))) });
+  // Bake inverse placement so the original pin anchor and orientation survive.
+  lipGeo.translate(0, -0.06, -7.15); lipGeo.rotateX(-0.25); seal(lipGeo);
+  const prostomium = new THREE.Mesh(lipGeo, ewCuticle());
   prostomium.position.set(0, 0.06, 7.15);
   prostomium.rotation.x = 0.25;                            // droops over the mouth
   // mouth crease as a dark child slit on the underside
-  const mouth = new THREE.Mesh(new THREE.CircleGeometry(0.12, 12),
+  const mouth = new THREE.Mesh(new THREE.CircleGeometry(0.075, 12),
     mat(THREE, 0x261a12, { rough: 0.7, side: THREE.DoubleSide, noTex: true }));
   childMesh(prostomium, mouth, 0, -0.24, -0.1, Math.PI / 2, 0, 0);
   add({
@@ -3841,8 +4166,10 @@ function buildEarthworm(THREE) {
   // Clitellum: the swollen, glandular, saddle-to-girdle band over segments 14–16 in
   // Pheretima — secretes the egg cocoon and marks sexual maturity. Smooth, distinctly
   // coloured, raised above the annulated body. A pin/identify landmark.
-  const clitellum = organ(THREE, 0xb5825e, 0.64, 0.63, 0.52,
-    { amp: 0.045, rough: 0.48, clear: 0.55, clearRough: 0.4, sheen: 0xd8b088, seed: 5 });
+  const clitGeo = ewBody(RAD, HALF, { z0: 1.94, z1: 3.26, lenSeg: 40,
+    cover: (z, u) => 0.994 + 0.032 * Math.pow(Math.sin(Math.PI * u), 2) });
+  clitGeo.translate(0, 0, -2.6); seal(clitGeo);
+  const clitellum = new THREE.Mesh(clitGeo, ewCuticle());
   clitellum.position.set(0, 0, 2.6);
   add({
     id: 'clitellum', name: 'Clitellum', layer: 0, system: 'integument', cuttable: false, detachable: false,
@@ -3851,12 +4178,14 @@ function buildEarthworm(THREE) {
   });
 
   // Terminal segment bearing the anus (periproct). A pin anchor for the posterior end.
-  const anal = organ(THREE, 0x835a48, 0.42, 0.40, 0.44,
-    { amp: 0.12, rough: 0.6, sheen: 0xbf9075, seed: 7 });
+  const analGeo = ewBody(RAD, HALF, { z0: -7.30, z1: -6.80, lenSeg: 24,
+    cover: (z) => 0.985 + 0.019 * smooth(Math.max(0, Math.min(1, (-z - 6.80) / 0.18))) });
+  analGeo.translate(0, 0, 6.95); seal(analGeo);
+  const anal = new THREE.Mesh(analGeo, ewCuticle());
   anal.position.set(0, 0, -6.95);
-  const anus = new THREE.Mesh(new THREE.CircleGeometry(0.14, 12),
+  const anus = new THREE.Mesh(new THREE.CircleGeometry(0.045, 12),
     mat(THREE, 0x2a1c14, { rough: 0.75, side: THREE.DoubleSide, noTex: true }));
-  childMesh(anal, anus, 0, 0, -0.42, 0, Math.PI, 0);      // faces posteriorly (-z)
+  childMesh(anal, anus, 0, 0, -0.34, 0, Math.PI, 0);      // seated at the tapered posterior tip
   add({
     id: 'anal-segment', name: 'Anal segment', layer: 0, system: 'digestive', cuttable: false, detachable: false,
     note: 'The last segment, the periproct, pierced by the terminal anus where the gut opens to the outside. Anchor a pin here to hold the posterior end taut.',
@@ -4127,10 +4456,10 @@ SPECIMEN_OBJECTIVES.earthworm = [
     hint: 'Pins tool (4). Grip on the prostomium, the clitellum band, the body and the anal end.',
     done: (s) => s.pinned.size >= 4 },
   { id: 'incise', text: 'Make a shallow <b>mid-dorsal incision</b>, kept just off the midline so the blade misses the dorsal blood vessel.',
-    hint: 'Scalpel (3). One smooth stroke down the dorsum from behind the clitellum — do not saw or plunge.',
+    hint: 'Scalpel (2). One smooth stroke down the dorsum from behind the clitellum — do not saw or plunge.',
     done: (s) => s.incisions.has('body-wall') && s.incisions.get('body-wall').length > 1.1 },
   { id: 'open', text: 'Reflect the <b>body wall</b> and pin the flaps back to open the coelom.',
-    hint: 'Forceps (2) on the cut edge, or the retractor with two hands.',
+    hint: 'Forceps (3) on the cut edge, or the retractor with two hands.',
     done: (s) => s.opened.has('body-wall') },
   { id: 'coelom', text: 'Identify the transverse <b>septa</b> and the <b>dorsal blood vessel</b> — the vessel you must never cut.',
     hint: 'Probe (1) each. The dark-red midline vessel over the gut is the dorsal vessel.',
@@ -4159,8 +4488,10 @@ SPECIMEN_OBJECTIVES.earthworm = [
  * with another module's top-level names. The only top-level names this file adds
  * are `buildFish` and the single self-registration block at the bottom.
  *
- * Anatomy grounded in a standard vertebrate (teleost / bony-fish, Labeo-type)
- * dissection — the CBSE/ICSE laboratory sequence: lay the fish on its side, lift
+ * A generalized mixed-teleost teaching model, not a species-accurate Labeo/carp.
+ * The retained stomach/pyloric caeca and two-chamber bladder combination needs
+ * a coherent species revision; see docs/dissection-realism/ANATOMY.md.
+ * Dissection sequence: lay the fish on its side, lift
  * the operculum to count the gill arches, then cut a flap of the LEFT flank wall
  * and reflect it to open the peritoneal cavity. No pinning (it lies on its side).
  *
@@ -4205,16 +4536,23 @@ function buildFish(THREE) {
    * sx (thickness) << sy (depth) is what makes the fish read as slab-sided. */
   function fishBody(sx, sy, sz, o) {
     o = o || {};
-    const seg = o.seg || 52, seg2 = o.seg2 || 38;
+    // Enough samples for shallow real scale relief while the cuttable root
+    // remains below the existing 9,000-vertex tissue-response ceiling.
+    const seg = o.seg || (o.vcol ? 96 : 52), seg2 = o.seg2 || (o.vcol ? 72 : 38);
     const g = new THREE.SphereGeometry(1, seg, seg2);
     displace(THREE, g, o.amp != null ? o.amp : 0.03, 2.2, o.seed || 0);
     const p = g.attributes.position, v = new THREE.Vector3();
     const colors = o.vcol ? new Float32Array(p.count * 3) : null;
     const c = new THREE.Color();
-    const dorsal = new THREE.Color(0x5c6a4a);   // olive-silver back
-    const flank  = new THREE.Color(0xacb6a6);   // silver flank
-    const belly  = new THREE.Color(0xdcdccc);   // pale cream underside
-    const line   = new THREE.Color(0x475138);   // faint lateral-line stripe
+    const dorsal = new THREE.Color(0x28383b);   // dark slate back
+    const flank  = new THREE.Color(0x778980);   // muted silver-olive flank
+    const belly  = new THREE.Color(0xbfb9a9);   // warm preserved underside
+    const line   = new THREE.Color(0x405255);   // faint lateral-line stripe
+    const stations = [
+      [0, 0.28, 0.30], [0.10, 0.42, 0.44], [0.22, 0.82, 0.80],
+      [0.40, 1.00, 1.02], [0.58, 1.13, 1.02], [0.76, 1.14, 1.00],
+      [0.90, 1.00, 0.94], [1, 0.90, 0.90],
+    ];
     for (let i = 0; i < p.count; i++) {
       v.fromBufferAttribute(p, i);
       const ux = v.x, uy = v.y, uz = v.z;         // unit coords, pre-scale
@@ -4228,6 +4566,31 @@ function buildFish(THREE) {
       const ydome = uy >= 0 ? 1.06 : 0.99;         // dorsum a touch more arched
       p.setXYZ(i, ux * girth * sx, uy * girth * sy * ydome, uz * sz);
       if (colors) {
+        // Exterior-only shoulder, peduncle and blunt cranial profile. Keep the
+        // internal myotome geometry exactly as authored in the non-vcol path.
+        let k = 1; while (k < stations.length - 1 && t > stations[k][0]) k++;
+        const lo = stations[k - 1], hi = stations[k], f = smooth((t - lo[0]) / (hi[0] - lo[0]));
+        const wide = lo[1] + (hi[1] - lo[1]) * f, deep = lo[2] + (hi[2] - lo[2]) * f;
+        // Gently shorten the extreme snout cap; this is not another vanishing
+        // sine that pinches both ends into a flat pointed leaf.
+        const z = uz > 0.87 ? 0.87 + (uz - 0.87) * 0.70 : uz;
+        p.setXYZ(i, ux * sx * wide * 1.16, uy * sy * deep * ydome, z * sz);
+        // Staggered, shallow overlapping scale edges are part of the actual
+        // flank, so incision triangles remove them along with the skin. Leave
+        // the cranial/opercular region smooth and fade relief at the peduncle.
+        // The relief is illustrative, not measured cycloid/ctenoid morphology.
+        const wrap = x => x - Math.floor(x);
+        const around = wrap(Math.atan2(uy, ux) / (Math.PI * 2) + 0.5) * 18;
+        const row = Math.floor(around), across = wrap(around);
+        const along = wrap(t * 24 + (row % 2) * 0.5);
+        const span = Math.pow(Math.sin(Math.PI * across), 2);
+        const edge = Math.exp(-Math.pow((along - (0.50 + 0.19 * Math.cos((across - 0.5) * Math.PI))) / 0.075, 2)) * span;
+        const mask = smooth(Math.max(0, Math.min(1, (t - 0.10) / 0.15)))
+          * smooth(Math.max(0, Math.min(1, (0.77 - t) / 0.13)));
+        const scaleRelief = mask * (0.006 * edge + 0.002 * span * Math.pow(Math.sin(Math.PI * along), 2));
+        const radial = Math.hypot(ux, uy) || 1;
+        p.setX(i, p.getX(i) + ux / radial * scaleRelief);
+        p.setY(i, p.getY(i) + uy / radial * scaleRelief);
         const up = Math.max(0, Math.min(1, (uy + 1) / 2));   // 0 belly .. 1 dorsal
         c.copy(belly).lerp(flank, smooth(Math.min(1, up * 1.7)));
         c.lerp(dorsal, smooth(Math.max(0, (up - 0.56) / 0.44)));
@@ -4235,6 +4598,7 @@ function buildFish(THREE) {
         c.lerp(line, ll * 0.22);
         const m = vnoise(ux * 11 + 2, uy * 6, uz * 6 + 5);      // faint scale mottle
         c.offsetHSL(0, 0, (m - 0.5) * 0.05);
+        c.multiplyScalar(1 - mask * edge * 0.10 + mask * span * 0.035);
         colors[i * 3] = c.r; colors[i * 3 + 1] = c.g; colors[i * 3 + 2] = c.b;
       }
     }
@@ -4243,34 +4607,66 @@ function buildFish(THREE) {
     return g;
   }
 
-  /* A thin translucent fin membrane on rays. Decorative only — always a child of
-   * the body wall, never a pickable part. Base runs along local -x..+x (the
-   * attached root at -x, the free scalloped edge at +x); the membrane spans local
-   * y. Orient with rotation when attaching. */
-  function fin(len, wide, o) {
-    o = o || {};
-    const g = new THREE.PlaneGeometry(len, wide, 6, 4);
-    const p = g.attributes.position, v = new THREE.Vector3();
-    for (let i = 0; i < p.count; i++) {
-      v.fromBufferAttribute(p, i);
-      const tx = (v.x / len) + 0.5;                 // 0 root .. 1 free edge
-      // Attachment is the origin; rays fan out from a narrow root, not a
-      // rectangular sheet floating half a fin-length away from its insertion.
-      p.setXYZ(i, tx * len, v.y * (0.08 + tx * 1.02), Math.sin(v.y * 2.4) * 0.05 * tx);
+  // Merge same-material ray geometry once at construction; fin detail costs one
+  // draw call per fin, not one per ray. No external geometry utility required.
+  function finRays(geometries) {
+    const positions = [], normals = [], indices = [];
+    geometries.forEach(g => {
+      const offset = positions.length / 3;
+      positions.push(...g.attributes.position.array); normals.push(...g.attributes.normal.array);
+      indices.push(...Array.from(g.index.array, index => index + offset)); g.dispose();
+    });
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    g.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3)); g.setIndex(indices); seal(g);
+    return g;
+  }
+
+  // Root and free edge are independently authored curves. A shallow camber and
+  // scalloped membrane between curved rays make an actual fin, not a plane fan.
+  function fin(name, roots, tips, o = {}) {
+    const rows = 8, positions = [], uvs = [], colors = [], indices = [], rayGeometries = [];
+    const point = (i, t) => new THREE.Vector3().fromArray(roots[i]).lerp(new THREE.Vector3().fromArray(tips[i]), t)
+      .add(new THREE.Vector3((o.camber || 0.055) * Math.sin(Math.PI * t), 0, 0));
+    const columns = roots.length * 2 - 1;
+    for (let column = 0; column < columns; column++) {
+      const i = Math.floor(column / 2), between = column % 2;
+      for (let j = 0; j <= rows; j++) {
+        const t = j / rows, v = point(i, t);
+        if (between) {
+          v.lerp(point(i + 1, t), 0.5);
+          const anchor = new THREE.Vector3().fromArray(roots[i]).lerp(new THREE.Vector3().fromArray(roots[i + 1]), 0.5);
+          // The free membrane edge recedes slightly between supporting rays.
+          v.lerp(anchor, 0.045 * Math.pow(t, 6));
+        }
+        positions.push(...v.toArray()); uvs.push(column / (columns - 1), t);
+        const shade = 0.76 + 0.18 * t + 0.035 * Math.sin(column * 0.71 + t * 3);
+        colors.push(shade, shade * 0.98, shade * (0.90 + 0.08 * t));
+      }
+      if (column < columns - 1) for (let j = 0; j < rows; j++) {
+        const a = column * (rows + 1) + j, b = a + rows + 1;
+        indices.push(a, b, a + 1, b, b + 1, a + 1);
+      }
     }
-    seal(g);
-    const m = new THREE.Mesh(g, mat(THREE, o.color || 0xa7b4a2, {
-      trans: true, opacity: o.opacity != null ? o.opacity : 0.48, rough: 0.5, clear: 0.4,
-      side: THREE.DoubleSide, transmission: 0.55, thickness: 0.12, sheen: 0xcdd6c6 }));
-    m.material.depthWrite = false;
-    const nr = o.rays || 6;                          // fin rays as fine child struts
-    for (let i = 0; i < nr; i++) {
-      const yy = (i / (nr - 1) - 0.5) * wide * 0.82;
-      const ray = tube(THREE, o.rayColor || 0x8a9885,
-        [[0, yy * 0.08, 0.012], [len * 0.5, yy * 0.59, 0.012], [len, yy * 1.1, 0.012]],
-        0.009, { rough: 0.6, rad: 4, seg: 6 });
-      m.add(ray);
+    for (let i = 0; i < roots.length; i++) {
+      const path = new THREE.CatmullRomCurve3([0, 0.3, 0.65, 1].map(t => point(i, t)));
+      const ray = new THREE.TubeGeometry(path, 10, 0.009, 4, false), rp = ray.attributes.position;
+      for (let k = 0; k < rp.count; k++) {
+        const t = ray.attributes.uv.getX(k), centre = path.getPointAt(t);
+        const v = new THREE.Vector3().fromBufferAttribute(rp, k).sub(centre).multiplyScalar(1 - t * 0.65).add(centre);
+        rp.setXYZ(k, v.x, v.y, v.z);
+      }
+      seal(ray); rayGeometries.push(ray);
     }
+    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    g.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+    g.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3)); g.setIndex(indices); seal(g);
+    const m = new THREE.Mesh(g, mat(THREE, 0x89989a, { vcol: true, trans: true, opacity: 0.74,
+      rough: 0.48, clear: 0.35, side: THREE.DoubleSide, transmission: 0.20, thickness: 0.06, sheen: 0xcbd1cb }));
+    m.name = name; m.userData.exteriorTissue = 'fin'; m.userData.exteriorDetail = 'fin';
+    m.userData.finRoots = roots.map(p => p.slice()); m.material.depthWrite = false;
+    const rays = new THREE.Mesh(finRays(rayGeometries), mat(THREE, 0x72817d, { rough: 0.58, clear: 0.28 }));
+    rays.name = name + '-rays'; rays.userData.exteriorDetail = 'fin-ray'; m.add(rays);
     return m;
   }
 
@@ -4310,44 +4706,76 @@ function buildFish(THREE) {
   const skinGeo = fishBody(0.5, 1.7, 3.3, { vcol: true, amp: 0.03 });
   const skin = new THREE.Mesh(skinGeo,
     mat(THREE, 0xffffff, { vcol: true, rough: 0.42, clear: 0.62, clearRough: 0.4,
-      sheen: 0xd6dcc8, sheenAmt: 0.7 }));
+      sheen: 0xd6dcc8, sheenAmt: 0.7, transmission: 0, specular: 0.55 }));
 
   // Head detail — a large lateral eye, a nostril, and the inferior mouth with the
   // fleshy lips typical of a bottom-feeding cyprinid. All decorative children.
   const iris = new THREE.Mesh(new THREE.SphereGeometry(0.2, 20, 16),
-    mat(THREE, 0xb59a3c, { rough: 0.26, clear: 0.9, clearRough: 0.14, sheen: 0xffe08a }));
-  iris.scale.set(0.7, 1, 1);
+    mat(THREE, 0xa39d76, { rough: 0.26, clear: 0.9, clearRough: 0.14, sheen: 0xd4d7bf }));
+  iris.scale.set(0.52, 0.9, 0.9); iris.userData.exteriorDetail = 'eye';
   const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.11, 16, 12),
     mat(THREE, 0x080a06, { rough: 0.18, clear: 1, clearRough: 0.08 }));
   childMesh(iris, pupil, -0.1, 0, 0);
   childMesh(skin, iris, -0.42, 0.42, 2.55);
+  // Both flanks must remain coherent when the student rotates the specimen.
+  // Mirror only the existing external detail; anatomy and pick targets stay put.
+  const farIris = iris.clone(true);
+  farIris.position.x = 0.42;
+  farIris.children[0].position.x = 0.1;
+  skin.add(farIris);
   const nostril = new THREE.Mesh(new THREE.SphereGeometry(0.03, 8, 6), mat(THREE, 0x15170f, { rough: 0.6 }));
   childMesh(skin, nostril, -0.34, 0.5, 2.95);
-  // inferior mouth: a dark ventral gape with a thick fleshy lower lip
-  const lip = new THREE.Mesh(new THREE.TorusGeometry(0.17, 0.05, 8, 18, Math.PI * 1.1),
-    mat(THREE, 0x8a5a4e, { rough: 0.5, clear: 0.4, sheen: 0xc08878 }));
-  childMesh(skin, lip, -0.18, -0.34, 3.02, 0.2, -0.5, 0.2);
-  const gape = new THREE.Mesh(new THREE.CircleGeometry(0.13, 16, 0, Math.PI),
-    mat(THREE, 0x120b09, { rough: 0.7, side: THREE.DoubleSide }));
-  childMesh(skin, gape, -0.14, -0.28, 3.06, 0, -0.9, 0.15);
+  const farNostril = nostril.clone(); farNostril.position.x = 0.34; skin.add(farNostril);
+  // Subterminal mouth follows the snout instead of a large pink hook off its tip.
+  const lip = tube(THREE, 0x777c70,
+    [[-0.23, -0.19, 3.10], [-0.20, -0.27, 3.13], [-0.07, -0.31, 3.14], [0.10, -0.28, 3.12]],
+    0.025, { rough: 0.48, clear: 0.4, rad: 5, seg: 14 });
+  lip.name = 'subterminal-lip'; skin.add(lip);
 
-  // Fins as thin translucent child meshes on rays. Paired fins (pectoral, pelvic)
-  // lie flat on the near LEFT flank facing the camera; median fins (dorsal, anal,
-  // caudal) stand in the sagittal plane. Caudal is a forked two-lobe tail.
-  const pectoral = fin(0.95, 0.62, { rays: 7, color: 0xb0bca6 });
-  childMesh(skin, pectoral, -0.44, -0.5, 1.15, 0.15, -Math.PI / 2, -0.7);
-  const pelvic = fin(0.6, 0.42, { rays: 5, color: 0xb0bca6 });
-  childMesh(skin, pelvic, -0.38, -1.02, -0.15, 0.1, -Math.PI / 2, -0.5);
-  const dorsalFin = fin(2.2, 0.85, { rays: 12, color: 0x9fae98, opacity: 0.5 });
-  childMesh(skin, dorsalFin, 0, 1.85, 0.2, 0, -Math.PI / 2, Math.PI / 2);
-  const analFin = fin(1.0, 0.5, { rays: 7, color: 0x9fae98 });
-  childMesh(skin, analFin, 0, -1.15, -1.9, 0, -Math.PI / 2, Math.PI / 2);
-  const caudalUp = fin(1.5, 0.7, { rays: 9, color: 0x93a48c, opacity: 0.52 });
-  caudalUp.name = 'caudal-upper';
-  childMesh(skin, caudalUp, 0, 0, -3.1, 0, Math.PI / 2, 0.55);
-  const caudalLo = fin(1.5, 0.7, { rays: 9, color: 0x93a48c, opacity: 0.52 });
-  caudalLo.name = 'caudal-lower';
-  childMesh(skin, caudalLo, 0, 0, -3.1, 0, Math.PI / 2, -0.55);
+  // Seat roots on the actual shaped skin. These queries run once at build time,
+  // before any child fins exist; no frame-time raycast or detached insertions.
+  const surfacePoint = (origin, direction) => {
+    const hit = new THREE.Raycaster(new THREE.Vector3(...origin), new THREE.Vector3(...direction)).intersectObject(skin, false)[0];
+    return hit ? hit.point.toArray() : [0, 0, origin[2]];
+  };
+  for (const s of [-1, 1]) {
+    for (const [name, y, z, length, spread] of [['pectoral', -0.45, 1.18, 1.05, 0.72], ['pelvic', -1.00, -0.15, 0.68, 0.47]]) {
+      const root = surfacePoint([s * 2, y, z], [-s, 0, 0]), roots = [], tips = [];
+      for (let i = 0; i < 8; i++) {
+        const t = i / 7;
+        roots.push([root[0], root[1] + (t - 0.5) * 0.08, root[2] - t * 0.10]);
+        // The tray-side paired fins lie against the right flank instead of
+        // acting as rigid stilts that lift the entire fish off its support.
+        const tipX = s < 0 ? root[0] - (0.16 + 0.18 * Math.sin(t * Math.PI))
+          : Math.min(root[0] + 0.025, skinGeo.boundingBox.max.x - 0.025);
+        tips.push([tipX, y - t * spread,
+          z - length * (0.48 + 0.52 * Math.sin(t * Math.PI * 0.85))]);
+      }
+      skin.add(fin(name + (s < 0 ? '-left' : '-right'), roots, tips, { camber: s < 0 ? -0.08 : -0.025 }));
+    }
+  }
+  for (const [name, sign, start, end, height, nr] of [['dorsal-fin', 1, 1.10, -1.65, 0.72, 14], ['anal-fin', -1, -1.00, -2.45, 0.56, 9]]) {
+    const roots = [], tips = [];
+    for (let i = 0; i < nr; i++) {
+      const t = i / (nr - 1), z = start + (end - start) * t;
+      const root = surfacePoint([0, sign * 4, z], [0, -sign, 0]); roots.push(root);
+      tips.push([0.025 * Math.sin(t * Math.PI), root[1] + sign * height * Math.pow(Math.sin(Math.PI * t), 0.65),
+        z - 0.28 * Math.sin(Math.PI * t)]);
+    }
+    skin.add(fin(name, roots, tips));
+  }
+  // A continuous forked caudal fan, split only at the center seam for the two
+  // lobes. Both share an embedded peduncle root, not two floating paper triangles.
+  for (const s of [-1, 1]) {
+    const roots = [], tips = [];
+    for (let i = 0; i < 12; i++) {
+      const t = i / 11;
+      roots.push([0, s * t * 0.12, 0]);
+      tips.push([0.018 * Math.sin(t * Math.PI), s * t * 1.08, -0.60 - 0.90 * smooth(t)]);
+    }
+    const caudal = fin(s > 0 ? 'caudal-upper' : 'caudal-lower', roots, tips, { camber: s * 0.045 });
+    childMesh(skin, caudal, 0, 0, -3.12);
+  }
 
   add({
     id: 'body-wall', name: 'Skin & flank body wall', layer: 0, system: 'integument',
@@ -4358,23 +4786,50 @@ function buildFish(THREE) {
                [-0.5, -1.05, -2.1], [-0.46, -0.25, -2.3]],
   });
 
-  // Operculum: the bony gill cover on the left flank, proud (lateral) of the skin
-  // so it is the pick target over the gill chamber. Lift it to expose the gills.
-  const opGeo = new THREE.SphereGeometry(1, 30, 22);
-  displace(THREE, opGeo, 0.03, 2.4, 3);
-  opGeo.scale(0.12, 1.05, 0.82);                    // a thin curved plate
-  seal(opGeo);
+  // The operculum is a fitted bony cover, not a domed circular medallion. Keep
+  // the original part transform while conforming its closed, thin surface to
+  // the actual left flank; the outer face stays just proud enough to be picked.
+  const opGeo = new THREE.SphereGeometry(1, 40, 28);
   const operculum = new THREE.Mesh(opGeo,
-    mat(THREE, 0xc7ccbf, { rough: 0.34, clear: 0.6, clearRough: 0.2, sheen: 0xdfe6da, sheenAmt: 0.7 }));
+    mat(THREE, 0xffffff, { vcol: true, rough: 0.48, clear: 0.32, clearRough: 0.35,
+      sheen: 0xdfe6da, sheenAmt: 0.45, transmission: 0, specular: 0.55 }));
   operculum.position.set(-0.62, 0.05, 1.62);
   operculum.rotation.set(0, 0.12, 0.05);
-  // faint radiating bony striae + the free posterior margin
-  for (let i = 0; i < 5; i++) {
-    const a = -0.6 + i * 0.3;
-    const stria = new THREE.Mesh(new THREE.CapsuleGeometry(0.012, 1.2, 3, 5),
-      mat(THREE, 0xb7bdb0, { rough: 0.5 }));
-    childMesh(operculum, stria, 0.13, 0.1, 0, 0, 0, a);
+  operculum.updateMatrix(); const opInverse = operculum.matrix.clone().invert();
+  const opRay = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(1, 0, 0)), opSamples = new Map();
+  const flankAt = (y, z) => {
+    const key = y.toFixed(5) + ':' + z.toFixed(5);
+    if (opSamples.has(key)) return opSamples.get(key);
+    opRay.ray.origin.set(-2, y, z);
+    const hit = opRay.intersectObject(skin, false)[0];
+    const color = new THREE.Color(0xa6b1b5);
+    if (hit) {
+      const c = skinGeo.attributes.color;
+      color.setRGB((c.getX(hit.face.a) + c.getX(hit.face.b) + c.getX(hit.face.c)) / 3,
+        (c.getY(hit.face.a) + c.getY(hit.face.b) + c.getY(hit.face.c)) / 3,
+        (c.getZ(hit.face.a) + c.getZ(hit.face.b) + c.getZ(hit.face.c)) / 3);
+    }
+    const sample = { x: hit ? hit.point.x : -0.40, color }; opSamples.set(key, sample); return sample;
+  };
+  const opPositions = opGeo.attributes.position, opColors = [], opPoint = new THREE.Vector3();
+  for (let i = 0; i < opPositions.count; i++) {
+    opPoint.fromBufferAttribute(opPositions, i);
+    const y = 0.035 + opPoint.y * (1.00 - 0.16 * Math.max(0, opPoint.z));
+    const z = 1.68 + opPoint.z * 0.72, sample = flankAt(y, z);
+    opPoint.set(sample.x - 0.012 + opPoint.x * 0.025, y, z).applyMatrix4(opInverse);
+    opPositions.setXYZ(i, opPoint.x, opPoint.y, opPoint.z);
+    opColors.push(sample.color.r, sample.color.g, sample.color.b);
   }
+  opGeo.setAttribute('color', new THREE.Float32BufferAttribute(opColors, 3)); seal(opGeo);
+  operculum.userData.exteriorDetail = 'conforming-operculum';
+  // The free posterior edge is a restrained crescent; no circular raised rim.
+  const seamPoints = [];
+  for (let i = 0; i <= 18; i++) {
+    const angle = i / 18 * Math.PI, y = 0.035 + Math.cos(angle), z = 1.68 - 0.72 * Math.sin(angle);
+    seamPoints.push(new THREE.Vector3(flankAt(y, z).x - 0.022, y, z).applyMatrix4(opInverse).toArray());
+  }
+  const seam = tube(THREE, 0x687674, seamPoints, 0.006, { rough: 0.58, clear: 0.25, rad: 4, seg: 28 });
+  seam.name = 'opercular-margin'; seam.userData.exteriorDetail = 'opercular-seam'; operculum.add(seam);
   add({
     id: 'operculum', name: 'Operculum (gill cover)', layer: 0, system: 'skeletal',
     cuttable: true, detachable: true,
@@ -4675,14 +5130,14 @@ SPECIMENS.fish = {
 };
 SPECIMEN_OBJECTIVES.fish = [
   { id: 'operculum', text: 'Lift the bony <b>operculum</b> to open the gill chamber.',
-    hint: 'Forceps (2). Grip the gill cover and draw it clear of the flank.',
+    hint: 'Forceps (3). Grip the gill cover and draw it clear of the flank.',
     done: (s) => s.removed.has('operculum') },
   { id: 'gills', text: 'Examine the <b>gills</b> — count the four arches and find the red <b>filaments</b> and white <b>rakers</b>.',
     hint: 'Probe (1) each of the four arches, then the filaments and the rakers.',
     done: (s, seen) => ['gill-arch-1', 'gill-arch-2', 'gill-arch-3', 'gill-arch-4', 'gill-filaments', 'gill-rakers']
       .every((id) => seen.has(id)) },
   { id: 'incise', text: 'Cut a flap of the <b>flank body wall</b>, from behind the operculum along the belly to the vent.',
-    hint: 'Scalpel (3). One smooth stroke — do not saw.',
+    hint: 'Scalpel (2). One smooth stroke — do not saw.',
     done: (s) => s.incisions.has('body-wall') && s.incisions.get('body-wall').length > 1.1 },
   { id: 'reflect', text: 'Reflect the flap to expose the muscular <b>body wall (myotomes)</b>.',
     hint: 'Forceps. Grip the cut edge and fold it back.',
@@ -4769,6 +5224,31 @@ function buildCockroach(THREE) {
   const NERVE_C = 0xe9e4d6;     // ventral nerve cord, white
   const TRACHEA_C = 0xc6cfd4;   // silvery air tubes
 
+  // Same-material exterior pieces are batched at authoring time, with every
+  // temporary geometry disposed. Articulation does not add one draw call per
+  // spine, antennal ring or tarsal segment.
+  function exteriorBatch(name, geometries, color, detail = 'chitin') {
+    const positions = [], normals = [], indices = [];
+    geometries.forEach(g => {
+      const offset = positions.length / 3;
+      positions.push(...g.attributes.position.array); normals.push(...g.attributes.normal.array);
+      indices.push(...Array.from(g.index.array, i => i + offset)); g.dispose();
+    });
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    g.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3)); g.setIndex(indices); seal(g);
+    const mesh = new THREE.Mesh(g, mat(THREE, color, { rough: 0.46, clear: 0.38 }));
+    mesh.name = name; mesh.userData.exteriorTissue = 'chitin'; mesh.userData.exteriorDetail = detail;
+    return mesh;
+  }
+  function limbSegment(a, b, radiusA, radiusB, radial = 7) {
+    const start = new THREE.Vector3(...a), end = new THREE.Vector3(...b), direction = end.clone().sub(start);
+    const g = new THREE.CylinderGeometry(radiusB, radiusA, direction.length(), radial, 1);
+    g.applyQuaternion(new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.normalize()));
+    g.translate((start.x + end.x) / 2, (start.y + end.y) / 2, (start.z + end.z) / 2);
+    return g;
+  }
+
   // Whole-body span (local units before final lay-flat): head at z ~ +5.4, abdomen
   // tip at z ~ -6.2, so the insect is ~11.6 long, ~3.2 wide, ~1.1 tall (flat).
 
@@ -4780,10 +5260,10 @@ function buildCockroach(THREE) {
 
   // Abdominal terga — the broad, gently domed, segmented dorsal plate the incision
   // runs down. Ten overlapping segments suggested by transverse grooves.
-  const abdG = new THREE.SphereGeometry(1, 44, 28);
+  const abdG = new THREE.SphereGeometry(1, 72, 48);
   displace(THREE, abdG, 0.03, 3.0, 7);
   {
-    const p = abdG.attributes.position, v = new THREE.Vector3();
+    const p = abdG.attributes.position, v = new THREE.Vector3(), colors = [], color = new THREE.Color();
     for (let i = 0; i < p.count; i++) {
       v.fromBufferAttribute(p, i);
       const uz = v.z;
@@ -4792,14 +5272,22 @@ function buildCockroach(THREE) {
       v.x *= 1.55 * taper;
       v.y *= 0.42;                        // FLAT
       v.z *= 3.1;
-      // segment ridges
-      v.y += Math.sin(v.z * 3.1) * 0.018 * (v.y > 0 ? 1 : 0);
+      // Ten low overlapping terga: shallow geometric transverse sulci and
+      // scalloped lateral edges, not painted rings on a smooth oval.
+      const phase = ((v.z + 3.1) / 0.62) % 1;
+      const groove = Math.exp(-Math.pow((phase - 0.12) / 0.12, 2));
+      if (v.y > 0) v.y *= 1 - 0.18 * groove;
+      v.x *= 1 - 0.022 * groove;
       if (v.y < 0) v.y *= 0.5;            // shallow ventral
       p.setXYZ(i, v.x, v.y, v.z);
+      color.setHex(0x8a4021).lerp(new THREE.Color(0x382219), groove * 0.44 + Math.min(0.22, Math.abs(v.x) * 0.10));
+      colors.push(color.r, color.g, color.b);
     }
+    abdG.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
     p.needsUpdate = true; abdG.computeVertexNormals();
   }
-  const abd = new THREE.Mesh(abdG, mat(THREE, CHITIN, { rough: 0.32, clear: 0.7, clearRough: 0.2, sheen: 0x8a5a34 }));
+  const abd = new THREE.Mesh(abdG, mat(THREE, 0xffffff, { vcol: true, rough: 0.44, clear: 0.48, clearRough: 0.28, sheen: 0x9a6843 }));
+  abd.userData.exteriorDetail = 'segmented-abdomen';
   abd.position.set(0, 0.08, -2.2);
   add({
     id: 'exoskeleton', name: 'Abdominal terga (exoskeleton)', layer: 0, system: 'integument',
@@ -4810,30 +5298,46 @@ function buildCockroach(THREE) {
   });
   // cerci — two segmented sensory appendages at the tail tip
   for (let s = -1; s <= 1; s += 2) {
-    const cerc = new THREE.Mesh(new THREE.ConeGeometry(0.08, 0.9, 6),
-      mat(THREE, CHITIN_D, { rough: 0.6 }));
-    childMesh(abd, cerc, s * 0.22, 0.02, -1.62, Math.PI * 0.62, 0, s * 0.3);
+    const segments = [];
+    for (let i = 0; i < 10; i++) {
+      const t = i / 10, next = (i + 0.87) / 10;
+      segments.push(limbSegment([s * (0.23 + t * 0.25), 0.035 + t * 0.05, -2.93 - t * 0.78],
+        [s * (0.23 + next * 0.25), 0.035 + next * 0.05, -2.93 - next * 0.78], 0.065 * (1 - t * 0.8), 0.06 * (1 - next * 0.8), 6));
+    }
+    abd.add(exteriorBatch('cercus-' + s, segments, CHITIN_D, 'cercus'));
   }
 
   // Pronotum — the shield-shaped plate over the prothorax, a landmark.
   const pronG = new THREE.SphereGeometry(1, 32, 20);
   {
-    const p = pronG.attributes.position, v = new THREE.Vector3();
+    const p = pronG.attributes.position, v = new THREE.Vector3(), colors = [], color = new THREE.Color();
     for (let i = 0; i < p.count; i++) {
       v.fromBufferAttribute(p, i);
-      v.x *= 1.9; v.y *= 0.4; v.z *= 1.35;
+      const anterior = v.z;
+      // Broad posterior corners and a gently rolled anterior shield, not the
+      // former oversized spherical button wider than the abdomen.
+      v.x *= 1.40 * (1 - 0.13 * anterior); v.y *= 0.30;
+      // The anterior hood overlaps the cervical region; an exposed bead-like
+      // neck incorrectly separates the head from this protective shield.
+      v.z = anterior > 0 ? anterior * 1.10 + Math.pow(anterior, 3) * 0.85 : anterior * 1.48;
       if (v.y < 0) v.y *= 0.4;
       p.setXYZ(i, v.x, v.y, v.z);
+      const margin = Math.pow(Math.max(0, 1 - Math.abs(v.y) / 0.30), 4);
+      color.setHex(0x633421).lerp(new THREE.Color(0xbc8a50), margin * 0.75);
+      colors.push(color.r, color.g, color.b);
     }
+    pronG.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
     p.needsUpdate = true; pronG.computeVertexNormals();
   }
-  const pron = new THREE.Mesh(pronG, mat(THREE, CHITIN, { rough: 0.3, clear: 0.72, sheen: 0x8a5a34 }));
+  const pron = new THREE.Mesh(pronG, mat(THREE, 0xffffff, { vcol: true, rough: 0.38, clear: 0.48, sheen: 0x9b6e44 }));
+  pron.userData.exteriorDetail = 'pronotal-shield';
   pron.position.set(0, 0.16, 2.7);
   // The meso/metathorax joins the abdominal shell to the prothoracic shield.
   // Keep this unpickable bridge with the shield; the former empty gap exposed
   // the bench through an intact insect before any dissection step.
   const thorax = organ(THREE, CHITIN_D, 1.15, 0.26, 1.05, { rough: 0.5, clear: 0.3, seed: 21 });
   thorax.name = 'thoracic-bridge';
+  thorax.userData.exteriorTissue = 'chitin';
   childMesh(pron, thorax, 0, -0.12, -1.4);
   add({
     id: 'pronotum', name: 'Pronotum (thoracic shield)', layer: 0, system: 'integument',
@@ -4844,9 +5348,19 @@ function buildCockroach(THREE) {
 
   // Head capsule with antennae and compound eyes (decorative children).
   const head = organ(THREE, CHITIN_D, 0.6, 0.34, 0.5, { rough: 0.4, clear: 0.5, seed: 3 });
+  {
+    const p = head.geometry.attributes.position;
+    for (let i = 0; i < p.count; i++) {
+      const forward = Math.max(0, p.getZ(i) / 0.5);
+      p.setXYZ(i, p.getX(i) * (1 - 0.32 * forward), p.getY(i) - forward * 0.08, p.getZ(i));
+    }
+    seal(head.geometry);
+  }
   head.position.set(0, 0.14, 4.9);
   const neck = organ(THREE, CHITIN_D, 0.3, 0.2, 0.45, { rough: 0.6, clear: 0.2, seed: 22 });
+  neck.geometry.scale(1, 0.65, 1); seal(neck.geometry);
   neck.name = 'cervical-connection';
+  neck.userData.exteriorTissue = 'chitin';
   childMesh(head, neck, 0, -0.02, -0.57);
   add({
     id: 'head', name: 'Head capsule', layer: 0, system: 'integument',
@@ -4854,29 +5368,51 @@ function buildCockroach(THREE) {
     note: 'Bears the long segmented antennae, the compound eyes and the biting mouthparts. Hypognathous — held under the pronotum.',
     mesh: head,
   });
+  for (const side of [-1, 1]) {
+    const jaw = [limbSegment([side * 0.16, -0.03, 0.35], [side * 0.23, -0.11, 0.52], 0.10, 0.055),
+      limbSegment([side * 0.23, -0.11, 0.52], [side * 0.035, -0.14, 0.60], 0.055, 0.012)];
+    head.add(exteriorBatch('mandible-' + side, jaw, 0x352117, 'mouthpart'));
+  }
   for (let s = -1; s <= 1; s += 2) {
     const eye = new THREE.Mesh(new THREE.SphereGeometry(0.16, 12, 10),
       mat(THREE, 0x2a1c14, { rough: 0.25, clear: 0.9 }));
+    eye.scale.set(0.65, 1.10, 0.80); eye.userData.exteriorDetail = 'eye';
     childMesh(head, eye, s * 0.42, 0.12, 0.16);
-    // antenna — a long thin curved chain of many short segments
-    const apts = [];
-    for (let k = 0; k <= 14; k++) {
-      const t = k / 14;
-      apts.push([s * (0.5 + t * 2.4), 0.1 + Math.sin(t * 2.2) * 0.5 + t * 0.3, 0.4 + t * 2.6]);
+    // Tapered, visibly segmented flagellum with a thicker basal scape.
+    const antennaPoint = t => [s * (0.42 + t * 2.4), 0.1 + Math.sin(t * 2.2) * 0.24, 0.37 + t * 2.7];
+    const antenna = [];
+    for (let k = 0; k < 42; k++) {
+      const t = k / 42, next = (k + 0.94) / 42;
+      antenna.push(limbSegment(antennaPoint(t), antennaPoint(next), 0.040 * (1 - t * 0.80), 0.037 * (1 - next * 0.80), 5));
     }
-    const ant = tube(THREE, CHITIN_D, apts, 0.035, { rough: 0.55, rad: 6, seg: 40 });
-    childMesh(head, ant, 0, 0, 0);
+    head.add(exteriorBatch('antenna-' + s, antenna, CHITIN_D, 'antenna'));
   }
-  // three pairs of legs off the thorax (children of the pronotum region, purely
-  // decorative — flattened jointed spikes splayed to the sides)
+  // Six articulated walking legs. Distinct coxa/femur/tibia/tarsus proportions,
+  // knee joints, tibial spines and terminal claws replace the six curved sticks.
   for (let s = -1; s <= 1; s += 2) {
     for (let L = 0; L < 3; L++) {
       const z = 2.4 - L * 1.05;
-      const lpts = [
-        [s * 0.7, -0.1, z], [s * 1.5, 0.15, z - 0.1],
-        [s * 2.3, -0.2, z - 0.35], [s * 2.7, -0.5, z - 0.7],
-      ];
-      const leg = tube(THREE, CHITIN_D, lpts, 0.06, { rough: 0.55, rad: 6, seg: 20 });
+      const spread = L === 0 ? 0.62 : L === 1 ? -0.18 : -0.82;
+      const points = [[s * 0.70, -0.10, z], [s * 1.18, -0.02, z + 0.12],
+        [s * (1.95 + L * 0.12), -0.05, z + spread], [s * (2.60 + L * 0.17), -0.27, z + spread - 0.82]];
+      const segments = [limbSegment(points[0], points[1], 0.14, 0.12),
+        limbSegment(points[1], points[2], 0.12, 0.075), limbSegment(points[2], points[3], 0.065, 0.035)];
+      for (let joint = 1; joint <= 2; joint++) {
+        const g = new THREE.SphereGeometry(joint === 1 ? 0.125 : 0.085, 9, 6); g.translate(...points[joint]); segments.push(g);
+      }
+      for (let k = 1; k <= 6; k++) {
+        const t = k / 7, p = new THREE.Vector3(...points[2]).lerp(new THREE.Vector3(...points[3]), t);
+        for (const side of [-1, 1]) segments.push(limbSegment(p.toArray(),
+          [p.x + s * 0.11, p.y + side * 0.055, p.z + side * 0.13], 0.022, 0.003, 5));
+      }
+      let last = points[3];
+      for (let k = 0; k < 5; k++) {
+        const next = [last[0] + s * 0.105, last[1] - 0.012, last[2] - 0.085];
+        segments.push(limbSegment(last, next, 0.037 - k * 0.004, 0.030 - k * 0.004, 6)); last = next;
+      }
+      for (const side of [-1, 1]) segments.push(limbSegment(last, [last[0] + s * 0.13, last[1] + 0.025, last[2] + side * 0.075], 0.021, 0.002, 5));
+      const leg = exteriorBatch('walking-leg-' + (s < 0 ? 'left-' : 'right-') + L, segments, 0x714022, 'jointed-leg');
+      leg.userData.jointCount = 7; leg.userData.tarsalSegments = 5;
       // Leg paths above are specimen-local. Compensate for the abdominal
       // parent's offset so the three pairs attach to the thorax, not the tail.
       childMesh(abd, leg, 0, 0.02, -abd.position.z);
@@ -4886,29 +5422,61 @@ function buildCockroach(THREE) {
   // Wings — two pairs folded flat over the back: leathery brown tegmina over
   // membranous hindwings. Removable (the first real step of the dissection).
   const mkWing = (s, membranous) => {
-    const g = new THREE.PlaneGeometry(2.0, 4.6, 10, 22);
-    const p = g.attributes.position, v = new THREE.Vector3();
-    for (let i = 0; i < p.count; i++) {
-      v.fromBufferAttribute(p, i);
-      // taper to a rounded tip, curve down at the outer edge
-      const t = (v.y + 2.3) / 4.6;               // 0 base .. 1 tip
-      v.x *= (0.5 + 0.6 * Math.sin(t * Math.PI));
-      p.setXYZ(i, v.x, v.y, -Math.abs(v.x) * 0.06);
-    }
-    p.needsUpdate = true; g.computeVertexNormals();
+    const g = new THREE.BufferGeometry();
     const m = new THREE.Mesh(g, mat(THREE,
-      membranous ? 0x8a6a44 : 0x6f4526,
-      { rough: membranous ? 0.35 : 0.5, clear: 0.5, trans: membranous ? 0.5 : 0.12,
-        thickness: 0.3, side: THREE.DoubleSide, sheen: 0x9a6a3a }));
+      membranous ? 0x8a6a44 : 0xffffff,
+      { vcol: !membranous, rough: membranous ? 0.35 : 0.43, clear: 0.42, trans: membranous ? 0.5 : 0.06,
+        thickness: 0.12, side: THREE.DoubleSide, sheen: 0xa87748 }));
+    // Preserve the existing part transform and detachable-attachment contract;
+    // author the new cambered surface in specimen space, then inverse-transform.
     m.rotation.x = -Math.PI / 2;
     m.position.set(s * 0.85, 0.28 + (membranous ? -0.03 : 0), -1.9);
     m.rotation.z = s * 0.16;
-    // wing venation as fine raised veins
-    for (let k = -2; k <= 2; k++) {
-      const vpts = [[k * 0.28, 0.02, 2.2], [k * 0.34, 0.02, 0], [k * 0.26, 0.02, -2.2]];
-      const vein = tube(THREE, 0x4a2c16, vpts, 0.015, { rough: 0.6, rad: 4, seg: 16 });
-      childMesh(m, vein, 0, 0.01, 0, Math.PI / 2, 0, 0);
+    m.updateMatrix(); const inverse = m.matrix.clone().invert();
+    const wingPoint = (t, u, lift = 0) => {
+      // Broad insertion, mostly parallel costal margins, rounded distal edge.
+      // Slight overlap and unequal tip reach avoid two identical pointed leaves.
+      const width = 0.50 + 0.16 * Math.sin(Math.PI * t) - 0.15 * Math.pow(t, 6);
+      const x = s * (0.55 - 0.23 * t * t + u * width * (s > 0 ? 0.97 : 1));
+      const emergence = smooth(Math.min(1, t / 0.18));
+      const tip = smooth(Math.max(0, (t - 0.82) / 0.18));
+      const y = 0.59 - 0.28 * (1 - emergence) + 0.035 * Math.sin(Math.PI * t)
+        - 0.055 * Math.abs(u) - 0.09 * Math.pow(t, 8) + (s > 0 ? 0.008 : 0) + lift;
+      const z = 1.80 - t * (s > 0 ? 6.49 : 6.62) + 0.30 * u * u * tip;
+      return new THREE.Vector3(x, y, z).applyMatrix4(inverse);
+    };
+    const rows = 36, columns = 12, positions = [], uvs = [], colors = [], indices = [], color = new THREE.Color();
+    for (let i = 0; i <= rows; i++) for (let j = 0; j <= columns; j++) {
+      const t = i / rows, u = j / columns * 2 - 1;
+      positions.push(...wingPoint(t, u).toArray()); uvs.push((u + 1) / 2, t);
+      color.setHex(0x9b542c).lerp(new THREE.Color(0x4d2b1c), 0.22 * Math.abs(u) + 0.15 * t);
+      colors.push(color.r, color.g, color.b);
+      if (i < rows && j < columns) {
+        const a = i * (columns + 1) + j, b = a + columns + 1;
+        indices.push(a, b, a + 1, b, b + 1, a + 1);
+      }
     }
+    g.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    g.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+    g.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3)); g.setIndex(indices); seal(g);
+    m.userData.exteriorDetail = 'cambered-tegmen';
+    const veins = [];
+    for (let k = 0; k < 8; k++) {
+      const u = -0.88 + k * 1.76 / 7;
+      const path = new THREE.CatmullRomCurve3(Array.from({ length: 13 }, (_, i) => {
+        const t = i / 12; return wingPoint(t, u * (0.28 + t * 0.72), 0.012);
+      }));
+      veins.push(new THREE.TubeGeometry(path, 24, 0.009, 4, false));
+    }
+    for (let k = 0; k < 11; k++) {
+      const t = 0.14 + k * 0.065;
+      const path = new THREE.CatmullRomCurve3([-0.80, -0.3, 0.3, 0.80].map(u => wingPoint(t + u * 0.022, u, 0.009)));
+      veins.push(new THREE.TubeGeometry(path, 8, 0.0045, 3, false));
+    }
+    const venation = exteriorBatch('tegmen-venation', veins, 0x754328, 'wing-veins');
+    // Keep low-contrast veins distinct; do not apply the parent's scale-like map.
+    delete venation.userData.exteriorTissue;
+    m.add(venation);
     return m;
   };
   add({
@@ -5133,10 +5701,10 @@ SPECIMENS.cockroach = {
 };
 SPECIMEN_OBJECTIVES.cockroach = [
   { id: 'wings', text: 'Remove the <b>wings</b> to clear the back.',
-    hint: 'Forceps (2). Grip each tegmen and lift it away.',
+    hint: 'Forceps (3). Grip each tegmen and lift it away.',
     done: (s) => s.removed.has('wing-left') || s.removed.has('wing-right') },
   { id: 'terga', text: 'Cut the <b>abdominal terga</b> along the midline of the back.',
-    hint: 'Scalpel (3). One smooth stroke down the dorsal midline — do not saw.',
+    hint: 'Scalpel (2). One smooth stroke down the dorsal midline — do not saw.',
     done: (s) => s.incisions.has('exoskeleton') && s.incisions.get('exoskeleton').length > 1.1 },
   { id: 'open', text: 'Reflect the exoskeleton to open the body cavity.',
     hint: 'Forceps on the cut edge, folding the plate aside.',
@@ -5640,6 +6208,7 @@ function SUR_grow(THREE, proj, b, cfg) {
  * end the hilum sits on — a liver's vessels run toward the free tip, a kidney's
  * run up and down the organ from the notch. */
 function SUR_seedTree(THREE, proj, b, spec, density, seed, radius) {
+  const substeps = Math.max(1, Math.min(3, spec.substeps || 1));
   const start = new THREE.Vector3(
     proj.center.x + spec.hilum[0] * proj.half.x,
     proj.center.y + spec.hilum[1] * proj.half.y,
@@ -5665,9 +6234,9 @@ function SUR_seedTree(THREE, proj, b, spec, density, seed, radius) {
     d.multiplyScalar(Math.cos(a)).addScaledVector(side, Math.sin(a)).normalize();
     SUR_grow(THREE, proj, b, {
       start: p, normal: n, dir: d, r: radius,
-      gens: spec.gens || 3, steps: spec.steps || 5,
-      step: proj.scale * (spec.stepK || 0.12),
-      tort: spec.tort, taper: spec.taper || 0.94,
+      gens: spec.gens || 3, steps: (spec.steps || 5) * substeps,
+      step: proj.scale * (spec.stepK || 0.12) / substeps,
+      tort: spec.tort / substeps, taper: Math.pow(spec.taper || 0.94, 1 / substeps),
       split: spec.split || 0.5, rMin: radius * 0.16, seed: seed + k * 13.7,
     });
   }
@@ -5898,11 +6467,11 @@ const SUR_REC = [
   // because heart.js already builds the named coronaries.
   { m: /^lv-free-wall$/, sheen: [0.62, 0.28],
     disp: { fine: 0.007, fineFreq: 13, lob: 0.008, lobFreq: 2.6, rim: 0.2 },
-    tree: { hilum: [-0.15, 0.92, 0.55], seeds: 3, spread: 1.3, gens: 3, steps: 5,
+    tree: { hilum: [-0.15, 0.92, 0.55], seeds: 3, spread: 1.3, gens: 3, steps: 5, substeps: 3,
             stepK: 0.11, art: 0.014, vein: 0.030 } },
   { m: /^rv-free-wall$/, sheen: [0.62, 0.28],
     disp: { fine: 0.007, fineFreq: 13, lob: 0.008, lobFreq: 2.6, rim: 0.2 },
-    tree: { hilum: [0.25, 0.92, 0.6], seeds: 2, spread: 1.2, gens: 3, steps: 5,
+    tree: { hilum: [0.25, 0.92, 0.6], seeds: 2, spread: 1.2, gens: 3, steps: 5, substeps: 3,
             stepK: 0.12, art: 0.012, vein: 0.026 } },
   { m: /^(right|left)-atrium$/, sheen: [0.58, 0.30],
     disp: { fine: 0.010, fineFreq: 14, lob: 0.014, lobFreq: 3.4, rim: 0.3 },
@@ -5945,13 +6514,13 @@ function SUR_finishProfile(specimen, part) {
   const profile = (kind, tone, blend, rough, coat, coatRough, kids = false) =>
     ({ kind, tone, blend, rough, coat, coatRough, kids });
   if (specimen === 'frog' && (id === 'skin' || /^(fore|hind)limb-/.test(id)))
-    return profile('frog-hide', 0x7b7850, id === 'skin' ? 0.10 : 0.34, 0.72, 0.20, 0.50, id !== 'skin');
+    return profile(id === 'skin' ? 'frog-belly' : 'frog-hide', 0x938b55, id === 'skin' ? 0.04 : 0.32, 0.48, 0.22, 0.34, id !== 'skin');
   if (specimen === 'fish' && /^(body-wall|operculum)$/.test(id))
-    return profile('scales', 0xaaa18b, 0.12, 0.65, 0.26, 0.42);
+    return profile(id === 'operculum' ? 'fin' : 'scales', 0xc8c7b4, 0.08, 0.43, 0.26, 0.30);
   if (specimen === 'cockroach' && part.system === 'integument')
-    return profile('chitin', 0x956735, 0.24, 0.57, 0.34, 0.38);
+    return profile('chitin', 0x894825, 0.12, 0.40, 0.30, 0.28);
   if (specimen === 'earthworm' && (part.system === 'integument' || id === 'anal-segment'))
-    return profile('hide', 0xa78270, id === 'body-wall' ? 0.09 : 0.30, 0.71, 0.23, 0.46);
+    return profile('worm-cuticle', 0xb7806c, 0.06, 0.46, 0.23, 0.32);
   if (/fat-body|epicardial-fat/.test(id))
     return profile('fat', specimen === 'frog' ? 0xb6a66b : 0xd3c4a0, 0.58, 0.82, 0.12, 0.56, true);
   if (specimen === 'heart') {
@@ -5960,7 +6529,7 @@ function SUR_finishProfile(specimen, part) {
     if (/pericardium/.test(id) && part.mesh.material.transparent && part.mesh.material.opacity <= 0.2)
       return profile('serous', 0xd2c5aa, 0.12, 0.32, 0.18, 0.48);
     if (/free-wall|atrium|auricle|^septum$|papillary|moderator/.test(id))
-      return profile('flesh', 0xa38d70, 0.64, 0.74, 0.22, 0.48);
+      return profile('myocardium', 0xa9584d, 0.62, 0.46, 0.22, 0.32);
     if (/pericardium|leaflet|chordae|cusp/.test(id))
       return profile('serous', 0xd2c5aa, 0.28, 0.65, 0.24, 0.44);
     return null;
@@ -5975,31 +6544,64 @@ function SUR_finishProfile(specimen, part) {
   return null;
 }
 
-// Small, repeatable CPU-generated maps: no photo textures, image downloads,
-// canvas/readback or per-frame work. Shared by finish class inside one specimen.
+// Original periodic pigment/relief fields, not photographic anatomy. Features
+// live at several scales: broad colour variation, spots/scales and fine pores.
+// All maps are generated once and shared by finish class, never per frame.
 function SUR_finishMaps(THREE, kind) {
-  const size = 128, rough = new Uint8Array(size * size * 4), tint = new Uint8Array(rough.length);
-  const height = kind === 'scales' ? new Float32Array(size * size) : null;
+  const exterior = /^(frog-hide|frog-belly|scales|chitin|worm-cuticle|myocardium|fin)$/.test(kind);
+  const size = exterior ? 256 : 128, rough = new Uint8Array(size * size * 4), tint = new Uint8Array(rough.length);
+  const height = exterior ? new Float32Array(size * size) : null;
+  const clamp = x => Math.max(0, Math.min(1, x));
   for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
     const u = x / size, v = y / size, i = (y * size + x) * 4;
     const n = tisFbm(u, v, kind.length * 13 + 7);
-    const grain = tisNoise(u, v, 32, 19);
-    const r = Math.round(255 * (0.74 + n * 0.24 + grain * 0.02));
-    const c = Math.round(255 * (kind === 'frog-hide'
-      ? 0.78 + n * 0.19 + grain * 0.03 // visible, soft mottling across the pale belly
-      : 0.89 + n * 0.09 + grain * 0.02));
-    rough.set([r, r, r, 255], i); tint.set([c, c, c, 255], i);
-    if (height) {
-      const row = Math.floor(v * 12), fy = v * 12 - row;
-      const dx = ((u * 14 + (row % 2) * 0.5) % 1) - 0.5;
-      const arc = 0.27 + 0.46 * Math.sqrt(Math.max(0, 1 - 4 * dx * dx));
-      height[y * size + x] = n * 0.12 + Math.exp(-Math.pow((fy - arc) / 0.075, 2)) * 0.07;
+    const grain = tisNoise(u, v, 64, 19);
+    let c = 0.89 + n * 0.09 + grain * 0.02, h = grain * 0.10;
+    let rr = c, gg = c, bb = c, r = 0.68 + n * 0.28 + grain * 0.04;
+    if (kind === 'frog-hide' || kind === 'frog-belly') {
+      const pigment = tisNoise(u, v, 18, 31) * 0.75 + tisNoise(u, v, 36, 11) * 0.25;
+      const spot = smooth(clamp((pigment - 0.57) / 0.18));
+      // The ventral field is pale; strong mottling belongs on the flanks/limbs.
+      const k = kind === 'frog-belly' ? 0.09 : 0.51;
+      c = 0.91 + n * 0.08 - spot * k;
+      rr = c; gg = c * 0.99; bb = c * (1 - spot * 0.12);
+      h = grain * 0.11 + pigment * 0.05; r = 0.67 + n * 0.22 + spot * 0.09;
+    } else if (kind === 'scales') {
+      const row = Math.floor(v * 26), fy = v * 26 - row;
+      const dx = ((u * 36 + (row % 2) * 0.5) % 1) - 0.5;
+      const arc = 0.25 + 0.49 * Math.sqrt(Math.max(0, 1 - 4 * dx * dx));
+      const edge = Math.exp(-Math.pow((fy - arc) / 0.065, 2));
+      const plate = tisNoise((Math.floor(u * 36) + 0.5) / 36, (row + 0.5) / 26, 26, 47);
+      c = 0.76 + plate * 0.20 + n * 0.04 - edge * 0.18;
+      rr = c * 0.98; gg = c; bb = c * (0.95 + n * 0.04);
+      h = edge * 0.20 + grain * 0.035; r = 0.52 + plate * 0.24 + edge * 0.22;
+    } else if (kind === 'chitin') {
+      const hair = Math.pow(0.5 + 0.5 * Math.sin(u * 156 * Math.PI + tisNoise(u, v, 8, 3) * 4), 16);
+      c = 0.70 + n * 0.27 - hair * 0.028;
+      rr = c; gg = c * (0.91 + n * 0.08); bb = c * (0.82 + n * 0.13);
+      h = grain * 0.045 + hair * 0.023; r = 0.58 + n * 0.30 + grain * 0.08;
+    } else if (kind === 'worm-cuticle') {
+      c = 0.85 + n * 0.13; rr = c; gg = c * 0.97; bb = c * 0.95;
+      h = grain * 0.028; r = 0.60 + n * 0.29 + grain * 0.06;
+    } else if (kind === 'myocardium') {
+      // Epicardial surface is smooth and mottled; exposed muscle striations
+      // must not look like thick parallel corrugations through the outer wall.
+      c = 0.74 + n * 0.23; rr = c; gg = c * (0.89 + n * 0.1); bb = c * (0.87 + n * 0.1);
+      h = grain * 0.05 + tisNoise(u, v, 24, 8) * 0.028;
+      r = 0.60 + n * 0.29 + grain * 0.07;
+    } else if (kind === 'fin') {
+      rr = gg = bb = 0.91 + n * 0.08; h = grain * 0.025;
     }
+    rough[i] = rough[i + 1] = rough[i + 2] = Math.round(clamp(r) * 255); rough[i + 3] = 255;
+    tint[i] = Math.round(clamp(rr) * 255); tint[i + 1] = Math.round(clamp(gg) * 255);
+    tint[i + 2] = Math.round(clamp(bb) * 255); tint[i + 3] = 255;
+    if (height) height[y * size + x] = h;
   }
   function texture(data) {
     const t = new THREE.DataTexture(data, size, size, THREE.RGBAFormat);
     t.wrapS = t.wrapT = THREE.RepeatWrapping;
-    t.magFilter = t.minFilter = THREE.LinearFilter;
+    t.magFilter = THREE.LinearFilter; t.minFilter = THREE.LinearMipmapLinearFilter;
+    t.generateMipmaps = true; t.anisotropy = 2;
     t.needsUpdate = true;
     return t;
   }
@@ -6032,12 +6634,21 @@ function createSurfaceDetail(THREE, parts, specimenId, group) {
   let sheened = false;
   let tris = 0;
 
+  // Installed scans own their baked relief and calibrated texture maps. Only
+  // the validated adapter writes this marker; organ detailing remains active.
+  function preparedPart(p) {
+    const tag = p.mesh.userData.preparedExterior;
+    return tag && tag.schemaVersion === 1 && tag.role === 'part'
+      && tag.specimenId === specimenId && tag.partId === p.id;
+  }
+
   /* --- step 1: silhouette ---------------------------------------------------- */
   function displaceAll() {
     if (displaced) return;
     displaced = true;
     let seed = 3.1;
     byId.forEach((p, id) => {
+      if (preparedPart(p)) return;
       const rec = SUR_match(id);
       if (!rec) return;
       const geo = p.mesh.geometry;
@@ -6055,7 +6666,11 @@ function createSurfaceDetail(THREE, parts, specimenId, group) {
         SUR_displaceBlob(THREE, geo, { fine: rec.gut.fine * 0.4, fineFreq: rec.gut.fineFreq, lob: 0.01, lobFreq: 3 }, seed);
         return;
       }
-      if (rec.disp) SUR_displaceBlob(THREE, geo, rec.disp, seed);
+      // Authored close-fitting exterior sheets/pads already have controlled
+      // relief. Whole-bounding-box displacement makes the separate pads tear
+      // and moves a conforming sac through the muscle it surrounds.
+      if (rec.disp && !['localized-fat', 'conforming-sac'].includes(p.mesh.userData.exteriorDetail))
+        SUR_displaceBlob(THREE, geo, rec.disp, seed);
       if (rec.kids) {
         // Fat bodies carry their finger lobes as children; lobulating only the
         // root would leave five smooth sausages sticking out of a bumpy bead.
@@ -6075,6 +6690,7 @@ function createSurfaceDetail(THREE, parts, specimenId, group) {
     if (sheened) return;
     sheened = true;
     byId.forEach((p) => {
+      if (preparedPart(p)) return;
       const cfg = SUR_finishProfile(specimenId, p);
       if (!cfg) return;
       if (!finishMaps.has(cfg.kind)) finishMaps.set(cfg.kind, SUR_finishMaps(THREE, cfg.kind));
@@ -6083,8 +6699,11 @@ function createSurfaceDetail(THREE, parts, specimenId, group) {
         const original = mesh.material;
         if (!mesh.isMesh || !original || original.clearcoat == null) return;
         const m = original.clone();
-        finishSaved.push({ mesh, original, applied: m });
+        finishSaved.push({ mesh, original, applied: m, castShadow: mesh.castShadow });
         mesh.material = m;
+        // A shadow map treats transparent meshes as opaque. The prepared sac
+        // must not project a solid dark copy over the visible myocardium.
+        if (p.id === 'pericardium' && m.transparent && m.opacity <= 0.2) mesh.castShadow = false;
         // Vertex-coloured hide keeps its dorsal/ventral pattern. A gentle warm
         // multiplier is enough; blending its white material all the way to an
         // organ colour would obliterate the pale belly and segment distinctions.
@@ -6097,14 +6716,30 @@ function createSurfaceDetail(THREE, parts, specimenId, group) {
         m.roughnessMap = maps.rough;
         m.clearcoatRoughnessMap = maps.rough;
         if (!m.map) m.map = maps.tint;
-        if (maps.normal) { m.normalMap = maps.normal; m.normalScale.set(0.28, 0.28); }
+        if (maps.normal) { m.normalMap = maps.normal; m.normalScale.set(0.18, 0.18); }
         else m.normalScale.multiplyScalar(0.65);
         m.needsUpdate = true;
       }
       finish(p.mesh);
       // Only known same-tissue children. Skin children include eyes and fins;
       // tinting an entire specimen traversal would turn those into opaque flesh.
-      if (cfg.kids) p.mesh.children.forEach(finish);
+      if (cfg.kids) p.mesh.children.filter(c => !c.userData.exteriorTissue).forEach(finish);
+      // Explicit visual ownership, not blanket recolouring: pupils/irises,
+      // structures and vessel labels never inherit a neighbouring skin finish.
+      p.mesh.traverse(child => {
+        if (child === p.mesh || !child.isMesh || !child.userData.exteriorTissue) return;
+        const tissue = child.userData.exteriorTissue;
+        if (!['frog-hide', 'chitin', 'scales', 'fin'].includes(tissue)) return;
+        if (!finishMaps.has(tissue)) finishMaps.set(tissue, SUR_finishMaps(THREE, tissue));
+        const taggedMaps = finishMaps.get(tissue), original = child.material;
+        if (!original || original.clearcoat == null) return;
+        const m = original.clone(); finishSaved.push({ mesh: child, original, applied: m }); child.material = m;
+        m.roughnessMap = taggedMaps.rough; m.clearcoatRoughnessMap = taggedMaps.rough;
+        if (!m.map) m.map = taggedMaps.tint;
+        m.normalMap = taggedMaps.normal; m.normalScale.set(0.18, 0.18);
+        m.roughness = tissue === 'chitin' ? 0.4 : 0.48; m.clearcoat = 0.22; m.clearcoatRoughness = 0.32;
+        m.needsUpdate = true;
+      });
     });
   }
 
@@ -6126,6 +6761,7 @@ function createSurfaceDetail(THREE, parts, specimenId, group) {
 
   function buildVessels() {
     byId.forEach((p, id) => {
+      if (preparedPart(p)) return;
       const rec = SUR_match(id);
       if (!rec) return;
       const bA = SUR_builder(), bV = SUR_builder();
@@ -6156,13 +6792,21 @@ function createSurfaceDetail(THREE, parts, specimenId, group) {
         }, density * 0.8, seed + 101.7, s.vein * proj.scale * 1.0);
       } else return;
 
-      tris += bA.tris + bV.tris;
-      attach(p, SUR_finish(THREE, bA), SUR_ART,
-        { tissue: 'vessel', rough: 0.57, clear: 0.30, clearRough: 0.40,
-          sheen: 0xe07a64, transmission: 0.10, thickness: 0.22 });
-      attach(p, SUR_finish(THREE, bV), SUR_VEIN,
+      const namedCoronaries = specimenId === 'heart' && /^(lv|rv)-free-wall$/.test(id);
+      tris += (namedCoronaries ? 0 : bA.tris) + bV.tris;
+      // Named coronary arteries already belong to the heart builder. The
+      // separate generic arterial tree reads as angular orange incisions on
+      // these broad walls, and is not a validated extra coronary network.
+      if (!namedCoronaries) {
+        const artery = attach(p, SUR_finish(THREE, bA), SUR_ART,
+          { tissue: 'vessel', rough: 0.57, clear: 0.30, clearRough: 0.40,
+            sheen: 0xe07a64, transmission: 0.10, thickness: 0.22 });
+        if (artery) artery.userData.SUR_vesselClass = 'artery';
+      }
+      const vein = attach(p, SUR_finish(THREE, bV), SUR_VEIN,
         { tissue: 'vessel', rough: 0.62, clear: 0.24, clearRough: 0.44,
           sheen: 0x9a6a90, transmission: 0.06, thickness: 0.3 });
+      if (vein) vein.userData.SUR_vesselClass = 'vein';
     });
   }
 
@@ -6202,6 +6846,7 @@ function createSurfaceDetail(THREE, parts, specimenId, group) {
     list.forEach(([ida, idb], pi) => {
       const A = byId.get(ida), B = byId.get(idb);
       if (!A || !B || !A.mesh.geometry || !B.mesh.geometry) return;
+      if (preparedPart(A) || preparedPart(B)) return;
       A.mesh.updateMatrixWorld(); B.mesh.updateMatrixWorld();
       if (!A.mesh.geometry.boundingSphere) A.mesh.geometry.computeBoundingSphere();
       if (!B.mesh.geometry.boundingSphere) B.mesh.geometry.computeBoundingSphere();
@@ -6303,7 +6948,11 @@ function createSurfaceDetail(THREE, parts, specimenId, group) {
      * the specimen from scratch, which is the real undo. */
     dispose() {
       clearDecor();
-      finishSaved.forEach((s) => { s.mesh.material = s.original; s.applied.dispose(); });
+      finishSaved.forEach((s) => {
+        s.mesh.material = s.original;
+        if (s.castShadow !== undefined) s.mesh.castShadow = s.castShadow;
+        s.applied.dispose();
+      });
       finishSaved.length = 0;
       finishMaps.forEach((maps) => Object.values(maps).forEach((t) => { if (t) t.dispose(); }));
       finishMaps.clear();
@@ -7439,6 +8088,36 @@ function createSoftBody(THREE, parts) {
   const _local = new THREE.Vector3();
   const _inv = new THREE.Matrix4();
 
+  // Split scanned surfaces still share one physical boundary. Anchor matching
+  // world-space seams and taper motion near them; otherwise a breathing skin
+  // root opens cracks against a limb that is not independently breathing.
+  const exterior = parts.filter(p => p.mesh?.userData.preparedExterior?.role === 'part');
+  const seams = new Map(), weights = new Map();
+  const keyOf = v => [v.x, v.y, v.z].map(n => Math.round(n * 1e5)).join(',');
+  for (const p of exterior) {
+    p.mesh.updateWorldMatrix(true, false);
+    const attr = p.mesh.geometry.attributes.position;
+    for (let i = 0; i < attr.count; i++) {
+      _v.fromBufferAttribute(attr, i).applyMatrix4(p.mesh.matrixWorld);
+      const key = keyOf(_v);
+      if (!seams.has(key)) seams.set(key, { owners: new Set(), point: _v.clone() });
+      seams.get(key).owners.add(p.id);
+    }
+  }
+  const shared = [...seams.values()].filter(s => s.owners.size > 1);
+  for (const p of exterior) {
+    const attr = p.mesh.geometry.attributes.position, influence = new Float32Array(attr.count).fill(1);
+    const boundary = shared.filter(s => s.owners.has(p.id));
+    for (let i = 0; i < attr.count && boundary.length; i++) {
+      _v.fromBufferAttribute(attr, i).applyMatrix4(p.mesh.matrixWorld);
+      let d2 = 0.30 * 0.30;
+      for (const s of boundary) d2 = Math.min(d2, _v.distanceToSquared(s.point));
+      const t = Math.sqrt(d2) / 0.30;
+      influence[i] = t * t * (3 - 2 * t);
+    }
+    weights.set(p.id, influence);
+  }
+
   for (const p of parts) {
     if (!p || !p.mesh || !p.mesh.geometry) continue;
     if (SB_RIGID_HINT.test(p.id)) continue;
@@ -7450,6 +8129,8 @@ function createSoftBody(THREE, parts) {
       part: p,
       pos,
       rest: new Float32Array(pos.array),      // the shape everything springs back to
+      normalRest: p.mesh.geometry.attributes.normal?.array.slice(),
+      seamWeight: weights.get(p.id),
       // press
       dent: 0, dentTarget: 0, dentVel: 0,
       cx: 0, cy: 0, cz: 0, nx: 0, ny: 1, nz: 0, radius: 1,
@@ -7527,7 +8208,11 @@ function createSoftBody(THREE, parts) {
       const active = it.dent !== 0 || it.dentVel !== 0 || it.ring > 0 || living;
       if (!active) {
         // Idle parts cost nothing. Write rest once if we were dirty.
-        if (it.dirty) { it.pos.array.set(it.rest); it.pos.needsUpdate = true; it.dirty = false; refreshBounds(it, true); }
+        if (it.dirty) {
+          it.pos.array.set(it.rest); it.pos.needsUpdate = true; it.dirty = false;
+          if (it.normalRest) { const normal = it.part.mesh.geometry.attributes.normal; normal.array.set(it.normalRest); normal.needsUpdate = true; }
+          refreshBounds(it, true);
+        }
         return;
       }
 
@@ -7540,7 +8225,7 @@ function createSoftBody(THREE, parts) {
           // body span) — a deep, pronounced breath, the strongest "this is alive"
           // signal without the body ballooning. Still a slow soft sine so it reads
           // as respiration; push much past this and it becomes a pulsing balloon.
-          lifeAmp = 0.100 * (0.5 + 0.5 * Math.sin(it.lifePhase * 1.5));
+          lifeAmp = (it.seamWeight ? 0.018 : 0.100) * (0.5 + 0.5 * Math.sin(it.lifePhase * 1.5));
           lifeK = 1;
         } else if (it.life === 'beat') {
           // A quick systolic squeeze with a long diastolic rest, not a sine. Raised
@@ -7585,13 +8270,27 @@ function createSoftBody(THREE, parts) {
           ox += rx * lifeAmp; oy += ry * lifeAmp; oz += rz * lifeAmp;
         }
 
-        arr[i3] = rx + ox; arr[i3 + 1] = ry + oy; arr[i3 + 2] = rz + oz;
+        const weight = it.seamWeight ? it.seamWeight[i] : 1;
+        arr[i3] = rx + ox * weight; arr[i3 + 1] = ry + oy * weight; arr[i3 + 2] = rz + oz * weight;
       }
 
       it.pos.needsUpdate = true;
       it.dirty = true;
       const geo = it.part.mesh.geometry;
       geo.computeVertexNormals();
+      // Preserve the opt-in closed ventricular UV seam while pressing/beating.
+      // The shared helper never welds positions or intentionally open edges.
+      if (typeof smoothClosedLatheSeam === 'function') smoothClosedLatheSeam(geo);
+      if (it.seamWeight && it.normalRest) {
+        const normal = geo.attributes.normal;
+        for (let i = 0; i < n; i++) {
+          const w = it.seamWeight[i], j = i * 3;
+          _v.set(normal.array[j], normal.array[j + 1], normal.array[j + 2]).multiplyScalar(w);
+          _local.set(it.normalRest[j], it.normalRest[j + 1], it.normalRest[j + 2]);
+          _v.addScaledVector(_local, 1 - w).normalize(); normal.setXYZ(i, _v.x, _v.y, _v.z);
+        }
+        normal.needsUpdate = true;
+      }
       refreshBounds(it, false);
     });
   }
@@ -7612,7 +8311,8 @@ function createSoftBody(THREE, parts) {
     items.forEach((it) => {
       it.pos.array.set(it.rest);
       it.pos.needsUpdate = true;
-      it.part.mesh.geometry.computeVertexNormals();
+      if (it.normalRest) { const normal = it.part.mesh.geometry.attributes.normal; normal.array.set(it.normalRest); normal.needsUpdate = true; }
+      else it.part.mesh.geometry.computeVertexNormals();
       it.part.mesh.geometry.computeBoundingSphere();
     });
     items.clear();
@@ -8585,6 +9285,17 @@ function createCutting(THREE, scene) {
     normal.normalize();
     const box = new THREE.Box3().setFromBufferAttribute(new THREE.BufferAttribute(rest, 3));
     const spanZ = box.max.z - box.min.z;
+    // The prepared cockroach's functional exoskeleton root also owns its six
+    // walking legs, thoracic connectors and posterior appendages. A whole
+    // half-space removal amputates those structures. These bounds are authored
+    // in the prepared root's LOCAL frame (existing translation 0,.08,-2.2):
+    // abdomen z ≈ -2.90..3.00; leg tops y <= .2895. Open only dorsal terga above
+    // y=.30, with a retained lateral/tail margin. Not a general anatomy solver.
+    const preparedTag = mesh.userData.preparedExterior;
+    const abdomenWindow = partId === 'exoskeleton' && preparedTag?.schemaVersion === 1
+      && preparedTag.specimenId === 'cockroach' && preparedTag.partId === partId
+      ? { minX: -1.18, maxX: 1.18, minZ: -2.55, maxZ: 3.05, minY: .30 } : null;
+    if (abdomenWindow) normal.set(0, 1, 0);
     // Frog and fish carry their head and fins on one closed exterior mesh.
     // Earthworm uses an open CylinderGeometry and separate head/tail parts.
     const preserveEnds = partId === 'skin' || (partId === 'body-wall' && mesh.geometry.type === 'SphereGeometry');
@@ -8659,8 +9370,45 @@ function createCutting(THREE, scene) {
     }
     const accessDistance = vertex => (vertex[0] - center.x) * normal.x
       + (vertex[1] - center.y) * normal.y + (vertex[2] - center.z) * normal.z + 0.025;
+    const abdominalPlanes = abdomenWindow ? [
+      vertex => vertex[1] - abdomenWindow.minY,
+      vertex => vertex[0] - abdomenWindow.minX,
+      vertex => abdomenWindow.maxX - vertex[0],
+      vertex => vertex[2] - abdomenWindow.minZ,
+      vertex => abdomenWindow.maxZ - vertex[2],
+    ] : null;
+    function addAbdominalRim(a, b) {
+      if (!a || !b) return;
+      // Only the intersection of all five bounds is an actual cut edge. Trim
+      // every candidate segment to it; no decorative rim across retained legs.
+      for (const distance of abdominalPlanes) {
+        const da = distance(a), db = distance(b);
+        if (da < -1e-7 && db < -1e-7) return;
+        if ((da < 0) !== (db < 0)) {
+          const crossing = interpolate(a, b, da / (da - db));
+          if (da < 0) a = crossing; else b = crossing;
+        }
+      }
+      addRim(a, b, false);
+    }
     for (let j = 0; j < rec.originalIndices.length; j += 3) {
       const triangle = [0, 1, 2].map(i => readVertex(rec.originalIndices[j + i]));
+      if (abdominalPlanes) {
+        // Entirely outside any one bound means no part of this triangle can
+        // enter the window. Keep it whole, including original appendage UVs.
+        if (abdominalPlanes.some(distance => triangle.every(vertex => distance(vertex) <= 0))) {
+          append(triangle); continue;
+        }
+        let remaining = triangle;
+        for (const distance of abdominalPlanes) {
+          const outside = clip(remaining, distance, false);
+          append(outside.polygon);
+          addAbdominalRim(outside.crossings[0], outside.crossings[1]);
+          remaining = clip(remaining, distance, true).polygon;
+          if (!remaining.length) break;
+        }
+        continue;
+      }
       const back = clip(triangle, accessDistance, false);
       append(back.polygon);
       addRim(back.crossings[0], back.crossings[1], true);
@@ -8688,8 +9436,8 @@ function createCutting(THREE, scene) {
     residual.name = 'uncut:' + partId;
     residual.userData.noPick = true;
     residual.userData.accessWindow = {
-      normal: normal.toArray(), constant: 0.025 - center.dot(normal),
-      preserveEnds, tailZ, headZ,
+      normal: normal.toArray(), constant: abdomenWindow ? -abdomenWindow.minY : 0.025 - center.dot(normal),
+      preserveEnds, tailZ, headZ, ...(abdomenWindow ? { abdomen: abdomenWindow } : {}),
     };
     residual.raycast = CUT_noRaycast;
     residual.position.copy(mesh.position); residual.quaternion.copy(mesh.quaternion); residual.scale.copy(mesh.scale);
@@ -24783,8 +25531,8 @@ function setupEnvironment(THREE, deps, refs) {
   lamp2.target.position.set(0, 0, 0);
   addTo(lamp2.target);
 
-  // Dim cyan rim, to peel the specimen off the background.
-  const rim = addTo(new THREE.DirectionalLight(0x38e0d8, 0.7));
+  // A dim neutral-green rim separates the specimen without staining the tissue cyan.
+  const rim = addTo(new THREE.DirectionalLight(0xc1d8d2, 0.45));
   rim.position.set(-6, 3.5, -7);
 
   /* ---- the visible lamp fixture ------------------------------------------ */
@@ -28465,7 +29213,10 @@ function buildShell(root) {
       <div class="k">Enter · send &nbsp; Esc · skip</div></div>`);
   const keysEl = el(`<div id="keys"><div id="kbox"><span class="lbl">Reference</span>
       <h2>Keyboard</h2><div id="kgrps"></div>
-      <div class="foot">? or Esc to close</div></div></div>`);
+      <div class="foot">Prepared exterior credits:
+        <a href="./assets/specimens/FROG-ATTRIBUTION.md" target="_blank" rel="noopener">Frog — ffish.asia / floraZia (CC0)</a> ·
+        <a href="./assets/specimens/COCKROACH-ATTRIBUTION.md" target="_blank" rel="noopener">Cockroach — CK (modified, CC BY 4.0)</a><br>
+        Teaching-model interiors are illustrative. ? or Esc to close</div></div></div>`);
 
   [objBar, topRight, dock, hint, say, handBox, systems, rec, viva, coach, rail, ask, keysEl]
     .forEach((n) => root.appendChild(n));
@@ -29248,7 +29999,7 @@ function buildShell(root) {
     mountCards: (specs, cb) => {
       const c = pick.querySelector('#cards');
       c.innerHTML = '';
-      Object.values(specs).forEach((s) => {
+      Object.values(getAvailableSpecimens(specs)).forEach((s) => {
         const card = el(`<div class="card"><span class="lbl">Specimen</span>
           <h2>${s.name}</h2><p>${s.blurb}</p></div>`);
         card.onclick = () => cb(s.id);
@@ -29293,6 +30044,11 @@ let histology = null, imaging = null, pathology = null;
 let physio = null, tutor = null, xr = null, zoomverse = null;
 let specimenId = null;
 let lastT = 0;
+let preparedFrog = null, preparedInstall = null, installExterior = null;
+const preparedSpecimens = new Map();
+let specimenRequest = 0, specimenAbort = null;
+let specimenGripRelease = false;
+let cancelSpecimenLoad = null;
 
 // The abstract input the dissection engine consumes. Long-lived and mutated in
 // place — reallocating this every frame at 60fps is exactly the kind of garbage
@@ -29733,6 +30489,7 @@ function tchHitsSpecimen(clientX, clientY) {
 }
 
 function tchDown(e) {
+  if (specimenAbort) return;
   if (e.pointerType !== 'touch') return;   // a pen hovers and a mouse has a button
   if (!tchScene(e)) return;
   TCH.ids.add(e.pointerId);
@@ -29776,6 +30533,16 @@ function drivingHandSlot(snap) {
 }
 
 function routeInput() {
+  // A pinch held while switching specimens is not a new incision. Require one
+  // neutral input frame before the newly loaded preparation can accept a grip.
+  if (specimenAbort || specimenGripRelease) {
+    const heldHand = hands?.snapshot?.hands?.some(h => h.present && h.isPinching);
+    const heldXR = xr && xr.isPresenting() && xr.input()?.gripping;
+    if (!specimenAbort && !heldHand && !heldXR && !mouse.down) specimenGripRelease = false;
+    input.grip = 0; input.gripping = false; input.span = 0;
+    controls.enabled = false; drawCursor(false); dialReset(); flickReset();
+    return;
+  }
   // VR outranks everything: if a headset is presenting, its controller or tracked
   // hand IS the instrument and the desktop pointer is not even on screen.
   const xin = xr && xr.isPresenting() ? xr.input() : null;
@@ -30081,7 +30848,85 @@ function captureCutRest() {
   });
 }
 
+// Only the selected additional specimen is downloaded. Hold the current
+// attempt still while loading; a stale response must never replace a newer
+// selection, or install a new surface halfway through a cut.
+async function requestSpecimen(id) {
+  id = normalizeSpecimenId(id);
+  specimenGripRelease = true; mouse.down = false;
+  input.grip = 0; input.gripping = false; input.span = 0;
+  const request = ++specimenRequest;
+  if (specimenAbort) specimenAbort.abort();
+  specimenAbort = null;
+  cancelSpecimenLoad = null;
+  if (id !== 'cockroach' || preparedSpecimens.has(id)) {
+    loadSpecimen(id);
+    renderer.setAnimationLoop(tick);
+    window.__LAB.ready = true;
+    return;
+  }
+  const abort = new AbortController(); specimenAbort = abort;
+  // Free the render thread during local bitmap decode on low-end devices.
+  renderer.setAnimationLoop(null);
+  window.__LAB.ready = false;
+  const loading = document.createElement('div');
+  loading.setAttribute('role', 'status');
+  loading.textContent = 'Preparing the cockroach specimen…';
+  loading.style.cssText = 'position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;background:#080d0ce8;color:#a5d6bb;font:16px system-ui;z-index:9999';
+  document.body.appendChild(loading);
+  cancelSpecimenLoad = () => {
+    if (request !== specimenRequest) return;
+    ++specimenRequest; abort.abort(); specimenAbort = null; cancelSpecimenLoad = null;
+    loading.remove(); window.__LAB.ready = true; renderer.setAnimationLoop(tick);
+    shell.say('Preparation cancelled — your previous specimen is unchanged.');
+  };
+  const cancel = document.createElement('button');
+  cancel.textContent = 'Cancel and return';
+  cancel.style.cssText = 'background:#142a22;color:#c9e6d7;border:1px solid #39765a;border-radius:8px;padding:12px 22px;font:inherit;cursor:pointer';
+  cancel.onclick = cancelSpecimenLoad;
+  loading.appendChild(cancel);
+  let timeout;
+  const deadline = new Promise((resolve, reject) => {
+    abort.signal.addEventListener('abort', () => reject(new DOMException('Specimen preparation cancelled', 'AbortError')), { once: true });
+    timeout = setTimeout(() => abort.abort(), 20000);
+  });
+  const preparation = (async () => {
+    const [loader, adapter] = await Promise.all([
+      import('./src/lab/prepared-loader.js'), import('./src/lab/specimen-assets.js'),
+    ]);
+    if (abort.signal.aborted) throw new DOMException('Specimen preparation cancelled', 'AbortError');
+    const loaded = await loader.loadPreparedSpecimen(THREE, {
+      specimenId: id, url: './assets/specimens/' + id + '.glb', signal: abort.signal,
+    });
+    if (abort.signal.aborted || request !== specimenRequest) {
+      loaded.dispose();
+      throw new DOMException('Specimen preparation cancelled', 'AbortError');
+    }
+    return { loaded, install: adapter.installPreparedExterior };
+  })();
+  let failed = false;
+  try {
+    const result = await Promise.race([preparation, deadline]);
+    if (request !== specimenRequest || abort.signal.aborted) { result.loaded.dispose(); return; }
+    preparedSpecimens.set(id, result.loaded); installExterior = result.install;
+  } catch (error) {
+    failed = true;
+    if (request === specimenRequest) console.warn('Prepared specimen unavailable; interactive fallback retained.', error);
+  } finally {
+    clearTimeout(timeout); loading.remove();
+    if (request === specimenRequest) {
+      specimenAbort = null;
+      cancelSpecimenLoad = null;
+      loadSpecimen(id);
+      renderer.setAnimationLoop(tick);
+      window.__LAB.ready = true;
+      if (failed || !preparedInstall) shell.say('Original interactive cockroach — detailed exterior unavailable. Select it again to retry.');
+    }
+  }
+}
+
 function loadSpecimen(id) {
+  id = normalizeSpecimenId(id);
   if (group) { scene.remove(group); group = null; }
   if (dissection) { dissection.dispose(); dissection = null; }
   if (imaging) { imaging.dispose(); imaging = null; }          // it caches part meshes
@@ -30092,11 +30937,23 @@ function loadSpecimen(id) {
   if (strata) { strata.dispose(); strata = null; }
   if (cutting) cutting.clear();
   if (blood) blood.clear();
+  if (soft) { soft.dispose(); soft = null; }
+  // Stop geometry consumers before releasing the previous exterior's clones.
+  if (preparedInstall) { preparedInstall.restore(); preparedInstall = null; }
 
   specimenId = id;
   const built = buildSpecimen(THREE, id);
   group = built.group;
   parts = built.parts;
+  const preparedAsset = id === 'frog' ? preparedFrog : preparedSpecimens.get(id);
+  if (preparedAsset && installExterior) {
+    try {
+      preparedInstall = installExterior(THREE, { specimenId: id, parts, prepared: preparedAsset.prepared });
+    } catch (error) {
+      console.warn('Prepared exterior unavailable; original interactive specimen retained.', error);
+      if (id !== 'frog') { preparedSpecimens.delete(id); preparedAsset.dispose(); }
+    }
+  }
   scene.add(group);
 
   const spec = SPECIMENS[id];
@@ -30143,6 +31000,18 @@ function loadSpecimen(id) {
     const placement = env.fitSpecimen(group);
     camera.position.y += placement.offsetY;
     controls.target.y += placement.offsetY;
+    if ((preparedInstall && ['frog', 'cockroach'].includes(id)) || ['fish', 'earthworm'].includes(id)) {
+      // The photographed folded legs span more than the original procedural
+      // model. Frame the whole preparation cranial-end-up, not a cropped belly.
+      const horizontal = id === 'fish' || id === 'earthworm';
+      const span = horizontal
+        ? Math.max(placement.width, placement.length / Math.max(0.5, camera.aspect))
+        : Math.max(placement.length, placement.width / Math.max(0.5, camera.aspect));
+      const distance = span / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov * 0.5))) * 1.26;
+      controls.target.set(placement.x, placement.supportY + 0.8, placement.z);
+      camera.position.copy(controls.target).add(new THREE.Vector3(horizontal ? -0.46 : 0, 0.89, horizontal ? 0 : -0.46).normalize().multiplyScalar(distance));
+      if (xr) xr.setFocus(...controls.target.toArray());
+    }
     controls.update();
   }
   if (typeof createSoftBody === 'function') {
@@ -30255,7 +31124,7 @@ function tick(t) {
   // you can see what is under the blade — and dissect.js picks on mesh.visible, so
   // leaving it live would let the probe hover organs three layers deep. It would
   // also let damage() write material.color onto a shader material that has none.
-  const scanning = imaging && imaging.mode() !== 'off';
+  const scanning = !!specimenAbort || (imaging && imaging.mode() !== 'off');
   if (dissection && !scanning) dissection.update(input, dt);
   if (imaging) imaging.update(dt);
 
@@ -30425,6 +31294,7 @@ function setTool(t) {
 }
 
 function onKey(e) {
+  if (specimenAbort) { if (e.key === 'Escape' && cancelSpecimenLoad) cancelSpecimenLoad(); return; }
   // The tutor's answer line takes prose. Typing "probe" must not fire p, r, o, b
   // and e as shortcuts.
   if (shell.inputOpen && shell.inputOpen()) return;
@@ -30611,7 +31481,63 @@ function onKey(e) {
 
 /* ---- wiring ------------------------------------------------------------ */
 function startApp() {
+  window.__LAB = window.__LAB || {};
+  window.__LAB.ready = false;
+  return startPreparedApp().catch(error => {
+    window.__LAB.ready = false; window.__LAB.ok = false;
+    window.__LAB.error = String(error && error.message || error);
+    console.error('Dissection startup failed', error);
+    const message = document.createElement('p');
+    message.setAttribute('role', 'alert');
+    message.textContent = 'The lab could not start. Please reload to try again.';
+    message.style.cssText = 'position:fixed;inset:40% 10%;color:#c9e6d7;z-index:9999;text-align:center';
+    document.body.appendChild(message);
+  });
+}
+
+async function startPreparedApp() {
   const root = document.getElementById('stage');
+  // Prepare once, before students can begin an attempt. Never replace a surface
+  // asynchronously midway through a cut. Parsed maps are shared across resets.
+  const loading = document.createElement('div');
+  loading.setAttribute('role', 'status');
+  loading.textContent = 'Preparing the frog specimen…';
+  loading.style.cssText = 'position:fixed;inset:0;display:grid;place-items:center;background:#080d0c;color:#a5d6bb;font:16px system-ui;z-index:9999';
+  document.body.appendChild(loading);
+  const assetAbort = new AbortController();
+  let assetTimeout;
+  // Dynamic imports do not accept AbortSignal. Bound the entire preparation,
+  // not just fetch/decode, so a stalled local module cannot trap the student on
+  // this loading screen. A late result belongs to this expired attempt only.
+  const deadline = new Promise((resolve, reject) => {
+    assetTimeout = setTimeout(() => {
+      assetAbort.abort();
+      reject(new Error('Frog preparation timed out'));
+    }, 20000);
+  });
+  const preparation = (async () => {
+    const [loader, adapter] = await Promise.all([
+      import('./src/lab/prepared-loader.js'), import('./src/lab/specimen-assets.js'),
+    ]);
+    if (assetAbort.signal.aborted) throw new DOMException('Frog preparation cancelled', 'AbortError');
+    const loaded = await loader.loadPreparedSpecimen(THREE, {
+      specimenId: 'frog', url: './assets/specimens/frog.glb', signal: assetAbort.signal,
+    });
+    if (assetAbort.signal.aborted) {
+      loaded.dispose();
+      throw new DOMException('Frog preparation cancelled', 'AbortError');
+    }
+    return { loaded, install: adapter.installPreparedExterior };
+  })();
+  try {
+    const result = await Promise.race([preparation, deadline]);
+    preparedFrog = result.loaded;
+    installExterior = result.install;
+  } catch (error) {
+    console.warn('Frog scan could not load; using the original interactive specimen.', error);
+  } finally {
+    clearTimeout(assetTimeout); loading.remove();
+  }
   bootScene(root);
   shell = buildShell(document.body);
 
@@ -30659,8 +31585,8 @@ function startApp() {
     }
   }
 
-  shell.mountCards(SPECIMENS, (id) => loadSpecimen(id));
-  shell.on('specimen', (id) => loadSpecimen(id));
+  shell.mountCards(SPECIMENS, (id) => requestSpecimen(id));
+  shell.on('specimen', (id) => requestSpecimen(id));
   shell.on('viva', () => {
     if (!dissection) return;
     // The viva now marks against the tutor transcript and, if a case is loaded,
@@ -30775,6 +31701,7 @@ function startApp() {
     mouse.x = e.clientX / innerWidth; mouse.y = e.clientY / innerHeight;
   });
   addEventListener('pointerdown', (e) => {
+    if (specimenAbort) return;
     if (e.pointerType === 'touch') return;
     if (e.target.closest('.chrome')) return;
     mouse.down = true;
@@ -30799,6 +31726,7 @@ function startApp() {
     drivingHandSlot: { get: () => handDrive.slot, configurable: true },
   });
   window.__LAB.loadSpecimen = loadSpecimen;
+  window.__LAB.requestSpecimen = requestSpecimen;
   window.__LAB.setCase = setCase;
   window.__LAB.setTool = setTool;
   // Drive the engine exactly as a hand or mouse would, for testing.
@@ -30901,6 +31829,8 @@ function startApp() {
     if (renderer) renderer.toneMappingExposure = 1.15;
     loadSpecimen('frog');
   }
+  window.__LAB.ready = true;
+  if (!preparedInstall) shell.say('Original interactive frog — the scanned exterior is unavailable. Reload to retry.');
 }
 
 

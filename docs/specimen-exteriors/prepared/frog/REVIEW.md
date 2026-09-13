@@ -1,0 +1,7 @@
+# Prepared frog review — 13 September 2026
+
+Reviewed the actual ventral, dorsal and functional-region stills. The source scan retains an organic continuous body, mottled peripheral skin, a cream ventral surface and connected folded limbs. Its natural folded forelimb pose is retained; this is not the fully extended pinned pose in the user's concept reference. No image-generation skin overlay or new anatomy was substituted.
+
+The production candidate `assets/specimens/frog.glb` remains unchanged, SHA-256 `64ccc2056475153d70b5f68a2b3b94ff075f0491c63c76a65b7157e7f7c349bc`. Rechecked the original source SHA-256: `d03d6b33b1d64da045632e62fdb5202860ccb503f03ecc77532717cc4e924c26`.
+
+`node --test tests/prepared-frog-asset.test.cjs tests/prepared-frog-interactions.test.cjs`: 9 tests pass. These instantiate the real binary, existing builder and interaction engines; only bitmap decoding is stubbed. Tests cover the five bounded independent roots, continuous limb seams, unchanged organ resources and transforms, pin contacts, material ownership, synthetic input handoff, cut/access removal and reset. The added seam regression applies press, jiggle and life simultaneously to the actual scan: common limb boundaries stay anchored, free tissue still responds, and original positions/normals return after settling and disposal. They do not certify species anatomy, physical webcam tracking, photorealism or exact reference matching. Main-task browser review remains required.
