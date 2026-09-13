@@ -375,6 +375,55 @@ body:not(.embed) header .btn.primary{background:var(--cy);color:var(--bg);border
 }
 </style>
 <!-- PHYSICS-PILLAR-LAYOUT:END -->
+<!-- BIO-LIBRARY:labs-style:START -->
+<style>
+.bio-guide{width:min(590px,calc(100vw - 32px));max-height:85dvh;overflow:auto;background:var(--panel);color:var(--ink);border:1px solid var(--hair);border-radius:12px;padding:28px;box-shadow:0 24px 80px #0005}
+.bio-guide::backdrop{background:#020905b8}.bio-guide h2{font-family:var(--display);font-weight:500;font-size:30px;margin:14px 0}.bio-guide-close{float:right}.bio-guide-context{color:var(--em);font-size:13px;margin:8px 0}.bio-guide-source{font-size:12px;color:var(--dim);line-height:1.6}.bio-guide-answer{white-space:pre-line;line-height:1.75;font-size:15px;border-block:1px solid var(--line);padding:20px 0;margin:20px 0}.bio-guide-form{display:grid;gap:12px}.bio-guide label{font-size:13px}.bio-guide textarea{font:inherit;padding:12px;color:var(--ink);background:var(--bg-2);border:1px solid var(--hair);border-radius:6px;resize:vertical;width:100%;box-sizing:border-box}.bio-guide button{font:inherit;cursor:pointer;padding:9px 15px;border:1px solid var(--hair);border-radius:6px;background:var(--raise);color:var(--ink)}
+.bio-guide :focus-visible,.ln-workspace :focus-visible,.lb-library :focus-visible{outline:2px solid var(--em);outline-offset:4px}
+@media(prefers-reduced-motion:reduce){.bio-guide *,.ln-workspace *,.lb-library *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+.ln-index-meta,.ln-card-meta{color:var(--dim);font:11px/1.8 var(--mono);margin-top:18px}.ln-index-meta{display:flex;flex-wrap:wrap;gap:12px 28px;padding-bottom:24px;border-bottom:1px solid var(--line)}
+.ln-filters{display:grid;grid-template-columns:2fr repeat(4,1fr);gap:12px;margin:28px 0 16px}.ln-filters label,.ln-workspace label{display:grid;gap:8px;font-size:12px;color:var(--dim)}
+.ln-filters input,.ln-filters select,.ln-workspace input,.ln-workspace select,.ln-workspace textarea{width:100%;min-width:0;box-sizing:border-box;background:var(--bg-2);color:var(--ink);border:1px solid var(--hair);border-radius:6px;font:inherit;padding:11px 12px}.ln-workspace textarea{resize:vertical;line-height:1.65;min-height:82px}.ln-count{font:12px var(--mono);color:var(--dim);margin:18px 0}.ln-empty{grid-column:1/-1;padding:30px 0}.ln-breadcrumb{display:flex;flex-wrap:wrap;gap:10px;font-size:12px;color:var(--dim);margin-bottom:24px}.ln-breadcrumb a{color:var(--em)}
+.ln-workspace{margin:24px 0;color:var(--ink)}.ln-question{padding:20px 0;border-block:1px solid var(--line);display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start}.ln-question h2{font-size:19px;font-weight:550;line-height:1.5;margin:0 0 10px}.ln-question p{font-size:13px;color:var(--dim);line-height:1.7;margin:8px 0}.ln-modes{display:flex;gap:6px;flex-wrap:wrap}.ln-modes button{padding:8px 12px;font-size:12px}.ln-workflow-hint{border-left:2px solid var(--em);padding:4px 16px;margin:16px 0;font-size:13px;line-height:1.75;color:var(--dim)}.ln-actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin:18px 0}.ln-save{font-size:12px;color:var(--dim);margin:6px 0}.ln-notebook-top{display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding:14px 0;margin-bottom:20px}.ln-notebook-top h2{font:500 28px var(--display);margin:0}.ln-theory{display:flex;flex-wrap:wrap;gap:9px;font-size:12px}.ln-theory a{color:var(--em)}.ln-fields{display:grid;grid-template-columns:1fr 1fr;gap:16px}.ln-fields label:first-child{grid-column:1/-1}.ln-table-wrap{overflow:auto;margin:16px 0;border:1px solid var(--line);border-radius:6px}.ln-table{width:100%;border-collapse:collapse;font-size:12px;line-height:1.6;text-align:left}.ln-table th,.ln-table td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top;min-width:110px}.ln-table th{color:var(--dim);font-weight:500;background:var(--bg-2)}.ln-table td:first-child,.ln-table th:first-child{min-width:55px}.ln-table td span{display:block;white-space:normal}.ln-graph{background:var(--bg-2);border:1px solid var(--line);padding:16px;border-radius:8px;margin:20px 0}.ln-graph-controls{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}.ln-graph svg{width:100%;height:auto;display:block;overflow:visible}.ln-graph p{font-size:12px;color:var(--dim);line-height:1.6}.ln-record-summary{font-size:12px;line-height:1.8;color:var(--dim);padding:12px;border:1px solid var(--line);border-radius:6px}.ln-record-summary strong{color:var(--ink);font-weight:500}.ln-stage-iframe{width:100%;height:min(780px,80dvh);min-height:460px;border:1px solid var(--line);border-radius:8px;background:var(--bg-2)}.ln-dissection-help{font-size:13px;color:var(--dim);line-height:1.7;margin-bottom:15px}.ln-dissection-help a{color:var(--em)}
+@media(max-width:1050px){.ln-filters{grid-template-columns:repeat(4,1fr)}.ln-search{grid-column:1/-1}.ln-question{grid-template-columns:1fr}}
+@media(max-width:600px){.ln-filters{grid-template-columns:1fr 1fr}.ln-fields{grid-template-columns:1fr}.ln-fields label:first-child{grid-column:auto}.ln-graph-controls{grid-template-columns:1fr}.ln-question{padding-top:12px}.lb-stage{padding:12px}.ln-stage-iframe{min-height:540px}.ln-actions .bx-btn{flex-grow:1}.ln-workspace .ln-table{font-size:11px}}
+body main .ln-question h2{font:500 21px/1.5 var(--display);margin:0 0 8px;letter-spacing:-.4px}body main .lb-hd h1:focus{outline:none}body main .ln-question p{font-size:12px}.ln-question p:empty{display:none}
+/* New benches inherit the established bx surfaces, spacing and theme tokens. */
+.ex-bench { align-items:start; }
+.ex-view { min-width:0; overflow:hidden; }
+.ex-canvas { display:block;width:100%;height:auto;aspect-ratio:640/390; }
+.ex-side { min-width:0; }
+.ex-actions { display:flex;flex-direction:column;gap:8px; }
+.ex-actions:empty { display:none; }
+.ex-clock { margin:0;color:var(--dim);font-size:11px;line-height:1.5; }
+.ex-control { display:block; }
+.ex-label { display:block;margin-bottom:8px;font-size:12px;font-weight:600;color:var(--dim); }
+.ex-select { width:100%;min-height:42px;border:1px solid var(--hair);border-radius:9px;background:var(--bg-2);color:var(--ink);font:inherit;font-size:13px;padding:8px 10px; }
+.ex-control:focus-within .ex-label { color:var(--em); }
+.ex-select:focus-visible,.ex-bench button:focus-visible,.ex-bench input:focus-visible { outline:2px solid var(--em);outline-offset:3px; }
+.ex-readings { display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 15px;margin:19px 0;padding:16px 0;border-block:1px solid var(--hair);font-size:12px; }
+.ex-readings dt { color:var(--dim);overflow-wrap:anywhere; }
+.ex-readings dd { margin:0;font-family:ui-monospace,monospace;text-align:right;max-width:180px;overflow-wrap:anywhere;font-weight:600;color:var(--ink); }
+.ex-status { margin:0;padding:15px 19px;border-block:1px solid var(--hair);font-size:13px;line-height:1.6;color:var(--ink);min-height:72px; }
+.ex-assumption { margin-top:16px;line-height:1.6; }
+.ex-source { display:inline-block;margin-top:10px;font-size:12px;color:var(--em);text-underline-offset:3px; }
+.ex-graph { padding:10px; }
+.ex-graph svg { display:block;width:100%;height:auto; }
+.ex-graph text { fill:var(--dim);font-size:11px;font-family:ui-monospace,monospace; }
+.ex-axis { stroke:var(--hair);fill:none; }
+.ex-trace { stroke:var(--em);stroke-width:2.5;fill:none; }
+.ex-table-wrap { max-width:100%;overflow-x:auto;padding:16px; }
+.ex-punnett { width:100%;border-collapse:collapse;font-family:ui-monospace,monospace;font-size:13px; }
+.ex-punnett caption { text-align:left;color:var(--dim);padding-bottom:12px;font:12px/1.5 Inter,sans-serif; }
+.ex-punnett th,.ex-punnett td { padding:12px 9px;border:1px solid var(--hair);text-align:center; }
+.ex-punnett th { color:var(--dim);font-size:11px; }
+.ex-punnett td { color:var(--em); }
+.ex-sequence { padding:7px 18px;font-size:12px;line-height:1.7;overflow-wrap:anywhere; }
+.ex-sequence b { display:block;color:var(--dim);font-weight:500; }
+.ex-sequence code { color:var(--ink);word-break:break-word; }
+@media(max-width:760px){.ex-bench{grid-template-columns:1fr}.ex-status{padding:12px 14px}.ex-readings dd{max-width:160px}.ex-side .bx-chips{gap:7px}.ex-side .bx-btn{min-height:40px}.ex-table-wrap{padding:10px}}
+</style>
+<!-- BIO-LIBRARY:labs-style:END -->
 </head>
 <body data-page="labs">
 <div class="bg-veil" aria-hidden="true"></div>
@@ -449,100 +498,65 @@ body:not(.embed) header .btn.primary{background:var(--cy);color:var(--bg);border
 </script>
 <script id="page-js">
 /* ===== _labs.js ===== */
-/* ============================================================================
-   Biology Entelloq — THE LABS.
-   A registry + shell. Each lab is a self-contained module that registers itself
-   and is handed a host element to build into; the shell owns the picker, the
-   mounting, and the teardown so a lab never has to think about routing.
-   Every lab here is REAL and runnable — there are no teasers in this product.
-   ========================================================================== */
+/* Biology Entelloq: existing registry, extended with investigation furniture. */
 const LABS = (function () {
   const list = [];
+  const enrich = l => Object.assign({}, l, window.BIO_LAB_META?.[l.id] || {});
   return {
-    // FIRST registration wins. The bench modules are concatenated in a fixed order
-    // and several ids exist in more than one of them — _lab_bench.js holds the
-    // canonical, maintained copy of microscope / gel-electrophoresis /
-    // predator-prey / enzyme-kinetics, while the later, larger modules carry their
-    // own variants of those alongside benches that exist nowhere else. Pushing
-    // blindly would render duplicate cards; letting the LAST win would silently
-    // replace the maintained copies with unmaintained ones. So the earlier file
-    // keeps the id and the later files contribute only what is genuinely new.
-    register(id, def) {
-      if (list.some((l) => l.id === id)) return;
-      list.push(Object.assign({ id }, def));
-    },
-    all() { return list; },
-    get(id) { return list.find((l) => l.id === id); },
+    register(id, def) { if (!list.some(l => l.id === id)) list.push(Object.assign({ id }, def)); },
+    all() { return list.map(enrich); },
+    get(id) { const l = list.find(l => l.id === id); return l ? enrich(l) : null; }
   };
 })();
-
 (function () {
-  "use strict";
-  const $ = (s, r = document) => r.querySelector(s);
-  const app = document.getElementById("labsApp");
+  'use strict';
+  const app = document.getElementById('labsApp');
   if (!app) return;
-
-  let live = null;          // { dispose } of the mounted lab
-  function unmount() { if (live && live.dispose) { try { live.dispose(); } catch (e) {} } live = null; }
-
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  let live = null, notebook = null;
+  let filters = { query: '', category: '', difficulty: '', duration: '', type: '' };
+  function unmount() { notebook?.dispose(); notebook = null; try { live?.dispose?.(); } catch (e) { console.warn('Lab cleanup', e); } live = null; }
   function route() {
-    const id = location.hash.replace(/^#/, "");
-    const lab = LABS.get(id);
+    let id; try { id = decodeURIComponent(location.hash.slice(1)); } catch (_) { id = ''; }
     unmount();
-    if (lab) renderLab(lab); else renderIndex();
-    scrollTo({ top: 0, behavior: "smooth" });
+    const lab = LABS.get(id);
+    if (lab) renderLab(lab); else renderIndex(id);
     if (window.__observeReveals) window.__observeReveals();
   }
-  addEventListener("hashchange", route);
-
-  function renderIndex() {
-    const cards = LABS.all().map((l, i) => `
-      <a class="card lift reveal d${(i % 3) + 1}" href="#${l.id}" style="--lc:${l.color || "var(--em)"}">
-        <div class="glow"></div>
-        <div class="ico" style="background:color-mix(in srgb,${l.color || "var(--em)"} 13%,transparent);
-             color:${l.color || "var(--em)"};border-color:color-mix(in srgb,${l.color || "var(--em)"} 24%,transparent)">${l.icon || ""}</div>
-        <div class="lb-tag" style="color:${l.color || "var(--em)"}">${l.tag || "Lab"}</div>
-        <h3 class="h3" style="margin:4px 0 8px">${l.title}</h3>
-        <p>${l.blurb}</p>
-        <div class="lb-go" style="color:${l.color || "var(--em)"}">Open the bench →</div>
-      </a>`).join("");
-    app.innerHTML = `
-      <div class="wrap band">
-        <div class="reveal">
-          <div class="eyebrow">The benches</div>
-          <h1 class="h1" style="margin:16px 0 16px">Run the experiment<br><span class="grad">yourself.</span></h1>
-          <p class="lead" style="max-width:640px">Every bench here works: reagents, variables, instruments and results. Change something, and the biology answers back.</p>
-        </div>
-        <div class="grid g3" style="margin-top:38px">${cards}</div>
-      </div>`;
-  }
-
-  function renderLab(l) {
-    app.innerHTML = `
-      <div class="wrap band lb-page" style="--lc:${l.color || "var(--em)"}">
-        <a class="lb-back" href="#">← All benches</a>
-        <div class="lb-hd reveal">
-          <div class="lb-tag" style="color:${l.color || "var(--em)"}">${l.tag || "Lab"}</div>
-          <h1 class="h1" style="margin:8px 0 12px">${l.title}</h1>
-          <p class="lead" style="max-width:720px">${l.blurb}</p>
-        </div>
-        <div class="lb-stage" id="labStage"></div>
-      </div>`;
-    const host = $("#labStage");
-    try { live = l.build(host) || null; }
-    catch (e) {
-      host.innerHTML = `<div class="lb-err">This bench hit a problem starting up. <button class="btn ghost" onclick="location.reload()">Reload</button></div>`;
-      console.warn("lab failed: " + l.id, e);
+  function renderIndex(unknown) {
+    const all = LABS.all(), categories = [...new Set(all.map(l => l.category || l.tag))].sort();
+    app.innerHTML = `<div class="wrap band lb-library"><div class="eyebrow">The biology laboratory</div><h1 class="h1" style="margin:16px 0">Change something.<br><span class="grad">Understand what follows.</span></h1><p class="lead" style="max-width:700px">Start with a question. Build evidence with experiments, microscopy and virtual dissections. Your notebook follows every investigation.</p><div class="ln-index-meta"><span>${all.length} working investigations</span><span>Guided · Challenge · Sandbox</span><span>Saved on this device</span></div>${unknown ? '<p role="status">That bench could not be found. Choose an investigation below.</p>' : ''}<div class="ln-filters"><label class="ln-search">Find an experiment<input id="lab-search" type="search" placeholder="Try heart, plant food, or DNA bands" value="${esc(filters.query)}"></label><label>Category<select id="lab-category"><option value="">All fields</option>${categories.map(c=>`<option>${esc(c)}</option>`).join('')}</select></label><label>Level<select id="lab-difficulty"><option value="">All levels</option><option value="foundation">Foundation</option><option value="school">School</option><option value="advanced">Advanced</option></select></label><label>Time<select id="lab-duration"><option value="">Any duration</option><option value="10">Up to 10 min</option><option value="20">Up to 20 min</option><option value="40">Up to 40 min</option></select></label><label>Type<select id="lab-type"><option value="">All types</option>${['simulation','microscope','dissection','genetics','data','investigation'].map(t=>`<option value="${t}">${t[0].toUpperCase()+t.slice(1)}</option>`).join('')}</select></label></div><p id="lab-count" class="ln-count" role="status"></p><div class="grid g3" id="lab-cards"></div></div>`;
+    const controls = { query:'lab-search', category:'lab-category', difficulty:'lab-difficulty', duration:'lab-duration', type:'lab-type' };
+    Object.entries(controls).forEach(([k,id]) => { const e=document.getElementById(id); e.value=filters[k]; e.addEventListener(k==='query'?'input':'change',()=>{filters[k]=e.value;paint();}); });
+    function paint() {
+      const query=filters.query.trim().toLowerCase();
+      const shown=all.filter(l=>{
+        const searchable=[l.title,l.blurb,l.category,l.tag,...(l.aliases||[]),...(l.relatedTopics||[])].join(' ').toLowerCase();
+        return (!query || query.split(/\s+/).every(w=>searchable.includes(w))) && (!filters.category || (l.category||l.tag)===filters.category) && (!filters.difficulty || l.difficulty===filters.difficulty) && (!filters.duration || (l.minutes||15)<=Number(filters.duration)) && (!filters.type || (l.type||'simulation')===filters.type);
+      });
+      document.getElementById('lab-count').textContent=shown.length+' of '+all.length+' investigations';
+      document.getElementById('lab-cards').innerHTML=shown.length ? shown.map(l=>`<a class="card lift" href="#${esc(l.id)}" style="--lc:${l.color||'var(--em)'}"><div class="lb-tag">${esc(l.category||l.tag)}</div><h2 class="h3" style="margin:12px 0">${esc(l.title)}</h2><p>${esc(l.blurb)}</p><div class="ln-card-meta">${esc(l.difficulty||'school')} · ${l.minutes||15} min · ${esc(l.type||'simulation')}</div><div class="lb-go">Open the bench →</div></a>`).join('') : '<div class="ln-empty"><h2>No experiments match those filters.</h2><p>Try a broader term or another field.</p><button class="bx-btn" id="lab-clear">Show all experiments</button></div>';
+      document.getElementById('lab-clear')?.addEventListener('click',()=>{filters={query:'',category:'',difficulty:'',duration:'',type:''};renderIndex();document.getElementById('lab-search').focus();});
     }
+    paint();
   }
-
-  // Defer the first route by a microtask: the bench modules are concatenated AFTER
-  // this shell, so they have not registered yet at this point in synchronous
-  // execution. A microtask runs once the whole script block has finished, by which
-  // time every LABS.register() call has landed.
-  queueMicrotask(route);
+  function renderLab(l) {
+    app.innerHTML=`<div class="wrap band lb-page" style="--lc:${l.color||'var(--em)'}"><nav class="ln-breadcrumb" aria-label="Breadcrumb"><a href="#">Lab</a><span>/</span><span>${esc(l.category||l.tag)}</span><span>/</span><span aria-current="page">${esc(l.title)}</span></nav><div class="lb-hd"><div class="lb-tag">${esc(l.type||'simulation')} · ${esc(l.difficulty||'school')} · ${l.minutes||15} min</div><h1 class="h1" tabindex="-1" style="margin:12px 0">${esc(l.title)}</h1><p class="lead" style="max-width:720px">${esc(l.blurb)}</p></div><div id="lab-workflow"></div><div class="lb-stage" id="labStage"></div><div id="lab-notebook"></div></div>`;
+    const host=document.getElementById('labStage');
+    try {
+      live=l.build(host)||{};
+      notebook=window.BioNotebook?.mount(l,host,live,document.getElementById('lab-workflow'),document.getElementById('lab-notebook'));
+    } catch(e) {
+      host.innerHTML='<div class="lb-err">This bench could not start. <button class="bx-btn" id="lab-retry">Try again</button><a href="#">Choose another lab</a></div>';
+      document.getElementById('lab-retry').onclick=route;
+      console.error('Lab failed: '+l.id,e);
+    }
+    app.querySelector('h1').focus({preventScroll:true});
+  }
+  addEventListener('hashchange',route);
+  addEventListener('pagehide',unmount);
+  if(document.readyState==='loading') addEventListener('DOMContentLoaded',route,{once:true}); else queueMicrotask(route);
 })();
-
 
 /* ===== _lab_bench.js ===== */
 /* ============================================================================
@@ -558,11 +572,13 @@ function LB_slider(host, label, min, max, val, step, fmt, on) {
   const g = LB_el("div", "bx-grp");
   g.innerHTML = `<label>${label}</label><div class="bx-row"><input type="range" class="bx-slider" min="${min}" max="${max}" value="${val}" step="${step}"><span class="bx-val"></span></div>`;
   const i = g.querySelector("input"), o = g.querySelector(".bx-val");
+  i.setAttribute("aria-label", label);
   const upd = () => { o.textContent = fmt(+i.value); on(+i.value); };
   i.addEventListener("input", upd); host.appendChild(g); upd(); return i;
 }
 function LB_canvas(host, ratio) {
   const c = LB_el("canvas"); host.appendChild(c);
+  c.setAttribute("role", "img"); c.setAttribute("aria-label", "Interactive experiment diagram. Measurements are available in the adjacent text readout.");
   const ctx = c.getContext("2d"); let W, H, dpr;
   function size() {
     dpr = Math.min(devicePixelRatio || 1, 2);
@@ -580,7 +596,7 @@ function LB_css(v) { return getComputedStyle(document.documentElement).getProper
 LABS.register("microscope", {
   title: "Virtual Microscope", tag: "Microscopy", color: "var(--cy)",
   icon: '<svg viewBox="0 0 24 24" fill="none"><path d="M6 18h9M9 18l-1-3M11 6l3 5-3 2-3-5zM13 4l2 1M5 21h14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-  blurb: "Four real specimen slides at 40x to 1000x. Change the objective, hunt for focus, add a stain — the field of view narrows and the scale bar recalculates exactly as it would on the bench.",
+  blurb: "Explore illustrated specimen slides at 40x to 1000x. Change objective, move the stage, find focus and annotate structures against a calibrated model scale bar.",
   build(host) {
     const wrap = LB_el("div", "bx"); host.appendChild(wrap);
     const view = LB_el("div", "bx-view"); const side = LB_el("div", "bx-side");
@@ -597,7 +613,8 @@ LABS.register("microscope", {
     // objective itself — 4x/10x/40x/100x are the lenses that exist on a turret;
     // a "1000x objective" does not.
     const MAGS = [40, 100, 400, 1000];
-    let slide = "onion", mag = 100, focus = 50, light = 70, stained = false, raf, t = 0;
+    let slide = "onion", mag = 100, focus = 50, light = 70, stained = false, raf, t = 0, stageX = 0, stageY = 0;
+    const annotations = [];
 
     // Declared BEFORE the sliders: LB_slider fires its callback immediately to show
     // the initial value, and those callbacks call read() — referencing these after
@@ -631,6 +648,26 @@ LABS.register("microscope", {
 
     LB_slider(side, "Fine focus", 0, 100, 50, 1, (v) => (Math.abs(v - 50) < 6 ? "sharp" : Math.abs(v - 50) < 20 ? "soft" : "blurred"), (v) => { focus = v; read(); });
     LB_slider(side, "Condenser / light", 20, 100, 70, 1, (v) => v + "%", (v) => { light = v; read(); });
+    LB_slider(side, "Stage X position", -200, 200, 0, 5, (v) => v + " µm", (v) => { stageX = v; });
+    LB_slider(side, "Stage Y position", -200, 200, 0, 5, (v) => v + " µm", (v) => { stageY = v; });
+    const annotationLabel = LB_el("label", "bx-grp");
+    annotationLabel.textContent = "Observation label · then click the specimen";
+    const annotationInput = LB_el("input", "ex-select"); annotationInput.type = "text"; annotationInput.maxLength = 60;
+    annotationInput.placeholder = "e.g. nucleus"; annotationInput.setAttribute("aria-label", "Microscope observation label");
+    annotationLabel.appendChild(annotationInput); side.appendChild(annotationLabel);
+    const annotationList = LB_el("div", "bx-note"); side.appendChild(annotationList);
+    function markObservation(x,y) {
+      if (!annotationInput.value.trim() || annotations.length >= 8) return;
+      const R = Math.min(cv.W, cv.H) * .44, u = R * 2 / fovMicrons();
+      if (Math.hypot(x * cv.W - cv.W/2, y * cv.H - cv.H/2) > R) return;
+      annotations.push({x:(x * cv.W - cv.W/2)/u + stageX, y:(y * cv.H - cv.H/2)/u + stageY, label: annotationInput.value.trim(), slide, mag});
+      annotationList.textContent = annotations.map((a,i) => (i + 1) + ". " + a.label + " (" + a.mag + "x)").join(" · ");
+    }
+    cv.c.addEventListener("click", (event) => {const r=cv.c.getBoundingClientRect();markObservation((event.clientX-r.left)/r.width,(event.clientY-r.top)/r.height);});
+    const markCentre = LB_el("button", "bx-btn", "Mark structure at field centre");
+    markCentre.addEventListener("click",()=>markObservation(.5,.5));side.appendChild(markCentre);
+    const clearAnnotations = LB_el("button", "bx-btn", "Clear observation markers");
+    clearAnnotations.addEventListener("click", () => { annotations.length = 0; annotationList.textContent = ""; }); side.appendChild(clearAnnotations);
 
     const stainBtn = LB_el("button", "bx-btn", "Apply stain");
     stainBtn.addEventListener("click", () => {
@@ -660,6 +697,7 @@ LABS.register("microscope", {
         : (s.stain !== "none" && !stained)
           ? `Structure is visible but low-contrast. ${s.stain[0].toUpperCase() + s.stain.slice(1)} would stain it.`
           : `Well resolved. Total magnification is objective x10 eyepiece; the scale bar below is measured, not decorative.`;
+      note.textContent += " Illustrated specimens; the model field is 4 mm at 40×. Resolution thresholds and stain contrast are simplified optical assumptions.";
     }
 
     function draw() {
@@ -681,10 +719,12 @@ LABS.register("microscope", {
       // Pixels per micron, straight off the same field of view the scale bar is
       // drawn from. Anything sized through u is measurable against that bar.
       const u = (R * 2) / fovMicrons();
+      ctx.save(); ctx.translate(-stageX * u, -stageY * u);
       if (slide === "onion") drawOnion(ctx, cx, cy, R, u, stained);
       else if (slide === "blood") drawBlood(ctx, cx, cy, R, u, stained, resolved);
       else if (slide === "stomata") drawStomata(ctx, cx, cy, R, u);
       else drawBacteria(ctx, cx, cy, R, u, stained, resolved);
+      ctx.restore();
       ctx.filter = "none";
       ctx.restore();
       // eyepiece surround + scale bar
@@ -696,6 +736,7 @@ LABS.register("microscope", {
       ctx.beginPath(); ctx.moveTo(cx - R + 16, cy + R - 18); ctx.lineTo(cx - R + 16 + px, cy + R - 18); ctx.stroke();
       ctx.fillStyle = LB_css("--ink"); ctx.font = "600 12px ui-monospace,monospace"; ctx.textAlign = "left";
       ctx.fillText(barUm >= 1000 ? (barUm / 1000) + " mm" : barUm + " µm", cx - R + 16, cy + R - 26);
+      annotations.forEach((a, i) => { if (a.slide !== slide) return; const x = cx + (a.x - stageX) * u, y = cy + (a.y - stageY) * u; if (Math.hypot(x - cx, y - cy) > R - 10) return; ctx.strokeStyle = LB_css("--amber"); ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(x, y, 10, 0, 6.28); ctx.stroke(); ctx.fillStyle = LB_css("--ink"); ctx.textAlign = "center"; ctx.font = "600 12px Inter,sans-serif"; ctx.fillText(String(i + 1), x, y + 4); });
       raf = requestAnimationFrame(draw);
     }
     function niceBar(x) { const p = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000]; return p.reduce((a, b) => Math.abs(b - x) < Math.abs(a - x) ? b : a); }
@@ -795,7 +836,7 @@ LABS.register("microscope", {
       }
     }
     read(); draw();
-    return { dispose() { cancelAnimationFrame(raf); cv.off(); } };
+    return { dispose() { cancelAnimationFrame(raf); cv.off(); }, snapshot() { return {variables: {Slide:SLIDES[slide].n, 'Total magnification (×)':mag, 'Focus setting':focus, 'Light (%)':light, 'Stage X (µm)':stageX, 'Stage Y (µm)':stageY, Stained:stained?'Yes':'No'}, measurements: {'Field of view (µm)':fovMicrons(), 'Focus error (µm)':focusErrUm(), 'Observation markers':annotations.length}, stage:'Observing specimen', actions:annotations.map(a=>a.label)}; } };
   },
 });
 
@@ -803,7 +844,7 @@ LABS.register("microscope", {
 LABS.register("gel-electrophoresis", {
   title: "Gel Electrophoresis", tag: "Molecular", color: "var(--indigo)",
   icon: '<svg viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="18" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M8 6v2M12 6v2M16 6v2M8 12h1M12 14h1M16 11h1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>',
-  blurb: "Load a real agarose gel, set the voltage and run it. Small fragments race ahead, migration falls off logarithmically with size — then read an unknown off the ladder.",
+  blurb: "Load a virtual agarose gel, set the voltage and separate a fictional DNA sample. Compare its migration with a reference ladder to estimate fragment size.",
   build(host) {
     const wrap = LB_el("div", "bx"); host.appendChild(wrap);
     const view = LB_el("div", "bx-view"); const side = LB_el("div", "bx-side");
@@ -818,7 +859,7 @@ LABS.register("gel-electrophoresis", {
       { n: "Sample B", frags: [UNKNOWN] },
       { n: "Empty", frags: [] },
     ];
-    let volts = 90, minutes = 0, running = false, raf, loaded = false;
+    let volts = 90, minutes = 0, running = false, raf, loaded = false, voltMinutes = 0, lastFrame = performance.now();
 
     LB_slider(side, "Voltage", 40, 150, 90, 5, (v) => v + " V", (v) => { volts = v; });
     const loadBtn = LB_el("button", "bx-btn pri", "Load the wells");
@@ -826,14 +867,17 @@ LABS.register("gel-electrophoresis", {
     const resetBtn = LB_el("button", "bx-btn", "Reset");
     const row = LB_el("div", "bx-chips"); row.appendChild(loadBtn); row.appendChild(runBtn); row.appendChild(resetBtn);
     side.appendChild(row);
+    const stepBtn = LB_el("button", "bx-btn", "Advance 10 model minutes"); stepBtn.disabled = true; side.appendChild(stepBtn);
+    stepBtn.addEventListener("click", () => { running = false; advance(10); runBtn.textContent = "Run the gel"; upd(); });
+    side.appendChild(LB_el("p", "bx-note", "Teaching model: migration decreases linearly with log₁₀(fragment size) over this range. Voltage acts over elapsed time; changing it does not move earlier bands retroactively. Fixed gel concentration and temperature; a model separation, not a wet-lab protocol."));
     const readout = LB_el("div", "bx-read"); side.appendChild(readout);
     const guessWrap = LB_el("div", "bx-grp"); side.appendChild(guessWrap);
     const verdict = LB_el("div", "bx-verdict"); verdict.style.display = "none"; side.appendChild(verdict);
 
-    loadBtn.addEventListener("click", () => { loaded = true; runBtn.disabled = false; loadBtn.disabled = true; upd(); });
+    loadBtn.addEventListener("click", () => { loaded = true; runBtn.disabled = false; stepBtn.disabled = false; loadBtn.disabled = true; upd(); });
     runBtn.addEventListener("click", () => { running = !running; runBtn.textContent = running ? "Pause" : "Run the gel"; });
     resetBtn.addEventListener("click", () => {
-      minutes = 0; running = false; loaded = false; loadBtn.disabled = false;
+      minutes = 0; voltMinutes = 0; running = false; loaded = false; loadBtn.disabled = false; stepBtn.disabled = true;
       runBtn.disabled = true; runBtn.textContent = "Run the gel"; verdict.style.display = "none"; upd();
     });
 
@@ -852,18 +896,26 @@ LABS.register("gel-electrophoresis", {
     });
     guessWrap.appendChild(gchips);
 
-    // real physics: distance ∝ voltage × time × log-inverse of fragment size
+    // Empirical-style teaching calibration: distance is linear in log10(size).
+    // Integrate voltage exposure so changing voltage affects subsequent motion.
     function migration(bp) {
-      const mobility = 1 / Math.log10(bp);          // small fragments move further
-      return Math.min(1, (volts / 100) * (minutes / 60) * mobility * 1.55);
+      const mobility = Math.max(0, (4.3 - Math.log10(bp)) / 2);
+      return Math.min(1.1, (voltMinutes / 6000) * mobility);
+    }
+    function advance(dt) {
+      const elapsed = Math.max(0, Math.min(dt, 90 - minutes));
+      minutes += elapsed; voltMinutes += volts * elapsed;
+      if (minutes >= 90) { running = false; runBtn.textContent = "Run the gel"; }
     }
     function upd() {
+      gchips.querySelectorAll("button").forEach(b => { b.disabled = !loaded || minutes < 8; });
       readout.innerHTML = !loaded
         ? "Wells empty. Load the samples to begin."
         : `Running at <b>${volts} V</b> for <b>${minutes.toFixed(0)} min</b>. ${minutes < 8 ? "Bands are still in the wells." : minutes > 55 ? "Careful — the smallest fragments are running off the end." : "Bands separating."}`;
     }
     function draw() {
-      if (running) { minutes += 0.25; if (minutes > 90) { minutes = 90; running = false; runBtn.textContent = "Run the gel"; } upd(); }
+      const now = performance.now(), dt = Math.min(.1, (now - lastFrame) / 1000); lastFrame = now;
+      if (running) { advance(dt * 6); upd(); }
       const { ctx, W, H } = cv; ctx.clearRect(0, 0, W, H);
       const padX = 26, padTop = 30, gelH = H - padTop - 24, laneW = (W - padX * 2) / LANES.length;
       // gel slab
@@ -884,6 +936,7 @@ LABS.register("gel-electrophoresis", {
         ctx.fillText(L.n, x, padTop - 8);
         if (!loaded) return;
         L.frags.forEach((bp) => {
+          if (migration(bp) >= 1) return;
           const y = padTop + 12 + migration(bp) * (gelH - 26);
           // The bands are the one thing this bench asks you to read, so they take
           // their colour from the theme: indigo for the ladder, emerald for the
@@ -906,7 +959,7 @@ LABS.register("gel-electrophoresis", {
       raf = requestAnimationFrame(draw);
     }
     upd(); draw();
-    return { dispose() { cancelAnimationFrame(raf); cv.off(); } };
+    return { dispose() { cancelAnimationFrame(raf); cv.off(); }, snapshot() { return {variables: {'Voltage (V)':volts, 'Samples loaded':loaded?'Yes':'No'}, measurements: {'Run time (model min)':Number(minutes.toFixed(2)), 'Voltage exposure (V·min)':Number(voltMinutes.toFixed(2)), 'Sample B migration (% gel)':loaded?Number((migration(UNKNOWN)*100).toFixed(2)):0}, stage:!loaded?'Load the wells':running?'Separating DNA':'Compare DNA bands'}; } };
   },
 });
 
@@ -914,7 +967,7 @@ LABS.register("gel-electrophoresis", {
 LABS.register("predator-prey", {
   title: "Predator & Prey", tag: "Ecology", color: "var(--amber)",
   icon: '<svg viewBox="0 0 24 24" fill="none"><path d="M3 17c3-6 6 2 9-4s6 3 9-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="6" cy="7" r="1.6" fill="currentColor"/><circle cx="17" cy="15" r="1.6" fill="currentColor"/></svg>',
-  blurb: "The Lotka–Volterra cycle, running live. Push the birth and predation rates and watch the two populations chase each other — the predator peak always lagging the prey peak.",
+  blurb: "Set starting populations, food supply and predation pressure. Follow a predator–prey model through time and compare abundant food with a limited carrying capacity.",
   build(host) {
     const wrap = LB_el("div", "bx"); host.appendChild(wrap);
     const view = LB_el("div", "bx-view"); const side = LB_el("div", "bx-side");
@@ -922,16 +975,26 @@ LABS.register("predator-prey", {
     const cv = LB_canvas(view, 0.62);
 
     let a = 0.9, b = 0.9, c = 0.6, d = 0.9;   // prey birth, predation, pred death, conversion
-    let prey = 40, pred = 9, raf, hist = [], t = 0;
+    let prey = 40, pred = 9, initialPrey = 40, initialPred = 9, raf, hist = [[40,9,0]], t = 0, running = false, foodLimited = false, capacity = 180, lastFrame = performance.now();
     LB_slider(side, "Prey birth rate", 20, 200, 90, 5, (v) => (v / 100).toFixed(2), (v) => { a = v / 100; });
     LB_slider(side, "Predation rate", 20, 200, 90, 5, (v) => (v / 100).toFixed(2), (v) => { b = v / 100; });
     LB_slider(side, "Predator death rate", 20, 200, 60, 5, (v) => (v / 100).toFixed(2), (v) => { c = v / 100; });
+    LB_slider(side, "Starting prey", 5, 150, 40, 1, (v) => String(v), (v) => { initialPrey = v; });
+    LB_slider(side, "Starting predators", 1, 80, 9, 1, (v) => String(v), (v) => { initialPred = v; });
+    LB_slider(side, "Food-limited carrying capacity", 30, 300, 180, 5, (v) => v + " prey", (v) => { capacity = v; });
+    const foodLabel = LB_el("label", "bx-note");
+    const foodToggle = LB_el("input"); foodToggle.type = "checkbox"; foodToggle.addEventListener("change", () => { foodLimited = foodToggle.checked; });
+    foodLabel.append(foodToggle, document.createTextNode(" Limit prey growth by food supply")); side.appendChild(foodLabel);
+    const runBtn = LB_el("button", "bx-btn", "Run populations");
+    runBtn.addEventListener("click", () => { running = !running; runBtn.textContent = running ? "Pause populations" : "Run populations"; }); side.appendChild(runBtn);
+    const stepBtn = LB_el("button", "bx-btn", "Advance 1 model time unit");
+    stepBtn.addEventListener("click", () => { for (let i = 0; i < 100; i++) step(.01); }); side.appendChild(stepBtn);
     const resetBtn = LB_el("button", "bx-btn", "Reset populations");
-    resetBtn.addEventListener("click", () => { prey = 40; pred = 9; hist = []; });
+    resetBtn.addEventListener("click", () => { prey = initialPrey; pred = initialPred; t = 0; hist = [[prey,pred,0]]; running = false; runBtn.textContent = "Run populations"; });
     side.appendChild(resetBtn);
     const readout = LB_el("div", "bx-read"); side.appendChild(readout);
     const note = LB_el("div", "bx-note",
-      "Prey grow when predators are scarce; predators grow only after prey are plentiful, so their peak always lags. That lag is why the two curves are permanently out of phase — the classic Lotka–Volterra oscillation.");
+      "Illustrative Lotka–Volterra model with an optional logistic food limit. Time is in model units and populations are continuous approximations. Predators typically peak after prey; limited food can damp the cycles. Tiny positive numerical floors avoid unstable steps, so extinction is not represented.");
     side.appendChild(note);
 
     function step(dt) {
@@ -942,12 +1005,14 @@ LABS.register("predator-prey", {
       // symplectic for Lotka–Volterra, so the cycle holds its amplitude instead of
       // spiralling outward the way the plain explicit step did. Only the extinction
       // floors remain.
-      prey = Math.max(0.4, prey + (a * prey - b * prey * pred * 0.02) * dt);
+      prey = Math.max(0.4, prey + (a * prey * (foodLimited ? 1 - prey / capacity : 1) - b * prey * pred * 0.02) * dt);
       pred = Math.max(0.2, pred + (d * b * prey * pred * 0.02 * 0.35 - c * pred) * dt);
-      hist.push([prey, pred]); if (hist.length > 460) hist.shift();
+      t += dt;
+      hist.push([prey, pred, t]); if (hist.length > 460) hist.shift();
     }
     function draw() {
-      if (!LB_REDUCED) { for (let i = 0; i < 3; i++) step(0.016); t += 0.016; } else step(0.05);
+      const now = performance.now(), dt = Math.min(.1, (now - lastFrame) / 1000); lastFrame = now;
+      if (running) { for (let i = 0; i < 5; i++) step(dt * .6); }
       const { ctx, W, H } = cv; ctx.clearRect(0, 0, W, H);
       const pad = 30, gw = W - pad * 2, gh = H - pad * 2;
       ctx.strokeStyle = LB_css("--line"); ctx.lineWidth = 1;
@@ -956,7 +1021,7 @@ LABS.register("predator-prey", {
       function series(idx, col) {
         ctx.strokeStyle = col; ctx.lineWidth = 2.2; ctx.beginPath();
         hist.forEach((h, i) => {
-          const x = pad + (i / 460) * gw, y = H - pad - (h[idx] / maxV) * gh;
+          const x = pad + ((h[2]-hist[0][2]) / Math.max(1,t-hist[0][2])) * gw, y = H - pad - (h[idx] / maxV) * gh;
           i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
         });
         ctx.stroke();
@@ -965,11 +1030,13 @@ LABS.register("predator-prey", {
       ctx.font = "600 11px ui-monospace,monospace"; ctx.textAlign = "left";
       ctx.fillStyle = LB_css("--em"); ctx.fillText("prey", pad + 6, pad + 4);
       ctx.fillStyle = LB_css("--rose"); ctx.fillText("predators", pad + 50, pad + 4);
+      ctx.fillStyle = LB_css("--dim"); ctx.textAlign = "center"; ctx.fillText("model time "+hist[0][2].toFixed(1)+" → "+t.toFixed(1), W / 2, H - 8);
+      ctx.textAlign = "right"; ctx.fillText(String(Math.round(maxV)),pad-4,pad+10); ctx.fillText("0",pad-4,H-pad);
       readout.innerHTML = `Prey <b>${prey.toFixed(0)}</b> · Predators <b>${pred.toFixed(0)}</b>`;
       raf = requestAnimationFrame(draw);
     }
     draw();
-    return { dispose() { cancelAnimationFrame(raf); cv.off(); } };
+    return { dispose() { cancelAnimationFrame(raf); cv.off(); }, snapshot() { return {variables: {'Prey birth rate':a, 'Predation rate':b, 'Predator death rate':c, 'Starting prey':initialPrey, 'Starting predators':initialPred, 'Food limit':foodLimited?'Logistic':'Unlimited', 'Carrying capacity (prey)':capacity}, measurements: {'Prey population':Number(prey.toFixed(2)), 'Predator population':Number(pred.toFixed(2)), 'Elapsed model time':Number(t.toFixed(2))}, stage:running?'Population dynamics running':'Population dynamics paused'}; } };
   },
 });
 
@@ -977,7 +1044,7 @@ LABS.register("predator-prey", {
 LABS.register("enzyme-kinetics", {
   title: "Enzyme Kinetics", tag: "Molecular", color: "var(--em)",
   icon: '<svg viewBox="0 0 24 24" fill="none"><path d="M4 18c4 0 4-9 8-9s4 6 8 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="7" cy="9" r="1.6" fill="currentColor"/></svg>',
-  blurb: "Drive a real enzyme with temperature, pH and substrate. Find its optimum — then cook it past 55 °C and watch the denaturation refuse to reverse, exactly as broken tertiary structure does.",
+  blurb: "Investigate an enzyme model with temperature, pH, substrate and enzyme concentration. Compare inhibition mechanisms and separate saturation from loss of enzyme activity.",
   build(host) {
     const wrap = LB_el("div", "bx"); host.appendChild(wrap);
     const view = LB_el("div", "bx-view"); const side = LB_el("div", "bx-side");
@@ -985,7 +1052,7 @@ LABS.register("enzyme-kinetics", {
     const cv = LB_canvas(view, 0.62);
 
     const ENZ = { pepsin: { n: "Pepsin", pH: 2, t: 37 }, amylase: { n: "Amylase", pH: 7, t: 37 }, trypsin: { n: "Trypsin", pH: 8, t: 37 } };
-    let enz = "amylase", temp = 37, pH = 7, sub = 50, denatured = false, raf;
+    let enz = "amylase", temp = 37, pH = 7, sub = 50, enzymeConcentration = 1, inhibitor = "none", inhibitorConcentration = 20, denatured = false, raf;
 
     const eg = LB_el("div", "bx-grp"); eg.innerHTML = "<label>Enzyme</label>";
     const ec = LB_el("div", "bx-chips");
@@ -998,6 +1065,12 @@ LABS.register("enzyme-kinetics", {
     LB_slider(side, "Temperature", 0, 80, 37, 1, (v) => v + " °C", (v) => { temp = v; if (v > 55) denatured = true; });
     LB_slider(side, "pH", 1, 14, 7, 1, (v) => "pH " + v, (v) => { pH = v; });
     LB_slider(side, "Substrate concentration", 0, 100, 50, 1, (v) => v + " mM", (v) => { sub = v; });
+    LB_slider(side, "Relative enzyme concentration", .1, 2, 1, .1, (v) => v.toFixed(1) + "×", (v) => { enzymeConcentration = v; });
+    const inhibitorLabel = LB_el("label", "bx-grp"); inhibitorLabel.textContent = "Inhibition model";
+    const inhibitorSelect = LB_el("select", "ex-select"); inhibitorSelect.setAttribute("aria-label", "Inhibition model");
+    [["none", "No inhibitor"],["competitive", "Competitive"],["noncompetitive", "Pure noncompetitive"]].forEach(([value,label]) => { const option = LB_el("option", "", label); option.value = value; inhibitorSelect.appendChild(option); });
+    inhibitorSelect.addEventListener("change", () => { inhibitor = inhibitorSelect.value; }); inhibitorLabel.appendChild(inhibitorSelect); side.appendChild(inhibitorLabel);
+    LB_slider(side, "Inhibitor concentration", 0, 100, 20, 5, (v) => v + " µM", (v) => { inhibitorConcentration = v; });
     const resetBtn = LB_el("button", "bx-btn", "Fresh enzyme sample");
     // Fresh enzyme goes into whatever buffer is already in the water bath, so if the
     // tube is still above 55 °C it denatures on the way in. Clearing the flag without
@@ -1012,8 +1085,10 @@ LABS.register("enzyme-kinetics", {
       const e = ENZ[enz];
       const tf = Math.exp(-Math.pow(temp - e.t, 2) / 260);      // bell around optimum
       const pf = Math.exp(-Math.pow(pH - e.pH, 2) / 3.2);
-      const sf = sub / (18 + sub);                               // Michaelis–Menten
-      return tf * pf * sf * 100;
+      const alpha = 1 + inhibitorConcentration / 20;
+      const km = 18 * (inhibitor === "competitive" ? alpha : 1);
+      const vmax = 100 * enzymeConcentration / (inhibitor === "noncompetitive" ? alpha : 1);
+      return tf * pf * (sub / (km + sub)) * vmax;
     }
     function draw() {
       const { ctx, W, H } = cv; ctx.clearRect(0, 0, W, H);
@@ -1022,14 +1097,19 @@ LABS.register("enzyme-kinetics", {
       ctx.beginPath(); ctx.moveTo(pad, pad); ctx.lineTo(pad, H - pad); ctx.lineTo(W - pad, H - pad); ctx.stroke();
       ctx.fillStyle = LB_css("--faint"); ctx.font = "600 10.5px ui-monospace,monospace";
       ctx.textAlign = "center"; ctx.fillText("temperature (°C)", W / 2, H - 10);
+      ctx.textAlign = "left"; ctx.fillText("rate (arbitrary units)", pad + 4, pad - 12);
+      ctx.textAlign = "right"; [0,100,200].forEach(v=>ctx.fillText(String(v),pad-5,H-pad-(v/200)*gh+4));
       // rate-vs-temperature curve for the current pH & substrate
       const e = ENZ[enz];
       ctx.strokeStyle = LB_css("--em"); ctx.lineWidth = 2.4; ctx.beginPath();
       for (let x = 0; x <= 80; x++) {
         const tf = Math.exp(-Math.pow(x - e.t, 2) / 260);
         const pf = Math.exp(-Math.pow(pH - e.pH, 2) / 3.2);
-        const v = (x > 55 ? 0 : tf * pf * (sub / (18 + sub)) * 100);
-        const px = pad + (x / 80) * gw, py = H - pad - (v / 100) * gh;
+        const alpha = 1 + inhibitorConcentration / 20;
+        const km = 18 * (inhibitor === "competitive" ? alpha : 1);
+        const vmax = 100 * enzymeConcentration / (inhibitor === "noncompetitive" ? alpha : 1);
+        const v = (x > 55 ? 0 : tf * pf * (sub / (km + sub)) * vmax);
+        const px = pad + (x / 80) * gw, py = H - pad - (v / 200) * gh;
         x ? ctx.lineTo(px, py) : ctx.moveTo(px, py);
       }
       ctx.stroke();
@@ -1044,22 +1124,22 @@ LABS.register("enzyme-kinetics", {
       ctx.fillText("denaturation", pad + (56 / 80) * gw, pad + 12);
       // current operating point
       const r = rate();
-      const mx = pad + (temp / 80) * gw, my = H - pad - (r / 100) * gh;
+      const mx = pad + (temp / 80) * gw, my = H - pad - (r / 200) * gh;
       ctx.fillStyle = denatured ? LB_css("--rose") : LB_css("--amber");
       ctx.beginPath(); ctx.arc(mx, my, 6, 0, 6.28); ctx.fill();
       readout.innerHTML = `Reaction rate <b>${r.toFixed(1)}</b> arbitrary units${denatured ? " — <b style='color:var(--rose)'>denatured</b>" : ""}`;
       note.textContent = denatured
-        ? "Above ~55 °C the hydrogen and ionic bonds holding the tertiary structure gave way. The active site's shape is gone — and cooling it back down does NOT restore it. Take a fresh sample."
+        ? "This sample crossed the model's illustrative 55 °C irreversible-denaturation threshold. Cooling does not restore its activity here. Actual denaturation depends on the enzyme, exposure time and conditions; use a fresh virtual sample."
         : Math.abs(temp - e.t) < 5 && Math.abs(pH - ENZ[enz].pH) < 1
           ? `Close to ${ENZ[enz].n}'s optimum (${e.t} °C, pH ${ENZ[enz].pH}). Raising substrate now gives diminishing returns — the active sites are saturating.`
-          : `${ENZ[enz].n} works best near ${e.t} °C and pH ${ENZ[enz].pH}. Away from that, fewer collisions have the right energy and geometry.`;
+          : `${ENZ[enz].n} has an illustrative optimum near ${e.t} °C and pH ${ENZ[enz].pH} in this model.`;
+      note.textContent += " Assumptions: Michaelis–Menten response, Km = 18 mM, inhibitor Ki = 20 µM, fixed sample volume. Competitive inhibition raises apparent Km; pure noncompetitive inhibition lowers Vmax. These constants and curves are teaching approximations.";
       raf = requestAnimationFrame(draw);
     }
     draw();
-    return { dispose() { cancelAnimationFrame(raf); cv.off(); } };
+    return { dispose() { cancelAnimationFrame(raf); cv.off(); }, snapshot() { return {variables: {Enzyme:ENZ[enz].n, 'Temperature (°C)':temp, pH, 'Substrate (mM)':sub, 'Relative enzyme concentration':enzymeConcentration, Inhibition:inhibitor, 'Inhibitor (µM)':inhibitorConcentration}, measurements: {'Reaction rate (arbitrary units)':Number(rate().toFixed(3)), 'Active sample':denatured?'Denatured':'Active'}, stage:denatured?'Sample denatured':'Measuring reaction rate'}; } };
   },
 });
-
 
 /* ===== _lab_ecology.js ===== */
 /* ============================================================================
@@ -2330,6 +2410,15 @@ LABS.register("enzyme-kinetics", {
       raf = requestAnimationFrame(frame);
 
       return {
+        snapshot() {
+          return {
+            variables: { 'Bark lightness': state.env, 'Predation pressure': state.pred,
+              'Mutation probability per allele': state.mu, 'Starting dark allele frequency': +sP0.value },
+            measurements: { 'Generation': state.gen, 'Dark allele frequency (%)': state.p * 100,
+              'Population (beetles)': state.pop.length, 'Killed last generation': state.killed },
+            stage: state.phase
+          };
+        },
         dispose() {
           cancelAnimationFrame(raf);
           ro.disconnect();
@@ -2342,7 +2431,6 @@ LABS.register("enzyme-kinetics", {
     }
   });
 })();
-
 
 /* ===== _lab_molecular.js ===== */
 /* ============================================================================
@@ -5429,489 +5517,36 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
 })();</script>
 
 <script id="atmo-js">
-/* ============================================================================
-   BIOLOGY ENTELLOQ — THE LIVING FIELD.
-
-   Physics Entelloq puts a sheet of spacetime behind the product and bends it
-   around the cursor. This is the biological answer to that, and it is not the
-   same idea in different colours: matter is passive and gets curved, whereas
-   tissue is ALIVE and reaches toward what it wants. So the field here is a thick
-   section of living tissue seen down a microscope, and the cursor is a nutrient
-   source. Cells near it swell, their membranes brighten, and the capillary
-   network grows toward it — chemotaxis, the oldest behaviour there is.
-
-   Four things are happening at once in the shader:
-     · a Worley cell field (membranes are the F2-F1 ridge — the real thing under
-       phase contrast) in two parallax layers, so the section has thickness
-     · a domain warp driven by slow fbm, because no real tissue is on a grid
-     · ridged fbm capillaries that bias their flow toward the cursor
-     · a breath — everything respires at about 7 cycles a minute, which is why
-       it reads as alive rather than as a screensaver on a loop
-
-   SELF-INSTALLING. Dropping this one <script> onto a page is the whole install:
-   it makes its own canvas, injects its own CSS, picks its colour from
-   <body data-page>, and follows the light/dark toggle. It never needs markup.
-   ========================================================================== */
-(function () {
-  "use strict";
-  if (window.BIOQ_ATMO) return;                       // idempotent: safe to double-inject
-
-  // Inside the unified app shell each section loads in an iframe with ?embed=1.
-  // The shell already has a field; a second one per iframe would mean two WebGL
-  // contexts fighting for the GPU and a visible seam where the two tissues meet.
-  // So the embedded page renders none of its own and goes transparent instead,
-  // letting the shell's single continuous field show through — which is also why
-  // navigating between sections never interrupts it.
-  try {
-    if (new URLSearchParams(location.search).get("embed")) {
-      var t = document.createElement("style");
-      t.id = "atmo-embed";
-      t.textContent = "html,body{background:transparent!important}.bg-veil{display:none!important}";
-      (document.head || document.documentElement).appendChild(t);
-      window.BIOQ_ATMO = { theme: function () {}, setSection: function () {}, mouse: null, mode: "embedded" };
-      return;
-    }
-  } catch (e) {}
-
-  /* --- where the colour comes from -------------------------------------- */
-  // Each pillar gets its own biology, and the hues deliberately match the `tc`
-  // accent the app shell already assigns that view — so the field is the same
-  // colour as the section you are standing in rather than a second, competing
-  // palette. Intensity is how ALIVE the field looks: the Lab runs hot, Me runs quiet.
-  var SECTIONS = {
-    home:     ["#34d399", 0.44],   // em     — chlorophyll
-    learn:    ["#34d399", 0.52],   // em
-    lessons:  ["#38e0d8", 0.50],   // cy
-    reason:   ["#8b5cf6", 0.48],   // violet — the colour of thinking
-    labs:     ["#f6c667", 0.52],   // amber  — a bench lamp
-    solve:    ["#7c8cf8", 0.48],   // indigo
-    explore:  ["#38e0d8", 0.58],   // cy     — open water
-    me:       ["#c9a86a", 0.34],   // quiet, warm, low
-    about:    ["#34d399", 0.46],   // em
-    lab:      ["#fb7185", 0.64],   // rose   — an opened body, and the field runs hot
-    universe: ["#38e0d8", 0.60]    // cy
-  };
-
-  var reduced = false;
-  try { reduced = matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
-  var STILL = reduced || /[?&#](still|print)=?1?/.test(location.search + location.hash);
-
-  /* --- install ----------------------------------------------------------- */
-  var css = document.createElement("style");
-  css.id = "atmo-css";
-  css.textContent =
-    // z-index:-1, NOT 0. A positioned element at z-index:0 paints ABOVE ordinary
-    // in-flow block content, so the field would cover the page. Negative z puts it
-    // between the root background and everything else, which means not one existing
-    // element needs its position or stacking touched — and the product's fixed nav
-    // (position:fixed;z-index:60) keeps working exactly as before.
-    "#atmo{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;" +
-      "opacity:0;transition:opacity 1.2s cubic-bezier(.22,1,.36,1);display:block}" +
-    "#atmo.lit{opacity:.78}" +
-    // In light mode the same field reads as a stained section on a white slide, so
-    // it stays — but fainter, because ink on paper is a quieter medium.
-    "html[data-theme=\"light\"] #atmo.lit{opacity:.42}" +
-    // The pages paint --bg on BOTH html and body; body's copy would hide a
-    // negative-z child, so hand the background to the root alone. --bg is a themed
-    // custom property, so this keeps following the light/dark toggle for free.
-    "html{background:var(--bg,#04070a)}body{background:transparent!important}";
-  (document.head || document.documentElement).appendChild(css);
-
-  var cv = document.createElement("canvas");
-  cv.id = "atmo";
-  cv.setAttribute("aria-hidden", "true");
-  // NOTE: attach() is *declared* here but deliberately not *called* until the very
-  // bottom of this module. It reaches into cur/tgt/M/FS/VS, all of which are `var`
-  // bindings that are hoisted but still undefined at this point in the file —
-  // calling it here would throw on the first property write and silently leave the
-  // page with no field at all.
-  function attach() {
-    if (!document.body) return setTimeout(attach, 16);
-    document.body.insertBefore(cv, document.body.firstChild);
-    // The class is what fades the field in, and it must land on a LATER frame than
-    // the insert or the CSS transition has nothing to transition from. rAF is the
-    // usual way to get that, but rAF does not run at all in a background tab — so a
-    // page that loads hidden would sit at opacity 0. The timer is the backstop;
-    // adding the class twice costs nothing.
-    function lit() { cv.classList.add("lit"); }
-    requestAnimationFrame(lit);
-    setTimeout(lit, 80);
-    boot();
-  }
-
-  /* --- state ------------------------------------------------------------- */
-  function hexRGB(h) {
-    h = String(h).replace("#", "");
-    return [parseInt(h.slice(0, 2), 16) / 255, parseInt(h.slice(2, 4), 16) / 255, parseInt(h.slice(4, 6), 16) / 255];
-  }
-  var cur = { r: 0.20, g: 0.83, b: 0.60, in: 0.44, lt: 0 };
-  var tgt = { r: 0.20, g: 0.83, b: 0.60, in: 0.44, lt: 0 };
-  var M = { x: innerWidth / 2, y: innerHeight / 2, tx: innerWidth / 2, ty: innerHeight / 2, live: 0, tlive: 0 };
-
-  addEventListener("pointermove", function (e) {
-    M.tx = e.clientX; M.ty = e.clientY; M.tlive = 1;
-  }, { passive: true });
-  // A pointer that has left should stop feeding the tissue, or the glow sits there
-  // forever on a page nobody is touching. pointerleave does not bubble, so it has
-  // to be bound to the root element rather than to window; mouseout with a null
-  // relatedTarget is the belt-and-braces case for leaving through the chrome.
-  document.documentElement.addEventListener("pointerleave", function () { M.tlive = 0; }, { passive: true });
-  addEventListener("mouseout", function (e) { if (!e.relatedTarget) M.tlive = 0; }, { passive: true });
-  addEventListener("blur", function () { M.tlive = 0; });
-  // Touch has no hover: without this the glow would stay wherever the last tap
-  // landed, permanently, on every phone.
-  addEventListener("pointerup", function (e) {
-    if (e.pointerType !== "mouse") M.tlive = 0;
-  }, { passive: true });
-
-  function theme(rgb, intensity) {
-    tgt.r = rgb[0]; tgt.g = rgb[1]; tgt.b = rgb[2];
-    if (typeof intensity === "number") tgt.in = intensity;
-  }
-  function setSection(key) {
-    var s = SECTIONS[key] || SECTIONS.home;
-    theme(hexRGB(s[0]), s[1]);
-    nudge();                             // navigating must restain the field even in STILL mode
-  }
-  // repaint is filled in by whichever renderer boots. In STILL mode (reduced
-  // motion, or ?still=1) exactly one frame is ever drawn, so without this a reader
-  // who switches to light mode would be left looking at the dark field forever.
-  var repaint = null;
-  function nudge() {
-    if (!STILL || !repaint) return;      // the animated path picks the change up on its own
-    for (var i = 0; i < 60; i++) ease(); // settle the eased colour, then draw the one frame
-    repaint(0);
-  }
-  function readTheme() {
-    var next = (document.documentElement.getAttribute("data-theme") === "light") ? 1 : 0;
-    if (next === tgt.lt) return;
-    tgt.lt = next;
-    nudge();
-  }
-
-  function ease() {
-    cur.r += (tgt.r - cur.r) * 0.035; cur.g += (tgt.g - cur.g) * 0.035;
-    cur.b += (tgt.b - cur.b) * 0.035; cur.in += (tgt.in - cur.in) * 0.035;
-    cur.lt += (tgt.lt - cur.lt) * 0.08;
-    M.x += (M.tx - M.x) * 0.075; M.y += (M.ty - M.y) * 0.075;
-    M.live += (M.tlive - M.live) * 0.04;
-  }
-
-  /* --- the field --------------------------------------------------------- */
-  var FS = [
-    "precision mediump float;",
-    "uniform vec2 uRes;uniform float uT;uniform vec2 uM;uniform vec3 uC;uniform float uIn;uniform float uLive;uniform float uLight;",
-
-    "float h1(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}",
-    "vec2 h2(vec2 p){return fract(sin(vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3))))*43758.5453);}",
-    "float vn(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);",
-    " float a=h1(i),b=h1(i+vec2(1,0)),c=h1(i+vec2(0,1)),d=h1(i+vec2(1,1));",
-    " return mix(mix(a,b,f.x),mix(c,d,f.x),f.y);}",
-    "float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<4;i++){v+=a*vn(p);p*=2.07;a*=.5;}return v;}",
-    // Ridged noise gives threads instead of blobs — this is what makes a capillary
-    // look like a vessel and not like a cloud.
-    "float ridge(vec2 p){float v=0.,a=.5;for(int i=0;i<4;i++){v+=a*(1.-abs(vn(p)*2.-1.));p*=2.11;a*=.5;}return v;}",
-
-    // Worley. Returns (F1, F2-F1, cell id). Every nucleus orbits its own cell on a
-    // slow private path, so no two cells ever pulse together.
-    "vec3 cells(vec2 p,float t){vec2 n=floor(p),f=fract(p);",
-    " float f1=8.,f2=8.;vec2 id=vec2(0.);",
-    " for(int j=-1;j<=1;j++){for(int i=-1;i<=1;i++){",
-    "  vec2 g=vec2(float(i),float(j));vec2 o=h2(n+g);",
-    "  o=.5+.40*sin(t*.32+6.2831*o);",
-    "  float d=length(g+o-f);",
-    "  if(d<f1){f2=f1;f1=d;id=n+g;}else if(d<f2){f2=d;}",
-    " }}",
-    " return vec3(f1,f2-f1,h1(id));}",
-
-    "void main(){",
-    " vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y;",
-    " vec2 m=(uM-.5*uRes)/uRes.y;m.y*=-1.;",
-    " float t=uT;",
-    // ~7 breaths a minute. Slow enough that you feel it rather than watch it.
-    " float breath=.5+.5*sin(t*.72);",
-
-    // Chemotaxis. Everything below is stronger the closer it is to the cursor,
-    // and uLive fades the whole effect out when the pointer leaves.
-    " float rm=length(uv-m);",
-    // Tight. A wide gradient turns the whole page into a lamp; the point is a
-    // local response in the tissue the pointer is actually over, so the falloff
-    // is effectively gone by a third of the screen height.
-    " float food=exp(-rm*rm*7.5)*uLive;",
-
-    // Domain warp — the reason this reads as tissue and not as a tiling.
-    " vec2 w=uv+vec2(fbm(uv*1.5+t*.05),fbm(uv*1.5-t*.04+11.3))*.34;",
-    // Tissue swells toward the food source: cells near the cursor get physically
-    // bigger by shrinking the sampling scale there.
-    " float swell=1.-food*.30;",
-
-    // Two layers at different depths. The far one drifts slower and sits dimmer,
-    // which is what gives a flat quad the thickness of a real section.
-    " vec3 c1=cells(w*3.4*swell+vec2(t*.020,-t*.014),t);",
-    " vec3 c2=cells(w*6.9*swell+vec2(-t*.030,t*.023)+31.7,t*1.25);",
-
-    // Membrane = the F2-F1 ridge. This is the single most biological line there is.
-    " float mem1=1.-smoothstep(.0,.085,c1.y);",
-    " float mem2=1.-smoothstep(.0,.060,c2.y);",
-    // Cytoplasm: each cell tinted by its own id, so the field has variation
-    // rather than one flat wash.
-    " float cyto=(.35+.65*c1.z)*(1.-smoothstep(.15,.85,c1.x));",
-    // Nuclei, breathing slightly out of phase per cell.
-    " float nuc=smoothstep(.135+.02*sin(t*.6+c1.z*31.),.0,c1.x)*(.55+.45*c1.z);",
-
-    // Capillaries, warped again so they wander, and pulled toward the cursor so
-    // the network visibly grows in that direction.
-    " vec2 vp=w*2.3+vec2(t*.035,-t*.028)-normalize(uv-m+1e-4)*food*.55;",
-    " float vas=ridge(vp);",
-    " vas=pow(max(vas-.62,0.)*2.6,2.0);",
-
-    // Motes — organelles and spores adrift in the medium, the counterpart to the
-    // stars in the physics field. They rise, because everything in a fluid does.
-    " vec2 sp=w*17.0+vec2(0.,-t*.10);vec2 si=floor(sp);vec2 sf=fract(sp)-.5;",
-    " float sv=h1(si);",
-    " float mote=step(.972,sv)*smoothstep(.055,0.,length(sf-(h2(si)-.5)*.6))*(.55+.45*sin(t*2.1+sv*44.));",
-
-    // --- compose ---
-    " float lum=(.030+.055*breath)*(.55+uIn);",
-    " vec3 col=vec3(.012,.026,.034)*(1.-uLight);",
-    " col+=uC*cyto*lum*1.35;",
-    " col+=uC*mem1*(.055+uIn*.13)*(.75+.25*breath);",
-    " col+=mix(uC,vec3(1.),.35)*mem2*(.022+uIn*.055);",
-    " col+=mix(uC,vec3(1.),.55)*nuc*(.020+uIn*.048);",
-    " col+=mix(uC,vec3(1.,.55,.52),.30)*vas*(.055+uIn*.14);",
-    " col+=vec3(.85,.95,1.)*mote*.55;",
-    // The food source itself: a soft bloom, plus a brightening of whatever tissue
-    // is under it, so the cursor lights the section rather than floating over it.
-    " col+=uC*food*(.085+uIn*.15);",
-    " col*=1.+food*.34;",
-    // Depth: the section is thickest and best-lit in the middle of the field.
-    " col*=1.-.38*smoothstep(.55,1.35,length(uv));",
-
-    // Light mode: invert the physics, not the palette. On a slide the stain
-    // ABSORBS — so a green stain removes red and blue and leaves green, which
-    // means the structures subtract (1-uC), not uC. Subtracting uC would print
-    // the complement and give a magenta negative of the tissue.
-    " float dens=cyto*.30+mem1*1.05+mem2*.42+nuc*.62+vas*.95;",
-    " dens=min(dens*(.46+uIn*.60)*(1.+food*.45),1.25);",
-    " vec3 ink=vec3(1.)-(vec3(1.)-uC)*dens*.80-vec3(.05)*dens;",
-    // Illumination falls off toward the edge of the coverslip.
-    " ink=mix(ink,vec3(1.),.22*smoothstep(.55,1.4,length(uv)));",
-    " col=mix(col,ink,uLight);",
-
-    " gl_FragColor=vec4(col,1.);}"
-  ].join("\n");
-
-  var VS = "attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}";
-
-  function boot() {
-    readTheme();
-    // Follow the product's own theme toggle without it having to know we exist.
-    try {
-      new MutationObserver(readTheme).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-    } catch (e) {}
-    // Pick the colour from the page the shell already declares.
-    setSection((document.body && document.body.getAttribute("data-page")) || "home");
-    for (var i = 0; i < 40; i++) ease();     // start already at the right colour, no fade-in from green
-
-    var gl = null;
-    try {
-      gl = cv.getContext("webgl", { alpha: true, antialias: false, depth: false, stencil: false, powerPreference: "low-power" })
-        || cv.getContext("experimental-webgl", { alpha: true, antialias: false, depth: false });
-    } catch (e) {}
-    if (!gl) return fallback();
-
-    function sh(ty, src) {
-      var o = gl.createShader(ty); gl.shaderSource(o, src); gl.compileShader(o);
-      if (!gl.getShaderParameter(o, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(o) || "compile");
-      return o;
-    }
-    var prog;
-    try {
-      prog = gl.createProgram();
-      gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS));
-      gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS));
-      gl.linkProgram(prog);
-      if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog) || "link");
-    } catch (e) { return fallback(); }
-
-    gl.useProgram(prog);
-    var buf = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-    var lp = gl.getAttribLocation(prog, "p");
-    gl.enableVertexAttribArray(lp);
-    gl.vertexAttribPointer(lp, 2, gl.FLOAT, false, 0, 0);
-
-    var uRes = gl.getUniformLocation(prog, "uRes"), uT = gl.getUniformLocation(prog, "uT"),
-        uM = gl.getUniformLocation(prog, "uM"), uC = gl.getUniformLocation(prog, "uC"),
-        uIn = gl.getUniformLocation(prog, "uIn"), uLive = gl.getUniformLocation(prog, "uLive"),
-        uLight = gl.getUniformLocation(prog, "uLight");
-
-    // A full-screen procedural field is fill-rate bound, so resolution is the one
-    // dial that matters. 1.25x is enough for the membranes to stay crisp and cheap
-    // enough that an integrated GPU never notices.
-    var dpr = Math.min(devicePixelRatio || 1, 1.25);
-    // A page can boot while its tab is hidden or its pane is not compositing, and
-    // then innerWidth is 0 — sizing to that leaves a 1x1 canvas which never
-    // recovers, because becoming visible does not fire a resize event. Fall back
-    // through the layout box to a sane default so the field is always drawable.
-    function vw() { return innerWidth || document.documentElement.clientWidth || cv.clientWidth || 1280; }
-    function vh() { return innerHeight || document.documentElement.clientHeight || cv.clientHeight || 800; }
-    function size() {
-      // Re-read it every measure: devicePixelRatio changes when the window moves to
-      // a display of a different density, or the browser is zoomed.
-      dpr = Math.min(devicePixelRatio || 1, 1.25);
-      var w = Math.max(1, Math.round(vw() * dpr)), h = Math.max(1, Math.round(vh() * dpr));
-      if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; gl.viewport(0, 0, w, h); }
-    }
-    // draw() re-measures on every frame, so while the loop is running the resize
-    // event has nothing to add. It matters in STILL mode, where resizing the canvas
-    // clears it and no further frame is coming to put the field back — and it is
-    // coalesced to one measure per frame, because a window drag fires it in bursts.
-    var rz = 0;
-    addEventListener("resize", function () {
-      if (rz) return;
-      rz = requestAnimationFrame(function () { rz = 0; size(); if (STILL) draw(0); });
-    });
-    size();
-
-    var raf = null, t0 = 0;
-    // draw() is the whole render and nothing else; frame() is draw() plus the
-    // scheduling. Keeping them apart is what lets _tick() below render on demand
-    // without quietly queueing a second rAF alongside the running loop.
-    function draw(ms) {
-      ease(); size();
-      if (!t0) t0 = ms || 0;
-      gl.uniform2f(uRes, cv.width, cv.height);
-      gl.uniform1f(uT, ((ms || 0) - t0) * 0.001);
-      var s = cv.width / vw();
-      gl.uniform2f(uM, M.x * s, (vh() - M.y) * s);
-      gl.uniform3f(uC, cur.r, cur.g, cur.b);
-      gl.uniform1f(uIn, cur.in);
-      gl.uniform1f(uLive, M.live);
-      gl.uniform1f(uLight, cur.lt);
-      gl.drawArrays(gl.TRIANGLES, 0, 3);
-    }
-    function frame(ms) {
-      raf = null;
-      draw(ms);
-      if (!STILL) raf = requestAnimationFrame(frame);
-    }
-    repaint = draw;
-    if (STILL) draw(0); else raf = requestAnimationFrame(frame);
-
-    // A field nobody can see must not cost a frame.
-    document.addEventListener("visibilitychange", function () {
-      if (document.hidden) { if (raf) { cancelAnimationFrame(raf); raf = null; } }
-      // Coming back from hidden also re-measures, because the viewport may have
-      // been 0 the whole time the tab was in the background.
-      else if (!raf && !STILL) { size(); raf = requestAnimationFrame(frame); }
-    });
-
-    // _tick renders exactly one frame on demand. rAF is throttled to nothing in a
-    // hidden tab, so this is the only way to prove the field actually draws when
-    // the page is not on screen — which is precisely when it needs proving.
-    window.BIOQ_ATMO = { theme: theme, setSection: setSection, mouse: M, mode: "webgl", _tick: draw };
-  }
-
-  /* --- fallback ---------------------------------------------------------- */
-  // No WebGL. Draw the same idea in 2D: drifting cells with membranes and nuclei,
-  // and a nutrient glow at the cursor. Fewer cells, no capillaries, same product.
-  function fallback() {
-    var ctx = cv.getContext("2d");
-    if (!ctx) { window.BIOQ_ATMO = { theme: theme, setSection: setSection, mouse: M, mode: "none" }; return; }
-    var dpr = Math.min(devicePixelRatio || 1, 1.5), W = 0, H = 0, pop = [];
-    // Same reasoning as the WebGL path: a page can boot hidden with innerWidth 0,
-    // and becoming visible does not fire a resize event.
-    function vw() { return innerWidth || document.documentElement.clientWidth || cv.clientWidth || 1280; }
-    function vh() { return innerHeight || document.documentElement.clientHeight || cv.clientHeight || 800; }
-    function cell(x, y) {
-      return {
-        x: x, y: y, r: 42 + Math.random() * 78,
-        vx: (Math.random() - 0.5) * 0.13, vy: (Math.random() - 0.5) * 0.13, ph: Math.random() * 6.283
-      };
-    }
-    function size() {
-      var w = vw(), h = vh();
-      // devicePixelRatio is not fixed for the life of a page: dragging the window
-      // to a display of a different density, or zooming the browser, changes it,
-      // and a stale one leaves the field soft or oversampled.
-      dpr = Math.min(devicePixelRatio || 1, 1.5);
-      // Reseeding the population here is what used to make the whole field jump on
-      // every resize — and resize is not a rare event: a window drag fires it
-      // continuously, and on a phone so does the URL bar collapsing. So the cells
-      // are carried across and rescaled into the new box instead, and only the
-      // surplus or shortfall is dropped or seeded to keep the density right.
-      var sx = W ? w / W : 1, sy = H ? h / H : 1;
-      for (var i = 0; i < pop.length; i++) { pop[i].x *= sx; pop[i].y *= sy; }
-      W = w; H = h;
-      cv.width = Math.max(1, Math.round(W * dpr)); cv.height = Math.max(1, Math.round(H * dpr));
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      var n = Math.max(10, Math.min(30, Math.round(W * H / 46000)));
-      while (pop.length > n) pop.pop();
-      while (pop.length < n) pop.push(cell(Math.random() * W, Math.random() * H));
-    }
-    // Resize arrives in bursts, and each one reallocates the backing store, so it
-    // is coalesced to one measure per frame — which is all the display can show.
-    var rz = 0;
-    function onResize() {
-      if (rz) return;
-      rz = requestAnimationFrame(function () {
-        rz = 0; size();
-        // Setting cv.width clears the canvas, and in STILL mode no further frame is
-        // coming, so the single frame has to be drawn again by hand.
-        if (STILL) frame();
-      });
-    }
-    size(); addEventListener("resize", onResize);
-
-    var raf = null, t = 0;
-    function rgba(a) { return "rgba(" + (cur.r * 255 | 0) + "," + (cur.g * 255 | 0) + "," + (cur.b * 255 | 0) + "," + a + ")"; }
-    function frame() {
-      raf = null; ease(); t += 0.016;
-      var light = cur.lt > 0.5;
-      ctx.clearRect(0, 0, W, H);
-      var glow = ctx.createRadialGradient(M.x, M.y, 0, M.x, M.y, 340);
-      glow.addColorStop(0, rgba((light ? 0.10 : 0.13) * M.live)); glow.addColorStop(1, rgba(0));
-      ctx.fillStyle = glow; ctx.fillRect(0, 0, W, H);
-      for (var i = 0; i < pop.length; i++) {
-        var c = pop[i];
-        c.x += c.vx; c.y += c.vy;
-        if (c.x < -140) c.x = W + 140; if (c.x > W + 140) c.x = -140;
-        if (c.y < -140) c.y = H + 140; if (c.y > H + 140) c.y = -140;
-        // Chemotaxis, cheaply: a cell near the cursor swells.
-        var d = Math.hypot(c.x - M.x, c.y - M.y);
-        var food = Math.exp(-(d * d) / 260000) * M.live;
-        var r = c.r * (1 + Math.sin(t * 0.62 + c.ph) * 0.05 + food * 0.20);
-        var g = ctx.createRadialGradient(c.x, c.y, r * 0.2, c.x, c.y, r);
-        g.addColorStop(0, rgba((light ? 0.030 : 0.052) * (0.6 + cur.in) * (1 + food))); g.addColorStop(1, rgba(0));
-        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(c.x, c.y, r, 0, 6.283); ctx.fill();
-        ctx.strokeStyle = rgba((light ? 0.055 : 0.085) * (1 + food * 1.4)); ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.arc(c.x, c.y, r, 0, 6.283); ctx.stroke();
-        ctx.fillStyle = rgba((light ? 0.045 : 0.062) * (1 + food));
-        ctx.beginPath(); ctx.arc(c.x + r * 0.11, c.y - r * 0.07, r * 0.24, 0, 6.283); ctx.fill();
-      }
-      if (!STILL) raf = requestAnimationFrame(frame);
-    }
-    repaint = frame;
-    if (STILL) { for (var k = 0; k < 40; k++) ease(); frame(); } else raf = requestAnimationFrame(frame);
-    document.addEventListener("visibilitychange", function () {
-      if (document.hidden) { if (raf) { cancelAnimationFrame(raf); raf = null; } return; }
-      // Re-measure on the way back: the viewport may have been 0 for the whole time
-      // the tab was in the background, and no resize event marks it coming good.
-      size();
-      if (STILL) frame();
-      else if (!raf) raf = requestAnimationFrame(frame);
-    });
-
-    window.BIOQ_ATMO = { theme: theme, setSection: setSection, mouse: M, mode: "2d" };
-  }
-
-  /* --- go ---------------------------------------------------------------- */
-  // Last line on purpose: everything above is now assigned, so boot() can read it.
-  attach();
+/* The launch photograph continues through the application as one persistent scene. */
+(function(){
+  'use strict';
+  const embedded = new URLSearchParams(location.search).has('embed');
+  const style=document.createElement('style');style.id='bio-launch-backdrop-css';
+  style.textContent=`html:root{background:var(--bg,#050b08)!important}html body,body .stage,body .home{background:transparent!important}body>#atmo,body>#fx,body>.bg-veil{display:none!important}
+    #bio-app-backdrop{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:#050b08}
+    #bio-app-backdrop:before{content:'';position:absolute;inset:-3%;background:url('./assets/biology-dna-hero.webp') center right/cover no-repeat;opacity:.62;animation:bio-app-drift 28s ease-in-out infinite alternate}
+    #bio-app-backdrop:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#050b08e0 3%,#050b08a8 48%,#050b0866),linear-gradient(0deg,#050b0899,transparent 70%)}
+    html[data-theme=light] #bio-app-backdrop{background:#eef3e9}html[data-theme=light] #bio-app-backdrop:before{opacity:.23}html[data-theme=light] #bio-app-backdrop:after{background:linear-gradient(90deg,#f1f5edee,#f1f5edb0)}
+    body .side,body .topbar{background:color-mix(in srgb,var(--bg-2) 93%,transparent);backdrop-filter:blur(12px)}
+    #bio-background-toggle{position:fixed;right:18px;bottom:16px;z-index:45;padding:8px 11px;border:1px solid var(--hair,#38523c);border-radius:6px;background:var(--panel,#0d180f);color:var(--dim,#b2bdb0);font:11px var(--sans,system-ui);cursor:pointer}
+    #bio-background-toggle:focus-visible{outline:2px solid var(--em);outline-offset:3px}
+    #bio-app-backdrop[data-paused=true]:before{animation-play-state:paused}
+    @keyframes bio-app-drift{from{transform:scale(1.015)}to{transform:translate3d(-7px,4px,0) scale(1.055)}}
+    @media(max-width:760px){#bio-background-toggle{bottom:calc(76px + env(safe-area-inset-bottom));right:12px;font-size:10px;padding:7px 9px}#bio-app-backdrop:before{background-position:62% center;opacity:.5}}
+    @media(prefers-reduced-motion:reduce){#bio-app-backdrop:before{animation:none!important;transform:none!important}}`;
+  if(embedded) style.textContent+='html:root,html body{background:transparent!important}';
+  document.head.append(style);
+  window.BIOQ_ATMO={theme(){},setSection(){},mouse:null,mode:embedded?'embedded':'launch-image'};
+  if(embedded)return;
+  const bg=document.createElement('div');bg.id='bio-app-backdrop';bg.setAttribute('aria-hidden','true');document.body.prepend(bg);
+  const toggle=document.createElement('button');toggle.id='bio-background-toggle';toggle.type='button';document.body.append(toggle);
+  const reduced=matchMedia('(prefers-reduced-motion:reduce)');let stored=false;
+  try{stored=localStorage.getItem('bioq_landing_motion')==='paused';}catch(_){}
+  function refresh(){const paused=stored||reduced.matches||document.hidden;bg.dataset.paused=String(paused);toggle.textContent=reduced.matches?'Reduced background motion':stored?'▷ Background motion':'Ⅱ Background motion';toggle.setAttribute('aria-label',reduced.matches?'Reduced background motion enabled':stored?'Resume background motion':'Pause background motion');toggle.setAttribute('aria-pressed',String(stored||reduced.matches));toggle.disabled=reduced.matches;}
+  toggle.onclick=()=>{stored=!stored;try{localStorage.setItem('bioq_landing_motion',stored?'paused':'running');}catch(_){}refresh();};
+  reduced.addEventListener('change',refresh);document.addEventListener('visibilitychange',refresh);
+  addEventListener('storage',e=>{if(e.key==='bioq_landing_motion'){stored=e.newValue==='paused';refresh();}});refresh();
 })();
-
 </script>
 <script id="auth-js">
 /* ============================================================================
@@ -6355,5 +5990,570 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
 </script>
 
 <!-- ENTELLOQ-ECOSYSTEM-SWITCHER:END -->
+<!-- BIO-LIBRARY:labs-script:START -->
+<script>
+/* Context travels with the concept or experiment. No provider keys or network calls. */
+(function () {
+  'use strict';
+  let context = null, dialog = null, returnFocus = null;
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function reply(question) {
+    const c = context || {}, q = question.toLowerCase();
+    if (c.kind === 'lab') {
+      const trials = c.trials || [], latest = trials.at(-1), previous = trials.at(-2);
+      if (!c.hypothesis) return 'Before changing a variable, write a prediction: if you change one condition, which measurement should change, and why?';
+      if (!latest) return 'Record a baseline trial. Which one variable will you change next, and which conditions will you hold constant?';
+      if (previous) {
+        const changed = Object.keys(latest.variables || {}).filter(k => JSON.stringify(latest.variables[k]) !== JSON.stringify(previous.variables?.[k]));
+        if (changed.length > 1) return 'Between your last two trials you changed ' + changed.join(', ') + '. Which change caused the result? Repeat while changing only one of these conditions.';
+        if (!changed.length) return 'Your last two trials used the same recorded conditions. Compare the measurements: does the model vary between repeats, or is it deterministic? Repeating a deterministic simulation alone does not estimate biological uncertainty.';
+        return 'You changed ' + changed[0] + '. Compare the two measurements with your hypothesis. What further value would distinguish a trend from a single comparison?';
+      }
+      return 'You have a baseline. Choose one independent variable, predict the direction of the change, then record another trial. Explain any difference using the linked theory.';
+    }
+    const topics = window.BIO_LIBRARY?.topics || [], t = topics.find(t => t.id === (c.subtopicId || c.topic));
+    if (!t) return 'Open a concept or an experiment first. I use the selected concept, explanation mode, and recorded trials to keep the discussion in context.';
+    const ex = t.explanations;
+    if (/simpl|layman/.test(q)) return ex.layman;
+    if (/deeper|advanced|molecular/.test(q)) return ex.advanced;
+    if (/before|prerequis/.test(q)) {
+      const prereqs = (t.prerequisites || []).map(id => topics.find(x => x.id === id)?.title).filter(Boolean);
+      return prereqs.length ? 'Build on ' + prereqs.join(' and ') + '. ' + ex.intuition : ex.intuition;
+    }
+    if (/connect|relat/.test(q)) {
+      const related = (t.relatedTopics || []).map(id => topics.find(x => x.id === id)).filter(Boolean);
+      return related.slice(0, 2).map(x => x.title + ': ' + x.summary).join('\n\n') || ex.realWorld;
+    }
+    const term = (t.keyTerms || []).find(x => q.includes(x.term.toLowerCase()));
+    if (term) return term.term + ': ' + term.definition + '\n\n' + ex.intuition;
+    if (/why|intuition/.test(q)) return ex.intuition;
+    if (/world|use|matter/.test(q)) return ex.realWorld;
+    return 'From the ' + t.title + ' library entry:\n\n' + (ex[c.mode] || ex.scientific) + '\n\nFor a focused next step, ask for a simpler explanation, a prerequisite, a related concept, or a deeper mechanism.';
+  }
+  function ask(question = '') {
+    if (!dialog) {
+      dialog = document.createElement('dialog'); dialog.className = 'bio-guide';
+      dialog.innerHTML = '<form method="dialog"><button class="bx-btn bio-guide-close" aria-label="Close learning guide">Close ×</button></form><div class="eyebrow">Entelloq learning guide</div><h2>Think it through.</h2><p class="bio-guide-context"></p><p class="bio-guide-source">On-device guidance from the concept library and your experiment records.</p><div class="bio-guide-answer" role="status"></div><form class="bio-guide-form"><label for="bio-guide-question">Ask about this concept or trial</label><textarea id="bio-guide-question" rows="2" maxlength="1200" placeholder="What should I keep controlled?"></textarea><button class="bx-btn pri" type="submit">Explore the question →</button></form>';
+      document.body.append(dialog);
+      dialog.querySelector('.bio-guide-form').addEventListener('submit', e => { e.preventDefault(); answer(dialog.querySelector('textarea').value); });
+      dialog.addEventListener('close', () => returnFocus?.isConnected && returnFocus.focus());
+      dialog.addEventListener('click', e => { if (e.target === dialog) { const r = dialog.getBoundingClientRect(); if(e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) dialog.close(); } });
+    }
+    returnFocus = document.activeElement;
+    dialog.querySelector('.bio-guide-context').textContent = context ? (context.title || context.topic || context.lab) + (context.subtopic ? ' / '+context.subtopic : '') + ' · ' + (context.mode || context.stage || 'investigation') : 'Select a concept to begin.';
+    dialog.querySelector('textarea').value = question;
+    if (!dialog.open) dialog.showModal();
+    answer(question || 'What should I consider next?');
+    dialog.querySelector('textarea').focus();
+  }
+  function answer(question) {
+    dialog.querySelector('.bio-guide-answer').textContent = reply(question);
+    window.dispatchEvent(new CustomEvent('bioq:ask', { detail: { question, context } }));
+  }
+  window.BioContext = {
+    publish(value) {
+      context = value;
+      window.dispatchEvent(new CustomEvent('bioq:context', { detail: value }));
+      if (parent !== window && location.origin !== 'null') parent.postMessage({ bioqContext: value }, location.origin);
+    },
+    get: () => context, ask, reply, escape: esc
+  };
+})();
+/* A reusable, local scientific notebook. Bench state is sampled only on request. */
+(function () {
+  'use strict';
+  const esc = s => String(s ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const fields = { hypothesis:'Hypothesis', variables:'Independent, dependent and controlled variables', method:'Method', observations:'Observations', conclusion:'Conclusion', limitations:'Errors / limitations' };
+  const memory = new Map();
+  const plain = x => x && typeof x === 'object' && !Array.isArray(x);
+  function cleanMap(x) {
+    if (!plain(x)) return {};
+    return Object.fromEntries(Object.entries(x).slice(0,40).filter(([k,v])=>k.length<150 && (typeof v==='string'||typeof v==='number') && (typeof v!=='number'||Number.isFinite(v))).map(([k,v])=>[k,typeof v==='string'?v.slice(0,1500):v]));
+  }
+  function clean(value) {
+    const v = plain(value) ? value : {};
+    const note={version:1,mode:['guided','challenge','sandbox'].includes(v.mode)?v.mode:'guided',trials:[],question:typeof v.question==='string'?v.question.slice(0,2000):''};
+    for(const key of Object.keys(fields)) note[key]=typeof v[key]==='string'?v[key].slice(0,12000):'';
+    if(Array.isArray(v.trials)) note.trials=v.trials.slice(-80).filter(plain).map((t,i)=>({index:i+1,at:typeof t.at==='string'?t.at:'',variables:cleanMap(t.variables),measurements:cleanMap(t.measurements),stage:String(t.stage||'').slice(0,300),observation:String(t.observation||'').slice(0,2000)}));
+    return note;
+  }
+  function csvCell(value) {
+    let s=String(value??'');
+    if (/^[\s]*[=+@-]/.test(s) && !(typeof value==='number')) s="'"+s;
+    return '"'+s.replace(/"/g,'""')+'"';
+  }
+  function csv(trials) {
+    const vars=[...new Set(trials.flatMap(t=>Object.keys(t.variables)))],ms=[...new Set(trials.flatMap(t=>Object.keys(t.measurements)))];
+    const rows=[['Trial','Recorded at',...vars.map(k=>'Variable: '+k),...ms.map(k=>'Measurement: '+k),'Stage','Observation']];
+    for(const t of trials) rows.push([t.index,t.at,...vars.map(k=>t.variables[k]??''),...ms.map(k=>t.measurements[k]??''),t.stage,t.observation]);
+    return rows.map(r=>r.map(csvCell).join(',')).join('\r\n');
+  }
+  function download(data,type,name) { const url=URL.createObjectURL(new Blob([data],{type}));const a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500); }
+  function fallback(host) {
+    const variables={},measurements={};
+    host.querySelectorAll('input,select').forEach((e,i)=>{
+      if(e.type==='button'||e.type==='hidden')return;
+      const label=e.labels?.[0]?.textContent.trim()||e.getAttribute('aria-label')||e.closest('.bx-grp')?.querySelector('label,.bx-lbl')?.textContent||e.id||'Control '+(i+1);
+      variables[label]=e.type==='range'||e.type==='number'?Number(e.value):e.type==='checkbox'?String(e.checked):e.value;
+    });
+    host.querySelectorAll('.bx-chips').forEach((g,i)=>{const selected=[...g.querySelectorAll('.on,[aria-pressed=true]')].map(e=>e.textContent.trim()).join(', ');if(selected)variables[g.closest('.bx-grp')?.querySelector('label,.bx-lbl')?.textContent||'Selection '+(i+1)]=selected;});
+    const reads=host.querySelectorAll('.bx-read,.ns-cap,.pg-readout,.hm-read');
+    reads.forEach((el,i)=>{const value=el.textContent.trim();if(value)measurements['Observation '+(i+1)]=value;});
+    return {variables,measurements,stage:'Observation'};
+  }
+  function mount(lab,host,live,workflow,target) {
+    const key='bioq.lab-notebook.v1.'+lab.id;
+    let note=clean(memory.get(key)),saveOk=true,xKey='Trial',yKey='',graphType='scatter',disposed=false;
+    try {const raw=localStorage.getItem(key);if(raw)note=clean(JSON.parse(raw));}catch(_){saveOk=false;}
+    if(!note.question)note.question=lab.question||'How does changing one condition affect this biological system?';
+    workflow.className='ln-workspace';target.className='ln-workspace';
+    workflow.innerHTML=`<div class="ln-question"><div><h2>${esc(note.question)}</h2><p>${esc((lab.learningObjectives||[]).join(' · '))}</p></div><div class="ln-modes" role="group" aria-label="Experiment mode">${['guided','challenge','sandbox'].map(m=>`<button class="bx-btn" data-lab-mode="${m}" aria-pressed="${m===note.mode}">${m[0].toUpperCase()+m.slice(1)}</button>`).join('')}</div></div><p class="ln-workflow-hint" id="lab-hint"></p><label>My hypothesis<input id="lab-hypothesis" maxlength="2000" placeholder="If I change… then… because…" value="${esc(note.hypothesis)}"></label>`;
+    target.innerHTML=`<div class="ln-notebook-top"><h2>Lab notebook</h2><div class="ln-theory"><span>Understand the theory</span>${(lab.relatedTopics||[]).map(id=>`<a href="./learn.html#topic/${esc(id)}/intuition">${esc(id.replace(/-/g,' '))} ↗</a>`).join('')}</div></div><p class="ln-save" id="lab-save-state" role="status"></p><div class="ln-actions"><button class="bx-btn pri" id="lab-record">Record trial</button><button class="bx-btn" id="lab-coach">Ask the learning guide</button><button class="bx-btn" id="lab-capture">Capture view</button><button class="bx-btn" id="lab-csv">Export data CSV</button><button class="bx-btn" id="lab-export">Export notebook</button></div><div class="ln-record-summary" id="lab-record-summary"></div><div id="lab-trials"></div><div class="ln-graph"><div class="ln-graph-controls"><label>Horizontal axis<select id="lab-x"></select></label><label>Vertical axis<select id="lab-y"></select></label><label>Graph type<select id="lab-graph-type"><option value="scatter">Scatter</option><option value="line">Line</option><option value="bar">Bar</option></select></label></div><div id="lab-plot"></div></div><div class="ln-fields"><label>Research question<input data-note="question" maxlength="2000" value="${esc(note.question)}"></label>${Object.entries(fields).filter(([k])=>k!=='hypothesis').map(([k,label])=>`<label>${label}<textarea data-note="${k}" maxlength="12000" rows="3" placeholder="${k==='conclusion'?'Use evidence from your recorded trials.':k==='limitations'?'Which assumptions might differ in a living system?':'Write your '+label.toLowerCase()+'.'}">${esc(note[k])}</textarea></label>`).join('')}</div>`;
+    const $=s=>target.querySelector(s);
+    function save() {memory.set(key,note);try{localStorage.setItem(key,JSON.stringify(note));saveOk=true;}catch(_){saveOk=false;}$('#lab-save-state').textContent=saveOk?'Saved on this device · up to 80 trials per experiment.':'Device storage is unavailable. This session stays usable; export your notebook before leaving.';}
+    function snapshot() {try{const s=live.snapshot?live.snapshot():fallback(host);return {variables:cleanMap(s.variables),measurements:cleanMap(s.measurements),stage:String(s.stage||'Observation'),actions:Array.isArray(s.actions)?s.actions.slice(-12).map(x=>String(x).slice(0,180)):[]};}catch(_){return fallback(host);}}
+    function publish() { const s=snapshot();window.BioContext?.publish({kind:'lab',lab:lab.id,title:lab.title,mode:note.mode,hypothesis:note.hypothesis,stage:s.stage,variables:s.variables,measurements:s.measurements,actions:[...actions,...(s.actions||[])].slice(-12),trials:note.trials.slice(-2)}); }
+    const actions=[];
+    function action(e){const t=e.target.closest('button,input,select');if(t){actions.push((t.getAttribute('aria-label')||t.textContent||t.id||'Changed control').trim().slice(0,120));if(actions.length>50)actions.shift();}publish();}
+    host.addEventListener('change',action);host.addEventListener('click',action);
+    function mode() {
+      workflow.querySelectorAll('[data-lab-mode]').forEach(b=>{b.classList.toggle('on',b.dataset.labMode===note.mode);b.setAttribute('aria-pressed',String(b.dataset.labMode===note.mode));});
+      workflow.querySelector('#lab-hint').textContent=note.mode==='guided'?(lab.steps||['Predict the result. Record a baseline. Change one variable and record another trial. Compare evidence, then explain the pattern.']).join(' → '):note.mode==='challenge'?(lab.challenge||'Design a fair test of the research question. Choose your own controls and collect enough evidence to justify your conclusion.'):'Choose your own question, explore the controls, and record any observation worth investigating.';
+      save();publish();
+    }
+    workflow.querySelectorAll('[data-lab-mode]').forEach(b=>b.addEventListener('click',()=>{note.mode=b.dataset.labMode;mode();}));
+    workflow.querySelector('#lab-hypothesis').addEventListener('input',e=>{note.hypothesis=e.target.value;save();publish();});
+    target.querySelectorAll('[data-note]').forEach(e=>e.addEventListener('input',()=>{note[e.dataset.note]=e.value;if(e.dataset.note==='question')workflow.querySelector('h2').textContent=e.value;save();}));
+    function graph() {
+      const vars=[...new Set(note.trials.flatMap(t=>Object.keys(t.variables).filter(k=>typeof t.variables[k]==='number')))];
+      const measures=[...new Set(note.trials.flatMap(t=>Object.keys(t.measurements).filter(k=>typeof t.measurements[k]==='number')))];
+      if(xKey!=='Trial'&&!vars.includes(xKey))xKey='Trial';if(!measures.includes(yKey))yKey=measures[0]||'';
+      $('#lab-x').innerHTML=['Trial',...vars].map(k=>`<option ${k===xKey?'selected':''}>${esc(k)}</option>`).join('');
+      $('#lab-y').innerHTML=measures.length?measures.map(k=>`<option ${k===yKey?'selected':''}>${esc(k)}</option>`).join(''):'<option>No numeric measurements yet</option>';
+      const points=note.trials.map(t=>({x:xKey==='Trial'?t.index:t.variables[xKey],y:t.measurements[yKey],index:t.index})).filter(p=>Number.isFinite(p.x)&&Number.isFinite(p.y));
+      if(!points.length){$('#lab-plot').innerHTML='<p>Record a trial with a numeric measurement to plot it. Structural observations remain available in the table and notebook.</p>';return;}
+      let xmin=Math.min(...points.map(p=>p.x)),xmax=Math.max(...points.map(p=>p.x)),ymin=Math.min(0,...points.map(p=>p.y)),ymax=Math.max(0,...points.map(p=>p.y));
+      if(xmin===xmax){xmin-=1;xmax+=1;}if(ymin===ymax)ymax=ymin+1;
+      const xp=x=>70+(x-xmin)/(xmax-xmin)*580,yp=y=>255-(y-ymin)/(ymax-ymin)*210;
+      const sorted=[...points].sort((a,b)=>a.x-b.x);
+      let series=graphType==='line'?`<polyline points="${sorted.map(p=>xp(p.x)+','+yp(p.y)).join(' ')}" fill="none" stroke="var(--em)" stroke-width="2"/>`:'';
+      series+=points.map(p=>graphType==='bar'?`<rect x="${xp(p.x)-Math.min(15,230/points.length)}" y="${Math.min(yp(p.y),yp(0))}" width="${Math.min(30,460/points.length)}" height="${Math.max(1,Math.abs(yp(p.y)-yp(0)))}" fill="var(--em)"><title>Trial ${p.index}: ${esc(p.x)}, ${esc(p.y)}</title></rect>`:`<circle cx="${xp(p.x)}" cy="${yp(p.y)}" r="4" fill="var(--em)"><title>Trial ${p.index}: ${esc(p.x)}, ${esc(p.y)}</title></circle>`).join('');
+      const ticks=Array.from({length:5},(_,i)=>{const y=ymin+(ymax-ymin)*i/4;return `<line x1="70" x2="650" y1="${yp(y)}" y2="${yp(y)}" stroke="var(--line)"/><text x="60" y="${yp(y)+4}" text-anchor="end">${Number(y.toPrecision(3))}</text>`;}).join('');
+      $('#lab-plot').innerHTML=`<svg viewBox="0 0 710 335" role="img" aria-label="${esc(yKey)} against ${esc(xKey)} from ${points.length} recorded trials"><g fill="var(--dim)" font-family="system-ui" font-size="11">${ticks}<text x="70" y="285">${Number(xmin.toPrecision(3))}</text><text x="650" y="285" text-anchor="end">${Number(xmax.toPrecision(3))}</text><text x="350" y="318" text-anchor="middle">${esc(xKey)}</text><text x="70" y="24">${esc(yKey)}</text></g><path d="M70 40V255H650" fill="none" stroke="var(--hair)"/>${series}</svg><p>${points.length} recorded observations. ${graphType==='line'?'Connecting points shows a trend; it does not establish causation.':graphType==='bar'?'Repeated horizontal values share a position; use Trial on the horizontal axis to compare every repeat.':'Hover a point for its recorded values.'}</p>`;
+    }
+    function paint() {
+      const kv=m=>Object.entries(m).map(([k,v])=>`<span>${esc(k)}: <strong>${esc(v)}</strong></span>`).join('');
+      $('#lab-trials').innerHTML=note.trials.length?`<div class="ln-table-wrap"><table class="ln-table"><caption class="ln-count">Recorded trial history</caption><thead><tr><th>Trial</th><th>Variables</th><th>Measurements</th><th>Observation</th></tr></thead><tbody>${note.trials.map(t=>`<tr><td>${t.index}</td><td>${kv(t.variables)}</td><td>${kv(t.measurements)}</td><td>${esc(t.observation||t.stage)}</td></tr>`).join('')}</tbody></table></div>`:'<p class="ln-count">No trials recorded. Set your conditions, then record a baseline.</p>';
+      const s=note.trials.at(-1);$('#lab-record-summary').innerHTML=s?`Last recorded: trial ${s.index} · ${esc(s.stage)}<br>${kv(s.measurements)}`:'Your next trial will capture the current controls and measurements.';
+      graph();$('#lab-csv').disabled=!note.trials.length;
+    }
+    $('#lab-record').onclick=()=>{if(note.trials.length>=80){$('#lab-save-state').textContent='This notebook contains 80 trials. Export your records before starting another investigation.';return;}const s=snapshot();note.trials.push({index:note.trials.length+1,at:new Date().toISOString(),...s,observation:note.observations.slice(0,2000)});save();paint();publish();};
+    $('#lab-coach').onclick=()=>{publish();window.BioContext?.ask('Help me reason from my experiment.');};
+    $('#lab-x').onchange=e=>{xKey=e.target.value;graph();};$('#lab-y').onchange=e=>{yKey=e.target.value;graph();};$('#lab-graph-type').onchange=e=>{graphType=e.target.value;graph();};
+    $('#lab-csv').onclick=()=>download(csv(note.trials),'text/csv;charset=utf-8',lab.id+'-trials.csv');
+    $('#lab-export').onclick=()=>{const text=['# '+lab.title,'', 'Question: '+note.question,'Mode: '+note.mode,...Object.entries(fields).flatMap(([k,label])=>['','## '+label,note[k]||'(not recorded)']),'','## Trial data',csv(note.trials)].join('\n');download(text,'text/markdown;charset=utf-8',lab.id+'-notebook.md');};
+    $('#lab-capture').onclick=async()=>{
+      if(live.capture){try{const blob=await live.capture();if(!blob)throw new Error('No image');download(blob,'image/png',lab.id+'-observation.png');}catch(_){$('#lab-save-state').textContent='This view is not ready for capture. Let the specimen finish loading, then try again.';}return;}
+      const canvas=host.querySelector('canvas'),svg=host.querySelector('svg');
+      if(canvas){try{canvas.toBlob(blob=>{if(blob)download(blob,'image/png',lab.id+'-observation.png');else $('#lab-save-state').textContent='Capture unavailable for this view. Export your observations instead.';});}catch(_){$('#lab-save-state').textContent='This view cannot be captured by the browser. Your notebook is still exportable.';}}
+      else if(svg){const clone=svg.cloneNode(true),style=getComputedStyle(svg);clone.setAttribute('xmlns','http://www.w3.org/2000/svg');clone.setAttribute('style','background:'+getComputedStyle(document.documentElement).getPropertyValue('--bg-2')+';color:'+style.color+';'+['--em','--cy','--ink','--dim','--line','--hair','--rose','--amber'].map(k=>k+':'+getComputedStyle(document.documentElement).getPropertyValue(k)).join(';'));download(new XMLSerializer().serializeToString(clone),'image/svg+xml',lab.id+'-observation.svg');}
+      else $('#lab-save-state').textContent='No capturable view is available. Your written observations can still be exported.';
+    };
+    mode();paint();publish();
+    return {dispose(){if(disposed)return;disposed=true;save();host.removeEventListener('change',action);host.removeEventListener('click',action);}};
+  }
+  window.BioNotebook={mount,clean,csv};
+})();
+/* Reviewed metadata stays separate from experiment rendering. Durations are estimates. */
+(function(){
+  'use strict';
+  const rows=[
+    ['microscope','Microscopy','foundation',10,'microscope',['cell-structure'],['onion','blood','stomata','slide','cell','protein factory'],'How does magnification change field of view and visible detail?',['Choose a slide','Focus at low power','Compare two objectives','Use the scale to estimate size']],
+    ['osmosis','Cell Biology','foundation',10,'simulation',['membrane-transport'],['water','turgor','hypotonic','hypertonic','cell swelling'],'How does the surrounding solution change a cell’s volume?',['Predict water movement','Record the starting condition','Change external solute','Compare plant and animal cells']],
+    ['enzyme-kinetics','Biochemistry','school',15,'simulation',['enzymes'],['enzymes','temperature','pH','inhibition','substrate'],'Which conditions limit the activity of this model enzyme?',['Record a baseline','Vary one condition','Take a fresh sample after denaturation','Compare reaction rates']],
+    ['photosynthesis-rate','Plant Biology','school',15,'simulation',['photosynthesis'],['plant food','light','oxygen','chloroplast'],'When does adding more light stop increasing photosynthesis?',['Predict a limiting factor','Keep temperature and carbon dioxide fixed','Change light intensity','Test the plateau']],
+    ['cellular-respiration','Cell Biology','school',15,'simulation',['cellular-respiration'],['ATP','mitochondria','energy','fermentation'],'How do oxygen and glucose availability change the energy yield?',['Record an oxygen-rich baseline','Change oxygen supply','Compare carbon dioxide and ATP proxies','Explain the pathway change']],
+    ['mitosis','Cell Biology','school',10,'simulation',['mitosis','meiosis'],['chromosomes','division','spindle','cell cycle'],'Why must the spindle checkpoint be satisfied before sister chromatids separate?',['Observe chromosome replication','Advance to metaphase','Disrupt the spindle','Restore attachment and follow separation']],
+    ['mendelian-genetics','Genetics','school',15,'genetics',['mendelian-genetics'],['Punnett','offspring','alleles','inheritance','cross'],'Do small families always match the predicted inheritance ratio?',['Choose parents','Predict gametes','Compare expected proportions','Sample offspring and compare repeats']],
+    ['dna-protein','Molecular Biology','school',15,'genetics',['dna','protein-synthesis'],['mutation','transcription','translation','codons','ribosome'],'How can a DNA change alter a protein, or leave it unchanged?',['Read the coding strand','Transcribe and translate','Change one base or shift the frame','Compare the peptide']],
+    ['heart-physiology','Human Physiology','school',15,'simulation',['heart-circulation'],['heart','blood flow','cardiac output','resistance','vessel diameter'],'How are heart rate, stroke volume, resistance and pressure connected?',['Record resting values','Change one control','Compare flow with pressure','State the model assumptions']],
+    ['heart-rate','Human Physiology','school',15,'simulation',['heart-circulation'],['heart','ECG','electrocardiogram','P wave','QRS','T wave'],'How does pacing change the model cardiac cycle?',['Observe one cycle','Change the rate','Identify electrical and mechanical events','Compare recorded values']],
+    ['gas-exchange','Human Physiology','school',15,'simulation',['gas-exchange'],['lung','alveolus','alveoli','breathing','oxygen'],'What limits diffusion across an alveolar membrane?',['Record a baseline','Change the gradient','Compare surface area and thickness','Relate diffusion to ventilation']],
+    ['natural-selection','Evolution','school',20,'simulation',['natural-selection'],['beetle','adaptation','allele','evolution'],'How does a changing environment shift an inherited trait over generations?',['Record initial variation','Advance several generations','Change the environment','Compare allele frequencies']],
+    ['predator-prey','Ecology','school',15,'simulation',['ecology'],['food web','population','predator','prey','oscillation'],'Why can a predator population peak after its prey population?',['Record starting populations','Advance equal time intervals','Change predation or food supply','Explain the lag']],
+    ['gel-electrophoresis','Biotechnology','school',15,'data',['dna'],['DNA bands','forensic','gel','fragments','ladder'],'Which fictional DNA sample matches the observed band pattern?',['Load samples and a ladder','Run the model gel','Compare fragment migration','Justify the match']],
+    ['dna-extraction','Biotechnology','foundation',15,'simulation',['dna'],['DNA','cell','membrane','extraction'],'Which cell structures must be separated to reveal DNA?',['Inspect the starting material','Follow the virtual separation stages','Observe where DNA appears','Explain each separation']],
+    ['pcr','Biotechnology','advanced',20,'simulation',['dna'],['amplification','DNA copies','polymerase'],'How does repeated copying change the amount of a target DNA segment?',['Inspect the model target','Advance a cycle','Compare successive copy numbers','Explain ideal versus limited amplification']],
+    ['plant-investigation','Open Investigation','school',20,'investigation',['plant-transport','photosynthesis'],['yellow leaves','growth','minerals','plant food'],'Why have the plants in this virtual greenhouse stopped growing?',['Inspect observations','Choose a diagnostic comparison','Collect several pieces of evidence','Write a supported conclusion']],
+    ['ecosystem-investigation','Open Investigation','school',20,'investigation',['ecology','natural-selection'],['biodiversity','river','food web','ecosystem'],'What best explains a sudden loss of biodiversity in a virtual pond?',['Inspect the food web','Choose environmental tests','Compare upstream and downstream evidence','Evaluate competing explanations']]
+  ];
+  const meta={};
+  rows.forEach(([id,category,difficulty,minutes,type,relatedTopics,aliases,question,steps])=>{meta[id]={category,difficulty,minutes,type,relatedTopics,aliases,question,steps,learningObjectives:[],challenge:'Investigate: '+question+' Choose your procedure and controls, then defend your conclusion with recorded evidence.'};});
+  const dissections=[['heart','Mammalian Heart','Human Physiology',['heart-circulation']],['frog','Frog','Dissection',['heart-circulation','gas-exchange']],['fish','Bony Fish','Dissection',['gas-exchange','heart-circulation']],['earthworm','Earthworm','Dissection',['gas-exchange','ecology']],['cockroach','Cockroach','Dissection',['gas-exchange','nervous-system']]];
+  dissections.forEach(([specimen,title,category,relatedTopics])=>{
+    const id=specimen+'-dissection';
+    meta[id]={category:'Dissection',difficulty:'school',minutes:30,type:'dissection',relatedTopics,aliases:[specimen,title,'anatomy','auto dissection','organs',category],question:'How do the structures of the '+title.toLowerCase()+' support their functions?',steps:['Inspect the external anatomy','Use the guided access sequence','Identify an internal structure','Connect its form to its function'],learningObjectives:['Recognize anatomical layers','Compare organs and systems','Record structural evidence']};
+    LABS.register(id,{title:title+' Dissection',tag:'Dissection',blurb:'Explore the existing 3D '+title.toLowerCase()+' with manual instruments, guided access, clickable anatomy and optional hand tracking.',build(host){
+      const help=document.createElement('p');help.className='ln-dissection-help';help.textContent='Use the theatre’s instruments to open access layers, select a structure, and inspect its function. The theatre includes its own guided tutor and camera controls. Record observations in the notebook below.';host.append(help);
+      const iframe=document.createElement('iframe');iframe.className='ln-stage-iframe';iframe.title=title+' virtual dissection';iframe.allow='camera; fullscreen; xr-spatial-tracking';iframe.src='./lab.html?instant=1';host.append(iframe);
+      let stopped=false,attempt=0,timer=null,ready=false,failed=false;
+      function connect(){
+        if(stopped)return;
+        try{
+          const api=iframe.contentWindow.__LAB;
+          if(api?.ok===false){failed=true;help.textContent='The 3D theatre could not start in this browser. '+(api.error||'Try reloading the bench or opening the Dissection Theatre directly.');return;}
+          if(api?.ok&&api.loadSpecimen){
+            // startApp has finished its default frog setup before ok becomes true.
+            if(specimen!=='frog')api.loadSpecimen(specimen);
+            if(Array.isArray(api.parts)&&api.parts.length){ready=true;return;}
+          }
+        }catch(_){}
+        if(attempt++<150)timer=setTimeout(connect,200);
+        else{failed=true;help.textContent='The 3D theatre did not finish loading. Reload this bench, or open the Dissection Theatre from the app navigation.';}
+      }
+      iframe.addEventListener('load',connect,{once:true});
+      return {
+        snapshot(){
+          if(!ready)return{variables:{'Requested specimen':title},measurements:{'Theatre status':failed?'Unavailable':'Loading'},stage:failed?'Theatre unavailable':'Theatre loading'};
+          try{
+            const api=iframe.contentWindow.__LAB,parts=Array.isArray(api.parts)?api.parts:[],state=api.dissection?.state;
+            const actual=iframe.contentDocument.querySelector('#specbtn .specname')?.textContent.trim()||title;
+            const selected=parts.find(p=>p.id===api.dissection?.hovered);
+            return{variables:{Specimen:actual,Instrument:api.tool||'probe'},measurements:{'Available anatomical structures':parts.length,'Pinned structures':state?.pinned?.size||0,'Incisions':state?.incisions?.size||0,'Opened structures':state?.opened?.size||0,'Removed structures':state?.removed?.size||0,'Deepest revealed layer':state?.maxLayerRevealed||0,'Selected structure':selected?.name||'None'},stage:selected?'Inspecting '+selected.name:'Explore anatomy',actions:selected?['Inspect '+selected.name+': '+(selected.note||'')]:[]};
+          }catch(_){return{variables:{'Requested specimen':title},measurements:{'Theatre status':'Unavailable'},stage:'Theatre unavailable'};}
+        },
+        capture(){
+          return new Promise((resolve,reject)=>{
+            if(!ready||stopped){reject(new Error('Wait for the 3D theatre to finish loading before capturing.'));return;}
+            try{
+              const api=iframe.contentWindow.__LAB,canvas=iframe.contentDocument.querySelector('#stage canvas');
+              if(!canvas){reject(new Error('No specimen canvas is available to capture.'));return;}
+              // WebGL does not preserve its buffer: draw once immediately before
+              // requesting the browser-native bitmap, without changing the scene.
+              api.environment()?.render();
+              canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('The browser could not capture this 3D view.')),'image/png');
+            }catch(_){reject(new Error('The browser could not capture this 3D view. Export your written observations instead.'));}
+          });
+        },
+        dispose(){stopped=true;clearTimeout(timer);iframe.src='about:blank';iframe.remove();}
+      };
+    }});
+  });
+  window.BIO_LAB_META=meta;
+})();
+/* Biology Entelloq — reusable, inspectable school models. No clinical predictions.
+ * Mechanisms: OpenStax Biology 2e §§5.2, 7.4, 8.2, 10.3, 12.3;
+ * standard genetic code: https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi
+ * diffusion: https://www.ncbi.nlm.nih.gov/books/NBK54112/
+ * cardiac output: https://www.ncbi.nlm.nih.gov/books/NBK470455/
+ * Numerical constants below are teaching assumptions, not empirical fits.
+ */
+(function () {
+  'use strict';
+  const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
+  const round = (n, p = 2) => Number(n.toFixed(p));
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const M = window.BIO_MODELS = window.BIO_MODELS || {};
+  M.osmosis = (volume, external, plant) => {
+    const internal = 300 / Math.max(0.2, volume);
+    const pressure = plant ? Math.max(0, volume - 1) * 2.5 : 0;
+    return { internal, pressure, flow: 0.035 * (0.002478 * (internal - external) - pressure) };
+  };
+  M.photosynthesis = v => {
+    const light = v.light / (v.light + 180), carbon = v.co2 / (v.co2 + 220);
+    const thermal = Math.exp(-Math.pow((v.temp - 27) / 13, 2));
+    const color = ({white:1,red:0.95,blue:0.9,green:0.35})[v.color] || 1;
+    const gross = 30 * light * carbon * thermal * color;
+    const respiration = 0.8 * Math.pow(2, (v.temp - 25) / 10);
+    return {gross, respiration, net:gross - respiration};
+  };
+  M.respiration = v => {
+    const glucose = 1.8 * v.glucose / (v.glucose + 3) * Math.exp(-Math.pow((v.temp - 35) / 18, 2));
+    const aerobic = v.oxygen / (v.oxygen + 2);
+    return {glucose, oxygen:glucose * aerobic * 6,
+      co2:glucose * (6 * aerobic + (v.organism === 'yeast' ? 2 * (1 - aerobic) : 0)),
+      atp:glucose * (30 * aerobic + 2 * (1 - aerobic)),
+      fermentation:glucose * (1 - aerobic), aerobic};
+  };
+  M.heart = v => {
+    const output = v.hr * v.sv / 1000;
+    const resistance = v.resistance / Math.pow(v.diameter / 100, 4);
+    return {output, resistance, pressure:output * resistance + 5};
+  };
+  M.gasExchange = v => {
+    const ventilation = v.breaths * Math.max(0, v.tidal - 0.15);
+    const diffusion = 250 * (v.area / 70) * (0.5 / v.thickness) * (v.gradient / 60);
+    const supply = ventilation * 60;
+    const uptake = Math.min(diffusion, supply);
+    return {ventilation, diffusion, uptake, co2:uptake * 0.8};
+  };
+  M.gametes = genotype => {
+    if (genotype.startsWith('X')) return genotype.match(/X[Aa]|Y/g);
+    let out = [''];
+    for (let i = 0; i < genotype.length; i += 2) out = out.flatMap(g => [g + genotype[i], g + genotype[i + 1]]);
+    return out;
+  };
+  M.zygote = (a,b) => {
+    if(a.startsWith('X')||b.startsWith('X'))return[a,b].sort().join('');
+    let child='';for(let i=0;i<a.length;i++)child+=[a[i],b[i]].sort().join('');return child;
+  };
+  M.cross = (a, b) => {
+    const ag = M.gametes(a), bg = M.gametes(b), counts = {};
+    ag.forEach(x => bg.forEach(y => {
+      const child = M.zygote(x,y);
+      counts[child] = (counts[child] || 0) + 1 / (ag.length * bg.length);
+    }));
+    return counts;
+  };
+  const aaNames = {F:'Phe',L:'Leu',S:'Ser',Y:'Tyr','*':'Stop',C:'Cys',W:'Trp',P:'Pro',H:'His',Q:'Gln',R:'Arg',I:'Ile',M:'Met',T:'Thr',N:'Asn',K:'Lys',V:'Val',A:'Ala',D:'Asp',E:'Glu',G:'Gly'};
+  const code = {}, bases = 'UCAG', amino = 'FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG';
+  let codeIndex = 0;
+  for (const a of bases) for (const b of bases) for (const c of bases) code[a+b+c] = aaNames[amino[codeIndex++]];
+  M.codons = code;
+  M.translate = dna => {
+    const rna = dna.toUpperCase().replace(/T/g, 'U');
+    const peptide = [], codons = [];
+    for (let i = 0; i + 2 < rna.length; i += 3) {
+      const c = rna.slice(i, i + 3), aa = code[c] || '?';
+      codons.push({codon:c, amino:aa});
+      if (aa === 'Stop') break;
+      peptide.push(aa);
+    }
+    return {rna, peptide, codons, started:rna.startsWith('AUG'), trailing:rna.length % 3};
+  };
+  M.mutation = (original, changed) => {
+    if (original === changed) return 'Unchanged';
+    if ((changed.length - original.length) % 3 !== 0) return 'Frameshift';
+    const a = M.translate(original), b = M.translate(changed);
+    if (!b.started) return 'Start codon changed';
+    if (b.peptide.length < a.peptide.length && b.codons.at(-1)?.amino === 'Stop') return 'Nonsense / earlier stop';
+    if (a.peptide.join() === b.peptide.join()) return 'Silent';
+    if (changed.length !== original.length) return 'In-frame insertion / deletion';
+    if (a.codons.at(-1)?.amino === 'Stop' && b.codons.at(-1)?.amino !== 'Stop') return 'Stop-loss';
+    return 'Missense';
+  };
+  M.mitosisCanAdvance = (stage, spindle, checkpoint) => stage !== 2 || spindle === 100 || !checkpoint;
+  function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function color(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || '#67bd9c'; }
+  const icon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 3v7L4 19q-1 2 2 2h12q3 0 2-2l-5-9V3M8 3h8M7 15h10"/></svg>';
+  function text(ctx, str, x, y, size = 15, col = '--ink') { size=Math.max(size,Math.min(24,6400/Math.max(240,ctx.canvas.clientWidth)));ctx.fillStyle = color(col); ctx.font = `500 ${size}px Inter, sans-serif`; ctx.textAlign = 'center'; ctx.fillText(str, x, y); }
+  function circle(ctx,x,y,r,fill,stroke) { ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); if(fill){ctx.fillStyle=fill;ctx.fill();} if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=2;ctx.stroke();} }
+  function line(ctx,x,y,a,b,col='--em',width=3) {ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(a,b);ctx.strokeStyle=color(col);ctx.lineWidth=width;ctx.stroke();}
+  function arrow(ctx,x,y,a,b,col='--cy') {line(ctx,x,y,a,b,col,3); const ang=Math.atan2(b-y,a-x); line(ctx,a,b,a-11*Math.cos(ang-.5),b-11*Math.sin(ang-.5),col,3);line(ctx,a,b,a-11*Math.cos(ang+.5),b-11*Math.sin(ang+.5),col,3);}
+  function range(key,label,min,max,value,step=1) { return {key,label,min,max,value,step}; }
+  function select(key,label,value,options) { return {key,label,value,options}; }
+  function register(spec) {
+    LABS.register(spec.id, {title:spec.title,tag:spec.tag,category:spec.tag,blurb:spec.blurb,color:'var(--em)',icon,
+      relatedTopics:spec.topics,difficulty:'school',duration:'10–20 min',
+      build(host) { return build(host,spec); }
+    });
+  }
+  function build(host,spec) {
+    const wrap=el('div','bx ex-bench'), view=el('div','bx-view ex-view'), side=el('div','bx-side ex-side');
+    wrap.append(view,side); host.append(wrap);
+    const canvas=el('canvas','ex-canvas'); canvas.width=1280;canvas.height=780;
+    canvas.setAttribute('role','img');canvas.setAttribute('aria-label',spec.title+' interactive diagram; live values are listed beside it.');view.append(canvas);
+    const ctx=canvas.getContext('2d');ctx.scale(2,2);
+    const status=el('p','ex-status');status.setAttribute('aria-live','polite');view.append(status);
+    const extra=el('div','ex-extra');view.append(extra);
+    const b={v:{},s:spec.state?spec.state():{},time:0,history:[],actions:[],running:false,extra,side,view,host,controls:{},ctx};
+    const readings=el('dl','ex-readings');
+    function action(s) {b.actions.push(s);if(b.actions.length>30)b.actions.shift();}
+    b.action=action;
+    (spec.vars||[]).forEach(d=>{
+      b.v[d.key]=d.value;
+      const label=el('label','bx-grp ex-control'), cap=el('span','ex-label',d.label), out=el('output','bx-val');label.append(cap);
+      let input;
+      if(d.options){input=el('select','ex-select');d.options.forEach(o=>{const n=el('option','',typeof o==='string'?o:o[1]);n.value=typeof o==='string'?o:o[0];input.append(n);});input.value=d.value;label.append(input);}
+      else {const row=el('span','bx-row');input=el('input','bx-slider');input.type='range';input.min=d.min;input.max=d.max;input.step=d.step;input.value=d.value;out.textContent=d.value;row.append(input,out);label.append(row);}
+      input.setAttribute('aria-label',d.label);b.controls[d.key]=input;
+      input.addEventListener(d.options?'change':'input',()=>{b.v[d.key]=d.options?input.value:+input.value;out.textContent=input.value;action(`${d.label}: ${input.value}`);if(spec.change)spec.change(b,d.key);b.render();});side.append(label);
+    });
+    b.button=(label,fn,parent=b.controlsHost||side)=>{const button=el('button','bx-btn',label);button.type='button';button.addEventListener('click',()=>{action(label);fn();b.render();});parent.append(button);return button;};
+    const row=el('div','bx-chips');side.append(row);
+    let runButton, stepButton;
+    if(spec.step){
+      runButton=b.button('Run observation',()=>{b.running=!b.running;},row);
+      stepButton=b.button('Advance 10 s',()=>{b.running=false;for(let i=0;i<20;i++)advance(.5);},row);
+      side.append(el('p','ex-clock','Model clock · nominal 5× speed · 300 s per trial'));
+    }
+    b.reset=()=>{b.s=spec.state?spec.state():{};b.time=0;b.history=[];b.running=false;if(spec.reset)spec.reset(b);};
+    b.button(spec.resetLabel||'Reset experiment',b.reset,row);
+    b.controlsHost=el('div','ex-actions');side.append(b.controlsHost);
+    side.append(readings);
+    const note=el('p','bx-note ex-assumption',spec.assumption);side.append(note);
+    if(spec.source){const a=el('a','ex-source','Model reference ↗');a.href=spec.source;a.target='_blank';a.rel='noopener';side.append(a);}
+    const graph=el('div','ex-graph');view.append(graph);
+    b.measure=()=>spec.measure(b);
+    b.render=()=>{
+      const measures=b.measure();
+      readings.replaceChildren(...Object.entries(measures).flatMap(([k,v])=>[el('dt','',k),el('dd','',typeof v==='number'?String(round(v)):v)]));
+      status.textContent=(spec.story?spec.story(b):'')+(spec.step&&b.time>=300?' Observation complete at 300 s. Reset the experiment for a fresh trial.':'');
+      if(runButton){runButton.textContent=b.running?'Pause observation':'Run observation';runButton.disabled=b.time>=300;stepButton.disabled=b.time>=300;}
+      ctx.clearRect(0,0,640,390);spec.draw(b,ctx);
+      if(spec.detail)spec.detail(b);
+      if(spec.chart && b.history.length){
+        const key=spec.chart, values=b.history.map(h=>h.y), min=Math.min(0,...values), max=Math.max(1,...values), span=max-min;
+        const path=b.history.map((p,i)=>`${i?'L':'M'}${45+(p.x/Math.max(10,b.time))*550},${142-(p.y-min)/span*110}`).join(' ');
+        graph.innerHTML=`<svg viewBox="0 0 640 180" role="img" aria-label="${esc(key)} plotted against elapsed seconds"><path class="ex-axis" d="M45 22V142H610"/><path class="ex-trace" d="${path}"/><text x="45" y="15">${esc(key)}</text><text x="45" y="160">0 s</text><text x="557" y="160">${round(b.time)} s</text><text x="4" y="32">${round(max,1)}</text><text x="4" y="142">${round(min,1)}</text></svg>`;
+      } else graph.replaceChildren();
+    };
+    function advance(dt){if(b.time>=300){b.running=false;return;}dt=Math.min(dt,300-b.time);spec.step(b,dt);b.time+=dt;const m=b.measure();if(spec.chart){b.history.push({x:b.time,y:Number(m[spec.chart])||0});if(b.history.length>600)b.history.shift();}if(b.time>=300)b.running=false;}
+    if(spec.controls)spec.controls(b);
+    b.render();
+    const resizeObserver=new ResizeObserver(()=>b.render());resizeObserver.observe(canvas);
+    // Observation time is independent of screen refresh rate. No animation runs
+    // until the student asks; the manual step is available with reduced motion.
+    const timer=spec.step?setInterval(()=>{if(!b.running||document.hidden)return;advance(.5);b.render();},100):null;
+    return {dispose(){if(timer)clearInterval(timer);resizeObserver.disconnect();b.running=false;},snapshot(){return {
+      variables:Object.fromEntries((spec.vars||[]).map(d=>[d.label,b.v[d.key]])),
+      measurements:b.measure(),stage:spec.story?spec.story(b):'Observing',actions:b.actions.slice()
+    };}};
+  }
+
+  register({id:'osmosis',title:'Osmosis Lab',tag:'Cell Biology',topics:['cell-membrane','osmosis'],
+    blurb:'Place a cell in a new solution. Follow water movement, measure the changing volume and discover what a cell wall changes.',
+    vars:[select('type','Cell type','plant',[['plant','Plant cell'],['animal','Animal cell']]),range('external','External nonpenetrating solute (mOsm/L)',0,600,150,10)],
+    state:()=>({volume:1,lysed:false}),change(b,k){if(k==='type')b.reset();},
+    step(b,dt){if(b.s.lysed)return;const m=M.osmosis(b.s.volume,b.v.external,b.v.type==='plant');b.s.volume=clamp(b.s.volume+m.flow*dt,.2,1.7);if(b.s.volume>=1.7)b.s.lysed=true;},
+    measure(b){const m=M.osmosis(b.s.volume,b.v.external,b.v.type==='plant');return {'Cell volume (% initial)':round(b.s.volume*100),'Internal solute (mOsm/L)':round(m.internal),'Wall pressure (MPa)':round(m.pressure,3),'Net water flow (% volume/s)':b.s.lysed?0:round(m.flow*100,3),'Elapsed time (s)':b.time};},
+    story(b){if(b.s.lysed)return 'Lysis: this animal cell exceeded the model membrane limit. Reset to test another solution.';const m=M.osmosis(b.s.volume,b.v.external,b.v.type==='plant');const tonic=b.v.external<300?'Initially hypotonic':b.v.external>300?'Initially hypertonic':'Initially isotonic';return `${tonic}. ${Math.abs(m.flow)<.0003?'Near water-potential equilibrium':m.flow>0?'Net water movement into the cell':'Net water movement out of the cell'}. ${b.v.type==='plant'?(b.s.volume>1.02?'The wall is under turgor pressure.':b.s.volume<.9?'The membrane pulls away from the wall: plasmolysis.':'The cell is flaccid.'):'Watch the cell volume as water crosses the membrane.'}`;},
+    chart:'Cell volume (% initial)',
+    assumption:'Teaching model at 25 °C: water crosses; solute does not. The cell starts at 300 mOsm/L, solute amount is conserved and the bath is effectively infinite. Wall stiffness and the animal-cell lysis threshold are illustrative; the diagram is not to scale.',
+    source:'https://openstax.org/books/biology-2e/pages/5-2-passive-transport',
+    draw(b,c){const plant=b.v.type==='plant',v=b.s.volume,r=85*Math.cbrt(v);text(c,'EXTERNAL SOLUTION',320,32,12,'--dim');text(c,b.v.external+' mOsm/L',320,58,22);if(plant){c.strokeStyle=color('--em');c.lineWidth=9;c.strokeRect(195,91,250,245);const gap=6+Math.max(0,1.02-v)*90;c.fillStyle=color('--bg-2');c.fillRect(195+gap,91+gap,250-gap*2,245-gap*2);c.strokeStyle=color('--cy');c.lineWidth=2;c.strokeRect(195+gap,91+gap,250-gap*2,245-gap*2);}else circle(c,320,207,r,color('--bg-2'),color('--cy'));if(!b.s.lysed){circle(c,304,201,20,color('--indigo'));for(let i=0;i<22;i++){const a=i*2.4,rr=Math.sqrt((i+.5)/22)*(r-12);circle(c,320+Math.cos(a)*rr,207+Math.sin(a)*rr,3,color('--amber'));}}for(let i=0;i<Math.round(b.v.external/15);i++){const x=35+(i*89)%560,y=91+(i*61)%250;if(x<182||x>458)circle(c,x,y,3,color('--amber'));}const flow=M.osmosis(v,b.v.external,plant).flow;if(!b.s.lysed&&Math.abs(flow)>.0003){for(const sign of [-1,1]){const inner=320+sign*(plant?119:r+8),outer=320+sign*173;if(flow>0)arrow(c,outer,207,inner,207);else arrow(c,inner,207,outer,207);}}text(c,b.s.lysed?'MEMBRANE RUPTURED':`${round(v*100,1)}% of initial volume`,320,365,18);}
+  });
+  register({id:'photosynthesis-rate',title:'Photosynthesis Rate Lab',tag:'Plant Biology',topics:['photosynthesis'],
+    blurb:'Build a light-response curve, change carbon dioxide and test whether a brighter lamp always means more oxygen.',
+    vars:[range('light','Light (µmol photons/m²/s)',0,1500,500,25),range('co2','Carbon dioxide (ppm)',0,1200,400,20),range('temp','Temperature (°C)',0,50,25),select('color','Lamp spectrum','white',[['white','White'],['red','Red'],['blue','Blue'],['green','Green']])],
+    state:()=>({oxygen:0}),step(b,dt){b.s.oxygen+=M.photosynthesis(b.v).net*dt/60;},
+    measure(b){const m=M.photosynthesis(b.v);return {'Gross O₂ production (µmol/min)':round(m.gross),'Net O₂ exchange (µmol/min)':round(m.net),'Respiratory O₂ use (µmol/min)':round(m.respiration),'Cumulative net O₂ (µmol)':round(b.s.oxygen),'Elapsed time (s)':b.time};},
+    chart:'Net O₂ exchange (µmol/min)',
+    story(b){const m=M.photosynthesis(b.v);return m.net<=0?'Respiration exceeds photosynthesis: net oxygen is being consumed. Increase one factor and compare.':'Oxygen accumulates. Keep three variables fixed while you test the fourth; a plateau signals diminishing response.';},
+    assumption:'A fictional fixed leaf sample with saturating light and CO₂ responses, an illustrative 27 °C optimum and ongoing respiration. Spectrum multipliers are qualitative. Rates are model outputs, not measurements of a particular plant; green light still supports photosynthesis.',
+    source:'https://openstax.org/books/biology-2e/pages/8-2-the-light-dependent-reactions-of-photosynthesis',
+    draw(b,c){c.strokeStyle=color('--cy');c.lineWidth=3;c.strokeRect(150,82,340,252);c.globalAlpha=.12;c.fillStyle=color('--cy');c.fillRect(151,113,338,220);c.globalAlpha=1;line(c,318,306,318,161,'--em',7);for(let i=0;i<5;i++){c.fillStyle=color('--em');c.beginPath();c.ellipse(318+(i%2?1:-1)*31,275-i*24,43,15,i%2?-.5:.5,0,Math.PI*2);c.fill();}circle(c,94,61,24,color('--amber'));for(let i=0;i<4;i++){c.globalAlpha=clamp(b.v.light/1500,.12,1);arrow(c,116,67+i*6,223+i*30,145,'--amber');c.globalAlpha=1;}const m=M.photosynthesis(b.v);for(let i=0;i<Math.floor(Math.max(0,m.net));i++)circle(c,300+Math.sin(i*2)*35,145-((i*19+b.time*12)%83),3.5,null,color('--cy'));text(c,'Fixed leaf sample · gas-exchange chamber',320,364,15);text(c,`${round(m.net)} µmol O₂/min net`,320,45,20);}
+  });
+  register({id:'cellular-respiration',title:'Cellular Respiration Lab',tag:'Biochemistry',topics:['cellular-respiration'],
+    blurb:'Control oxygen, fuel and temperature. Compare the gas exchange and energy yield of aerobic metabolism and fermentation.',
+    vars:[select('organism','Fictional cell system','yeast',[['yeast','Yeast-like cells'],['muscle','Muscle-like cells']]),range('temp','Temperature (°C)',0,60,35),range('glucose','Glucose availability (mM)',0,20,8,.5),range('oxygen','Dissolved oxygen availability (relative units)',0,20,10,.5)],
+    state:()=>({atp:0,co2:0}),step(b,dt){const m=M.respiration(b.v);b.s.atp+=m.atp*dt/60;b.s.co2+=m.co2*dt/60;},
+    measure(b){const m=M.respiration(b.v);return {'O₂ consumption (µmol/min)':round(m.oxygen),'CO₂ production (µmol/min)':round(m.co2),'ATP output proxy (µmol/min)':round(m.atp),'Fermentative share (%)':round((1-m.aerobic)*100),'Accumulated ATP proxy (µmol)':round(b.s.atp),'Elapsed time (s)':b.time};},
+    chart:'ATP output proxy (µmol/min)',
+    story(b){const m=M.respiration(b.v);return b.v.glucose===0?'No fuel: neither pathway can produce ATP in this model.':`${round(m.aerobic*100)}% of glucose follows the aerobic pathway. Fermentation regenerates NAD⁺ and produces ${b.v.organism==='yeast'?'ethanol + CO₂':'lactate, with no fermentative CO₂'}.`;},
+    assumption:'Fixed cell biomass and steady external fuel/oxygen. Illustrative aerobic yield: 30 ATP per glucose; fermentation: 2. Actual aerobic yields vary. Fermentation is modeled separately from anaerobic respiration using other electron acceptors. ATP is an energy-output proxy; rates are synthetic.',
+    source:'https://openstax.org/books/biology-2e/pages/7-4-oxidative-phosphorylation',
+    draw(b,c){const m=M.respiration(b.v);text(c,'GLUCOSE',320,40,18,'--amber');arrow(c,320,53,320,98,'--amber');c.strokeStyle=color('--hair');c.lineWidth=2;c.strokeRect(233,106,174,53);text(c,'Glycolysis · 2 ATP',320,137,16);arrow(c,266,164,175,216);arrow(c,375,164,467,216,'--indigo');circle(c,163,262,68,null,color('--em'));circle(c,478,262,68,null,color('--indigo'));text(c,'Aerobic',163,251,17);text(c,round(m.aerobic*100)+'%',163,278,25,'--em');text(c,'Fermentation',478,251,14);text(c,round((1-m.aerobic)*100)+'%',478,278,25,'--indigo');text(c,'CO₂ + H₂O · more ATP',163,362,13);text(c,b.v.organism==='yeast'?'Ethanol + CO₂':'Lactate',478,362,13);}
+  });
+  register({id:'heart-physiology',title:'Heart Physiology Lab',tag:'Human Physiology',topics:['heart-circulation','cardiovascular-system'],
+    blurb:'Change the pump and the vessels. Relate heart rate, stroke volume and resistance to the pressure needed to sustain flow.',
+    vars:[range('hr','Heart rate (beats/min)',40,180,72),range('sv','Stroke volume (mL/beat)',30,120,70),range('resistance','Baseline resistance (mmHg·min/L)',8,24,17,.5),range('diameter','Vessel diameter (% reference)',75,125,100)],
+    state:()=>({beats:0}),step(b,dt){b.s.beats+=b.v.hr*dt/60;},
+    measure(b){const m=M.heart(b.v);return {'Cardiac output (L/min)':round(m.output),'Effective resistance (mmHg·min/L)':round(m.resistance),'Required mean pressure (mmHg)':round(m.pressure),'Elapsed heartbeats':round(b.s.beats,1),'Elapsed time (s)':b.time};},
+    chart:'Cardiac output (L/min)',story(b){const m=M.heart(b.v);return `CO = ${b.v.hr} × ${b.v.sv} ÷ 1000 = ${round(m.output)} L/min. ${m.pressure>180?'The ideal pump would require very high pressure; a living heart cannot necessarily maintain this output.':'Change vessel diameter and compare how resistance changes.'}`;},
+    assumption:'Ideal fixed-output pump: CO = HR × SV. Relative resistance follows diameter⁻⁴ at fixed viscosity and length; required mean pressure = flow × resistance + 5 mmHg. Real vessels and hearts adapt. The beat is schematic and these are not clinical predictions.',
+    source:'https://www.ncbi.nlm.nih.gov/books/NBK470455/',
+    draw(b,c){const m=M.heart(b.v),pulse=1+.035*Math.sin(b.s.beats*Math.PI*2);c.save();c.translate(225,202);c.scale(pulse,pulse);c.beginPath();c.moveTo(0,100);c.bezierCurveTo(-170,-10,-75,-130,0,-57);c.bezierCurveTo(75,-130,170,-10,0,100);c.fillStyle=color('--rose');c.globalAlpha=.22;c.fill();c.globalAlpha=1;c.strokeStyle=color('--rose');c.lineWidth=4;c.stroke();c.restore();text(c,b.v.hr+' bpm',225,195,23);text(c,b.v.sv+' mL/beat',225,225,16);const w=25*b.v.diameter/100;line(c,348,140-w,540,140-w,'--rose',4);line(c,348,140+w,540,140+w,'--rose',4);arrow(c,382,140,505,140,'--rose');line(c,348,268-w,540,268-w,'--cy',4);line(c,348,268+w,540,268+w,'--cy',4);arrow(c,505,268,382,268,'--cy');text(c,'Arterial flow',446,90,16);text(c,'Venous return',446,326,16);text(c,round(m.output)+' L/min',320,371,25,'--em');}
+  });
+  register({id:'gas-exchange',title:'Lung Gas Exchange Lab',tag:'Human Physiology',topics:['gas-exchange','respiratory-system'],
+    blurb:'Give an alveolus more area, a thicker barrier or a steeper oxygen gradient. Find whether ventilation or diffusion limits oxygen uptake.',
+    vars:[range('breaths','Breathing rate (breaths/min)',4,40,12),range('tidal','Tidal volume (L/breath)',.2,1.2,.5,.05),range('area','Exchange area (m²)',10,100,70),range('thickness','Barrier thickness (µm)',.25,3,.5,.05),range('gradient','O₂ partial-pressure difference (mmHg)',0,100,60)],
+    state:()=>({uptake:0}),step(b,dt){b.s.uptake+=M.gasExchange(b.v).uptake*dt/60;},
+    measure(b){const m=M.gasExchange(b.v);return {'Alveolar ventilation (L/min)':round(m.ventilation),'Diffusion capacity proxy (mL O₂/min)':round(m.diffusion),'O₂ uptake proxy (mL/min)':round(m.uptake),'CO₂ output proxy (mL/min)':round(m.co2),'Cumulative O₂ proxy (mL)':round(b.s.uptake),'Elapsed time (s)':b.time};},
+    chart:'O₂ uptake proxy (mL/min)',story(b){const m=M.gasExchange(b.v);return m.diffusion<m.ventilation*60?'Diffusion limits this model: test area, gradient or thickness while holding breathing constant.':'Ventilation limits this model: increasing exchange area alone will not increase the oxygen-uptake proxy.';},
+    assumption:'Fick relationship: diffusion ∝ area × pressure difference / thickness. Alveolar ventilation subtracts a fixed 0.15 L dead space. Illustrative uptake is capped by ventilation; CO₂ proxy uses a fixed respiratory quotient of 0.8. Perfusion, hemoglobin and feedback are omitted.',
+    source:'https://www.ncbi.nlm.nih.gov/books/NBK54112/',
+    draw(b,c){const r=80*Math.sqrt(b.v.area/70),th=5+b.v.thickness*8;circle(c,243,190,r,null,color('--cy'));circle(c,243,190,r+th,null,color('--hair'));c.strokeStyle=color('--rose');c.lineWidth=14;c.beginPath();c.arc(243,190,r+th+27,-.75,2.5);c.stroke();text(c,'ALVEOLUS',243,179,16);text(c,'air',243,204,15,'--cy');arrow(c,243+r-20,192,243+r+th+45,192,'--cy');text(c,'O₂',243+r+th+63,181,15,'--cy');arrow(c,243+r+th+36,242,243+r-27,242,'--rose');text(c,'CO₂',243+r+th+61,264,15,'--rose');text(c,'Blood capillary',430,325,16,'--rose');text(c,`${round(M.gasExchange(b.v).uptake)} mL O₂/min`,320,365,23);}
+  });
+  register({id:'mitosis',title:'Mitosis & the Spindle Checkpoint',tag:'Cell Biology',topics:['mitosis','cell-cycle'],
+    blurb:'Prepare a replicated cell, build its spindle and test the checkpoint. Can both daughter cells receive the same chromosomes?',
+    vars:[range('spindle','Correct bipolar spindle attachments (%)',0,100,100,25),select('checkpoint','Spindle checkpoint','on',[['on','Active'],['off','Disabled (investigate errors)']])],
+    state:()=>({stage:0,error:false,blocked:false}),
+    measure(b){return {'Stage number':b.s.stage,'Replicated chromosomes before separation':4,'Correct bipolar attachments (%)':b.v.spindle,'Daughter A chromosomes':b.s.stage===5?(b.s.error?5:4):'Not separated','Daughter B chromosomes':b.s.stage===5?(b.s.error?3:4):'Not separated'};},
+    story(b){const stages=['G₂: DNA has already replicated. Four duplicated chromosomes contain eight chromatids.','Prophase / prometaphase: chromosomes condense and the spindle gains access.','Metaphase: test bipolar attachment before separating sister chromatids.','Anaphase: sister chromatids have separated; each is now a chromosome.','Telophase: two nuclear envelopes form.','Cytokinesis: the cytoplasm divides.'];return b.s.blocked?'Checkpoint arrest: incomplete bipolar attachments. Repair the spindle before trying again.':stages[b.s.stage]+(b.s.error?' An attachment error was allowed through the checkpoint.':'');},
+    assumption:'A diploid fictional cell with 2n = 4; chromosome number is counted by centromeres. DNA replication precedes mitosis. Missing attachment can trigger arrest. Disabling the checkpoint illustrates one possible unequal segregation (5:3), not a prediction of every spindle error.',
+    source:'https://openstax.org/books/biology-2e/pages/10-3-control-of-the-cell-cycle',
+    controls(b){b.button('Advance cell-cycle stage',()=>{if(b.s.stage===5)return;if(!M.mitosisCanAdvance(b.s.stage,b.v.spindle,b.v.checkpoint==='on')){b.s.blocked=true;return;}b.s.blocked=false;if(b.s.stage===2&&b.v.spindle<100)b.s.error=true;b.s.stage++;});b.button('Repair all attachments',()=>{b.v.spindle=100;b.controls.spindle.value=100;b.controls.spindle.closest('label').querySelector('output').textContent='100';b.s.blocked=false;});},
+    draw(b,c){const stage=b.s.stage;const labels=['G₂','Prophase','Metaphase','Anaphase','Telophase','Cytokinesis'];for(let i=0;i<6;i++){circle(c,80+i*96,36,7,color(i===stage?'--em':'--hair'));text(c,labels[i],80+i*96,62,10,i===stage?'--ink':'--dim');}if(stage===5){circle(c,195,226,96,null,color('--em'));circle(c,445,226,96,null,color('--cy'));for(let j=0;j<2;j++){const n=b.s.error?(j===0?5:3):4;for(let i=0;i<n;i++)line(c,170+j*250+i*15,203,177+j*250+i*15,244,i%2?'--indigo':'--amber',5);}text(c,b.s.error?'Unequal sets: investigate the checkpoint':'Two matching chromosome sets',320,366,19);return;}c.strokeStyle=color('--hair');c.lineWidth=3;c.beginPath();c.ellipse(320,227,230,128,0,0,Math.PI*2);c.stroke();if(stage<2)circle(c,320,224,83,null,color('--indigo'));const separated=stage>=3;for(let i=0;i<4;i++){const y=151+i*46;const col=i%2?'--indigo':'--amber';if(separated){line(c,203,y-12,214,y,col,5);line(c,214,y,203,y+12,col,5);line(c,437,y-12,426,y,col,5);line(c,426,y,437,y+12,col,5);}else {const x=stage===2?320:280+(i%2)*80;line(c,x-11,y-12,x+11,y+12,col,5);line(c,x+11,y-12,x-11,y+12,col,5);if(stage===2){line(c,122,227,x,y,'--em',1);if(i<Math.round(b.v.spindle/25))line(c,518,227,x,y,'--cy',1);}}}if(stage>=1){circle(c,122,227,7,color('--em'));circle(c,518,227,7,color('--cy'));}if(stage===4){circle(c,208,224,81,null,color('--indigo'));circle(c,432,224,81,null,color('--indigo'));}text(c,b.s.blocked?'CHECKPOINT: WAIT':'2n = 4 · track the centromeres',320,377,16,b.s.blocked?'--rose':'--dim');}
+  });
+  register({id:'mendelian-genetics',title:'Inheritance & Virtual Breeding',tag:'Genetics',topics:['mendelian-genetics','inheritance'],
+    blurb:'Choose two fictional parents, predict their offspring and breed a sample. Compare exact probabilities with what chance actually produces.',
+    vars:[select('mode','Inheritance model','complete',[['complete','Complete dominance'],['incomplete','Incomplete dominance'],['codominant','Codominance'],['dihybrid','Dihybrid · independent loci'],['sexlinked','X-linked recessive']]),select('parentA','Parent 1 genotype','Aa',['AA','Aa','aa']),select('parentB','Parent 2 genotype','Aa',['AA','Aa','aa']),range('sample','Offspring per breeding trial',4,200,40,4)],
+    state:()=>({offspring:{},total:0,seed:12345,generation:1}),
+    change(b,k){if(k==='mode'){for(const key of ['parentA','parentB']){const gen=b.v.mode==='sexlinked'?(key==='parentA'?['XAXA','XAXa','XaXa']:['XAY','XaY']):b.v.mode==='dihybrid'?['AABB','AABb','AAbb','AaBB','AaBb','Aabb','aaBB','aaBb','aabb']:['AA','Aa','aa'];const s=b.controls[key];s.replaceChildren(...gen.map(g=>{const o=el('option','',g);o.value=g;return o;}));b.v[key]=b.v.mode==='sexlinked'?(key==='parentA'?'XAXa':'XAY'):b.v.mode==='dihybrid'?'AaBb':'Aa';s.value=b.v[key];}}if(k!=='sample'){b.s.offspring={};b.s.total=0;}},
+    measure(b){const probabilities=M.cross(b.v.parentA,b.v.parentB),m={'Offspring generated':b.s.total,'Breeding generation':b.s.generation};Object.entries(probabilities).forEach(([g,p])=>{m[g+' expected (%)']=round(p*100);m[g+' observed count']=b.s.offspring[g]||0;});return m;},
+    story(b){return b.s.total?'Compare expected probabilities with observed counts. An individual offspring has no obligation to complete a ratio.':'Make a prediction, then breed. A Punnett square shows probabilities, not a guaranteed family composition.';},
+    assumption:'Fictional diploid organisms; equal gamete probability, random fertilization, no viability differences and no linkage in the dihybrid model. A = pigment, a = no pigment. Incomplete dominance gives a blended heterozygote; codominance expresses both patterns. The X-linked recessive model uses a fictional trait in an XX/XY chromosome system. Sampling uses a reproducible pseudorandom sequence.',
+    source:'https://openstax.org/books/biology-2e/pages/12-3-laws-of-inheritance',
+    controls(b){b.button('Breed offspring sample',()=>{const prob=Object.entries(M.cross(b.v.parentA,b.v.parentB));for(let i=0;i<b.v.sample;i++){b.s.seed=(1664525*b.s.seed+1013904223)>>>0;let p=b.s.seed/4294967296,g=prob.at(-1)[0];for(const [key,value]of prob){p-=value;if(p<=0){g=key;break;}}b.s.offspring[g]=(b.s.offspring[g]||0)+1;b.s.total++;}});b.button('Use two sampled offspring as parents',()=>{const keys=Object.keys(b.s.offspring).filter(g=>b.s.offspring[g]>0);if(!keys.length)return;for(const[key,index]of [['parentA',0],['parentB',keys.length-1]]){const candidates=keys.filter(g=>Array.from(b.controls[key].options).some(o=>o.value===g));if(!candidates.length)continue;b.v[key]=candidates[Math.min(index,candidates.length-1)];b.controls[key].value=b.v[key];}b.s.offspring={};b.s.total=0;b.s.generation++;});},
+    detail(b){const ag=M.gametes(b.v.parentA),bg=M.gametes(b.v.parentB);b.extra.innerHTML='<div class="ex-table-wrap"><table class="ex-punnett"><caption>Gametes and possible zygotes · repeated gametes carry their probability</caption><thead><tr><th scope="col">Parent 1 ↓ / Parent 2 →</th>'+bg.map(g=>`<th scope="col">${esc(g)}</th>`).join('')+'</tr></thead><tbody>'+ag.map(a=>'<tr><th scope="row">'+esc(a)+'</th>'+bg.map(z=>{const g=M.zygote(a,z);return `<td>${esc(g)}</td>`;}).join('')+'</tr>').join('')+'</tbody></table></div>';},
+    draw(b,c){const prob=M.cross(b.v.parentA,b.v.parentB);const phenotype=g=>{if(b.v.mode==='sexlinked')return(g.includes('Y')?'XY · ':'XX · ')+(!g.includes('XA')?'trait expressed':'trait absent');if(b.v.mode==='dihybrid')return(g.slice(0,2).includes('A')?'Pigmented':'Pale')+' / '+(g.slice(2).includes('B')?'Round':'Long');if(g==='AA')return'Pigmented';if(g==='aa')return'Pale';return b.v.mode==='incomplete'?'Blended':b.v.mode==='codominant'?'Both patterns':'Pigmented';};const ph={};Object.entries(prob).forEach(([g,p])=>{const k=phenotype(g);if(!ph[k])ph[k]={p:0,n:0};ph[k].p+=p;ph[k].n+=b.s.offspring[g]||0;});const entries=Object.entries(ph);text(c,b.v.parentA+' × '+b.v.parentB,320,40,29);text(c,'Expected phenotype probability / observed frequency',320,70,13,'--dim');entries.forEach(([k,val],i)=>{const y=108+i*65;text(c,k,136,y+8,14);c.fillStyle=color('--hair');c.fillRect(254,y-8,300,17);c.fillStyle=color('--em');c.fillRect(254,y-8,300*val.p,17);c.fillStyle=color('--indigo');c.fillRect(254,y+13,b.s.total?300*val.n/b.s.total:0,10);text(c,round(val.p*100,1)+'%',593,y+8,13);});text(c,'Emerald: expected · indigo: this sample',320,371,14);}
+  });
+  const originalDNA='ATGGCTTTTGAACCGTAA';
+  register({id:'dna-protein',title:'DNA → Protein Lab',tag:'Molecular Biology',topics:['gene-expression','dna-protein','mutations'],
+    blurb:'Change a fictional coding sequence one base at a time. Transcribe it, read real codons and explain why some mutations change a peptide and others do not.',
+    vars:[select('mutationType','Edit operation','substitute',[['substitute','Substitute one base'],['insert','Insert one base'],['delete','Delete one base']]),range('position','Base position (1-based)',1,18,6),select('base','New base','C',['A','C','G','T'])],
+    state:()=>({dna:originalDNA,revealed:0}),measure(b){const m=M.translate(b.s.dna);return {'DNA coding strand (5′→3′)':b.s.dna,'mRNA (5′→3′)':m.rna,'Peptide (N→C)':m.started?m.peptide.join('–'):'No peptide: AUG start lost','Amino acids':m.started?m.peptide.length:0,'Mutation class':M.mutation(originalDNA,b.s.dna),'Bases in sequence':b.s.dna.length};},
+    story(b){const m=M.translate(b.s.dna);return !m.started?'The start codon is lost. This simplified reading frame cannot initiate translation.':`${M.mutation(originalDNA,b.s.dna)}. ${m.codons.at(-1)?.amino==='Stop'?'Translation reaches a stop codon.':'No in-frame stop appears in the displayed sequence.'} Compare the peptide with the reference; sequence alone does not tell us the full functional effect.`;},
+    assumption:'A short fictional coding strand, not a real gene. mRNA matches the coding strand with U replacing T; the complementary template is read antiparallel. Standard nuclear genetic code, an AUG start and the displayed reading frame only. No introns, alternative initiation or protein-folding prediction.',
+    source:'https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi',
+    controls(b){b.button('Apply DNA edit',()=>{if(b.s.dna.length>=30&&b.v.mutationType==='insert')return;const i=Math.min(b.v.position-1,b.s.dna.length-1);b.s.dna=b.s.dna.slice(0,i)+(b.v.mutationType==='delete'?'':b.v.base)+b.s.dna.slice(i+(b.v.mutationType==='insert'?0:1));b.s.revealed=0;});const r=el('div','bx-chips');b.controlsHost.append(r);[['Silent example','ATGGCCTTTGAACCGTAA'],['Missense example','ATGGATTTTGAACCGTAA'],['Nonsense example','ATGGCTTTTTAACCGTAA'],['Frameshift example','ATGGCTATTTGAACCGTAA']].forEach(([label,dna])=>b.button(label,()=>{b.s.dna=dna;b.s.revealed=0;},r));b.button('Read next codon',()=>{b.s.revealed=Math.min(M.translate(b.s.dna).codons.length,b.s.revealed+1);});},
+    detail(b){const m=M.translate(b.s.dna);b.extra.innerHTML='<div class="ex-sequence"><p><b>Reference peptide</b> Met–Ala–Phe–Glu–Pro–Stop</p><p><b>Current coding DNA 5′→3′</b> <code>'+esc(b.s.dna.match(/.{1,3}/g)?.join(' ')||'')+'</code></p><p><b>Complementary template 3′→5′</b> <code>'+esc(b.s.dna.split('').map(x=>({A:'T',T:'A',C:'G',G:'C'}[x])).join('').match(/.{1,3}/g)?.join(' ')||'')+'</code></p><p><b>mRNA 5′→3′</b> <code>'+esc(m.rna.match(/.{1,3}/g)?.join(' ')||'')+'</code></p></div>';},
+    draw(b,c){const m=M.translate(b.s.dna);text(c,'READ THE MESSAGE',320,35,13,'--dim');const codons=m.codons.slice(0,10),w=Math.min(80,540/Math.max(1,codons.length));codons.forEach((item,i)=>{const x=50+i*w;c.fillStyle=color(i<b.s.revealed?'--em':'--hair');c.globalAlpha=.2;c.fillRect(x,86,w-7,55);c.globalAlpha=1;text(c,item.codon,x+(w-7)/2,119,Math.min(20,w*.3));line(c,x+w/2,147,x+w/2,190,'--hair',2);circle(c,x+w/2,218,Math.min(26,w*.4),null,color(item.amino==='Stop'?'--rose':'--indigo'));text(c,i<b.s.revealed?item.amino:'?',x+w/2,224,Math.min(14,w*.22));});text(c,'mRNA codons · 5′ → 3′',320,68,16);text(c,m.started?'Peptide · N terminus → C terminus':'Start codon changed: initiation fails in this model',320,281,16);text(c,M.mutation(originalDNA,b.s.dna),320,342,23,'--em');}
+  });
+})();
+/* Fictional evidence investigations: students choose tests before evaluating causes. */
+(function(){
+  'use strict';
+  const cases=[{
+    id:'plant-investigation',title:'The Greenhouse Mystery',tag:'Open Investigation',
+    blurb:'Young plants have pale older leaves and slow growth. Choose comparisons, gather evidence and distinguish light, water and mineral explanations.',
+    opening:'Four trays grew normally for two weeks, then their older leaves became pale. The plants are upright, with no visible pests. These are fictional observations, designed for a controlled investigation.',
+    labels:['Low light','Water shortage','Nitrogen limitation','Blocked phloem'],correct:2,
+    tests:[
+      {name:'Compare light exposure',unit:'µmol photons m⁻² s⁻¹',a:480,b:490,note:'Affected and reference trays receive comparable light. A very small difference alone is weak evidence of a light shortage.'},
+      {name:'Compare soil moisture',unit:'relative water content (%)',a:68,b:70,note:'Moisture is similar and the leaves are not wilting. Consider which cause could explain older leaves becoming pale.'},
+      {name:'Compare leaf nitrogen',unit:'leaf dry mass (%)',a:1.1,b:3.2,note:'The affected tray has lower nitrogen content. Nitrogen is needed for amino acids and chlorophyll-associated metabolism.'},
+      {name:'Test nitrogen addition',unit:'new biomass over 7 days (g)',a:2.8,b:0.9,note:'A matched affected tray receiving nitrogen grew more than an affected tray receiving water only; other conditions were held constant.'},
+      {name:'Test extra light',unit:'new biomass over 7 days (g)',a:1.0,b:0.9,note:'An affected tray under extra light grew about as much as the unchanged affected tray. Added light did not resolve the main limitation.'}
+    ],conclusion:'Nitrogen limitation best fits the combination of low leaf nitrogen and improvement after nitrogen addition. One rescue comparison supports causation more strongly than the leaf colour alone. Replicate the experiment and test whether other minerals also limit growth.',
+    diagram:'plant'
+  },{
+    id:'ecosystem-investigation',title:'The Silent Pond',tag:'Open Investigation',
+    blurb:'A virtual pond has lost fish and aquatic insect diversity. Compare water conditions and food-web evidence before explaining what changed.',
+    opening:'After heavy rain, one pond became green and cloudy. Fish abundance fell over the next week. An upstream reference pond remained clear. The data are fictional; several causes could produce the first observation.',
+    labels:['Predators introduced','Nutrient enrichment and oxygen depletion','Water became too cold','Reduced sunlight alone'],correct:1,
+    tests:[
+      {name:'Compare dissolved oxygen at dawn',unit:'dissolved O₂ (mg/L)',a:2.1,b:7.4,note:'The affected pond has much less dissolved oxygen at dawn, after a night of community respiration.'},
+      {name:'Compare nitrate',unit:'nitrate nitrogen (mg/L)',a:5.4,b:0.4,note:'Nutrient availability rose after runoff. This is consistent with, but alone does not prove, nutrient-driven algal growth.'},
+      {name:'Compare temperature',unit:'water temperature (°C)',a:23,b:22,note:'The temperature difference is small. It does not fit a large sudden cooling event.'},
+      {name:'Survey predator numbers',unit:'predators per survey',a:6,b:7,note:'Survey effort is equal and there is no observed predator increase. Detection is imperfect, so a repeat survey would help.'},
+      {name:'Measure algal biomass',unit:'chlorophyll proxy (relative units)',a:85,b:12,note:'Algal biomass is much higher. Decomposition and respiration can consume oxygen; daytime photosynthesis can temporarily raise it.'}
+    ],conclusion:'Nutrient enrichment followed by increased algae and oxygen depletion best fits the combined evidence. Oxygen demand from respiration and decomposition can stress aquatic animals. Compare day/night oxygen measurements and replicated sites before making a stronger causal claim.',diagram:'pond'
+  }];
+  cases.forEach(c=>LABS.register(c.id,{...c,build(host){
+    let evidence=[],selected=null,choice=null;
+    const wrap=document.createElement('div');wrap.className='bx';host.append(wrap);
+    const view=document.createElement('div');view.className='bx-view';view.style.padding='24px';wrap.append(view);
+    const side=document.createElement('div');side.className='bx-side';wrap.append(side);
+    const opening=document.createElement('p');opening.className='bx-note';opening.textContent=c.opening;view.append(opening);
+    const drawing=document.createElement('div');view.append(drawing);
+    drawing.innerHTML=c.diagram==='plant'?'<svg viewBox="0 0 520 260" role="img" aria-label="Affected pale-leaved plant and healthy reference plant"><g stroke="var(--em)" stroke-width="6" fill="none"><path d="M150 225V85M150 165L110 126M150 125L185 85M365 225V70M365 160L330 110M365 115L400 73"/></g><g fill="var(--amber)"><ellipse cx="105" cy="120" rx="36" ry="17" transform="rotate(30 105 120)"/><ellipse cx="185" cy="84" rx="36" ry="17" transform="rotate(-30 185 84)"/></g><g fill="var(--em)"><ellipse cx="326" cy="104" rx="36" ry="19" transform="rotate(35 326 104)"/><ellipse cx="402" cy="72" rx="36" ry="19" transform="rotate(-35 402 72)"/></g><path d="M105 195h90l-15 55h-60zM320 195h90l-15 55h-60z" fill="var(--raise)" stroke="var(--hair)"/><g fill="var(--dim)" font-size="13" text-anchor="middle"><text x="150" y="25">Affected tray</text><text x="365" y="25">Reference tray</text></g></svg>':'<svg viewBox="0 0 520 260" role="img" aria-label="Pond food web: nutrients support algae; consumers and decomposers use oxygen"><g fill="var(--raise)" stroke="var(--hair)"><rect x="15" y="95" width="100" height="60" rx="8"/><rect x="185" y="30" width="130" height="60" rx="8"/><rect x="375" y="95" width="130" height="60" rx="8"/><rect x="180" y="185" width="150" height="60" rx="8"/></g><g stroke="var(--em)" fill="none" stroke-width="2"><path d="M115 115L185 60M315 60L395 95M440 155L330 208M250 90V185"/></g><g fill="var(--ink)" text-anchor="middle" font-size="14"><text x="65" y="130">Nutrients</text><text x="250" y="66">Algae</text><text x="440" y="130">Consumers</text><text x="255" y="220">Decomposers</text></g></svg>';
+    const result=document.createElement('div');result.className='bx-read';result.setAttribute('role','status');result.textContent='Choose a test to collect the first piece of evidence.';view.append(result);
+    const label=document.createElement('div');label.className='bx-lbl';label.textContent='Choose what to investigate';side.append(label);
+    c.tests.forEach((t,i)=>{const b=document.createElement('button');b.className='bx-btn';b.textContent=t.name;b.onclick=()=>{selected=i;if(!evidence.includes(i))evidence.push(i);b.classList.add('on');b.setAttribute('aria-pressed','true');result.textContent=t.name+': '+t.a+' vs '+t.b+' '+t.unit+'. '+t.note;drawBars(t);update();};side.append(b);});
+    const chart=document.createElement('div');view.append(chart);
+    function drawBars(t){const max=Math.max(t.a,t.b)*1.2;chart.innerHTML=`<svg viewBox="0 0 520 190" role="img" aria-label="${t.name}: ${t.a} compared with ${t.b} ${t.unit}"><g fill="var(--dim)" font-size="12"><text x="10" y="25">${t.unit}</text><text x="10" y="77">${selected===3&&c.diagram==='plant'?'Added nitrogen':selected===4&&c.diagram==='plant'?'Added light':'Affected'}</text><text x="10" y="137">${selected>=3&&c.diagram==='plant'?'Unchanged':'Reference'}</text></g><rect x="125" y="48" width="${300*t.a/max}" height="38" rx="4" fill="var(--amber)"/><rect x="125" y="108" width="${300*t.b/max}" height="38" rx="4" fill="var(--em)"/><g fill="var(--ink)" font-size="12"><text x="${134+300*t.a/max}" y="73">${t.a}</text><text x="${134+300*t.b/max}" y="133">${t.b}</text></g></svg>`;}
+    const conclusion=document.createElement('div');conclusion.className='bx-grp';conclusion.innerHTML='<label for="investigation-cause">Working explanation</label>';side.append(conclusion);
+    const select=document.createElement('select');select.id='investigation-cause';select.className='bx-btn';select.innerHTML='<option value="">Choose a possible cause</option>'+c.labels.map((l,i)=>'<option value="'+i+'">'+l+'</option>').join('');conclusion.append(select);select.onchange=()=>{choice=select.value===''?null:Number(select.value);update();};
+    const evaluate=document.createElement('button');evaluate.className='bx-btn pri';evaluate.textContent='Evaluate my explanation';side.append(evaluate);
+    const feedback=document.createElement('p');feedback.className='bx-note';feedback.setAttribute('role','status');side.append(feedback);
+    function update(){evaluate.disabled=evidence.length<3||choice===null;feedback.textContent=evidence.length<3?'Collect at least three different pieces of evidence before evaluating a cause.':'Use your notebook to connect the selected explanation to the evidence.';}
+    evaluate.onclick=()=>{feedback.textContent=choice===c.correct?c.conclusion:'That explanation does not account for all the evidence. Which measurement would be surprising if your explanation were correct? Try another comparison before revising.';};update();
+    return{snapshot(){const t=selected===null?null:c.tests[selected];return{variables:{'Selected test':t?.name||'None','Working explanation':choice===null?'Not selected':c.labels[choice]},measurements:{'Tests collected':evidence.length,...(t?{['Affected ('+t.unit+')']:t.a,['Comparison ('+t.unit+')']:t.b}:{})},stage:evidence.length>=3?'Analyze evidence':'Collect evidence'};},dispose(){host.innerHTML='';}};
+  }}));
+})();
+</script>
+<!-- BIO-LIBRARY:labs-script:END -->
 </body>
 </html>

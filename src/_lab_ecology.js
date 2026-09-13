@@ -1266,6 +1266,15 @@
       raf = requestAnimationFrame(frame);
 
       return {
+        snapshot() {
+          return {
+            variables: { 'Bark lightness': state.env, 'Predation pressure': state.pred,
+              'Mutation probability per allele': state.mu, 'Starting dark allele frequency': +sP0.value },
+            measurements: { 'Generation': state.gen, 'Dark allele frequency (%)': state.p * 100,
+              'Population (beetles)': state.pop.length, 'Killed last generation': state.killed },
+            stage: state.phase
+          };
+        },
         dispose() {
           cancelAnimationFrame(raf);
           ro.disconnect();

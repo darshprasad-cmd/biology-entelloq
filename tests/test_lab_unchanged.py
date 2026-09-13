@@ -78,7 +78,14 @@ class DissectionUnchanged(unittest.TestCase):
         for boundary in ORIGINAL["regions"]:
             with self.subTest(region=boundary["start"]):
                 content = region(after, boundary["start"], boundary["end"])
-                self.assertEqual(hashlib.sha256(content.encode("utf-8")).hexdigest(), boundary["sha256"])
+                if boundary["start"] == '<script id="atmo-js">':
+                    # September 14: the user expressly asked for the launch
+                    # photograph to continue throughout the app. Only this
+                    # atmosphere slot changes; the immersive launcher stays exact.
+                    expected = (ROOT / "src/library/backdrop.js").read_text(encoding="utf-8").strip()
+                    self.assertEqual(content.strip(), expected)
+                else:
+                    self.assertEqual(hashlib.sha256(content.encode("utf-8")).hexdigest(), boundary["sha256"])
         lab_entry = r'\{k:"lab",label:"Dissection Lab"[^\n]*'
         self.assertEqual(re.findall(lab_entry, after), [ORIGINAL["lab_entry"]])
 
