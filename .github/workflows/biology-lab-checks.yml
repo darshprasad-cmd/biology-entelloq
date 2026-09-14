@@ -1,0 +1,70 @@
+name: Biology lab checks
+
+on:
+  pull_request:
+  push:
+    branches: [main, codex/biology-dark-lab]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: biology-lab-checks-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  static:
+    name: Static site checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      # Keep the protected-branch check and the existing published-site
+      # contracts while the separate engineering-workflow PR is pending.
+      - name: Preserve the existing published site
+        shell: bash
+        run: |
+          set -euo pipefail
+          for page in index app learn lessons reason labs solve explore me about lab universe 404; do
+            test -f "$page.html"
+            test "$(wc -c < "$page.html")" -gt 20
+          done
+          test "$(tr -d '\r\n' < CNAME)" = "biology.entelloq.com"
+          test -f .nojekyll
+          for source in src/lab/assemble.py src/universe/assemble.py src/_atmo.js; do
+            test -f "$source"
+          done
+          for page in index app lab universe; do
+            grep -qi "biology" "$page.html"
+          done
+          if grep -q 'class="reveal' index.html; then
+            grep -q 'classList.add("in")' index.html
+          fi
+          if git grep -inE "coming soon|lorem ipsum" -- '*.html'; then
+            echo "::error::placeholder language found"
+            exit 1
+          fi
+          if git ls-files | grep -E '(^|/)\.env($|\.local$)'; then
+            echo "::error::committed environment file found"
+            exit 1
+          fi
+
+  next-app:
+    name: Next.js quality checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: next-app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: next-app/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
