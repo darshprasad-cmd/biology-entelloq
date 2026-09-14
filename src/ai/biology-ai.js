@@ -106,7 +106,14 @@
     if (!root.document || document.getElementById('bioq-ai')) return;
     // One panel owns the app, including its immersive iframe. Standalone labs
     // keep the same assistant without adding another panel inside the app.
-    try { if (root.parent !== root && root.parent.document.getElementById('bioq-ai')) return; } catch (e) { /* standalone origin */ }
+    try {
+      let owner = root.parent;
+      while (owner && owner !== root) {
+        if (owner.document.getElementById('bioq-ai')) return;
+        if (owner === owner.parent) break;
+        owner = owner.parent;
+      }
+    } catch (e) { /* standalone origin */ }
     const style = document.createElement('style');
     style.textContent = `
       #bioq-ai{position:fixed;right:20px;bottom:22px;z-index:75;font:13px/1.6 var(--sans,system-ui);color:var(--ink,#eaf2f5)}

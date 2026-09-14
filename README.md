@@ -67,9 +67,11 @@ Run `node scripts/check-learning.cjs` for the required static contracts. Browser
 checks and the content/model assumptions are documented in
 [`docs/library/IMPLEMENTATION.md`](docs/library/IMPLEMENTATION.md).
 
-The learning guide is local and context-aware. This static site has no connected
-LLM service; `bioq:context` and `bioq:ask` events provide a provider-neutral
-integration boundary without shipping credentials or sending student records.
+The learning guide uses the shared AI service for concept explanations and
+experiment questions, retaining local contextual guidance while loading or
+offline. Only the question, selected topic and authored reference material are
+sent; saved hypotheses, trials and observations remain on-device. The
+`bioq:context` and `bioq:ask` events remain available to local integrations.
 
 **No gamification.** Deliberately. No XP, no badges, no streaks, no leaderboards.
 Progress is shown because it is useful to you, never to make you come back.
@@ -79,8 +81,8 @@ its dependencies inlined, including three.js. Open one off a USB stick on a
 laptop with no internet and the dissection theatre still runs.
 
 Live AI explanations need a connection. The app and standalone dissection lab
-offer a contextual **Ask Entelloq AI** panel. Universe tutor questions and the
-introductory questions on About use the same service, with clearly labeled
+offer a contextual **Ask Entelloq AI** panel. The Learn/Lab learning guide,
+Universe tutor questions and introductory questions on About use the same service, with clearly labeled
 authored examples when it is unavailable. The deterministic dissection tutor
 continues to ask, assess and grade locally; AI never changes its scorecard.
 

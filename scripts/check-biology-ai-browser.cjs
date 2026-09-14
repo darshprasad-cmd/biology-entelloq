@@ -45,6 +45,7 @@ const server = http.createServer((req, res) => {
     let page = await context.newPage();
     page.setDefaultTimeout(15000);
     page.on('pageerror', e => report.errors.push(e.message));
+    if (!process.argv.includes('--worlds-only')) {
     await page.goto(base + '/app.html#lessons', { waitUntil: 'domcontentloaded' });
     await page.locator('#viewFrame.on').waitFor();
     await page.locator('#bioq-ai-launch').click();
@@ -90,10 +91,24 @@ const server = http.createServer((req, res) => {
     assert.equal(await page.locator('#aiOut img').count(), 0);
     report.checks.push('About questions use live AI and explicitly label authored fallback.');
 
+    await page.goto(base + '/learn.html#topic/photosynthesis/layman', { waitUntil: 'domcontentloaded' });
+    await page.locator('[data-ask]').first().click();
+    await page.waitForFunction(() => document.querySelector('.bio-guide-source').textContent.startsWith('AI explanation'));
+    assert.equal(await page.locator('.bio-guide-answer img').count(), 0);
+    assert.ok(captured.at(-1).messages.some(m => m.content.includes('Photosynthesis')));
+    await page.keyboard.press('Escape');
+    mode = 'error'; await page.locator('[data-ask]').first().click();
+    await page.waitForFunction(() => document.querySelector('.bio-guide-source').textContent.includes('Showing on-device guidance'));
+    assert.ok((await page.locator('.bio-guide-answer').innerText()).length > 100);
+    await page.keyboard.press('Escape'); mode = 'success';
+    report.checks.push('New Learn/Lab guide connects live questions and preserves clearly labeled local guidance.');
+    }
+
     await page.setViewportSize({ width: 1365, height: 900 });
     await page.goto(base + '/universe.html#cell', { waitUntil: 'domcontentloaded' });
     await page.waitForFunction(() => window.__UNI, null, { timeout: 45000 });
-    await page.locator('.u-mark').first().click();
+    await page.locator('.u-mark').first().focus();
+    await page.keyboard.press('Enter');
     await page.locator('.askbtn').click();
     await page.waitForFunction(() => document.querySelector('#uAns').textContent.includes('AI explanation'));
     assert.equal(await page.locator('#uAns img').count(), 0);

@@ -129,3 +129,36 @@ test('leaving the About demo cancels work and clears stale thinking or partial a
     if (active.startsWith('aiAbort')) assert.equal(record.aborted, true);
   }
 });
+
+test('the learning guide sends selected concept reference but keeps experiment records local', async () => {
+  const nodes = new Map(), dialogEvents = new Map();
+  const node = key => { if (!nodes.has(key)) nodes.set(key, { textContent: '', value: '', addEventListener() {}, focus() {} }); return nodes.get(key); };
+  const dialog = { open: false, querySelector: node, addEventListener: (name, callback) => dialogEvents.set(name, callback), showModal() { this.open = true; } };
+  let payload;
+  const window = { dispatchEvent() {}, addEventListener() {},
+    BIO_LIBRARY: { topics: [{ id: 'osmosis', explanations: { scientific: 'Water crosses a selectively permeable membrane.' } }] },
+    BIOQ_AI: { ask: async value => { payload = value; return 'A controlled comparison helps.'; }, explainError: () => 'Unavailable' } };
+  const document = { createElement: () => dialog, body: { append() {} }, activeElement: null };
+  vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../src/library/context.js'), 'utf8'), {
+    window, parent: window, document, location: { origin: 'https://biology.entelloq.com' }, AbortController,
+    CustomEvent: class { constructor(type, opts) { this.type = type; this.detail = opts.detail; } }
+  });
+  const records = { kind: 'lab', lab: 'osmosis-bench', topic: 'osmosis', title: 'Osmosis',
+    hypothesis: 'PRIVATE_HYPOTHESIS', observations: 'PRIVATE_OBSERVATION', trials: [{ variables: { privateVariable: 12345 } }] };
+  window.BioContext.publish(records); window.BioContext.ask('What should I control?');
+  await new Promise(setImmediate);
+  assert.equal(payload.question, 'What should I control?');
+  assert.match(payload.context, /selectively permeable membrane/);
+  assert.doesNotMatch(JSON.stringify(payload), /PRIVATE_|privateVariable|12345/);
+  assert.equal(window.BioContext.get(), records, 'AI must not mutate the original notebook context');
+  assert.equal(node('.bio-guide-answer').textContent, 'A controlled comparison helps.');
+  assert.match(node('.bio-guide-source').textContent, /AI explanation/);
+});
+
+test('a dissection nested through the Lab notebook shares the outer app assistant', () => {
+  const top = { document: { getElementById: () => ({ id: 'bioq-ai' }) } }; top.parent = top;
+  const parent = { parent: top, document: { getElementById: () => null } };
+  const document = { getElementById: () => null, createElement: () => { throw new Error('A duplicate assistant was mounted'); } };
+  const client = setup(() => {}, { window: { parent, document }, globals: { document } });
+  assert.doesNotThrow(() => client.mount('lab'));
+});
