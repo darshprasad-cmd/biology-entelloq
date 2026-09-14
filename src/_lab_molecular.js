@@ -159,6 +159,7 @@
       raf = requestAnimationFrame(frame);
       var dt = last ? Math.min(0.064, (t - last) / 1000) : 0.016;
       last = t;
+      if(document.hidden || (window.frameElement && !window.frameElement.getClientRects().length)) return;
       step(dt, t / 1000);
     }
     raf = requestAnimationFrame(frame);
@@ -273,8 +274,7 @@
     icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">' +
           '<path d="M8 3c0 5 8 5 8 9s-8 4-8 9"/><path d="M16 3c0 5-8 5-8 9s8 4 8 9"/>' +
           '<path d="M9.2 7h5.6M8.2 11h7.6M9.2 15h5.6"/></svg>',
-    blurb: "Run the real protocol on real tissue: detergent, salt, protease, ice-cold ethanol, rod. " +
-           "Every reagent has a job, the order is chemistry rather than tradition, and the DNA spools out white at the interface.",
+    blurb: "Investigate a virtual DNA extraction: each reagent changes the model sample, and the order determines whether DNA can be isolated. Yields and purity are illustrative teaching values.",
 
     build: function (host) {
       var css = styleTag("mlx-dnax-css",
@@ -810,6 +810,12 @@
       });
 
       return {
+        snapshot: function () {
+          var smp=EX_SAMPLES[S.sample], isolated=has("spool"), y=smp.yield*EX_ETH[S.eth].f;
+          return {variables:{'Source tissue':smp.name,'Ethanol temperature (°C)':Number(S.eth)},
+            measurements:{'Completed stages':S.done.length,'Sodium concentration model (M)':has("salt")?1.5:.01,'DNA yield model (µg)':isolated?Number(y.toFixed(2)):'Not yet isolated','DNA concentration model (ng/µL)':isolated?Number((y/.2).toFixed(2)):'Not yet isolated','A260/A280 model ratio':isolated?smp.a260:'Not yet isolated'},
+            stage:S.done.length?EX_STEPS[S.done.length-1].did:'Inspect the starting sample',actions:S.done.map(function(k){return EX_STEPS.find(function(s){return s.k===k;}).did;})};
+        },
         dispose: function () {
           tick.dispose();
           canvas.dispose();
@@ -1469,8 +1475,7 @@
     color: "#f6c667",
     icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' +
           '<path d="M3 16h3l2-9 3 13 2.5-8 2 4h5.5"/><path d="M4 20h16"/></svg>',
-    blurb: "Set the three temperatures and the cycle count, then run it. Copies double every cycle until the reagents " +
-           "run out — and an annealing temperature just five degrees too high costs you almost the entire product.",
+    blurb: "Explore a fictional thermocycler model. Change temperature stages and cycle count, then compare target copies, efficiency and specificity. Numerical results illustrate amplification rather than predict a real reaction.",
 
     build: function (host) {
       var css = styleTag("mlx-pcr-css",
@@ -1900,6 +1905,7 @@
 
       host.querySelector("#mlxpRun").addEventListener("click", run);
       host.querySelector("#mlxpStd").addEventListener("click", function () {
+        P.running=false; P.done=false; P.cyc=0; P.phase=0; P.phaseT=0;
         sD.value = 95; sA.value = 57; sE.value = 72; sC.value = 30;
         sync();
         P.sim = null; elOut.innerHTML = "";
@@ -1940,6 +1946,18 @@
       });
 
       return {
+        snapshot: function () {
+          var shown=P.sim?(P.running?P.sim.hist[Math.min(P.cyc,P.sim.hist.length-1)]:P.sim.hist[P.sim.hist.length-1]):null;
+          var measures={'Completed cycles':shown?shown.c:0};
+          if(shown){
+            measures['Specific product (model copies)']=Math.round(shown.spec);
+            measures['Nonspecific product (model copies)']=Math.round(shown.ns);
+            measures['Product mass model (ng)']=Number(massNg(shown.spec,PCR.AMPLICON).toFixed(3));
+            measures['Mean efficiency (%)']=Number(((Math.pow(shown.spec/PCR.N0,1/Math.max(1,shown.c))-1)*100).toFixed(3));
+            measures['Specificity (%)']=Number((shown.spec/(shown.spec+shown.ns)*100).toFixed(3));
+          }
+          return {variables:{'Denaturation temperature (°C)':P.Td,'Annealing temperature (°C)':P.Ta,'Extension temperature (°C)':P.Te,'Target cycles':P.cycles,'Playback speed':P.speed==='i'?'Instant':P.speed+'×'},measurements:measures,stage:!shown?'Set up the model program':P.running?['Denaturation','Annealing','Extension'][P.phase]+' · cycle '+(P.cyc+1):'Model amplification complete'};
+        },
         dispose: function () {
           tick.dispose();
           canvas.dispose();

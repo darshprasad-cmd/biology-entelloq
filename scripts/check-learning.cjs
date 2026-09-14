@@ -37,10 +37,12 @@ const checks = [
 ];
 // Asset parsing suites each hold a Three.js module and real GLB buffers. Bound
 // concurrency instead of starting one large parser process per test file.
-if (unitFiles.length) checks.push(['Learning unit tests', process.execPath, ['--test', '--test-concurrency=4', ...unitFiles]]);
+if (unitFiles.length) checks.push(['Learning unit tests', process.execPath, ['--test', '--test-concurrency=2', ...unitFiles]]);
 if (fs.existsSync(path.join(root, 'scripts/build-learning.py'))) checks.push(['Targeted build drift', python, ['scripts/build-learning.py', '--check']]);
 checks.push(['Physics shell style drift', python, ['scripts/sync-physics-shell.py', '--check']]);
 checks.push(['Physics pillar style drift', python, ['scripts/sync-physics-pillars.py', '--check']]);
+checks.push(['Library source drift', python, ['scripts/build-library.py', '--check']]);
+checks.push(['Shared launch background drift', python, ['scripts/build-background.py', '--check']]);
 
 const started = Date.now();
 Promise.all(checks.map(([name, command, args]) => new Promise(resolve => {

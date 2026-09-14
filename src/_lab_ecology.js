@@ -636,6 +636,7 @@
         if (!last) last = now;
         const dtWall = clamp((now - last) / 1000, 0, 0.1);
         last = now;
+        if(document.hidden || (window.frameElement && !window.frameElement.getClientRects().length)) return;
 
         if (sim.running && !(sim.N <= 0 && sim.P <= 0)) {
           let years = dtWall * SPEED;
@@ -1202,6 +1203,7 @@
         if (!last) last = now;
         const dt = clamp((now - last) / 1000, 0, 0.1);
         last = now;
+        if(document.hidden || (window.frameElement && !window.frameElement.getClientRects().length)) return;
         clock += dt;
 
         palAge += dt;
@@ -1266,6 +1268,15 @@
       raf = requestAnimationFrame(frame);
 
       return {
+        snapshot() {
+          return {
+            variables: { 'Bark lightness': state.env, 'Predation pressure': state.pred,
+              'Mutation probability per allele': state.mu, 'Starting dark allele frequency': +sP0.value },
+            measurements: { 'Generation': state.gen, 'Dark allele frequency (%)': state.p * 100,
+              'Population (beetles)': state.pop.length, 'Killed last generation': state.killed },
+            stage: state.phase
+          };
+        },
         dispose() {
           cancelAnimationFrame(raf);
           ro.disconnect();

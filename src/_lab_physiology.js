@@ -566,6 +566,7 @@
         if (!last) last = ts;
         var dt = clamp((ts - last) / 1000, 0, 0.05);
         last = ts;
+        if(document.hidden || (window.frameElement && !window.frameElement.getClientRects().length)) return;
 
         /* irreversible thermal denaturation — accrues only above 55 °C */
         if (st.T > 55 && st.denat < 1) {
@@ -673,7 +674,7 @@
     tag: "Physiology · Circulation",
     color: "#fb7185",
     icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.6 4.9 13.3a4.7 4.7 0 1 1 7.1-6 4.7 4.7 0 1 1 7.1 6z"/><path d="M6.6 12.4h2.6l1.2-2.6 1.9 4.8 1.2-2.2h2.9"/></svg>',
-    blurb: "A live ECG driven by real autonomic control. Add exercise, add adrenaline, cut the vagus nerve — and watch heart rate, stroke volume and cardiac output move exactly as they do in a body.",
+    blurb: "Explore an illustrative ECG and autonomic-control model. Change exercise and signaling, then compare heart rate, stroke volume and cardiac output. These simplified responses are not clinical predictions.",
 
     build: function (host) {
       var styleEl = injectStyle(host, HRT_CSS);
@@ -906,7 +907,7 @@
           hrNum = q("hrNum"), hrTgt = q("hrTgt"), eqBox = q("hrEq"), verdict = q("hrVerdict");
       var dVag = q("dVag"), dSym = q("dSym"), dAdr = q("dAdr"), dInt = q("dInt");
       var nVag = q("nVag"), nSym = q("nSym"), nAdr = q("nAdr");
-      var lastVerdict = "";
+      var lastVerdict = "", measuredHeart = null;
 
       function zoneOf(p) {
         if (p < 55) return ["Rest / very light", "--cy"];
@@ -918,6 +919,7 @@
       }
 
       function readouts(hr, m, force) {
+        measuredHeart={hr:hr,mechanics:m};
         var shown = Math.round(hr);
         hrNum.textContent = String(shown);
         oHR.innerHTML = shown + "<small>bpm</small>";
@@ -1038,6 +1040,7 @@
         if (!last) last = ts;
         var dt = clamp((ts - last) / 1000, 0, 0.06);
         last = ts;
+        if(document.hidden || (window.frameElement && !window.frameElement.getClientRects().length)) return;
         if (!W) { resize(); return; }
 
         sampAcc += PX_PER_S * dt;
@@ -1093,6 +1096,11 @@
       }
 
       return {
+        snapshot: function () {
+          var hr=measuredHeart?measuredHeart.hr:baseHR(),m=measuredHeart?measuredHeart.mechanics:mechanics(hr);
+          function number(v){return Number(v.toFixed(3));}
+          return {variables:{'Exercise intensity (%)':st.ex*100,'Relative adrenaline signal (%)':st.adr*100,'Age (years)':st.age,'Vagus signal':st.vagus?'Intact':'Blocked'},measurements:{'Heart rate (beats/min)':number(hr),'Stroke volume (mL/beat)':number(m.sv),'Cardiac output (L/min)':number(m.co),'Diastolic filling time (ms)':number(m.dias*1000),'Ejection fraction (%)':number(m.ef*100),'End-diastolic volume (mL)':number(m.edv)},stage:'Observe the model cardiac cycle'};
+        },
         dispose: function () {
           cancelAnimationFrame(raf);
           if (ro) ro.disconnect();

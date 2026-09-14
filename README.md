@@ -21,10 +21,10 @@ real variables. Nothing here is a video of someone else doing the experiment.
 
 | | |
 |---|---|
-| **Learn** | Experience biology — dissection, cells, anatomy, physiology |
+| **Learn** | Searchable biology concepts, six explanation modes, interactive models, prerequisites and quick checks |
 | **Lessons** | Every concept through six lenses: story → prediction → picture → maths → frontier → the world |
 | **Reason** | Think like a biologist — guided reasoning workouts, seven steps at a time |
-| **Labs** | Working benches: microscope, gel electrophoresis, enzyme kinetics, predator–prey |
+| **Labs** | 23 investigations: simulations, microscopy, genetics, physiology, ecology and five dissections, with saved notebooks and trial graphs |
 | **Solve** | Practice — NEET · CBSE · AP Biology · Olympiad |
 | **Explore** | Atlases, the tree of life, diseases, discoveries |
 | **Me** | Your journey, quietly tracked — no points, no streaks, no leaderboards |
@@ -47,7 +47,29 @@ a 224px desktop sidebar, a 76px header, a featured experiment, three experiment
 entries and a Biology Map. Space Grotesk headings, restrained cyan and green
 accents, and solid reading surfaces continue through the eight pillars. Phones
 use five bottom navigation tabs and an Explore sheet. The original Living Field
-source remains available; the reading layout suppresses its decorative canvas.
+source remains available. The launch page’s DNA photograph now continues behind
+the app and its eight reading sections as one shared backdrop, with the same
+persistent motion preference and a reduced-motion fallback.
+
+### Learn and Lab authoring
+
+The expanded library lives in `src/library/`. Content is separate from rendering:
+`topics.js` owns canonical concepts; `lab-metadata.js` owns laboratory discovery;
+`experiments.js` owns the new quantitative models; `notebook.js` owns local
+records, trial graphs, CSV export and observation capture. The original lessons,
+catalog, cell, microscope and dissection theatre remain available.
+
+Run `python scripts/build-library.py` and `python scripts/build-background.py`
+after editing these sources. Both support `--check`, read only repository files,
+and preserve existing page chrome. Root HTML is the deployable artifact.
+
+Run `node scripts/check-learning.cjs` for the required static contracts. Browser
+checks and the content/model assumptions are documented in
+[`docs/library/IMPLEMENTATION.md`](docs/library/IMPLEMENTATION.md).
+
+The learning guide is local and context-aware. This static site has no connected
+LLM service; `bioq:context` and `bioq:ask` events provide a provider-neutral
+integration boundary without shipping credentials or sending student records.
 
 **No gamification.** Deliberately. No XP, no badges, no streaks, no leaderboards.
 Progress is shown because it is useful to you, never to make you come back.
