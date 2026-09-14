@@ -78,6 +78,28 @@ Progress is shown because it is useful to you, never to make you come back.
 its dependencies inlined, including three.js. Open one off a USB stick on a
 laptop with no internet and the dissection theatre still runs.
 
+Live AI explanations need a connection. The app and standalone dissection lab
+offer a contextual **Ask Entelloq AI** panel. Universe tutor questions and the
+introductory questions on About use the same service, with clearly labeled
+authored examples when it is unavailable. The deterministic dissection tutor
+continues to ask, assess and grade locally; AI never changes its scorecard.
+
+The public client is `src/ai/biology-ai.js`, loaded directly by the static pages.
+It sends only the submitted question, bounded topic context and recent chat
+turns to `https://groq-proxy.physicsedge.workers.dev/v1/chat/completions`.
+Conversation stays in tab memory; profile, storage, camera frames and hidden
+pathology findings are not included. The shared service holds `GROQ_API_KEY`
+in its server environment and applies request limits. Never put provider keys
+in this repository, HTML, browser storage or Pages build variables: Pages
+publishes static files and does not keep an environment secret at runtime.
+
+For AI changes, run `node --test tests/biology-ai.test.cjs` and the required
+`node scripts/check-learning.cjs`. Sync changes in `src/universe/ui.js` with
+`python scripts/build-universe.py`, and in `src/lab/main.js` with
+`python scripts/build-dissection.py`. Both builders retain the original shell
+fingerprints. A live response also depends on deployment of the shared proxy
+and its server credential; browser regression checks can mock that boundary.
+
 **Reduced motion is respected everywhere**, including by the shader, which drops
 to a single still frame and repaints only when you change theme or section.
 

@@ -691,6 +691,7 @@ body:not(.embed) header .btn.primary{background:var(--cy);color:var(--bg);border
 }
 </style>
 <!-- PHYSICS-PILLAR-LAYOUT:END -->
+<script defer src="src/ai/biology-ai.js"></script>
 </head>
 <body data-page="about">
 <div class="bg-veil" aria-hidden="true"></div>
@@ -1000,7 +1001,7 @@ function homeHTML(){
       <div class="ai-window reveal">
         <div class="ai-top"><div class="dots"><i></i><i></i><i></i></div><div class="t">Ask Biology Entelloq</div></div>
         <div class="ai-body" id="aiBody">
-          <div class="ai-msg a"><div class="av">${I.dna}</div><div class="ai-bub">Ask me anything about life — or tap a question to see how I think.</div></div>
+          <div class="ai-msg a"><div class="av">${I.dna}</div><div class="ai-bub">Choose a question for an AI explanation. Offline examples remain available. For your own question, open the assistant in the Biology app.</div></div>
         </div>
       </div>
       <div class="reveal d2">
@@ -1298,6 +1299,7 @@ const PAGES={home:$("#page-home"),about:$("#page-about"),founder:$("#page-founde
 let current="home";
 function go(page,{scroll=true,push=false}={}){
   if(!PAGES[page])page="home";
+  if(page!=="home")cancelAIDemo();
   Object.values(PAGES).forEach(p=>p.classList.remove("active"));
   PAGES[page].classList.add("active");
   current=page;
@@ -1444,33 +1446,48 @@ function wireCell(){
 }
 
 /* ============================================================================
-   AI DEMO (typing)
+   AI QUESTIONS (live, with labeled offline examples)
    ========================================================================== */
-let aiTimer=null,aiGen=0;
+let aiTimer=null,aiGen=0,aiAbort=null;
+function cancelAIDemo(){
+  const interrupted=aiTimer!==null||aiAbort!==null;
+  ++aiGen;clearTimeout(aiTimer);aiTimer=null;if(aiAbort)aiAbort.abort();aiAbort=null;
+  // Returning from another About section must not leave an abandoned Thinking
+  // indicator or a half-typed answer looking like a complete explanation.
+  const out=$('#aiOut');
+  if(interrupted&&out){out.classList.remove('think');out.textContent='Request stopped. Choose a question to try again.';}
+}
+window.addEventListener('pagehide',cancelAIDemo);
 function wireAI(){
   $$(".ai-prompt").forEach(b=>b.addEventListener("click",()=>askAI(+b.dataset.ai)));
 }
-function askAI(i){
+async function askAI(i){
   const item=AIP[i];if(!item)return;const body=$("#aiBody");if(!body)return;
-  // Generation token: any earlier "thinking"/typewriter loop from a previous click
-  // becomes stale the moment a new prompt fires, so they can't overlap or race.
-  const gen=++aiGen; clearTimeout(aiTimer);
+  cancelAIDemo();const gen=aiGen,controller=new AbortController();aiAbort=controller;
   body.innerHTML=`<div class="ai-msg u"><div class="av">You</div><div class="ai-bub">${item.q}</div></div>
-    <div class="ai-msg a"><div class="av">${I.dna}</div><div class="ai-bub think" id="aiOut">Thinking<span class="caret"></span></div></div>`;
-  aiTimer=setTimeout(()=>{
+    <div class="ai-msg a"><div class="av">${I.dna}</div><div class="ai-bub think" id="aiOut" role="status">Thinking…</div></div>`;
+  let answer=item.a,label='Offline example · Biology Entelloq knowledge base';
+  try{
+    if(!window.BIOQ_AI)throw new Error('unavailable');
+    answer=await window.BIOQ_AI.ask({question:item.q,context:'Introductory biology. Explain the concept in a short paragraph and offer a guiding question.',signal:controller.signal});
+    label='AI explanation · verify important details';
+  }catch(error){
+    if(controller.signal.aborted)return;
+    label=(window.BIOQ_AI?window.BIOQ_AI.explainError(error):'AI is unavailable right now.')+' Showing an offline example.';
+  }
+  if(gen!==aiGen||!body.isConnected)return;
+  aiAbort=null;
+  const out=body.querySelector('#aiOut');if(!out)return;
+  out.classList.remove('think');out.style.whiteSpace='pre-wrap';out.textContent='';
+  const source=document.createElement('p');source.textContent=label;source.style.cssText='font-size:11px;color:var(--dim);margin:12px 0 0';
+  function done(){aiTimer=null;out.appendChild(source);body.scrollTop=body.scrollHeight;}
+  if(REDUCED){out.textContent=answer;done();return;}
+  let n=0;
+  (function type(){
     if(gen!==aiGen)return;
-    const out=body.querySelector("#aiOut");if(!out)return;
-    out.classList.remove("think");out.innerHTML='<span class="caret"></span>';
-    if(REDUCED){out.textContent=item.a;return;}
-    let n=0;const txt=item.a;
-    (function type(){
-      if(gen!==aiGen)return;
-      n+=Math.max(1,Math.round(txt.length/120));
-      out.innerHTML=txt.slice(0,n)+(n<txt.length?'<span class="caret"></span>':"");
-      body.scrollTop=body.scrollHeight;
-      if(n<txt.length)aiTimer=setTimeout(type,16);
-    })();
-  },560);
+    n+=Math.max(1,Math.round(answer.length/120));out.textContent=answer.slice(0,n);body.scrollTop=body.scrollHeight;
+    if(n<answer.length)aiTimer=setTimeout(type,16);else done();
+  })();
 }
 
 /* ============================================================================
