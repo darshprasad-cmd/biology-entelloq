@@ -971,10 +971,20 @@ export function createCutting(THREE, scene) {
       && preparedTag.specimenId === 'cockroach' && preparedTag.partId === partId
       ? { minX: -1.18, maxX: 1.18, minZ: -2.55, maxZ: 3.05, minY: .30 } : null;
     if (abdomenWindow) normal.set(0, 1, 0);
+    // The prepared frog is authored +Y ventral, with hip z=-3.5 and snout
+    // z=4.55. A flank stroke's oblique normal must not leave the opposite belly
+    // over the cavity. The generic 14% tail margin also covered the bladder.
+    // Open this derivative's abdominal window, preserving dorsal backing,
+    // head and the four independently owned limbs. Not an anatomy solver.
+    const frogWindow = partId === 'skin' && preparedTag?.schemaVersion === 1
+      && preparedTag.specimenId === 'frog' && preparedTag.partId === partId
+      ? { minZ: -3.40, maxZ: 3.15 } : null;
+    if (frogWindow) normal.set(0, 1, 0);
     // Frog and fish carry their head and fins on one closed exterior mesh.
     // Earthworm uses an open CylinderGeometry and separate head/tail parts.
     const preserveEnds = partId === 'skin' || (partId === 'body-wall' && mesh.geometry.type === 'SphereGeometry');
-    const tailZ = box.min.z + spanZ * 0.14, headZ = box.min.z + spanZ * 0.74;
+    const tailZ = frogWindow ? frogWindow.minZ : box.min.z + spanZ * 0.14;
+    const headZ = frogWindow ? frogWindow.maxZ : box.min.z + spanZ * 0.74;
     const attributes = ['position', ...Object.keys(mesh.geometry.attributes).filter(name => name !== 'position')];
     const layout = [], output = {};
     let stride = 0, normalOffset = -1;
@@ -1084,6 +1094,12 @@ export function createCutting(THREE, scene) {
         }
         continue;
       }
+      // The authored frog head and pelvic end are retained, not cut surfaces.
+      // Do not needlessly split their triangles along the abdominal plane.
+      if (frogWindow && (triangle.every(vertex => vertex[2] <= tailZ)
+        || triangle.every(vertex => vertex[2] >= headZ))) {
+        append(triangle); continue;
+      }
       const back = clip(triangle, accessDistance, false);
       append(back.polygon);
       addRim(back.crossings[0], back.crossings[1], true);
@@ -1113,6 +1129,7 @@ export function createCutting(THREE, scene) {
     residual.userData.accessWindow = {
       normal: normal.toArray(), constant: abdomenWindow ? -abdomenWindow.minY : 0.025 - center.dot(normal),
       preserveEnds, tailZ, headZ, ...(abdomenWindow ? { abdomen: abdomenWindow } : {}),
+      ...(frogWindow ? { preparedFrog: true } : {}),
     };
     residual.raycast = CUT_noRaycast;
     residual.position.copy(mesh.position); residual.quaternion.copy(mesh.quaternion); residual.scale.copy(mesh.scale);

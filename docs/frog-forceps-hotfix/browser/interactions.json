@@ -1,0 +1,84 @@
+{
+  "base": "http://127.0.0.1:3005",
+  "requestedSpecimens": [
+    "frog"
+  ],
+  "specimens": [
+    {
+      "id": "frog",
+      "pinned": 4,
+      "layers": [
+        {
+          "part": "skin",
+          "incisionLength": 1.659064689844987,
+          "cutIndexCount": 20757,
+          "opened": true,
+          "removed": true,
+          "hidden": true,
+          "nextLayer": 1
+        },
+        {
+          "part": "subcutaneous-fascia",
+          "incisionLength": 1.5918020105154513,
+          "cutIndexCount": 31077,
+          "opened": true,
+          "removed": true,
+          "hidden": true,
+          "nextLayer": 2
+        },
+        {
+          "part": "muscle-wall",
+          "incisionLength": 1.6861608902033436,
+          "cutIndexCount": 10038,
+          "opened": true,
+          "removed": true,
+          "hidden": true,
+          "nextLayer": 3
+        },
+        {
+          "part": "parietal-peritoneum",
+          "incisionLength": 1.5420582594652545,
+          "cutIndexCount": 25341,
+          "opened": true,
+          "removed": true,
+          "hidden": true,
+          "nextLayer": 4
+        }
+      ],
+      "damage": 0,
+      "inputSource": "mouse",
+      "lifted": [],
+      "visibleInternal": [
+        "ventral-abdominal-vein",
+        "liver-right",
+        "liver-left",
+        "liver-median",
+        "gall-bladder",
+        "frog-heart",
+        "lung-left",
+        "lung-right",
+        "stomach",
+        "oesophagus",
+        "small-intestine",
+        "large-intestine",
+        "cloaca",
+        "urinary-bladder",
+        "spleen",
+        "fat-body-left",
+        "fat-body-right"
+      ]
+    }
+  ],
+  "errors": [],
+  "cameraRequests": 0,
+  "warnings": [
+    "post-processing addons unavailable; running without bloom TypeError: Failed to fetch dynamically imported module: https://unpkg.com/three@0.160.0/examples/jsm/postprocessing/EffectComposer.js",
+    "[.WebGL-0x4cec001c2200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x4cec001c2200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x4cec001c2200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x4cec001c2200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  ],
+  "artifactSha256": "11e43927a087a476f346ba728663dc3058314c615c392fd89fbb0336e16de994",
+  "complete": true,
+  "limit": "Synthetic tracker snapshots verify application routing, not webcam recognition or measured physical tissue fidelity."
+}
