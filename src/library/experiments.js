@@ -161,7 +161,7 @@
     const resizeObserver=new ResizeObserver(()=>b.render());resizeObserver.observe(canvas);
     // Observation time is independent of screen refresh rate. No animation runs
     // until the student asks; the manual step is available with reduced motion.
-    const timer=spec.step?setInterval(()=>{if(!b.running||document.hidden)return;advance(.5);b.render();},100):null;
+    const timer=spec.step?setInterval(()=>{if(!b.running||document.hidden||(window.frameElement&&!window.frameElement.getClientRects().length))return;advance(.5);b.render();},100):null;
     return {dispose(){if(timer)clearInterval(timer);resizeObserver.disconnect();b.running=false;},snapshot(){return {
       variables:Object.fromEntries((spec.vars||[]).map(d=>[d.label,b.v[d.key]])),
       measurements:b.measure(),stage:spec.story?spec.story(b):'Observing',actions:b.actions.slice()

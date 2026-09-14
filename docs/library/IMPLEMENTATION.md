@@ -14,6 +14,7 @@ microscope, nine Lessons, reasoning workflows and immersive dissection code rema
 | `src/library/lab-metadata.js` | Learning questions, modes, filters, theory links and wrappers for the five existing dissections |
 | `src/library/experiments.js` | Eight new experiments and pure inspectable scientific models |
 | `src/_lab_bench.js` | Four maintained original benches with observations, controls and snapshots |
+| `src/_lab_molecular.js`, `_lab_physiology.js`, `_lab_ecology.js` | Existing molecular, autonomic and selection models with numeric observations and visibility-aware simulation clocks |
 | `src/library/investigations.js` | Two fictional scenarios requiring evidence before explanation |
 | `src/library/notebook.js` | Local hypotheses, variables, method, observations, trial data, conclusions, limitations, graphs and exports |
 | `src/library/context.js` | On-device learning guide and provider-neutral context events |
@@ -43,6 +44,9 @@ displayed as runnable cards.
 
 Each notebook saves locally and retains at most 80 trials. There is no cloud
 sync. If storage fails, students can continue and export within the session.
+Starting a new investigation requires an inline confirmation and clears only
+that lab's notes and trials. Stale tabs preserve their drafts for export instead
+of overwriting a newer saved notebook; the notice explains how to reload it.
 Each trial captures current model conditions and measurements; reopening a bench
 restores its notebook, while the simulation starts with its normal initial state.
 Model outputs are student-generated simulation data, not empirical biological
@@ -54,8 +58,10 @@ It teaches fair comparisons locally; it is not represented as a connected LLM.
 `bioq:context` and `bioq:ask` are integration events for a future approved provider.
 No student record is transmitted to a remote service.
 
-The five theatre wrappers select the existing specimen and expose observations
-to the notebook. They preserve the original gesture/manual interaction system.
+The five theatre wrappers wait for specimen preparation, select the existing
+specimen and expose observations to the notebook. Captures render the current
+theatre canvas, and records reflect the specimen currently being explored. They
+preserve the original gesture/manual interaction system.
 Physical camera tracking requires device testing; browser smoke tests do not
 constitute camera validation.
 
@@ -109,5 +115,6 @@ node scripts/check-library-workflow-browser.cjs
 
 The tests cover model invariants, browser interactions, structured content,
 source build drift, responsive layouts, denied storage, history, observation
-exports and preservation of the existing application. They do not constitute
+exports, stale-tab writes, confirmed notebook reuse and preservation of the
+existing application. They do not constitute
 independent expert review of every content sentence or physical camera testing.

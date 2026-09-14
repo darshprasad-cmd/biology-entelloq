@@ -1,0 +1,13 @@
+{
+  "checks": [
+    "23 working entries; aliases; intersecting category/type filters; safe, recoverable empty search.",
+    "Scientific snapshots respond to controls; trial table, scatter/line/bar, persistence, fair-test guidance, CSV/notebook/image exports, focus return.",
+    "New investigation cancels safely or resets only notes; negative graphs fit; stale tabs cannot overwrite/reset newer trials; persisted-page restoration remounts a working bench.",
+    "Scenario requires evidence before evaluating a cause; chosen tests enter the notebook.",
+    "All five existing 3D dissections mount inside the notebook workflow with available structures; no camera requested.",
+    "320/390/768/1440 layouts have no horizontal overflow; one shared launch backdrop through iframe navigation.",
+    "Denied storage retains a usable investigation and gives accurate export guidance."
+  ],
+  "errors": [],
+  "passed": true
+}

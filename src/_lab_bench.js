@@ -7,6 +7,7 @@
 /* ---------------------------------------------------------------- helpers -- */
 function LB_el(t, c, h) { const e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; }
 const LB_REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+function LB_visible() { return !document.hidden && (!window.frameElement || window.frameElement.getClientRects().length > 0); }
 function LB_slider(host, label, min, max, val, step, fmt, on) {
   const g = LB_el("div", "bx-grp");
   g.innerHTML = `<label>${label}</label><div class="bx-row"><input type="range" class="bx-slider" min="${min}" max="${max}" value="${val}" step="${step}"><span class="bx-val"></span></div>`;
@@ -140,7 +141,7 @@ LABS.register("microscope", {
     }
 
     function draw() {
-      t += LB_REDUCED ? 0 : 0.016;
+      t += LB_REDUCED || !LB_visible() ? 0 : 0.016;
       const { ctx, W, H } = cv;
       ctx.clearRect(0, 0, W, H);
       const cx = W / 2, cy = H / 2, R = Math.min(W, H) * 0.44;
@@ -354,7 +355,7 @@ LABS.register("gel-electrophoresis", {
     }
     function draw() {
       const now = performance.now(), dt = Math.min(.1, (now - lastFrame) / 1000); lastFrame = now;
-      if (running) { advance(dt * 6); upd(); }
+      if (running && LB_visible()) { advance(dt * 6); upd(); }
       const { ctx, W, H } = cv; ctx.clearRect(0, 0, W, H);
       const padX = 26, padTop = 30, gelH = H - padTop - 24, laneW = (W - padX * 2) / LANES.length;
       // gel slab
@@ -451,7 +452,7 @@ LABS.register("predator-prey", {
     }
     function draw() {
       const now = performance.now(), dt = Math.min(.1, (now - lastFrame) / 1000); lastFrame = now;
-      if (running) { for (let i = 0; i < 5; i++) step(dt * .6); }
+      if (running && LB_visible()) { for (let i = 0; i < 5; i++) step(dt * .6); }
       const { ctx, W, H } = cv; ctx.clearRect(0, 0, W, H);
       const pad = 30, gw = W - pad * 2, gh = H - pad * 2;
       ctx.strokeStyle = LB_css("--line"); ctx.lineWidth = 1;

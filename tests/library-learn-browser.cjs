@@ -128,8 +128,19 @@ async function main() {
     report.checks.push('Index, cell model and photosynthesis remain within viewport at 320, 390, 768 and 1440 pixels.');
     await page.setViewportSize({width:1440,height:1000});
     await page.evaluate(()=>{document.documentElement.dataset.theme='light';});
+    const controlContrast=await page.locator('[data-visual-action="play"]').evaluate(el=>{
+      const style=getComputedStyle(el),rgb=value=>value.match(/[\d.]+/g).slice(0,3).map(Number);
+      const light=value=>rgb(value).map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4;}).reduce((sum,v,i)=>sum+v*[.2126,.7152,.0722][i],0);
+      const a=light(style.color),b=light(style.backgroundColor);return (Math.max(a,b)+.05)/(Math.min(a,b)+.05);
+    });
+    assert(controlContrast>=4.5,'Light theme interactive labels meet normal text contrast.');
     await page.screenshot({path:path.join(output,'learn-photosynthesis-light.png'),fullPage:false});
     report.screenshots.push('learn-photosynthesis-light.png');
+    await page.locator('[data-visual-action="play"]').click();
+    await page.waitForFunction(()=>document.querySelector('.bl-stepcount')?.textContent.trim()==='2 / 6');
+    assert.equal(await page.locator('[data-visual-action="play"]').evaluate(el=>el===document.activeElement),true);
+    await page.locator('[data-visual-action="play"]').click();
+    report.checks.push('Light-theme control labels remain readable, and playback retains keyboard focus as the diagram advances.');
     await page.goto(base+'/app.html#learn/topic/calvin-cycle/advanced',{waitUntil:'domcontentloaded'});
     const iframe=page.locator('#viewFrame');
     await iframe.waitFor({state:'visible'});

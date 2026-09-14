@@ -1,0 +1,22 @@
+{
+  "completed": true,
+  "checks": [
+    "Complete library mounts beside preserved cell and microscope experiences.",
+    "Aliases, fuzzy search, connected expansion, safe text handling, categories and curriculum filters work.",
+    "All 18 priority topics render six substantial modes, checks, and visual states that change with interaction.",
+    "All 73 completed concepts render a visual, explanation and check without errors.",
+    "Arrow, End, focus management and browser history preserve explanation mode.",
+    "Organelles are selectable by keyboard buttons and connect to specific lessons; plant and animal cell schematics differ.",
+    "Punnett square recomputes genotype probabilities after both parent changes.",
+    "Quick checks explain answers, persist across reload, retry, and pass selected topic context to the learning guide.",
+    "Index, cell model and photosynthesis remain within viewport at 320, 390, 768 and 1440 pixels.",
+    "Embedded app deep links preserve subtopic and selected mode through interactions and a full reload.",
+    "Denied storage and malformed saved progress cannot prevent learning or quick checks."
+  ],
+  "screenshots": [
+    "learn-library-desktop.png",
+    "learn-photosynthesis-desktop.png",
+    "learn-photosynthesis-mobile.png",
+    "learn-photosynthesis-light.png"
+  ]
+}

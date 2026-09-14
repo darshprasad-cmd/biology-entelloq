@@ -42,14 +42,43 @@
   }
   function mount(lab,host,live,workflow,target) {
     const key='bioq.lab-notebook.v1.'+lab.id;
-    let note=clean(memory.get(key)),saveOk=true,xKey='Trial',yKey='',graphType='scatter',disposed=false;
-    try {const raw=localStorage.getItem(key);if(raw)note=clean(JSON.parse(raw));}catch(_){saveOk=false;}
+    const cached=memory.get(key);
+    let note=clean(cached?.note),baselineRaw=cached?.baselineRaw??null,savedView=cached?.savedView??'',conflict=!!cached?.conflict,saveOk=!cached?.unsaved,xKey='Trial',yKey='',graphType='scatter',disposed=false;
+    const hasDraft=cached && JSON.stringify(note)!==savedView;
+    try {
+      const raw=localStorage.getItem(key);
+      if(!hasDraft){baselineRaw=raw;note=clean(raw?JSON.parse(raw):null);conflict=false;saveOk=true;}
+      else if(raw!==baselineRaw){conflict=true;saveOk=false;}
+    }catch(_){saveOk=false;}
     if(!note.question)note.question=lab.question||'How does changing one condition affect this biological system?';
+    if(!hasDraft)savedView=JSON.stringify(note);
     workflow.className='ln-workspace';target.className='ln-workspace';
     workflow.innerHTML=`<div class="ln-question"><div><h2>${esc(note.question)}</h2><p>${esc((lab.learningObjectives||[]).join(' · '))}</p></div><div class="ln-modes" role="group" aria-label="Experiment mode">${['guided','challenge','sandbox'].map(m=>`<button class="bx-btn" data-lab-mode="${m}" aria-pressed="${m===note.mode}">${m[0].toUpperCase()+m.slice(1)}</button>`).join('')}</div></div><p class="ln-workflow-hint" id="lab-hint"></p><label>My hypothesis<input id="lab-hypothesis" maxlength="2000" placeholder="If I change… then… because…" value="${esc(note.hypothesis)}"></label>`;
     target.innerHTML=`<div class="ln-notebook-top"><h2>Lab notebook</h2><div class="ln-theory"><span>Understand the theory</span>${(lab.relatedTopics||[]).map(id=>`<a href="./learn.html#topic/${esc(id)}/intuition">${esc(id.replace(/-/g,' '))} ↗</a>`).join('')}</div></div><p class="ln-save" id="lab-save-state" role="status"></p><div class="ln-actions"><button class="bx-btn pri" id="lab-record">Record trial</button><button class="bx-btn" id="lab-coach">Ask the learning guide</button><button class="bx-btn" id="lab-capture">Capture view</button><button class="bx-btn" id="lab-csv">Export data CSV</button><button class="bx-btn" id="lab-export">Export notebook</button></div><div class="ln-record-summary" id="lab-record-summary"></div><div id="lab-trials"></div><div class="ln-graph"><div class="ln-graph-controls"><label>Horizontal axis<select id="lab-x"></select></label><label>Vertical axis<select id="lab-y"></select></label><label>Graph type<select id="lab-graph-type"><option value="scatter">Scatter</option><option value="line">Line</option><option value="bar">Bar</option></select></label></div><div id="lab-plot"></div></div><div class="ln-fields"><label>Research question<input data-note="question" maxlength="2000" value="${esc(note.question)}"></label>${Object.entries(fields).filter(([k])=>k!=='hypothesis').map(([k,label])=>`<label>${label}<textarea data-note="${k}" maxlength="12000" rows="3" placeholder="${k==='conclusion'?'Use evidence from your recorded trials.':k==='limitations'?'Which assumptions might differ in a living system?':'Write your '+label.toLowerCase()+'.'}">${esc(note[k])}</textarea></label>`).join('')}</div>`;
     const $=s=>target.querySelector(s);
-    function save() {memory.set(key,note);try{localStorage.setItem(key,JSON.stringify(note));saveOk=true;}catch(_){saveOk=false;}$('#lab-save-state').textContent=saveOk?'Saved on this device · up to 80 trials per experiment.':'Device storage is unavailable. This session stays usable; export your notebook before leaving.';}
+    const resetPanel=document.createElement('div');
+    resetPanel.className='ln-record-summary';resetPanel.id='lab-reset-panel';resetPanel.hidden=true;
+    resetPanel.setAttribute('role','group');resetPanel.setAttribute('aria-labelledby','lab-reset-title');
+    resetPanel.innerHTML='<h3 id="lab-reset-title">Start a new investigation?</h3><p>Export your notebook first if you want to keep it. Starting again clears this lab’s notes and recorded trials on this device. Your current experiment controls stay in place.</p><p id="lab-reset-message" role="status"></p><div class="ln-actions"><button class="bx-btn" id="lab-reset-cancel">Cancel</button><button class="bx-btn" id="lab-reset-confirm">Start new investigation</button></div>';
+    const newButton=document.createElement('button');newButton.className='bx-btn';newButton.id='lab-new';newButton.textContent='New investigation';newButton.setAttribute('aria-controls','lab-reset-panel');newButton.setAttribute('aria-expanded','false');
+    $('.ln-actions').append(newButton);$('.ln-actions').after(resetPanel);
+    const conflictMessage='Another tab changed this notebook. Your work remains in this tab for export. Export it, then reload to use the latest saved notebook.';
+    function remember(){memory.set(key,{note:clean(note),baselineRaw,savedView,conflict,unsaved:!saveOk});}
+    function status(){if(!disposed)$('#lab-save-state').textContent=conflict?conflictMessage:saveOk?'Saved on this device · up to 80 trials per experiment.':'Device storage is unavailable. This session stays usable; export your notebook before leaving.';}
+    function persist(next,force=false){
+      const serialized=JSON.stringify(next);
+      if(!force && serialized===savedView){status();return !conflict;}
+      try{
+        // Compare with the exact revision read by this view, including before a reset.
+        // A stale view keeps its local draft; it never blindly replaces newer records.
+        if(localStorage.getItem(key)!==baselineRaw){conflict=true;saveOk=false;status();return false;}
+        localStorage.setItem(key,serialized);baselineRaw=serialized;savedView=serialized;conflict=false;saveOk=true;
+      }catch(_){saveOk=false;}
+      status();return true;
+    }
+    function save(){persist(note);remember();}
+    function storageChanged(e){if((e.key===key||e.key===null)&&e.newValue!==baselineRaw){conflict=true;saveOk=false;status();remember();}}
+    window.addEventListener('storage',storageChanged);
     function snapshot() {try{const s=live.snapshot?live.snapshot():fallback(host);return {variables:cleanMap(s.variables),measurements:cleanMap(s.measurements),stage:String(s.stage||'Observation'),actions:Array.isArray(s.actions)?s.actions.slice(-12).map(x=>String(x).slice(0,180)):[]};}catch(_){return fallback(host);}}
     function publish() { const s=snapshot();window.BioContext?.publish({kind:'lab',lab:lab.id,title:lab.title,mode:note.mode,hypothesis:note.hypothesis,stage:s.stage,variables:s.variables,measurements:s.measurements,actions:[...actions,...(s.actions||[])].slice(-12),trials:note.trials.slice(-2)}); }
     const actions=[];
@@ -86,7 +115,18 @@
       const s=note.trials.at(-1);$('#lab-record-summary').innerHTML=s?`Last recorded: trial ${s.index} · ${esc(s.stage)}<br>${kv(s.measurements)}`:'Your next trial will capture the current controls and measurements.';
       graph();$('#lab-csv').disabled=!note.trials.length;
     }
-    $('#lab-record').onclick=()=>{if(note.trials.length>=80){$('#lab-save-state').textContent='This notebook contains 80 trials. Export your records before starting another investigation.';return;}const s=snapshot();note.trials.push({index:note.trials.length+1,at:new Date().toISOString(),...s,observation:note.observations.slice(0,2000)});save();paint();publish();};
+    $('#lab-record').onclick=()=>{if(note.trials.length>=80){$('#lab-save-state').textContent='This notebook contains 80 trials. Export your records, then choose New investigation.';return;}const s=snapshot();note.trials.push({index:note.trials.length+1,at:new Date().toISOString(),...s,observation:note.observations.slice(0,2000)});save();paint();publish();};
+    newButton.onclick=()=>{resetPanel.hidden=false;newButton.setAttribute('aria-expanded','true');$('#lab-reset-message').textContent=conflict?conflictMessage:'';$('#lab-reset-cancel').focus();};
+    function closeReset(){resetPanel.hidden=true;newButton.setAttribute('aria-expanded','false');newButton.focus();}
+    $('#lab-reset-cancel').onclick=closeReset;
+    $('#lab-reset-confirm').onclick=()=>{
+      const fresh=clean({question:lab.question||'How does changing one condition affect this biological system?'});
+      if(!persist(fresh,true)){$('#lab-reset-message').textContent=conflictMessage;remember();return;}
+      note=fresh;actions.length=0;xKey='Trial';yKey='';graphType='scatter';remember();
+      workflow.querySelector('#lab-hypothesis').value='';workflow.querySelector('h2').textContent=note.question;
+      target.querySelectorAll('[data-note]').forEach(e=>{e.value=note[e.dataset.note]||'';});
+      $('#lab-graph-type').value='scatter';mode();paint();closeReset();
+    };
     $('#lab-coach').onclick=()=>{publish();window.BioContext?.ask('Help me reason from my experiment.');};
     $('#lab-x').onchange=e=>{xKey=e.target.value;graph();};$('#lab-y').onchange=e=>{yKey=e.target.value;graph();};$('#lab-graph-type').onchange=e=>{graphType=e.target.value;graph();};
     $('#lab-csv').onclick=()=>download(csv(note.trials),'text/csv;charset=utf-8',lab.id+'-trials.csv');
@@ -99,7 +139,7 @@
       else $('#lab-save-state').textContent='No capturable view is available. Your written observations can still be exported.';
     };
     mode();paint();publish();
-    return {dispose(){if(disposed)return;disposed=true;save();host.removeEventListener('change',action);host.removeEventListener('click',action);}};
+    return {dispose(){if(disposed)return;remember();disposed=true;window.removeEventListener('storage',storageChanged);host.removeEventListener('change',action);host.removeEventListener('click',action);}};
   }
   window.BioNotebook={mount,clean,csv};
 })();

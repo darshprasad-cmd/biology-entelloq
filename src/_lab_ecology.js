@@ -636,6 +636,7 @@
         if (!last) last = now;
         const dtWall = clamp((now - last) / 1000, 0, 0.1);
         last = now;
+        if(document.hidden || (window.frameElement && !window.frameElement.getClientRects().length)) return;
 
         if (sim.running && !(sim.N <= 0 && sim.P <= 0)) {
           let years = dtWall * SPEED;
@@ -1202,6 +1203,7 @@
         if (!last) last = now;
         const dt = clamp((now - last) / 1000, 0, 0.1);
         last = now;
+        if(document.hidden || (window.frameElement && !window.frameElement.getClientRects().length)) return;
         clock += dt;
 
         palAge += dt;

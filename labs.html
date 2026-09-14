@@ -555,6 +555,7 @@ const LABS = (function () {
   }
   addEventListener('hashchange',route);
   addEventListener('pagehide',unmount);
+  addEventListener('pageshow',event=>{if(event.persisted)route();});
   if(document.readyState==='loading') addEventListener('DOMContentLoaded',route,{once:true}); else queueMicrotask(route);
 })();
 
@@ -568,6 +569,7 @@ const LABS = (function () {
 /* ---------------------------------------------------------------- helpers -- */
 function LB_el(t, c, h) { const e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; }
 const LB_REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+function LB_visible() { return !document.hidden && (!window.frameElement || window.frameElement.getClientRects().length > 0); }
 function LB_slider(host, label, min, max, val, step, fmt, on) {
   const g = LB_el("div", "bx-grp");
   g.innerHTML = `<label>${label}</label><div class="bx-row"><input type="range" class="bx-slider" min="${min}" max="${max}" value="${val}" step="${step}"><span class="bx-val"></span></div>`;
@@ -701,7 +703,7 @@ LABS.register("microscope", {
     }
 
     function draw() {
-      t += LB_REDUCED ? 0 : 0.016;
+      t += LB_REDUCED || !LB_visible() ? 0 : 0.016;
       const { ctx, W, H } = cv;
       ctx.clearRect(0, 0, W, H);
       const cx = W / 2, cy = H / 2, R = Math.min(W, H) * 0.44;
@@ -915,7 +917,7 @@ LABS.register("gel-electrophoresis", {
     }
     function draw() {
       const now = performance.now(), dt = Math.min(.1, (now - lastFrame) / 1000); lastFrame = now;
-      if (running) { advance(dt * 6); upd(); }
+      if (running && LB_visible()) { advance(dt * 6); upd(); }
       const { ctx, W, H } = cv; ctx.clearRect(0, 0, W, H);
       const padX = 26, padTop = 30, gelH = H - padTop - 24, laneW = (W - padX * 2) / LANES.length;
       // gel slab
@@ -1012,7 +1014,7 @@ LABS.register("predator-prey", {
     }
     function draw() {
       const now = performance.now(), dt = Math.min(.1, (now - lastFrame) / 1000); lastFrame = now;
-      if (running) { for (let i = 0; i < 5; i++) step(dt * .6); }
+      if (running && LB_visible()) { for (let i = 0; i < 5; i++) step(dt * .6); }
       const { ctx, W, H } = cv; ctx.clearRect(0, 0, W, H);
       const pad = 30, gw = W - pad * 2, gh = H - pad * 2;
       ctx.strokeStyle = LB_css("--line"); ctx.lineWidth = 1;
@@ -1780,6 +1782,7 @@ LABS.register("enzyme-kinetics", {
         if (!last) last = now;
         const dtWall = clamp((now - last) / 1000, 0, 0.1);
         last = now;
+        if(document.hidden || (window.frameElement && !window.frameElement.getClientRects().length)) return;
 
         if (sim.running && !(sim.N <= 0 && sim.P <= 0)) {
           let years = dtWall * SPEED;
@@ -2346,6 +2349,7 @@ LABS.register("enzyme-kinetics", {
         if (!last) last = now;
         const dt = clamp((now - last) / 1000, 0, 0.1);
         last = now;
+        if(document.hidden || (window.frameElement && !window.frameElement.getClientRects().length)) return;
         clock += dt;
 
         palAge += dt;
@@ -2594,6 +2598,7 @@ LABS.register("enzyme-kinetics", {
       raf = requestAnimationFrame(frame);
       var dt = last ? Math.min(0.064, (t - last) / 1000) : 0.016;
       last = t;
+      if(document.hidden || (window.frameElement && !window.frameElement.getClientRects().length)) return;
       step(dt, t / 1000);
     }
     raf = requestAnimationFrame(frame);
@@ -2708,8 +2713,7 @@ LABS.register("enzyme-kinetics", {
     icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">' +
           '<path d="M8 3c0 5 8 5 8 9s-8 4-8 9"/><path d="M16 3c0 5-8 5-8 9s8 4 8 9"/>' +
           '<path d="M9.2 7h5.6M8.2 11h7.6M9.2 15h5.6"/></svg>',
-    blurb: "Run the real protocol on real tissue: detergent, salt, protease, ice-cold ethanol, rod. " +
-           "Every reagent has a job, the order is chemistry rather than tradition, and the DNA spools out white at the interface.",
+    blurb: "Investigate a virtual DNA extraction: each reagent changes the model sample, and the order determines whether DNA can be isolated. Yields and purity are illustrative teaching values.",
 
     build: function (host) {
       var css = styleTag("mlx-dnax-css",
@@ -3245,6 +3249,12 @@ LABS.register("enzyme-kinetics", {
       });
 
       return {
+        snapshot: function () {
+          var smp=EX_SAMPLES[S.sample], isolated=has("spool"), y=smp.yield*EX_ETH[S.eth].f;
+          return {variables:{'Source tissue':smp.name,'Ethanol temperature (°C)':Number(S.eth)},
+            measurements:{'Completed stages':S.done.length,'Sodium concentration model (M)':has("salt")?1.5:.01,'DNA yield model (µg)':isolated?Number(y.toFixed(2)):'Not yet isolated','DNA concentration model (ng/µL)':isolated?Number((y/.2).toFixed(2)):'Not yet isolated','A260/A280 model ratio':isolated?smp.a260:'Not yet isolated'},
+            stage:S.done.length?EX_STEPS[S.done.length-1].did:'Inspect the starting sample',actions:S.done.map(function(k){return EX_STEPS.find(function(s){return s.k===k;}).did;})};
+        },
         dispose: function () {
           tick.dispose();
           canvas.dispose();
@@ -3904,8 +3914,7 @@ LABS.register("enzyme-kinetics", {
     color: "#f6c667",
     icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' +
           '<path d="M3 16h3l2-9 3 13 2.5-8 2 4h5.5"/><path d="M4 20h16"/></svg>',
-    blurb: "Set the three temperatures and the cycle count, then run it. Copies double every cycle until the reagents " +
-           "run out — and an annealing temperature just five degrees too high costs you almost the entire product.",
+    blurb: "Explore a fictional thermocycler model. Change temperature stages and cycle count, then compare target copies, efficiency and specificity. Numerical results illustrate amplification rather than predict a real reaction.",
 
     build: function (host) {
       var css = styleTag("mlx-pcr-css",
@@ -4335,6 +4344,7 @@ LABS.register("enzyme-kinetics", {
 
       host.querySelector("#mlxpRun").addEventListener("click", run);
       host.querySelector("#mlxpStd").addEventListener("click", function () {
+        P.running=false; P.done=false; P.cyc=0; P.phase=0; P.phaseT=0;
         sD.value = 95; sA.value = 57; sE.value = 72; sC.value = 30;
         sync();
         P.sim = null; elOut.innerHTML = "";
@@ -4375,6 +4385,18 @@ LABS.register("enzyme-kinetics", {
       });
 
       return {
+        snapshot: function () {
+          var shown=P.sim?(P.running?P.sim.hist[Math.min(P.cyc,P.sim.hist.length-1)]:P.sim.hist[P.sim.hist.length-1]):null;
+          var measures={'Completed cycles':shown?shown.c:0};
+          if(shown){
+            measures['Specific product (model copies)']=Math.round(shown.spec);
+            measures['Nonspecific product (model copies)']=Math.round(shown.ns);
+            measures['Product mass model (ng)']=Number(massNg(shown.spec,PCR.AMPLICON).toFixed(3));
+            measures['Mean efficiency (%)']=Number(((Math.pow(shown.spec/PCR.N0,1/Math.max(1,shown.c))-1)*100).toFixed(3));
+            measures['Specificity (%)']=Number((shown.spec/(shown.spec+shown.ns)*100).toFixed(3));
+          }
+          return {variables:{'Denaturation temperature (°C)':P.Td,'Annealing temperature (°C)':P.Ta,'Extension temperature (°C)':P.Te,'Target cycles':P.cycles,'Playback speed':P.speed==='i'?'Instant':P.speed+'×'},measurements:measures,stage:!shown?'Set up the model program':P.running?['Denaturation','Annealing','Extension'][P.phase]+' · cycle '+(P.cyc+1):'Model amplification complete'};
+        },
         dispose: function () {
           tick.dispose();
           canvas.dispose();
@@ -4387,7 +4409,6 @@ LABS.register("enzyme-kinetics", {
   });
 
 })();
-
 
 /* ===== _lab_physiology.js ===== */
 /* ============================================================================
@@ -4958,6 +4979,7 @@ LABS.register("enzyme-kinetics", {
         if (!last) last = ts;
         var dt = clamp((ts - last) / 1000, 0, 0.05);
         last = ts;
+        if(document.hidden || (window.frameElement && !window.frameElement.getClientRects().length)) return;
 
         /* irreversible thermal denaturation — accrues only above 55 °C */
         if (st.T > 55 && st.denat < 1) {
@@ -5065,7 +5087,7 @@ LABS.register("enzyme-kinetics", {
     tag: "Physiology · Circulation",
     color: "#fb7185",
     icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.6 4.9 13.3a4.7 4.7 0 1 1 7.1-6 4.7 4.7 0 1 1 7.1 6z"/><path d="M6.6 12.4h2.6l1.2-2.6 1.9 4.8 1.2-2.2h2.9"/></svg>',
-    blurb: "A live ECG driven by real autonomic control. Add exercise, add adrenaline, cut the vagus nerve — and watch heart rate, stroke volume and cardiac output move exactly as they do in a body.",
+    blurb: "Explore an illustrative ECG and autonomic-control model. Change exercise and signaling, then compare heart rate, stroke volume and cardiac output. These simplified responses are not clinical predictions.",
 
     build: function (host) {
       var styleEl = injectStyle(host, HRT_CSS);
@@ -5298,7 +5320,7 @@ LABS.register("enzyme-kinetics", {
           hrNum = q("hrNum"), hrTgt = q("hrTgt"), eqBox = q("hrEq"), verdict = q("hrVerdict");
       var dVag = q("dVag"), dSym = q("dSym"), dAdr = q("dAdr"), dInt = q("dInt");
       var nVag = q("nVag"), nSym = q("nSym"), nAdr = q("nAdr");
-      var lastVerdict = "";
+      var lastVerdict = "", measuredHeart = null;
 
       function zoneOf(p) {
         if (p < 55) return ["Rest / very light", "--cy"];
@@ -5310,6 +5332,7 @@ LABS.register("enzyme-kinetics", {
       }
 
       function readouts(hr, m, force) {
+        measuredHeart={hr:hr,mechanics:m};
         var shown = Math.round(hr);
         hrNum.textContent = String(shown);
         oHR.innerHTML = shown + "<small>bpm</small>";
@@ -5430,6 +5453,7 @@ LABS.register("enzyme-kinetics", {
         if (!last) last = ts;
         var dt = clamp((ts - last) / 1000, 0, 0.06);
         last = ts;
+        if(document.hidden || (window.frameElement && !window.frameElement.getClientRects().length)) return;
         if (!W) { resize(); return; }
 
         sampAcc += PX_PER_S * dt;
@@ -5485,6 +5509,11 @@ LABS.register("enzyme-kinetics", {
       }
 
       return {
+        snapshot: function () {
+          var hr=measuredHeart?measuredHeart.hr:baseHR(),m=measuredHeart?measuredHeart.mechanics:mechanics(hr);
+          function number(v){return Number(v.toFixed(3));}
+          return {variables:{'Exercise intensity (%)':st.ex*100,'Relative adrenaline signal (%)':st.adr*100,'Age (years)':st.age,'Vagus signal':st.vagus?'Intact':'Blocked'},measurements:{'Heart rate (beats/min)':number(hr),'Stroke volume (mL/beat)':number(m.sv),'Cardiac output (L/min)':number(m.co),'Diastolic filling time (ms)':number(m.dias*1000),'Ejection fraction (%)':number(m.ef*100),'End-diastolic volume (mL)':number(m.edv)},stage:'Observe the model cardiac cycle'};
+        },
         dispose: function () {
           cancelAnimationFrame(raf);
           if (ro) ro.disconnect();
@@ -6103,14 +6132,43 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
   }
   function mount(lab,host,live,workflow,target) {
     const key='bioq.lab-notebook.v1.'+lab.id;
-    let note=clean(memory.get(key)),saveOk=true,xKey='Trial',yKey='',graphType='scatter',disposed=false;
-    try {const raw=localStorage.getItem(key);if(raw)note=clean(JSON.parse(raw));}catch(_){saveOk=false;}
+    const cached=memory.get(key);
+    let note=clean(cached?.note),baselineRaw=cached?.baselineRaw??null,savedView=cached?.savedView??'',conflict=!!cached?.conflict,saveOk=!cached?.unsaved,xKey='Trial',yKey='',graphType='scatter',disposed=false;
+    const hasDraft=cached && JSON.stringify(note)!==savedView;
+    try {
+      const raw=localStorage.getItem(key);
+      if(!hasDraft){baselineRaw=raw;note=clean(raw?JSON.parse(raw):null);conflict=false;saveOk=true;}
+      else if(raw!==baselineRaw){conflict=true;saveOk=false;}
+    }catch(_){saveOk=false;}
     if(!note.question)note.question=lab.question||'How does changing one condition affect this biological system?';
+    if(!hasDraft)savedView=JSON.stringify(note);
     workflow.className='ln-workspace';target.className='ln-workspace';
     workflow.innerHTML=`<div class="ln-question"><div><h2>${esc(note.question)}</h2><p>${esc((lab.learningObjectives||[]).join(' · '))}</p></div><div class="ln-modes" role="group" aria-label="Experiment mode">${['guided','challenge','sandbox'].map(m=>`<button class="bx-btn" data-lab-mode="${m}" aria-pressed="${m===note.mode}">${m[0].toUpperCase()+m.slice(1)}</button>`).join('')}</div></div><p class="ln-workflow-hint" id="lab-hint"></p><label>My hypothesis<input id="lab-hypothesis" maxlength="2000" placeholder="If I change… then… because…" value="${esc(note.hypothesis)}"></label>`;
     target.innerHTML=`<div class="ln-notebook-top"><h2>Lab notebook</h2><div class="ln-theory"><span>Understand the theory</span>${(lab.relatedTopics||[]).map(id=>`<a href="./learn.html#topic/${esc(id)}/intuition">${esc(id.replace(/-/g,' '))} ↗</a>`).join('')}</div></div><p class="ln-save" id="lab-save-state" role="status"></p><div class="ln-actions"><button class="bx-btn pri" id="lab-record">Record trial</button><button class="bx-btn" id="lab-coach">Ask the learning guide</button><button class="bx-btn" id="lab-capture">Capture view</button><button class="bx-btn" id="lab-csv">Export data CSV</button><button class="bx-btn" id="lab-export">Export notebook</button></div><div class="ln-record-summary" id="lab-record-summary"></div><div id="lab-trials"></div><div class="ln-graph"><div class="ln-graph-controls"><label>Horizontal axis<select id="lab-x"></select></label><label>Vertical axis<select id="lab-y"></select></label><label>Graph type<select id="lab-graph-type"><option value="scatter">Scatter</option><option value="line">Line</option><option value="bar">Bar</option></select></label></div><div id="lab-plot"></div></div><div class="ln-fields"><label>Research question<input data-note="question" maxlength="2000" value="${esc(note.question)}"></label>${Object.entries(fields).filter(([k])=>k!=='hypothesis').map(([k,label])=>`<label>${label}<textarea data-note="${k}" maxlength="12000" rows="3" placeholder="${k==='conclusion'?'Use evidence from your recorded trials.':k==='limitations'?'Which assumptions might differ in a living system?':'Write your '+label.toLowerCase()+'.'}">${esc(note[k])}</textarea></label>`).join('')}</div>`;
     const $=s=>target.querySelector(s);
-    function save() {memory.set(key,note);try{localStorage.setItem(key,JSON.stringify(note));saveOk=true;}catch(_){saveOk=false;}$('#lab-save-state').textContent=saveOk?'Saved on this device · up to 80 trials per experiment.':'Device storage is unavailable. This session stays usable; export your notebook before leaving.';}
+    const resetPanel=document.createElement('div');
+    resetPanel.className='ln-record-summary';resetPanel.id='lab-reset-panel';resetPanel.hidden=true;
+    resetPanel.setAttribute('role','group');resetPanel.setAttribute('aria-labelledby','lab-reset-title');
+    resetPanel.innerHTML='<h3 id="lab-reset-title">Start a new investigation?</h3><p>Export your notebook first if you want to keep it. Starting again clears this lab’s notes and recorded trials on this device. Your current experiment controls stay in place.</p><p id="lab-reset-message" role="status"></p><div class="ln-actions"><button class="bx-btn" id="lab-reset-cancel">Cancel</button><button class="bx-btn" id="lab-reset-confirm">Start new investigation</button></div>';
+    const newButton=document.createElement('button');newButton.className='bx-btn';newButton.id='lab-new';newButton.textContent='New investigation';newButton.setAttribute('aria-controls','lab-reset-panel');newButton.setAttribute('aria-expanded','false');
+    $('.ln-actions').append(newButton);$('.ln-actions').after(resetPanel);
+    const conflictMessage='Another tab changed this notebook. Your work remains in this tab for export. Export it, then reload to use the latest saved notebook.';
+    function remember(){memory.set(key,{note:clean(note),baselineRaw,savedView,conflict,unsaved:!saveOk});}
+    function status(){if(!disposed)$('#lab-save-state').textContent=conflict?conflictMessage:saveOk?'Saved on this device · up to 80 trials per experiment.':'Device storage is unavailable. This session stays usable; export your notebook before leaving.';}
+    function persist(next,force=false){
+      const serialized=JSON.stringify(next);
+      if(!force && serialized===savedView){status();return !conflict;}
+      try{
+        // Compare with the exact revision read by this view, including before a reset.
+        // A stale view keeps its local draft; it never blindly replaces newer records.
+        if(localStorage.getItem(key)!==baselineRaw){conflict=true;saveOk=false;status();return false;}
+        localStorage.setItem(key,serialized);baselineRaw=serialized;savedView=serialized;conflict=false;saveOk=true;
+      }catch(_){saveOk=false;}
+      status();return true;
+    }
+    function save(){persist(note);remember();}
+    function storageChanged(e){if((e.key===key||e.key===null)&&e.newValue!==baselineRaw){conflict=true;saveOk=false;status();remember();}}
+    window.addEventListener('storage',storageChanged);
     function snapshot() {try{const s=live.snapshot?live.snapshot():fallback(host);return {variables:cleanMap(s.variables),measurements:cleanMap(s.measurements),stage:String(s.stage||'Observation'),actions:Array.isArray(s.actions)?s.actions.slice(-12).map(x=>String(x).slice(0,180)):[]};}catch(_){return fallback(host);}}
     function publish() { const s=snapshot();window.BioContext?.publish({kind:'lab',lab:lab.id,title:lab.title,mode:note.mode,hypothesis:note.hypothesis,stage:s.stage,variables:s.variables,measurements:s.measurements,actions:[...actions,...(s.actions||[])].slice(-12),trials:note.trials.slice(-2)}); }
     const actions=[];
@@ -6147,7 +6205,18 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
       const s=note.trials.at(-1);$('#lab-record-summary').innerHTML=s?`Last recorded: trial ${s.index} · ${esc(s.stage)}<br>${kv(s.measurements)}`:'Your next trial will capture the current controls and measurements.';
       graph();$('#lab-csv').disabled=!note.trials.length;
     }
-    $('#lab-record').onclick=()=>{if(note.trials.length>=80){$('#lab-save-state').textContent='This notebook contains 80 trials. Export your records before starting another investigation.';return;}const s=snapshot();note.trials.push({index:note.trials.length+1,at:new Date().toISOString(),...s,observation:note.observations.slice(0,2000)});save();paint();publish();};
+    $('#lab-record').onclick=()=>{if(note.trials.length>=80){$('#lab-save-state').textContent='This notebook contains 80 trials. Export your records, then choose New investigation.';return;}const s=snapshot();note.trials.push({index:note.trials.length+1,at:new Date().toISOString(),...s,observation:note.observations.slice(0,2000)});save();paint();publish();};
+    newButton.onclick=()=>{resetPanel.hidden=false;newButton.setAttribute('aria-expanded','true');$('#lab-reset-message').textContent=conflict?conflictMessage:'';$('#lab-reset-cancel').focus();};
+    function closeReset(){resetPanel.hidden=true;newButton.setAttribute('aria-expanded','false');newButton.focus();}
+    $('#lab-reset-cancel').onclick=closeReset;
+    $('#lab-reset-confirm').onclick=()=>{
+      const fresh=clean({question:lab.question||'How does changing one condition affect this biological system?'});
+      if(!persist(fresh,true)){$('#lab-reset-message').textContent=conflictMessage;remember();return;}
+      note=fresh;actions.length=0;xKey='Trial';yKey='';graphType='scatter';remember();
+      workflow.querySelector('#lab-hypothesis').value='';workflow.querySelector('h2').textContent=note.question;
+      target.querySelectorAll('[data-note]').forEach(e=>{e.value=note[e.dataset.note]||'';});
+      $('#lab-graph-type').value='scatter';mode();paint();closeReset();
+    };
     $('#lab-coach').onclick=()=>{publish();window.BioContext?.ask('Help me reason from my experiment.');};
     $('#lab-x').onchange=e=>{xKey=e.target.value;graph();};$('#lab-y').onchange=e=>{yKey=e.target.value;graph();};$('#lab-graph-type').onchange=e=>{graphType=e.target.value;graph();};
     $('#lab-csv').onclick=()=>download(csv(note.trials),'text/csv;charset=utf-8',lab.id+'-trials.csv');
@@ -6160,7 +6229,7 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
       else $('#lab-save-state').textContent='No capturable view is available. Your written observations can still be exported.';
     };
     mode();paint();publish();
-    return {dispose(){if(disposed)return;disposed=true;save();host.removeEventListener('change',action);host.removeEventListener('click',action);}};
+    return {dispose(){if(disposed)return;remember();disposed=true;window.removeEventListener('storage',storageChanged);host.removeEventListener('change',action);host.removeEventListener('click',action);}};
   }
   window.BioNotebook={mount,clean,csv};
 })();
@@ -6195,17 +6264,22 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
     meta[id]={category:'Dissection',difficulty:'school',minutes:30,type:'dissection',relatedTopics,aliases:[specimen,title,'anatomy','auto dissection','organs',category],question:'How do the structures of the '+title.toLowerCase()+' support their functions?',steps:['Inspect the external anatomy','Use the guided access sequence','Identify an internal structure','Connect its form to its function'],learningObjectives:['Recognize anatomical layers','Compare organs and systems','Record structural evidence']};
     LABS.register(id,{title:title+' Dissection',tag:'Dissection',blurb:'Explore the existing 3D '+title.toLowerCase()+' with manual instruments, guided access, clickable anatomy and optional hand tracking.',build(host){
       const help=document.createElement('p');help.className='ln-dissection-help';help.textContent='Use the theatre’s instruments to open access layers, select a structure, and inspect its function. The theatre includes its own guided tutor and camera controls. Record observations in the notebook below.';host.append(help);
-      const iframe=document.createElement('iframe');iframe.className='ln-stage-iframe';iframe.title=title+' virtual dissection';iframe.allow='camera; fullscreen; xr-spatial-tracking';iframe.src='./lab.html?instant=1';host.append(iframe);
-      let stopped=false,attempt=0,timer=null,ready=false,failed=false;
+      const iframe=document.createElement('iframe');iframe.className='ln-stage-iframe';iframe.title=title+' virtual dissection';iframe.setAttribute('aria-busy','true');iframe.allow='camera; fullscreen; xr-spatial-tracking';iframe.src='./lab.html?instant=1';host.append(iframe);
+      let stopped=false,attempt=0,timer=null,ready=false,failed=false,selectionRequested=false;
       function connect(){
         if(stopped)return;
         try{
           const api=iframe.contentWindow.__LAB;
-          if(api?.ok===false){failed=true;help.textContent='The 3D theatre could not start in this browser. '+(api.error||'Try reloading the bench or opening the Dissection Theatre directly.');return;}
-          if(api?.ok&&api.loadSpecimen){
-            // startApp has finished its default frog setup before ok becomes true.
-            if(specimen!=='frog')api.loadSpecimen(specimen);
-            if(Array.isArray(api.parts)&&api.parts.length){ready=true;return;}
+          if(api?.ok===false&&api.error){failed=true;help.textContent='The 3D theatre could not start in this browser. '+api.error;return;}
+          if(api?.ok&&api.ready!==false&&api.loadSpecimen){
+            // Newer theatres prepare the initial surface asynchronously. Prefer
+            // their request lifecycle so the cockroach exterior is prepared too.
+            if(specimen!=='frog'&&!selectionRequested){
+              selectionRequested=true;
+              Promise.resolve((api.requestSpecimen||api.loadSpecimen)(specimen)).then(connect).catch(()=>{if(!stopped){failed=true;help.textContent='The requested specimen could not load. Reload this bench to retry.';}});
+              return;
+            }
+            if(Array.isArray(api.parts)&&api.parts.length){ready=true;iframe.setAttribute('aria-busy','false');return;}
           }
         }catch(_){}
         if(attempt++<150)timer=setTimeout(connect,200);
@@ -6217,6 +6291,7 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
           if(!ready)return{variables:{'Requested specimen':title},measurements:{'Theatre status':failed?'Unavailable':'Loading'},stage:failed?'Theatre unavailable':'Theatre loading'};
           try{
             const api=iframe.contentWindow.__LAB,parts=Array.isArray(api.parts)?api.parts:[],state=api.dissection?.state;
+            if(api.ready===false)return{variables:{'Requested specimen':title},measurements:{'Theatre status':'Preparing specimen'},stage:'Theatre loading'};
             const actual=iframe.contentDocument.querySelector('#specbtn .specname')?.textContent.trim()||title;
             const selected=parts.find(p=>p.id===api.dissection?.hovered);
             return{variables:{Specimen:actual,Instrument:api.tool||'probe'},measurements:{'Available anatomical structures':parts.length,'Pinned structures':state?.pinned?.size||0,'Incisions':state?.incisions?.size||0,'Opened structures':state?.opened?.size||0,'Removed structures':state?.removed?.size||0,'Deepest revealed layer':state?.maxLayerRevealed||0,'Selected structure':selected?.name||'None'},stage:selected?'Inspecting '+selected.name:'Explore anatomy',actions:selected?['Inspect '+selected.name+': '+(selected.note||'')]:[]};
@@ -6227,6 +6302,7 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
             if(!ready||stopped){reject(new Error('Wait for the 3D theatre to finish loading before capturing.'));return;}
             try{
               const api=iframe.contentWindow.__LAB,canvas=iframe.contentDocument.querySelector('#stage canvas');
+              if(api.ready===false){reject(new Error('Wait for specimen preparation to finish before capturing.'));return;}
               if(!canvas){reject(new Error('No specimen canvas is available to capture.'));return;}
               // WebGL does not preserve its buffer: draw once immediately before
               // requesting the browser-native bitmap, without changing the scene.
@@ -6404,7 +6480,7 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
     const resizeObserver=new ResizeObserver(()=>b.render());resizeObserver.observe(canvas);
     // Observation time is independent of screen refresh rate. No animation runs
     // until the student asks; the manual step is available with reduced motion.
-    const timer=spec.step?setInterval(()=>{if(!b.running||document.hidden)return;advance(.5);b.render();},100):null;
+    const timer=spec.step?setInterval(()=>{if(!b.running||document.hidden||(window.frameElement&&!window.frameElement.getClientRects().length))return;advance(.5);b.render();},100):null;
     return {dispose(){if(timer)clearInterval(timer);resizeObserver.disconnect();b.running=false;},snapshot(){return {
       variables:Object.fromEntries((spec.vars||[]).map(d=>[d.label,b.v[d.key]])),
       measurements:b.measure(),stage:spec.story?spec.story(b):'Observing',actions:b.actions.slice()

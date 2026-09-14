@@ -55,5 +55,6 @@ const LABS = (function () {
   }
   addEventListener('hashchange',route);
   addEventListener('pagehide',unmount);
+  addEventListener('pageshow',event=>{if(event.persisted)route();});
   if(document.readyState==='loading') addEventListener('DOMContentLoaded',route,{once:true}); else queueMicrotask(route);
 })();

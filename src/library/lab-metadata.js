@@ -29,17 +29,22 @@
     meta[id]={category:'Dissection',difficulty:'school',minutes:30,type:'dissection',relatedTopics,aliases:[specimen,title,'anatomy','auto dissection','organs',category],question:'How do the structures of the '+title.toLowerCase()+' support their functions?',steps:['Inspect the external anatomy','Use the guided access sequence','Identify an internal structure','Connect its form to its function'],learningObjectives:['Recognize anatomical layers','Compare organs and systems','Record structural evidence']};
     LABS.register(id,{title:title+' Dissection',tag:'Dissection',blurb:'Explore the existing 3D '+title.toLowerCase()+' with manual instruments, guided access, clickable anatomy and optional hand tracking.',build(host){
       const help=document.createElement('p');help.className='ln-dissection-help';help.textContent='Use the theatre’s instruments to open access layers, select a structure, and inspect its function. The theatre includes its own guided tutor and camera controls. Record observations in the notebook below.';host.append(help);
-      const iframe=document.createElement('iframe');iframe.className='ln-stage-iframe';iframe.title=title+' virtual dissection';iframe.allow='camera; fullscreen; xr-spatial-tracking';iframe.src='./lab.html?instant=1';host.append(iframe);
-      let stopped=false,attempt=0,timer=null,ready=false,failed=false;
+      const iframe=document.createElement('iframe');iframe.className='ln-stage-iframe';iframe.title=title+' virtual dissection';iframe.setAttribute('aria-busy','true');iframe.allow='camera; fullscreen; xr-spatial-tracking';iframe.src='./lab.html?instant=1';host.append(iframe);
+      let stopped=false,attempt=0,timer=null,ready=false,failed=false,selectionRequested=false;
       function connect(){
         if(stopped)return;
         try{
           const api=iframe.contentWindow.__LAB;
-          if(api?.ok===false){failed=true;help.textContent='The 3D theatre could not start in this browser. '+(api.error||'Try reloading the bench or opening the Dissection Theatre directly.');return;}
-          if(api?.ok&&api.loadSpecimen){
-            // startApp has finished its default frog setup before ok becomes true.
-            if(specimen!=='frog')api.loadSpecimen(specimen);
-            if(Array.isArray(api.parts)&&api.parts.length){ready=true;return;}
+          if(api?.ok===false&&api.error){failed=true;help.textContent='The 3D theatre could not start in this browser. '+api.error;return;}
+          if(api?.ok&&api.ready!==false&&api.loadSpecimen){
+            // Newer theatres prepare the initial surface asynchronously. Prefer
+            // their request lifecycle so the cockroach exterior is prepared too.
+            if(specimen!=='frog'&&!selectionRequested){
+              selectionRequested=true;
+              Promise.resolve((api.requestSpecimen||api.loadSpecimen)(specimen)).then(connect).catch(()=>{if(!stopped){failed=true;help.textContent='The requested specimen could not load. Reload this bench to retry.';}});
+              return;
+            }
+            if(Array.isArray(api.parts)&&api.parts.length){ready=true;iframe.setAttribute('aria-busy','false');return;}
           }
         }catch(_){}
         if(attempt++<150)timer=setTimeout(connect,200);
@@ -51,6 +56,7 @@
           if(!ready)return{variables:{'Requested specimen':title},measurements:{'Theatre status':failed?'Unavailable':'Loading'},stage:failed?'Theatre unavailable':'Theatre loading'};
           try{
             const api=iframe.contentWindow.__LAB,parts=Array.isArray(api.parts)?api.parts:[],state=api.dissection?.state;
+            if(api.ready===false)return{variables:{'Requested specimen':title},measurements:{'Theatre status':'Preparing specimen'},stage:'Theatre loading'};
             const actual=iframe.contentDocument.querySelector('#specbtn .specname')?.textContent.trim()||title;
             const selected=parts.find(p=>p.id===api.dissection?.hovered);
             return{variables:{Specimen:actual,Instrument:api.tool||'probe'},measurements:{'Available anatomical structures':parts.length,'Pinned structures':state?.pinned?.size||0,'Incisions':state?.incisions?.size||0,'Opened structures':state?.opened?.size||0,'Removed structures':state?.removed?.size||0,'Deepest revealed layer':state?.maxLayerRevealed||0,'Selected structure':selected?.name||'None'},stage:selected?'Inspecting '+selected.name:'Explore anatomy',actions:selected?['Inspect '+selected.name+': '+(selected.note||'')]:[]};
@@ -61,6 +67,7 @@
             if(!ready||stopped){reject(new Error('Wait for the 3D theatre to finish loading before capturing.'));return;}
             try{
               const api=iframe.contentWindow.__LAB,canvas=iframe.contentDocument.querySelector('#stage canvas');
+              if(api.ready===false){reject(new Error('Wait for specimen preparation to finish before capturing.'));return;}
               if(!canvas){reject(new Error('No specimen canvas is available to capture.'));return;}
               // WebGL does not preserve its buffer: draw once immediately before
               // requesting the browser-native bitmap, without changing the scene.
