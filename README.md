@@ -67,9 +67,11 @@ Run `node scripts/check-learning.cjs` for the required static contracts. Browser
 checks and the content/model assumptions are documented in
 [`docs/library/IMPLEMENTATION.md`](docs/library/IMPLEMENTATION.md).
 
-The learning guide is local and context-aware. This static site has no connected
-LLM service; `bioq:context` and `bioq:ask` events provide a provider-neutral
-integration boundary without shipping credentials or sending student records.
+The learning guide uses the shared AI service for concept explanations and
+experiment questions, retaining local contextual guidance while loading or
+offline. Only the question, selected topic and authored reference material are
+sent; saved hypotheses, trials and observations remain on-device. The
+`bioq:context` and `bioq:ask` events remain available to local integrations.
 
 **No gamification.** Deliberately. No XP, no badges, no streaks, no leaderboards.
 Progress is shown because it is useful to you, never to make you come back.
@@ -77,6 +79,28 @@ Progress is shown because it is useful to you, never to make you come back.
 **Everything works offline.** Each page is a single self-contained HTML file with
 its dependencies inlined, including three.js. Open one off a USB stick on a
 laptop with no internet and the dissection theatre still runs.
+
+Live AI explanations need a connection. The app and standalone dissection lab
+offer a contextual **Ask Entelloq AI** panel. The Learn/Lab learning guide,
+Universe tutor questions and introductory questions on About use the same service, with clearly labeled
+authored examples when it is unavailable. The deterministic dissection tutor
+continues to ask, assess and grade locally; AI never changes its scorecard.
+
+The public client is `src/ai/biology-ai.js`, loaded directly by the static pages.
+It sends only the submitted question, bounded topic context and recent chat
+turns to `https://groq-proxy.physicsedge.workers.dev/v1/chat/completions`.
+Conversation stays in tab memory; profile, storage, camera frames and hidden
+pathology findings are not included. The shared service holds `GROQ_API_KEY`
+in its server environment and applies request limits. Never put provider keys
+in this repository, HTML, browser storage or Pages build variables: Pages
+publishes static files and does not keep an environment secret at runtime.
+
+For AI changes, run `node --test tests/biology-ai.test.cjs` and the required
+`node scripts/check-learning.cjs`. Sync changes in `src/universe/ui.js` with
+`python scripts/build-universe.py`, and in `src/lab/main.js` with
+`python scripts/build-dissection.py`. Both builders retain the original shell
+fingerprints. A live response also depends on deployment of the shared proxy
+and its server credential; browser regression checks can mock that boundary.
 
 **Reduced motion is respected everywhere**, including by the shader, which drops
 to a single still frame and repaints only when you change theme or section.

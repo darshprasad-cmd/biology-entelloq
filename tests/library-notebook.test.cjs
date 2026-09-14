@@ -14,7 +14,7 @@ test('notebook load limits records and keeps each trial independent',()=>{
  const n=notebook(),trials=Array.from({length:110},(_,i)=>({variables:{x:i},measurements:{y:i*i}}));const note=n.clean({trials});assert.equal(note.trials.length,80);assert.equal(note.trials[0].index,1);assert.equal(note.trials[0].variables.x,30);trials[30].variables.x=-1;assert.equal(note.trials[0].variables.x,30);
 });
 test('guide uses exact active subtopic and teaches experimental control from the recorded variables',()=>{
- const window={dispatchEvent(){},BIO_LIBRARY:{topics:[{id:'photosynthesis',explanations:{layman:'parent'}},{id:'calvin-cycle',explanations:{layman:'child',advanced:'deeper child',intuition:'ATP coupling'},keyTerms:[]}]}};
+ const window={dispatchEvent(){},addEventListener(){},BIO_LIBRARY:{topics:[{id:'photosynthesis',explanations:{layman:'parent'}},{id:'calvin-cycle',explanations:{layman:'child',advanced:'deeper child',intuition:'ATP coupling'},keyTerms:[]}]}};
  const env={window,parent:window,location:{origin:'http://local'},CustomEvent:class{constructor(type,init){this.type=type;this.detail=init.detail;}}};vm.runInNewContext(fs.readFileSync(path.join(root,'src/library/context.js'),'utf8'),env);
  window.BioContext.publish({kind:'learn',topic:'photosynthesis',subtopicId:'calvin-cycle',mode:'layman'});assert.equal(window.BioContext.reply('simpler'),'child');
  window.BioContext.publish({kind:'lab',hypothesis:'Rate increases',trials:[{variables:{temperature:30,pH:7}},{variables:{temperature:40,pH:8}}]});assert.match(window.BioContext.reply('why?'),/temperature, pH/);assert.match(window.BioContext.reply('why?'),/only one/);
