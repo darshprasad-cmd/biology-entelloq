@@ -1,0 +1,12 @@
+{
+  "base": "http://127.0.0.1:3006",
+  "complete": true,
+  "errors": [],
+  "checks": [
+    "23 reference slides; real microscope magnification, isolated shortcuts/input, X and focus return",
+    "real scale journey; no underlying Viva shortcut; X and focus return",
+    "real X-ray/MRI/off, window/MRI weighting sync, record and Viva via buttons",
+    "390/320/1440 real lab layouts and mode-sheet X"
+  ],
+  "cameraRequests": 0
+}

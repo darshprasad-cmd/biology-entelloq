@@ -825,15 +825,15 @@ function examinationOpen() {
 function containExaminationKeys(event) {
   const microscope = histology?.isOpen(), journey = zoomverse?.isOpen();
   if (!microscope && !journey) return;
-  // Histology owns its own magnification keys; the scale view has no keyboard
-  // handler. Neither viewer may send V/L/tool shortcuts to the lab behind it.
+  // Each viewer owns its navigation keys. Neither may send V/L/tool shortcuts
+  // to the lab behind it; native range and button keys retain their defaults.
   if (journey && event.key !== 'Tab') {
     event.stopPropagation();
     if (event.key === 'Escape') { event.preventDefault(); zoomverse.close(); }
   }
   if (event.key !== 'Tab') return;
   const host = document.querySelector(microscope ? '#his' : '#zoomverse');
-  const targets = host ? [...host.querySelectorAll('button:not(:disabled),[tabindex="0"]')]
+  const targets = host ? [...host.querySelectorAll('button:not(:disabled),input:not(:disabled),a[href],summary,[tabindex="0"]')]
     .filter(node => node.getClientRects().length) : [];
   if (!targets.length) return;
   const first = targets[0], last = targets.at(-1);
@@ -1243,7 +1243,25 @@ function loadSpecimen(id) {
  *   blood     — needs final surface positions to stick droplets to
  *   tutor     — last, so it judges a settled frame
  */
+// BIOQ_LAB_MODAL_BRIDGE_START
+// The embedded app owns a separate Exit above this entire iframe. Give the
+// active in-lab modal sole ownership of that corner; no child z-index can do it.
+let publishedLabModalState = null;
+function publishLabModalState(force = false) {
+  if (window.parent === window || location.origin === 'null') return;
+  const active = !!document.querySelector('#features:not([hidden]),#his.on,#zoomverse.on,#keys.on,#viva.on,#pick:not(.gone)');
+  if (!force && active === publishedLabModalState) return;
+  publishedLabModalState = active;
+  window.parent.postMessage({ bioqLabModal: active }, location.origin);
+}
+window.addEventListener('message', event => {
+  if (event.origin !== location.origin || event.source !== window.parent || event.data?.bioqLabModalRequest !== true) return;
+  publishLabModalState(true);
+});
+// BIOQ_LAB_MODAL_BRIDGE_END
+
 function tick(t) {
+  publishLabModalState();
   const dt = lastT ? Math.min(64, t - lastT) : 16; lastT = t;
   restoreExaminationFocus();
   updateUndoState();

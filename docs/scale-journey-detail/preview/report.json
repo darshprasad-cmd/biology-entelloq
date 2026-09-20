@@ -1,0 +1,44 @@
+{
+  "base": "http://127.0.0.1:3006",
+  "complete": true,
+  "errors": [],
+  "stages": [
+    {
+      "name": "Tissue",
+      "parts": 3
+    },
+    {
+      "name": "Cell",
+      "parts": 10
+    },
+    {
+      "name": "Nucleus",
+      "parts": 5
+    },
+    {
+      "name": "Chromatin",
+      "parts": 3
+    },
+    {
+      "name": "Nucleosome",
+      "parts": 5
+    },
+    {
+      "name": "DNA",
+      "parts": 5
+    },
+    {
+      "name": "Base pair",
+      "parts": 5
+    },
+    {
+      "name": "Carbon atom",
+      "parts": 4
+    }
+  ],
+  "checks": [
+    "real nested specimen chooser, histology picker and microscope exit hit tests",
+    "all stages and subpart buttons; finite transitions; actual pointer rotation; reduced-motion default",
+    "phone portrait and landscape; back-to-lab then Exit-lab; no camera requests or page errors"
+  ]
+}
