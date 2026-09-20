@@ -50,13 +50,17 @@ function bindUniverseInput(el, keyboardTarget, Z, api) {
     const [a, b] = [...pointers.values()];
     return Math.hypot(a.x - b.x, a.y - b.y);
   };
+  const inspecting = () => api.viewMode?.() === 'orbit';
+  const zoom = delta => inspecting() ? api.zoomView(delta) : api.nudge(delta);
   listen(el, 'wheel', e => {
     e.preventDefault();
     const unit = e.deltaMode === 1 ? 1 : e.deltaMode === 2 ? 8 : 0.01;
     // Trackpad spread emits negative ctrl+wheel: spread must move IN, not out.
-    const d = KIT.clamp(e.deltaY * unit * (e.ctrlKey ? -0.3 : 0.5), -0.9, 0.9);
-    Z.flingVel = api.reduced() ? 0 : KIT.clamp(Z.flingVel + d * 0.2, -2, 2);
-    api.nudge(d);
+    // Scale travel follows reading/scroll direction. Inspection follows normal
+    // 3D navigation: wheel up approaches the object; trackpad spread also zooms in.
+    const d = KIT.clamp(e.deltaY * unit * (e.ctrlKey ? -0.3 : inspecting() ? -0.5 : 0.5), -0.9, 0.9);
+    Z.flingVel = api.reduced() || inspecting() ? 0 : KIT.clamp(Z.flingVel + d * 0.2, -2, 2);
+    zoom(d);
   }, { passive: false });
   listen(el, 'pointerdown', e => {
     if ((e.pointerType === 'mouse' && e.button !== 0) || pointers.size >= 2) return;
@@ -67,7 +71,7 @@ function bindUniverseInput(el, keyboardTarget, Z, api) {
     api.wake();
   });
   listen(el, 'pointermove', e => {
-    if (!api.reduced() && e.pointerType !== 'touch') {
+    if (!api.reduced() && !inspecting() && e.pointerType !== 'touch') {
       Z.pxT = (e.clientX / Math.max(1, innerWidth) - 0.5) * 0.16;
       Z.pyT = (e.clientY / Math.max(1, innerHeight) - 0.5) * 0.16;
     }
@@ -77,8 +81,11 @@ function bindUniverseInput(el, keyboardTarget, Z, api) {
     pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
     if (pointers.size === 2) {
       const next = distance();
-      if (pinchPrev > 0 && next > 0) api.nudge(Math.log(next / pinchPrev) * 1.8);
+      if (pinchPrev > 0 && next > 0) zoom(Math.log(next / pinchPrev) * 1.8);
       pinchPrev = next; dragVel = 0;
+    } else if (inspecting()) {
+      api.orbitView((e.clientX - prev.x) * 0.008, (e.clientY - prev.y) * 0.008);
+      dragVel = 0;
     } else {
       const d = -(e.clientY - prev.y) * 0.009;
       dragVel = d / (Math.max(8, api.now() - lastT) / 1000);
@@ -91,7 +98,7 @@ function bindUniverseInput(el, keyboardTarget, Z, api) {
     const wasPinch = pointers.size > 1;
     pointers.delete(e.pointerId);
     if (el.hasPointerCapture?.(e.pointerId)) el.releasePointerCapture(e.pointerId);
-    Z.flingVel = cancelled || wasPinch || api.reduced() ? 0 : KIT.clamp(dragVel * 0.08, -2, 2);
+    Z.flingVel = cancelled || wasPinch || api.reduced() || inspecting() ? 0 : KIT.clamp(dragVel * 0.08, -2, 2);
     dragVel = 0; pinchPrev = 0; lastT = api.now();
   }
   listen(el, 'pointerup', e => end(e, false));
@@ -99,7 +106,21 @@ function bindUniverseInput(el, keyboardTarget, Z, api) {
   listen(el, 'lostpointercapture', e => end(e, true));
   listen(keyboardTarget, 'blur', () => { pointers.clear(); pinchPrev = dragVel = Z.flingVel = 0; });
   listen(keyboardTarget, 'keydown', e => {
-    if (e.ctrlKey || e.metaKey || e.altKey || e.target?.isContentEditable || /INPUT|TEXTAREA|SELECT/.test(e.target?.tagName || '')) return;
+    if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey || e.target?.isContentEditable || /INPUT|TEXTAREA|SELECT/.test(e.target?.tagName || '')) return;
+    if (inspecting()) {
+      if (e.key === 'ArrowLeft') api.orbitView(-0.12, 0);
+      else if (e.key === 'ArrowRight') api.orbitView(0.12, 0);
+      else if (e.key === 'ArrowUp') api.orbitView(0, -0.12);
+      else if (e.key === 'ArrowDown') api.orbitView(0, 0.12);
+      else if (e.key === '=' || e.key === '+') api.zoomView(0.5);
+      else if (e.key === '-' || e.key === '_') api.zoomView(-0.5);
+      else if (e.key.toLowerCase() === 'r') api.resetView();
+      else if (e.key === 'Home') api.jumpTo(0, true);
+      else if (e.key === 'End') api.jumpTo(api.count - 1, true);
+      else if (/^[0-9]$/.test(e.key)) api.jumpTo(e.key === '0' ? 9 : +e.key - 1, true);
+      else return;
+      e.preventDefault(); return;
+    }
     if (e.key === 'ArrowUp' || e.key === '=' || e.key === '+') api.jumpTo(Z.posTarget + 0.5, true);
     else if (e.key === 'ArrowDown' || e.key === '-' || e.key === '_') api.jumpTo(Z.posTarget - 0.5, true);
     else if (e.key === 'Home') api.jumpTo(0, true);
@@ -167,7 +188,7 @@ function bootUniverse(mount) {
     if (!factory) { UNI.stages.push(null); return; }
     try {
       const inst = factory({ THREE, KIT, meta: meta[key] || {}, scene });
-      if (inst && inst.root) { inst.root.visible = false; scene.add(inst.root); }
+      if (inst && inst.root) { inst.root.name = 'universe:' + key; inst.root.userData.stageKey = key; inst.root.visible = false; scene.add(inst.root); }
       inst.key = key;
       UNI.stages.push(inst);
     } catch (e) { console.warn('stage failed: ' + key, e); UNI.stages.push(null); }
@@ -187,6 +208,35 @@ function bootUniverse(mount) {
     lastInput: 0,
   };
 
+  // Inspect a scale without accidentally diving into the next one. Camera
+  // angles/distance are remembered independently for each of the 13 models.
+  const views = Array.from({ length: N }, () => ({ yaw: 0, pitch: 0, distance: UNI_CAM_Z }));
+  let viewMode = 'zoom', paused = false, onViewChange = null;
+  const view = () => views[KIT.clamp(Math.round(Z.pos), 0, N - 1)];
+  const viewChanged = () => { Z.lastInput = now(); wake(); onViewChange?.(); };
+  function setViewMode(mode) {
+    if (mode !== 'zoom' && mode !== 'orbit') return;
+    viewMode = mode; Z.flingVel = 0;
+    Z.px = Z.py = Z.pxT = Z.pyT = 0;
+    if (mode === 'orbit') jumpTo(Math.round(Z.pos), true);
+    viewChanged();
+  }
+  function setPaused(value) { paused = Boolean(value); viewChanged(); }
+  function orbitView(dx, dy) {
+    if (!Number.isFinite(dx) || !Number.isFinite(dy)) return;
+    const v = view(); v.yaw = ((v.yaw + dx) % (Math.PI * 2));
+    v.pitch = KIT.clamp(v.pitch + dy, -1.3, 1.3); viewChanged();
+  }
+  function zoomView(delta) {
+    if (!Number.isFinite(delta)) return;
+    const v = view(); v.distance = KIT.clamp(v.distance * Math.exp(-delta * 0.35), 1.6, 8);
+    viewChanged();
+  }
+  function resetView() {
+    Object.assign(view(), { yaw: 0, pitch: 0, distance: UNI_CAM_Z });
+    Z.flingVel = 0; Z.px = Z.py = Z.pxT = Z.pyT = 0; viewChanged();
+  }
+
   function clampTarget() { Z.posTarget = KIT.clamp(Z.posTarget, 0, N - 1); }
   function nudge(delta) { Z.posTarget += delta; clampTarget(); if (reducedMotion) { Z.pos = Z.posTarget; Z.flingVel = 0; } Z.lastInput = now(); wake(); }
   function now() { return performance.now(); }
@@ -195,6 +245,7 @@ function bootUniverse(mount) {
   const el = renderer.domElement;
   const unbindInput = bindUniverseInput(el, window, Z, {
     nudge, jumpTo, now, reduced: () => reducedMotion, count: N,
+    viewMode: () => viewMode, orbitView, zoomView, resetView,
     wake: () => { Z.lastInput = now(); wake(); },
   });
   function jumpTo(i, instant = false) {
@@ -209,6 +260,7 @@ function bootUniverse(mount) {
       Z.px = Z.py = Z.pxT = Z.pyT = 0;
       wake();
     }
+    onViewChange?.();
   }
   motion.addEventListener?.('change', motionChanged);
 
@@ -224,10 +276,13 @@ function bootUniverse(mount) {
   // something else happens to resize it. Re-run after the next frame and again once
   // the rotation animation has settled. visualViewport catches the other way the
   // usable height changes on a phone — the address bar sliding away.
-  addEventListener('orientationchange', () => {
-    requestAnimationFrame(relayout);
-    setTimeout(relayout, 250);
-  });
+  let layoutFrame = 0, layoutTimer = 0;
+  function orientationChanged() {
+    cancelAnimationFrame(layoutFrame); clearTimeout(layoutTimer);
+    layoutFrame = requestAnimationFrame(relayout);
+    layoutTimer = setTimeout(relayout, 250);
+  }
+  addEventListener('orientationchange', orientationChanged);
   if (window.visualViewport) visualViewport.addEventListener('resize', relayout);
 
   // ── immersion: hide the chrome after a spell of no input, show it on any input.
@@ -249,7 +304,10 @@ function bootUniverse(mount) {
 
     // parallax camera drift (spring toward pointer target), always looking at origin
     Z.px = reducedMotion ? 0 : KIT.damp(Z.px, Z.pxT, 3, dt); Z.py = reducedMotion ? 0 : KIT.damp(Z.py, Z.pyT, 3, dt);
-    camera.position.set(Z.px, -Z.py, UNI_CAM_Z);
+    if (viewMode === 'orbit') {
+      const v = view(), cp = Math.cos(v.pitch);
+      camera.position.set(Math.sin(v.yaw) * cp * v.distance, Math.sin(v.pitch) * v.distance, Math.cos(v.yaw) * cp * v.distance);
+    } else camera.position.set(Z.px, -Z.py, UNI_CAM_Z);
     camera.lookAt(0, 0, 0);
 
     // relay: scale + fade + update only the live stages
@@ -268,13 +326,14 @@ function bootUniverse(mount) {
       st.root.visible = true;
       st.root.scale.setScalar(scale);
       KIT.setGroupFade(st.root, fade);
-      if (st.update && (!reducedMotion || !initialized.has(st))) {
-        st.update(reducedMotion ? 0 : dt, d, camera, fade); initialized.add(st);
+      const stopped = reducedMotion || paused || viewMode === 'orbit';
+      if (st.update && (!stopped || !initialized.has(st))) {
+        st.update(stopped ? 0 : dt, d, camera, fade); initialized.add(st);
       }
     }
 
     // auto-immerse after 2.6s idle
-    if (!reducedMotion && !immersed && t - Z.lastInput > 2600 && !document.activeElement?.closest?.('.hud,.u-panel,.u-help,.u-mark')) { immersed = true; if (onImmersion) onImmersion(true); }
+    if (!reducedMotion && viewMode !== 'orbit' && !immersed && t - Z.lastInput > 2600 && !document.activeElement?.closest?.('.hud,.u-panel,.u-help,.u-mark')) { immersed = true; if (onImmersion) onImmersion(true); }
 
     if (onFrame) onFrame(Z.pos);
 
@@ -317,6 +376,11 @@ function bootUniverse(mount) {
     stageKeyAt: (i) => UNI.ORDER[KIT.clamp(i, 0, N - 1)],
     jumpTo,
     nudge,
+    setViewMode, setPaused, resetView,
+    onViewChange: (fn) => { onViewChange = fn; },
+    get viewMode() { return viewMode; },
+    get paused() { return paused; },
+    get inspectionView() { return { ...view() }; },
     projectedHotspots,
     onImmersion: (fn) => { onImmersion = fn; },
     onJump: (fn) => { onJump = fn; },
@@ -325,6 +389,12 @@ function bootUniverse(mount) {
     get reducedMotion() { return reducedMotion; },
     count: N,
     _tick: tick,   // advance one frame manually (scripted verification without rAF)
-    dispose() { cancelAnimationFrame(raf); unbindInput(); motion.removeEventListener?.('change', motionChanged); UNI.stages.forEach((s) => s && s.dispose && s.dispose()); renderer.dispose(); },
+    dispose() {
+      cancelAnimationFrame(raf); cancelAnimationFrame(layoutFrame); clearTimeout(layoutTimer);
+      unbindInput(); motion.removeEventListener?.('change', motionChanged);
+      removeEventListener('resize', relayout); removeEventListener('orientationchange', orientationChanged);
+      window.visualViewport?.removeEventListener('resize', relayout);
+      UNI.stages.forEach((s) => s && s.dispose && s.dispose()); renderer.dispose();
+    },
   };
 }

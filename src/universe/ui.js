@@ -70,7 +70,7 @@ body.immersed .hud.dim.rail{opacity:.25}
 /* hotspot markers over the 3D */
 .u-markers{position:fixed;inset:0;z-index:8;pointer-events:none}
 .u-mark{position:absolute;transform:translate(-50%,-50%);pointer-events:auto;cursor:pointer;
-  display:flex;align-items:center;gap:8px;will-change:transform,opacity;
+  display:grid;place-items:center;width:28px;height:28px;will-change:transform,opacity;
   background:none;border:none;margin:0;padding:0;font:inherit;color:inherit;text-align:left}
 /* Focus ring for the keyboard path. A pale hairline on its own vanishes over a bright
    nebula, so it rides on a dark halo and stays legible over anything the 3D puts
@@ -85,13 +85,38 @@ body.immersed .hud.dim.rail{opacity:.25}
 .u-mark .ring::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(56,224,216,.35);
   animation:mpulse 2.4s var(--ease) infinite}
 @keyframes mpulse{0%{transform:scale(.6);opacity:.8}100%{transform:scale(1.7);opacity:0}}
-.u-mark .nm{font-size:12px;font-weight:600;padding:4px 10px;border-radius:8px;background:var(--glass-2);
+.u-mark .nm{position:absolute;left:28px;pointer-events:none;font-size:12px;font-weight:600;padding:4px 10px;border-radius:8px;background:var(--glass-2);
   backdrop-filter:blur(10px);border:1px solid var(--line);white-space:nowrap;opacity:0;transform:translateX(-4px);
   transition:opacity .2s,transform .2s var(--ease)}
 .u-mark:hover .nm{opacity:1;transform:none}
 .u-mark:hover .ring{transform:scale(1.25)}
+.u-mark.selected .nm{opacity:1;transform:none}
+.u-mark.selected .ring{border-color:var(--em);background:rgba(52,211,153,.5)}
 @media (prefers-reduced-motion:reduce){.u-mark .ring::after{animation:none}}
 body.u-keyboard .hud,body.u-keyboard .u-panel,body.u-keyboard .u-ai .answer{transition:none}
+
+/* Stable access to named model structures, including off-screen hotspots. */
+.u-explorer{left:26px;top:82px;display:flex;gap:6px;flex-wrap:wrap;max-width:calc(100vw - 70px)}
+.u-explorer button,.u-explorer select,.u-parts button,.u-part-nav button{font:600 12px var(--sans);min-height:44px;padding:9px 12px;border:1px solid var(--line);border-radius:9px;color:var(--dim);background:var(--glass-2);cursor:pointer;touch-action:manipulation}
+.u-explorer button:active,.u-parts button:active,.u-part-nav button:active{transform:scale(.97)}
+.u-explorer select{max-width:205px;color:var(--ink)}
+.u-explorer button[aria-pressed="true"],.u-explorer button[aria-expanded="true"],.u-parts button[aria-current="true"]{color:var(--em);border-color:rgba(52,211,153,.55);background:rgba(13,39,30,.95)}
+.u-explorer button:disabled,.u-part-nav button:disabled{opacity:.45;cursor:default}
+.u-explorer button:focus-visible,.u-explorer select:focus-visible,.u-parts button:focus-visible,.u-part-nav button:focus-visible,.u-panel button:focus-visible{outline:2px solid var(--em);outline-offset:3px}
+.u-parts{position:fixed;left:26px;top:134px;z-index:13;width:310px;max-height:calc(100dvh - 240px);padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--glass-2);backdrop-filter:blur(20px);overflow:auto;overscroll-behavior:contain;touch-action:pan-y}
+.u-parts[hidden],.u-panel[hidden]{display:none}
+.u-parts-head{position:sticky;top:0;z-index:1;background:var(--glass-2);display:flex;align-items:start;justify-content:space-between;gap:10px;margin-bottom:8px}
+.u-parts h2{margin:0;font-size:15px;line-height:1.4}
+.u-parts p{margin:0 0 12px;color:var(--dim);font-size:11px;line-height:1.5}
+.u-parts .u-parts-close{min-width:44px;padding:5px;flex:none;font-size:22px}
+.u-parts-list{display:flex;flex-direction:column;gap:6px}
+.u-parts-list button{text-align:left;width:100%;display:flex;align-items:center;gap:9px;line-height:1.4}
+.u-parts-list .part-number{font:10px var(--mono);color:var(--faint);min-width:18px}
+.u-part-nav{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin:0 0 20px}
+.u-part-nav .part-count{width:100%;color:var(--faint);font:10px var(--mono)}
+.u-panel .desc{overflow-wrap:anywhere}
+.u-panel h2,.u-panel .eyebrow{padding-right:52px}
+.u-panel:focus{outline:none}
 
 /* info panel */
 .u-panel{position:fixed;z-index:12;top:0;right:0;height:100%;width:min(420px,92vw);
@@ -99,8 +124,8 @@ body.u-keyboard .hud,body.u-keyboard .u-panel,body.u-keyboard .u-ai .answer{tran
   transform:translateX(102%);transition:transform .24s var(--ease);display:flex;flex-direction:column;
   padding:28px 26px;overflow-y:auto}
 .u-panel.open{transform:none}
-.u-panel .close{position:absolute;top:20px;right:20px;width:34px;height:34px;border-radius:10px;border:1px solid var(--line);
-  background:none;color:var(--dim);cursor:pointer;display:grid;place-items:center;transition:color .2s,border-color .2s,transform .1s var(--ease)}
+.u-panel .close{position:sticky;top:0;align-self:flex-end;flex:none;margin:0 0 -44px auto;z-index:1;width:44px;height:44px;border-radius:10px;border:1px solid var(--line);
+  background:var(--glass-2);color:var(--dim);font-size:24px;cursor:pointer;display:grid;place-items:center;touch-action:manipulation;transition:color .2s,border-color .2s,transform .1s var(--ease)}
 .u-panel .close:hover{color:var(--ink);border-color:var(--cy)}
 .u-panel .close:active{transform:scale(.94)}
 .u-panel .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--cy);margin-bottom:12px}
@@ -134,18 +159,30 @@ body.u-keyboard .hud,body.u-keyboard .u-panel,body.u-keyboard .u-ai .answer{tran
 /* keyboard help */
 .u-help{position:fixed;inset:0;z-index:20;display:none;place-items:center;background:rgba(2,4,6,.6);backdrop-filter:blur(8px)}
 .u-help.open{display:grid}
-.u-help .box{width:min(460px,92vw);background:var(--glass-2);border:1px solid var(--line);border-radius:20px;padding:28px}
-.u-help h3{margin:0 0 18px;font-size:1.2rem}
-.u-help .row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px;color:var(--dim)}
+.u-help .box{width:min(500px,92vw);max-height:calc(100dvh - 32px);display:flex;flex-direction:column;background:var(--glass-2);border:1px solid var(--line);border-radius:20px;padding:20px}
+.u-help-head{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:12px}
+.u-help h3{margin:0;font-size:1.2rem}
+.u-help-close{width:44px;height:44px;flex:none;font-size:24px;background:var(--glass-2);color:var(--ink);border:1px solid var(--line);border-radius:10px;cursor:pointer;touch-action:manipulation}
+.u-help-close:focus-visible{outline:2px solid var(--em);outline-offset:3px}
+.u-help-close:active{transform:scale(.97)}
+.u-help-body{overflow-y:auto;overscroll-behavior:contain}
+.u-help .row{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px;line-height:1.5;color:var(--dim)}
+.u-help .row>span{flex:1;min-width:0}.u-help .row>span:last-child{text-align:right}
 .u-help .row:last-child{border:none}
 .u-help kbd{font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:6px;border:1px solid var(--line);color:var(--ink)}
 
 @media (max-width:640px){
+  .u-explorer{left:16px;right:16px;top:90px;max-width:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+  .u-explorer button{padding:8px;font-size:11px}
+  .u-explorer select{width:100%;max-width:none;font-size:11px}
+  .u-parts{left:16px;right:16px;top:244px;width:auto;max-height:calc(100dvh - 265px);padding:14px}
+  .u-top{max-width:100vw;gap:8px}.u-brand{font-size:13px;gap:6px;flex-shrink:0}.u-brand svg{width:22px;height:22px}
+  .u-readout{min-width:0;margin-left:0;padding-left:9px}.u-readout .t{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.u-readout .s{font-size:9px;line-height:1.3}
   .u-rail{display:none}
   .u-panel{width:100%;height:70%;top:auto;bottom:0;border-left:none;border-top:1px solid var(--line);
     transform:translateY(102%);border-radius:22px 22px 0 0}
   .u-panel.open{transform:none}
-  .u-hint{font-size:11px;gap:12px;white-space:nowrap;bottom:24px}
+  .u-hint{font-size:11px;gap:12px;width:max-content;max-width:calc(100vw - 32px);text-align:center;bottom:24px}
   .u-hint>span:not(:first-child){display:none}
   .u-scale .note{max-width:230px}
   .u-top{padding:16px}
@@ -165,14 +202,17 @@ body.u-keyboard .hud,body.u-keyboard .u-panel,body.u-keyboard .u-ai .answer{tran
   .u-help{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
   .u-panel{padding:calc(28px + env(safe-area-inset-top)) calc(26px + env(safe-area-inset-right))
     calc(28px + env(safe-area-inset-bottom)) calc(26px + env(safe-area-inset-left))}
-  .u-panel .close{top:calc(20px + env(safe-area-inset-top));right:calc(20px + env(safe-area-inset-right))}
+  .u-explorer{left:calc(26px + env(safe-area-inset-left));top:calc(82px + env(safe-area-inset-top))}
   @media (max-width:640px){
     .u-top{padding:calc(16px + env(safe-area-inset-top)) 16px 16px calc(16px + env(safe-area-inset-left))}
     /* on a phone the panel is a bottom sheet — nothing above it to clear */
     .u-panel{padding-top:28px}
+    .u-explorer{left:calc(16px + env(safe-area-inset-left));right:calc(16px + env(safe-area-inset-right));top:calc(90px + env(safe-area-inset-top))}
+    .u-parts{top:calc(244px + env(safe-area-inset-top));max-height:calc(100dvh - 265px - env(safe-area-inset-top) - env(safe-area-inset-bottom))}
     .u-scale{bottom:calc(144px + env(safe-area-inset-bottom))}
   }
 }
+@media(max-height:500px) and (min-width:641px){.u-explorer{top:68px}.u-parts{top:118px;max-height:calc(100dvh - 135px)}.u-panel{padding-top:25px}.u-part-nav{margin-bottom:12px}}
 @media (prefers-reduced-motion:reduce){
   .hud,.u-panel,.u-ai .answer,.u-rail button,.u-rail button .rl,.u-rail button .rd,.u-mark .ring,.u-mark .nm{transition:none}
 }
@@ -188,6 +228,14 @@ const UIC = {
 };
 
 const LAB_URL = './lab.html';
+
+// Exactly the catalogue's named hotspots; no synthesized anatomy or camera-space
+// visibility filtering. A projection can disappear without losing its lesson.
+function universeSubpartsFor(data, stageKey) {
+  const spots = data[stageKey] && data[stageKey].hotspots;
+  return Object.entries(spots || {}).filter(([, meta]) => meta && typeof meta.name === 'string' && meta.name.trim())
+    .map(([id, meta]) => ({ id, meta, stage: stageKey }));
+}
 
 function buildUniverseUI(core) {
   const data = UNI_DATA;
@@ -232,12 +280,117 @@ function buildUniverseUI(core) {
   const markers = el('div', 'u-markers'); document.body.appendChild(markers);
   const markEls = new Map();   // id -> element
 
+  // Stable keyboard/touch entry: projection is not the inventory of a model.
+  const explorer = el('div', 'hud u-explorer');
+  explorer.setAttribute('role', 'group'); explorer.setAttribute('aria-label', 'Explore this scale');
+  explorer.innerHTML = '<button type="button" id="uPartsToggle" aria-expanded="false" aria-controls="uParts">Subparts</button>'
+    + '<button type="button" id="uInspect" aria-pressed="false">Inspect 3D</button>'
+    + '<button type="button" id="uPause" aria-pressed="false">Pause motion</button>'
+    + '<button type="button" id="uResetView">Reset view</button>'
+    + '<select id="uScaleSelect" aria-label="Choose a scale"></select>'
+    + '<button type="button" id="uHelpToggle" aria-haspopup="dialog" aria-controls="uHelp">Help</button>';
+  document.body.appendChild(explorer);
+  const partsToggle = explorer.querySelector('#uPartsToggle'), inspectBtn = explorer.querySelector('#uInspect');
+  const pauseBtn = explorer.querySelector('#uPause'), resetBtn = explorer.querySelector('#uResetView');
+  const scaleSelect = explorer.querySelector('#uScaleSelect');
+  UNI_ORDER.forEach((key, index) => { const option = el('option'); option.value = index; option.textContent = (index + 1) + ' · ' + ((data[key] || {}).title || key); scaleSelect.appendChild(option); });
+  scaleSelect.addEventListener('change', () => { closeSubparts(false); closePanel(false); core.jumpTo(Number(scaleSelect.value), true); });
+  function updateViewControls() {
+    inspectBtn.disabled = typeof core.setViewMode !== 'function';
+    pauseBtn.disabled = typeof core.setPaused !== 'function' || !!core.reducedMotion;
+    resetBtn.disabled = typeof core.resetView !== 'function';
+    const inspecting = core.viewMode === 'orbit';
+    inspectBtn.setAttribute('aria-pressed', String(inspecting));
+    inspectBtn.textContent = inspecting ? 'Exit 3D inspect' : 'Inspect 3D';
+    inspectBtn.title = inspecting ? 'Drag rotates; wheel/pinch adjusts inspection zoom. Exit to travel through scales.' : 'Inspect this model without changing scale';
+    pauseBtn.setAttribute('aria-pressed', String(!!core.paused));
+    pauseBtn.textContent = core.paused ? 'Resume motion' : 'Pause motion';
+    if (core.reducedMotion) pauseBtn.textContent = 'Motion off';
+    pauseBtn.title = core.reducedMotion ? 'Reduced motion keeps automatic animation off; manual inspection remains available.' : 'Pause or resume illustrative scene motion. Inspection mode always freezes it.';
+    hint.innerHTML = inspecting
+      ? '<span><b>Inspect</b> · drag / arrows rotate · wheel / pinch / + − zoom</span><span>Scene motion frozen · exit to travel</span><span><kbd>?</kbd> shortcuts</span>'
+      : '<span><b>Scroll</b> · <b>drag</b> · <b>pinch</b> to zoom</span><span><b>Subparts</b> · choose a named structure</span><span><kbd>?</kbd> shortcuts</span>';
+  }
+  inspectBtn.addEventListener('click', () => { if (core.setViewMode) core.setViewMode(core.viewMode === 'orbit' ? 'zoom' : 'orbit'); updateViewControls(); });
+  pauseBtn.addEventListener('click', () => { if (core.setPaused) core.setPaused(!core.paused); updateViewControls(); });
+  resetBtn.addEventListener('click', () => { if (core.resetView) core.resetView(); updateViewControls(); });
+  if (core.onViewChange) core.onViewChange(updateViewControls);
+  updateViewControls();
+
+  const partsPanel = el('section', 'u-parts'); partsPanel.id = 'uParts'; partsPanel.hidden = true;
+  partsPanel.setAttribute('aria-labelledby', 'uPartsTitle');
+  partsPanel.innerHTML = '<div class="u-parts-head"><h2 id="uPartsTitle">Subparts</h2>'
+    + '<button class="u-parts-close" type="button" aria-label="Close subparts">×</button></div>'
+    + '<p>Choose a named structure. The full list stays available even when a marker is off-screen.</p>'
+    + '<div class="u-parts-list"></div>';
+  document.body.appendChild(partsPanel);
+  const partsTitle = partsPanel.querySelector('#uPartsTitle'), partsList = partsPanel.querySelector('.u-parts-list');
+  let partsStage = null, partButtons = new Map(), selected = null, panelReturn = null;
+  const currentStage = () => UNI_ORDER[Math.max(0, Math.min(UNI_ORDER.length - 1, Math.round(core.pos || 0)))];
+  function updateSelection() {
+    partButtons.forEach((button, id) => button.setAttribute('aria-current', String(!!selected && selected.stage === partsStage && selected.id === id)));
+  }
+  function renderSubparts(stageKey) {
+    partsStage = stageKey;
+    const records = universeSubpartsFor(data, stageKey);
+    partsTitle.textContent = ((data[stageKey] || {}).title || stageKey) + ' · subparts';
+    partsToggle.textContent = 'Subparts · ' + records.length;
+    partsList.replaceChildren(); partButtons = new Map();
+    const overview = el('button'); overview.type = 'button'; overview.textContent = 'Scale overview';
+    overview.addEventListener('click', () => openPanel(null, stageKey)); partsList.appendChild(overview);
+    records.forEach((record, i) => {
+      const button = el('button'); button.type = 'button'; button.dataset.part = record.id;
+      const number = el('span', 'part-number'); number.textContent = String(i + 1).padStart(2, '0'); number.setAttribute('aria-hidden', 'true');
+      const name = el('span'); name.textContent = record.meta.name;
+      button.append(number, name); button.addEventListener('click', () => openPanel(record.meta, stageKey));
+      partsList.appendChild(button); partButtons.set(record.id, button);
+    });
+    if (!records.length) { const empty = el('p'); empty.textContent = 'No named subparts for this scale yet. The overview is available.'; partsList.appendChild(empty); }
+    updateSelection();
+  }
+  function closeSubparts(restore = true) {
+    partsPanel.hidden = true; partsToggle.setAttribute('aria-expanded', 'false');
+    if (restore) partsToggle.focus({ preventScroll: true });
+  }
+  function openSubparts(stageKey = currentStage()) {
+    if (!data[stageKey]) stageKey = currentStage();
+    closePanel(false);
+    if (stageKey !== currentStage()) core.jumpTo(UNI_ORDER.indexOf(stageKey), true);
+    renderSubparts(stageKey); partsPanel.hidden = false; partsToggle.setAttribute('aria-expanded', 'true');
+    document.body.classList.remove('immersed');
+    const button = selected && selected.stage === stageKey ? partButtons.get(selected.id) : partsList.querySelector('button');
+    if (button) button.focus({ preventScroll: true });
+  }
+  partsToggle.addEventListener('click', () => partsPanel.hidden ? openSubparts() : closeSubparts());
+  partsPanel.querySelector('.u-parts-close').addEventListener('click', () => closeSubparts());
+  partsPanel.addEventListener('keydown', e => {
+    if (e.key === 'Tab') return;
+    e.stopPropagation();
+    if (e.key === 'Escape') { e.preventDefault(); closeSubparts(); return; }
+    const buttons = [...partsList.querySelectorAll('button')], index = buttons.indexOf(document.activeElement);
+    if (index < 0) return;
+    let next = index;
+    if (e.key === 'ArrowDown') next = (index + 1) % buttons.length;
+    else if (e.key === 'ArrowUp') next = (index - 1 + buttons.length) % buttons.length;
+    else if (e.key === 'Home') next = 0;
+    else if (e.key === 'End') next = buttons.length - 1;
+    else return;
+    e.preventDefault(); buttons[next].focus({ preventScroll: true }); buttons[next].scrollIntoView({ block: 'nearest' });
+  });
+
   // ── info panel ───────────────────────────────────────────────────────────
   const panel = el('div', 'u-panel');
+  panel.hidden = true; panel.tabIndex = -1; panel.setAttribute('role', 'region'); panel.setAttribute('aria-labelledby', 'uPanelTitle');
   document.body.appendChild(panel);
-  let panelAbort = null, panelGeneration = 0, clientPromise = null;
+  let panelAbort = null, panelGeneration = 0, clientPromise = null, panelStage = null;
   function cancelPanelAI() { ++panelGeneration; if (panelAbort) panelAbort.abort(); panelAbort = null; }
-  function closePanel() { cancelPanelAI(); panel.classList.remove('open'); }
+  function closePanel(restore = true) {
+    cancelPanelAI(); const wasOpen = !panel.hidden; panel.classList.remove('open'); panel.hidden = true; panelStage = null;
+    if (restore && wasOpen) {
+      const target = panelReturn && panelReturn.isConnected && !panelReturn.closest('[hidden]') ? panelReturn : partsToggle;
+      target.focus({ preventScroll: true });
+    }
+  }
   addEventListener('pagehide', cancelPanelAI);
   function getAIClient() {
     if (window.BIOQ_AI) return Promise.resolve(window.BIOQ_AI);
@@ -257,7 +410,14 @@ function buildUniverseUI(core) {
 
   function openPanel(meta, stageKey) {
     cancelPanelAI();
+    panelStage = stageKey;
+    if (!panel.contains(document.activeElement)) panelReturn = document.activeElement;
     const sd = data[stageKey] || {};
+    const records = universeSubpartsFor(data, stageKey);
+    const selectedIndex = records.findIndex(record => record.meta === meta || (meta && record.meta.name === meta.name));
+    selected = selectedIndex >= 0 ? records[selectedIndex] : null;
+    updateSelection();
+    if (matchMedia('(max-width: 640px)').matches) closeSubparts(false);
     const title = meta && meta.name ? meta.name : sd.title;
     const desc = meta && meta.desc ? meta.desc : sd.blurb;
     const facts = sd.facts || [];
@@ -268,10 +428,16 @@ function buildUniverseUI(core) {
     const ai = sd.ai;
 
     panel.innerHTML = `
-      <button class="close" aria-label="Close">&times;</button>
+      <button class="close" type="button" aria-label="Close structure details">&times;</button>
       <div class="eyebrow">${sd.scaleLabel || ''} · ${sd.size || ''}</div>
-      <h2>${title}</h2>
+      <h2 id="uPanelTitle">${title}</h2>
       <div class="desc">${desc}</div>
+      <div class="u-part-nav" role="group" aria-label="Subpart navigation">
+        <span class="part-count">${selectedIndex >= 0 ? 'Subpart ' + (selectedIndex + 1) + ' of ' + records.length : 'Scale overview'}</span>
+        <button type="button" class="u-prev" aria-label="Inspect previous subpart" ${selectedIndex <= 0 ? 'disabled' : ''}>← Previous</button>
+        <button type="button" class="u-next" aria-label="Inspect next subpart" ${!records.length || selectedIndex >= records.length - 1 ? 'disabled' : ''}>Next →</button>
+        <button type="button" class="u-all-parts">All subparts</button></div>
+      ${sd.modelNote ? `<div class="sec"><h4>About this model</h4><p>${sd.modelNote}</p>${sd.source ? `<a href="${sd.source.url}" target="_blank" rel="noopener noreferrer">${sd.source.label} ↗</a>` : ''}</div>` : ''}
       ${ai ? `<div class="u-ai" id="uAi">
         <button class="askbtn">${UIC.ai} Ask the tutor</button>
         <div class="answer" id="uAns" role="status" style="white-space:pre-wrap"></div></div>` : ''}
@@ -281,7 +447,10 @@ function buildUniverseUI(core) {
       ${labs.length ? `<div class="sec"><h4>${UIC.lab} Labs</h4><ul>${labs.map((l) => `<li>${/dissection/i.test(l) ? `<a class="linkbtn" href="${LAB_URL}">${l} →</a>` : l}</li>`).join('')}</ul></div>` : ''}
       ${related.length ? `<div class="sec"><h4>${UIC.rel} Connected scales</h4><div class="chips">${related.map((r) => `<button class="chip" data-jump="${r.k}">${r.t}</button>`).join('')}</div></div>` : ''}`;
 
-    panel.querySelector('.close').addEventListener('click', closePanel);
+    panel.querySelector('.close').addEventListener('click', () => closePanel());
+    panel.querySelector('.u-prev').addEventListener('click', () => { if (selectedIndex > 0) openPanel(records[selectedIndex - 1].meta, stageKey); });
+    panel.querySelector('.u-next').addEventListener('click', () => { if (records[selectedIndex + 1]) openPanel(records[selectedIndex + 1].meta, stageKey); });
+    panel.querySelector('.u-all-parts').addEventListener('click', () => openSubparts(stageKey));
     panel.querySelectorAll('[data-jump]').forEach((c) => c.addEventListener('click', e => {
       const i = UNI_ORDER.indexOf(c.dataset.jump); if (i >= 0) { core.jumpTo(i, e.detail === 0); closePanel(); }
     }));
@@ -319,7 +488,14 @@ function buildUniverseUI(core) {
       });
     }
     panel.classList.add('open');
+    panel.hidden = false; panel.scrollTop = 0; document.body.classList.remove('immersed');
+    panel.focus({ preventScroll: true });
   }
+  panel.addEventListener('keydown', e => {
+    if (e.key === 'Tab') return;
+    e.stopPropagation();
+    if (e.key === 'Escape') { e.preventDefault(); closePanel(); }
+  });
 
   // typewriter that respects reduced motion
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
@@ -335,19 +511,40 @@ function buildUniverseUI(core) {
   }
 
   // ── keyboard help ────────────────────────────────────────────────────────
-  const help = el('div', 'u-help');
-  help.innerHTML = `<div class="box"><h3>Navigate the Biology Universe</h3>
-    <div class="row"><span>Zoom through scales</span><span><kbd>scroll</kbd> · <kbd>drag</kbd> · <kbd>↑</kbd><kbd>↓</kbd></span></div>
+  const help = el('div', 'u-help'); help.id = 'uHelp';
+  help.setAttribute('role', 'dialog'); help.setAttribute('aria-modal', 'true'); help.setAttribute('aria-labelledby', 'uHelpTitle');
+  help.innerHTML = `<div class="box"><div class="u-help-head"><h3 id="uHelpTitle">Navigate the Biology Universe</h3><button class="u-help-close" type="button" aria-label="Close help">×</button></div><div class="u-help-body">
+    <div class="row"><span>Travel through scales</span><span><kbd>scroll</kbd> · <kbd>drag</kbd> · <kbd>↑</kbd><kbd>↓</kbd></span></div>
+    <div class="row"><span>Inspect 3D (motion frozen)</span><span>Drag / arrows rotate</span></div>
+    <div class="row"><span>Inspection zoom</span><span>Wheel / pinch / <kbd>+</kbd><kbd>−</kbd></span></div>
+    <div class="row"><span>Return to scale travel</span><span>Exit 3D inspect</span></div>
     <div class="row"><span>Jump to a scale</span><span><kbd>1</kbd>–<kbd>9</kbd>, <kbd>0</kbd></span></div>
     <div class="row"><span>To the universe / the atom</span><span><kbd>Home</kbd> · <kbd>End</kbd></span></div>
-    <div class="row"><span>Explore an object</span><span><kbd>click</kbd> a marker</span></div>
-    <div class="row"><span>Close panel · this help</span><span><kbd>Esc</kbd></span></div></div>`;
+    <div class="row"><span>Explore an object</span><span>Subparts list · or a marker</span></div>
+    <div class="row"><span>Move through subparts</span><span><kbd>↑</kbd><kbd>↓</kbd> · <kbd>Enter</kbd></span></div>
+    <div class="row"><span>Close panel · this help</span><span>× button · <kbd>Esc</kbd></span></div></div></div>`;
   document.body.appendChild(help);
-  addEventListener('keydown', (e) => {
-    if (e.key === '?' || (e.key === '/' && e.shiftKey)) { help.classList.toggle('open'); }
-    else if (e.key === 'Escape') { if (help.classList.contains('open')) help.classList.remove('open'); else closePanel(); }
+  const helpToggle = explorer.querySelector('#uHelpToggle'), helpClose = help.querySelector('.u-help-close');
+  let helpReturn = null;
+  function setHelp(open) {
+    if (open) helpReturn = document.activeElement;
+    help.classList.toggle('open', open);
+    if (open) helpClose.focus({ preventScroll: true });
+    else (helpReturn && helpReturn.isConnected ? helpReturn : helpToggle).focus({ preventScroll: true });
+  }
+  helpToggle.addEventListener('click', () => setHelp(true));
+  helpClose.addEventListener('click', () => setHelp(false));
+  help.addEventListener('keydown', e => {
+    e.stopPropagation();
+    if (e.key === 'Escape' || e.key === '?') { e.preventDefault(); setHelp(false); }
+    else if (e.key === 'Tab') { e.preventDefault(); helpClose.focus(); }
   });
-  help.addEventListener('click', (e) => { if (e.target === help) help.classList.remove('open'); });
+  addEventListener('keydown', (e) => {
+    if (e.target && (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName) || e.target.isContentEditable)) return;
+    if (e.key === '?' || (e.key === '/' && e.shiftKey)) { e.preventDefault(); setHelp(!help.classList.contains('open')); }
+    else if (e.key === 'Escape') { if (help.classList.contains('open')) setHelp(false); else if (!panel.hidden) closePanel(); else if (!partsPanel.hidden) closeSubparts(); }
+  });
+  help.addEventListener('click', (e) => { if (e.target === help) setHelp(false); });
 
   // ── superscript-friendly size formatter (10^26 → 10²⁶) ───────────────────
   // data already carries pretty strings, so just read them.
@@ -357,7 +554,7 @@ function buildUniverseUI(core) {
   const uSize = document.getElementById('uSize'), uScaleLbl = document.getElementById('uScaleLbl');
   let shownIndex = -1;
 
-  core.onImmersion((on) => document.body.classList.toggle('immersed', on));
+  core.onImmersion((on) => document.body.classList.toggle('immersed', on && panel.hidden && partsPanel.hidden && !explorer.contains(document.activeElement)));
   core.onJump(() => {});
 
   core.onFrame((pos) => {
@@ -366,6 +563,16 @@ function buildUniverseUI(core) {
     if (idx !== shownIndex) {
       shownIndex = idx;
       const k = UNI_ORDER[idx], d = data[k] || {};
+      scaleSelect.value = String(idx);
+      const listHadFocus = !partsPanel.hidden && partsPanel.contains(document.activeElement);
+      if ((selected && selected.stage !== k) || (!panel.hidden && panelStage !== k)) {
+        selected = null;
+        const detailHadFocus = panel.contains(document.activeElement);
+        closePanel(false);
+        if (detailHadFocus) partsToggle.focus({ preventScroll: true });
+      }
+      renderSubparts(k);
+      if (listHadFocus) partsList.querySelector('button').focus({ preventScroll: true });
       uTitle.textContent = d.title || k;
       uSub.textContent = d.scaleLabel || '';
       uSize.textContent = d.size || '';
@@ -397,11 +604,22 @@ function buildUniverseUI(core) {
       // and so the ring's — on the projected y.
       m.style.transform = `translate(calc(${s.x}px - 7px), calc(${s.y}px - 50%))`;
       m.style.opacity = String(Math.max(0, s.fade));
+      const isSelected = !!selected && selected.stage === s.stage && (selected.meta === s.meta || selected.meta.name === s.meta?.name);
+      m.classList.toggle('selected', isSelected);
+      m.setAttribute('aria-pressed', String(isSelected));
     }
     // drop markers that are no longer projected
     for (const [id, m] of markEls) { if (!live.has(id)) { m.remove(); markEls.delete(id); } }
   });
 
   function el(tag, cls) { const e = document.createElement(tag); if (cls) e.className = cls; return e; }
-  return { openPanel, closePanel };
+  return { openPanel, closePanel, openSubparts, closeSubparts,
+    selectSubpart(id, stageKey = currentStage()) {
+      const record = universeSubpartsFor(data, stageKey).find(part => part.id === id);
+      if (!record) return false;
+      if (stageKey !== currentStage()) core.jumpTo(UNI_ORDER.indexOf(stageKey), true);
+      openPanel(record.meta, stageKey); return true;
+    },
+    get selection() { return selected ? { id: selected.id, stage: selected.stage } : null; },
+  };
 }

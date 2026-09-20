@@ -1,0 +1,10 @@
+{
+  "base": "http://127.0.0.1:3006",
+  "errors": [],
+  "artifacts": {
+    "universe.html": "ad4ba1d9f76c765d38156271bee2cf838713d74ec6fd82c90af60a70110ce217",
+    "lab.html": "dadf44e92fe7fc1e8497b3f41f92ac013f002f00b730f56a0da138c5cef92136"
+  },
+  "complete": true,
+  "limit": "Software WebGL and synthetic pin input; no camera recognition or physical touch hardware claim."
+}

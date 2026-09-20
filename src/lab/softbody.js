@@ -130,6 +130,17 @@ export function createSoftBody(THREE, parts) {
     if (it) it.dentTarget = 0;
   }
 
+  function settle(partId) {
+    const it = items.get(partId);
+    if (!it) return;
+    it.dent = it.dentTarget = it.dentVel = it.ring = 0;
+    it.pos.array.set(it.rest); it.pos.needsUpdate = true;
+    const normal = it.part.mesh.geometry.attributes.normal;
+    if (normal && it.normalRest) { normal.array.set(it.normalRest); normal.needsUpdate = true; }
+    it.dirty = false;
+    refreshBounds(it, true);
+  }
+
   function jiggle(partId, strength) {
     const it = items.get(partId);
     if (!it) return;
@@ -278,5 +289,5 @@ export function createSoftBody(THREE, parts) {
     items.clear();
   }
 
-  return { press, release, jiggle, setLife, update, dispose, get count() { return items.size; } };
+  return { press, release, settle, jiggle, setLife, update, dispose, get count() { return items.size; } };
 }

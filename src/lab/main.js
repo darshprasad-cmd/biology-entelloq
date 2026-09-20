@@ -648,6 +648,13 @@ function routeInput() {
 
 /* ---- events from the dissection engine -> everyone --------------------- */
 function onEvent(evt) {
+  // Tissue Undo does not rewind circulation or repair divided attachments.
+  // Crossing those boundaries must retire earlier snapshots, or a later Undo
+  // could put an organ back while its physical connections remain severed.
+  if (evt.kind === 'lift' || evt.kind === 'sever'
+    || (evt.kind === 'damage' && (evt.tetherId || evt.meta?.physio))) {
+    if (dissection?.clearHistory) dissection.clearHistory();
+  }
   shell.pushEvent(evt);
   if (narrator) narrator.observe(evt);
 
@@ -720,6 +727,34 @@ function onEvent(evt) {
 
   // The tutor watches everything, and decides for itself when to speak.
   if (tutor) tutor.observe(evt, dissection.state);
+}
+
+/* ---- per-action undo -------------------------------------------------- */
+function canUndoAction() {
+  return !!(dissection?.canUndo && !specimenAbort && !handStartPromise
+    && !(imaging && imaging.mode() !== 'off')
+    && !(histology && histology.isOpen()) && !(zoomverse && zoomverse.isOpen()));
+}
+
+function updateUndoState() {
+  if (shell?.setUndoState) shell.setUndoState(canUndoAction(), dissection?.undoLabel || '');
+}
+
+function undoAction() {
+  if (!canUndoAction()) return false;
+  // End ownership of the current mouse/touch/hand gesture. A pinch held through
+  // Undo must be released before it can cut or pull the restored tissue again.
+  mouse.down = false; TCH.claimed = -1;
+  input.grip = 0; input.gripping = false; input.span = 0;
+  specimenGripRelease = true; dialReset(); flickReset();
+  if (blood) blood.clear();
+  const restored = dissection.undo();
+  if (restored) {
+    shell.setStructure(null);
+    shell.say('Dissection action restored; live simulation continues.');
+  }
+  updateUndoState();
+  return restored;
 }
 
 /* ---- contextual depth --------------------------------------------------- *
@@ -809,7 +844,8 @@ function setCase(caseId) {
   // A case describes a fresh specimen. Reusing cut indices, removed sheets or
   // residual rims would author the new pathology against the previous anatomy.
   const attempt = dissection && dissection.state;
-  if (attempt && (attempt.pinned.size || attempt.incisions.size || attempt.removed.size || (cutting && cutting.count))) {
+  if (attempt && (attempt.pinned.size || attempt.incisions.size || attempt.removed.size
+    || dissection.canUndo || (cutting && cutting.count))) {
     loadSpecimen(specimenId);
     if (!pathology) return null;
   }
@@ -820,6 +856,7 @@ function setCase(caseId) {
     catch (e) { console.warn('softbody rebuild failed', e); soft = null; }
   }
   captureCutRest();
+  if (dissection?.clearHistory) dissection.clearHistory();
   if (shell.setVignette) shell.setVignette(pathology.vignette());
   if (r) shell.say('New specimen on the table. Read the history, then dissect.');
   return r;
@@ -853,6 +890,7 @@ async function requestSpecimen(id) {
     return;
   }
   const abort = new AbortController(); specimenAbort = abort;
+  updateUndoState();
   // Free the render thread during local bitmap decode on low-end devices.
   renderer.setAnimationLoop(null);
   window.__LAB.ready = false;
@@ -865,6 +903,7 @@ async function requestSpecimen(id) {
     if (request !== specimenRequest) return;
     ++specimenRequest; abort.abort(); specimenAbort = null; cancelSpecimenLoad = null;
     loading.remove(); window.__LAB.ready = true; renderer.setAnimationLoop(tick);
+    updateUndoState();
     shell.say('Preparation cancelled — your previous specimen is unchanged.');
   };
   const cancel = document.createElement('button');
@@ -1013,6 +1052,12 @@ function loadSpecimen(id) {
     scene, camera, group, parts, onEvent,
     requiresPinning: SPECIMENS[id].requiresPinning !== false,
     getRemovalSupport: env && env.getRemovalSupport,
+    captureAction: partId => ({ cut: cutting?.snapshot(partId) || null }),
+    restoreAction: (partId, saved) => {
+      if (soft?.settle) soft.settle(partId);
+      if (cutting) cutting.restore(partId, saved?.cut, cutRest.get(partId));
+    },
+    onHistoryChange: updateUndoState,
     onCutProgress: (part, points) => {
       if (!cutting) return;
       if (cutting.has(part.id)) cutting.grow(part.id, points);
@@ -1059,6 +1104,7 @@ function loadSpecimen(id) {
   if (strata && shell.setStrata) shell.setStrata(strata.stack, 0);
   if (shell.setVignette) shell.setVignette(null);
   if (pathology && shell.setCases) shell.setCases(pathology.list(), (cid) => setCase(cid));
+  updateUndoState();
 }
 
 /* ---- frame ------------------------------------------------------------- */
@@ -1077,6 +1123,7 @@ function loadSpecimen(id) {
  */
 function tick(t) {
   const dt = lastT ? Math.min(64, t - lastT) : 16; lastT = t;
+  updateUndoState();
 
   // The scale journey OWNS the whole frame while it is open: its own scene, its own
   // camera, driven by the scroll. Everything else — dissection, idle life, the
@@ -1251,6 +1298,7 @@ const KEYMAP = [
   { key: 'D', label: 'Divide the attachments holding the hovered structure', group: 'Dissect' },
   { key: 'B', label: 'Bleeding on / off', group: 'Dissect' },
   { key: 'Q', label: 'Wound detail — high / low', group: 'Dissect' },
+  { key: 'Ctrl/Cmd+Z', label: 'Undo the last pin, cut or layer pull', group: 'Dissect' },
   { key: 'P', label: 'Living physiology on / off', group: 'Physiology' },
   { key: 'C', label: 'Clamp / release the hovered vessel', group: 'Physiology' },
   { key: 'K', label: 'Stimulate the hovered nerve', group: 'Physiology' },
@@ -1285,9 +1333,13 @@ function onKey(e) {
   // The tutor's answer line takes prose. Typing "probe" must not fire p, r, o, b
   // and e as shortcuts.
   if (shell.inputOpen && shell.inputOpen()) return;
-  if (e.metaKey || e.ctrlKey || e.altKey) return;
   const target = e.target;
   if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) return;
+  if ((e.metaKey || e.ctrlKey) && !e.altKey && !e.shiftKey && e.key.toLowerCase() === 'z') {
+    if (undoAction()) e.preventDefault();
+    return;
+  }
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
 
   const tools = { '1': 'probe', '2': 'scalpel', '3': 'forceps', '4': 'pins', '5': 'retractor', '6': 'swab' };
   if (tools[e.key]) { setTool(tools[e.key]); return; }
@@ -1585,6 +1637,7 @@ async function startPreparedApp() {
     });
   });
   shell.on('tool', (t) => setTool(t));
+  if (shell.onUndo) shell.onUndo(undoAction);
   if (shell.setActions) shell.setActions([], doAction);
   shell.on('level', (l) => { if (tutor) tutor.setLevel(l); });
   shell.on('bleeding', (k) => { if (blood) { blood.setIntensity(k); blood.setEnabled(k > 0); } });
@@ -1710,12 +1763,14 @@ async function startPreparedApp() {
     handsApi:   { get: () => hands,      configurable: true },
     shell:      { get: () => shell,      configurable: true },
     tool:       { get: () => currentTool, configurable: true },
+    canUndo:    { get: canUndoAction, configurable: true },
     drivingHandSlot: { get: () => handDrive.slot, configurable: true },
   });
   window.__LAB.loadSpecimen = loadSpecimen;
   window.__LAB.requestSpecimen = requestSpecimen;
   window.__LAB.setCase = setCase;
   window.__LAB.setTool = setTool;
+  window.__LAB.undo = undoAction;
   // Drive the engine exactly as a hand or mouse would, for testing.
   window.__LAB.feed = (x, y, grip, gripping, span) => {
     input.x = x; input.y = y; input.grip = grip;

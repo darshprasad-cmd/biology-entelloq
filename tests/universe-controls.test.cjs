@@ -14,7 +14,7 @@ class Surface {
   releasePointerCapture(id) { this.captured.delete(id); }
   emit(k, data = {}) { const e = { pointerType: 'touch', button: 0, pointerId: 1, clientX: 0, clientY: 0, preventDefault() { this.prevented = true; }, ...data }; this.listeners.get(k)?.forEach(fn => fn(e)); return e; }
 }
-function input(reduced = false) {
+function input(reduced = false, overrides = {}) {
   const context = vm.createContext({ innerWidth: 1400, innerHeight: 900 });
   vm.runInContext('const KIT={clamp:(v,a,b)=>Math.max(a,Math.min(b,v))};' + fs.readFileSync(path.join(root, 'src/universe/core.js'), 'utf8'), context);
   const el = new Surface(), keyboard = new Surface(), deltas = [], jumps = [];
@@ -24,6 +24,7 @@ function input(reduced = false) {
     count: 13, now: () => clock += 16, reduced: () => reduced, wake() {},
     nudge(d) { deltas.push(d); Z.posTarget = Math.max(0, Math.min(12, Z.posTarget + d)); },
     jumpTo(i, instant) { jumps.push([i, instant]); Z.posTarget = Z.pos = Math.max(0, Math.min(12, i)); Z.flingVel = 0; },
+    ...overrides,
   });
   return { el, keyboard, Z, deltas, jumps, dispose };
 }
@@ -89,6 +90,69 @@ test('keyboard shortcuts are immediate, prevent scrolling, and leave text fields
     assert.equal(keyboard.emit('keydown', { key: 'Home', ...data }).prevented, undefined);
     assert.equal(Z.pos, 9);
   }
+});
+
+test('inspection drag and pinch change viewpoint without traversing scales or flinging', () => {
+  const rotations = [], zooms = [];
+  const { el, keyboard, Z, deltas } = input(true, {
+    viewMode: () => 'orbit', orbitView: (x,y) => rotations.push([x,y]), zoomView: d => zooms.push(d), resetView() {},
+  });
+  el.emit('pointerdown', { clientX: 100, clientY: 100 });
+  el.emit('pointermove', { clientX: 150, clientY: 120 });
+  assert.deepEqual(rotations[0], [.4, .16]);
+  el.emit('pointerdown', { pointerId: 2, clientX: 250, clientY: 120 });
+  el.emit('pointermove', { pointerId: 2, clientX: 300, clientY: 120 });
+  assert.equal(zooms[0], Math.log(1.5) * 1.8);
+  el.emit('pointerup', { pointerId: 2 }); el.emit('pointerup');
+  el.emit('wheel', { deltaY: 100 });
+  assert.equal(zooms.at(-1), -.5, 'inspection wheel down pulls back');
+  el.emit('wheel', { deltaY: -100 });
+  assert.equal(zooms.at(-1), .5, 'inspection wheel up approaches');
+  el.emit('wheel', { deltaY: -100, ctrlKey: true });
+  assert.equal(zooms.at(-1), .3, 'trackpad spread approaches in inspection too');
+  keyboard.emit('keydown', { key: 'ArrowLeft' }); keyboard.emit('keydown', { key: '+' });
+  assert.deepEqual(rotations[1], [-.12, 0]); assert.equal(zooms.at(-1), .5);
+  assert.deepEqual(deltas, []); assert.equal(Z.pos, 4); assert.equal(Z.flingVel, 0);
+  const count = rotations.length;
+  keyboard.emit('keydown', { key: 'ArrowLeft', defaultPrevented: true });
+  assert.equal(rotations.length, count, 'a subpart control owns its handled keys');
+});
+
+test('real core remembers bounded per-stage views, freezes motion for inspection and cleans up listeners', () => {
+  const win = new Surface(), motion = new Surface(); motion.matches = false;
+  const canvas = new Surface(), mount = { appendChild() {} };
+  const kit = kitContext(); let disposed = false;
+  class Renderer { constructor() { this.domElement = canvas; } setPixelRatio() {} setSize() {} setClearColor() {} render(scene,camera) { scene.updateMatrixWorld(true); camera.updateMatrixWorld(true); } dispose() { disposed = true; } }
+  const context = vm.createContext({ THREE: { ...THREE, WebGLRenderer: Renderer }, KIT: kit,
+    innerWidth:1440,innerHeight:1000,devicePixelRatio:1,window:win,document:{activeElement:null}, POSTFX_DEPS:null,
+    matchMedia:()=>motion,performance:{now:()=>100},requestAnimationFrame:()=>1,cancelAnimationFrame(){},setTimeout,clearTimeout,
+    addEventListener:win.addEventListener.bind(win),removeEventListener:win.removeEventListener.bind(win),
+  });
+  vm.runInContext(fs.readFileSync(path.join(root,'src/universe/core.js'),'utf8')+`
+    UNI.ORDER=['cell','organelle'];
+    for(const key of UNI.ORDER) UNI.register(key,()=>{
+      const root=new THREE.Group(), spin=new THREE.Group();root.add(spin);
+      return {root,update(dt){spin.rotation.y+=dt;},hotspots:[],dispose(){}};
+    });
+    this.core=bootUniverse({appendChild(){}});
+  `, context);
+  const c = context.core;
+  c._tick(.05); const spin = c.scene.getObjectByName('universe:cell').children[0];
+  const angle=spin.rotation.y; c.setPaused(true); c._tick(.05); assert.equal(spin.rotation.y,angle);
+  c.setPaused(false); c._tick(.05); assert.ok(spin.rotation.y>angle);
+  c.setViewMode('orbit'); const frozen=spin.rotation.y;
+  canvas.emit('pointerdown',{clientX:100,clientY:100}); canvas.emit('pointermove',{clientX:500,clientY:400}); canvas.emit('pointerup');
+  for(let i=0;i<100;i++)canvas.emit('wheel',{deltaY:-100});
+  c._tick(.05); assert.equal(spin.rotation.y,frozen); assert.equal(c.pos,0);
+  const first=c.inspectionView; assert.equal(first.distance,1.6); assert.ok(Math.abs(first.pitch)<=1.3);
+  assert.ok(c.camera.position.toArray().every(Number.isFinite));
+  c.jumpTo(1,true); assert.equal(c.inspectionView.yaw,0); assert.equal(c.inspectionView.distance,3.5);
+  c.jumpTo(0,true); assert.deepEqual(c.inspectionView,first);
+  c.resetView(); assert.equal(c.inspectionView.distance,3.5); assert.equal(c.inspectionView.yaw,0);
+  c.setViewMode('zoom'); c._tick(.05); assert.ok(spin.rotation.y>frozen);
+  c.dispose(); assert.equal(disposed,true);
+  for(const listeners of win.listeners.values())assert.equal(listeners.size,0);
+  for(const listeners of canvas.listeners.values())assert.equal(listeners.size,0);
 });
 
 function kitContext() {

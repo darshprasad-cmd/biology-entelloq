@@ -3,7 +3,7 @@ const { execFileSync } = require('node:child_process');
 const assert = require('node:assert/strict');
 const fs = require('node:fs'), path = require('node:path'), crypto = require('node:crypto'), vm = require('node:vm');
 const root = path.resolve(__dirname, '..');
-const modules = ['kit.js', 'core.js', 'stage_cosmic.js', 'stage_molecular.js', 'ui.js'];
+const modules = ['kit.js', 'core.js', 'data.js', 'stage_cosmic.js', 'stage_body.js', 'stage_cell.js', 'stage_molecular.js', 'ui.js'];
 const digest = text => crypto.createHash('sha256').update(text).digest('hex');
 
 test('Universe modified slots match source; original import map, launcher and other modules retain fingerprint', () => {

@@ -15,7 +15,7 @@ const save = () => fs.writeFileSync(path.join(output, 'interactions.json'), JSON
 (async () => {
   const browser = await chromium.launch({ headless: true, args: ['--enable-unsafe-swiftshader'] });
   try {
-    const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' });
+    const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce', hasTouch:true });
     await context.route('https://unpkg.com/**', route => route.abort());
     const page = await context.newPage(); page.setDefaultTimeout(30000);
     page.on('pageerror', e => report.errors.push(e.message));
@@ -36,6 +36,7 @@ const save = () => fs.writeFileSync(path.join(output, 'interactions.json'), JSON
     await page.evaluate(() => window.__LAB.intro()?.skip());
     for (const id of specimenIds) {
       await page.evaluate(id => window.__LAB.requestSpecimen(id), id);
+      assert.equal(await page.evaluate(()=>window.__LAB.canUndo),false,id+': specimen change starts empty Undo history');
       if (['frog', 'cockroach'].includes(id)) assert.equal(await page.evaluate(id => window.__LAB.parts.some(p => p.mesh.userData.preparedExterior?.specimenId === id), id), true, id + ': actual prepared exterior required');
       await page.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
       await page.screenshot({ path: path.join(output, id + '-intact.png') });
@@ -157,6 +158,29 @@ const save = () => fs.writeFileSync(path.join(output, 'interactions.json'), JSON
       assert.equal(result.damage, 0, 'firm pinch alone is not a plunging injury');
       await page.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
       await page.screenshot({ path: path.join(output, id + '-opened.png') }); save();
+      if(id==='frog'){
+        await page.setViewportSize({width:390,height:844});
+        await page.waitForFunction(()=>document.body.classList.contains('bioq-phone'));
+        assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'actual lab phone has no horizontal overflow');
+        for(const selector of ['#undobtn','#helpbtn','#specbtn','#dock']){
+          const r=await page.locator(selector).boundingBox();
+          assert.ok(r&&r.x>=-1&&r.y>=-1&&r.x+r.width<=391&&r.y+r.height<=845,selector+' inside phone viewport');
+        }
+        await page.locator('#undobtn').tap();
+        const restored=await page.evaluate(()=>{
+          const l=__LAB,p=l.parts.find(p=>p.id==='parietal-peritoneum');
+          return {visible:p.mesh.visible,removed:l.dissection.state.removed.has(p.id),cut:l.cutting().has(p.id),level:l.dissection.state.maxLayerRevealed,
+            skinAbsent:l.dissection.state.removed.has('skin')};
+        });
+        assert.deepEqual(restored,{visible:true,removed:false,cut:true,level:3,skinAbsent:true},'native mobile Undo restores only last removed access layer');
+        await page.screenshot({path:path.join(output,'frog-phone-undo.png')});
+        await page.locator('#undobtn').blur();await page.keyboard.press('Control+z');
+        assert.equal(await page.evaluate(()=>__LAB.cutting().has('parietal-peritoneum')),false,'keyboard Undo also removes restored layer incision');
+        assert.equal(await page.evaluate(()=>__LAB.dissection.state.removed.has('skin')),true,'earlier skin removal remains');
+        result.undo={mobileTap:restored,keyboardCutRestored:true};
+        await page.setViewportSize({width:1440,height:1000});save();
+        await page.waitForFunction(()=>!document.body.classList.contains('bioq-phone'));
+      }
     }
     report.cameraRequests = await page.evaluate(() => window.__cameraRequests);
     assert.equal(report.cameraRequests, 0); assert.deepEqual(report.errors, []);
