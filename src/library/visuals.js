@@ -7,7 +7,7 @@
   const circle = (x,y,r,color,opacity=1) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${color}" opacity="${opacity}"/>`;
   const line = (x1,y1,x2,y2,color='var(--cy)',arrow=false,width=2) => `<path d="M${x1} ${y1}L${x2} ${y2}" fill="none" stroke="${color}" stroke-width="${width}" ${arrow ? 'marker-end="url(#bl-arrow)"' : ''}/>`;
   const box = (x,y,w,h,color='var(--cy)',r=12) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${color}" fill-opacity=".09" stroke="${color}" stroke-opacity=".6"/>`;
-  const wrapSVG = (title, body) => `<svg viewBox="0 0 600 330" role="img" aria-label="${esc(title)}"><defs><marker id="bl-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="var(--cy)" stroke-width="1.5"/></marker></defs>${body}</svg>`;
+  const wrapSVG = (title, body, marker='bl-arrow') => `<svg viewBox="0 0 600 330" role="img" aria-label="${esc(title)}" focusable="false"><defs><marker id="${marker}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="var(--cy)" stroke-width="1.5"/></marker></defs>${body.replaceAll('url(#bl-arrow)','url(#'+marker+')')}</svg>`;
   const pathway = (labels, active, y=255) => {
     const gap = 530 / Math.max(labels.length, 1);
     return labels.map((label,i) => { const x = 35 + gap * i + gap / 2; return (i < labels.length - 1 ? line(x + 13,y,x + gap - 13,y,'var(--line)',false) : '') + circle(x,y,active === i ? 8 : 4,active === i ? 'var(--cy)' : 'var(--dim)',active === i ? 1 : .4) + T(x,y + 25,label,10,active === i ? 'var(--cy)' : 'var(--dim)'); }).join('');
@@ -57,19 +57,19 @@
   function cellDiagram(selected) {
     const group = (id,label,body) => `<g data-organelle="${id}" role="button" tabindex="0" aria-label="Inspect ${label}" opacity="${selected === id ? 1 : .65}" style="outline:none">${body}</g>`;
     if (['chloroplasts','vacuoles','cell-wall'].includes(selected)) {
-      return group('cell-wall','cell wall',box(78,37,444,258,'var(--cy)',24)) + group('cell-membrane','cell membrane',box(90,48,420,234,'var(--cy)',20)) + group('vacuoles','central vacuole',box(179,90,247,145,'var(--sky)',25)+T(302,170,'Central vacuole',15)) + group('chloroplasts','chloroplasts',[0,1,2,3,4].map(i=>`<ellipse cx="${i<3?130:466}" cy="${95+(i%3)*65}" rx="17" ry="23" fill="var(--cy)" fill-opacity=".3" stroke="var(--cy)"/>`+line(i<3?119:455,95+(i%3)*65,i<3?141:477,95+(i%3)*65,'var(--cy)')).join('')) + group('nucleus','nucleus',circle(254,65,17,'var(--indigo)',.5)) + T(300,319,'Photosynthetic plant cell · simplified, not to scale',11,'var(--dim)');
+      return group('cell-wall','cell wall',box(78,37,444,258,'var(--cy)',24)) + group('cell-membrane','cell membrane',box(90,48,420,234,'var(--cy)',20)) + group('vacuoles','central vacuole',box(179,90,247,145,'var(--sky,var(--cy))',25)+T(302,170,'Central vacuole',15)) + group('chloroplasts','chloroplasts',[0,1,2,3,4].map(i=>`<ellipse cx="${i<3?130:466}" cy="${95+(i%3)*65}" rx="17" ry="23" fill="var(--cy)" fill-opacity=".3" stroke="var(--cy)"/>`+line(i<3?119:455,95+(i%3)*65,i<3?141:477,95+(i%3)*65,'var(--cy)')).join('')) + group('nucleus','nucleus',circle(254,65,17,'var(--indigo)',.5)) + T(300,319,'Photosynthetic plant cell · simplified, not to scale',11,'var(--dim)');
     }
     let b = `<path d="M80 88C120 23 382 15 477 78C572 143 541 263 432 282C293 312 130 292 76 221C42 177 44 131 80 88Z" fill="var(--cy)" fill-opacity=".035" stroke="var(--cy)" stroke-opacity=".6" stroke-width="2"/>`;
     b += group('cell-membrane','cell membrane',`<path d="M84 91C127 29 379 20 474 83C561 145 533 258 430 277" fill="none" stroke="var(--cy)" stroke-width="${selected === 'cell-membrane' ? 6 : 3}"/>`);
     b += group('cytoskeleton','cytoskeleton',`<path d="M100 160Q210 70 421 263M102 230Q278 172 468 120M174 65Q199 241 455 215" fill="none" stroke="var(--cy)" stroke-opacity=".45" stroke-width="2" stroke-dasharray="5 6"/>`);
     b += group('nucleus','nucleus',`<ellipse cx="261" cy="144" rx="70" ry="58" fill="var(--indigo)" fill-opacity=".2" stroke="var(--indigo)" stroke-width="2"/><path d="M224 123Q250 104 252 154T293 166" fill="none" stroke="var(--indigo)" stroke-width="3"/>${T(258,210,'Nucleus',12)}`);
     b += group('nucleolus','nucleolus',circle(274,139,20,'var(--indigo)',selected==='nucleolus'?.9:.35));
-    b += group('rough-er','rough endoplasmic reticulum',`<path d="M173 116Q152 173 201 205M164 100Q128 183 196 221M156 91Q111 189 191 233" fill="none" stroke="var(--sky)" stroke-width="5" stroke-linecap="round"/>${[0,1,2,3,4].map(i => circle(149 + i * 9,178 + i * 11,3,'var(--sky)')).join('')}`);
+    b += group('rough-er','rough endoplasmic reticulum',`<path d="M173 116Q152 173 201 205M164 100Q128 183 196 221M156 91Q111 189 191 233" fill="none" stroke="var(--sky,var(--cy))" stroke-width="5" stroke-linecap="round"/>${[0,1,2,3,4].map(i => circle(149 + i * 9,178 + i * 11,3,'var(--sky,var(--cy))')).join('')}`);
     b += group('mitochondria','mitochondria',`<g transform="translate(405 98) rotate(20)"><ellipse rx="53" ry="25" fill="var(--amber)" fill-opacity=".15" stroke="var(--amber)" stroke-width="2"/><path d="M-34 0L-23 -12L-12 11L0 -12L12 11L24 -10L33 2" fill="none" stroke="var(--amber)" stroke-width="2"/></g>${T(425,147,'Mitochondrion',11)}`);
     b += group('golgi-apparatus','Golgi apparatus',`<path d="M359 183Q397 202 427 176M355 194Q397 215 432 188M356 205Q397 230 430 200M361 218Q395 239 422 214" stroke="var(--rose)" stroke-width="5" fill="none" stroke-linecap="round"/>${circle(444,195,6,'var(--rose)',.5)}${T(399,253,'Golgi',11)}`);
     b += group('lysosomes','lysosome',`${circle(303,251,16,'var(--rose)',.3)}${circle(301,247,3,'var(--rose)')}${circle(307,255,3,'var(--rose)')}`);
-    b += group('ribosomes','ribosomes',[0,1,2,3,4,5].map(i => circle(98 + (i % 3) * 15,129 + Math.floor(i / 3) * 18,4,'var(--sky)')).join(''));
-    b += group('smooth-er','smooth ER',`<path d="M207 56Q230 73 245 59T277 63M213 47Q238 58 250 46T285 47" fill="none" stroke="var(--sky)" stroke-width="4"/>`);
+    b += group('ribosomes','ribosomes',[0,1,2,3,4,5].map(i => circle(98 + (i % 3) * 15,129 + Math.floor(i / 3) * 18,4,'var(--sky,var(--cy))')).join(''));
+    b += group('smooth-er','smooth ER',`<path d="M207 56Q230 73 245 59T277 63M213 47Q238 58 250 46T285 47" fill="none" stroke="var(--sky,var(--cy))" stroke-width="4"/>`);
     b += group('peroxisomes','peroxisomes',circle(349,249,12,'var(--amber)',.5));
     b += group('centrosomes','centrosome',`<path d="M341 158l21 16M345 152l21 16M345 167l18-21M351 171l18-21" fill="none" stroke="var(--amber)" stroke-width="3"/>`);
     return b + T(300,320,'Animal cell · structures simplified, not to scale',10,'var(--dim)');
@@ -78,14 +78,14 @@
     let body = '';
     if (step === 0) body = `<path d="M145 241C75 65 278 42 439 69C441 219 290 295 145 241Z" fill="var(--cy)" fill-opacity=".14" stroke="var(--cy)" stroke-width="2"/><path d="M99 278L410 85M163 230L149 131M221 192L246 87M285 156L341 92M189 212L290 246M250 179L353 210" fill="none" stroke="var(--cy)" stroke-width="2"/>${T(473,71,'LIGHT',11,'var(--amber)')}${line(475,84,429,124,'var(--amber)',true)}${T(464,234,'CO₂ + H₂O',13)}${T(295,295,'Leaf surface captures light',12,'var(--dim)')}`;
     else if (step === 1) body = [0,1,2,3,4,5].map(i => box(75 + i * 73,70,63,145,'var(--cy)',15) + [0,1,2].map(j => `<ellipse cx="${94 + i * 73}" cy="${97 + j * 43}" rx="9" ry="14" fill="var(--cy)" opacity=".5"/>`).join('')).join('') + `<path d="M62 55H533M62 230H533" stroke="var(--cy)" stroke-width="3"/>${T(300,272,'Chloroplast-rich mesophyll cells',15)}${T(300,297,'Air spaces let gases reach photosynthetic cells',11,'var(--dim)')}`;
-    else if (step === 2) body = box(97,49,405,232,'var(--cy)',26) + box(112,62,375,205,'var(--cy)',22) + box(183,98,220,132,'var(--sky)',30) + T(293,168,'Vacuole',15,'var(--dim)') + [0,1,2,3,4,5].map(i => `<ellipse cx="${i < 3 ? 139 : 454}" cy="${100 + (i % 3) * 65}" rx="13" ry="22" fill="var(--cy)" fill-opacity=".3" stroke="var(--cy)"/>`).join('') + circle(240,80,16,'var(--indigo)',.4) + T(300,311,'A plant cell contains many chloroplasts',12,'var(--dim)');
+    else if (step === 2) body = box(97,49,405,232,'var(--cy)',26) + box(112,62,375,205,'var(--cy)',22) + box(183,98,220,132,'var(--sky,var(--cy))',30) + T(293,168,'Vacuole',15,'var(--dim)') + [0,1,2,3,4,5].map(i => `<ellipse cx="${i < 3 ? 139 : 454}" cy="${100 + (i % 3) * 65}" rx="13" ry="22" fill="var(--cy)" fill-opacity=".3" stroke="var(--cy)"/>`).join('') + circle(240,80,16,'var(--indigo)',.4) + T(300,311,'A plant cell contains many chloroplasts',12,'var(--dim)');
     else if (step === 3) body = `<ellipse cx="300" cy="153" rx="230" ry="115" fill="var(--cy)" fill-opacity=".08" stroke="var(--cy)" stroke-width="2"/><ellipse cx="300" cy="153" rx="218" ry="103" fill="none" stroke="var(--cy)" stroke-opacity=".4"/>` + [0,1,2].map(i => [0,1,2,3].map(j => `<rect x="${136 + i * 117}" y="${96 + j * 18}" width="80" height="12" rx="7" fill="var(--cy)" fill-opacity=".22" stroke="var(--cy)"/>`).join('')).join('') + line(218,149,253,149,'var(--cy)') + line(335,149,370,149,'var(--cy)') + T(187,214,'Thylakoids',13) + T(370,215,'Stroma',13) + T(300,305,'Light reactions → ATP + NADPH → Calvin cycle',13,'var(--cy)');
     else if (step === 4) body = `<path d="M95 91H505M95 213H505" stroke="var(--cy)" stroke-width="9" stroke-opacity=".45"/>${T(300,70,'Stroma',13,'var(--dim)')}${T(300,165,'Thylakoid lumen',15)}` + [0,1,2,3,4,5,6,7].map(i => T(125 + i * 45,126,'H⁺',14,'var(--amber)')).join('') + box(399,192,48,42,'var(--amber)') + line(423,174,423,256,'var(--amber)',true) + T(423,283,'ATP synthase',12) + T(170,277,'Proton gradient stores energy',12,'var(--dim)');
     else body = line(72,179,531,179,'var(--line)',false,8) + [0,1,2].map((i) => box(101 + i * 163,122,92,114,i === 1 ? 'var(--amber)' : 'var(--cy)') + T(147 + i * 163,184,['PS II','Carriers','PS I'][i],16) + (i < 2 ? line(199 + i * 163,165,254 + i * 163,165,'var(--cy)',true) : '')).join('') + T(147,85,'Light ↓',14,'var(--amber)') + T(473,85,'Light ↓',14,'var(--amber)') + T(147,263,'H₂O → O₂',12) + T(474,263,'NADP⁺ → NADPH',12) + T(300,311,'Electron transfer powers proton-gradient formation',11,'var(--dim)');
     return body;
   }
   function division(step, meiosis) {
-    const red = 'var(--rose)', blue = 'var(--sky)';
+    const red = 'var(--rose)', blue = 'var(--sky,var(--cy))';
     let b = '';
     const cell = (x,y,r=98) => `<circle cx="${x}" cy="${y}" r="${r}" fill="var(--cy)" fill-opacity=".035" stroke="var(--cy)" stroke-opacity=".6" stroke-width="2"/>`;
     if (!meiosis) {
@@ -105,16 +105,16 @@
     return b + T(300,317,'One homologous pair shown · DNA replicated once, cell divides twice',10,'var(--dim)');
   }
   function protein(step) {
-    return `<path d="M32 40H251V273H32" fill="var(--indigo)" fill-opacity=".035" stroke="var(--indigo)" stroke-opacity=".5"/>${T(133,69,'Nucleus',12,'var(--dim)')}${T(424,69,'Cytoplasm',12,'var(--dim)')}` + [0,1,2,3,4,5,6].map(i => line(73,99+i*18,152,99+i*18,i%2?'var(--indigo)':'var(--sky)',false,3)+circle(73,99+i*18,4,'var(--indigo)')+circle(152,99+i*18,4,'var(--sky)')).join('') + T(111,252,'DNA',13) + `<path d="M174 130Q197 111 217 130T261 130T307 130T353 130T399 130T445 130T491 130" fill="none" stroke="var(--cy)" stroke-width="${step>0?4:2}" opacity="${step>0?1:.4}"/>` + T(339,105,'mRNA  5′ → 3′',12,'var(--cy)') + (step>=2 ? `<ellipse cx="394" cy="142" rx="55" ry="34" fill="var(--amber)" fill-opacity=".18" stroke="var(--amber)"/>${T(394,148,'AUG',15)}${T(394,200,'Ribosome',13)}` : '') + (step===3 ? [0,1,2,3,4,5].map(i=>line(394+i*15,226+i*5,409+i*15,231+i*5,'var(--rose)',false,2)+circle(394+i*15,226+i*5,6,'var(--rose)')).join('')+T(446,292,'Polypeptide',12,'var(--rose)') : '') + pathway(['Transcribe','Process','Translate','Fold'],step,304);
+    return `<path d="M32 40H251V273H32" fill="var(--indigo)" fill-opacity=".035" stroke="var(--indigo)" stroke-opacity=".5"/>${T(133,69,'Nucleus',12,'var(--dim)')}${T(424,69,'Cytoplasm',12,'var(--dim)')}` + [0,1,2,3,4,5,6].map(i => line(73,99+i*18,152,99+i*18,i%2?'var(--indigo)':'var(--sky,var(--cy))',false,3)+circle(73,99+i*18,4,'var(--indigo)')+circle(152,99+i*18,4,'var(--sky,var(--cy))')).join('') + T(111,252,'DNA',13) + `<path d="M174 130Q197 111 217 130T261 130T307 130T353 130T399 130T445 130T491 130" fill="none" stroke="var(--cy)" stroke-width="${step>0?4:2}" opacity="${step>0?1:.4}"/>` + T(339,105,'mRNA  5′ → 3′',12,'var(--cy)') + (step>=2 ? `<ellipse cx="394" cy="142" rx="55" ry="34" fill="var(--amber)" fill-opacity=".18" stroke="var(--amber)"/>${T(394,148,'AUG',15)}${T(394,200,'Ribosome',13)}` : '') + (step===3 ? [0,1,2,3,4,5].map(i=>line(394+i*15,226+i*5,409+i*15,231+i*5,'var(--rose)',false,2)+circle(394+i*15,226+i*5,6,'var(--rose)')).join('')+T(446,292,'Polypeptide',12,'var(--rose)') : '') + pathway(['Transcribe','Process','Translate','Fold'],step,304);
   }
   function heart(step) {
     const nodes = [[300,276],[177,176],[300,50],[423,176]];
     const labels = ['Body tissues','Right heart','Lungs','Left heart'];
-    let b = `<path d="M278 266C85 266 85 53 278 53" fill="none" stroke="var(--sky)" stroke-width="5" stroke-opacity=".65"/><path d="M322 53C515 53 515 266 322 266" fill="none" stroke="var(--rose)" stroke-width="5" stroke-opacity=".65"/>`;
-    nodes.forEach(([x,y],i) => { b += box(x-61,y-25,122,50,i===1?'var(--sky)':i===3?'var(--rose)':'var(--cy)',12)+T(x,y+5,labels[i],13); });
+    let b = `<path d="M278 266C85 266 85 53 278 53" fill="none" stroke="var(--sky,var(--cy))" stroke-width="5" stroke-opacity=".65"/><path d="M322 53C515 53 515 266 322 266" fill="none" stroke="var(--rose)" stroke-width="5" stroke-opacity=".65"/>`;
+    nodes.forEach(([x,y],i) => { b += box(x-61,y-25,122,50,i===1?'var(--sky,var(--cy))':i===3?'var(--rose)':'var(--cy)',12)+T(x,y+5,labels[i],13); });
     const pos = [[194,248],[178,75],[412,78],[420,244]][step];
-    b += `<g class="bl-bead">${circle(pos[0],pos[1],9,step<2?'var(--sky)':'var(--rose)')}</g>`;
-    b += T(76,162,'O₂-poor',10,'var(--sky)')+T(525,162,'O₂-rich',10,'var(--rose)')+T(300,145,'Two circuits.',18)+T(300,171,'One continuous flow.',14,'var(--dim)')+T(300,318,'Blue and red indicate oxygenation, not the actual colour of blood',10,'var(--dim)');
+    b += `<g class="bl-bead">${circle(pos[0],pos[1],9,step<2?'var(--sky,var(--cy))':'var(--rose)')}</g>`;
+    b += T(76,162,'O₂-poor',10,'var(--sky,var(--cy))')+T(525,162,'O₂-rich',10,'var(--rose)')+T(300,145,'Two circuits.',18)+T(300,171,'One continuous flow.',14,'var(--dim)')+T(300,318,'Blue and red indicate oxygenation, not the actual colour of blood',10,'var(--dim)');
     return b;
   }
   function neuron(step) {
@@ -138,7 +138,7 @@
     for(let i=0;i<11;i++) { const y=71+i*20; body+=circle(278,y,6,'var(--cy)',.7)+line(282,y,299,y,'var(--cy)')+circle(321,y,6,'var(--cy)',.7)+line(300,y,316,y,'var(--cy)'); }
     for(let i=0;i<17;i++) body+=circle(66+(i%5)*38,88+Math.floor(i/5)*44,step===3?4:7,'var(--indigo)',.75);
     for(let i=0;i<6;i++) body+=circle(399+(i%3)*45,106+Math.floor(i/3)*84,step===3?4:7,'var(--indigo)',.75);
-    if(step>0) body+=box(266,141,66,62,step===2?'var(--amber)':'var(--sky)',11);
+    if(step>0) body+=box(266,141,66,62,step===2?'var(--amber)':'var(--sky,var(--cy))',11);
     body+=step===2?line(415,171,184,171,'var(--cy)',true,3):line(182,171,415,171,'var(--cy)',true,3);
     if(step===2) body+=T(301,235,'ATP → ADP + Pi',12,'var(--amber)');
     return body+T(300,314,['Net movement down gradient','A protein offers a selective path','Energy moves solute against gradient','Net water movement shown at equal pressure'][step],12,'var(--dim)');
@@ -173,7 +173,7 @@
     return `<path d="M213 29V88C104 87 72 184 144 235C242 305 358 239 349 162C346 107 312 91 267 88V29" fill="var(--cy)" fill-opacity=".08" stroke="var(--cy)" stroke-width="2"/><path d="M93 117C9 254 208 323 344 244C391 217 397 162 369 125" fill="none" stroke="var(--rose)" stroke-opacity=".5" stroke-width="26"/>${T(228,156,'Alveolus',19)}${T(227,181,'Air space',12,'var(--dim)')}${T(451,225,'Capillary',13,'var(--rose)')}${line(306,190,377,224,'var(--cy)',true,step%2===0?4:2)}${T(365,185,'O₂',17,'var(--cy)')}${line(368,253,285,218,'var(--cy)',true,step%2===1?4:2)}${T(297,270,'CO₂',17,'var(--rose)')}${T(300,314,'Gases diffuse down their own partial-pressure gradients',11,'var(--dim)')}`;
   }
   function plantTransport(step) {
-    return `<path d="M298 265V71M298 108Q214 27 137 93Q203 157 297 115M300 154Q372 74 463 130Q397 192 301 164" fill="var(--cy)" fill-opacity=".09" stroke="var(--cy)" stroke-width="3"/><path d="M298 264L243 295M298 264L352 302M298 264L300 309M243 295L212 293M352 302L381 289" fill="none" stroke="var(--cy)" stroke-width="3"/>${line(280,246,280,118,'var(--sky)',true,step%2===0?4:2)}${line(318,128,318,250,'var(--rose)',true,step%2===1?4:2)}${T(175,204,'Xylem',16,'var(--sky)')}${T(175,225,'Water + minerals ↑',11,'var(--dim)')}${T(430,214,'Phloem',16,'var(--rose)')}${T(430,236,'Source → sink',11,'var(--dim)')}${T(300,32,'Water loss from leaves helps pull xylem sap upward',12,'var(--dim)')}`;
+    return `<path d="M298 265V71M298 108Q214 27 137 93Q203 157 297 115M300 154Q372 74 463 130Q397 192 301 164" fill="var(--cy)" fill-opacity=".09" stroke="var(--cy)" stroke-width="3"/><path d="M298 264L243 295M298 264L352 302M298 264L300 309M243 295L212 293M352 302L381 289" fill="none" stroke="var(--cy)" stroke-width="3"/>${line(280,246,280,118,'var(--sky,var(--cy))',true,step%2===0?4:2)}${line(318,128,318,250,'var(--rose)',true,step%2===1?4:2)}${T(175,204,'Xylem',16,'var(--sky,var(--cy))')}${T(175,225,'Water + minerals ↑',11,'var(--dim)')}${T(430,214,'Phloem',16,'var(--rose)')}${T(430,236,'Source → sink',11,'var(--dim)')}${T(300,32,'Water loss from leaves helps pull xylem sap upward',12,'var(--dim)')}`;
   }
   function selection(step) {
     const darkCounts=[4,4,7,10], count=darkCounts[step%4];
@@ -195,8 +195,75 @@
     const active=steps[step]||{};
     return circle(300,137,79,'var(--cy)',.07)+`<circle cx="300" cy="137" r="79" fill="none" stroke="var(--cy)" stroke-opacity=".45"/>`+T(300,133,String(step+1).padStart(2,'0'),39,'var(--cy)')+T(300,163,'Explore the sequence',11,'var(--dim)')+T(300,250,active.title||'Follow the mechanism',16)+pathway(steps.map((_,i)=>String(i+1)),step,287);
   }
+  // These diagrams also power the catalog previews. Each represents the actual
+  // mechanism rather than borrowing the illustration of a neighbouring topic.
+  function specialized(topic,step) {
+    const id=topic.id, accent='var(--cy)', muted='var(--dim)';
+    if(id==='bacteria') return `<rect x="133" y="77" width="328" height="174" rx="87" fill="var(--cy)" fill-opacity=".07" stroke="var(--cy)" stroke-width="3"/><rect x="145" y="89" width="304" height="150" rx="75" fill="none" stroke="var(--cy)" stroke-opacity=".45"/><path d="M231 151Q277 91 310 161T369 143Q338 208 287 155T231 151" fill="none" stroke="var(--indigo)" stroke-width="4"/><path d="M459 164Q519 86 526 163T577 167" fill="none" stroke="var(--amber)" stroke-width="3"/>`+[0,1,2,3,4,5,6,7].map(i=>circle(191+(i%4)*66,126+Math.floor(i/4)*83,4,'var(--sky,var(--cy))',.7)).join('')+T(294,179,'Nucleoid',13)+T(293,291,'DNA and ribosomes · no membrane-enclosed nucleus',13,muted);
+    if(id==='viruses') return box(318,57,233,230,accent,65)+T(435,88,'Host cell',14,muted)+`<path d="M${155+step*50} 101l42 24v48l-42 24l-42-24v-48Z" fill="var(--rose)" fill-opacity=".1" stroke="var(--rose)" stroke-width="3"/><path d="M${140+step*50} 134q28-25 28 12t-26 17" fill="none" stroke="var(--indigo)" stroke-width="3"/>`+line(207,237,376,237,accent,true)+T(164,57,'Viral particle',14,'var(--rose)')+T(300,319,['Attach and enter a suitable host','Use host machinery to make components','Assemble new particles and release'][step%3],12,muted);
+    if(id==='pcr') return T(300,41,'Template → amplified target',17)+[0,1,2].map(i=>{const x=124+i*175;return box(x-63,77,127,173,i===step%3?accent:muted,12)+T(x,111,['Separate','Anneal','Extend'][i],14)+T(x,233,['~95 °C','Primer-specific','~72 °C'][i],11,muted)+[0,1,2,3].map(j=>line(x-32,140+j*18,x+(i===0?-8:32),140+j*18,i===2&&j%2?'var(--amber)':accent,false,3)).join('')+(i<2?line(x+71,164,x+100,164,accent,true):'');}).join('')+T(300,292,'Repeated cycles copy the region between the primers',12,muted);
+    if(id==='gel-electrophoresis') return box(112,46,375,241,accent,6)+[0,1,2,3].map(i=>{const x=155+i*97;return `<rect x="${x-20}" y="66" width="40" height="12" rx="3" fill="var(--ink)" opacity=".3"/>`+[0,1,2].map(j=>`<rect x="${x-19}" y="${105+j*47+(i%3)*13+step*3}" width="38" height="5" rx="2" fill="${i===0?'var(--amber)':accent}" opacity=".8"/>`).join('')+T(x,313,i===0?'Ladder':'Sample '+i,12,muted);}).join('')+line(535,71,535,264,accent,true)+T(535,57,'−',23)+T(535,286,'+',23)+T(300,31,'Smaller DNA fragments move farther',14);
+    if(id==='crispr') return T(300,42,'Guide-directed recognition',17)+[0,1,2,3,4,5,6,7,8,9].map(i=>line(75+i*49,126,75+i*49,180,i>3&&i<7?'var(--amber)':accent,false,3)).join('')+line(75,125,516,125,accent,false,4)+line(75,181,516,181,accent,false,4)+`<ellipse cx="313" cy="154" rx="102" ry="86" fill="var(--indigo)" fill-opacity=".13" stroke="var(--indigo)" stroke-width="2"/><path d="M231 204Q254 230 274 212L372 212" fill="none" stroke="var(--rose)" stroke-width="4"/>`+T(314,87,'Cas protein',13,'var(--indigo)')+T(321,246,'Guide RNA',13,'var(--rose)')+(step>0?line(345,106,345,201,'var(--amber)',false,3):'')+T(300,300,'Target recognition → molecular action → repair and verification',12,muted);
+    if(id==='homeostasis') return T(300,36,'A regulated variable',17)+[0,1,2].map((i)=>box(70+i*171,103,133,91,i===step%3?accent:muted,12)+T(136+i*171,153,['Sensor','Integrator','Effector'][i],15)+(i<2?line(210+i*171,149,235+i*171,149,accent,true):'')).join('')+`<path d="M479 207V253H135V210" fill="none" stroke="var(--cy)" stroke-width="2" marker-end="url(#bl-arrow)"/>`+T(305,279,'Response reduces the original disturbance',12,muted)+T(307,307,'Negative feedback model',11,muted);
+    if(id==='cell-differentiation'||id==='stem-cells') return circle(135,164,40,accent,.12)+circle(135,164,16,'var(--indigo)',.4)+[0,1,2].map(i=>line(184,164,391,77+i*89,accent,true)+circle(441,77+i*89,28,['var(--sky,var(--cy))','var(--rose)','var(--amber)'][i],.15)+circle(441,77+i*89,10,['var(--sky,var(--cy))','var(--rose)','var(--amber)'][i],.7)).join('')+T(135,234,id==='stem-cells'?'Stem cell':'Shared genome',14)+T(443,302,'Different cell identities',13,muted)+(id==='stem-cells'?`<path d="M95 112C49 33 200 21 176 113" fill="none" stroke="var(--cy)" stroke-width="2" marker-end="url(#bl-arrow)"/>`+T(123,32,'Self-renewal',13,accent):T(298,37,'Signals alter gene expression',16));
+    if(id==='genetic-drift') return T(300,41,'Chance changes allele frequencies',17)+[0,1,2].map(i=>{const x=120+i*179,counts=[6,3,9];return box(x-66,78,134,173,i===step%3?accent:muted,12)+Array.from({length:12},(_,j)=>circle(x-38+(j%3)*38,105+Math.floor(j/3)*39,9,j<counts[i]?'var(--indigo)':'var(--amber)',.8)).join('')+T(x,283,['Start','Sample A','Sample B'][i],13,muted);}).join('');
+    if(id==='population-growth') return T(300,36,'Population size through time',17)+line(93,265,535,265,muted)+line(93,265,93,60,muted)+`<path d="M101 252C219 250 227 77 458 81H527" fill="none" stroke="var(--cy)" stroke-width="4"/><path d="M101 252C345 252 410 208 461 43" fill="none" stroke="var(--amber)" stroke-width="3" stroke-dasharray="7 5"/>`+line(101,79,535,79,muted,false,1)+T(401,67,'Carrying capacity K',12,muted)+circle(130+step*100,[249,207,115][step%3],7,accent)+T(316,304,'Logistic and exponential models make different assumptions',11,muted);
+    if(id==='carbon-cycle'||id==='nitrogen-cycle') {
+      const carbon=id==='carbon-cycle',labels=carbon?['Atmospheric CO₂','Plants','Consumers','Soil & decomposers']:['Atmospheric N₂','Ammonium','Nitrite / nitrate','Organic nitrogen'];
+      const positions=[[300,67],[145,173],[450,173],[300,269]];
+      return line(267,89,175,142,accent,true)+line(211,173,382,173,accent,true)+line(424,201,330,242,accent,true)+(carbon?line(300,238,300,102,accent,true):line(272,249,171,206,accent,true))+line(450,137,339,80,accent,true)+positions.map(([x,y],i)=>box(x-77,y-27,154,54,i===step%4?accent:muted,10)+T(x,y+4,labels[i],12)).join('')+T(300,326,carbon?'Matter cycles among reservoirs; energy flows through the system':'Microbial transformations connect organic and inorganic nitrogen',11,muted);
+    }
+    if(id==='blood') return `<rect x="61" y="66" width="478" height="198" rx="95" fill="var(--amber)" fill-opacity=".06" stroke="var(--rose)" stroke-opacity=".5" stroke-width="2"/>`+[[138,120],[215,205],[338,115],[457,196]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="32" ry="21" fill="var(--rose)" fill-opacity=".3" stroke="var(--rose)"/><ellipse cx="${x}" cy="${y}" rx="13" ry="8" fill="var(--rose)" fill-opacity=".3"/>`).join('')+circle(325,216,29,'var(--sky,var(--cy))',.16)+circle(325,216,12,'var(--indigo)',.7)+[0,1,2,3].map(i=>circle(233+i*18,103+(i%2)*13,4,'var(--amber)')).join('')+T(300,35,'Cells and platelets suspended in plasma',17)+T(300,303,'Transport · immune defence · clotting',13,muted);
+    if(id==='synapses') return `<path d="M126 25V88C40 101 84 201 223 201C365 201 391 104 301 88V25" fill="var(--indigo)" fill-opacity=".07" stroke="var(--indigo)" stroke-width="2"/><path d="M90 265Q247 231 416 265V308" fill="var(--cy)" fill-opacity=".06" stroke="var(--cy)" stroke-width="3"/>`+[[150,136],[237,151],[307,130]].map(([x,y])=>circle(x,y,17,'var(--indigo)',.12)+[0,1,2].map(i=>circle(x-7+i*7,y+(i%2)*5,3,'var(--rose)',.8)).join('')).join('')+[0,1,2,3,4].map(i=>circle(163+i*34,step===0?177:219+(i%2)*13,4,'var(--rose)',.8)).join('')+T(482,135,'Vesicles',13,'var(--indigo)')+T(480,226,'Synaptic cleft',12,muted)+T(300,327,'Chemical release → receptors → postsynaptic response',11,muted);
+    if(id==='stomata') return `<path d="M264 60C94 77 98 251 268 272C193 207 191 128 264 60Z" fill="var(--cy)" fill-opacity=".2" stroke="var(--cy)" stroke-width="3"/><path d="M336 60C506 77 502 251 332 272C407 207 409 128 336 60Z" fill="var(--cy)" fill-opacity=".2" stroke="var(--cy)" stroke-width="3"/>`+`<ellipse cx="300" cy="167" rx="${17+step*10}" ry="78" fill="var(--bg)" stroke="var(--dim)" stroke-dasharray="4 5"/>`+T(300,173,'Pore',13,muted)+T(300,30,'Two guard cells regulate an opening',16)+T(300,317,'Ion transport → water movement → changing turgor',12,muted);
+    if(id==='cell-cycle') return `<circle cx="300" cy="160" r="102" fill="none" stroke="var(--dim)" stroke-opacity=".3" stroke-width="33"/>`+[[300,58],[402,160],[300,262],[198,160]].map(([x,y],i)=>circle(x,y,28,i===step%4?accent:muted,.2)+T(x,y+5,['G1','S','G2','M'][i],18)).join('')+T(300,154,'Grow. Copy.',17)+T(300,178,'Prepare. Divide.',17)+T(300,319,'DNA is replicated during S phase',12,muted);
+    if(id==='atp'||id==='fermentation') {
+      if(id==='atp')return T(300,38,'Couple a favourable reaction to cellular work',16)+box(83,115,160,89,'var(--indigo)',12)+T(163,167,'Adenosine',19)+[0,1,2].map(i=>line(246+i*91,160,265+i*91,160,accent,false,3)+circle(290+i*91,160,27,i===2?'var(--amber)':accent,.2)+T(290+i*91,167,'P',22)).join('')+T(300,267,'ATP + H₂O → ADP + Pi',18,accent)+T(300,307,'Usable energy comes from the overall hydrolysis reaction',11,muted);
+      return T(300,38,'Regenerate NAD⁺ so glycolysis can continue',16)+box(62,124,134,80,accent)+T(129,170,'Pyruvate',18)+line(207,164,387,164,accent,true,3)+box(400,124,134,80,'var(--rose)')+T(468,170,'Lactate',18)+`<path d="M241 94Q298 63 355 94" fill="none" stroke="var(--indigo)" stroke-width="2" marker-end="url(#bl-arrow)"/>`+T(244,64,'NADH',13,'var(--indigo)')+T(356,64,'NAD⁺',13,'var(--indigo)')+T(300,274,'Lactate fermentation shown',13,muted)+T(300,310,'The fermentation reaction itself does not produce ATP',11,muted);
+    }
+    if(id==='non-mendelian-inheritance') return T(300,36,'An example: incomplete dominance',17)+[0,1,2].map(i=>circle(126+i*174,142,43,['var(--rose)','var(--sky,var(--cy))','var(--indigo)'][i],i===1?.12:.45)+T(126+i*174,147,['RR','rr','Rr'][i],23)+T(126+i*174,218,['Red parent','White parent','Intermediate'][i],13,muted)).join('')+line(148,250,454,250,accent,true)+T(300,299,'Alleles segregate; the phenotype model changes',13,muted);
+    if(id==='mutations') return T(300,39,'A sequence change can have different consequences',16)+['Original','Changed'].map((label,row)=>T(91,113+row*90,label,12,muted)+['A','T','G','C','C','A'].map((letter,i)=>box(145+i*63,78+row*90,48,52,row===1&&i===3?'var(--rose)':accent,5)+T(169+i*63,113+row*90,row===1&&i===3?'T':letter,22)).join('')).join('')+T(300,294,'Effects depend on location, cell context and the resulting molecule',11,muted);
+    return null;
+  }
+  function renderModel(kind,topic,steps,step,selected,a='Aa',b='Aa') {
+    const special=specialized(topic,step);if(special!==null)return special;
+    switch(kind) {
+      case 'cell': return cellDiagram(selected);
+      case 'photosynthesis': return photosynthesis(step);
+      case 'mitosis': return division(step,false);
+      case 'meiosis': return division(step,true);
+      case 'protein': return protein(step);
+      case 'heart': return heart(step);
+      case 'neuron': return neuron(step);
+      case 'genetics': return genetics(a,b);
+      case 'ecology': return ecology(step);
+      case 'transport': return transport(step);
+      case 'respiration': return respiration(step);
+      case 'mitochondria': return mitochondria(step);
+      case 'calvin': return calvin(step);
+      case 'dna': return dna(step);
+      case 'enzyme': return enzyme(step);
+      case 'gas-exchange': return gasExchange(step);
+      case 'plant-transport': return plantTransport(step);
+      case 'selection': return selection(step);
+      case 'immunity': return immunity(step);
+      case 'biomolecules': return biomolecules(step);
+      default: return process(steps,step);
+    }
+  }
+  function preview(topic,config={}) {
+    const kind=kindFor(topic,config.topics||window.BIO_LIBRARY?.topics||[]);
+    const steps=(specialized(topic,0)!==null?topic.visual?.steps:stageSets[kind])||topic.visual?.steps||[{title:topic.title,detail:topic.summary}];
+    const byTopic={'chloroplasts':3,'light-reactions':5,'translation':2,'ribosomes':2,'osmosis':3,'active-transport':2,'electron-transport-chain':2,'chemiosmosis':3,'atp':3,'citric-acid-cycle':1,'cell-membrane':1,'xylem':0,'phloem':1,'immune-memory':3,'cell-cycle':1,'dna-replication':3,'crossing-over':0,'fermentation':0};
+    const representative={photosynthesis:3,mitosis:1,meiosis:1,protein:2,heart:3,neuron:1,respiration:2,enzyme:1,selection:2,immunity:1,biomolecules:2,calvin:2};
+    const step=Math.min(byTopic[topic.id]??representative[kind]??0,steps.length-1);
+    const selected=organelles.find(o=>o.id===topic.id)?.id||'nucleus';
+    const body=renderModel(kind,topic,steps,step,selected).replace(/\sdata-organelle="[^"]*"/g,'').replace(/\srole="button"/g,'').replace(/\stabindex="0"/g,'').replace(/\sclass="bl-bead"/g,'');
+    const marker=String(config.idPrefix||'bl-preview-'+topic.id).replace(/[^a-zA-Z0-9_-]/g,'-')+'-arrow';
+    return wrapSVG(topic.title+' — model preview',body,marker);
+  }
   function mount(container, topic, config) {
-    const kind=kindFor(topic,config.topics||[]);
+    const kind=specialized(topic,0)!==null?'special':kindFor(topic,config.topics||[]);
     let steps=stageSets[kind] || topic.visual?.steps || [];
     if(!steps.length) steps=[{title:topic.title,detail:topic.summary}];
     const initialStage={'chloroplasts':3,'light-reactions':4,'translation':2,'osmosis':3,'active-transport':2,'electron-transport-chain':2,'chemiosmosis':3,'atp':3,'citric-acid-cycle':1};
@@ -205,37 +272,14 @@
     const labels={cell:'Inspect a living cell',photosynthesis:'Zoom into photosynthesis',mitosis:'Follow the chromosomes',meiosis:'Two divisions, new combinations',protein:'From information to a protein',heart:'Trace the blood’s journey',neuron:'Watch an electrical signal',genetics:'Build a genetic cross',ecology:'Read a food web',transport:'Across a selective membrane',respiration:'Where energy is transferred',dna:'Information in two strands',enzyme:'How catalysis changes the path','gas-exchange':'Between air and blood','plant-transport':'Two transport systems',selection:'Follow variation through generations',immunity:'Recognition, response, memory',biomolecules:'The molecules of life',mitochondria:'Inside a mitochondrion',calvin:'Follow carbon through the cycle'};
     const findOrganelle = id => (config.topics||[]).find(t=>t.id===id) || (config.topics||[]).find(t=>(t.aliases||[]).some(alias=>alias.toLowerCase()===id.replace(/-/g,' ')) || t.title.toLowerCase()===id.replace(/-/g,' '));
     function draw() {
-      let body;
-      switch(kind) {
-        case 'cell': body=cellDiagram(selected); break;
-        case 'photosynthesis': body=photosynthesis(step); break;
-        case 'mitosis': body=division(step,false); break;
-        case 'meiosis': body=division(step,true); break;
-        case 'protein': body=protein(step); break;
-        case 'heart': body=heart(step); break;
-        case 'neuron': body=neuron(step); break;
-        case 'genetics': body=genetics(a,b); break;
-        case 'ecology': body=ecology(step); break;
-        case 'transport': body=transport(step); break;
-        case 'respiration': body=respiration(step); break;
-        case 'mitochondria': body=mitochondria(step); break;
-        case 'calvin': body=calvin(step); break;
-        case 'dna': body=dna(step); break;
-        case 'enzyme': body=enzyme(step); break;
-        case 'gas-exchange': body=gasExchange(step); break;
-        case 'plant-transport': body=plantTransport(step); break;
-        case 'selection': body=selection(step); break;
-        case 'immunity': body=immunity(step); break;
-        case 'biomolecules': body=biomolecules(step); break;
-        default: body=process(steps,step);
-      }
+      const body=renderModel(kind,topic,steps,step,selected,a,b);
       const item=kind==='cell'?organelles.find(o=>o.id===selected):steps[step];
       const target=kind==='cell'?findOrganelle(selected):null;
-      container.innerHTML=`<div class="bl-diagram"><div class="bl-vis-top"><span>${esc(labels[kind]||'Explore the mechanism')}</span><span>${kind==='cell'?'Click to inspect':kind==='genetics'?'Change the parents':kind==='photosynthesis'?'Six scales':'Interactive model'}</span></div>${wrapSVG(labels[kind]||topic.title,body)}
+      container.innerHTML=`<div class="bl-diagram"><div class="bl-vis-top"><span>${esc(labels[kind]||topic.title)}</span><span>${kind==='cell'?'Click to inspect':kind==='genetics'?'Change the parents':kind==='photosynthesis'?'Six scales':kind==='special'?'Concept diagram':'Interactive model'}</span></div>${wrapSVG(labels[kind]||topic.title,body)}
         ${kind==='cell'?`<div class="bl-organelles" aria-label="Choose an organelle">${organelles.map(o=>`<button type="button" data-select-organelle="${o.id}" aria-pressed="${selected===o.id}">${o.name}</button>`).join('')}</div>`:''}
         ${kind==='genetics'?`<div class="bl-genotype"><label>Parent 1 genotype<select data-parent="a">${['AA','Aa','aa'].map(v=>`<option ${a===v?'selected':''}>${v}</option>`).join('')}</select></label><label>Parent 2 genotype<select data-parent="b">${['AA','Aa','aa'].map(v=>`<option ${b===v?'selected':''}>${v}</option>`).join('')}</select></label></div><p class="bl-result-summary" role="status">${punnettSummary(a,b)}</p>`:''}
         ${kind==='photosynthesis'?`<div class="bl-zoompath" aria-label="Scale of observation">${steps.map((s,i)=>`<button type="button" data-zoom="${i}" aria-pressed="${step===i}">${esc(s.title)}${i<steps.length-1?' ›':''}</button>`).join('')}</div>`:''}
-        ${!['cell','genetics'].includes(kind)?`<div class="bl-vis-controls"><button type="button" data-visual-action="back" aria-label="Previous ${kind==='photosynthesis'?'scale':'stage'}" ${step===0?'disabled':''}>← ${kind==='photosynthesis'?'Zoom out':'Back'}</button><button type="button" data-visual-action="play" aria-label="${playing?'Pause':'Play'} visual sequence">${playing?'Pause':'Play sequence'}</button><button type="button" data-visual-action="next" aria-label="Next ${kind==='photosynthesis'?'scale':'stage'}">${kind==='photosynthesis'?'Zoom in':'Next'} →</button><span class="bl-stepcount">${step+1} / ${steps.length}</span></div>`:''}
+        ${!['cell','genetics'].includes(kind)?`<div class="bl-vis-controls"><button type="button" data-visual-action="back" aria-label="Previous ${kind==='photosynthesis'?'scale':'stage'}" ${step===0?'disabled':''}>← ${kind==='photosynthesis'?'Zoom out':'Back'}</button>${kind!=='special'?`<button type="button" data-visual-action="play" aria-label="${playing?'Pause':'Play'} visual sequence">${playing?'Pause':'Play sequence'}</button>`:''}<button type="button" data-visual-action="next" aria-label="Next ${kind==='photosynthesis'?'scale':'stage'}">${kind==='photosynthesis'?'Zoom in':kind==='special'?'Next annotation':'Next'} →</button><span class="bl-stepcount">${step+1} / ${steps.length}</span></div>`:''}
         <div class="bl-stepdetail" aria-live="${playing?'off':'polite'}"><strong>${esc(item?.title||item?.name||topic.title)}</strong>${esc(item?.detail||topic.summary)}${target&&target.id!==topic.id?`<br><a class="bl-organelle-link" href="${config.url(target,config.mode)}">Explore ${esc(target.title)} in six modes →</a>`:''}</div></div><p class="bl-vis-note">${kind==='genetics'?'Assumes random fertilisation, equal segregation, and one autosomal gene. Probabilities apply independently to each offspring.':kind==='selection'?'Illustrative frequencies explain selection; this is not a fitted population model.':'A conceptual model, with structures and timing simplified for learning.'}${reduced?' Reduced motion is enabled.':''}</p>`;
       container.querySelectorAll('[data-organelle],[data-select-organelle]').forEach(control=>{const select=()=>{selected=control.dataset.organelle||control.dataset.selectOrganelle;const focusKey=selected;draw();container.querySelector(`[data-select-organelle="${focusKey}"]`)?.focus({preventScroll:true});config.onContext?.(organelles.find(o=>o.id===selected)?.name||selected);};control.addEventListener('click',select);if(control.matches('[data-organelle]'))control.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();select();}});});
       container.querySelectorAll('[data-zoom]').forEach(button=>button.addEventListener('click',()=>{stop();step=Number(button.dataset.zoom);draw();container.querySelector(`[data-zoom="${step}"]`)?.focus({preventScroll:true});config.onContext?.(steps[step].title);}));
@@ -257,5 +301,5 @@
     const result={AA:0,Aa:0,aa:0};for(const x of a)for(const y of b)result[[x,y].sort().join('')]++;
     return Object.entries(result).filter(([,n])=>n).map(([g,n])=>`${g}: ${n*25}%`).join(' · ')+` | Dominant phenotype: ${(result.AA+result.Aa)*25}%`;
   }
-  window.BioLibraryVisuals={mount};
+  window.BioLibraryVisuals={mount,preview};
 })();

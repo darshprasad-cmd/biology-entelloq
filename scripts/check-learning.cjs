@@ -43,6 +43,7 @@ checks.push(['Physics shell style drift', python, ['scripts/sync-physics-shell.p
 checks.push(['Physics pillar style drift', python, ['scripts/sync-physics-pillars.py', '--check']]);
 checks.push(['Library source drift', python, ['scripts/build-library.py', '--check']]);
 checks.push(['Shared launch background drift', python, ['scripts/build-background.py', '--check']]);
+checks.push(['Visual preview source drift', python, ['scripts/build-previews.py', '--check']]);
 
 const started = Date.now();
 Promise.all(checks.map(([name, command, args]) => new Promise(resolve => {

@@ -252,10 +252,10 @@ html:root,html body{background:var(--bg)!important;color:var(--ink)}
 html body{font:16px/1.65 var(--sans);letter-spacing:0}
 body>#fx,body>#atmo,body>.bg-veil{display:none!important}
 body main{padding-top:112px;padding-bottom:60px;min-width:0}
-html body.embed main{padding-top:42px!important;padding-bottom:65px}
+html body.embed main{padding-top:28px!important;padding-bottom:65px}
 body main .wrap{width:100%;max-width:var(--maxw);padding-inline:var(--edge);margin-inline:auto;min-width:0}
 body main .wrap .wrap{padding-inline:0}
-body main .band{padding-block:36px}
+body main .band{padding-block:26px}
 body main>:is(.band,.lrn-hero,.sv-hero,.ex-hero,.me-hero):first-child,
 body main>:is(#lessonApp,#reasonApp,#labsApp)>:first-child,
 body main>.page>.band:first-child{padding-top:0}
@@ -422,8 +422,141 @@ body main .ln-question h2{font:500 21px/1.5 var(--display);margin:0 0 8px;letter
 .ex-sequence b { display:block;color:var(--dim);font-weight:500; }
 .ex-sequence code { color:var(--ink);word-break:break-word; }
 @media(max-width:760px){.ex-bench{grid-template-columns:1fr}.ex-status{padding:12px 14px}.ex-readings dd{max-width:160px}.ex-side .bx-chips{gap:7px}.ex-side .bx-btn{min-height:40px}.ex-table-wrap{padding:10px}}
+/* Actual bench captures lead the catalog. No model styles or canvas behavior change. */
+.lb-library.band,.lb-page.band{padding-top:clamp(26px,4vw,52px);padding-bottom:64px}
+.lc-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:25px}
+.lc-heading .h1{font-size:clamp(27px,3.3vw,43px);line-height:1.12;letter-spacing:-.045em;margin:12px 0}
+.lc-heading p{font-size:14px;color:var(--dim);margin:0;line-height:1.6}
+.lc-library-note{display:grid;gap:7px;flex-shrink:0;text-align:right;padding-bottom:3px}
+.lc-library-note span:first-child{font-family:var(--mono);font-size:11px;color:var(--ink)}
+.lc-library-note span:last-child{font-size:11px;color:var(--faint)}
+.lb-library .ln-filters{grid-template-columns:minmax(220px,1.8fr) repeat(4,minmax(0,1fr));gap:12px;margin:0;padding:18px 0;border-block:1px solid var(--line)}
+.lb-library .ln-filters label{font-size:10px;gap:7px}
+.lb-library .ln-filters input,.lb-library .ln-filters select{min-width:0;padding:9px 11px;font-size:12px;min-height:40px}
+.lb-library .ln-count{font-size:11px;margin:17px 0;color:var(--faint)}
+.lc-catalog{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:25px 22px}
+.lc-card{display:flex;min-width:0;flex-direction:column;color:var(--ink);text-decoration:none;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--panel);transition:border-color .18s ease,transform .18s ease}
+.lc-card:hover{border-color:color-mix(in srgb,var(--lc) 55%,var(--line));transform:translateY(-3px)}
+.lc-card:focus-visible{outline:3px solid var(--em);outline-offset:4px}
+.lc-preview{position:relative;aspect-ratio:16/10;overflow:hidden;isolation:isolate;background:#090f16;border-bottom:1px solid var(--line)}
+.lc-preview img{display:block;width:100%;height:100%;object-fit:contain;transition:transform .3s ease}
+.lc-preview-specimen img{object-fit:cover}
+.lc-card:hover .lc-preview img{transform:scale(1.035)}
+.lc-preview-type{position:absolute;left:10px;bottom:10px;border:1px solid #ffffff1f;border-radius:5px;padding:4px 7px;color:#dde7ed;background:#0a101bdc;font-family:var(--mono);font-size:9px;letter-spacing:.055em;text-transform:uppercase}
+.lc-open{position:absolute;right:10px;bottom:10px;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#0a101bdc;border:1px solid #ffffff29;color:#e4edf2;font-size:16px;transition:background .18s ease}
+.lc-card:hover .lc-open{background:#174738}
+.lc-card-copy{padding:17px 18px 16px;display:flex;flex:1;flex-direction:column;gap:8px}
+.lc-card-copy .lb-tag{font-size:9px;color:var(--faint);letter-spacing:.11em}
+.lb-library .lc-card h2{font-size:17px;line-height:1.3;letter-spacing:-.025em;font-weight:600;margin:0}
+.lc-card .ln-card-meta{margin-top:auto;padding-top:5px;display:flex;align-items:center;gap:11px;font-size:10px;font-family:var(--mono);text-transform:capitalize;color:var(--dim)}
+.lc-card .ln-card-meta span+span:before{content:'·';margin-right:11px;color:var(--faint)}
+.lc-catalog .ln-empty{grid-column:1/-1}
+.lb-page .ln-breadcrumb{font-size:11px;margin-bottom:23px}
+.lb-page .lb-hd{max-width:none;margin:0 0 22px;display:flex;align-items:center;justify-content:space-between;gap:30px}
+.lc-lab-title{max-width:760px;min-width:0}
+.lb-page .lb-hd .h1{font-size:clamp(27px,3.5vw,42px);line-height:1.1;letter-spacing:-.04em;margin:10px 0}
+.lb-page .lb-hd .lead{font-size:13px;line-height:1.65;max-width:680px;margin:0}
+.lc-workspace-nav{flex-shrink:0;display:grid;gap:5px}
+.lc-workspace-nav button{display:flex;gap:10px;align-items:center;padding:7px 10px;background:transparent;border:0;border-radius:5px;color:var(--dim);font:500 11px/1.5 var(--sans,Inter,sans-serif);text-align:left;cursor:pointer}
+.lc-workspace-nav button span{font:9px var(--mono);color:var(--faint)}
+.lc-workspace-nav button:hover{background:var(--raise);color:var(--ink)}
+.lc-workspace-nav button:focus-visible{outline:2px solid var(--em);outline-offset:2px}
+.lb-page #lab-workflow{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(220px,.7fr);gap:0 28px;padding:17px 0 0;margin:0 0 20px;border-top:1px solid var(--line)}
+.lb-page #lab-workflow .ln-question{grid-column:1;grid-row:1;display:flex;flex-direction:column;align-items:flex-start;gap:11px;border:0;padding:0}
+.lb-page #lab-workflow .ln-question h2{font-size:16px;line-height:1.45;letter-spacing:-.015em;margin:0}
+.lb-page #lab-workflow .ln-question p:empty{display:none}
+.lb-page #lab-workflow .ln-question p{font-size:11px;line-height:1.6;margin:6px 0 0}
+.lb-page #lab-workflow .ln-modes{gap:6px}
+.lb-page #lab-workflow .ln-modes .bx-btn{padding:6px 10px;font-size:11px;border-radius:7px}
+.lb-page #lab-workflow>label{grid-column:2;grid-row:1;font-size:11px;align-self:start;display:grid;gap:8px}
+.lb-page #lab-workflow>label input{padding:11px 12px;font-size:12px}
+.lb-page #lab-workflow .ln-workflow-hint{grid-column:1/-1;grid-row:2;margin:12px 0 0;padding:10px 0 0;border:0;border-top:1px solid var(--line);font-size:11px;line-height:1.7;color:var(--dim)}
+.lb-page #lab-workflow,.lb-page #labStage,.lb-page #lab-notebook{scroll-margin-top:95px}
+.lb-page .lb-stage{padding:clamp(15px,2.5vw,26px)}
+.lb-page #lab-notebook{margin-top:30px}
+@media(min-width:1500px){.lc-catalog{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:1000px){.lc-heading{align-items:flex-start}.lc-library-note{padding-top:4px}.lc-library-note span:last-child{max-width:160px;line-height:1.6}.lb-library .ln-filters{grid-template-columns:repeat(4,minmax(0,1fr))}.lb-library .ln-search{grid-column:1/-1}.lc-catalog{gap:18px 16px}.lc-card-copy{padding:15px}.lb-library .lc-card h2{font-size:15px}.lb-page .lb-hd{gap:20px}}
+@media(max-width:760px){.lc-heading{display:block}.lc-library-note{display:flex;flex-wrap:wrap;gap:8px 15px;text-align:left;margin-top:16px}.lc-library-note span:last-child{max-width:none}.lc-catalog{grid-template-columns:repeat(2,minmax(0,1fr))}.lb-page #lab-workflow{grid-template-columns:1fr;gap:14px}.lb-page #lab-workflow>label{grid-column:1;grid-row:2}.lb-page #lab-workflow .ln-workflow-hint{grid-row:3;margin:0}.lb-page .lb-hd{display:block}.lc-workspace-nav{display:flex;flex-wrap:wrap;gap:3px 9px;margin-top:14px}.lc-workspace-nav button{padding:5px 0}.lc-card-copy .lb-tag{font-size:8px;letter-spacing:.06em}}
+@media(max-width:480px){.lb-library.band,.lb-page.band{padding-top:25px}.lc-heading .h1{max-width:300px;font-size:29px}.lc-heading p{font-size:12px}.lc-library-note span:last-child{font-size:10px}.lb-library .ln-filters{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.lb-library .ln-filters input,.lb-library .ln-filters select{font-size:12px}.lc-catalog{gap:14px 10px}.lc-card{border-radius:10px}.lc-card-copy{padding:12px 10px;gap:7px}.lb-library .lc-card h2{font-size:14px;line-height:1.35}.lc-card .ln-card-meta{font-size:9px;gap:6px}.lc-card .ln-card-meta span+span:before{margin-right:6px}.lc-preview-type{font-size:7px;left:6px;bottom:6px;padding:3px 5px}.lc-open{right:6px;bottom:6px;width:21px;height:21px;font-size:13px}.lb-page .ln-breadcrumb{font-size:10px;gap:7px;margin-bottom:18px}.lb-page .lb-hd .lead{font-size:12px}.lb-page .lb-stage{padding:12px}.lb-page #lab-workflow .ln-question h2{font-size:15px}}
+@media(prefers-reduced-motion:reduce){.lc-card,.lc-preview img,.lc-open{transition:none}.lc-card:hover,.lc-card:hover .lc-preview img{transform:none}}
 </style>
 <!-- BIO-LIBRARY:labs-style:END -->
+<!-- BIO-PREVIEWS:css:START -->
+<style>
+/* Preview surfaces retain the colours of the real models in either app theme. */
+.bp-media{display:block;position:relative;aspect-ratio:16/10;overflow:hidden;background:var(--bg-2,var(--panel));border-bottom:1px solid var(--line);isolation:isolate}
+.bp-media img{display:block;width:100%;height:100%;object-fit:cover;transition:transform 180ms ease-out}
+.bp-media>svg{display:block;width:100%;height:100%;pointer-events:none}
+.bp-unavailable{display:grid;place-items:center;color:var(--dim);font:12px var(--sans,system-ui)}
+body main .bp-card{padding:0;overflow:hidden;min-width:0}
+body main .bp-card>:not(.bp-media){margin-inline:18px}
+body main .bp-card>.bp-media{margin:0 0 17px}
+body main .bp-card>:last-child{margin-bottom:18px}
+body main .bp-card>p:not(.rz-outcome){display:none}
+body main .bp-card :is(.les-dom,.rz-dom){font:10px/1.5 var(--mono);letter-spacing:.2px}
+body main .bp-card :is(h2,h3){font:450 20px/1.3 var(--display);letter-spacing:-.45px}
+body main .bp-card .glow,body main .bp-card>.ico{display:none}
+body main .bp-card .les-lensrow{gap:5px;margin-top:12px;margin-bottom:12px}
+body main .bp-card .les-cardroute,body main .bp-card .rz-go{font-size:12px}
+body main .bp-card .rz-outcome{display:none}
+body main .bp-card .rz-skills{margin-bottom:12px}
+body main .bp-card[hidden]{display:none!important}
+body main .cc-node.bp-card{padding:0 0 14px}
+body main .cc-node.bp-card>.bp-media{height:auto;aspect-ratio:16/10;border-radius:0;margin:0 0 12px}
+body main .cc-node.bp-card>:not(.bp-media){margin-inline:12px}
+body main .cc-node.bp-card>:last-child{margin-bottom:0}
+body main .cc-promo.bp-card{display:grid;grid-template-columns:180px minmax(0,1fr) 30px;padding:0;border:1px solid var(--line);border-radius:8px;background:var(--panel);gap:20px}
+body main .cc-promo.bp-card>.bp-media{width:180px;height:150px;margin:0;aspect-ratio:auto}
+body main .cc-promo.bp-card>span[aria-hidden]:not(.bp-media){display:none}
+body main .cc-promo.bp-card>:not(.bp-media){margin:0}
+body main .cc-promo.bp-card p{display:none}
+#learningPaths .bp-card{padding:0;overflow:hidden;text-align:left}
+#learningPaths .bp-card>:not(.bp-media){margin-inline:15px}#learningPaths .bp-card>.bp-media{margin-bottom:13px}
+#learningPaths .bp-card .ic,#learningPaths .bp-card p{display:none}#learningPaths .bp-card h3{margin-bottom:16px;font-size:17px}
+.bp-nav-preview{position:fixed;z-index:1000;width:272px;padding:7px;background:var(--panel);border:1px solid var(--hair);border-radius:10px;box-shadow:0 16px 45px #0005;pointer-events:none}
+.bp-nav-preview[hidden]{display:none}.bp-nav-preview .bp-media{border-radius:6px;aspect-ratio:16/10}.bp-nav-preview strong{display:block;padding:10px 7px 6px;font:500 13px/1.4 var(--sans);color:var(--ink)}
+.topbar #bio-background-toggle{position:static;flex:none;width:36px;min-height:36px;padding:7px;font-size:0}
+.topbar #bio-background-toggle::after{content:'Ⅱ';font:13px var(--sans)}
+.topbar #bio-background-toggle[aria-pressed=true]::after{content:'▷'}
+body:has(#bioq-ai)>#bio-background-toggle{bottom:76px}
+@media(hover:hover) and (pointer:fine){.bp-card:hover>.bp-media img{transform:scale(1.025)}}
+@media(prefers-reduced-motion:reduce){.bp-media img{transition:none}.bp-card:hover>.bp-media img{transform:none}}
+@media(max-width:600px){body main .bp-card>:not(.bp-media){margin-inline:16px}body main .bp-card>:last-child{margin-bottom:16px}.bp-nav-preview{display:none!important}}
+/* Compact first screens keep models close to their headings and filters. */
+body main :is(.les-listhead,.rz-listhead,.sv-hero){padding-block:12px 24px}
+body main :is(.les-listhead,.rz-listhead,.sv-hero) h1{font-size:clamp(29px,3.4vw,42px);margin:9px 0 12px!important}
+body main :is(.les-listhead,.rz-listhead,.sv-hero) .lead{font-size:14px;line-height:1.65;margin:0;max-width:60ch}
+body main .les-filters{padding:16px;margin-bottom:22px}
+body main .les-clear:disabled{display:none}
+body main .sv-hero .sv-stats{margin-top:22px;gap:9px}
+body main .sv-hero .sv-stat{padding:12px 15px}
+body main .sv-hero .sv-stat b{font-size:22px}
+body main .sv-hero .sv-stat span{font-size:9px}
+.sv-opt.bp-choice{display:flex;align-items:center;gap:10px;padding:7px;overflow:hidden;text-align:left}
+.sv-opt.bp-choice>.bp-media{width:65px;height:52px;flex:none;border:0;border-radius:3px;aspect-ratio:auto}
+.sv-opt.bp-choice>.oi{display:none}
+.sv-opt.bp-choice>span:not(.bp-media){min-width:0;font-size:12px;line-height:1.4}
+.sv-opt.bp-choice .osub{font-size:10px;margin-top:3px}
+@media(max-width:600px){
+ body main .les-filterfields{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+ body main .les-filterfields .les-search{grid-column:1/-1}
+ body main .les-filters{padding:14px}
+ body main .les-filtermeta{margin-top:10px;gap:0}
+ body main .les-filtermeta>span{display:none}
+ body main :is(.les-listhead,.rz-listhead,.sv-hero){padding-top:0}
+ body main .sv-hero .sv-stats{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+ body main .sv-hero .sv-stat{padding:10px 7px;min-width:0}
+ body main .sv-hero .sv-stat b{font-size:19px}
+ body main .sv-hero .sv-stat span{font-size:8px;line-height:1.5}
+ body main .sv-topics{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .sv-opt.bp-choice{flex-direction:column;align-items:stretch;padding:5px 5px 10px}
+ .sv-opt.bp-choice>.bp-media{width:100%;height:65px}
+ .sv-opt.bp-choice>span:not(.bp-media){padding-inline:5px}
+ body main .cc-promo.bp-card{grid-template-columns:85px minmax(0,1fr) 20px;gap:12px}
+ body main .cc-promo.bp-card>.bp-media{width:85px;height:130px}
+}
+</style>
+<!-- BIO-PREVIEWS:css:END -->
 </head>
 <body data-page="labs">
 <div class="bg-veil" aria-hidden="true"></div>
@@ -525,7 +658,7 @@ const LABS = (function () {
   }
   function renderIndex(unknown) {
     const all = LABS.all(), categories = [...new Set(all.map(l => l.category || l.tag))].sort();
-    app.innerHTML = `<div class="wrap band lb-library"><div class="eyebrow">The biology laboratory</div><h1 class="h1" style="margin:16px 0">Change something.<br><span class="grad">Understand what follows.</span></h1><p class="lead" style="max-width:700px">Start with a question. Build evidence with experiments, microscopy and virtual dissections. Your notebook follows every investigation.</p><div class="ln-index-meta"><span>${all.length} working investigations</span><span>Guided · Challenge · Sandbox</span><span>Saved on this device</span></div>${unknown ? '<p role="status">That bench could not be found. Choose an investigation below.</p>' : ''}<div class="ln-filters"><label class="ln-search">Find an experiment<input id="lab-search" type="search" placeholder="Try heart, plant food, or DNA bands" value="${esc(filters.query)}"></label><label>Category<select id="lab-category"><option value="">All fields</option>${categories.map(c=>`<option>${esc(c)}</option>`).join('')}</select></label><label>Level<select id="lab-difficulty"><option value="">All levels</option><option value="foundation">Foundation</option><option value="school">School</option><option value="advanced">Advanced</option></select></label><label>Time<select id="lab-duration"><option value="">Any duration</option><option value="10">Up to 10 min</option><option value="20">Up to 20 min</option><option value="40">Up to 40 min</option></select></label><label>Type<select id="lab-type"><option value="">All types</option>${['simulation','microscope','dissection','genetics','data','investigation'].map(t=>`<option value="${t}">${t[0].toUpperCase()+t.slice(1)}</option>`).join('')}</select></label></div><p id="lab-count" class="ln-count" role="status"></p><div class="grid g3" id="lab-cards"></div></div>`;
+    app.innerHTML = `<div class="wrap band lb-library"><header class="lc-heading"><div><div class="eyebrow">The biology laboratory</div><h1 class="h1">See it. Test it. Understand it.</h1><p>Choose a slide, a living system, or a specimen.</p></div><div class="lc-library-note"><span>${all.length} interactive labs</span><span>Real bench previews · Your own notebook</span></div></header>${unknown ? '<p role="status">That bench could not be found. Choose an investigation below.</p>' : ''}<div class="ln-filters"><label class="ln-search">Find an experiment<input id="lab-search" type="search" placeholder="Search experiments…" value="${esc(filters.query)}"></label><label>Category<select id="lab-category"><option value="">All fields</option>${categories.map(c=>`<option>${esc(c)}</option>`).join('')}</select></label><label>Level<select id="lab-difficulty"><option value="">All levels</option><option value="foundation">Foundation</option><option value="school">School</option><option value="advanced">Advanced</option></select></label><label>Time<select id="lab-duration"><option value="">Any duration</option><option value="10">Up to 10 min</option><option value="20">Up to 20 min</option><option value="40">Up to 40 min</option></select></label><label>Type<select id="lab-type"><option value="">All types</option>${['simulation','microscope','dissection','genetics','data','investigation'].map(t=>`<option value="${t}">${t[0].toUpperCase()+t.slice(1)}</option>`).join('')}</select></label></div><p id="lab-count" class="ln-count" role="status"></p><div class="lc-catalog" id="lab-cards"></div></div>`;
     const controls = { query:'lab-search', category:'lab-category', difficulty:'lab-difficulty', duration:'lab-duration', type:'lab-type' };
     Object.entries(controls).forEach(([k,id]) => { const e=document.getElementById(id); e.value=filters[k]; e.addEventListener(k==='query'?'input':'change',()=>{filters[k]=e.value;paint();}); });
     function paint() {
@@ -535,13 +668,13 @@ const LABS = (function () {
         return (!query || query.split(/\s+/).every(w=>searchable.includes(w))) && (!filters.category || (l.category||l.tag)===filters.category) && (!filters.difficulty || l.difficulty===filters.difficulty) && (!filters.duration || (l.minutes||15)<=Number(filters.duration)) && (!filters.type || (l.type||'simulation')===filters.type);
       });
       document.getElementById('lab-count').textContent=shown.length+' of '+all.length+' investigations';
-      document.getElementById('lab-cards').innerHTML=shown.length ? shown.map(l=>`<a class="card lift" href="#${esc(l.id)}" style="--lc:${l.color||'var(--em)'}"><div class="lb-tag">${esc(l.category||l.tag)}</div><h2 class="h3" style="margin:12px 0">${esc(l.title)}</h2><p>${esc(l.blurb)}</p><div class="ln-card-meta">${esc(l.difficulty||'school')} · ${l.minutes||15} min · ${esc(l.type||'simulation')}</div><div class="lb-go">Open the bench →</div></a>`).join('') : '<div class="ln-empty"><h2>No experiments match those filters.</h2><p>Try a broader term or another field.</p><button class="bx-btn" id="lab-clear">Show all experiments</button></div>';
+      document.getElementById('lab-cards').innerHTML=shown.length ? shown.map((l,i)=>`<a class="lc-card" href="#${esc(l.id)}" style="--lc:${l.color||'var(--em)'}"><div class="lc-preview${l.type==='dissection'?' lc-preview-specimen':''}"><img src="./assets/previews/lab-${esc(l.id)}.webp" alt="" width="960" height="600" loading="${i<6?'eager':'lazy'}" decoding="async"><span class="lc-preview-type">${esc(l.type||'simulation')}</span><span class="lc-open" aria-hidden="true">↗</span></div><div class="lc-card-copy"><span class="lb-tag">${esc(l.category||l.tag)}</span><h2>${esc(l.title)}</h2><div class="ln-card-meta"><span>${esc(l.difficulty||'school')}</span><span>${l.minutes||15} min</span></div></div></a>`).join('') : '<div class="ln-empty"><h2>No experiments match those filters.</h2><p>Try a broader term or another field.</p><button class="bx-btn" id="lab-clear">Show all experiments</button></div>';
       document.getElementById('lab-clear')?.addEventListener('click',()=>{filters={query:'',category:'',difficulty:'',duration:'',type:''};renderIndex();document.getElementById('lab-search').focus();});
     }
     paint();
   }
   function renderLab(l) {
-    app.innerHTML=`<div class="wrap band lb-page" style="--lc:${l.color||'var(--em)'}"><nav class="ln-breadcrumb" aria-label="Breadcrumb"><a href="#">Lab</a><span>/</span><span>${esc(l.category||l.tag)}</span><span>/</span><span aria-current="page">${esc(l.title)}</span></nav><div class="lb-hd"><div class="lb-tag">${esc(l.type||'simulation')} · ${esc(l.difficulty||'school')} · ${l.minutes||15} min</div><h1 class="h1" tabindex="-1" style="margin:12px 0">${esc(l.title)}</h1><p class="lead" style="max-width:720px">${esc(l.blurb)}</p></div><div id="lab-workflow"></div><div class="lb-stage" id="labStage"></div><div id="lab-notebook"></div></div>`;
+    app.innerHTML=`<div class="wrap band lb-page" style="--lc:${l.color||'var(--em)'}"><nav class="ln-breadcrumb" aria-label="Breadcrumb"><a href="#">All labs</a><span>/</span><span>${esc(l.category||l.tag)}</span><span>/</span><span aria-current="page">${esc(l.title)}</span></nav><header class="lb-hd"><div class="lc-lab-title"><div class="lb-tag">${esc(l.type||'simulation')} · ${esc(l.difficulty||'school')} · ${l.minutes||15} min</div><h1 class="h1" tabindex="-1">${esc(l.title)}</h1><p class="lead">${esc(l.blurb)}</p></div><nav class="lc-workspace-nav" aria-label="Investigation steps"><button type="button" data-lab-jump="lab-workflow"><span>01</span> Predict</button><button type="button" data-lab-jump="labStage"><span>02</span> Experiment</button><button type="button" data-lab-jump="lab-notebook"><span>03</span> Notebook</button></nav></header><div id="lab-workflow"></div><div class="lb-stage" id="labStage"></div><div id="lab-notebook"></div></div>`;
     const host=document.getElementById('labStage');
     try {
       live=l.build(host)||{};
@@ -551,6 +684,12 @@ const LABS = (function () {
       document.getElementById('lab-retry').onclick=route;
       console.error('Lab failed: '+l.id,e);
     }
+    app.querySelectorAll('[data-lab-jump]').forEach(button=>button.addEventListener('click',()=>{
+      const target=document.getElementById(button.dataset.labJump);
+      target?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});
+      const focusTarget=target?.querySelector('input,button,h2');
+      if(focusTarget){if(focusTarget.tagName==='H2')focusTarget.tabIndex=-1;focusTarget.focus({preventScroll:true});}
+    }));
     app.querySelector('h1').focus({preventScroll:true});
   }
   addEventListener('hashchange',route);
@@ -6689,5 +6828,83 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
 })();
 </script>
 <!-- BIO-LIBRARY:labs-script:END -->
+<!-- BIO-PREVIEWS:js:START -->
+<script>
+/* Real view captures for browsing. Previews never start an experiment. */
+(function(){
+  'use strict';
+  const sections=['home','learn','lessons','reason','labs','solve','explore','me','about','lab','universe'];
+  const lessons=['diffusion','enzyme','population','photosynthesis','respiration','replication','selection','actionpotential','cardiac'];
+  const workouts=['altitude','resistance','glucose'];
+  const legacy={cell:'legacy-cell',microscope:'legacy-microscope'};
+  function routeKey(k,sub){
+    const concept=/^(?:topic|learn)\/([-a-z0-9]+)\//.exec(sub||'');
+    if(['learn','reason','solve'].includes(k)&&concept&&window.BIO_LIBRARY?.topics.some(t=>t.id===concept[1]))return 'topic-'+concept[1];
+    if(k==='learn'&&legacy[sub])return legacy[sub];
+    if(k==='explore'&&['tree','atlas','timeline','graph','diseases'].includes(sub))return 'explore-'+sub;
+    if(k==='lessons'&&lessons.includes(sub))return 'lesson-'+sub;
+    if(k==='reason'&&workouts.includes(sub))return 'reason-'+sub;
+    if(k==='labs'&&/^[a-z0-9-]+$/.test(sub||''))return 'lab-'+sub;
+    return sections.includes(k)?'section-'+k:null;
+  }
+  function media(key){
+    const figure=document.createElement('span');figure.className='bp-media';figure.setAttribute('aria-hidden','true');
+    if(key.startsWith('topic-')&&window.BioLibraryVisuals){const topic=window.BIO_LIBRARY?.topics.find(t=>t.id===key.slice(6));if(topic){figure.innerHTML=window.BioLibraryVisuals.preview(topic,{topics:window.BIO_LIBRARY.topics,idPrefix:'bp-concept-'+(++media.serial)});return figure;}}
+    const image=document.createElement('img');image.src='./assets/previews/'+key+'.webp';image.alt='';image.width=640;image.height=400;image.loading='lazy';image.decoding='async';
+    image.addEventListener('error',()=>{figure.classList.add('bp-unavailable');image.remove();figure.textContent='Preview unavailable';},{once:true});
+    figure.append(image);return figure;
+  }
+  media.serial=0;
+  function attach(card,key){
+    if(!key||card.dataset.previewMounted)return;
+    card.dataset.previewMounted=key;card.classList.add('bp-card');card.prepend(media(key));
+  }
+  const selector='#homeIn .cc-world,#homeIn .cc-node,#homeIn .cc-promo,#learningPaths .tile,.les-card,.rz-workout,#catalog .exp,#recSlot .card,[data-preview-route],[data-bio-preview]';
+  function enhance(){
+    document.querySelectorAll(selector).forEach(card=>{
+      let key=card.dataset.bioPreview;
+      if(!key&&card.dataset.previewRoute)key=routeKey(card.dataset.previewRoute,card.dataset.previewSub);
+      if(!key&&card.dataset.go)key=routeKey(card.dataset.go,card.dataset.sub);
+      if(!key&&card.dataset.lesson)key='lesson-'+card.dataset.lesson;
+      if(!key&&card.matches('.rz-workout')){const id=card.getAttribute('href')?.slice(1);if(workouts.includes(id))key='reason-'+id;}
+      if(!key&&card.matches('#recSlot .card')){const link=card.matches('a[href]')?card:card.querySelector('a[href]');if(link){const url=new URL(link.href,location.href);key=routeKey(url.pathname.split('/').pop().replace('.html',''),url.hash.slice(1));}}
+      if(!key&&card.matches('#catalog .exp')){
+        const link=card.matches('a')?card:card.querySelector('a[href]');
+        if(link){const url=new URL(link.href,location.href);const route=url.pathname.split('/').pop().replace('.html','');key=routeKey(route,url.hash.slice(1))||legacy[url.hash.slice(1)];}
+      }
+      attach(card,key);
+    });
+    const topicImages={'Mixed':'section-learn','Cell Biology':'legacy-cell','Genetics & DNA':'lesson-replication','Human Physiology':'lab-heart-rate','Evolution':'lesson-selection','Ecology':'lesson-population','Plant Biology':'lesson-photosynthesis','Microbiology':'lab-microscope','Biotechnology':'lab-pcr'};
+    document.querySelectorAll('.sv-opt[data-group="topic"],.sv-opt[data-group="mode"]').forEach(button=>{
+      const key=button.dataset.group==='topic'?topicImages[button.dataset.val]:'solve-'+button.dataset.val;
+      if(!key||button.dataset.previewMounted)return;
+      button.dataset.previewMounted=key;button.classList.add('bp-choice');button.prepend(media(key));
+    });
+  }
+  let queued=false;
+  const observer=new MutationObserver(records=>{
+    if(queued||!records.some(r=>[...r.addedNodes].some(n=>n.nodeType===1&&!n.matches('.bp-media,.bp-media *')&&(n.matches(selector+',.sv-opt')||n.querySelector(selector+',.sv-opt')))))return;
+    queued=true;queueMicrotask(()=>{queued=false;enhance();});
+  });
+  observer.observe(document.body,{childList:true,subtree:true});enhance();
+  const tip=document.createElement('div');tip.id='bio-nav-preview';tip.className='bp-nav-preview';tip.hidden=true;tip.setAttribute('role','tooltip');document.body.append(tip);let active=null;
+  function hide(){if(active)active.removeAttribute('aria-describedby');active=null;tip.hidden=true;}
+  function show(button){
+    if(!matchMedia('(min-width:851px)').matches)return;
+    const key=routeKey(button.dataset.go,button.dataset.sub);if(!key)return;
+    hide();active=button;tip.replaceChildren(media(key));const label=document.createElement('strong');label.textContent=button.textContent.trim();tip.append(label);tip.hidden=false;
+    const rect=button.getBoundingClientRect();tip.style.left=Math.min(innerWidth-292,rect.right+14)+'px';tip.style.top=Math.max(12,Math.min(innerHeight-230,rect.top-15))+'px';button.setAttribute('aria-describedby',tip.id);
+  }
+  document.querySelectorAll('.side [data-go]').forEach(button=>{
+    button.addEventListener('pointerenter',e=>{if(e.pointerType!=='touch')show(button);});button.addEventListener('pointerleave',hide);button.addEventListener('focus',()=>show(button));button.addEventListener('blur',hide);button.addEventListener('click',hide);
+  });
+  addEventListener('keydown',event=>{if(event.key==='Escape')hide();});addEventListener('resize',hide);
+  window.BioPreviews={refresh:enhance,routeKey};
+  // Keep persistent display controls in the app bar, clear of lesson content.
+  const appbar=document.querySelector('.topbar'),motion=document.getElementById('bio-background-toggle');
+  if(appbar&&motion)appbar.append(motion);
+})();
+</script>
+<!-- BIO-PREVIEWS:js:END -->
 </body>
 </html>

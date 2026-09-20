@@ -17,42 +17,42 @@
     {
       id: "altitude", domain: "Human Physiology", color: "#fb7185",
       title: "The mountaineer's blood",
-      prompt: "A climber moves from sea level to a Himalayan base camp at 5,000 m and stays for three weeks. A blood test on arrival is normal; three weeks later her red-blood-cell count is markedly higher. She hasn't trained or taken any drug. Reason through why her body did this.",
+      prompt: "A climber moves from sea level to a Himalayan base camp at 5,000 m and stays for several weeks. Measurements show that her total red-cell mass has increased. She hasn't taken a drug that stimulates blood-cell production. Trace the physiological response that could explain this change.",
       principles: { hint: "Which biological principles are genuinely in play?",
         options: [
-          { t: "Homeostasis — the body defends a set point (here, oxygen delivery)", ok: true },
+          { t: "Homeostasis — responses help maintain adequate tissue oxygenation", ok: true },
           { t: "Negative feedback — a sensed drop triggers a correcting response", ok: true },
           { t: "Natural selection acting within her lifetime", ok: false },
           { t: "Gas exchange & oxygen transport by haemoglobin", ok: true },
           { t: "The red cells sensed the altitude and decided to divide", ok: false },
         ] },
       regulated: { q: "What is her body actually regulating?", o: ["The number of red blood cells, as an end in itself", "Oxygen delivery to the tissues", "Her blood pressure", "The altitude"], a: 1,
-        why: "The set point being defended is OXYGEN DELIVERY. Red-cell count is just one lever the body pulls to defend it. Naming the regulated variable — not the mechanism — is the first move of physiological reasoning." },
+        why: "Adequate OXYGEN DELIVERY is the physiological goal, while local tissue oxygen availability helps control the response. Red-cell production is one mechanism; it does not restore every oxygen measurement to a single fixed set point." },
       form: { q: "Which structure-function link carries the signal?", o: ["The lungs make more haemoglobin directly", "Kidney cells sense low oxygen and release the hormone erythropoietin (EPO), which tells bone marrow to make more red cells", "The heart pumps harder, creating red cells", "Muscles convert to red cells under stress"], a: 1,
         why: "Specialised oxygen-sensing cells in the KIDNEY release EPO when oxygen falls. EPO travels to the BONE MARROW, whose job is making blood cells. Structure fits function at every step — sensor, messenger, factory." },
       strategy: { q: "What's the soundest way to reason this out?", o: [
         { t: "Start from the STIMULUS (low O₂), follow the feedback loop to the response", ok: true },
         { t: "Assume the body 'wants' more red cells and work backwards", ok: false, why: "Biology has no 'wants'. Teleology feels intuitive but hides the mechanism. Always trace the actual signal, sensor and effector." },
-        { t: "Conclude it's a coincidence / measurement error", ok: false, why: "The effect is real and reproducible (it's why athletes altitude-train). Dismissing a consistent result skips the reasoning." },
+        { t: "Conclude it's a coincidence / measurement error", ok: false, why: "Measurement quality matters, but sustained hypoxia provides a testable physiological explanation. An increased cell concentration alone could also reflect reduced plasma volume; this case specifies increased total red-cell mass." },
       ] },
       reason: [
-        "Thin air at altitude means each breath delivers less oxygen — arterial O₂ falls.",
-        "Oxygen-sensing cells in the kidney detect the drop (the SENSOR).",
+        "Lower atmospheric pressure reduces inspired oxygen partial pressure; the oxygen fraction remains similar. Arterial oxygenation can fall.",
+        "Reduced oxygen availability in kidney tissue activates oxygen-sensing pathways (the SENSOR).",
         "They secrete more erythropoietin (EPO) — the MESSENGER — into the blood.",
         "EPO reaches the bone marrow (the EFFECTOR) and ramps up red-cell production.",
-        "More red cells → more haemoglobin → oxygen delivery is restored toward its set point.",
-        "This is negative feedback: the response (more O₂ delivery) removes the original stimulus (low O₂).",
+        "More red-cell mass increases haemoglobin capacity, helping support oxygen delivery despite the lower oxygen pressure.",
+        "Improved kidney tissue oxygenation reduces the drive for EPO secretion: negative feedback moderates the response.",
       ],
       reflect: {
         misconception: "The cells did NOT 'sense the altitude and choose to divide.' No single cell knows it's on a mountain — a hormonal loop between kidney and marrow does the work.",
-        alternative: "The body also breathes faster and the heart beats harder immediately — fast responses buy time while the slow red-cell response builds over weeks. Real regulation layers fast and slow loops.",
-        principle: "GENERAL PRINCIPLE: a homeostatic system defends a regulated variable through sensor → signal → effector negative feedback. Find those three parts and any regulation makes sense.",
+        alternative: "Ventilation and circulation also adjust. Plasma-volume changes can raise red-cell concentration before much new red-cell mass forms. Distinguish a concentration measurement from the total amount.",
+        principle: "GENERAL PRINCIPLE: trace sensor → signal → effector, then ask how the response changes the original stimulus. Several interacting feedback loops may support the same physiological function.",
       },
     },
     {
       id: "resistance", domain: "Evolution", color: "#f6c667",
       title: "The antibiotic that stopped working",
-      prompt: "A patient's bacterial infection is wiped out by an antibiotic. Months later the same infection returns — but now the drug barely works. The bacteria seem to have 'learned' to resist it. Reason through what actually happened.",
+      prompt: "In this simplified case, a bacterial infection improves after an antibiotic, but some bacteria remain. Later the infection returns and the drug works poorly. Tests show that a resistant variant, rare in the original population, is now common. Explain the population change.",
       principles: { hint: "Which principles are truly at work?",
         options: [
           { t: "Variation — the bacterial population wasn't genetically identical", ok: true },
@@ -62,24 +62,24 @@
           { t: "The antibiotic taught the bacteria to resist", ok: false },
         ] },
       regulated: { q: "What did the antibiotic actually do to the population?", o: ["Made each bacterium tougher", "Acted as a selection pressure — killing the susceptible, sparing the few already resistant", "Created new resistance genes", "Slowed bacterial breathing"], a: 1,
-        why: "The drug is a FILTER, not a teacher. Resistant variants existed by chance BEFORE the drug arrived (mutation is random). The antibiotic simply removed everyone else, so the survivors' descendants dominate." },
-      form: { q: "Where does the resistance physically come from?", o: ["The bacteria will it into being", "A pre-existing mutation — e.g. a pump that ejects the drug, or an enzyme that breaks it", "The patient's immune system", "The antibiotic mutating"], a: 1,
-        why: "Resistance is a molecular structure: an efflux pump, a drug-degrading enzyme, or an altered target the drug can't grip. These arise by random mutation and, once selected, spread — even hopping between bacteria on plasmids." },
+        why: "The evidence in this case identifies resistance before treatment. The drug suppresses susceptible bacteria more strongly, giving resistant survivors a reproductive advantage. Selection changes variant frequencies; it does not teach cells the mutation they need." },
+      form: { q: "Where does the resistance physically come from?", o: ["The bacteria will it into being", "A genetic variant — such as an altered drug target, increased efflux, or a drug-degrading enzyme", "The patient's immune system", "The antibiotic mutating"], a: 1,
+        why: "Inherited molecular differences can reduce a drug's effect. Resistance variants can arise through mutation or be acquired by gene transfer, then spread through reproduction and further transfer." },
       strategy: { q: "How should you reason about the population over time?", o: [
         { t: "Track how ALLELE FREQUENCIES shift under selection, generation by generation", ok: true },
-        { t: "Think about what one bacterium does when it meets the drug", ok: false, why: "Evolution acts on POPULATIONS across generations, not on an individual in the moment. The single-bacterium view is the classic Lamarckian trap." },
-        { t: "Assume the drug caused the mutations it selects for", ok: false, why: "Mutations are random and pre-exist selection (Luria–Delbrück, 1943). The drug selects; it does not create." },
+        { t: "Explain the frequency shift only from one bacterium's immediate response", ok: false, why: "A cellular response can matter, but this question concerns inherited variants across the population. Track differential survival and reproduction rather than attributing the whole frequency change to one cell." },
+        { t: "Assume the drug intentionally generates the precise mutation needed", ok: false, why: "Mutations are not directed toward a future need. Stress can affect mutation rates, and new variants can arise during treatment; neither fact means the drug specifies a useful mutation. Here the variant was already present." },
       ] },
       reason: [
-        "A huge bacterial population carries random genetic variation — including, by chance, a few cells with a resistance mutation.",
-        "The antibiotic kills the susceptible majority but the resistant few survive (differential survival).",
-        "Those survivors reproduce — bacteria divide every ~20 minutes — passing resistance on (heredity).",
+        "The initial population contains inherited variation, including the rare resistant variant detected before treatment.",
+        "The antibiotic kills or inhibits susceptible bacteria more strongly, favoring resistant survivors.",
+        "Survivors reproduce and transmit resistance. Division time varies with the species and growth conditions.",
         "Within the population, the frequency of the resistance allele climbs from rare to common.",
-        "Months later the infection is dominated by descendants of the resistant survivors — the drug now barely works.",
+        "In this case, resistant descendants become common in the returning infection, reducing the drug's effectiveness.",
         "No individual 'learned' anything; the population's composition changed. That is evolution by natural selection.",
       ],
       reflect: {
-        misconception: "Bacteria don't 'learn' or 'try' to resist, and the antibiotic doesn't 'teach' them. Resistance is selected FROM pre-existing random variation, not induced by the drug.",
+        misconception: "Selection favors inherited variants; it does not teach bacteria the sequence they need. Do not infer that all resistance must predate treatment: mutation and gene transfer can also supply variants while selection is occurring.",
         alternative: "Resistance genes also spread horizontally via plasmids passed between bacteria — so selection AND gene transfer both matter. Real evolution is messier than one clean mechanism.",
         principle: "GENERAL PRINCIPLE: variation + heredity + differential reproduction = evolution by natural selection. Selection edits existing variation; it does not create it on demand.",
       },
@@ -87,36 +87,36 @@
     {
       id: "glucose", domain: "Human Physiology", color: "#34d399",
       title: "The sugar that came back down",
-      prompt: "You eat a large plate of rice. Your blood-glucose concentration spikes within the hour — then, over the next two hours, drifts back to exactly where it started, without you doing anything. Trace the regulation that pulled it back.",
+      prompt: "After a carbohydrate-rich meal, a person's blood-glucose concentration rises and later moves back toward its usual range. The size and timing of the change vary between meals and people. Trace the regulation that can bring the concentration back down.",
       principles: { hint: "Which principles govern this?",
         options: [
-          { t: "Homeostasis — blood glucose is held near a set point", ok: true },
+          { t: "Homeostasis — blood glucose is regulated within a physiological range", ok: true },
           { t: "Negative feedback via hormones", ok: true },
           { t: "Antagonistic control (two opposing hormones)", ok: true },
           { t: "Diffusion alone brings glucose back to normal", ok: false },
-          { t: "The pancreas predicts meals in advance", ok: false },
+          { t: "Insulin must remain at the same level before and after every meal", ok: false },
         ] },
       regulated: { q: "What variable is being defended?", o: ["The amount of insulin", "Blood-glucose concentration", "The size of the meal", "Stomach acidity"], a: 1,
-        why: "The regulated variable is BLOOD-GLUCOSE CONCENTRATION (~5 mmol/L). Insulin is just the effector signal used to defend it — don't confuse the lever with the thing being held steady." },
+        why: "The regulated variable is BLOOD-GLUCOSE CONCENTRATION, not insulin itself. Glucose normally fluctuates with feeding and other conditions; regulation does not promise an exact return value or a universal two-hour timetable." },
       form: { q: "Which cells sense and respond?", o: ["Liver cells sense glucose and make insulin", "β-cells in the pancreas sense high glucose and secrete insulin, which tells liver & muscle to take glucose up and store it as glycogen", "Red blood cells absorb the excess", "The brain burns it off"], a: 1,
-        why: "Pancreatic β-cells are the glucose SENSOR and insulin SOURCE. Insulin's targets have the structure to pull glucose out of the blood — muscle and fat push GLUT4 transporters into the membrane so uptake itself rises, while the liver (whose GLUT2 is open either way) responds by switching on glucokinase and glycogen synthase, trapping glucose as glycogen. Sensor, signal, effector again." },
+        why: "Pancreatic β-cells secrete insulin in response to glucose and other signals. Insulin increases GLUT4-mediated uptake in muscle and fat, favors glycogen storage and suppresses liver glucose output. Liver glucose entry uses GLUT2 and is not switched on by moving GLUT4 to the membrane." },
       strategy: { q: "Best reasoning approach?", o: [
-        { t: "Follow the negative-feedback loop: high glucose → insulin → uptake → glucose falls → insulin stops", ok: true },
-        { t: "Assume glucose just gets 'used up' by activity", ok: false, why: "At rest, with no exercise, the fall is driven by regulated STORAGE (glycogenesis), not by burning it off. Consumption alone can't explain the precise return to set point." },
-        { t: "Think of insulin as always-on", ok: false, why: "Insulin is released in PROPORTION to glucose and switches off as glucose normalises — that's what stops the correction from overshooting." },
+        { t: "Trace rising glucose → increased insulin → uptake, storage and reduced liver output → glucose falls → insulin secretion declines", ok: true },
+        { t: "Assume unregulated glucose use alone explains the change", ok: false, why: "Cells use glucose even at rest, but regulated uptake, storage and liver glucose production also shape its blood concentration. Trace those controls rather than assuming use alone explains the curve." },
+        { t: "Assume insulin secretion is constant regardless of glucose", ok: false, why: "Insulin secretion changes with glucose, nutrients, gut hormones and neural signals. Basal secretion remains between meals; a declining meal response is not a complete shutoff." },
       ] },
       reason: [
-        "Rice is digested to glucose, which floods into the blood — glucose rises above the set point (the stimulus).",
-        "Pancreatic β-cells sense the rise and secrete insulin in proportion (sensor + signal).",
-        "Insulin tells liver and muscle to take glucose up and store it as glycogen (effector response).",
-        "Blood glucose falls back toward the set point; as it does, insulin secretion winds down.",
-        "This is negative feedback — the response removes the stimulus and then quiets itself.",
-        "If glucose later drops too low, the antagonistic hormone glucagon does the reverse — releasing stored glucose. Two opposing loops hold the line.",
+        "Digestion and absorption deliver meal-derived glucose to the blood, raising its concentration.",
+        "Pancreatic β-cells respond with increased insulin secretion, shaped also by gut hormones and other signals.",
+        "Insulin promotes glucose uptake and storage in appropriate tissues and reduces liver glucose production.",
+        "As blood glucose falls toward its usual range, the glucose-driven insulin response decreases; basal secretion can continue.",
+        "This is negative feedback: the response reduces the change that stimulated it, rather than enforcing a perfectly fixed value.",
+        "When glucose is low, glucagon and other counter-regulatory responses support liver glucose release and production.",
       ],
       reflect: {
-        misconception: "Diffusion doesn't 'even out' blood glucose back to a set point — an active, hormone-driven feedback loop does. And the pancreas reacts to glucose; it doesn't predict your meal.",
-        alternative: "Regulation is antagonistic: insulin lowers glucose, glucagon raises it. Many homeostatic variables (glucose, calcium, temperature) are held by such push-pull pairs, not a single hormone.",
-        principle: "GENERAL PRINCIPLE: tight homeostasis usually comes from ANTAGONISTIC negative-feedback loops — one to correct each direction of drift. Find both, and the steadiness makes sense.",
+        misconception: "Passive diffusion alone does not regulate blood glucose. Hormonal control changes uptake, storage and production. Neural and gut signals can contribute around meals, so insulin release is not driven by blood glucose alone.",
+        alternative: "Insulin and glucagon have important opposing effects, but glucose regulation includes other hormones, neural signals and ongoing fuel use. A two-hormone diagram is a useful first model, not the whole system.",
+        principle: "GENERAL PRINCIPLE: distinguish the regulated variable from its controls, then trace feedback and opposing responses. A stable range can emerge from several interacting processes.",
       },
     },
   ];
@@ -160,10 +160,10 @@
 
   function renderList() {
     app.innerHTML = "";
-    const head = el("div", "wrap band", `
+    const head = el("div", "wrap band rz-listhead", `
       <div class="eyebrow">Think like a biologist</div>
-      <h1 class="h1" style="margin:16px 0 16px">Don't memorise answers.<br><span class="grad">Build the reasoning.</span></h1>
-      <p class="lead" style="max-width:640px">Each workout walks you through how a biologist actually thinks — name the principles, find what's regulated, follow the structure to the function, choose a strategy, then reason it out and generalise.</p>`);
+      <h1 class="h1" style="margin:12px 0">Start with a question.</h1>
+      <p class="lead" style="max-width:640px">Three guided cases. Preview the evidence, then build your explanation.</p>`);
     app.appendChild(head);
     const wrap = el("div", "wrap rz-catalog");
     const tools = el("div", "rz-find");
@@ -188,7 +188,7 @@
         const details = WORKOUT_DETAILS[p.id];
         const c = el("a", "card rz-workout"); c.href = "#" + p.id; c.style.setProperty("--lc", p.color);
         c.innerHTML = `<div class="glow"></div><div class="rz-dom" style="color:${p.color}">${p.domain}</div>
-          <h2 class="h3" style="margin:6px 0 10px">${p.title}</h2><p>${p.prompt.slice(0, 120)}…</p>
+          <h2 class="h3" style="margin-block:6px 10px">${p.title}</h2><p>${p.prompt.slice(0, 120)}…</p>
           <div class="rz-skills" aria-label="Reasoning skills">${details.skills.map((skill) => `<span>${skill}</span>`).join("")}</div>
           <p class="rz-outcome"><strong>Work towards</strong>${details.outcome}</p>
           <div class="rz-go" style="color:${p.color}">Reason it through <span aria-hidden="true">→</span></div>`;

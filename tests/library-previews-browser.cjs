@@ -1,0 +1,94 @@
+/* Static previews must show the real model without running its simulation. */
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const {createRequire}=require('node:module');
+const root=path.resolve(__dirname,'..');
+const moduleRoot=process.env.BIOLOGY_PLAYWRIGHT_MODULES||'C:/Users/darsh/biology-entelloq/node_modules';
+const {chromium}=createRequire(path.join(moduleRoot,'library-previews.cjs'))('playwright');
+const base=process.env.BIOLOGY_PREVIEW_URL||'http://127.0.0.1:3014';
+const output=path.join(root,'docs','visual-previews');
+fs.mkdirSync(output,{recursive:true});
+const report={completed:false,checks:[],screenshots:[]};
+(async()=>{
+  const browser=await chromium.launch({headless:true});
+  try{
+    const page=await browser.newPage({viewport:{width:1440,height:1000},reducedMotion:'reduce'});
+    const errors=[];page.on('pageerror',error=>errors.push(error.message));
+    await page.goto(base+'/learn.html',{waitUntil:'domcontentloaded'});
+    await page.locator('.bl-preview svg').first().waitFor();
+    const starting=await page.locator('.bl-topicrow').count();
+    assert(starting>=18&&starting<73,'Starting points remain a manageable subset.');
+    assert.equal(await page.locator('.bl-preview svg').count(),starting);
+    const API=await page.evaluate(()=>{
+      let calls=0;const oldInterval=window.setInterval,oldFrame=window.requestAnimationFrame;
+      window.setInterval=(...args)=>{calls++;return oldInterval(...args);};
+      window.requestAnimationFrame=(...args)=>{calls++;return oldFrame(...args);};
+      const renderings=window.BIO_LIBRARY.topics.map(topic=>window.BioLibraryVisuals.preview(topic,{idPrefix:'test-'+topic.id}));
+      window.setInterval=oldInterval;window.requestAnimationFrame=oldFrame;
+      return {calls,count:renderings.length,allSVG:renderings.every(svg=>svg.startsWith('<svg')&&!/role="button"|tabindex=/.test(svg)),distinct:new Set(renderings).size};
+    });
+    assert.equal(API.calls,0);assert.equal(API.count,73);assert.equal(API.allSVG,true);assert.equal(API.distinct,73);
+    report.checks.push('All 73 concepts export static snapshots from the actual lesson renderer; no timers, animation frames, or nested controls start.');
+    await page.screenshot({path:path.join(output,'learn-preview-catalog-desktop.png'),fullPage:false});
+    report.screenshots.push('learn-preview-catalog-desktop.png');
+    await page.locator('[data-scope="all"]').click();
+    assert.equal(await page.locator('.bl-preview svg').count(),73);
+    assert.equal(await page.locator('.bl-topicrow').count(),73);
+    const duplicateIds=await page.locator('#bioLibrary').evaluate(root=>{const ids=[...root.querySelectorAll('[id]')].map(el=>el.id);return ids.filter((id,i)=>ids.indexOf(id)!==i);});
+    assert.deepEqual(duplicateIds,[],'Each SVG marker and card has a unique id.');
+    assert.equal(await page.locator('.bl-roadmap').count(),0,'Unwritten roadmap topics are kept out of learner browsing.');
+    assert.equal(await page.locator('.bl-preview :is(button,iframe,canvas)').count(),0);
+    await page.locator('[data-category="cell-biology"]').click();
+    assert(await page.locator('[data-preview-topic="nucleolus"] .bl-preview svg').count()>0);
+    await page.locator('#bl-clear').click();
+    await page.locator('#bl-search').fill('mitocondria');
+    assert(await page.locator('[data-preview-topic="mitochondria"] .bl-preview svg').count()>0);
+    await page.locator('#bl-search').fill('cell powerhouse');
+    assert(await page.locator('[data-preview-topic="mitochondria"] .bl-preview svg').count()>0);
+    await page.locator('#bl-clear').click();
+    await page.locator('#bl-search').fill('bacteria');
+    const bacteriaText=await page.locator('[data-preview-topic="bacteria"] .bl-preview').innerText();
+    assert(bacteriaText.includes('Nucleoid'));
+    assert(!bacteriaText.includes('Mitochondrion'));
+    report.checks.push('Scope, category and fuzzy/alias search results expose visible previews; unwritten roadmap topics stay out of browsing.');
+    await page.goto(base+'/learn.html#topic/photosynthesis/visual',{waitUntil:'domcontentloaded'});
+    await page.locator('.bl-mapbranch .bl-map-preview svg').first().waitFor();
+    const relatedCount=await page.locator('.bl-mapbranch a').count();
+    assert(relatedCount>0);assert.equal(await page.locator('.bl-mapbranch .bl-map-preview svg').count(),relatedCount);
+    assert.equal(await page.locator('.bl-modes [role=tab]').count(),6);
+    await page.locator('[data-mode="advanced"]').click();
+    await page.waitForFunction(()=>document.querySelector('[data-mode="advanced"]')?.getAttribute('aria-selected')==='true');
+    assert((await page.locator('.bl-prose').textContent()).includes('RuBisCO'));
+    await page.locator('.bl-mapbranch a').first().click();
+    await page.waitForFunction(()=>!location.hash.includes('/photosynthesis/'));
+    assert(await page.locator('.bl-diagram svg').count()>0);
+    await page.goBack();
+    await page.locator('.bl-mapbranch a').first().waitFor();
+    await page.screenshot({path:path.join(output,'learn-preview-topic-desktop.png'),fullPage:false});
+    report.screenshots.push('learn-preview-topic-desktop.png');
+    report.checks.push('Related and prerequisite links show their model before opening; six explanation modes and topic history still work.');
+    for(const width of [320,390,768,1440]){
+      await page.setViewportSize({width,height:950});
+      await page.goto(base+'/learn.html#library',{waitUntil:'domcontentloaded'});
+      await page.locator('.bl-preview svg').first().waitFor();
+      assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),width+' catalog has no horizontal overflow');
+      const preview=page.locator('.bl-preview').first();
+      assert(await preview.isVisible());
+      assert(await preview.evaluate(el=>getComputedStyle(el).opacity==='1'),'Preview does not require hover.');
+      await page.locator('.bl-topiclink').first().focus();
+      assert(await preview.isVisible(),'Preview remains visible on keyboard focus.');
+      if(width===390){await page.screenshot({path:path.join(output,'learn-preview-catalog-mobile.png'),fullPage:false});report.screenshots.push('learn-preview-catalog-mobile.png');}
+    }
+    const touch=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,isMobile:true,reducedMotion:'reduce'});
+    const touchPage=await touch.newPage();await touchPage.goto(base+'/learn.html');
+    await touchPage.locator('.bl-preview svg').first().waitFor();
+    assert(await touchPage.locator('.bl-preview').first().isVisible());
+    await touchPage.locator('.bl-topiclink').first().tap();
+    await touchPage.locator('.bl-diagram').waitFor();
+    await touch.close();
+    report.checks.push('Previews are visible without hover on touch and keyboard, with no page overflow from 320 to 1440 pixels.');
+    assert.deepEqual(errors,[]);report.completed=true;
+  }finally{await browser.close();fs.writeFileSync(path.join(output,'learn-preview-report.json'),JSON.stringify(report,null,2)+'\n');}
+  console.log(JSON.stringify(report,null,2));
+})().catch(error=>{console.error(error);process.exitCode=1;});

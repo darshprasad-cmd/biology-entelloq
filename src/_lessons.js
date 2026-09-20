@@ -324,8 +324,8 @@
     app.innerHTML = "";
     const head = el("div", "wrap band les-listhead reveal", `
       <div class="eyebrow">The 6-Lens lessons</div>
-      <h1 class="h1" style="margin:16px 0 16px">See every concept from<br><span class="grad">story to frontier.</span></h1>
-      <p class="lead" style="max-width:640px">Every idea, through six lenses — felt, tested, drawn, quantified, pushed to the research edge, and grounded in your life. Pick one and step in.</p>`);
+      <h1 class="h1" style="margin:12px 0">An idea, from six angles.</h1>
+      <p class="lead" style="max-width:640px">Preview a model. Explore its story, predictions, mechanisms and uses.</p>`);
     app.appendChild(head);
     const grid = el("div", "wrap");
     const filters = el("section", "les-filters");
@@ -351,7 +351,7 @@
       card.style.setProperty("--lc", l.color);
       card.innerHTML = `<div class="glow"></div>
         <div class="les-dom" style="color:${l.color}">${l.domain} · ${l.diff}</div>
-        <h3 class="h3" style="margin:6px 0 10px">${l.title}</h3>
+        <h3 class="h3" style="margin-block:6px 10px">${l.title}</h3>
         <p>${l.intuition}</p>
         <div class="les-lensrow" aria-label="Six lenses: Experience, Predict, Visual, Math, Frontier, Real World">${LENSES.map((x) => `<span class="les-lensdot" aria-hidden="true" style="--dc:${x.c}" title="${x.n}">${x.g}</span>`).join("")}</div>
         <span class="les-cardroute">Explore the concept <span aria-hidden="true">→</span></span>`;

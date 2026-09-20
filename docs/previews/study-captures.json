@@ -1,0 +1,150 @@
+{
+  "capturedFrom": "http://127.0.0.1:3014",
+  "manifest": [
+    {
+      "key": "lesson-diffusion",
+      "src": "assets/previews/lesson-diffusion.webp",
+      "width": 960,
+      "height": 477,
+      "bytes": 18456,
+      "route": "lessons.html#diffusion",
+      "selector": "#lensStage canvas",
+      "kind": "Actual Experience-lens model",
+      "state": "Default model conditions",
+      "alt": "Diffusion & Osmosis"
+    },
+    {
+      "key": "lesson-enzyme",
+      "src": "assets/previews/lesson-enzyme.webp",
+      "width": 960,
+      "height": 477,
+      "bytes": 3628,
+      "route": "lessons.html#enzyme",
+      "selector": "#lensStage canvas",
+      "kind": "Actual Experience-lens model",
+      "state": "Default model conditions",
+      "alt": "Enzyme Action"
+    },
+    {
+      "key": "lesson-population",
+      "src": "assets/previews/lesson-population.webp",
+      "width": 960,
+      "height": 477,
+      "bytes": 7198,
+      "route": "lessons.html#population",
+      "selector": "#lensStage canvas",
+      "kind": "Actual Experience-lens model",
+      "state": "Default model conditions",
+      "alt": "Population Growth"
+    },
+    {
+      "key": "lesson-photosynthesis",
+      "src": "assets/previews/lesson-photosynthesis.webp",
+      "width": 960,
+      "height": 477,
+      "bytes": 6326,
+      "route": "lessons.html#photosynthesis",
+      "selector": "#lensStage canvas",
+      "kind": "Actual Experience-lens model",
+      "state": "Default model conditions",
+      "alt": "Photosynthesis"
+    },
+    {
+      "key": "lesson-respiration",
+      "src": "assets/previews/lesson-respiration.webp",
+      "width": 960,
+      "height": 441,
+      "bytes": 11750,
+      "route": "lessons.html#respiration",
+      "selector": "#lensStage canvas",
+      "kind": "Actual Experience-lens model",
+      "state": "Default model conditions",
+      "alt": "Cellular Respiration"
+    },
+    {
+      "key": "lesson-replication",
+      "src": "assets/previews/lesson-replication.webp",
+      "width": 960,
+      "height": 477,
+      "bytes": 14970,
+      "route": "lessons.html#replication",
+      "selector": "#lensStage canvas",
+      "kind": "Actual Experience-lens model",
+      "state": "Fork speed 100%, copying in progress",
+      "alt": "DNA Replication"
+    },
+    {
+      "key": "lesson-selection",
+      "src": "assets/previews/lesson-selection.webp",
+      "width": 960,
+      "height": 477,
+      "bytes": 9058,
+      "route": "lessons.html#selection",
+      "selector": "#lensStage canvas",
+      "kind": "Actual Experience-lens model",
+      "state": "Default model conditions",
+      "alt": "Natural Selection"
+    },
+    {
+      "key": "lesson-actionpotential",
+      "src": "assets/previews/lesson-actionpotential.webp",
+      "width": 960,
+      "height": 477,
+      "bytes": 9380,
+      "route": "lessons.html#actionpotential",
+      "selector": "#lensStage canvas",
+      "kind": "Actual Experience-lens model",
+      "state": "Above-threshold stimulus applied",
+      "alt": "The Action Potential"
+    },
+    {
+      "key": "lesson-cardiac",
+      "src": "assets/previews/lesson-cardiac.webp",
+      "width": 960,
+      "height": 477,
+      "bytes": 13910,
+      "route": "lessons.html#cardiac",
+      "selector": "#lensStage canvas",
+      "kind": "Actual Experience-lens model",
+      "state": "Default model conditions",
+      "alt": "The Cardiac Cycle"
+    },
+    {
+      "key": "reason-altitude",
+      "src": "assets/previews/reason-altitude.webp",
+      "width": 960,
+      "height": 648,
+      "bytes": 32804,
+      "route": "reason.html#altitude",
+      "selector": "#rzSteps section.rz-step:last-of-type",
+      "kind": "Actual principle-selection stage",
+      "state": "First reasoning step, no answers selected or revealed",
+      "alt": "The mountaineer's blood"
+    },
+    {
+      "key": "reason-resistance",
+      "src": "assets/previews/reason-resistance.webp",
+      "width": 960,
+      "height": 648,
+      "bytes": 29664,
+      "route": "reason.html#resistance",
+      "selector": "#rzSteps section.rz-step:last-of-type",
+      "kind": "Actual principle-selection stage",
+      "state": "First reasoning step, no answers selected or revealed",
+      "alt": "The antibiotic that stopped working"
+    },
+    {
+      "key": "reason-glucose",
+      "src": "assets/previews/reason-glucose.webp",
+      "width": 960,
+      "height": 648,
+      "bytes": 27626,
+      "route": "reason.html#glucose",
+      "selector": "#rzSteps section.rz-step:last-of-type",
+      "kind": "Actual principle-selection stage",
+      "state": "First reasoning step, no answers selected or revealed",
+      "alt": "The sugar that came back down"
+    }
+  ],
+  "errors": []
+}

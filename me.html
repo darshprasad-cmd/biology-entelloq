@@ -356,10 +356,10 @@ html:root,html body{background:var(--bg)!important;color:var(--ink)}
 html body{font:16px/1.65 var(--sans);letter-spacing:0}
 body>#fx,body>#atmo,body>.bg-veil{display:none!important}
 body main{padding-top:112px;padding-bottom:60px;min-width:0}
-html body.embed main{padding-top:42px!important;padding-bottom:65px}
+html body.embed main{padding-top:28px!important;padding-bottom:65px}
 body main .wrap{width:100%;max-width:var(--maxw);padding-inline:var(--edge);margin-inline:auto;min-width:0}
 body main .wrap .wrap{padding-inline:0}
-body main .band{padding-block:36px}
+body main .band{padding-block:26px}
 body main>:is(.band,.lrn-hero,.sv-hero,.ex-hero,.me-hero):first-child,
 body main>:is(#lessonApp,#reasonApp,#labsApp)>:first-child,
 body main>.page>.band:first-child{padding-top:0}
@@ -479,6 +479,82 @@ body:not(.embed) header .btn.primary{background:var(--cy);color:var(--bg);border
 }
 </style>
 <!-- PHYSICS-PILLAR-LAYOUT:END -->
+<!-- BIO-PREVIEWS:css:START -->
+<style>
+/* Preview surfaces retain the colours of the real models in either app theme. */
+.bp-media{display:block;position:relative;aspect-ratio:16/10;overflow:hidden;background:var(--bg-2,var(--panel));border-bottom:1px solid var(--line);isolation:isolate}
+.bp-media img{display:block;width:100%;height:100%;object-fit:cover;transition:transform 180ms ease-out}
+.bp-media>svg{display:block;width:100%;height:100%;pointer-events:none}
+.bp-unavailable{display:grid;place-items:center;color:var(--dim);font:12px var(--sans,system-ui)}
+body main .bp-card{padding:0;overflow:hidden;min-width:0}
+body main .bp-card>:not(.bp-media){margin-inline:18px}
+body main .bp-card>.bp-media{margin:0 0 17px}
+body main .bp-card>:last-child{margin-bottom:18px}
+body main .bp-card>p:not(.rz-outcome){display:none}
+body main .bp-card :is(.les-dom,.rz-dom){font:10px/1.5 var(--mono);letter-spacing:.2px}
+body main .bp-card :is(h2,h3){font:450 20px/1.3 var(--display);letter-spacing:-.45px}
+body main .bp-card .glow,body main .bp-card>.ico{display:none}
+body main .bp-card .les-lensrow{gap:5px;margin-top:12px;margin-bottom:12px}
+body main .bp-card .les-cardroute,body main .bp-card .rz-go{font-size:12px}
+body main .bp-card .rz-outcome{display:none}
+body main .bp-card .rz-skills{margin-bottom:12px}
+body main .bp-card[hidden]{display:none!important}
+body main .cc-node.bp-card{padding:0 0 14px}
+body main .cc-node.bp-card>.bp-media{height:auto;aspect-ratio:16/10;border-radius:0;margin:0 0 12px}
+body main .cc-node.bp-card>:not(.bp-media){margin-inline:12px}
+body main .cc-node.bp-card>:last-child{margin-bottom:0}
+body main .cc-promo.bp-card{display:grid;grid-template-columns:180px minmax(0,1fr) 30px;padding:0;border:1px solid var(--line);border-radius:8px;background:var(--panel);gap:20px}
+body main .cc-promo.bp-card>.bp-media{width:180px;height:150px;margin:0;aspect-ratio:auto}
+body main .cc-promo.bp-card>span[aria-hidden]:not(.bp-media){display:none}
+body main .cc-promo.bp-card>:not(.bp-media){margin:0}
+body main .cc-promo.bp-card p{display:none}
+#learningPaths .bp-card{padding:0;overflow:hidden;text-align:left}
+#learningPaths .bp-card>:not(.bp-media){margin-inline:15px}#learningPaths .bp-card>.bp-media{margin-bottom:13px}
+#learningPaths .bp-card .ic,#learningPaths .bp-card p{display:none}#learningPaths .bp-card h3{margin-bottom:16px;font-size:17px}
+.bp-nav-preview{position:fixed;z-index:1000;width:272px;padding:7px;background:var(--panel);border:1px solid var(--hair);border-radius:10px;box-shadow:0 16px 45px #0005;pointer-events:none}
+.bp-nav-preview[hidden]{display:none}.bp-nav-preview .bp-media{border-radius:6px;aspect-ratio:16/10}.bp-nav-preview strong{display:block;padding:10px 7px 6px;font:500 13px/1.4 var(--sans);color:var(--ink)}
+.topbar #bio-background-toggle{position:static;flex:none;width:36px;min-height:36px;padding:7px;font-size:0}
+.topbar #bio-background-toggle::after{content:'Ⅱ';font:13px var(--sans)}
+.topbar #bio-background-toggle[aria-pressed=true]::after{content:'▷'}
+body:has(#bioq-ai)>#bio-background-toggle{bottom:76px}
+@media(hover:hover) and (pointer:fine){.bp-card:hover>.bp-media img{transform:scale(1.025)}}
+@media(prefers-reduced-motion:reduce){.bp-media img{transition:none}.bp-card:hover>.bp-media img{transform:none}}
+@media(max-width:600px){body main .bp-card>:not(.bp-media){margin-inline:16px}body main .bp-card>:last-child{margin-bottom:16px}.bp-nav-preview{display:none!important}}
+/* Compact first screens keep models close to their headings and filters. */
+body main :is(.les-listhead,.rz-listhead,.sv-hero){padding-block:12px 24px}
+body main :is(.les-listhead,.rz-listhead,.sv-hero) h1{font-size:clamp(29px,3.4vw,42px);margin:9px 0 12px!important}
+body main :is(.les-listhead,.rz-listhead,.sv-hero) .lead{font-size:14px;line-height:1.65;margin:0;max-width:60ch}
+body main .les-filters{padding:16px;margin-bottom:22px}
+body main .les-clear:disabled{display:none}
+body main .sv-hero .sv-stats{margin-top:22px;gap:9px}
+body main .sv-hero .sv-stat{padding:12px 15px}
+body main .sv-hero .sv-stat b{font-size:22px}
+body main .sv-hero .sv-stat span{font-size:9px}
+.sv-opt.bp-choice{display:flex;align-items:center;gap:10px;padding:7px;overflow:hidden;text-align:left}
+.sv-opt.bp-choice>.bp-media{width:65px;height:52px;flex:none;border:0;border-radius:3px;aspect-ratio:auto}
+.sv-opt.bp-choice>.oi{display:none}
+.sv-opt.bp-choice>span:not(.bp-media){min-width:0;font-size:12px;line-height:1.4}
+.sv-opt.bp-choice .osub{font-size:10px;margin-top:3px}
+@media(max-width:600px){
+ body main .les-filterfields{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+ body main .les-filterfields .les-search{grid-column:1/-1}
+ body main .les-filters{padding:14px}
+ body main .les-filtermeta{margin-top:10px;gap:0}
+ body main .les-filtermeta>span{display:none}
+ body main :is(.les-listhead,.rz-listhead,.sv-hero){padding-top:0}
+ body main .sv-hero .sv-stats{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+ body main .sv-hero .sv-stat{padding:10px 7px;min-width:0}
+ body main .sv-hero .sv-stat b{font-size:19px}
+ body main .sv-hero .sv-stat span{font-size:8px;line-height:1.5}
+ body main .sv-topics{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .sv-opt.bp-choice{flex-direction:column;align-items:stretch;padding:5px 5px 10px}
+ .sv-opt.bp-choice>.bp-media{width:100%;height:65px}
+ .sv-opt.bp-choice>span:not(.bp-media){padding-inline:5px}
+ body main .cc-promo.bp-card{grid-template-columns:85px minmax(0,1fr) 20px;gap:12px}
+ body main .cc-promo.bp-card>.bp-media{width:85px;height:130px}
+}
+</style>
+<!-- BIO-PREVIEWS:css:END -->
 </head>
 
 <body data-page="me">
@@ -1473,5 +1549,83 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
 </script>
 
 <!-- ENTELLOQ-ECOSYSTEM-SWITCHER:END -->
+<!-- BIO-PREVIEWS:js:START -->
+<script>
+/* Real view captures for browsing. Previews never start an experiment. */
+(function(){
+  'use strict';
+  const sections=['home','learn','lessons','reason','labs','solve','explore','me','about','lab','universe'];
+  const lessons=['diffusion','enzyme','population','photosynthesis','respiration','replication','selection','actionpotential','cardiac'];
+  const workouts=['altitude','resistance','glucose'];
+  const legacy={cell:'legacy-cell',microscope:'legacy-microscope'};
+  function routeKey(k,sub){
+    const concept=/^(?:topic|learn)\/([-a-z0-9]+)\//.exec(sub||'');
+    if(['learn','reason','solve'].includes(k)&&concept&&window.BIO_LIBRARY?.topics.some(t=>t.id===concept[1]))return 'topic-'+concept[1];
+    if(k==='learn'&&legacy[sub])return legacy[sub];
+    if(k==='explore'&&['tree','atlas','timeline','graph','diseases'].includes(sub))return 'explore-'+sub;
+    if(k==='lessons'&&lessons.includes(sub))return 'lesson-'+sub;
+    if(k==='reason'&&workouts.includes(sub))return 'reason-'+sub;
+    if(k==='labs'&&/^[a-z0-9-]+$/.test(sub||''))return 'lab-'+sub;
+    return sections.includes(k)?'section-'+k:null;
+  }
+  function media(key){
+    const figure=document.createElement('span');figure.className='bp-media';figure.setAttribute('aria-hidden','true');
+    if(key.startsWith('topic-')&&window.BioLibraryVisuals){const topic=window.BIO_LIBRARY?.topics.find(t=>t.id===key.slice(6));if(topic){figure.innerHTML=window.BioLibraryVisuals.preview(topic,{topics:window.BIO_LIBRARY.topics,idPrefix:'bp-concept-'+(++media.serial)});return figure;}}
+    const image=document.createElement('img');image.src='./assets/previews/'+key+'.webp';image.alt='';image.width=640;image.height=400;image.loading='lazy';image.decoding='async';
+    image.addEventListener('error',()=>{figure.classList.add('bp-unavailable');image.remove();figure.textContent='Preview unavailable';},{once:true});
+    figure.append(image);return figure;
+  }
+  media.serial=0;
+  function attach(card,key){
+    if(!key||card.dataset.previewMounted)return;
+    card.dataset.previewMounted=key;card.classList.add('bp-card');card.prepend(media(key));
+  }
+  const selector='#homeIn .cc-world,#homeIn .cc-node,#homeIn .cc-promo,#learningPaths .tile,.les-card,.rz-workout,#catalog .exp,#recSlot .card,[data-preview-route],[data-bio-preview]';
+  function enhance(){
+    document.querySelectorAll(selector).forEach(card=>{
+      let key=card.dataset.bioPreview;
+      if(!key&&card.dataset.previewRoute)key=routeKey(card.dataset.previewRoute,card.dataset.previewSub);
+      if(!key&&card.dataset.go)key=routeKey(card.dataset.go,card.dataset.sub);
+      if(!key&&card.dataset.lesson)key='lesson-'+card.dataset.lesson;
+      if(!key&&card.matches('.rz-workout')){const id=card.getAttribute('href')?.slice(1);if(workouts.includes(id))key='reason-'+id;}
+      if(!key&&card.matches('#recSlot .card')){const link=card.matches('a[href]')?card:card.querySelector('a[href]');if(link){const url=new URL(link.href,location.href);key=routeKey(url.pathname.split('/').pop().replace('.html',''),url.hash.slice(1));}}
+      if(!key&&card.matches('#catalog .exp')){
+        const link=card.matches('a')?card:card.querySelector('a[href]');
+        if(link){const url=new URL(link.href,location.href);const route=url.pathname.split('/').pop().replace('.html','');key=routeKey(route,url.hash.slice(1))||legacy[url.hash.slice(1)];}
+      }
+      attach(card,key);
+    });
+    const topicImages={'Mixed':'section-learn','Cell Biology':'legacy-cell','Genetics & DNA':'lesson-replication','Human Physiology':'lab-heart-rate','Evolution':'lesson-selection','Ecology':'lesson-population','Plant Biology':'lesson-photosynthesis','Microbiology':'lab-microscope','Biotechnology':'lab-pcr'};
+    document.querySelectorAll('.sv-opt[data-group="topic"],.sv-opt[data-group="mode"]').forEach(button=>{
+      const key=button.dataset.group==='topic'?topicImages[button.dataset.val]:'solve-'+button.dataset.val;
+      if(!key||button.dataset.previewMounted)return;
+      button.dataset.previewMounted=key;button.classList.add('bp-choice');button.prepend(media(key));
+    });
+  }
+  let queued=false;
+  const observer=new MutationObserver(records=>{
+    if(queued||!records.some(r=>[...r.addedNodes].some(n=>n.nodeType===1&&!n.matches('.bp-media,.bp-media *')&&(n.matches(selector+',.sv-opt')||n.querySelector(selector+',.sv-opt')))))return;
+    queued=true;queueMicrotask(()=>{queued=false;enhance();});
+  });
+  observer.observe(document.body,{childList:true,subtree:true});enhance();
+  const tip=document.createElement('div');tip.id='bio-nav-preview';tip.className='bp-nav-preview';tip.hidden=true;tip.setAttribute('role','tooltip');document.body.append(tip);let active=null;
+  function hide(){if(active)active.removeAttribute('aria-describedby');active=null;tip.hidden=true;}
+  function show(button){
+    if(!matchMedia('(min-width:851px)').matches)return;
+    const key=routeKey(button.dataset.go,button.dataset.sub);if(!key)return;
+    hide();active=button;tip.replaceChildren(media(key));const label=document.createElement('strong');label.textContent=button.textContent.trim();tip.append(label);tip.hidden=false;
+    const rect=button.getBoundingClientRect();tip.style.left=Math.min(innerWidth-292,rect.right+14)+'px';tip.style.top=Math.max(12,Math.min(innerHeight-230,rect.top-15))+'px';button.setAttribute('aria-describedby',tip.id);
+  }
+  document.querySelectorAll('.side [data-go]').forEach(button=>{
+    button.addEventListener('pointerenter',e=>{if(e.pointerType!=='touch')show(button);});button.addEventListener('pointerleave',hide);button.addEventListener('focus',()=>show(button));button.addEventListener('blur',hide);button.addEventListener('click',hide);
+  });
+  addEventListener('keydown',event=>{if(event.key==='Escape')hide();});addEventListener('resize',hide);
+  window.BioPreviews={refresh:enhance,routeKey};
+  // Keep persistent display controls in the app bar, clear of lesson content.
+  const appbar=document.querySelector('.topbar'),motion=document.getElementById('bio-background-toggle');
+  if(appbar&&motion)appbar.append(motion);
+})();
+</script>
+<!-- BIO-PREVIEWS:js:END -->
 </body>
 </html>

@@ -10,7 +10,7 @@
   const categoryById = new Map(categories.map(c => [c.id, c]));
   const modes = [
     { id:'layman', name:'Layman', glyph:'A', color:'var(--em)', question:'What is the simplest way to understand this?', title:'Start with the idea.' },
-    { id:'intuition', name:'Intuition', glyph:'B', color:'var(--sky)', question:'Why does it work this way?', title:'Build a mental model.' },
+    { id:'intuition', name:'Intuition', glyph:'B', color:'var(--sky,var(--cy))', question:'Why does it work this way?', title:'Build a mental model.' },
     { id:'visual', name:'Visual', glyph:'C', color:'var(--cy)', question:'What is happening, and where?', title:'Follow the process.' },
     { id:'scientific', name:'Scientific', glyph:'D', color:'var(--indigo)', question:'What is the biological mechanism?', title:'Inside the mechanism.' },
     { id:'advanced', name:'Advanced', glyph:'E', color:'var(--rose)', question:'What changes when we look closer?', title:'Go one level deeper.' },
@@ -37,7 +37,13 @@
       if (stored.last && byId.has(stored.last.id)) progress.last = { id:stored.last.id, mode:modes.some(m => m.id === stored.last.mode) ? stored.last.mode : 'layman' };
     }
   } catch (_) { sessionOnly = true; }
-  let query = '', selectedCategory = 'all', curriculum = 'all', visualCleanup = null, focusMode = null;
+  let query = '', selectedCategory = 'all', curriculum = 'all', scope = 'start', visualCleanup = null, focusMode = null;
+  const previewCache = new Map();
+  function preview(topic, slot='catalog') {
+    const key = slot + ':' + topic.id;
+    if (!previewCache.has(key)) previewCache.set(key, window.BioLibraryVisuals?.preview(topic,{topics,idPrefix:'bl-'+slot+'-'+topic.id}) || '');
+    return previewCache.get(key);
+  }
   const index = topics.map(topic => ({ topic, title:norm(topic.title), aliases:(topic.aliases || []).map(norm), text:norm([topic.title, topic.summary, ...(topic.aliases || []), ...(topic.keyTerms || []).map(k => k.term)].join(' ')) }));
   function persist() {
     try { localStorage.setItem(storageKey, JSON.stringify(progress)); sessionOnly = false; }
@@ -57,7 +63,7 @@
   }
   function search(value) {
     const q = norm(value);
-    if (!q) return topics.filter(t => !t.parentId).map(topic => ({topic, score:1}));
+    if (!q) return topics.filter(t => scope !== 'start' || selectedCategory !== 'all' || !t.parentId).map(topic => ({topic, score:1}));
     const words = q.split(' ');
     const hits = index.map(item => {
       let score = item.title === q ? 120 : item.aliases.includes(q) ? 110 : item.title.includes(q) ? 90 : item.aliases.some(a => a.includes(q)) ? 80 : item.text.includes(q) ? 50 : 0;
@@ -88,22 +94,19 @@
     if (curriculum === 'university') return /university|college/.test(tags);
     return /foundation/.test(tags);
   }
-  function roadmapItems() {
-    const data = library.roadmap || [];
-    return Array.isArray(data) ? data : Object.entries(data).flatMap(([category, values]) => (Array.isArray(values) ? values : []).map(value => typeof value === 'string' ? {title:value, category} : {...value, category}));
-  }
   function renderIndex() {
+    root.dataset.view = 'index';
     const explored = Object.values(progress.topics).filter(e => e.modes.length).length;
     const last = progress.last && byId.get(progress.last.id);
-    root.innerHTML = `<div class="bl-intro"><div><p class="eyebrow">Learn / The biology library</p><h1 class="bl-library-title">One concept. <span class="grad">Six ways in.</span></h1><p class="lead">Start with a simple idea. Look inside the living system. Follow it all the way down to the molecular mechanism.</p></div><div class="bl-progress"><strong>${topics.filter(t => !t.parentId).length} starting points</strong><span>${explored ? explored + ' concepts explored · ' : ''}Six perspectives on every concept.</span>${last ? `<a href="${url(last, progress.last.mode)}">Continue: ${esc(last.title)} →</a>` : '<a href="#topic/cell-structure/layman">Begin with the cell →</a>'}</div></div>
-      <form class="bl-searchbar" role="search" aria-label="Search biology concepts"><label class="bl-field"><span class="bl-label">Find a concept</span><input id="bl-search" type="search" placeholder="Try mitochondria, plant food, or a question…" value="${esc(query)}" autocomplete="off" aria-controls="bl-results"></label><label class="bl-field"><span class="bl-label">Curriculum</span><select id="bl-curriculum">${curriculumOptions.map(([id, label]) => `<option value="${id}" ${curriculum === id ? 'selected' : ''}>${label}</option>`).join('')}</select></label><button type="button" class="btn ghost bl-clear" id="bl-clear">Reset filters</button></form>
-      <p class="bl-searchhint">Search by name or by the idea: <button type="button" data-search="cell powerhouse">cell powerhouse</button> · <button type="button" data-search="plant food">plant food</button> · <button type="button" data-search="protein factory">protein factory</button></p>
+    root.innerHTML = `<div class="bl-intro"><div><p class="eyebrow">Learn / The visual library</p><h1 class="bl-library-title">One concept. <span class="grad">Six ways in.</span></h1><p class="lead">See the system. Find your starting point. Explore what makes it work.</p></div><div class="bl-progress"><strong>${topics.length} concepts</strong><span>${explored ? explored + ' explored · ' : ''}${categories.length} fields of biology.</span>${last ? `<a href="${url(last, progress.last.mode)}">Continue: ${esc(last.title)} →</a>` : '<a href="#topic/cell-structure/layman">Begin with the cell →</a>'}</div></div>
+      <form class="bl-searchbar" role="search" aria-label="Search biology concepts"><label class="bl-field"><span class="bl-label">Find a concept</span><input id="bl-search" type="search" placeholder="Search all ${topics.length} concepts…" value="${esc(query)}" autocomplete="off" aria-controls="bl-results"></label><label class="bl-field"><span class="bl-label">Curriculum</span><select id="bl-curriculum">${curriculumOptions.map(([id, label]) => `<option value="${id}" ${curriculum === id ? 'selected' : ''}>${label}</option>`).join('')}</select></label><button type="button" class="btn ghost bl-clear" id="bl-clear">Reset filters</button></form>
+      <p class="bl-searchhint">Try an idea: <button type="button" data-search="cell powerhouse">cell powerhouse</button> · <button type="button" data-search="plant food">plant food</button> · <button type="button" data-search="protein factory">protein factory</button></p>
       <div class="bl-browser"><nav class="bl-categories" aria-label="Biology units">${[{id:'all', title:'All biology'}, ...categories].map(c => `<button type="button" class="bl-category" data-category="${esc(c.id)}" aria-pressed="${selectedCategory === c.id}"><span>${esc(c.title)}</span><span>${topics.filter(t => inCategory(t,c.id)).length}</span></button>`).join('')}</nav><div class="bl-results" id="bl-results"></div></div>
       <div class="bl-legacy"><span>Keep exploring</span><a href="#cell">Interactive cell</a><a href="#microscope">Virtual microscope</a><a href="./lessons.html">Six-lens lessons</a><a href="./labs.html">Open the lab →</a></div>`;
     root.querySelector('form').addEventListener('submit', e => e.preventDefault());
     root.querySelector('#bl-search').addEventListener('input', e => { query = e.target.value; renderResults(); });
     root.querySelector('#bl-curriculum').addEventListener('change', e => { curriculum = e.target.value; renderResults(); });
-    root.querySelector('#bl-clear').addEventListener('click', () => { query = ''; curriculum = 'all'; selectedCategory = 'all'; renderIndex(); root.querySelector('#bl-search').focus(); });
+    root.querySelector('#bl-clear').addEventListener('click', () => { query = ''; curriculum = 'all'; selectedCategory = 'all'; scope = 'start'; renderIndex(); root.querySelector('#bl-search').focus(); });
     root.querySelectorAll('[data-search]').forEach(button => button.addEventListener('click', () => { query = button.dataset.search; selectedCategory = 'all'; root.querySelector('#bl-search').value = query; updateCategories(); renderResults(); root.querySelector('#bl-search').focus(); }));
     root.querySelectorAll('[data-category]').forEach(button => button.addEventListener('click', () => { selectedCategory = button.dataset.category; updateCategories(); renderResults(); }));
     renderResults();
@@ -111,14 +114,57 @@
   function updateCategories() { root.querySelectorAll('[data-category]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.category === selectedCategory))); }
   function renderResults() {
     const hits = search(query).filter(({topic}) => inCategory(topic, selectedCategory) && matchesCurriculum(topic));
-    const title = query ? 'Search the living world' : selectedCategory === 'all' ? 'Choose your starting point' : categoryTitle(selectedCategory);
-    const planned = roadmapItems().filter(item => (!selectedCategory || selectedCategory === 'all' || item.category === selectedCategory) && (!query || norm(item.title || item.name).includes(norm(query))));
-    root.querySelector('#bl-results').innerHTML = `<div class="bl-resulthead"><h2>${esc(title)}</h2><p role="status" aria-live="polite">${hits.length} ${query ? 'matching concepts' : 'complete topics'}${curriculum !== 'all' ? ' · ' + esc(curriculumOptions.find(c => c[0] === curriculum)?.[1] || '') : ''}</p></div>
-      ${hits.length ? `<div class="bl-topiclist">${hits.map(({topic, connected}) => { const sub = children(topic.id); const record = progress.topics[topic.id]; return `<article class="bl-topicrow"><a class="bl-topiclink" href="${url(topic)}"><div class="bl-overline">${esc(categoryTitle(topic.category))}${connected ? ' · connected idea' : ''}</div><h3>${esc(topic.title)} <span class="bl-arrow" aria-hidden="true">↗</span></h3><p>${esc(topic.summary)}</p><div class="bl-rowmeta"><span>6 explanation modes</span><span>${esc(topic.difficulty || 'Foundation')}</span>${record?.modes.length ? `<span class="bl-done">${record.modes.length}/6 explored</span>` : ''}</div></a>${sub.length ? `<details class="bl-sublist"><summary>${sub.length} concepts inside</summary><ul>${sub.map(t => `<li><a href="${url(t)}">${esc(t.title)}</a></li>`).join('')}</ul></details>` : ''}</article>`; }).join('')}</div>` : `<div class="bl-empty"><h3>No complete lessons match yet.</h3><p>Try a broader term, another curriculum, or reset the filters. The library includes thoroughly developed starting points, with the wider curriculum mapped below.</p></div>`}
-      ${planned.length ? `<details class="bl-roadmap"><summary>Wider curriculum map · ${planned.length} concepts to develop</summary><p>These are planned additions. Open the complete topics above for six explanations, interactive models, and quick checks.</p><ul>${planned.map(item => `<li>${esc(item.title || item.name || item)}</li>`).join('')}</ul></details>` : ''}`;
+    const title = query ? 'Matching concepts' : selectedCategory === 'all' ? (scope === 'start' ? 'Choose a starting point' : 'The complete library') : categoryTitle(selectedCategory);
+    const card = ({topic,connected}) => {
+      const sub = children(topic.id), record = progress.topics[topic.id], parent = topic.parentId && byId.get(topic.parentId);
+      const level = {foundation:'Foundation',school:'Core',university:'Advanced'}[topic.difficulty] || topic.difficulty || 'Core';
+      return `<article class="bl-topicrow" data-preview-topic="${esc(topic.id)}"><a class="bl-topiclink" href="${url(topic)}" aria-labelledby="bl-card-${esc(topic.id)}" aria-describedby="bl-card-desc-${esc(topic.id)}"><div class="bl-preview" aria-hidden="true">${preview(topic)}<span class="bl-preview-open">Explore <span aria-hidden="true">↗</span></span></div><div class="bl-cardbody"><p class="bl-overline">${esc(parent ? parent.title : categoryTitle(topic.category))}${connected ? ' · related' : ''}</p><h3 id="bl-card-${esc(topic.id)}">${esc(topic.title)}</h3><span class="bl-sr-only" id="bl-card-desc-${esc(topic.id)}">${esc(topic.summary)}</span><div class="bl-rowmeta"><span>${sub.length ? sub.length + ' concepts inside' : esc(level)}</span><span class="${record?.modes.length ? 'bl-done' : ''}">${record?.modes.length ? record.modes.length+'/6 explored' : 'Six perspectives'}</span></div></div></a></article>`;
+    };
+    const groups = !query && selectedCategory === 'all' && scope === 'all';
+    root.querySelector('#bl-results').innerHTML = `<div class="bl-resulthead"><div><h2>${esc(title)}</h2><p role="status" aria-live="polite">${hits.length} complete concepts${curriculum !== 'all' ? ' · ' + esc(curriculumOptions.find(c => c[0] === curriculum)?.[1] || '') : ''}</p></div>${selectedCategory === 'all' && !query ? `<div class="bl-scope" aria-label="Library view"><button type="button" data-scope="start" aria-pressed="${scope === 'start'}">Starting points</button><button type="button" data-scope="all" aria-pressed="${scope === 'all'}">All ${topics.length}</button></div>` : ''}</div>
+      ${hits.length ? groups ? categories.map(category => {const group = hits.filter(({topic}) => topic.category === category.id); return group.length ? `<section class="bl-topicgroup" aria-label="${esc(category.title)}"><div class="bl-grouphead"><h3>${esc(category.title)}</h3><span>${group.length} concepts</span></div><div class="bl-topiclist">${group.map(card).join('')}</div></section>` : '';}).join('') : `<div class="bl-topiclist">${hits.map(card).join('')}</div>` : `<div class="bl-empty"><h3>No concepts match these filters.</h3><p>Try a broader term, another curriculum, or reset the filters.</p></div>`}`;
+    root.querySelectorAll('[data-scope]').forEach(button => button.addEventListener('click', () => {scope=button.dataset.scope;renderResults();root.querySelector('[data-scope="'+scope+'"]')?.focus({preventScroll:true});}));
   }
-  function prose(value) { return String(value || '').split(/\n\s*\n|\n/).filter(Boolean).map(p => `<p>${esc(p)}</p>`).join(''); }
-  function links(ids, mode) { return (ids || []).filter(id => byId.has(id)).map(id => `<a href="${url(id, mode)}">${esc(byId.get(id).title)} ↗</a>`).join(''); }
+  function prose(value) {
+    // Keep the complete authored explanation, but give it a readable first layer.
+    const paragraphs = String(value || '').split(/\n\s*\n|\n/).filter(Boolean);
+    const chunks = [];
+    paragraphs.forEach(paragraph => {
+      const sentences = paragraph.match(/[^.!?]+(?:[.!?]+(?=\s+[A-Z0-9“"(]|$)|$)/g);
+      if (!sentences || sentences.join('').replace(/\s/g,'') !== paragraph.replace(/\s/g,'')) { chunks.push(paragraph); return; }
+      let current = '';
+      sentences.forEach(sentence => {
+        if (current && (current + ' ' + sentence).split(/\s+/).length > 48) { chunks.push(current); current = ''; }
+        current += (current ? ' ' : '') + sentence.trim();
+      });
+      if (current) chunks.push(current);
+    });
+    const first = chunks.shift() || '';
+    return `<p>${esc(first)}</p>${chunks.length ? `<details class="bl-explanation-depth"><summary>Unpack the explanation <span aria-hidden="true">+</span></summary><div>${chunks.map(p => `<p>${esc(p)}</p>`).join('')}</div></details>` : ''}`;
+  }
+  function practiceLinks(topic, mode) {
+    const context = '/learn/' + encodeURIComponent(topic.id) + '/' + encodeURIComponent(mode);
+    return `<nav class="bl-practice" aria-label="Practise ${esc(topic.title)}"><span class="bl-label">Try the idea yourself</span><div><a href="./solve.html#${context.slice(1)}" data-practice="solve"><span>Test in Solve</span><span aria-hidden="true">↗</span></a><a href="./reason.html#${context.slice(1)}" data-practice="reason"><span>Reason it through</span><span aria-hidden="true">↗</span></a></div><p>Keep this topic with you. Return here whenever you need the model.</p></nav>`;
+  }
+  function enrichmentFor(topic) { return window.BIO_ENRICHMENT?.[topic.id] || {}; }
+  function curiosity(topic) {
+    const item = enrichmentFor(topic).curiosity;
+    if (!item?.title || !item.body) return '';
+    const source = (library.sources || []).find(s => s.id === item.sourceId);
+    return `<aside class="bl-curiosity" aria-labelledby="bl-curiosity-title"><p class="bl-label">Did you know?</p><h3 id="bl-curiosity-title">${esc(item.title)}</h3><p>${esc(item.body)}</p>${source && /^https:\/\//.test(source.url || '') ? `<a href="${esc(source.url)}" target="_blank" rel="noopener noreferrer">Explore the science ↗</a>` : ''}</aside>`;
+  }
+  function workedExample(topic) {
+    const item = enrichmentFor(topic).workedExample;
+    if (!item?.question || !Array.isArray(item.steps) || !item.answer) return '';
+    return `<section class="bl-example" aria-labelledby="bl-example-title"><p class="bl-label">A worked example</p><h3 id="bl-example-title">${esc(item.question)}</h3><details class="bl-example-reveal"><summary>Follow the reasoning <span aria-hidden="true">+</span></summary><ol>${item.steps.map(step => `<li>${esc(step)}</li>`).join('')}</ol><p class="bl-example-answer"><span class="bl-label">What follows</span>${esc(item.answer)}</p></details></section>`;
+  }
+  function connectionMap(topic, mode) {
+    const before = [...new Set(topic.prerequisites || [])].filter(id => byId.has(id) && id !== topic.id);
+    const related = [...new Set(topic.relatedTopics || [])].filter(id => byId.has(id) && id !== topic.id);
+    if (!before.length && !related.length) return '';
+    const branch = (ids, label, kind) => ids.length ? `<div class="bl-mapbranch" data-relation="${kind}"><h3>${label}</h3><ul>${ids.map(id => `<li><a href="${url(id,mode)}"><span class="bl-map-preview" aria-hidden="true">${preview(byId.get(id),'map-'+kind)}</span><span>${esc(byId.get(id).title)}</span><span aria-hidden="true">↗</span></a></li>`).join('')}</ul></div>` : '';
+    return `<section class="bl-connection-map" aria-labelledby="bl-map-title"><div class="bl-mapheader"><div><p class="bl-label">Make the connections</p><h2 id="bl-map-title">Where this idea leads.</h2></div><p>Open any connected concept; your explanation mode follows you.</p></div><div class="bl-map"><div class="bl-map-current"><span class="bl-label">You are exploring</span><strong>${esc(topic.title)}</strong></div><div class="bl-mapbranches">${branch(before,'Builds on','prerequisite')}${branch(related,'Connects to','related')}</div></div></section>`;
+  }
   function sourcesFor(topic) {
     const entries = Array.isArray(topic.sources) ? topic.sources : Array.isArray(library.sources) ? library.sources : [];
     return entries.map(entry => typeof entry === 'string' ? (library.sources || []).find(source => source.id === entry) || {url:entry,title:'Reference'} : entry).filter(entry => /^https:\/\//.test(entry.url || entry.href || '')).slice(0, 4).map(entry => `<a href="${esc(entry.url || entry.href)}" target="_blank" rel="noopener noreferrer">${esc(entry.title || entry.name || 'Reference')}</a>`).join('');
@@ -128,6 +174,7 @@
     window.BioContext?.publish({ kind:'learn', topic:parent ? parent.id : topic.id, title:parent ? parent.title : topic.title, subtopic:parent ? topic.title : '', subtopicId:parent ? topic.id : '', mode, summary:topic.summary });
   }
   function renderTopic(topic, modeId) {
+    root.dataset.view = 'topic';
     const mode = modes.find(m => m.id === modeId) || modes[0];
     const parent = topic.parentId && byId.get(topic.parentId);
     const siblings = parent ? children(parent.id) : children(topic.id);
@@ -138,11 +185,13 @@
     publish(topic, mode.id);
     const labs = (topic.labs || []).map(lab => typeof lab === 'string' ? {id:lab, title:lab.replace(/-/g, ' ')} : lab);
     root.innerHTML = `<nav class="bl-breadcrumb" aria-label="Breadcrumb"><a href="#library">Learn</a><span aria-hidden="true">/</span><a href="#category/${esc(topic.category)}">${esc(categoryTitle(topic.category))}</a>${parent ? `<span aria-hidden="true">/</span><a href="${url(parent, mode.id)}">${esc(parent.title)}</a>` : ''}<span aria-hidden="true">/</span><span aria-current="page">${esc(topic.title)}</span></nav>
-      <header class="bl-topichead"><p class="eyebrow">${esc(categoryTitle(topic.category))}</p><h1 id="bl-topic-title" tabindex="-1">${esc(topic.title)}</h1><p class="lead">${esc(topic.summary)}</p><div class="bl-topicmeta"><span>${esc(topic.difficulty || 'Foundation')}</span><span>${entry.modes.length} of 6 perspectives explored</span><span>${esc((topic.curriculumTags || []).join(' · '))}</span></div></header>
+      <header class="bl-topichead"><p class="eyebrow">${esc(categoryTitle(topic.category))}</p><h1 id="bl-topic-title" tabindex="-1">${esc(topic.title)}</h1><p class="lead">${esc(topic.summary)}</p><div class="bl-topicmeta"><span>${esc(topic.difficulty || 'Foundation')}</span><span>${entry.modes.length} of 6 perspectives explored</span><details class="bl-curriculum-detail"><summary>Curriculum coverage</summary><p>${esc((topic.curriculumTags || []).join(' · '))}</p></details></div></header>
       ${siblings.length ? `<nav class="bl-subnav" aria-label="Concepts inside ${esc(parent ? parent.title : topic.title)}">${parent ? `<a href="${url(parent, mode.id)}">Overview</a>` : ''}${siblings.map(t => `<a href="${url(t, mode.id)}" ${t.id === topic.id ? 'aria-current="page"' : ''}>${esc(t.title)}</a>`).join('')}</nav>` : ''}
       <div class="bl-modes" role="tablist" aria-label="Explanation mode">${modes.map(m => `<button type="button" class="bl-mode" id="bl-mode-${m.id}" role="tab" aria-selected="${m.id === mode.id}" aria-controls="bl-explanation" tabindex="${m.id === mode.id ? '0' : '-1'}" data-mode="${m.id}" style="--mode-color:${m.color}"><span aria-hidden="true">${m.glyph}</span>${m.name}</button>`).join('')}</div>
-      <div class="bl-study"><div class="bl-stage" id="bl-visual"></div><section class="bl-explanation" id="bl-explanation" role="tabpanel" aria-labelledby="bl-mode-${mode.id}" tabindex="0"><p class="bl-modequestion">${mode.question}</p><h2>${mode.title}</h2><div class="bl-prose">${prose(topic.explanations?.[mode.id])}</div><div class="bl-understand"><button type="button" id="bl-next-mode">${mode.id === 'realWorld' ? 'Return to the simple idea ↩' : 'Try ' + modes[(modes.indexOf(mode) + 1) % modes.length].name + ' →'}</button><span>${savedText()}</span></div><div class="bl-ai" aria-label="Ask the learning guide"><button type="button" data-ask="Explain this simpler.">Explain it simpler</button><button type="button" data-ask="What comes before this, and why?">What comes before?</button><button type="button" data-ask="Take me one level deeper.">Go deeper ↗</button></div><p class="bl-ai-status" role="status" hidden></p></section></div>
-      <div class="bl-bottom"><section class="bl-quiz" aria-labelledby="bl-check-title"><p class="bl-label">Pause / predict / explain</p><h2 id="bl-check-title">Check your understanding.</h2>${(topic.quickCheck || []).map((check, i) => `<fieldset data-question="${i}"><legend>${esc(check.question)}</legend><div class="bl-options">${check.options.map((option, n) => `<button type="button" class="bl-option" data-answer="${n}" data-check="${i}"><span aria-hidden="true">${String.fromCharCode(65 + n)}</span>${esc(option)}</button>`).join('')}</div><div class="bl-feedback" data-feedback="${i}" role="status" aria-live="polite" hidden></div></fieldset>`).join('')}</section><aside class="bl-connections" aria-label="Connected concepts"><h3>Keep the connections alive.</h3>${topic.prerequisites?.length ? `<div class="bl-linkgroup"><span class="bl-label">Useful before this</span><div class="bl-links">${links(topic.prerequisites, mode.id)}</div></div>` : ''}${topic.relatedTopics?.length ? `<div class="bl-linkgroup"><span class="bl-label">Related concepts</span><div class="bl-links">${links(topic.relatedTopics, mode.id)}</div></div>` : ''}${labs.length ? `<div class="bl-linkgroup"><span class="bl-label">Test it in the lab</span><div class="bl-links">${labs.map(lab => `<a href="./labs.html#${encodeURIComponent(lab.id)}">${esc(lab.title)} →</a>`).join('')}</div></div>` : ''}<details class="bl-terms"><summary>Key terms · ${(topic.keyTerms || []).length}</summary><dl>${(topic.keyTerms || []).map(term => `<dt>${esc(term.term)}</dt><dd>${esc(term.definition)}</dd>`).join('')}</dl></details></aside></div>
+      <div class="bl-study"><div class="bl-stage" id="bl-visual"></div><section class="bl-explanation" id="bl-explanation" role="tabpanel" aria-labelledby="bl-mode-${mode.id}" tabindex="0"><p class="bl-modequestion">${mode.question}</p><h2>${mode.title}</h2><div class="bl-prose">${prose(topic.explanations?.[mode.id])}</div>${practiceLinks(topic,mode.id)}<div class="bl-understand"><button type="button" id="bl-next-mode">${mode.id === 'realWorld' ? 'Return to the simple idea ↩' : 'Try ' + modes[(modes.indexOf(mode) + 1) % modes.length].name + ' →'}</button><span>${savedText()}</span></div><div class="bl-ai" aria-label="Ask the learning guide"><button type="button" data-ask="Explain this simpler.">Explain it simpler</button><button type="button" data-ask="What comes before this, and why?">What comes before?</button><button type="button" data-ask="Take me one level deeper.">Go deeper ↗</button></div><p class="bl-ai-status" role="status" hidden></p></section></div>
+      <div class="bl-discoveries">${curiosity(topic)}${workedExample(topic)}</div>
+      <div class="bl-bottom"><section class="bl-quiz" aria-labelledby="bl-check-title"><p class="bl-label">One quick check</p><h2 id="bl-check-title">Pause. Predict. Explain.</h2>${(topic.quickCheck || []).map((check, i) => `<fieldset data-question="${i}"><legend>${esc(check.question)}</legend><div class="bl-options">${check.options.map((option, n) => `<button type="button" class="bl-option" data-answer="${n}" data-check="${i}"><span aria-hidden="true">${String.fromCharCode(65 + n)}</span>${esc(option)}</button>`).join('')}</div><div class="bl-feedback" data-feedback="${i}" role="status" aria-live="polite" hidden></div></fieldset>`).join('')}</section><aside class="bl-connections" aria-label="Explore this topic further"><h3>Take it further.</h3>${labs.length ? `<div class="bl-linkgroup"><span class="bl-label">Test it in the lab</span><div class="bl-lablinks">${labs.map(lab => `<a href="./labs.html#${encodeURIComponent(lab.id)}"><span>${esc(lab.title)}</span><span aria-hidden="true">↗</span></a>`).join('')}</div></div>` : ''}<details class="bl-terms"><summary>Key terms · ${(topic.keyTerms || []).length}</summary><dl>${(topic.keyTerms || []).map(term => `<dt>${esc(term.term)}</dt><dd>${esc(term.definition)}</dd>`).join('')}</dl></details><p class="bl-revisit">Use the model, make a prediction, then try it in Solve or Reason. You can move between them at any point.</p></aside></div>
+      ${connectionMap(topic,mode.id)}
       ${sourcesFor(topic) ? `<p class="bl-sources">Read further ${sourcesFor(topic)}</p>` : ''}<div class="bl-legacy"><a href="#library">← All biology</a><a href="./labs.html">Explore the lab →</a></div>`;
     const switchMode = id => { focusMode = id; location.hash = url(topic, id); };
     root.querySelectorAll('[data-mode]').forEach(tab => {

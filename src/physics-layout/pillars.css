@@ -30,10 +30,10 @@ html:root,html body{background:var(--bg)!important;color:var(--ink)}
 html body{font:16px/1.65 var(--sans);letter-spacing:0}
 body>#fx,body>#atmo,body>.bg-veil{display:none!important}
 body main{padding-top:112px;padding-bottom:60px;min-width:0}
-html body.embed main{padding-top:42px!important;padding-bottom:65px}
+html body.embed main{padding-top:28px!important;padding-bottom:65px}
 body main .wrap{width:100%;max-width:var(--maxw);padding-inline:var(--edge);margin-inline:auto;min-width:0}
 body main .wrap .wrap{padding-inline:0}
-body main .band{padding-block:36px}
+body main .band{padding-block:26px}
 body main>:is(.band,.lrn-hero,.sv-hero,.ex-hero,.me-hero):first-child,
 body main>:is(#lessonApp,#reasonApp,#labsApp)>:first-child,
 body main>.page>.band:first-child{padding-top:0}

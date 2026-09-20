@@ -1,0 +1,25 @@
+{
+  "completed": true,
+  "checks": [
+    "Home directory: 8 decoded previews.",
+    "Biology map: 8 decoded previews.",
+    "Sidebar pointer preview: 1 decoded previews.",
+    "Sidebar previews support pointer and keyboard focus, and close on Escape.",
+    "lessons catalog: 9 decoded previews.",
+    "labs catalog: 23 decoded previews.",
+    "solve catalog: 9 decoded previews.",
+    "Solve modes: 3 decoded previews.",
+    "me catalog: 3 decoded previews.",
+    "All 10 atlas systems and 12 timeline milestones show distinct previews and matching selectable diagrams.",
+    "Home and all eight app sections stay within both shell and iframe width at 320, 390, 768 and 1440 pixels.",
+    "Touch path chooser: 8 decoded previews.",
+    "Touch Lessons inside app: 9 decoded previews."
+  ],
+  "screenshots": [
+    "app-preview-desktop.png",
+    "app-preview-mobile.png",
+    "app-lessons-mobile.png"
+  ],
+  "pageErrors": [],
+  "missingAssets": []
+}

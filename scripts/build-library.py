@@ -32,13 +32,13 @@ def render(page):
     before = path.read_bytes()
     text = before.decode('utf-8').replace('\r\n', '\n')
     if page == 'app':
-        text = slot(text, 'app-script', '<script>\n' + source('app-library.js') + '</script>\n', '</body>')
+        text = slot(text, 'app-script', '<script>\n' + source('topics.js') + source('visuals.js') + source('app-library.js') + '</script>\n', '</body>')
         return path, before, text.encode('utf-8')
     styles = source('shared.css')
     scripts = source('context.js')
     if page == 'learn':
         styles += source('learn.css')
-        scripts += source('topics.js') + source('visuals.js') + source('learn.js')
+        scripts += source('topics.js') + source('learning-cards.js') + source('visuals.js') + source('learn.js')
         if '<!-- BIO-LIBRARY:learn-main:START -->' in text:
             text = slot(text, 'learn-main', source('learn-main.html'), '<main id="page">')
         # Mount immediately inside main, before the existing Learn experiences.
@@ -50,6 +50,8 @@ def render(page):
         # Preserve the original catalog/cell/microscope and their JS unchanged.
     elif page == 'labs':
         styles += source('notebook.css') + source('experiments.css')
+        if (LIB / 'lab-catalog.css').exists():
+            styles += source('lab-catalog.css')
         scripts += source('notebook.js') + source('lab-metadata.js') + source('experiments.js') + source('investigations.js')
         # Replace only the existing canonical bench and shell module bodies.
         for name in ('_labs.js', '_lab_bench.js', '_lab_ecology.js', '_lab_molecular.js', '_lab_physiology.js'):
@@ -58,6 +60,9 @@ def render(page):
                 raise ValueError('Missing canonical lab source slot: ' + name)
             content = (LIB / 'labs.js' if name == '_labs.js' else ROOT / 'src' / name).read_text(encoding='utf-8').rstrip()
             text = pattern.sub(lambda m: m[1] + content + '\n\n', text)
+    elif page in ('reason', 'solve'):
+        styles += source('practice-bridge.css')
+        scripts += source('topics.js') + source('learning-cards.js') + source('visuals.js') + source('practice-bridge.js')
     else:
         raise ValueError('Unsupported library build target')
     text = slot(text, page + '-style', '<style>\n' + styles + '</style>\n', '</head>')
@@ -69,7 +74,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true')
     args = parser.parse_args()
-    results = [render(page) for page in ('learn', 'labs', 'app')]
+    results = [render(page) for page in ('learn', 'labs', 'reason', 'solve', 'app')]
     stale = [p.name for p, before, after in results if before != after]
     if args.check and stale:
         parser.exit(1, 'Library build drift: ' + ', '.join(stale) + '\n')
