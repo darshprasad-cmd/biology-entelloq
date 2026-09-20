@@ -6,6 +6,8 @@
   const workouts=['altitude','resistance','glucose'];
   const legacy={cell:'legacy-cell',microscope:'legacy-microscope'};
   function routeKey(k,sub){
+    const concept=/^(?:topic|learn)\/([-a-z0-9]+)\//.exec(sub||'');
+    if(['learn','reason','solve'].includes(k)&&concept&&window.BIO_LIBRARY?.topics.some(t=>t.id===concept[1]))return 'topic-'+concept[1];
     if(k==='learn'&&legacy[sub])return legacy[sub];
     if(k==='explore'&&['tree','atlas','timeline','graph','diseases'].includes(sub))return 'explore-'+sub;
     if(k==='lessons'&&lessons.includes(sub))return 'lesson-'+sub;
@@ -15,10 +17,12 @@
   }
   function media(key){
     const figure=document.createElement('span');figure.className='bp-media';figure.setAttribute('aria-hidden','true');
+    if(key.startsWith('topic-')&&window.BioLibraryVisuals){const topic=window.BIO_LIBRARY?.topics.find(t=>t.id===key.slice(6));if(topic){figure.innerHTML=window.BioLibraryVisuals.preview(topic,{topics:window.BIO_LIBRARY.topics,idPrefix:'bp-concept-'+(++media.serial)});return figure;}}
     const image=document.createElement('img');image.src='./assets/previews/'+key+'.webp';image.alt='';image.width=640;image.height=400;image.loading='lazy';image.decoding='async';
     image.addEventListener('error',()=>{figure.classList.add('bp-unavailable');image.remove();figure.textContent='Preview unavailable';},{once:true});
     figure.append(image);return figure;
   }
+  media.serial=0;
   function attach(card,key){
     if(!key||card.dataset.previewMounted)return;
     card.dataset.previewMounted=key;card.classList.add('bp-card');card.prepend(media(key));
@@ -31,7 +35,7 @@
       if(!key&&card.dataset.go)key=routeKey(card.dataset.go,card.dataset.sub);
       if(!key&&card.dataset.lesson)key='lesson-'+card.dataset.lesson;
       if(!key&&card.matches('.rz-workout')){const id=card.getAttribute('href')?.slice(1);if(workouts.includes(id))key='reason-'+id;}
-      if(!key&&card.matches('#recSlot .card')){const link=card.querySelector('a[href]');if(link){const url=new URL(link.href,location.href);key=routeKey(url.pathname.split('/').pop().replace('.html',''),url.hash.slice(1));}}
+      if(!key&&card.matches('#recSlot .card')){const link=card.matches('a[href]')?card:card.querySelector('a[href]');if(link){const url=new URL(link.href,location.href);key=routeKey(url.pathname.split('/').pop().replace('.html',''),url.hash.slice(1));}}
       if(!key&&card.matches('#catalog .exp')){
         const link=card.matches('a')?card:card.querySelector('a[href]');
         if(link){const url=new URL(link.href,location.href);const route=url.pathname.split('/').pop().replace('.html','');key=routeKey(route,url.hash.slice(1))||legacy[url.hash.slice(1)];}
@@ -64,4 +68,7 @@
   });
   addEventListener('keydown',event=>{if(event.key==='Escape')hide();});addEventListener('resize',hide);
   window.BioPreviews={refresh:enhance,routeKey};
+  // Keep persistent display controls in the app bar, clear of lesson content.
+  const appbar=document.querySelector('.topbar'),motion=document.getElementById('bio-background-toggle');
+  if(appbar&&motion)appbar.append(motion);
 })();

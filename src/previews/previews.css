@@ -1,6 +1,7 @@
 /* Preview surfaces retain the colours of the real models in either app theme. */
 .bp-media{display:block;position:relative;aspect-ratio:16/10;overflow:hidden;background:var(--bg-2,var(--panel));border-bottom:1px solid var(--line);isolation:isolate}
 .bp-media img{display:block;width:100%;height:100%;object-fit:cover;transition:transform 180ms ease-out}
+.bp-media>svg{display:block;width:100%;height:100%;pointer-events:none}
 .bp-unavailable{display:grid;place-items:center;color:var(--dim);font:12px var(--sans,system-ui)}
 body main .bp-card{padding:0;overflow:hidden;min-width:0}
 body main .bp-card>:not(.bp-media){margin-inline:18px}
@@ -29,6 +30,10 @@ body main .cc-promo.bp-card p{display:none}
 #learningPaths .bp-card .ic,#learningPaths .bp-card p{display:none}#learningPaths .bp-card h3{margin-bottom:16px;font-size:17px}
 .bp-nav-preview{position:fixed;z-index:1000;width:272px;padding:7px;background:var(--panel);border:1px solid var(--hair);border-radius:10px;box-shadow:0 16px 45px #0005;pointer-events:none}
 .bp-nav-preview[hidden]{display:none}.bp-nav-preview .bp-media{border-radius:6px;aspect-ratio:16/10}.bp-nav-preview strong{display:block;padding:10px 7px 6px;font:500 13px/1.4 var(--sans);color:var(--ink)}
+.topbar #bio-background-toggle{position:static;flex:none;width:36px;min-height:36px;padding:7px;font-size:0}
+.topbar #bio-background-toggle::after{content:'Ⅱ';font:13px var(--sans)}
+.topbar #bio-background-toggle[aria-pressed=true]::after{content:'▷'}
+body:has(#bioq-ai)>#bio-background-toggle{bottom:76px}
 @media(hover:hover) and (pointer:fine){.bp-card:hover>.bp-media img{transform:scale(1.025)}}
 @media(prefers-reduced-motion:reduce){.bp-media img{transition:none}.bp-card:hover>.bp-media img{transform:none}}
 @media(max-width:600px){body main .bp-card>:not(.bp-media){margin-inline:16px}body main .bp-card>:last-child{margin-bottom:16px}.bp-nav-preview{display:none!important}}
@@ -37,6 +42,7 @@ body main :is(.les-listhead,.rz-listhead,.sv-hero){padding-block:12px 24px}
 body main :is(.les-listhead,.rz-listhead,.sv-hero) h1{font-size:clamp(29px,3.4vw,42px);margin:9px 0 12px!important}
 body main :is(.les-listhead,.rz-listhead,.sv-hero) .lead{font-size:14px;line-height:1.65;margin:0;max-width:60ch}
 body main .les-filters{padding:16px;margin-bottom:22px}
+body main .les-clear:disabled{display:none}
 body main .sv-hero .sv-stats{margin-top:22px;gap:9px}
 body main .sv-hero .sv-stat{padding:12px 15px}
 body main .sv-hero .sv-stat b{font-size:22px}
@@ -50,6 +56,8 @@ body main .sv-hero .sv-stat span{font-size:9px}
  body main .les-filterfields{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
  body main .les-filterfields .les-search{grid-column:1/-1}
  body main .les-filters{padding:14px}
+ body main .les-filtermeta{margin-top:10px;gap:0}
+ body main .les-filtermeta>span{display:none}
  body main :is(.les-listhead,.rz-listhead,.sv-hero){padding-top:0}
  body main .sv-hero .sv-stats{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
  body main .sv-hero .sv-stat{padding:10px 7px;min-width:0}

@@ -1,0 +1,12 @@
+{
+  "completed": true,
+  "checks": [
+    "All 10 atlas systems and all 12 timeline events have persistent previews and distinct selected diagrams; original content and selection still work.",
+    "Atlas and timeline retain arrow, Home and End keyboard selection with visible focus.",
+    "Previews are visible before clicking, with bounded diagrams and no page overflow from 320 to 1440 pixels."
+  ],
+  "screenshots": [
+    "reference-atlas-desktop.png",
+    "reference-atlas-mobile.png"
+  ]
+}

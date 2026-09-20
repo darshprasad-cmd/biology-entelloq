@@ -36,3 +36,13 @@ The cards use the concepts and reference registry established in `topics.js`; 37
 Run `node --test tests/library-enrichment.test.cjs`.
 
 The checks require exact published-topic coverage, complete concise cards, unique questions and examples, distinct options, valid answer indices and canonical source IDs, balanced answer positions, and absence of placeholder content. Targeted answer checks protect important science and arithmetic, including DNA strand orientation, transcription, Calvin-cycle carbon bookkeeping, glycolytic net ATP, ideal PCR copy number and the direction of DNA migration in a gel.
+
+## Review of the inherited Reason cases
+
+The existing three cases in `src/_reason.js` retain their seven stages, six reasoning steps and original correct-option indices. Their scientific wording was corrected during this expansion:
+
+- **Altitude:** lower oxygen partial pressure is distinguished from oxygen fraction. The scenario specifies increased total red-cell mass, because concentration alone can rise through plasma-volume loss. Feedback supports tissue oxygenation without promising a universal fixed set point. See the [National Academies physiology chapter](https://www.ncbi.nlm.nih.gov/books/NBK232874/) and [experimental blood-volume study](https://pubmed.ncbi.nlm.nih.gov/8872628/).
+- **Resistance:** the scenario now supplies evidence for rare pre-existing resistance and explicitly permits surviving bacteria. It no longer claims a universal 20-minute doubling time, that all resistance necessarily predates treatment, or that antibiotic exposure cannot affect mutation rates. The distinction remains between selection and a mutation being directed toward a future need. A primary experiment documenting mutagenesis under sublethal antibiotic exposure is [Kohanski et al.](https://pubmed.ncbi.nlm.nih.gov/20159551/).
+- **Glucose:** regulation returns toward a physiological range, with no guaranteed exact value or two-hour timetable. Basal insulin can persist; meal responses decline rather than simply switching off. Liver glucose production, tissue uptake and storage are distinguished, and neural/gut contributions are acknowledged. See [Endotext on glucagon physiology](https://www.ncbi.nlm.nih.gov/books/NBK279127/) and [a human study of insulin and hepatic glucose production](https://pubmed.ncbi.nlm.nih.gov/9124541/).
+
+`node --test tests/reason-polish.test.cjs tests/library-enrichment.test.cjs tests/library-practice.test.cjs` passes all 14 contracts after these corrections.

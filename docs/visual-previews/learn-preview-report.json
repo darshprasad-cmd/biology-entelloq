@@ -1,0 +1,14 @@
+{
+  "completed": true,
+  "checks": [
+    "All 73 concepts export static snapshots from the actual lesson renderer; no timers, animation frames, or nested controls start.",
+    "Scope, category and fuzzy/alias search results expose visible previews; unwritten roadmap topics stay out of browsing.",
+    "Related and prerequisite links show their model before opening; six explanation modes and topic history still work.",
+    "Previews are visible without hover on touch and keyboard, with no page overflow from 320 to 1440 pixels."
+  ],
+  "screenshots": [
+    "learn-preview-catalog-desktop.png",
+    "learn-preview-topic-desktop.png",
+    "learn-preview-catalog-mobile.png"
+  ]
+}

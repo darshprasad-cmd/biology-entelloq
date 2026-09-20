@@ -229,7 +229,7 @@ body.embed .bl-library{scroll-margin-top:20px}body.embed .bl-library .bl-modes{t
 .bl-library .bl-understand>span{font-size:10px}
 .bl-library .bl-ai{gap:6px;margin-top:12px}
 .bl-library .bl-ai button{font-size:10px;padding:5px 8px;min-height:33px}
-.bl-library .bl-discoveries{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;margin-top:27px}
+.bl-library .bl-discoveries{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;margin-top:27px;align-items:start}
 .bl-library .bl-discoveries:empty{display:none}
 .bl-library .bl-discoveries> :only-child{grid-column:1/-1}
 .bl-library .bl-curiosity,.bl-library .bl-example{min-width:0;padding:21px 23px;border:1px solid var(--line);border-radius:7px;background:var(--panel)}

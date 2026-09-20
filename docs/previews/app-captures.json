@@ -1,0 +1,107 @@
+[
+  {
+    "key": "legacy-cell",
+    "route": "learn.html#cell",
+    "selector": "#cell .cell-stage svg"
+  },
+  {
+    "key": "legacy-microscope",
+    "route": "learn.html#microscope",
+    "selector": "#scopeField"
+  },
+  {
+    "key": "section-learn",
+    "route": "learn.html#topic/photosynthesis/visual",
+    "selector": ".bl-diagram > svg"
+  },
+  {
+    "key": "section-universe",
+    "route": "universe.html#earth",
+    "selector": "#uni canvas"
+  },
+  {
+    "key": "solve-practice",
+    "route": "solve.html · practice renderer",
+    "selector": ".sv-runner"
+  },
+  {
+    "key": "solve-timed",
+    "route": "solve.html · timed renderer",
+    "selector": ".sv-runner"
+  },
+  {
+    "key": "solve-adaptive",
+    "route": "solve.html · adaptive renderer",
+    "selector": ".sv-runner"
+  },
+  {
+    "key": "section-solve",
+    "route": "solve.html · diagram practice",
+    "selector": ".sv-qcard"
+  },
+  {
+    "key": "solve-review",
+    "route": "solve.html · diagram answer review",
+    "selector": ".sv-qcard"
+  },
+  {
+    "key": "section-me",
+    "route": "me.html · empty local profile",
+    "selector": "#masterySlot"
+  },
+  {
+    "key": "section-about",
+    "route": "about.html#founder",
+    "selector": "#page-founder .avatar"
+  },
+  {
+    "key": "section-explore",
+    "route": "explore.html#tree",
+    "selector": "#treeStage svg"
+  },
+  {
+    "key": "explore-atlas",
+    "route": "explore.html#atlas",
+    "selector": "#atlasDetail .br-reference-figure"
+  },
+  {
+    "key": "explore-timeline",
+    "route": "explore.html#timeline",
+    "selector": "#tlDetail .br-reference-figure"
+  },
+  {
+    "key": "explore-graph",
+    "route": "explore.html#graph",
+    "selector": "#kgCanvas"
+  },
+  {
+    "key": "explore-diseases",
+    "route": "explore.html#diseases",
+    "selector": "#dzList .dz-item"
+  },
+  {
+    "key": "explore-tree",
+    "route": "explore.html#tree",
+    "selector": "#treeStage svg"
+  },
+  {
+    "key": "reason-altitude",
+    "route": "reason.html#altitude",
+    "selector": ".tp-case-visual"
+  },
+  {
+    "key": "reason-resistance",
+    "route": "reason.html#resistance",
+    "selector": ".tp-case-visual"
+  },
+  {
+    "key": "reason-glucose",
+    "route": "reason.html#glucose",
+    "selector": ".tp-case-visual"
+  },
+  {
+    "key": "section-home",
+    "route": "app.html#home",
+    "selector": "viewport"
+  }
+]

@@ -32,7 +32,7 @@ def render(page):
     before = path.read_bytes()
     text = before.decode('utf-8').replace('\r\n', '\n')
     if page == 'app':
-        text = slot(text, 'app-script', '<script>\n' + source('app-library.js') + '</script>\n', '</body>')
+        text = slot(text, 'app-script', '<script>\n' + source('topics.js') + source('visuals.js') + source('app-library.js') + '</script>\n', '</body>')
         return path, before, text.encode('utf-8')
     styles = source('shared.css')
     scripts = source('context.js')
