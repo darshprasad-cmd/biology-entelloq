@@ -119,3 +119,45 @@ button{cursor:pointer}
 #bio-cell-glow stop:last-child{stop-color:var(--panel)}
 .launch-load path:first-child{stroke:var(--em)}
 .launch-load path:last-child{stroke:var(--cy)}
+
+/* A quieter shell around the visual directory. */
+:root{--sb:212px;--bar:64px;--edge:clamp(22px,3.3vw,48px)}
+.side{padding-top:22px}.side .brand{margin-bottom:22px;font-size:15px}
+.navi{min-height:38px;padding:7px 10px;font-size:12px}.navi svg{width:19px;height:19px}
+.side .sec{padding-top:9px}.side-sep{margin-block:9px}
+.side-progress{padding:12px;margin:12px 0 45px}.side-progress-top{gap:8px}.side-progress-ring{width:34px;height:34px;font-size:10px}.side-progress b{font-size:12px}.side-progress>small{margin-top:7px}
+.topbar{gap:18px}.top-search{width:190px;padding:7px 10px}.explore-trigger{font-size:12px}
+.home-in{max-width:1440px;padding-top:30px}.cc-head{margin-bottom:23px}.home .cc-head h1{font-size:36px;letter-spacing:-1.3px;margin-top:8px}
+.cc-head p{font-size:12px}.cc-hero{grid-template-columns:1fr 1.2fr;min-height:230px}.cc-hero-copy{padding:28px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center}
+.cc-hero h2{font-size:29px;margin:14px 0 21px;max-width:380px}.cc-hero small{font-size:9px}
+body main .cc-art.bp-card{padding:0;border-left:1px solid var(--line)}
+body main .cc-art.bp-card>.bp-media{height:100%;min-height:230px;aspect-ratio:auto;margin:0;border:0}
+body main .cc-art.bp-card>.bp-media img{object-fit:cover}
+.cc-directory-head{display:flex;align-items:baseline;justify-content:space-between;gap:18px;margin:32px 0 16px}
+.cc-directory-head h2{font-size:22px;letter-spacing:-.6px}.cc-directory-head>span{font:10px var(--mono);color:var(--faint)}
+.cc-worlds{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:0 0 35px}
+body main .cc-world.bp-card{padding:0;gap:0;text-align:left}
+body main .cc-world.bp-card h3{font-size:19px;margin-top:5px;margin-bottom:11px;line-height:1.3}
+body main .cc-world.bp-card h3 span{float:right;font:16px var(--sans);color:var(--faint)}
+body main .cc-world.bp-card small{min-height:0;padding:0;text-transform:uppercase;font-size:9px;letter-spacing:1px;color:var(--cy)}
+.cc-world-meta{display:block;font-size:11px;color:var(--dim);line-height:1.5}
+.cc-map-head{margin-bottom:16px}.cc-summary{font-size:12px;max-width:720px}
+#learningPaths .tiles{gap:15px}#bq-explore{width:min(980px,calc(100vw - 48px));padding:24px}
+@media(min-width:1500px){.cc-worlds{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:1100px){.cc-worlds{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:850px){
+ :root{--bar:58px;--edge:20px}.topbar{padding-inline:20px;gap:12px}.explore-trigger{font-size:11px;min-height:40px}
+ .home-in{padding:24px 20px 85px}.home .cc-head h1{font-size:30px}.cc-head{margin-bottom:19px}
+ .cc-directory-head{margin-top:26px}.cc-directory-head h2{font-size:20px}.cc-directory-head>span{display:none}
+ .cc-hero{min-height:210px}.cc-hero-copy{padding:22px}.cc-hero h2{font-size:26px;margin:12px 0 18px}
+ #bq-explore{width:100%;padding:22px 18px max(22px,env(safe-area-inset-bottom))}
+}
+@media(max-width:600px){
+ .cc-hero{grid-template-columns:1fr;display:flex;flex-direction:column-reverse}.cc-art{height:150px}
+ body main .cc-art.bp-card{border-left:0;border-bottom:1px solid var(--line)}body main .cc-art.bp-card>.bp-media{min-height:150px;height:150px}
+ .cc-hero-copy{padding:18px 20px}.cc-hero h2{font-size:24px;margin:8px 0 13px}.cc-hero .btn{font-size:12px;min-height:39px;padding:8px 12px}
+ .cc-worlds{gap:12px}.cc-world-meta{font-size:10px}body main .cc-world.bp-card h3{font-size:16px}body main .cc-world.bp-card>:not(.bp-media){margin-inline:12px}
+ body main .cc-world.bp-card .bp-media{aspect-ratio:4/3;margin-bottom:12px}body main .cc-world.bp-card small{font-size:8px}
+ .cc-map-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#learningPaths .tiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+}
+@media(max-width:360px){.home-in{padding-inline:16px}.cc-worlds{grid-template-columns:1fr}#learningPaths .tiles{grid-template-columns:1fr}}

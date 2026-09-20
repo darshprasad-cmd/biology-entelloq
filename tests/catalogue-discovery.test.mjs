@@ -16,17 +16,14 @@ assert.ok(catalogueStart > 0, 'Learn catalogue boundary must remain explicit');
 vm.runInContext(learn.slice(catalogueStart, learn.indexOf('/* ---- interactive cell', catalogueStart)) +
   '\nglobalThis.items = CATS.flatMap(category => category.items); buildCatalog();', catalogue);
 
-test('Learn keeps all fourteen cards and only labels working routes as live', () => {
+test('Learn retains editorial entries but only shows the twelve working experiences', () => {
   assert.equal(catalogue.items.length, 14);
   assert.equal(catalogue.items.filter(item => item.live).length, 12);
   assert.deepEqual(Array.from(catalogue.items.filter(item => !item.live), item => item.t),
     ['Histology Viewer', 'Gram Staining Lab']);
-  const referenceCards = catalogueHost.innerHTML.match(/<article\b[\s\S]*?<\/article>/g);
-  assert.equal(referenceCards.length, 2);
-  for (const card of referenceCards) {
-    assert.match(card, /Reference topic · no interactive/);
-    assert.doesNotMatch(card, /href=|chip live|card lift|Open bench/);
-  }
+  assert.equal((catalogueHost.innerHTML.match(/<a\b/g) || []).length, 12);
+  assert.doesNotMatch(catalogueHost.innerHTML, /Histology Viewer|Gram Staining Lab|<article\b/);
+  for (const item of catalogue.items.filter(item => item.live)) assert.ok(catalogueHost.innerHTML.includes(item.t));
 });
 
 test('every live Learn destination is an existing page, section, or registered bench', () => {

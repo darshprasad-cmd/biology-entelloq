@@ -8,7 +8,7 @@ const { createRequire } = require('node:module');
 const root = path.resolve(__dirname, '..');
 const modules = process.env.BIOLOGY_PLAYWRIGHT_MODULES || 'C:/Users/darsh/biology-entelloq/node_modules';
 const { chromium } = createRequire(path.join(modules, 'library-browser.cjs'))('playwright');
-const base = process.env.BIOLOGY_PREVIEW_URL || 'http://127.0.0.1:3013';
+const base = process.env.BIOLOGY_PREVIEW_URL || 'http://127.0.0.1:3014';
 const report = { completed:false, checks:[], screenshots:[] };
 const output = path.join(root, 'docs', 'library');
 fs.mkdirSync(output, {recursive:true});
@@ -63,15 +63,41 @@ async function main() {
     report.checks.push('All 18 priority topics render six substantial modes, checks, and visual states that change with interaction.');
     const completeCoverage=await page.evaluate(async()=>{
       const failures=[];
+      const normal=value=>String(value).replace(/\s+/g,' ').trim();
       for(const topic of window.BIO_LIBRARY.topics) {
         const hash='#topic/'+topic.id+'/visual';
         if(location.hash!==hash) {const ready=new Promise(resolve=>window.addEventListener('hashchange',()=>setTimeout(resolve,0),{once:true}));location.hash=hash;await ready;}
         if(!document.querySelector('.bl-diagram svg')||!document.querySelector('.bl-prose')?.textContent.trim()||!document.querySelector('.bl-quiz [data-answer]'))failures.push(topic.id);
+        if([...document.querySelectorAll('.bl-diagram svg [stroke^="var("]')].some(el=>getComputedStyle(el).stroke==='none'))failures.push(topic.id+': unresolved diagram stroke');
+        if(!document.querySelector('.bl-curiosity h3')?.textContent.trim()||!document.querySelector('.bl-example-reveal li')?.textContent.trim())failures.push(topic.id+': missing discovery content');
+        for(const section of ['solve','reason'])if(document.querySelector('[data-practice="'+section+'"]')?.getAttribute('href')!=='./'+section+'.html#learn/'+topic.id+'/visual')failures.push(topic.id+': '+section+' context');
+        for(const [key,relation] of [['prerequisites','prerequisite'],['relatedTopics','related']]){
+          const expected=[...new Set(topic[key]||[])].filter(id=>id!==topic.id&&window.BIO_LIBRARY.topics.some(t=>t.id===id)).sort();
+          const actual=[...document.querySelectorAll('[data-relation="'+relation+'"] a')].map(a=>a.getAttribute('href').split('/')[1]).sort();
+          if(JSON.stringify(expected)!==JSON.stringify(actual))failures.push(topic.id+': incomplete '+relation+' map');
+        }
+        const authored=normal(topic.explanations.visual);
+        const rendered=normal([...document.querySelectorAll('.bl-prose p')].map(p=>p.textContent).join(' '));
+        if(authored!==rendered)failures.push(topic.id+': explanation text changed');
       }
       return {total:window.BIO_LIBRARY.topics.length,failures};
     });
     assert.deepEqual(completeCoverage.failures,[]);
-    report.checks.push('All '+completeCoverage.total+' completed concepts render a visual, explanation and check without errors.');
+    report.checks.push('All '+completeCoverage.total+' completed concepts include their visual, unabridged explanation, quick check, discovery card, worked example, exact context links, and complete connection map.');
+    await page.goto(base+'/learn.html#topic/photosynthesis/advanced');
+    await page.locator('.bl-example-reveal').waitFor();
+    assert.equal(await page.locator('.bl-example-answer').isVisible(),false,'Worked solution is a learner-controlled reveal.');
+    await page.locator('.bl-example-reveal summary').focus();
+    await page.keyboard.press('Enter');
+    assert(await page.locator('.bl-example-answer').isVisible(),'Worked reasoning opens from the keyboard.');
+    assert.equal(await page.locator('[data-practice="solve"]').getAttribute('href'),'./solve.html#learn/photosynthesis/advanced');
+    assert.equal(await page.locator('[data-practice="reason"]').getAttribute('href'),'./reason.html#learn/photosynthesis/advanced');
+    if(await page.locator('.bl-explanation-depth').count()){
+      assert.equal(await page.locator('.bl-explanation-depth').getAttribute('open'),null);
+      await page.locator('.bl-explanation-depth summary').click();
+      assert(await page.locator('.bl-explanation-depth p').first().isVisible());
+    }
+    report.checks.push('Worked examples and deeper explanation remain concise until opened; practice links retain the exact current mode.');
     await page.goto(base+'/learn.html#topic/photosynthesis/layman');
     await page.locator('[data-mode="layman"]').focus();
     await page.keyboard.press('ArrowRight');

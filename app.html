@@ -403,7 +403,117 @@ button{cursor:pointer}
 #bio-cell-glow stop:last-child{stop-color:var(--panel)}
 .launch-load path:first-child{stroke:var(--em)}
 .launch-load path:last-child{stroke:var(--cy)}
+
+/* A quieter shell around the visual directory. */
+:root{--sb:212px;--bar:64px;--edge:clamp(22px,3.3vw,48px)}
+.side{padding-top:22px}.side .brand{margin-bottom:22px;font-size:15px}
+.navi{min-height:38px;padding:7px 10px;font-size:12px}.navi svg{width:19px;height:19px}
+.side .sec{padding-top:9px}.side-sep{margin-block:9px}
+.side-progress{padding:12px;margin:12px 0 45px}.side-progress-top{gap:8px}.side-progress-ring{width:34px;height:34px;font-size:10px}.side-progress b{font-size:12px}.side-progress>small{margin-top:7px}
+.topbar{gap:18px}.top-search{width:190px;padding:7px 10px}.explore-trigger{font-size:12px}
+.home-in{max-width:1440px;padding-top:30px}.cc-head{margin-bottom:23px}.home .cc-head h1{font-size:36px;letter-spacing:-1.3px;margin-top:8px}
+.cc-head p{font-size:12px}.cc-hero{grid-template-columns:1fr 1.2fr;min-height:230px}.cc-hero-copy{padding:28px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center}
+.cc-hero h2{font-size:29px;margin:14px 0 21px;max-width:380px}.cc-hero small{font-size:9px}
+body main .cc-art.bp-card{padding:0;border-left:1px solid var(--line)}
+body main .cc-art.bp-card>.bp-media{height:100%;min-height:230px;aspect-ratio:auto;margin:0;border:0}
+body main .cc-art.bp-card>.bp-media img{object-fit:cover}
+.cc-directory-head{display:flex;align-items:baseline;justify-content:space-between;gap:18px;margin:32px 0 16px}
+.cc-directory-head h2{font-size:22px;letter-spacing:-.6px}.cc-directory-head>span{font:10px var(--mono);color:var(--faint)}
+.cc-worlds{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:0 0 35px}
+body main .cc-world.bp-card{padding:0;gap:0;text-align:left}
+body main .cc-world.bp-card h3{font-size:19px;margin-top:5px;margin-bottom:11px;line-height:1.3}
+body main .cc-world.bp-card h3 span{float:right;font:16px var(--sans);color:var(--faint)}
+body main .cc-world.bp-card small{min-height:0;padding:0;text-transform:uppercase;font-size:9px;letter-spacing:1px;color:var(--cy)}
+.cc-world-meta{display:block;font-size:11px;color:var(--dim);line-height:1.5}
+.cc-map-head{margin-bottom:16px}.cc-summary{font-size:12px;max-width:720px}
+#learningPaths .tiles{gap:15px}#bq-explore{width:min(980px,calc(100vw - 48px));padding:24px}
+@media(min-width:1500px){.cc-worlds{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:1100px){.cc-worlds{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:850px){
+ :root{--bar:58px;--edge:20px}.topbar{padding-inline:20px;gap:12px}.explore-trigger{font-size:11px;min-height:40px}
+ .home-in{padding:24px 20px 85px}.home .cc-head h1{font-size:30px}.cc-head{margin-bottom:19px}
+ .cc-directory-head{margin-top:26px}.cc-directory-head h2{font-size:20px}.cc-directory-head>span{display:none}
+ .cc-hero{min-height:210px}.cc-hero-copy{padding:22px}.cc-hero h2{font-size:26px;margin:12px 0 18px}
+ #bq-explore{width:100%;padding:22px 18px max(22px,env(safe-area-inset-bottom))}
+}
+@media(max-width:600px){
+ .cc-hero{grid-template-columns:1fr;display:flex;flex-direction:column-reverse}.cc-art{height:150px}
+ body main .cc-art.bp-card{border-left:0;border-bottom:1px solid var(--line)}body main .cc-art.bp-card>.bp-media{min-height:150px;height:150px}
+ .cc-hero-copy{padding:18px 20px}.cc-hero h2{font-size:24px;margin:8px 0 13px}.cc-hero .btn{font-size:12px;min-height:39px;padding:8px 12px}
+ .cc-worlds{gap:12px}.cc-world-meta{font-size:10px}body main .cc-world.bp-card h3{font-size:16px}body main .cc-world.bp-card>:not(.bp-media){margin-inline:12px}
+ body main .cc-world.bp-card .bp-media{aspect-ratio:4/3;margin-bottom:12px}body main .cc-world.bp-card small{font-size:8px}
+ .cc-map-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#learningPaths .tiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+}
+@media(max-width:360px){.home-in{padding-inline:16px}.cc-worlds{grid-template-columns:1fr}#learningPaths .tiles{grid-template-columns:1fr}}
 </style>
+<!-- BIO-PREVIEWS:css:START -->
+<style>
+/* Preview surfaces retain the colours of the real models in either app theme. */
+.bp-media{display:block;position:relative;aspect-ratio:16/10;overflow:hidden;background:var(--bg-2,var(--panel));border-bottom:1px solid var(--line);isolation:isolate}
+.bp-media img{display:block;width:100%;height:100%;object-fit:cover;transition:transform 180ms ease-out}
+.bp-unavailable{display:grid;place-items:center;color:var(--dim);font:12px var(--sans,system-ui)}
+body main .bp-card{padding:0;overflow:hidden;min-width:0}
+body main .bp-card>:not(.bp-media){margin-inline:18px}
+body main .bp-card>.bp-media{margin:0 0 17px}
+body main .bp-card>:last-child{margin-bottom:18px}
+body main .bp-card>p:not(.rz-outcome){display:none}
+body main .bp-card :is(.les-dom,.rz-dom){font:10px/1.5 var(--mono);letter-spacing:.2px}
+body main .bp-card :is(h2,h3){font:450 20px/1.3 var(--display);letter-spacing:-.45px}
+body main .bp-card .glow,body main .bp-card>.ico{display:none}
+body main .bp-card .les-lensrow{gap:5px;margin-top:12px;margin-bottom:12px}
+body main .bp-card .les-cardroute,body main .bp-card .rz-go{font-size:12px}
+body main .bp-card .rz-outcome{display:none}
+body main .bp-card .rz-skills{margin-bottom:12px}
+body main .bp-card[hidden]{display:none!important}
+body main .cc-node.bp-card{padding:0 0 14px}
+body main .cc-node.bp-card>.bp-media{height:auto;aspect-ratio:16/10;border-radius:0;margin:0 0 12px}
+body main .cc-node.bp-card>:not(.bp-media){margin-inline:12px}
+body main .cc-node.bp-card>:last-child{margin-bottom:0}
+body main .cc-promo.bp-card{display:grid;grid-template-columns:180px minmax(0,1fr) 30px;padding:0;border:1px solid var(--line);border-radius:8px;background:var(--panel);gap:20px}
+body main .cc-promo.bp-card>.bp-media{width:180px;height:150px;margin:0;aspect-ratio:auto}
+body main .cc-promo.bp-card>span[aria-hidden]:not(.bp-media){display:none}
+body main .cc-promo.bp-card>:not(.bp-media){margin:0}
+body main .cc-promo.bp-card p{display:none}
+#learningPaths .bp-card{padding:0;overflow:hidden;text-align:left}
+#learningPaths .bp-card>:not(.bp-media){margin-inline:15px}#learningPaths .bp-card>.bp-media{margin-bottom:13px}
+#learningPaths .bp-card .ic,#learningPaths .bp-card p{display:none}#learningPaths .bp-card h3{margin-bottom:16px;font-size:17px}
+.bp-nav-preview{position:fixed;z-index:1000;width:272px;padding:7px;background:var(--panel);border:1px solid var(--hair);border-radius:10px;box-shadow:0 16px 45px #0005;pointer-events:none}
+.bp-nav-preview[hidden]{display:none}.bp-nav-preview .bp-media{border-radius:6px;aspect-ratio:16/10}.bp-nav-preview strong{display:block;padding:10px 7px 6px;font:500 13px/1.4 var(--sans);color:var(--ink)}
+@media(hover:hover) and (pointer:fine){.bp-card:hover>.bp-media img{transform:scale(1.025)}}
+@media(prefers-reduced-motion:reduce){.bp-media img{transition:none}.bp-card:hover>.bp-media img{transform:none}}
+@media(max-width:600px){body main .bp-card>:not(.bp-media){margin-inline:16px}body main .bp-card>:last-child{margin-bottom:16px}.bp-nav-preview{display:none!important}}
+/* Compact first screens keep models close to their headings and filters. */
+body main :is(.les-listhead,.rz-listhead,.sv-hero){padding-block:12px 24px}
+body main :is(.les-listhead,.rz-listhead,.sv-hero) h1{font-size:clamp(29px,3.4vw,42px);margin:9px 0 12px!important}
+body main :is(.les-listhead,.rz-listhead,.sv-hero) .lead{font-size:14px;line-height:1.65;margin:0;max-width:60ch}
+body main .les-filters{padding:16px;margin-bottom:22px}
+body main .sv-hero .sv-stats{margin-top:22px;gap:9px}
+body main .sv-hero .sv-stat{padding:12px 15px}
+body main .sv-hero .sv-stat b{font-size:22px}
+body main .sv-hero .sv-stat span{font-size:9px}
+.sv-opt.bp-choice{display:flex;align-items:center;gap:10px;padding:7px;overflow:hidden;text-align:left}
+.sv-opt.bp-choice>.bp-media{width:65px;height:52px;flex:none;border:0;border-radius:3px;aspect-ratio:auto}
+.sv-opt.bp-choice>.oi{display:none}
+.sv-opt.bp-choice>span:not(.bp-media){min-width:0;font-size:12px;line-height:1.4}
+.sv-opt.bp-choice .osub{font-size:10px;margin-top:3px}
+@media(max-width:600px){
+ body main .les-filterfields{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+ body main .les-filterfields .les-search{grid-column:1/-1}
+ body main .les-filters{padding:14px}
+ body main :is(.les-listhead,.rz-listhead,.sv-hero){padding-top:0}
+ body main .sv-hero .sv-stats{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+ body main .sv-hero .sv-stat{padding:10px 7px;min-width:0}
+ body main .sv-hero .sv-stat b{font-size:19px}
+ body main .sv-hero .sv-stat span{font-size:8px;line-height:1.5}
+ body main .sv-topics{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .sv-opt.bp-choice{flex-direction:column;align-items:stretch;padding:5px 5px 10px}
+ .sv-opt.bp-choice>.bp-media{width:100%;height:65px}
+ .sv-opt.bp-choice>span:not(.bp-media){padding-inline:5px}
+ body main .cc-promo.bp-card{grid-template-columns:85px minmax(0,1fr) 20px;gap:12px}
+ body main .cc-promo.bp-card>.bp-media{width:85px;height:130px}
+}
+</style>
+<!-- BIO-PREVIEWS:css:END -->
 </head>
 <body>
 <!-- sidebar -->
@@ -532,11 +642,11 @@ function navItem(v,launch){
   b.innerHTML=IC[v.k]+`<span>${v.label}</span>`+(launch?`<span class="tag">Enter</span>`:"");
   return b;   // clicks handled by the delegated [data-go] listener below
 }
-["home","universe","learn","lessons","solve","reason"].forEach(k=>nav.appendChild(navItem(BYKEY[k],LAUNCH.includes(BYKEY[k]))));
+["home","learn","labs","lessons","reason","solve"].forEach(k=>nav.appendChild(navItem(BYKEY[k],false)));
 const sep=document.createElement("div"); sep.className="side-sep"; nav.appendChild(sep);
-["lab","labs","explore","me"].forEach(k=>nav.appendChild(navItem(BYKEY[k],LAUNCH.includes(BYKEY[k]))));
+["universe","lab","explore","me"].forEach(k=>nav.appendChild(navItem(BYKEY[k],LAUNCH.includes(BYKEY[k]))));
 const quick=document.createElement("div");quick.className="sec";quick.textContent="Quick actions";nav.appendChild(quick);
-[{k:"lessons",label:"Continue learning"},{k:"reason",label:"Reason it through"},{k:"about",label:"About Entelloq"}].forEach(v=>{
+[{k:"lessons",label:"Continue learning"},{k:"about",label:"About Entelloq"}].forEach(v=>{
   const b=navItem(v,false);b.classList.add("quick-action");if(v.k==="lessons")b.id="continueLearning";nav.appendChild(b);
 });
 
@@ -615,29 +725,22 @@ function buildHome(){
   const lastTopic=last&&CMDS.find(c=>c.k===last.k&&c.sub===last.sub);
   const target=last?{k:last.k,sub:last.sub}: {k:"lessons",sub:"diffusion"};
   const title=last?(lastTopic?lastTopic.label:BYKEY[last.k].label):"Life across a membrane.";
-  const description=last?BYKEY[last.k].desc:"A living cell begins with a boundary. Follow molecules across it, change the conditions, and discover what keeps life in balance.";
   const action=last?"Continue "+(lastTopic?lastTopic.label:BYKEY[last.k].label):"Start exploring";
   const explored=exploredLessons(),total=BIO_FIELDS.reduce((n,f)=>n+f.ids.length,0);
-  const art=`<svg viewBox="0 0 480 320" aria-hidden="true">
-    <defs><radialGradient id="bio-cell-glow"><stop stop-color="#6da99b" stop-opacity=".15"/><stop offset="1" stop-color="#101e29" stop-opacity="0"/></radialGradient></defs>
-    <ellipse cx="242" cy="148" rx="205" ry="142" fill="url(#bio-cell-glow)" stroke="none"/>
-    <path d="M88 138C83 67 164 37 241 52C323 31 401 79 388 148C412 215 317 250 242 236C151 258 68 213 88 138Z" stroke-width="1.5"/>
-    <path d="M97 138C92 75 163 46 241 61C315 40 391 82 379 148C401 207 316 240 242 227C156 249 80 209 97 138Z" opacity=".4"/>
-    <ellipse cx="247" cy="145" rx="45" ry="39" stroke-width="1.2"/><ellipse cx="247" cy="145" rx="38" ry="33" opacity=".3"/>
-    <path d="M234 130c25-7 5 33 27 20m-32-1c23 16 25-24 35-14" opacity=".7"/>
-    <g class="molecule-drift"><circle class="molecule" cx="137" cy="95" r="3"/><circle class="molecule" cx="163" cy="188" r="3"/><circle class="molecule" cx="341" cy="149" r="3"/><circle class="molecule" cx="311" cy="85" r="3"/><circle class="molecule" cx="46" cy="142" r="3"/><circle class="molecule" cx="67" cy="94" r="3"/><circle class="molecule" cx="52" cy="188" r="3"/><circle class="molecule" cx="417" cy="179" r="3"/></g>
-    <g class="molecule-drift"><circle class="solute" cx="181" cy="116" r="3"/><circle class="solute" cx="312" cy="185" r="3"/><circle class="solute" cx="217" cy="196" r="3"/><circle class="solute" cx="420" cy="105" r="3"/><circle class="solute" cx="181" cy="81" r="3"/></g>
-    <path d="M116 148H52m7-5-7 5 7 5M351 118h72m-7-5 7 5-7 5" stroke-dasharray="3 5" opacity=".6"/>
-    <path d="m292 195 30 58h77M242 63V29h75" stroke-dasharray="2 4" opacity=".3"/>
-  </svg>`;
   $("#homeIn").innerHTML=`
-    <div class="cc-head"><div><div class="eyebrow">YOUR BIOLOGY COMMAND CENTRE</div><h1>Your next discovery.</h1></div><p>Build a model of life.<br>One experiment at a time.</p></div>
-    <section class="cc-hero"><div class="cc-hero-copy"><small>${last?"YOUR NEXT CONNECTION":"FEATURED EXPLORATION / THE LIVING CELL"}</small><h2>${escapeHTML(title)}</h2><p>${escapeHTML(description)}</p><button class="btn" data-go="${target.k}"${target.sub?` data-sub="${escapeHTML(target.sub)}"`:""}>${escapeHTML(action)} ↗</button></div><div class="cc-art">${art}<span>MEMBRANES · TRANSPORT · HOMEOSTASIS</span></div></section>
-    <div class="cc-worlds">
-      <button class="cc-world" data-go="lab"><span class="cc-ic" aria-hidden="true">⌁</span><small>01 / THE DISSECTION THEATRE</small><h3>Dissection Lab ↗</h3><p>Explore a specimen, reveal its structures, and connect anatomy to function.</p></button>
-      <button class="cc-world" data-go="universe"><span class="cc-ic" aria-hidden="true">◎</span><small>02 / THE LIVING UNIVERSE</small><h3>Travel through life ↗</h3><p>From a planet to a protein. Follow the connections across the scales of life.</p></button>
-      <button class="cc-world" data-go="labs" data-sub="enzyme-kinetics"><span class="cc-ic" aria-hidden="true">∿</span><small>03 / THE MOLECULAR BENCH</small><h3>Make life react ↗</h3><p>Change the conditions. See how enzymes turn molecular encounters into life.</p></button>
-    </div>
+    <div class="cc-head"><div><div class="eyebrow">BIOLOGY ENTELLOQ</div><h1>Your next discovery.</h1></div><p>See the model.<br>Choose your next question.</p></div>
+    <section class="cc-hero"><div class="cc-hero-copy"><small>${last?"CONTINUE EXPLORING":"START WITH A LIVING SYSTEM"}</small><h2>${escapeHTML(title)}</h2><button class="btn" data-go="${target.k}"${target.sub?` data-sub="${escapeHTML(target.sub)}"`:""}>${escapeHTML(action)} ↗</button></div><div class="cc-art" data-preview-route="${target.k}" data-preview-sub="${escapeHTML(target.sub||'')}"></div></section>
+    <div class="cc-directory-head"><h2>Find your way into biology</h2><span>Models, experiments & ideas</span></div>
+    <div class="cc-worlds">${[
+      ['learn','The concept library','73 concepts · Six perspectives'],
+      ['labs','Your experiment bench','23 investigations · Save your evidence'],
+      ['universe','Across the scales of life','A continuous 3D exploration'],
+      ['lab','Inside living anatomy','Five virtual specimens'],
+      ['lessons','An idea, from six angles','Nine interactive lessons'],
+      ['reason','Follow the evidence','73 concept prompts · Three evidence cases'],
+      ['solve','Put your ideas to the test','Practice · Timed · Adaptive'],
+      ['explore','The living reference','Atlases · Evolution · Discoveries']
+    ].map(([key,name,meta])=>`<button class="cc-world" data-go="${key}"><small>${BYKEY[key].label}</small><h3>${name} <span aria-hidden="true">↗</span></h3><span class="cc-world-meta">${meta}</span></button>`).join('')}</div>
     <section class="cc-map"><div class="cc-map-head"><div><small>CONNECTED, NOT COLLECTED</small><h3>Your Biology Map</h3></div><button class="btn" data-go="universe">Open the universe ↗</button></div><div class="cc-map-grid">${BIO_FIELDS.map(field=>{const count=field.ids.filter(id=>explored.has(id)).length;return `<button class="cc-node" data-go="lessons" data-sub="${field.ids.find(id=>!explored.has(id))||field.ids[0]}"><b>${field.name}</b><span aria-hidden="true"><i style="width:${count/field.ids.length*100}%"></i></span><small>${count} / ${field.ids.length} explored</small></button>`;}).join("")}</div><p class="cc-summary">${explored.size} of ${total} lessons explored on this device. Exploration is a beginning. Use predictions, practice, and evidence to deepen your understanding.</p></section>
     <button class="cc-promo" data-go="reason"><span aria-hidden="true">∴</span><span><small>BEYOND RECALL / BIOLOGICAL REASONING</small><strong>Think like a biologist</strong><p>Make a prediction. Follow the evidence. Build an explanation that holds.</p></span><span aria-hidden="true">↗</span></button>
     <div class="cc-return"><button class="btn" data-go="me">Your learning & progress →</button><button class="btn" data-go="explore">Explore discoveries →</button><button class="btn" id="choosePath">Choose my next step</button></div>`;
@@ -1499,18 +1602,90 @@ prefetchSections();
   addEventListener('message',e=>{
     const frame=document.getElementById('viewFrame');
     if(!frame || e.source!==frame.contentWindow || e.origin!==location.origin)return;
-    const c=e.data?.bioqContext;if(!c || !['learn','lab'].includes(c.kind))return;
-    const id=c.kind==='learn'?(c.subtopicId||c.topic):c.lab;
+    const c=e.data?.bioqContext;if(!c || !['learn','lab','reason','solve'].includes(c.kind))return;
+    const id=c.kind==='lab'?c.lab:(c.subtopicId||c.topic);
     if(typeof id!=='string'||!/^[-a-z0-9]+$/.test(id))return;
     const modes=['layman','intuition','visual','scientific','advanced','realWorld'];
-    const section=c.kind==='learn'?'learn':'labs';
+    const section=c.kind==='lab'?'labs':c.kind;
     if(!new URL(frame.src,location.href).pathname.endsWith('/'+section+'.html'))return;
-    const sub=c.kind==='learn'?'topic/'+id+'/'+(modes.includes(c.mode)?c.mode:'layman'):id;
+    const mode=modes.includes(c.mode)?c.mode:'layman';
+    const sub=c.kind==='lab'?id:(c.kind==='learn'?'topic/':'learn/')+id+'/'+mode;
     if(location.hash!=='#'+section+'/'+sub)history.replaceState({k:section,sub},'','#'+section+'/'+sub);
-    const crumb=document.getElementById('routeLabel');if(crumb)crumb.textContent=(section==='learn'?'Learn':'Lab')+' / '+(c.title||id)+(c.subtopic?' / '+c.subtopic:'');
+    const crumb=document.getElementById('routeLabel');if(crumb)crumb.textContent=({learn:'Learn',labs:'Lab',reason:'Reason',solve:'Solve'}[section])+' / '+(c.title||id)+(c.subtopic?' / '+c.subtopic:'');
   });
 })();
 </script>
 <!-- BIO-LIBRARY:app-script:END -->
+<!-- BIO-PREVIEWS:js:START -->
+<script>
+/* Real view captures for browsing. Previews never start an experiment. */
+(function(){
+  'use strict';
+  const sections=['home','learn','lessons','reason','labs','solve','explore','me','about','lab','universe'];
+  const lessons=['diffusion','enzyme','population','photosynthesis','respiration','replication','selection','actionpotential','cardiac'];
+  const workouts=['altitude','resistance','glucose'];
+  const legacy={cell:'legacy-cell',microscope:'legacy-microscope'};
+  function routeKey(k,sub){
+    if(k==='learn'&&legacy[sub])return legacy[sub];
+    if(k==='explore'&&['tree','atlas','timeline','graph','diseases'].includes(sub))return 'explore-'+sub;
+    if(k==='lessons'&&lessons.includes(sub))return 'lesson-'+sub;
+    if(k==='reason'&&workouts.includes(sub))return 'reason-'+sub;
+    if(k==='labs'&&/^[a-z0-9-]+$/.test(sub||''))return 'lab-'+sub;
+    return sections.includes(k)?'section-'+k:null;
+  }
+  function media(key){
+    const figure=document.createElement('span');figure.className='bp-media';figure.setAttribute('aria-hidden','true');
+    const image=document.createElement('img');image.src='./assets/previews/'+key+'.webp';image.alt='';image.width=640;image.height=400;image.loading='lazy';image.decoding='async';
+    image.addEventListener('error',()=>{figure.classList.add('bp-unavailable');image.remove();figure.textContent='Preview unavailable';},{once:true});
+    figure.append(image);return figure;
+  }
+  function attach(card,key){
+    if(!key||card.dataset.previewMounted)return;
+    card.dataset.previewMounted=key;card.classList.add('bp-card');card.prepend(media(key));
+  }
+  const selector='#homeIn .cc-world,#homeIn .cc-node,#homeIn .cc-promo,#learningPaths .tile,.les-card,.rz-workout,#catalog .exp,#recSlot .card,[data-preview-route],[data-bio-preview]';
+  function enhance(){
+    document.querySelectorAll(selector).forEach(card=>{
+      let key=card.dataset.bioPreview;
+      if(!key&&card.dataset.previewRoute)key=routeKey(card.dataset.previewRoute,card.dataset.previewSub);
+      if(!key&&card.dataset.go)key=routeKey(card.dataset.go,card.dataset.sub);
+      if(!key&&card.dataset.lesson)key='lesson-'+card.dataset.lesson;
+      if(!key&&card.matches('.rz-workout')){const id=card.getAttribute('href')?.slice(1);if(workouts.includes(id))key='reason-'+id;}
+      if(!key&&card.matches('#recSlot .card')){const link=card.querySelector('a[href]');if(link){const url=new URL(link.href,location.href);key=routeKey(url.pathname.split('/').pop().replace('.html',''),url.hash.slice(1));}}
+      if(!key&&card.matches('#catalog .exp')){
+        const link=card.matches('a')?card:card.querySelector('a[href]');
+        if(link){const url=new URL(link.href,location.href);const route=url.pathname.split('/').pop().replace('.html','');key=routeKey(route,url.hash.slice(1))||legacy[url.hash.slice(1)];}
+      }
+      attach(card,key);
+    });
+    const topicImages={'Mixed':'section-learn','Cell Biology':'legacy-cell','Genetics & DNA':'lesson-replication','Human Physiology':'lab-heart-rate','Evolution':'lesson-selection','Ecology':'lesson-population','Plant Biology':'lesson-photosynthesis','Microbiology':'lab-microscope','Biotechnology':'lab-pcr'};
+    document.querySelectorAll('.sv-opt[data-group="topic"],.sv-opt[data-group="mode"]').forEach(button=>{
+      const key=button.dataset.group==='topic'?topicImages[button.dataset.val]:'solve-'+button.dataset.val;
+      if(!key||button.dataset.previewMounted)return;
+      button.dataset.previewMounted=key;button.classList.add('bp-choice');button.prepend(media(key));
+    });
+  }
+  let queued=false;
+  const observer=new MutationObserver(records=>{
+    if(queued||!records.some(r=>[...r.addedNodes].some(n=>n.nodeType===1&&!n.matches('.bp-media,.bp-media *')&&(n.matches(selector+',.sv-opt')||n.querySelector(selector+',.sv-opt')))))return;
+    queued=true;queueMicrotask(()=>{queued=false;enhance();});
+  });
+  observer.observe(document.body,{childList:true,subtree:true});enhance();
+  const tip=document.createElement('div');tip.id='bio-nav-preview';tip.className='bp-nav-preview';tip.hidden=true;tip.setAttribute('role','tooltip');document.body.append(tip);let active=null;
+  function hide(){if(active)active.removeAttribute('aria-describedby');active=null;tip.hidden=true;}
+  function show(button){
+    if(!matchMedia('(min-width:851px)').matches)return;
+    const key=routeKey(button.dataset.go,button.dataset.sub);if(!key)return;
+    hide();active=button;tip.replaceChildren(media(key));const label=document.createElement('strong');label.textContent=button.textContent.trim();tip.append(label);tip.hidden=false;
+    const rect=button.getBoundingClientRect();tip.style.left=Math.min(innerWidth-292,rect.right+14)+'px';tip.style.top=Math.max(12,Math.min(innerHeight-230,rect.top-15))+'px';button.setAttribute('aria-describedby',tip.id);
+  }
+  document.querySelectorAll('.side [data-go]').forEach(button=>{
+    button.addEventListener('pointerenter',e=>{if(e.pointerType!=='touch')show(button);});button.addEventListener('pointerleave',hide);button.addEventListener('focus',()=>show(button));button.addEventListener('blur',hide);button.addEventListener('click',hide);
+  });
+  addEventListener('keydown',event=>{if(event.key==='Escape')hide();});addEventListener('resize',hide);
+  window.BioPreviews={refresh:enhance,routeKey};
+})();
+</script>
+<!-- BIO-PREVIEWS:js:END -->
 </body>
 </html>

@@ -160,10 +160,10 @@
 
   function renderList() {
     app.innerHTML = "";
-    const head = el("div", "wrap band", `
+    const head = el("div", "wrap band rz-listhead", `
       <div class="eyebrow">Think like a biologist</div>
-      <h1 class="h1" style="margin:16px 0 16px">Don't memorise answers.<br><span class="grad">Build the reasoning.</span></h1>
-      <p class="lead" style="max-width:640px">Each workout walks you through how a biologist actually thinks — name the principles, find what's regulated, follow the structure to the function, choose a strategy, then reason it out and generalise.</p>`);
+      <h1 class="h1" style="margin:12px 0">Start with a question.</h1>
+      <p class="lead" style="max-width:640px">Three guided cases. Preview the evidence, then build your explanation.</p>`);
     app.appendChild(head);
     const wrap = el("div", "wrap rz-catalog");
     const tools = el("div", "rz-find");
@@ -188,7 +188,7 @@
         const details = WORKOUT_DETAILS[p.id];
         const c = el("a", "card rz-workout"); c.href = "#" + p.id; c.style.setProperty("--lc", p.color);
         c.innerHTML = `<div class="glow"></div><div class="rz-dom" style="color:${p.color}">${p.domain}</div>
-          <h2 class="h3" style="margin:6px 0 10px">${p.title}</h2><p>${p.prompt.slice(0, 120)}…</p>
+          <h2 class="h3" style="margin-block:6px 10px">${p.title}</h2><p>${p.prompt.slice(0, 120)}…</p>
           <div class="rz-skills" aria-label="Reasoning skills">${details.skills.map((skill) => `<span>${skill}</span>`).join("")}</div>
           <p class="rz-outcome"><strong>Work towards</strong>${details.outcome}</p>
           <div class="rz-go" style="color:${p.color}">Reason it through <span aria-hidden="true">→</span></div>`;
