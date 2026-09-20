@@ -2200,9 +2200,28 @@ function buildUniverseUI(core) {
   // ── info panel ───────────────────────────────────────────────────────────
   const panel = el('div', 'u-panel');
   document.body.appendChild(panel);
-  function closePanel() { panel.classList.remove('open'); }
+  let panelAbort = null, panelGeneration = 0, clientPromise = null;
+  function cancelPanelAI() { ++panelGeneration; if (panelAbort) panelAbort.abort(); panelAbort = null; }
+  function closePanel() { cancelPanelAI(); panel.classList.remove('open'); }
+  addEventListener('pagehide', cancelPanelAI);
+  function getAIClient() {
+    if (window.BIOQ_AI) return Promise.resolve(window.BIOQ_AI);
+    if (clientPromise) return clientPromise;
+    clientPromise = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      let timer;
+      const fail = () => { clearTimeout(timer); script.remove(); clientPromise = null; reject(new Error('unavailable')); };
+      script.src = './src/ai/biology-ai.js'; script.async = true;
+      script.onload = () => { clearTimeout(timer); if (window.BIOQ_AI) resolve(window.BIOQ_AI); else fail(); };
+      script.onerror = fail;
+      timer = setTimeout(fail, 8000);
+      document.head.appendChild(script);
+    });
+    return clientPromise;
+  }
 
   function openPanel(meta, stageKey) {
+    cancelPanelAI();
     const sd = data[stageKey] || {};
     const title = meta && meta.name ? meta.name : sd.title;
     const desc = meta && meta.desc ? meta.desc : sd.blurb;
@@ -2220,7 +2239,7 @@ function buildUniverseUI(core) {
       <div class="desc">${desc}</div>
       ${ai ? `<div class="u-ai" id="uAi">
         <button class="askbtn">${UIC.ai} Ask the tutor</button>
-        <div class="answer" id="uAns"></div></div>` : ''}
+        <div class="answer" id="uAns" role="status" style="white-space:pre-wrap"></div></div>` : ''}
       ${facts.length ? `<div class="sec"><h4>Did you know</h4><ul>${facts.map((f) => `<li>${f}</li>`).join('')}</ul></div>` : ''}
       ${diseases.length ? `<div class="sec"><h4>${UIC.dis} When it goes wrong</h4><ul>${diseases.map((d) => `<li class="dis">${d}</li>`).join('')}</ul></div>` : ''}
       ${research.length ? `<div class="sec"><h4>${UIC.res} At the frontier</h4><ul>${research.map((r) => `<li>${r}</li>`).join('')}</ul></div>` : ''}
@@ -2233,19 +2252,35 @@ function buildUniverseUI(core) {
     }));
     const aiBox = panel.querySelector('#uAi');
     if (aiBox) {
-      aiBox.querySelector('.askbtn').addEventListener('click', () => {
-        // Re-entry guard: a second click must not spawn a second typewriter racing
-        // the first on the same node.
-        if (aiBox.classList.contains('show')) return;
-        // No cloud model here: the "tutor" answers from the verified knowledge for
-        // this scale — the seed question plus the facts, typed out. Honest, offline.
+      const button = aiBox.querySelector('.askbtn');
+      button.addEventListener('click', async () => {
         const ans = aiBox.querySelector('#uAns');
+        if (panelAbort) { cancelPanelAI(); button.textContent = 'Ask the tutor'; ans.textContent = 'Request stopped.'; return; }
+        cancelPanelAI();
+        const gen = panelGeneration, controller = new AbortController(); panelAbort = controller;
+        const current = () => gen === panelGeneration && ans.isConnected;
         aiBox.classList.add('show');
-        const text = `${ai} — ${desc} ${facts[0] || ''}`;
-        const cite = `<span class="cite">Explained from Biology Entelloq’s knowledge base · open the full tutor in the app</span>`;
-        // Append the citation ONLY after typing finishes — each textContent write
-        // replaces all children, so appending before completion would erase it.
-        typeInto(ans, text, () => ans.insertAdjacentHTML('beforeend', cite));
+        ans.textContent = 'Thinking…'; button.textContent = 'Stop';
+        let answer = `${ai} — ${desc} ${facts[0] || ''}`;
+        let source = 'Offline example · Biology Entelloq knowledge base';
+        try {
+          const client = await getAIClient();
+          if (!current() || controller.signal.aborted) return;
+          answer = await client.ask({ question: ai,
+            context: 'Biology Universe. Selected topic: ' + title + '. Scale: ' + sd.scaleLabel + '. '
+              + desc + '\nReference facts: ' + facts.join(' ') + '\nThe colours, sizes and motion are illustrative, not experimental measurements.',
+            signal: controller.signal });
+          source = 'AI explanation · verify important details';
+        } catch (error) {
+          if (controller.signal.aborted) return;
+          source = (window.BIOQ_AI ? window.BIOQ_AI.explainError(error) : 'AI is unavailable right now.') + ' Showing an offline example.';
+        }
+        if (!current()) return;
+        panelAbort = null; button.textContent = 'Ask again';
+        typeInto(ans, answer, () => {
+          if (!current()) return;
+          const cite = el('span', 'cite'); cite.textContent = source; ans.appendChild(cite);
+        }, current);
       });
     }
     panel.classList.add('open');
@@ -2253,10 +2288,12 @@ function buildUniverseUI(core) {
 
   // typewriter that respects reduced motion
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-  function typeInto(node, text, done) {
+  function typeInto(node, text, done, current) {
+    if (current && !current()) return;
     if (reduced.matches || document.body.classList.contains('u-keyboard')) { node.textContent = text; if (done) done(); return; }
     node.textContent = ''; let n = 0;
     (function t() {
+      if (current && !current()) return;
       n += Math.max(1, Math.round(text.length / 90)); node.textContent = text.slice(0, n);
       if (n < text.length) setTimeout(t, 16); else if (done) done();
     })();

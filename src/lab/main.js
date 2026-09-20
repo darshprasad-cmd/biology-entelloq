@@ -1818,4 +1818,16 @@ async function startPreparedApp() {
   }
   window.__LAB.ready = true;
   if (!preparedInstall) shell.say('Original interactive frog — the scanned exterior is unavailable. Reload to retry.');
+  // Optional explanation panel. The local tutor still owns every question,
+  // rubric and grade; loading AI must never hold up the simulation or camera.
+  try {
+    if (window.BIOQ_AI) window.BIOQ_AI.mount('lab');
+    else {
+      const aiScript = document.createElement('script');
+      aiScript.src = './src/ai/biology-ai.js';
+      aiScript.setAttribute('data-bioq-assistant', 'lab');
+      aiScript.async = true;
+      document.head.appendChild(aiScript);
+    }
+  } catch (e) { /* the complete local tutor remains available offline */ }
 }
