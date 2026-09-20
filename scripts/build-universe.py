@@ -9,7 +9,7 @@ from pathlib import Path
 import re
 
 ROOT = Path(__file__).resolve().parents[1]
-MODULES = ("kit.js", "core.js", "stage_cosmic.js", "stage_molecular.js", "ui.js")
+MODULES = ("kit.js", "core.js", "data.js", "stage_cosmic.js", "stage_body.js", "stage_cell.js", "stage_molecular.js", "ui.js")
 
 
 def slot_pattern(name):

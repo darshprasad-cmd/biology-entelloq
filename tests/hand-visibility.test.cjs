@@ -206,13 +206,21 @@ test('phone preview can collapse without hiding stop or error status; motion pre
 function objectiveFixture(id, index = 0) {
   const definition = source.slice(source.indexOf('const OBJECTIVES = '), source.indexOf('export function buildShell(root)'));
   const tools = source.slice(source.indexOf('const SHELL_TOOLS = '), source.indexOf('/* Teaching level.'));
-  const refresh = source.slice(source.indexOf('  function refreshObjective(state)'), source.indexOf('  function pushEvent(evt)'));
-  const labels = {};
+  const refreshStart = source.indexOf('  function refreshObjective(');
+  const refreshEnd = source.indexOf('  function pushEvent(', refreshStart);
+  assert.ok(refreshStart >= 0 && refreshEnd > refreshStart, 'objective renderer must be present in the source fixture');
+  const refresh = source.slice(refreshStart, refreshEnd);
+  const checkStart = source.indexOf('    checkObjectives:');
+  const checkEnd = source.indexOf('    setObjective:', checkStart);
+  assert.ok(checkStart >= 0 && checkEnd > checkStart, 'public objective callback must be present in the source fixture');
+  const check = 'this.checkObjectives = ({' + source.slice(checkStart, checkEnd) + '}).checkObjectives;';
+  const labels = {}, events = [], dots = [];
   const ctx = { spec: { id }, objIdx: index, seen: new Set(), SH_PHONE: false,
-    objBar: { querySelectorAll: () => [], querySelector: name => labels[name] || (labels[name] = {}) },
-    hint: {}, objHint: {}, pushEvent() {} };
-  vm.createContext(ctx); vm.runInContext(tools + definition + refresh, ctx);
-  return { ctx, labels, state: { pinned: new Set(), incisions: new Map(), opened: new Set(), removed: new Set() } };
+    objBar: { querySelectorAll: () => dots, querySelector: name => labels[name] || (labels[name] = {}) },
+    hint: {}, objHint: {}, pushEvent(event) { events.push(event); } };
+  vm.createContext(ctx); vm.runInContext(tools + definition + refresh + check, ctx);
+  dots.push(...Array.from({ length: vm.runInContext('(OBJECTIVES[spec.id] || []).length', ctx) }, () => ({ className: '' })));
+  return { ctx, labels, events, dots, state: { pinned: new Set(), incisions: new Map(), opened: new Set(), removed: new Set() } };
 }
 
 test('frog guide keeps eight steps and cannot skip fascia or identify organs behind peritoneum', () => {
@@ -259,4 +267,43 @@ test('legacy species hints use the actual dock numbers instead of reversed short
     hint: 'Scalpel (3), then Forceps (2). Pins (4).', done: () => false }] };
   ctx.refreshObjective(state);
   assert.equal(ctx.hint.innerHTML, 'Scalpel (2), then Forceps (3). Pins (4).');
+});
+
+test('Undo re-evaluates objectives and progress dots without repeating completion records or erasing discoveries', () => {
+  const { ctx, labels, state, events, dots } = objectiveFixture('frog');
+  for (const limb of ['forelimb-left', 'forelimb-right', 'hindlimb-left', 'hindlimb-right']) state.pinned.add(limb);
+  state.incisions.set('skin', { length: 2 }); state.incisions.set('muscle-wall', { length: 2 });
+  state.removed.add('skin'); state.removed.add('subcutaneous-fascia');
+  state.opened.add('muscle-wall'); state.opened.add('parietal-peritoneum');
+  const discoveries = ['liver-median', 'frog-heart', 'lung-left', 'small-intestine'];
+  discoveries.forEach(id => ctx.seen.add(id));
+  ctx.checkObjectives(state, { kind: 'discover' });
+  assert.equal(ctx.objIdx, 6);
+  assert.equal(events.length, 6, 'ordinary progress records each completed objective');
+
+  state.opened.delete('parietal-peritoneum');
+  ctx.checkObjectives(state, { kind: 'undo' });
+  assert.equal(ctx.objIdx, 4, 'restoring a covering layer returns to the expose-cavity objective');
+  assert.match(labels['#objtxt'].innerHTML, /parietal peritoneum/);
+  assert.equal(labels['#objn'].textContent, 'Step 5 / 8');
+  assert.deepEqual(dots.map(dot => dot.className), ['done', 'done', 'done', 'done', 'now', '', '', '']);
+  assert.equal(events.length, 6, 'already completed earlier steps are not appended again during Undo');
+  assert.deepEqual([...ctx.seen], discoveries, 'the learner still knows the structures they identified');
+
+  state.incisions.delete('muscle-wall'); ctx.checkObjectives(state, { kind: 'undo' });
+  assert.equal(ctx.objIdx, 3);
+  state.removed.delete('subcutaneous-fascia'); ctx.checkObjectives(state, { kind: 'undo' });
+  assert.equal(ctx.objIdx, 2);
+  state.incisions.delete('skin'); ctx.checkObjectives(state, { kind: 'undo' });
+  assert.equal(ctx.objIdx, 1);
+  state.pinned.delete('hindlimb-right'); ctx.checkObjectives(state, { kind: 'undo' });
+  assert.equal(ctx.objIdx, 0);
+  assert.equal(labels['#objn'].textContent, 'Step 1 / 8');
+  assert.deepEqual(dots.map(dot => dot.className), ['now', '', '', '', '', '', '', '']);
+  assert.equal(events.length, 6);
+
+  state.pinned.add('hindlimb-right'); ctx.checkObjectives(state, { kind: 'pin' });
+  assert.equal(ctx.objIdx, 1);
+  assert.equal(events.length, 7, 'performing the undone action again records its new completion');
+  assert.equal(events.at(-1).text, 'Objective complete: pin');
 });

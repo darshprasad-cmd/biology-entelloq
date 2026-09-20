@@ -42,6 +42,92 @@ export function createDissection(THREE, ctx) {
   // per-attempt, and mixing the two is how undo semantics get confusing later.
   let stroke = null;
 
+  // One entry per deliberate action, shared by mouse, touch and tracked hands.
+  // Preserve mesh identities and immutable incision arrays; never retain GPU
+  // geometry clones. Both entry count and an upper-bound byte estimate are capped.
+  const history = [];
+  const HISTORY_LIMIT = 24, HISTORY_BYTES = 8 * 1024 * 1024;
+  let historyBytes = 0, pending = null, releaseRequired = false;
+  const changedHistory = () => ctx.onHistoryChange && ctx.onHistoryChange();
+
+  function beginAction(kind, part) {
+    const visuals = parts.map(p => ({ mesh: p.mesh, visible: p.mesh.visible,
+      position: p.mesh.position.clone(), quaternion: p.mesh.quaternion.clone(), scale: p.mesh.scale.clone(),
+      peelable: p.mesh.userData.peelable,
+      materials: (Array.isArray(p.mesh.material) ? p.mesh.material : [p.mesh.material]).map(material => ({
+        material, color: material.color?.clone(), emissive: material.emissive?.clone(),
+        opacity: material.opacity, transparent: material.transparent, depthWrite: material.depthWrite,
+      })) }));
+    // Hover is cursor feedback, not part of the action's persistent material.
+    if (hovered) visuals.find(v => v.mesh === hovered.mesh)?.materials.forEach(m => m.emissive?.setHex(0));
+    const incisions = new Map([...state.incisions].map(([id, inc]) => [id, { ...inc }]));
+    const external = ctx.captureAction ? ctx.captureAction(part.id, kind) : null;
+    pending = { kind, partId: part.id, label: kind + ' — ' + part.name, changed: false,
+      visuals, incisions, pinned: new Set(state.pinned), opened: new Set(state.opened),
+      removed: new Set(state.removed), damage: state.damage.slice(), maxLayerRevealed: state.maxLayerRevealed,
+      pins: pinMarks.children.map(m => ({ partId: m.userData.partId, position: m.position.clone() })),
+      peeling: new Map([...peeling].map(([id, st]) => [id, Object.fromEntries(
+        Object.entries(st).map(([key, value]) => [key, value?.clone ? value.clone() : value]))])),
+      external,
+      bytes: visuals.length * 256 + [...incisions.values()].reduce((n, inc) => n + inc.points.length * 24, 0)
+        + (external?.cut?.local?.length || 0) * 24 + (external?.cut?.rest?.byteLength || 0),
+    };
+    changedHistory();
+  }
+
+  function finishAction() {
+    if (!pending) return;
+    if (pending.changed) {
+      history.push(pending); historyBytes += pending.bytes;
+      while (history.length > HISTORY_LIMIT || historyBytes > HISTORY_BYTES) historyBytes -= history.shift().bytes;
+    }
+    pending = null;
+    changedHistory();
+  }
+
+  function clearHistory() {
+    history.length = 0; historyBytes = 0; pending = null;
+    changedHistory();
+  }
+
+  function undo() {
+    const saved = pending || history.pop();
+    if (!saved) return false;
+    if (!pending) historyBytes -= saved.bytes;
+    pending = null; stroke = null; lift = null; grabbed = null;
+    wasGripping = false; releaseRequired = true;
+    if (hovered) setEmissive(hovered, 0);
+    hovered = null; contact = null;
+    for (const name of ['pinned', 'opened', 'removed']) {
+      state[name].clear(); saved[name].forEach(id => state[name].add(id));
+    }
+    state.incisions.clear(); saved.incisions.forEach((inc, id) => state.incisions.set(id, { ...inc }));
+    state.damage.splice(0, state.damage.length, ...saved.damage);
+    state.maxLayerRevealed = saved.maxLayerRevealed;
+    peeling.clear(); saved.peeling.forEach((st, id) => peeling.set(id, st));
+    clearPins(); saved.pins.forEach(pin => addPinMark(pin.partId, pin.position));
+    saved.visuals.forEach(v => {
+      // System visibility is an inspection preference that can change after the
+      // saved action. Undo tissue state without revealing a currently hidden system.
+      v.mesh.visible = v.visible && !v.mesh.userData.sysHidden;
+      v.mesh.position.copy(v.position);
+      v.mesh.quaternion.copy(v.quaternion); v.mesh.scale.copy(v.scale);
+      if (v.peelable === undefined) delete v.mesh.userData.peelable;
+      else v.mesh.userData.peelable = v.peelable;
+      v.materials.forEach(m => {
+        if (m.color) m.material.color.copy(m.color);
+        if (m.emissive) m.material.emissive.copy(m.emissive);
+        m.material.opacity = m.opacity; m.material.transparent = m.transparent;
+        m.material.depthWrite = m.depthWrite; m.material.needsUpdate = true;
+      });
+      v.mesh.updateMatrixWorld(true);
+    });
+    if (ctx.restoreAction) ctx.restoreAction(saved.partId, saved.external, saved.kind);
+    changedHistory();
+    emit('undo', saved.partId, 'Undid ' + saved.label + '.', { action: saved.kind });
+    return true;
+  }
+
   const emit = (kind, partId, text, meta) => onEvent && onEvent({ kind, partId, text, meta: meta || {} });
 
   /* ---- picking --------------------------------------------------------- */
@@ -85,25 +171,38 @@ export function createDissection(THREE, ctx) {
 
   /* ---- pinning ---------------------------------------------------------- */
   const pinMarks = new THREE.Group();
+  pinMarks.name = 'dissection-pins';
   scene.add(pinMarks);
-  function placePin(part, point) {
-    if (state.pinned.has(part.id)) return;
-    state.pinned.add(part.id);
+  function addPinMark(partId, position) {
     const g = new THREE.ConeGeometry(0.075, 0.55, 8);
     const m = new THREE.Mesh(g, new THREE.MeshPhysicalMaterial({
       color: 0xd8dde2, roughness: 0.25, metalness: 0.85 }));
-    m.position.copy(point); m.position.y += 0.28;
+    m.position.copy(position); m.userData.partId = partId;
     m.rotation.x = Math.PI;
     pinMarks.add(m);
+  }
+  function clearPins() {
+    for (const mark of [...pinMarks.children]) {
+      pinMarks.remove(mark); mark.geometry.dispose(); mark.material.dispose();
+    }
+  }
+  function placePin(part, point) {
+    if (state.pinned.has(part.id)) return;
+    beginAction('pin', part);
+    state.pinned.add(part.id);
+    addPinMark(part.id, point.clone().add(new THREE.Vector3(0, 0.28, 0)));
+    pending.changed = true;
     emit('pin', part.id, 'Pinned ' + part.name + '.', { pinned: state.pinned.size });
     if (state.pinned.size >= 4) {
       emit('discover', null, 'The specimen is pinned out and the body wall is under tension. You can cut now.',
         { ready: true });
     }
+    finishAction();
   }
 
   /* ---- incision --------------------------------------------------------- */
   function beginStroke(part, point, grip) {
+    beginAction('cut', part);
     stroke = {
       partId: part.id,
       pts: [point.clone()],
@@ -151,6 +250,7 @@ export function createDissection(THREE, ctx) {
     const plunged = Number.isFinite(depth) && depth > 0.8;
 
     state.incisions.set(part.id, { points: pts, length, opened: false });
+    if (pending) pending.changed = true;
 
     if (sawing) {
       damage(part, 'sawn', part.name + ' was cut with a sawing stroke — the cut face is ragged.');
@@ -188,10 +288,12 @@ export function createDissection(THREE, ctx) {
         { length: +length.toFixed(2) });
     }
     stroke = null;
+    finishAction();
   }
 
   function discardStroke() {
     stroke = null;
+    finishAction();
   }
 
   /* ---- damage ----------------------------------------------------------- */
@@ -209,6 +311,7 @@ export function createDissection(THREE, ctx) {
     if (!part.mesh.userData.peelable || state.removed.has(part.id)) return false;
     const inc = state.incisions.get(part.id);
     if (!inc) return false;
+    beginAction('forceps pull', part);
     const parent = part.mesh.parent || group;
     part.mesh.updateWorldMatrix(true, false);
     let st = peeling.get(part.id);
@@ -236,6 +339,7 @@ export function createDissection(THREE, ctx) {
     const point = ray.ray.intersectPlane(st.plane, new THREE.Vector3());
     if (!point) return;
     st.target = Math.min(1, st.startT + point.distanceTo(st.grabStart) / 1.4);
+    if (pending && Math.abs(st.target - st.startT) > 0.001) pending.changed = true;
     // Only a deliberate forceps pull commits removal; a cut or retractor alone
     // never removes anatomy. Once committed, finish the short lift smoothly.
     if (st.target >= 0.98) st.committed = true;
@@ -268,6 +372,7 @@ export function createDissection(THREE, ctx) {
         emit('peel', pid, part.name + ' access sheet removed. What is underneath is now exposed.',
           { removed: true, accessWindow: true });
         revealLayer(part.layer + 1);
+        finishAction();
       }
     });
   }
@@ -276,6 +381,7 @@ export function createDissection(THREE, ctx) {
   let lift = null;
   function beginLift(part, point) {
     if (!part.detachable) return false;
+    beginAction('organ lift', part);
     part.mesh.updateWorldMatrix(true, false);
     camera.updateMatrixWorld();
     const worldHome = part.mesh.getWorldPosition(new THREE.Vector3());
@@ -341,6 +447,7 @@ export function createDissection(THREE, ctx) {
     const part = byId.get(lift.partId);
     const moved = part.mesh.position.distanceTo(lift.home);
     if (moved > 2.6 && placeOnTray(part, state.removed.size)) {
+      if (pending) pending.changed = true;
       state.removed.add(part.id);
       emit('lift', part.id, part.name + ' removed and set on the work surface.', { removed: state.removed.size });
       revealLayer(part.layer + 1);
@@ -349,6 +456,7 @@ export function createDissection(THREE, ctx) {
       emit('replace', part.id, part.name + ' returned to the cavity.', {});
     }
     lift = null;
+    finishAction();
   }
 
   /* ---- frame ------------------------------------------------------------- */
@@ -380,7 +488,8 @@ export function createDissection(THREE, ctx) {
       }
     }
 
-    const down = input.gripping && !wasGripping;
+    if (!input.gripping) releaseRequired = false;
+    const down = input.gripping && !wasGripping && !releaseRequired;
     const up = !input.gripping && wasGripping;
     wasGripping = input.gripping;
 
@@ -428,17 +537,28 @@ export function createDissection(THREE, ctx) {
       if (stroke) endStroke();
       if (lift) endLift();
       grabbed = null;
+      // Settle a released pull before the next action can start. This also
+      // completes an already committed removal without leaving an orphaned tween.
+      stepPeels(140);
+      finishAction();
     }
 
     stepPeels(dt);
   }
 
-  function setTool(t) { if (TOOLS.includes(t)) tool = t; }
+  function setTool(t) {
+    if (!TOOLS.includes(t) || t === tool) return;
+    if (stroke) endStroke();
+    if (lift) endLift();
+    grabbed = null; stepPeels(140); finishAction();
+    if (wasGripping) releaseRequired = true;
+    tool = t;
+  }
 
   function dispose() {
     discardStroke();
+    clearHistory(); clearPins();
     scene.remove(pinMarks);
-    pinMarks.traverse((o) => { if (o.geometry) o.geometry.dispose(); });
   }
 
   return {
@@ -448,7 +568,10 @@ export function createDissection(THREE, ctx) {
     // answers must be the same one this engine will give on the next frame.
     // Re-deriving the visibility and reflected-flap rules over in main.js would
     // be a second source of truth that silently drifts from this one.
-    setTool, update, dispose, state, pick,
+    setTool, update, dispose, state, pick, undo, clearHistory,
+    get canUndo() { return !!pending || history.length > 0; },
+    get undoLabel() { return (pending || history[history.length - 1])?.label || ''; },
+    get historyDepth() { return history.length; },
     get tool() { return tool; },
     get hovered() { return hovered ? hovered.id : null; },
     get contact() { return contact; },

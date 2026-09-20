@@ -26,6 +26,28 @@ export const SHELL_CSS = `
         border-radius:14px;box-shadow:0 12px 44px -14px rgba(0,0,0,.66),inset 0 1px 0 rgba(255,255,255,.045)}
 .lbl{font-family:var(--mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--faint)}
 .lbl.em{color:var(--em)}
+/* Visible exits keep the keyboard and touch paths equivalent. Sticky buttons
+   stay reachable while long references and phone sheets scroll. */
+.sh-close{position:sticky;top:0;z-index:3;display:flex;align-items:center;justify-content:center;
+  width:44px;min-width:44px;height:44px;min-height:44px;flex:none;margin:0 0 -44px auto;padding:0;
+  border:1px solid var(--line);border-radius:10px;background:#0b141a;color:var(--dim);font:24px/1 var(--sans);
+  cursor:pointer;touch-action:manipulation}
+.sh-close:hover{color:var(--em);border-color:var(--em)}
+.sh-close:active,#undobtn:active{transform:scale(.97)}
+.sh-close:focus-visible,#undobtn:focus-visible{outline:2px solid var(--em);outline-offset:3px}
+.sh-close[hidden]{display:none}
+#kbox>h2,#vbox>h2,#struct .n,#struct>.lbl,#rec>.lbl,#ask .q{padding-right:54px}
+#pickclose{position:fixed;top:calc(14px + env(safe-area-inset-top,0px));right:calc(14px + env(safe-area-inset-right,0px))}
+#drawbody>.sh-close{align-self:flex-end}
+#drawbody>.sh-close+.dsec{padding-right:52px;min-height:44px}
+#undobtn{min-height:44px;min-width:70px;display:inline-flex;align-items:center;justify-content:center;
+  gap:7px;cursor:pointer;padding:8px 11px;color:var(--ink);font:600 12px/1 var(--sans);touch-action:manipulation}
+#undobtn:disabled{opacity:.45;cursor:default}
+#undobtn:disabled:active{transform:none}
+#helpbtn,#specbtn{min-height:44px}
+#helpbtn{min-width:44px}
+#imagingclose{min-height:44px;padding:9px 13px;align-self:flex-end;cursor:pointer;color:var(--cy);font:600 12px var(--sans)}
+#imagingclose[hidden]{display:none}
 
 /* ── picker ────────────────────────────────────────────────────────────── */
 #pick{position:fixed;inset:0;z-index:60;display:grid;place-items:center;transition:opacity .6s ease;
@@ -214,6 +236,7 @@ body:not(.bioq-phone).physio-on #hand{max-height:calc(100dvh - 340px)}
 .handhead .lbl{color:var(--em);letter-spacing:.13em}
 .handtools{display:flex;align-items:center;gap:6px;flex:none}
 #handpreview{display:none;min-width:44px;min-height:44px;padding:8px;align-items:center;justify-content:center}
+#hand.preview-open #handpreview{font-size:24px;line-height:1}
 #hand.live #handpreview{display:inline-flex}
 .hcount{font-family:var(--mono);font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);
         border:1px solid var(--line);border-radius:6px;padding:2px 7px}
@@ -311,7 +334,8 @@ body:not(.bioq-phone).physio-on #hand{max-height:calc(100dvh - 340px)}
 .sysb.off{opacity:.4;text-decoration:line-through}
 
 /* ── attempt record ────────────────────────────────────────────────────── */
-#rec{right:var(--edge);top:var(--edge);bottom:var(--edge);width:370px;padding:16px;display:none;flex-direction:column;z-index:23}
+#rec{right:var(--edge);top:var(--edge);bottom:var(--edge);width:370px;padding:16px;display:none;flex-direction:column;z-index:28}
+#rec>.lbl{display:block;min-height:44px}
 #rec.on{display:flex}
 #recl{overflow-y:auto;flex:1;margin-top:10px;font-family:var(--mono);font-size:10.5px;line-height:1.65}
 .ev{padding:5px 0;border-bottom:1px solid rgba(255,255,255,.05);color:var(--dim)}
@@ -580,11 +604,14 @@ body.bioq-phone .card p{font-size:12px}
 /* top: the help and specimen chips on one row, the objective on the next.
    Two rows and not one because the specimen name is variable width — a single
    row that reserved room for "Earthworm" would leave a hole under "Frog". */
-body.bioq-phone #topright{top:calc(var(--sat) + 10px);right:var(--pr);gap:7px;z-index:26}
+body.bioq-phone #topright{top:calc(var(--sat) + 10px);right:var(--pr);gap:7px;z-index:26;
+  max-width:calc(100vw - var(--pl) - var(--pr) - 102px)}
+body.bioq-phone #undobtn,body.bioq-phone #helpbtn{flex:none}
 body.bioq-phone #helpbtn{width:38px}
-body.bioq-phone #specbtn{padding:8px 11px;gap:7px}
+body.bioq-phone #specbtn{padding:8px 11px;gap:7px;min-width:0}
 body.bioq-phone #specbtn .lbl{display:none}
-body.bioq-phone #specbtn .specname{font-size:12.5px}
+body.bioq-phone #specbtn .specname{font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+body.bioq-phone #specbtn svg{flex:none}
 body.bioq-phone #obj{top:calc(var(--sat) + 54px);left:var(--pl);right:var(--pr);
   transform:none;min-width:0;max-width:none;width:auto;padding:10px 13px;gap:7px}
 body.bioq-phone #objtxt{font-size:12.5px;line-height:1.4}
@@ -631,6 +658,15 @@ body.bioq-phone #struct .n{font-size:14px}
 body.bioq-phone #vig{max-height:30vh}
 body.bioq-phone #drawbody{max-height:30vh;gap:14px}
 body.bioq-phone #railfoot{justify-content:flex-start;gap:6px;padding:7px}
+body:not(.bioq-phone) #secsys,body:not(.bioq-phone) #sechand{display:none}
+/* The shared assistant keeps its existing request handlers. Only its launcher
+   joins the phone footer, so it cannot cover the hand controls or tool tray. */
+body.bioq-phone #railfoot #bioq-ai-launch{min-height:44px;margin:0;padding:8px 11px;
+  color:var(--cy);font:500 11px/1.4 var(--sans);cursor:pointer;touch-action:manipulation}
+body.bioq-phone #railfoot #bioq-ai-launch:focus-visible{outline:2px solid var(--cy);outline-offset:3px}
+body.bioq-phone #bioq-ai{left:var(--pl);right:var(--pr);top:calc(var(--sat) + 12px);bottom:auto}
+body.bioq-phone #bioq-ai-panel{width:100%;max-height:calc(100dvh - var(--sat) - var(--sab) - 24px);margin:0}
+body.bioq-phone #bioq-ai-panel #bioq-ai-close{min-width:44px;min-height:44px}
 /* Everything you tap grows to something a thumb can actually land on. */
 body.bioq-phone .minibtn,body.bioq-phone .bchip{padding:9px 12px;font-size:9.5px}
 body.bioq-phone .seg button{padding:9px 8px;font-size:9px}
@@ -822,35 +858,19 @@ const SHELL_KEYMAP_DEF = [
   { key: 'Esc', label: 'Close whatever is open',       group: 'Console' },
 ];
 
-/*
- * Is this a phone? Decided ONCE, at load, from two things:
- *
- *   - a coarse pointer, which is the only honest test for "this is a finger",
- *   - the SHORT edge of the viewport, because that is the one measure of a
- *     handset that does not change when the handset is turned on its side.
- *
- * Deliberately not a media query. The phone layout comes with structural
- * changes as well as CSS ones — the systems toggles move into the console, the
- * attempt record and the viva grow buttons because there is no keyboard to open
- * them with — and a query on max-width would hand a rotated phone the desktop
- * stylesheet while the DOM stayed rearranged for the phone. A query on
- * max-height would hand the phone layout to a short desktop window instead.
- *
- * 520px covers the largest handsets in portrait (a Pro Max is 440 CSS px wide)
- * and leaves tablets and unfolded foldables on the desktop layout, where their
- * width genuinely does carry the sidebars.
- *
- * main.js reads this too (as SH_PHONE — shell.js is concatenated ahead of it),
- * for the pixel-ratio cap and the post-processing tier.
- */
-const SH_PHONE = (() => {
+/* The compact layout follows available space, including resized desktop
+   windows and phone rotation. Its DOM placements update with the CSS class.
+   main.js also reads the initial value for its rendering quality defaults. */
+function SH_isPhoneLayout() {
   try {
-    if (typeof window === 'undefined' || !window.matchMedia) return false;
-    if (!window.matchMedia('(pointer: coarse)').matches) return false;
-    const short = Math.min(window.innerWidth || 0, window.innerHeight || 0);
-    return short > 0 && short <= 520;
+    if (typeof window === 'undefined') return false;
+    const width = window.innerWidth || 0, height = window.innerHeight || 0;
+    if (width <= 0 || height <= 0) return false;
+    if (width <= 640 || (width <= 960 && height <= 520)) return true;
+    return !!window.matchMedia?.('(pointer: coarse)').matches && Math.min(width, height) <= 520;
   } catch (e) { return false; }   // matchMedia throws in a few embedded webviews
-})();
+}
+let SH_PHONE = SH_isPhoneLayout();
 
 /* Everything the shell interpolates into innerHTML goes through this first:
    case labels and layer names arrive from data files, not from the shell. */
@@ -926,6 +946,32 @@ export function buildShell(root) {
   const handlers = {};
   const on = (n, fn) => { (handlers[n] = handlers[n] || []).push(fn); };
   const fire = (n, v) => (handlers[n] || []).forEach((f) => f(v));
+  const openers = new WeakMap();
+  function rememberFocus(surface) {
+    if (!surface.contains(document.activeElement)) openers.set(surface, document.activeElement);
+  }
+  function restoreFocus(surface, fallback) {
+    const saved = openers.get(surface);
+    const target = saved && saved.isConnected && saved !== document.body && saved.getClientRects().length ? saved : fallback;
+    if (target) target.focus({ preventScroll: true });
+  }
+  function closeButton(surface, id, label, close) {
+    const button = el(`<button class="sh-close" id="${id}" type="button" aria-label="${label}" title="${label}">×</button>`);
+    button.onclick = event => { event.stopPropagation(); close(); };
+    surface.prepend(button); return button;
+  }
+  function containModalKeys(surface) {
+    surface.addEventListener('keydown', event => {
+      if (event.key !== 'Escape' && event.key !== '?') event.stopPropagation();
+      if (event.key !== 'Tab') return;
+      const controls = [...surface.querySelectorAll('button:not(:disabled),a[href],input,select,textarea,[tabindex="0"]')]
+        .filter(node => node.getClientRects().length);
+      if (!controls.length) return;
+      const first = controls[0], last = controls.at(-1);
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    });
+  }
 
   /* picker */
   const pick = el(`<div id="pick"><div class="in">
@@ -952,17 +998,29 @@ export function buildShell(root) {
   // Top-right cluster: a help button + the specimen switcher, in one right-anchored
   // row so they never overlap whatever the specimen name's width.
   const topRight = el(`<div id="topright"></div>`);
-  const helpBtn = el(`<button id="helpbtn" class="chrome" title="Show all controls (?)">?</button>`);
+  const helpBtn = el(`<button id="helpbtn" class="chrome" type="button" aria-label="Show all controls" aria-haspopup="dialog" aria-controls="keys" title="Show all controls (?)">?</button>`);
+  const undoDescription = 'Undo pin, cut or layer pull';
+  const undoBtn = el(`<button id="undobtn" class="chrome" type="button" disabled aria-label="${undoDescription} (Ctrl or Command Z)" title="${undoDescription} (Ctrl/Cmd+Z)"><span aria-hidden="true">↶</span> Undo</button>`);
+  undoBtn.onclick = () => fire('undo');
+  let undoEnabled = false, undoLabel = undoDescription;
+  function setUndoState(canUndo, label) {
+    const enabled = !!canUndo, description = label ? 'Undo ' + label : undoDescription;
+    if (enabled === undoEnabled && description === undoLabel) return;
+    undoEnabled = enabled; undoLabel = description;
+    undoBtn.disabled = !enabled;
+    undoBtn.title = description + ' (Ctrl/Cmd+Z)';
+    undoBtn.setAttribute('aria-label', description + ' (Ctrl or Command Z)');
+  }
   const specBtn = el(`<button id="specbtn" class="chrome" title="Change specimen">
       <span class="lbl">Specimen</span><b class="specname">—</b>
       <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path
         d="M4 6l4-4 4 4M4 10l4 4 4-4" fill="none" stroke="currentColor"
         stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>`);
-  specBtn.onclick = () => pick.classList.remove('gone');
+  specBtn.onclick = () => showPicker();
   // The keyboard reference is the single place every control is spelled out; make it
   // reachable by a visible affordance, not only the ? key nobody is told about.
-  helpBtn.onclick = () => keysEl.classList.toggle('on');
-  topRight.appendChild(helpBtn); topRight.appendChild(specBtn);
+  helpBtn.onclick = () => setKeymapOpen(!keysEl.classList.contains('on'));
+  topRight.appendChild(undoBtn); topRight.appendChild(helpBtn); topRight.appendChild(specBtn);
   const dock = el(`<div id="dock" class="chrome"></div>`);
   const struct = el(`<div id="struct" class="chrome"><span class="lbl">Structure</span>
                      <div class="n">—</div><div class="d"></div><div class="sys lbl"></div>
@@ -1007,6 +1065,8 @@ export function buildShell(root) {
      control. The drawer is shut on load. Nothing here touches the centre. */
   const rail = el(`<div id="rail"></div>`);
   const physline = el(`<div id="physline" class="chrome"><span class="dot"></span><span class="v"></span></div>`);
+  const imagingClose = el(`<button id="imagingclose" class="chrome" type="button" hidden aria-label="Close imaging">× Close imaging</button>`);
+  imagingClose.onclick = () => { setImaging({ mode: 'off' }); fire('imaging', 'off'); dock.querySelector('.tool.on')?.focus({ preventScroll: true }); };
   const vig = el(`<div id="vig" class="chrome"></div>`);
   const drawer = el(`<div id="drawer">
       <div id="drawbody" class="chrome">
@@ -1034,16 +1094,51 @@ export function buildShell(root) {
         autocomplete="off" autocapitalize="off" spellcheck="false"
         placeholder="Say what you see, in your own words"></div>
       <div class="k">Enter · send &nbsp; Esc · skip</div></div>`);
-  const keysEl = el(`<div id="keys"><div id="kbox"><span class="lbl">Reference</span>
-      <h2>Keyboard</h2><div id="kgrps"></div>
+  const keysEl = el(`<div id="keys" role="dialog" aria-modal="true" aria-labelledby="keys-title"><div id="kbox"><span class="lbl">Reference</span>
+      <h2 id="keys-title">Controls</h2><div id="kgrps"></div>
       <div class="foot">Prepared exterior credits:
         <a href="./assets/specimens/FROG-ATTRIBUTION.md" target="_blank" rel="noopener">Frog — ffish.asia / floraZia (CC0)</a> ·
         <a href="./assets/specimens/COCKROACH-ATTRIBUTION.md" target="_blank" rel="noopener">Cockroach — CK (modified, CC BY 4.0)</a><br>
-        Teaching-model interiors are illustrative. ? or Esc to close</div></div></div>`);
+        Teaching-model interiors are illustrative. ×, ? or Esc to close</div></div></div>`);
 
   [objBar, topRight, dock, hint, say, handBox, systems, rec, viva, coach, rail, ask, keysEl]
     .forEach((n) => root.appendChild(n));
-  [physline, struct, vig, drawer].forEach((n) => rail.appendChild(n));
+  [physline, imagingClose, struct, vig, drawer].forEach((n) => rail.appendChild(n));
+  const keysClose = closeButton(keysEl.querySelector('#kbox'), 'keysclose', 'Close controls', () => setKeymapOpen(false));
+  const pickClose = closeButton(pick, 'pickclose', 'Close specimen chooser', () => closePicker());
+  pickClose.hidden = true; // The cold open has no previous specimen to return to.
+  closeButton(struct, 'structclose', 'Close structure details', () => {
+    setStructure(null); restoreFocus(struct, dock.querySelector('.tool.on'));
+  });
+  closeButton(rec, 'recclose', 'Close attempt record', () => setRecordOpen(false));
+  const vivaClose = closeButton(viva.querySelector('#vbox'), 'vivaclose', 'Close viva', () => closeViva());
+  closeButton(ask, 'askclose', 'Skip tutor question', () => closeAsk(null));
+  closeButton(drawer.querySelector('#drawbody'), 'consoleclose', 'Close console', () => setDrawer(false));
+  [keysEl, viva, pick].forEach(containModalKeys);
+  viva.setAttribute('role', 'dialog'); viva.setAttribute('aria-modal', 'true'); viva.setAttribute('aria-label', 'Viva');
+  pick.setAttribute('role', 'dialog'); pick.setAttribute('aria-modal', 'true'); pick.setAttribute('aria-label', 'Choose a specimen');
+  function showPicker() {
+    rememberFocus(pick); pick.inert = false; pick.classList.remove('gone');
+    (pickClose.hidden ? pick.querySelector('.card') : pickClose)?.focus({ preventScroll: true });
+  }
+  function closePicker() {
+    if (!spec) return;
+    pick.classList.add('gone'); pick.inert = true; restoreFocus(pick, specBtn);
+  }
+  function setKeymapOpen(open) {
+    if (open) rememberFocus(keysEl);
+    keysEl.classList.toggle('on', open);
+    if (open) keysClose.focus({ preventScroll: true }); else restoreFocus(keysEl, helpBtn);
+  }
+  function setRecordOpen(open) {
+    if (open) rememberFocus(rec);
+    rec.classList.toggle('on', open);
+    if (open) rec.querySelector('#recclose').focus({ preventScroll: true });
+    else restoreFocus(rec, SH_PHONE ? root.querySelector('#recbtn') : helpBtn);
+  }
+  function closeViva() {
+    viva.classList.remove('on'); restoreFocus(viva, SH_PHONE ? root.querySelector('#vivabtn') : helpBtn);
+  }
 
   /* tool dock */
   SHELL_TOOLS.forEach((t, i) => {
@@ -1096,6 +1191,7 @@ export function buildShell(root) {
 
   function setStructure(s) {
     if (!s || !s.name) { struct.classList.remove('on'); return; }
+    if (!struct.classList.contains('on')) rememberFocus(struct);
     struct.classList.add('on');
     struct.querySelector('.n').textContent = s.name;
     struct.querySelector('.d').textContent = s.note || '';
@@ -1120,13 +1216,13 @@ export function buildShell(root) {
     });
   }
 
-  function refreshObjective(state) {
+  function refreshObjective(state, restoring = false) {
     const sid = spec && spec.id;
     const list = OBJECTIVES[sid]
       || (typeof SPECIMEN_OBJECTIVES !== 'undefined' && SPECIMEN_OBJECTIVES[sid])
       || [];
     while (objIdx < list.length && list[objIdx].done(state, seen)) {
-      pushEvent({ kind: 'objective', text: 'Objective complete: ' + list[objIdx].id });
+      if (!restoring) pushEvent({ kind: 'objective', text: 'Objective complete: ' + list[objIdx].id });
       objIdx++;
     }
     const dots = objBar.querySelectorAll('#objdots span');
@@ -1169,6 +1265,9 @@ export function buildShell(root) {
   function setSpecimen(s, parts) {
     spec = s; objIdx = 0; seen = new Set(); events = []; seq = 0;
     pick.classList.add('gone');
+    pick.inert = true;
+    pickClose.hidden = false;
+    if (pick.contains(document.activeElement)) restoreFocus(pick, specBtn);
     const nameEl = specBtn.querySelector('.specname');
     if (nameEl) nameEl.textContent = s.name || '—';
     // Built-in objectives for frog/heart; self-registered ones (fish, earthworm, …)
@@ -1229,9 +1328,9 @@ export function buildShell(root) {
     viva.querySelector('#vbtns').innerHTML =
       '<button class="btn" id="vclose">Back to the specimen</button>' +
       '<button class="btn" id="vnew">New specimen</button>';
-    viva.querySelector('#vclose').onclick = () => viva.classList.remove('on');
+    viva.querySelector('#vclose').onclick = closeViva;
     viva.querySelector('#vnew').onclick = () => location.reload();
-    viva.classList.add('on');
+    rememberFocus(viva); viva.classList.add('on'); vivaClose.focus({ preventScroll: true });
   }
 
   /* ── the console ───────────────────────────────────────────────────────
@@ -1260,7 +1359,7 @@ export function buildShell(root) {
 
   const bloodChip = el(`<button class="bchip" data-k="2"><i></i><span>Blood · Moderate</span></button>`);
   const xrBtn = el(`<button class="minibtn vr">Enter VR</button>`);
-  const drawBtn = el(`<button class="minibtn">Console</button>`);
+  const drawBtn = el(`<button id="consolebtn" class="minibtn" type="button" aria-controls="drawbody" aria-expanded="false">Console</button>`);
   xrBtn.style.display = 'none';
   [bloodChip, xrBtn, drawBtn].forEach((b) => railFoot.appendChild(b));
 
@@ -1268,9 +1367,13 @@ export function buildShell(root) {
   let activeCase = null, caseCb = null, askCb = null, keyRows = SHELL_KEYMAP_DEF;
 
   function setDrawer(open) {
+    const wasOpen = drawer.classList.contains('open');
+    if (open && !wasOpen) rememberFocus(drawer);
     drawer.classList.toggle('open', !!open);
     drawBtn.classList.toggle('on', !!open);
     drawBtn.textContent = open ? 'Close' : 'Console';
+    drawBtn.setAttribute('aria-expanded', String(!!open));
+    if (!open && wasOpen) restoreFocus(drawer, drawBtn);
   }
   drawBtn.onclick = () => setDrawer(!drawer.classList.contains('open'));
   function revealBlood() {
@@ -1335,6 +1438,7 @@ export function buildShell(root) {
     if (typeof s.mode === 'string') imgMode = s.mode;
     imgSeg.querySelectorAll('button').forEach((b) => b.classList.toggle('on', b.dataset.id === imgMode));
     const live = !!imgMode && imgMode !== 'off';
+    imagingClose.hidden = !live;
     secImg.classList.toggle('off', !live);
     // Never fight the student's thumb: leave the slider alone while it has focus.
     if (typeof s.slice === 'number' && document.activeElement !== sliceIn)
@@ -1460,10 +1564,11 @@ export function buildShell(root) {
     ask.classList.remove('on');
     root.classList.remove('asking');
     const cb = askCb; askCb = null;
-    try { askIn.blur(); } catch (e) { /* detached */ }
+    restoreFocus(ask, dock.querySelector('.tool.on'));
     if (cb) cb(val);
   }
   function askInput(promptText, cb) {
+    rememberFocus(ask);
     askCb = typeof cb === 'function' ? cb : null;
     ask.querySelector('.q').textContent = promptText || '';
     askIn.value = '';
@@ -1481,7 +1586,8 @@ export function buildShell(root) {
   /* ── keyboard reference ────────────────────────────────────────────────── */
   function setKeymap(rows) {
     const list = (Array.isArray(rows) ? rows : []).filter((r) => r && r.key);
-    keyRows = list.length ? list : SHELL_KEYMAP_DEF;
+    keyRows = [...(list.length ? list : SHELL_KEYMAP_DEF)];
+    if (!keyRows.some(row => /undo/i.test(row.label || ''))) keyRows.push({ group: 'Dissection', key: 'Ctrl/Cmd Z', label: 'Undo pin, cut or layer pull. Live physiology continues.' });
     const groups = [];
     keyRows.forEach((r) => {
       const g = r.group || 'General';
@@ -1496,7 +1602,7 @@ export function buildShell(root) {
       + '</div>').join('');
   }
   keysEl.addEventListener('pointerdown', (e) => e.stopPropagation());
-  keysEl.addEventListener('click', (e) => { if (e.target === keysEl) keysEl.classList.remove('on'); });
+  keysEl.addEventListener('click', (e) => { if (e.target === keysEl) setKeymapOpen(false); });
 
   /* console defaults. Nothing fires on load — the drawer is shut and silent. */
   applyBleed(2, false);
@@ -1515,13 +1621,19 @@ export function buildShell(root) {
       return;
     }
     const k = (e.key || '').toLowerCase();
-    if (e.key === '?') { e.preventDefault(); keysEl.classList.toggle('on'); return; }
-    if (k === 'l') rec.classList.toggle('on');
+    if (e.key === '?') { e.preventDefault(); setKeymapOpen(!keysEl.classList.contains('on')); return; }
+    if (k === 'l') setRecordOpen(!rec.classList.contains('on'));
     if (k === '\\') setDrawer(!drawer.classList.contains('open'));
     if (k === 'b') revealBlood();
     if (k === 'escape') {
-      rec.classList.remove('on'); viva.classList.remove('on');
-      keysEl.classList.remove('on'); setDrawer(false);
+      if (keysEl.classList.contains('on')) setKeymapOpen(false);
+      else if (viva.classList.contains('on')) closeViva();
+      else if (!pick.classList.contains('gone') && spec) closePicker();
+      else if (rec.classList.contains('on')) setRecordOpen(false);
+      else if (drawer.classList.contains('open')) setDrawer(false);
+      else if (struct.classList.contains('on')) { setStructure(null); restoreFocus(struct, dock.querySelector('.tool.on')); }
+      else return;
+      e.preventDefault(); e.stopPropagation();
     }
     if (k === 'v') fire('viva');
   });
@@ -1532,7 +1644,7 @@ export function buildShell(root) {
   function setHandExpanded(expanded) {
     handBox.classList.toggle('preview-open', !!expanded);
     handPreview.setAttribute('aria-expanded', String(expanded));
-    handPreview.textContent = expanded ? 'Close' : 'Settings';
+    handPreview.textContent = expanded ? '×' : 'Settings';
     handPreview.setAttribute('aria-label', expanded ? 'Close hand settings' : 'Open hand settings');
     handBox.scrollTop = 0;
     if (!expanded) hideCoach();
@@ -1753,22 +1865,16 @@ export function buildShell(root) {
      desktop are reachable only because there is a keyboard or a spare corner,
      and the compact hand panel that stays within the bottom stack.
 
-     Guarded by SH_PHONE, which is false on every desktop, so none of this can
-     reach one. */
-  if (SH_PHONE) {
-    document.body.classList.add('bioq-phone');
-
+     The same nodes move when available space changes; listeners, current
+     settings and the camera session survive without rebuilding controls. */
     // The systems toggles floated at the top centre. Down here that is the
     // objective bar's row, and anywhere else on a 390px screen is the specimen.
     // The console is where the other rarely-touched switches already live.
     const secSys = el(`<div class="dsec" id="secsys"><span class="lbl">Systems</span></div>`);
-    secSys.appendChild(systems);
     drawBody.appendChild(secSys);
 
     // Reuse the same control and permission request. A phone is a valid camera
     // when it is propped up, but performance and lighting still matter.
-    rail.appendChild(handBox);
-    rail.insertBefore(coach, handBox);
     const secHand = el(`<div class="dsec" id="sechand"><span class="lbl">Hand tracking</span>
         <div class="dnote">Prop your phone securely with its front camera facing you, leave room for your hand,
         and use even lighting. Tap Use my hands to allow the camera. Tracking runs on-device and nothing is
@@ -1780,22 +1886,56 @@ export function buildShell(root) {
     // these two buttons a student's own record of what they did would simply be
     // unreachable on a phone.
     const recBtn = el(`<button class="minibtn mobonly" id="recbtn">Record</button>`);
-    recBtn.onclick = () => rec.classList.toggle('on');
+    recBtn.onclick = () => setRecordOpen(!rec.classList.contains('on'));
     const vivaBtn = el(`<button class="minibtn mobonly" id="vivabtn">Viva</button>`);
     vivaBtn.onclick = () => fire('viva');
     railFoot.appendChild(recBtn);
     railFoot.appendChild(vivaBtn);
 
-    // ...and the record covers the whole screen once it is open, so it needs a
-    // way out that is not Escape.
-    const recClose = el(`<button class="minibtn mobonly" id="recclose">Close</button>`);
-    recClose.onclick = () => rec.classList.remove('on');
-    rec.appendChild(recClose);
+  let layoutPhone = null;
+  function placeAssistantLauncher() {
+    const launcher = document.getElementById('bioq-ai-launch'), host = document.getElementById('bioq-ai');
+    if (!launcher || !host) return;
+    const parent = SH_PHONE ? railFoot : host;
+    if (launcher.parentElement !== parent) parent.appendChild(launcher);
   }
-  renderHand();
+  function updatePhoneLayout() {
+    const next = SH_isPhoneLayout();
+    if (layoutPhone === next) return;
+    const focused = document.activeElement;
+    const movingFocus = [handBox, coach, systems].some(surface => surface.contains(focused));
+    SH_PHONE = next; layoutPhone = next;
+    document.body.classList.toggle('bioq-phone', next);
+    if (next) {
+      secSys.appendChild(systems);
+      rail.appendChild(handBox);
+      rail.insertBefore(coach, handBox);
+    } else {
+      root.appendChild(systems); root.appendChild(handBox); root.appendChild(coach);
+    }
+    placeAssistantLauncher(); renderHand();
+    if (movingFocus && focused.isConnected) focused.focus({ preventScroll: true });
+  }
+  updatePhoneLayout();
+  window.addEventListener('resize', updatePhoneLayout);
+  window.visualViewport?.addEventListener('resize', updatePhoneLayout);
+  const coarsePointer = window.matchMedia?.('(pointer: coarse)');
+  coarsePointer?.addEventListener?.('change', updatePhoneLayout);
+  // The AI widget can mount after this shell. Observe body-level additions only;
+  // moving its existing launcher inside the footer does not retrigger the observer.
+  const assistantObserver = new MutationObserver(placeAssistantLauncher);
+  assistantObserver.observe(document.body, { childList: true });
+  window.addEventListener('pagehide', event => {
+    if (event.persisted) return; // Back-forward cache resumes this same shell.
+    window.removeEventListener('resize', updatePhoneLayout);
+    window.visualViewport?.removeEventListener('resize', updatePhoneLayout);
+    coarsePointer?.removeEventListener?.('change', updatePhoneLayout);
+    assistantObserver.disconnect();
+  });
 
   return {
     on, setTool, setStructure, setSpecimen, setHandState, showViva,
+    onUndo: fn => on('undo', fn), setUndoState,
     say: sayMsg,
     // The stored show-camera choice, so main.js can apply it to the overlay the
     // moment tracking starts rather than waiting for the first toggle.
@@ -1808,11 +1948,15 @@ export function buildShell(root) {
     // Reopen the specimen chooser. The cold open auto-loads the frog and hides
     // the picker, so this is how the heart (and any future specimen) stays
     // reachable without a menu bar cluttering the workspace.
-    showPicker: () => pick.classList.remove('gone'),
+    showPicker,
     // The drawer and the help sheet, for anything that wants to open them.
     setConsoleOpen: (o) => setDrawer(!!o),
-    showKeymap: (o) => keysEl.classList.toggle('on', o === undefined ? true : !!o),
-    checkObjectives: (state) => refreshObjective(state),
+    showKeymap: (o) => setKeymapOpen(o === undefined ? true : !!o),
+    checkObjectives: (state, event) => {
+      const restoring = !!event && event.kind === 'undo';
+      if (restoring) objIdx = 0;
+      refreshObjective(state, restoring);
+    },
     setObjective: () => {},
     setHint: (h) => { hint.innerHTML = h; if (objHint) objHint.innerHTML = h; },
     // Whether this is running the phone layout. main.js uses it for the
@@ -1823,8 +1967,8 @@ export function buildShell(root) {
       const c = pick.querySelector('#cards');
       c.innerHTML = '';
       Object.values(getAvailableSpecimens(specs)).forEach((s) => {
-        const card = el(`<div class="card"><span class="lbl">Specimen</span>
-          <h2>${s.name}</h2><p>${s.blurb}</p></div>`);
+        const card = el(`<button class="card" type="button"><span class="lbl">Specimen</span>
+          <h2>${s.name}</h2><p>${s.blurb}</p></button>`);
         card.onclick = () => cb(s.id);
         c.appendChild(card);
       });

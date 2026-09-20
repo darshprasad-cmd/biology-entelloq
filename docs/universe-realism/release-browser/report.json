@@ -1,0 +1,228 @@
+{
+  "errors": [],
+  "stages": [
+    {
+      "key": "universe",
+      "title": "The Universe",
+      "visible": true,
+      "meshes": 6,
+      "vertices": 3354,
+      "structure": null
+    },
+    {
+      "key": "earth",
+      "title": "Earth",
+      "visible": true,
+      "meshes": 5,
+      "vertices": 12237,
+      "structure": null
+    },
+    {
+      "key": "biome",
+      "title": "A Biome",
+      "visible": true,
+      "meshes": 383,
+      "vertices": 37605,
+      "structure": {
+        "representation": "illustrative forest diorama",
+        "trees": 30,
+        "individualLeaves": 4920,
+        "rooted": true
+      }
+    },
+    {
+      "key": "ecosystem",
+      "title": "An Ecosystem",
+      "visible": true,
+      "meshes": 123,
+      "vertices": 15285,
+      "structure": {
+        "representation": "illustrative food web; organisms not to scale",
+        "organisms": [
+          "plant",
+          "caterpillar",
+          "spider",
+          "fungi"
+        ],
+        "energyLinks": 5,
+        "nutrientLinks": 1
+      }
+    },
+    {
+      "key": "organism",
+      "title": "An Organism",
+      "visible": true,
+      "meshes": 240,
+      "vertices": 93569,
+      "structure": {
+        "representation": "illustrative human systems, no medical scan",
+        "connectedLimbs": 4,
+        "hands": 2,
+        "feet": 2,
+        "ribPairs": 12,
+        "vertebralMarkers": 24,
+        "cerebralHemispheres": 2,
+        "lungLobesIndicated": 5,
+        "continuousDigestiveTract": true
+      }
+    },
+    {
+      "key": "organ",
+      "title": "The Heart",
+      "visible": true,
+      "meshes": 87,
+      "vertices": 50165,
+      "structure": {
+        "representation": "illustrative external human heart; internal valves not exposed",
+        "greatVesselsConnected": true,
+        "coronariesSurfaceProjected": true
+      }
+    },
+    {
+      "key": "tissue",
+      "title": "Cardiac Tissue",
+      "visible": true,
+      "meshes": 83,
+      "vertices": 57053,
+      "structure": {
+        "representation": "illustrative cardiac tissue; surface nuclei are teaching cutaways",
+        "cardiomyocytes": 20,
+        "branches": 12,
+        "discs": 20,
+        "biconcaveRedCells": 10
+      }
+    },
+    {
+      "key": "cell",
+      "title": "The Cell",
+      "visible": true,
+      "meshes": 247,
+      "vertices": 126478,
+      "structure": {
+        "model": "animal-cell-cutaway",
+        "roughERCisternae": 4,
+        "golgiCisternae": 5,
+        "nuclearPores": 4,
+        "mitochondria": 3,
+        "erContinuousWithEnvelope": true
+      }
+    },
+    {
+      "key": "organelle",
+      "title": "The Mitochondrion",
+      "visible": true,
+      "meshes": 109,
+      "vertices": 35961,
+      "structure": {
+        "model": "mitochondrion-cutaway",
+        "folds": 8,
+        "continuousInnerMembrane": true,
+        "synthases": 24,
+        "circularGenome": true
+      }
+    },
+    {
+      "key": "protein",
+      "title": "Haemoglobin",
+      "visible": true,
+      "meshes": 36,
+      "vertices": 29550,
+      "structure": {
+        "pdb": "4HHB",
+        "representation": "C-alpha trace and heme heavy atoms",
+        "chains": 4,
+        "residues": 574,
+        "hemes": 4,
+        "oxygenBound": false
+      }
+    },
+    {
+      "key": "dna",
+      "title": "DNA",
+      "visible": true,
+      "meshes": 167,
+      "vertices": 11824,
+      "structure": {
+        "pdb": "1BNA",
+        "residues": 24,
+        "basePairs": 12,
+        "atoms": 486,
+        "bonds": 544,
+        "hydrogenBonds": 32
+      }
+    },
+    {
+      "key": "nucleotide",
+      "title": "An A–T Base Pair",
+      "visible": true,
+      "meshes": 15,
+      "vertices": 1028,
+      "structure": {
+        "pdb": "1BNA",
+        "residues": [
+          "DA A6",
+          "DT B19"
+        ],
+        "atoms": 41,
+        "bonds": 44,
+        "hydrogenBonds": 2,
+        "hydrogensOmitted": true
+      }
+    },
+    {
+      "key": "atom",
+      "title": "A Carbon Atom",
+      "visible": true,
+      "meshes": 16,
+      "vertices": 8436,
+      "structure": {
+        "element": "carbon-12",
+        "protons": 6,
+        "neutrons": 6,
+        "configuration": "1s2 2s2 2p2",
+        "representation": "illustrative probability clouds; enlarged nucleus; no electron trajectories"
+      }
+    }
+  ],
+  "limitations": "Software-rendered browser checks; not physical touch hardware, measured microscopy or GPU performance.",
+  "artifactSha256": "ad4ba1d9f76c765d38156271bee2cf838713d74ec6fd82c90af60a70110ce217",
+  "inspection": [
+    {
+      "key": "organ",
+      "subparts": 11
+    },
+    {
+      "key": "cell",
+      "subparts": 15
+    },
+    {
+      "key": "organelle",
+      "subparts": 8
+    },
+    {
+      "key": "protein",
+      "subparts": 4
+    },
+    {
+      "key": "dna",
+      "subparts": 4
+    }
+  ],
+  "mobileStages": [
+    "universe",
+    "earth",
+    "biome",
+    "ecosystem",
+    "organism",
+    "organ",
+    "tissue",
+    "cell",
+    "organelle",
+    "protein",
+    "dna",
+    "nucleotide",
+    "atom"
+  ],
+  "controls": "Home, End, ArrowUp, numeric jump, real browser touch pinch, normal wheel, live reduced motion, keyboard hotspot panel, tablet and mobile passed",
+  "complete": true
+}

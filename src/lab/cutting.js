@@ -816,7 +816,10 @@ export function createCutting(THREE, scene) {
     if (rec.mesh.geometry === rec.geometry) {
       rec.geometry.setIndex(rec.originalIndex);
       rec.geometry.setDrawRange(rec.originalDrawRange.start, rec.originalDrawRange.count);
-      rec.geometry.computeVertexNormals();
+      const normal = rec.geometry.attributes.normal;
+      if (normal && rec.restNormals && normal.array.length === rec.restNormals.array.length) {
+        normal.array.set(rec.restNormals.array); normal.needsUpdate = true;
+      } else rec.geometry.computeVertexNormals();
     }
   }
 
@@ -1165,6 +1168,53 @@ export function createCutting(THREE, scene) {
     return true;
   }
 
+  // Undo stores incision instructions, not copies of the dense prepared meshes.
+  // rest is immutable for an attempt; only the short, mutable local path is copied.
+  function snapshot(partId) {
+    const rec = wounds.get(partId);
+    return rec ? { mesh: rec.mesh, local: rec.local.map(p => p.clone()), rest: rec.rest,
+      tissue: rec.tissue, depth: (rec.depthMax - 0.14) / 0.30, amount: rec.kTo } : null;
+  }
+
+  function removeRemnant(partId) {
+    const remnant = remnants.get(partId);
+    if (!remnant) return;
+    const { residual, source, children, materials, rim } = remnant;
+    children.forEach(child => source.add(child));
+    if (residual.parent) residual.parent.remove(residual);
+    residual.geometry.dispose();
+    materials.forEach(material => material.dispose());
+    if (rim) { rim.geometry.dispose(); rim.material.dispose(); }
+    remnants.delete(partId);
+  }
+
+  function restore(partId, saved, rest) {
+    const mesh = saved?.mesh || wounds.get(partId)?.mesh || remnants.get(partId)?.source;
+    remove(partId);
+    removeRemnant(partId);
+    // A dense exterior may have no soft-body driver. Restore its authoritative
+    // rest positions here as well, so repeated undo never accumulates offsets.
+    const positions = mesh?.geometry.attributes.position;
+    const baseline = rest || saved?.rest;
+    if (positions && baseline && positions.array.length === baseline.length) {
+      positions.array.set(baseline); positions.needsUpdate = true;
+      mesh.geometry.computeBoundingBox(); mesh.geometry.computeBoundingSphere();
+    }
+    if (!saved) return true;
+    saved.mesh.updateWorldMatrix(true, false);
+    if (!open({ partId, mesh: saved.mesh, rest: saved.rest, tissue: saved.tissue,
+      depth: saved.depth, amount: saved.amount,
+      points: saved.local.map(p => saved.mesh.localToWorld(p.clone())) })) return false;
+    const rec = wounds.get(partId);
+    // open() normally converts a live, breathing surface into rest space. This
+    // path is already in rest space and must survive restoration exactly.
+    rec.local = saved.local.map(p => p.clone());
+    rebuild(rec);
+    rec.k = rec.kFrom = rec.kTo = saved.amount; rec.phase = 1;
+    applyLining(rec, rec.k); applyParent(rec, rec.k);
+    return true;
+  }
+
   /* Frame state hoisted to closure scope. `stepWound` is ONE function object
    * created once, not an arrow literal rebuilt on every call to update() — at
    * 60fps that literal was 60 closures a second of pure garbage, in the one loop
@@ -1258,14 +1308,7 @@ export function createCutting(THREE, scene) {
     wounds.forEach((rec) => destroy(rec));
     wounds.clear();
     rests.clear();
-    remnants.forEach(({ residual, source, children, materials, rim }) => {
-      children.forEach((child) => source.add(child));
-      if (residual.parent) residual.parent.remove(residual);
-      residual.geometry.dispose();
-      materials.forEach(material => material.dispose());
-      if (rim) { rim.geometry.dispose(); rim.material.dispose(); }
-    });
-    remnants.clear();
+    for (const partId of [...remnants.keys()]) removeRemnant(partId);
   }
 
   function dispose() {
@@ -1275,7 +1318,7 @@ export function createCutting(THREE, scene) {
   }
 
   return {
-    open, grow, gape, close, releaseSurface, remove, update, setQuality, clear, dispose,
+    open, grow, gape, close, releaseSurface, remove, snapshot, restore, update, setQuality, clear, dispose,
     get count() { return wounds.size; },
     has: (partId) => wounds.has(partId),
     // Read-only peek for the shell / viva: which strata the blade actually
