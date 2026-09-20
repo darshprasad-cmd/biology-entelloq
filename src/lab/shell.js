@@ -48,6 +48,8 @@ export const SHELL_CSS = `
 #helpbtn{min-width:44px}
 #imagingclose{min-height:44px;padding:9px 13px;align-self:flex-end;cursor:pointer;color:var(--cy);font:600 12px var(--sans)}
 #imagingclose[hidden]{display:none}
+body #hisClose,body #zoomverse .zv-x{min-width:44px;min-height:44px;touch-action:manipulation}
+body #hisClose:focus-visible,body #zoomverse .zv-x:focus-visible{outline:2px solid var(--em);outline-offset:3px}
 
 /* ── picker ────────────────────────────────────────────────────────────── */
 #pick{position:fixed;inset:0;z-index:60;display:grid;place-items:center;transition:opacity .6s ease;
@@ -403,6 +405,41 @@ body:not(.bioq-phone).physio-on #hand{max-height:calc(100dvh - 340px)}
 #drawbody{display:none;flex-direction:column;gap:16px;padding:13px 14px;max-height:44vh;overflow-y:auto}
 #drawer.open #drawbody{display:flex}
 #railfoot{display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:6px;padding:7px 8px}
+/* Primary study modes remain discoverable with the console folded. */
+#labfeatures{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:5px;padding:6px;flex:none}
+#labfeatures button{min-width:0;min-height:44px;padding:7px 4px;border:1px solid var(--line);
+  border-radius:8px;background:rgba(52,211,153,.055);color:var(--ink);font:500 11px/1.3 var(--sans);
+  cursor:pointer;touch-action:manipulation}
+#labfeatures button:disabled{opacity:.4;cursor:default}
+#labfeatures button:focus-visible,.feature-choice:focus-visible{outline:2px solid var(--em);outline-offset:2px}
+#labfeatures button:active:not(:disabled),.feature-choice:active:not(:disabled){transform:scale(.97)}
+#features{position:fixed;inset:0;z-index:100000;display:grid;place-items:center;
+  padding:calc(12px + env(safe-area-inset-top,0px)) calc(12px + env(safe-area-inset-right,0px))
+    calc(12px + env(safe-area-inset-bottom,0px)) calc(12px + env(safe-area-inset-left,0px));
+  border:0;border-radius:0;background:rgba(3,10,8,.9);box-shadow:none;backdrop-filter:blur(12px)}
+#features[hidden]{display:none}
+#featurebox{width:min(100%,560px);max-height:100%;min-height:0;display:flex;flex-direction:column;
+  overflow:hidden;padding:16px;border:1px solid rgba(52,211,153,.25);border-radius:16px;background:#0b1714}
+#featurebox>.sh-close{position:relative;top:auto}
+#featuretitle{margin:5px 54px 8px 0;font:600 21px/1.25 var(--sans);color:var(--ink)}
+#featurenote{margin:0 54px 16px 0;font:12px/1.6 var(--sans);color:var(--dim)}
+#featureitems{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:max-content;align-content:start;gap:8px;overflow:auto;
+  min-height:0;padding:3px;overscroll-behavior:contain;scroll-padding:3px}
+.feature-choice{min-width:0;min-height:60px;padding:12px;border:1px solid var(--line);border-radius:10px;
+  background:rgba(255,255,255,.025);color:var(--ink);text-align:left;cursor:pointer;touch-action:manipulation}
+.feature-choice strong{display:block;font:600 13px/1.4 var(--sans);overflow-wrap:anywhere}
+.feature-choice span{display:block;margin-top:4px;font:11px/1.5 var(--sans);color:var(--dim);overflow-wrap:anywhere}
+.feature-choice[aria-current="true"]{border-color:var(--em);background:rgba(52,211,153,.1)}
+.feature-choice:disabled{opacity:.4;cursor:default}
+#featureitems>.feature-empty{grid-column:1/-1;padding:12px;font:12px/1.6 var(--sans);color:var(--dim)}
+@media (hover:hover) and (pointer:fine){
+  #labfeatures button:hover:not(:disabled),.feature-choice:hover:not(:disabled){border-color:var(--em);background:rgba(52,211,153,.1)}
+}
+@media (max-width:380px){
+  #featurebox{padding:12px}
+  #featuretitle{font-size:19px}
+  #featureitems{grid-template-columns:1fr}
+}
 .minibtn.on{border-color:rgba(52,211,153,.5);color:var(--em);background:rgba(52,211,153,.1)}
 .minibtn.vr{border-color:rgba(56,224,216,.4);color:var(--cy)}
 .minibtn.vr.live{border-color:rgba(56,224,216,.7);background:rgba(56,224,216,.14)}
@@ -447,6 +484,12 @@ body:not(.bioq-phone).physio-on #hand{max-height:calc(100dvh - 340px)}
 .rad i{font-style:normal;color:rgba(240,184,102,.42);margin-right:6px}
 .dsec.off .slice,.dsec.off .rad{opacity:.34}
 .dsec.off .slice{pointer-events:none}
+.imgadjust{display:flex;flex-wrap:wrap;gap:6px}
+.imgadjust button{flex:1 1 110px;min-height:44px;min-width:0;padding:8px;color:var(--ink);
+  font:500 11px/1.4 var(--sans);touch-action:manipulation}
+.imgadjust button:disabled{opacity:.4;cursor:default}
+.imgadjust button:focus-visible{outline:2px solid var(--em);outline-offset:2px}
+.imgadjust button:active:not(:disabled){transform:scale(.97)}
 
 /* pathology cases — labels only. The diagnosis is the student's job. */
 .caselist{display:flex;flex-direction:column;gap:4px}
@@ -771,6 +814,13 @@ body.bioq-phone #phy-mon{display:none}
   body.bioq-phone #hand.camera-hidden #handlive{grid-column:1;grid-row:3}
   body.bioq-phone #hand.camera-hidden #camrow{grid-column:2;grid-row:3}
 }
+@media (max-height:520px) and (min-width:700px){
+  /* A landscape phone has width, not height. Keep the new mode strip beside
+     the footer so it never steals a row from the structure's close control. */
+  body.bioq-phone #drawer{display:grid;grid-template-columns:minmax(230px,1fr) minmax(0,2fr)}
+  body.bioq-phone #drawbody{grid-column:1/-1}
+  body.bioq-phone #railfoot{justify-content:flex-end}
+}
 @media (min-width:521px) and (max-width:1100px){
   body:not(.bioq-phone) #hint{left:468px;right:22px;transform:none;font-size:11px}
 }
@@ -1077,6 +1127,9 @@ export function buildShell(root) {
           <div class="seg" id="levelseg"></div></div>
         <div class="dsec off" id="secimg"><span class="lbl">Imaging</span>
           <div class="seg" id="imgseg"></div>
+          <div class="imgadjust">
+            <button id="imgwindowbtn" class="minibtn" type="button" disabled>Window preset</button>
+            <button id="imgweightingbtn" class="minibtn" type="button" disabled>MRI weighting</button></div>
           <div class="slice"><span class="lbl">Slice</span>
             <input id="imgslice" type="range" min="0" max="1000" value="500" aria-label="Slice position">
             <span class="lbl" id="imgpos">—</span></div>
@@ -1085,6 +1138,11 @@ export function buildShell(root) {
           <div class="caselist" id="caselist"></div></div>
         <div class="dsec hide" id="secdepth"><span class="lbl">Depth</span>
           <div class="ladder" id="ladder"></div></div>
+      </div>
+      <div id="labfeatures" class="chrome" aria-label="Study modes">
+        <button id="histologybtn" type="button" disabled aria-haspopup="dialog" aria-controls="features">Histology</button>
+        <button id="scalebtn" type="button" disabled>Scale journey</button>
+        <button id="labmodesbtn" type="button" aria-haspopup="dialog" aria-controls="features">More modes</button>
       </div>
       <div id="railfoot" class="chrome"></div></div>`);
 
@@ -1100,11 +1158,14 @@ export function buildShell(root) {
         <a href="./assets/specimens/FROG-ATTRIBUTION.md" target="_blank" rel="noopener">Frog — ffish.asia / floraZia (CC0)</a> ·
         <a href="./assets/specimens/COCKROACH-ATTRIBUTION.md" target="_blank" rel="noopener">Cockroach — CK (modified, CC BY 4.0)</a><br>
         Teaching-model interiors are illustrative. ×, ? or Esc to close</div></div></div>`);
+  const features = el(`<div id="features" class="chrome" role="dialog" aria-modal="true" aria-labelledby="featuretitle" aria-describedby="featurenote" hidden>
+      <div id="featurebox"><h2 id="featuretitle"></h2><p id="featurenote"></p><div id="featureitems"></div></div></div>`);
 
-  [objBar, topRight, dock, hint, say, handBox, systems, rec, viva, coach, rail, ask, keysEl]
+  [objBar, topRight, dock, hint, say, handBox, systems, rec, viva, coach, rail, ask, keysEl, features]
     .forEach((n) => root.appendChild(n));
   [physline, imagingClose, struct, vig, drawer].forEach((n) => rail.appendChild(n));
   const keysClose = closeButton(keysEl.querySelector('#kbox'), 'keysclose', 'Close controls', () => setKeymapOpen(false));
+  const featureClose = closeButton(features.querySelector('#featurebox'), 'featureclose', 'Close study modes', () => closeFeatures());
   const pickClose = closeButton(pick, 'pickclose', 'Close specimen chooser', () => closePicker());
   pickClose.hidden = true; // The cold open has no previous specimen to return to.
   closeButton(struct, 'structclose', 'Close structure details', () => {
@@ -1200,7 +1261,7 @@ export function buildShell(root) {
   }
 
   let actionCb = null;
-  /* list = [{id, label, key}]. Rendered only while a structure is hovered, so the
+  /* list = [{id, label, key, partId}]. Rendered only while a structure is hovered, so the
      offer disappears with the thing it was about instead of becoming furniture. */
   function setActions(list, cb) {
     if (cb) actionCb = cb;
@@ -1211,7 +1272,7 @@ export function buildShell(root) {
       if (!a || !a.label) return;
       const b = el(`<button class="act" type="button"><span></span>${a.key ? `<kbd>${a.key}</kbd>` : ''}</button>`);
       b.querySelector('span').textContent = a.label;
-      b.onclick = (e) => { e.stopPropagation(); if (actionCb) actionCb(a.id); };
+      b.onclick = (e) => { e.stopPropagation(); if (actionCb) actionCb(a.id, a.partId); };
       box.appendChild(b);
     });
   }
@@ -1263,6 +1324,7 @@ export function buildShell(root) {
   }
 
   function setSpecimen(s, parts) {
+    closeFeatures();
     spec = s; objIdx = 0; seen = new Set(); events = []; seq = 0;
     pick.classList.add('gone');
     pick.inert = true;
@@ -1349,6 +1411,8 @@ export function buildShell(root) {
   const bleedNote = drawer.querySelector('#bleednote');
   const levelSeg = drawer.querySelector('#levelseg');
   const imgSeg = drawer.querySelector('#imgseg');
+  const imgWindowBtn = drawer.querySelector('#imgwindowbtn');
+  const imgWeightingBtn = drawer.querySelector('#imgweightingbtn');
   const sliceIn = drawer.querySelector('#imgslice');
   const posEl = drawer.querySelector('#imgpos');
   const radEl = drawer.querySelector('#imgrad');
@@ -1356,6 +1420,94 @@ export function buildShell(root) {
   const ladder = drawer.querySelector('#ladder');
   const askIn = ask.querySelector('#askin');
   const kgrps = keysEl.querySelector('#kgrps');
+  const histologyBtn = drawer.querySelector('#histologybtn');
+  const scaleBtn = drawer.querySelector('#scalebtn');
+  const modesBtn = drawer.querySelector('#labmodesbtn');
+  const featureItems = features.querySelector('#featureitems');
+  const featureAvailability = { histology: false, zoomverse: false, imaging: false, physiology: false, tutor: false };
+  let showingModes = false;
+
+  function featureOpen() { return !features.hidden; }
+  function closeFeatures() {
+    if (!featureOpen()) return;
+    features.hidden = true;
+    showingModes = false;
+    restoreFocus(features, modesBtn);
+  }
+  function showFeatureChoices(options = {}) {
+    rememberFocus(features);
+    showingModes = false;
+    features.querySelector('#featuretitle').textContent = options.title || 'Study modes';
+    features.querySelector('#featurenote').textContent = options.note || 'Choose a mode to continue.';
+    featureItems.replaceChildren();
+    const items = Array.isArray(options.items) ? options.items.filter(item => item && item.id) : [];
+    items.forEach(item => {
+      const button = document.createElement('button');
+      button.type = 'button'; button.className = 'feature-choice'; button.dataset.choice = item.id;
+      button.disabled = !!item.disabled;
+      if (item.id === options.selectedId) button.setAttribute('aria-current', 'true');
+      const label = document.createElement('strong'); label.textContent = item.label || item.id;
+      button.appendChild(label);
+      if (item.detail) { const detail = document.createElement('span'); detail.textContent = item.detail; button.appendChild(detail); }
+      button.onclick = () => {
+        closeFeatures(); // Restore the original trigger before the next surface takes focus.
+        if (typeof options.onChoose === 'function') options.onChoose(item.id);
+      };
+      featureItems.appendChild(button);
+    });
+    if (!items.length) {
+      const empty = document.createElement('p'); empty.className = 'feature-empty'; empty.setAttribute('role', 'status');
+      empty.textContent = 'No choices are available for this specimen yet.'; featureItems.appendChild(empty);
+    }
+    features.hidden = false; featureItems.scrollTop = 0;
+    featureClose.focus({ preventScroll: true });
+  }
+  function showModes() {
+    showFeatureChoices({ title: 'More lab modes', note: 'Explore the specimen, review your work, or open the controls.', items: [
+      { id: 'imaging', label: 'Imaging', detail: 'X-ray, CT, MRI and ultrasound', disabled: !featureAvailability.imaging },
+      { id: 'pathology', label: 'Pathology cases', detail: 'Choose a case for this specimen', disabled: secCases.classList.contains('hide') },
+      { id: 'layers', label: 'Layers', detail: 'Review the current dissection depth', disabled: secDepth.classList.contains('hide') },
+      { id: 'physiology', label: 'Physiology', detail: 'Start or pause the live simulation', disabled: !featureAvailability.physiology },
+      { id: 'tutor', label: 'Ask tutor', detail: 'A question about your dissection', disabled: !featureAvailability.tutor },
+      { id: 'tutor-answer', label: 'Answer tutor', detail: 'Respond to the current question', disabled: !featureAvailability.tutor },
+      { id: 'tutor-hint', label: 'Tutor hint', detail: 'Get a clue for the current question', disabled: !featureAvailability.tutor },
+      { id: 'tutor-skip', label: 'Skip question', detail: 'Move on from the current tutor question', disabled: !featureAvailability.tutor },
+      { id: 'record', label: 'Attempt record', detail: 'Review your dissection actions' },
+      { id: 'viva', label: 'Viva', detail: 'Review the assessment questions' },
+      { id: 'controls', label: 'Controls', detail: 'All instruments and keyboard shortcuts' },
+    ], onChoose: id => {
+      const sections = { imaging: 'secimg', pathology: 'seccases', layers: 'secdepth' };
+      if (sections[id]) revealConsole(sections[id]);
+      else if (id === 'record') setRecordOpen(true);
+      else if (id === 'viva') fire('viva');
+      else if (id === 'controls') setKeymapOpen(true);
+      else fire('feature', id);
+    } });
+    showingModes = true;
+  }
+  function setFeatureAvailability(available = {}) {
+    for (const key of Object.keys(featureAvailability)) {
+      if (Object.prototype.hasOwnProperty.call(available, key)) featureAvailability[key] = !!available[key];
+    }
+    histologyBtn.disabled = !featureAvailability.histology;
+    scaleBtn.disabled = !featureAvailability.zoomverse;
+    if (showingModes) showModes();
+  }
+  histologyBtn.onclick = () => fire('feature', 'histology');
+  scaleBtn.onclick = () => fire('feature', 'zoomverse');
+  modesBtn.onclick = showModes;
+  // Capture stops letters and Escape before they reach any dissection shortcuts.
+  // Native Enter/Space activation remains intact, while Tab never leaves the sheet.
+  features.addEventListener('keydown', event => {
+    event.stopPropagation();
+    if (event.key === 'Escape') { event.preventDefault(); closeFeatures(); return; }
+    if (event.key !== 'Tab') return;
+    const controls = [...features.querySelectorAll('button:not(:disabled)')].filter(node => node.getClientRects().length);
+    const first = controls[0], last = controls.at(-1);
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+  }, true);
+  features.addEventListener('click', event => { if (event.target === features) closeFeatures(); });
 
   const bloodChip = el(`<button class="bchip" data-k="2"><i></i><span>Blood · Moderate</span></button>`);
   const xrBtn = el(`<button class="minibtn vr">Enter VR</button>`);
@@ -1376,6 +1528,18 @@ export function buildShell(root) {
     if (!open && wasOpen) restoreFocus(drawer, drawBtn);
   }
   drawBtn.onclick = () => setDrawer(!drawer.classList.contains('open'));
+  function revealConsole(sectionId) {
+    const section = [...drawBody.querySelectorAll('.dsec')].find(node => node.id === sectionId);
+    if (!section || section.classList.contains('hide')) return false;
+    setDrawer(true);
+    const target = [...section.querySelectorAll('button:not(:disabled),input:not(:disabled),select:not(:disabled)')]
+      .find(node => node.getClientRects().length) || section.querySelector('.lbl') || section;
+    if (!target.matches('button,input,select')) target.tabIndex = -1;
+    target.focus({ preventScroll: true });
+    const bounds = drawBody.getBoundingClientRect(), targetBounds = section.getBoundingClientRect();
+    drawBody.scrollTop += targetBounds.top - bounds.top - 12;
+    return true;
+  }
   function revealBlood() {
     setDrawer(true);
     drawBody.scrollTop = 0;
@@ -1433,11 +1597,23 @@ export function buildShell(root) {
     imgSeg.appendChild(btn);
   });
   sliceIn.addEventListener('input', () => { fire('slice', Number(sliceIn.value) / 1000); });
+  imgWindowBtn.onclick = () => fire('imaging-window');
+  imgWeightingBtn.onclick = () => fire('imaging-weighting');
   function setImaging(s) {
     s = s || {};
     if (typeof s.mode === 'string') imgMode = s.mode;
     imgSeg.querySelectorAll('button').forEach((b) => b.classList.toggle('on', b.dataset.id === imgMode));
     const live = !!imgMode && imgMode !== 'off';
+    const windowed = imgMode === 'ct' || imgMode === 'mri';
+    imgWindowBtn.disabled = !windowed;
+    imgWeightingBtn.disabled = imgMode !== 'mri';
+    const hasWindow = s.window && typeof s.window.level === 'number' && typeof s.window.width === 'number';
+    const windowLabel = hasWindow ? Math.round(s.window.level) + ' / ' + Math.round(s.window.width) : '';
+    imgWindowBtn.textContent = 'Window preset' + (windowed && windowLabel ? ' · ' + windowLabel : '');
+    imgWindowBtn.title = windowed ? 'Next window preset' + (hasWindow ? ' (level ' + Math.round(s.window.level) + ', width ' + Math.round(s.window.width) + ')' : '') : 'Window presets are available in CT and MRI';
+    const weighting = s.weighting === 't1' || s.weighting === 't2' ? s.weighting.toUpperCase() : '';
+    imgWeightingBtn.textContent = 'MRI weighting' + (imgMode === 'mri' && weighting ? ' · ' + weighting : '');
+    imgWeightingBtn.title = imgMode === 'mri' ? 'Switch MRI weighting' + (weighting ? ' (currently ' + weighting + ')' : '') : 'Weighting is available in MRI';
     imagingClose.hidden = !live;
     secImg.classList.toggle('off', !live);
     // Never fight the student's thumb: leave the slider alone while it has focus.
@@ -1945,6 +2121,7 @@ export function buildShell(root) {
     // the app boots identically if main.js never calls any of them.
     setVignette, askInput, inputOpen, setCases, setLevel, setXR,
     setImaging, setBleeding, setStrata, setPhysio, setKeymap, setActions,
+    setFeatureAvailability, showFeatureChoices, featureOpen, closeFeatures, revealConsole,
     // Reopen the specimen chooser. The cold open auto-loads the frog and hides
     // the picker, so this is how the heart (and any future specimen) stays
     // reachable without a menu bar cluttering the workspace.

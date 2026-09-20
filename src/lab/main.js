@@ -30,6 +30,7 @@ let histology = null, imaging = null, pathology = null;
 // Phase 4 — alive.
 let physio = null, tutor = null, xr = null, zoomverse = null;
 let specimenId = null;
+let examinedPartId = null, examinationReturnFocus = null;
 let lastT = 0;
 let preparedFrog = null, preparedInstall = null, installExterior = null;
 const preparedSpecimens = new Map();
@@ -715,6 +716,7 @@ function onEvent(evt) {
   }
 
   if (evt.kind === 'hover') {
+    if (evt.partId) examinedPartId = evt.partId;
     shell.setStructure(evt.partId
       ? { name: evt.text, note: evt.meta && evt.meta.note,
           system: evt.meta && evt.meta.system, actions: actionsFor(evt.partId) }
@@ -732,6 +734,7 @@ function onEvent(evt) {
 /* ---- per-action undo -------------------------------------------------- */
 function canUndoAction() {
   return !!(dissection?.canUndo && !specimenAbort && !handStartPromise
+    && !shell?.featureOpen?.()
     && !(imaging && imaging.mode() !== 'off')
     && !(histology && histology.isOpen()) && !(zoomverse && zoomverse.isOpen()));
 }
@@ -788,7 +791,124 @@ function actionsFor(partId) {
     if (held && held.length) out.push({ id: 'divide', label: 'Divide attachments', key: 'D' });
   }
   if (imaging) out.push({ id: 'imaging', label: 'Imaging', key: 'X' });
-  return out;
+  return out.map(action => ({ ...action, partId }));
+}
+
+// Visible entry points share the keyboard's real modules. A catalogue sample
+// is a teaching reference, never evidence of a disease or a harvested section.
+function pauseExaminationInput() {
+  specimenGripRelease = true; mouse.down = false;
+  input.grip = 0; input.gripping = false; input.span = 0;
+  dialReset(); flickReset();
+}
+
+function rememberExaminationFocus() {
+  examinationReturnFocus = document.activeElement;
+  pauseExaminationInput();
+  if (imaging && imaging.mode() !== 'off') {
+    imaging.setMode('off');
+    shell.setImaging?.({ mode: 'off' });
+  }
+}
+
+function restoreExaminationFocus() {
+  if (!examinationReturnFocus || histology?.isOpen() || zoomverse?.isOpen()) return;
+  const target = examinationReturnFocus; examinationReturnFocus = null;
+  pauseExaminationInput();
+  if (target.isConnected && target.getClientRects().length) target.focus({ preventScroll: true });
+}
+
+function examinationOpen() {
+  return !!(histology?.isOpen() || zoomverse?.isOpen() || shell?.featureOpen?.());
+}
+
+function containExaminationKeys(event) {
+  const microscope = histology?.isOpen(), journey = zoomverse?.isOpen();
+  if (!microscope && !journey) return;
+  // Histology owns its own magnification keys; the scale view has no keyboard
+  // handler. Neither viewer may send V/L/tool shortcuts to the lab behind it.
+  if (journey && event.key !== 'Tab') {
+    event.stopPropagation();
+    if (event.key === 'Escape') { event.preventDefault(); zoomverse.close(); }
+  }
+  if (event.key !== 'Tab') return;
+  const host = document.querySelector(microscope ? '#his' : '#zoomverse');
+  const targets = host ? [...host.querySelectorAll('button:not(:disabled),[tabindex="0"]')]
+    .filter(node => node.getClientRects().length) : [];
+  if (!targets.length) return;
+  const first = targets[0], last = targets.at(-1);
+  if (!host.contains(document.activeElement) || (!event.shiftKey && document.activeElement === last)) {
+    event.preventDefault(); first.focus();
+  } else if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+  event.stopPropagation();
+}
+
+function showHistologyLibrary() {
+  if (!histology || !shell.showFeatureChoices || specimenAbort) return;
+  const comparison = !['frog', 'heart'].includes(specimenId);
+  const catalogue = histology.catalogue();
+  const frogSlides = new Set(['epidermis', 'intestine', 'liver', 'lung', 'kidney', 'spleen']);
+  const referenceSpecies = id => specimenId === 'frog' && frogSlides.has(id) ? 'frog' : 'mammal';
+  const forSpecimen = specimenId;
+  pauseExaminationInput();
+  shell.showFeatureChoices({
+    title: comparison ? 'Mammalian reference histology' : 'Histology · reference slides',
+    note: 'Illustrative teaching sections, not microscope photographs or tissue sampled from your dissection. '
+      + (comparison ? 'Species-specific slides for this specimen are not available; these are mammalian comparisons.'
+        : 'Choose a labelled reference and change magnification. Each sample identifies its reference species. These are normal sections, not pathology findings.'),
+    items: catalogue.map(slide => ({ id: slide.id, label: slide.name,
+      detail: slide.stain + ' · ' + (referenceSpecies(slide.id) === 'frog' ? 'Frog' : 'Mammalian') + ' reference' })),
+    onChoose: id => {
+      if (specimenId !== forSpecimen || specimenAbort) return;
+      const slide = catalogue.find(item => item.id === id);
+      if (!slide) return;
+      rememberExaminationFocus();
+      const species = referenceSpecies(id);
+      histology.open('reference-' + id, { name: (species === 'frog' ? 'Frog reference · ' : 'Mammalian reference · ') + slide.name,
+        tissue: id, species });
+    },
+  });
+}
+
+function openStructureHistology(partId) {
+  if (!histology || specimenAbort) return;
+  const part = parts?.find(p => p.id === partId);
+  if (!part || !['frog', 'heart'].includes(specimenId)) { showHistologyLibrary(); return; }
+  const diseased = pathology?.histologyFor ? pathology.histologyFor(part.id) : null;
+  const supportedDisease = diseased && histology.catalogue().some(slide => slide.id === diseased);
+  rememberExaminationFocus();
+  histology.open(part.id, { name: part.name, system: part.system,
+    tissue: supportedDisease ? diseased : part.tissue, species: specimenId });
+  if (diseased && !supportedDisease) shell.say('This case has no disease-specific slide. Showing the normal teaching reference only.');
+}
+
+function openScaleJourney(partId) {
+  if (!zoomverse || specimenAbort) return;
+  const part = parts?.find(p => p.id === partId);
+  rememberExaminationFocus();
+  zoomverse.open(part ? { name: part.name, system: part.system, tissue: part.tissue, partId: part.id } : {});
+  document.querySelector('#zoomverse .zv-x')?.focus({ preventScroll: true });
+  shell.say('Scale journey — scroll or drag to explore. Use × to return to the specimen.');
+}
+
+function openLabFeature(id) {
+  if (specimenAbort || !dissection) return;
+  if (id === 'histology') showHistologyLibrary();
+  else if (id === 'zoomverse') openScaleJourney(dissection.hovered || examinedPartId);
+  else if (id === 'physiology' && physio) {
+    const running = !physio.running(); setPhysiology(running);
+    shell.say(running ? 'Physiology simulation running.' : 'Physiology stopped.');
+  } else if (id === 'tutor' && tutor) tutor.ask();
+  else if (id === 'tutor-answer' && tutor) {
+    if (tutor.pending) shell.askInput(tutor.pending, value => { if (value != null) tutor.answer(value); });
+    else shell.say('Choose Ask tutor first to start a question.');
+  } else if (id === 'tutor-hint' && tutor) tutor.hint();
+  else if (id === 'tutor-skip' && tutor) tutor.skip();
+}
+
+function refreshImagingControls() {
+  if (imaging) shell.setImaging({ mode: imaging.mode(), slice: imaging.slice,
+    window: imaging.window, weighting: imaging.weighting });
 }
 
 /* The monitor is the physiology model's own presence: it arrives with the model
@@ -805,16 +925,14 @@ function setPhysiology(on) {
   if (shell.setPhysio) shell.setPhysio({ running: on });
 }
 
-function doAction(id) {
-  const h = dissection && dissection.hovered;
+function doAction(id, partId) {
+  const h = partId || (dissection && dissection.hovered);
   if (id === 'histology') {
-    // Route through the same path the Z key uses so there is exactly one
-    // implementation of "open the microscope on this structure".
-    dispatchEvent(new KeyboardEvent('keydown', { key: 'z' }));
+    openStructureHistology(h);
   } else if (id === 'imaging') {
-    dispatchEvent(new KeyboardEvent('keydown', { key: 'x' }));
+    shell.revealConsole?.('secimg');
   } else if (id === 'zoomverse') {
-    dispatchEvent(new KeyboardEvent('keydown', { key: 'i' }));
+    openScaleJourney(h);
   } else if (id === 'clamp' && physio && h) {
     // Clamping a vessel is meaningless with the circulation stopped, and making
     // the student find a separate switch first is a puzzle, not a lesson. The
@@ -952,6 +1070,8 @@ async function requestSpecimen(id) {
 }
 
 function loadSpecimen(id) {
+  examinedPartId = null;
+  shell.closeFeatures?.();
   id = normalizeSpecimenId(id);
   if (group) { scene.remove(group); group = null; }
   if (dissection) { dissection.dispose(); dissection = null; }
@@ -1104,6 +1224,8 @@ function loadSpecimen(id) {
   if (strata && shell.setStrata) shell.setStrata(strata.stack, 0);
   if (shell.setVignette) shell.setVignette(null);
   if (pathology && shell.setCases) shell.setCases(pathology.list(), (cid) => setCase(cid));
+  shell.setFeatureAvailability?.({ histology: !!histology, zoomverse: !!zoomverse,
+    imaging: !!imaging, physiology: !!physio, tutor: !!tutor });
   updateUndoState();
 }
 
@@ -1123,6 +1245,7 @@ function loadSpecimen(id) {
  */
 function tick(t) {
   const dt = lastT ? Math.min(64, t - lastT) : 16; lastT = t;
+  restoreExaminationFocus();
   updateUndoState();
 
   // The scale journey OWNS the whole frame while it is open: its own scene, its own
@@ -1152,13 +1275,14 @@ function tick(t) {
       });
     }
   }
-  routeInput();
+  const examining = examinationOpen();
+  if (examining) pauseExaminationInput(); else routeInput();
 
   // Imaging gates dissection. A radiology study forces every part mesh visible so
   // you can see what is under the blade — and dissect.js picks on mesh.visible, so
   // leaving it live would let the probe hover organs three layers deep. It would
   // also let damage() write material.color onto a shader material that has none.
-  const scanning = !!specimenAbort || (imaging && imaging.mode() !== 'off');
+  const scanning = !!specimenAbort || examining || (imaging && imaging.mode() !== 'off');
   if (dissection && !scanning) dissection.update(input, dt);
   if (imaging) imaging.update(dt);
 
@@ -1330,6 +1454,11 @@ function setTool(t) {
 
 function onKey(e) {
   if (specimenAbort) { if (e.key === 'Escape' && cancelSpecimenLoad) cancelSpecimenLoad(); return; }
+  if (shell.featureOpen?.()) return;
+  if (histology?.isOpen() || zoomverse?.isOpen()) {
+    if (e.key === 'Escape') { histology?.close(); zoomverse?.close(); }
+    return;
+  }
   // The tutor's answer line takes prose. Typing "probe" must not fire p, r, o, b
   // and e as shortcuts.
   if (shell.inputOpen && shell.inputOpen()) return;
@@ -1349,29 +1478,18 @@ function onKey(e) {
   const scanning = imaging && imaging.mode() !== 'off';
 
   /* ---- examine ---- */
-  if (k === 'z' && histology && hovered) {
-    const part = parts.find((p) => p.id === hovered);
-    if (part) {
-      // A diseased structure must show its DISEASED section, not a textbook one.
-      const diseased = pathology && pathology.histologyFor ? pathology.histologyFor(part.id) : null;
-      histology.open(part.id, {
-        name: part.name, system: part.system, tissue: diseased || part.tissue, species: specimenId,
-      });
-    }
+  if (k === 'z' && histology) {
+    openStructureHistology(hovered);
     return;
   }
   if (k === 'i' && zoomverse) {
-    // The scale journey — dive from the hovered structure down to the atom. Works
-    // even with nothing hovered (a generic cell); a hovered organ picks the tissue.
-    const part = hovered ? parts.find((p) => p.id === hovered) : null;
-    zoomverse.open(part ? { name: part.name, system: part.system, tissue: part.tissue, partId: part.id } : {});
-    shell.say('Scale journey — scroll or drag to dive from tissue to a single atom. Esc to surface.');
+    openScaleJourney(hovered);
     return;
   }
   if (k === 'x' && imaging) {
     const m = imaging.cycleMode(e.shiftKey ? -1 : 1);
     shell.say(m === 'off' ? 'Imaging off — back to the specimen.' : 'Imaging: ' + m.toUpperCase() + '.');
-    if (shell.setImaging) shell.setImaging({ mode: m, slice: imaging.slice, window: imaging.window });
+    refreshImagingControls();
     return;
   }
   if (e.key === '[' || e.key === ']') {
@@ -1380,8 +1498,8 @@ function onKey(e) {
     else if (blood) blood.setIntensity(Math.max(0, Math.min(1, blood.intensity + d * 0.25)));
     return;
   }
-  if (k === 'w' && scanning) { imaging.cycleWindow(); return; }
-  if (k === 'r' && scanning) { imaging.setWeighting(imaging.weighting === 't1' ? 't2' : 't1'); return; }
+  if (k === 'w' && scanning) { imaging.cycleWindow(); refreshImagingControls(); return; }
+  if (k === 'r' && scanning) { imaging.setWeighting(imaging.weighting === 't1' ? 't2' : 't1'); refreshImagingControls(); return; }
   if (k === 'l' && strata && dissection) {
     const d = dissection.state.maxLayerRevealed;
     const s = strata.stack[Math.min(d, strata.stack.length - 1)];
@@ -1637,11 +1755,18 @@ async function startPreparedApp() {
     });
   });
   shell.on('tool', (t) => setTool(t));
+  shell.on('feature', openLabFeature);
   if (shell.onUndo) shell.onUndo(undoAction);
   if (shell.setActions) shell.setActions([], doAction);
   shell.on('level', (l) => { if (tutor) tutor.setLevel(l); });
   shell.on('bleeding', (k) => { if (blood) { blood.setIntensity(k); blood.setEnabled(k > 0); } });
-  shell.on('imaging', (m) => { if (imaging) imaging.setMode(m); });
+  shell.on('imaging', (m) => { if (imaging) { imaging.setMode(m); refreshImagingControls(); } });
+  shell.on('imaging-window', () => { if (imaging && imaging.mode() !== 'off') { imaging.cycleWindow(); refreshImagingControls(); } });
+  shell.on('imaging-weighting', () => {
+    if (imaging && imaging.mode() === 'mri') {
+      imaging.setWeighting(imaging.weighting === 't1' ? 't2' : 't1'); refreshImagingControls();
+    }
+  });
   shell.on('slice', (t) => { if (imaging) imaging.setSlice(t); });
   shell.on('case', (id) => setCase(id));
   // WebXR requires an unconsumed user gesture, so this must call straight through
@@ -1743,12 +1868,13 @@ async function startPreparedApp() {
   addEventListener('pointerdown', (e) => {
     if (specimenAbort) return;
     if (e.pointerType === 'touch') return;
-    if (e.target.closest('.chrome')) return;
+    if (!tchScene(e)) return;
     mouse.down = true;
   });
   addEventListener('pointerup', (e) => { if (e.pointerType !== 'touch') mouse.down = false; });
   addEventListener('pointercancel', (e) => { if (e.pointerType !== 'touch') mouse.down = false; });
   addEventListener('keydown', onKey);
+  addEventListener('keydown', containExaminationKeys, true);
 
   if (shell.setKeymap) shell.setKeymap(KEYMAP, { silent: true });
 
@@ -1773,6 +1899,7 @@ async function startPreparedApp() {
   window.__LAB.undo = undoAction;
   // Drive the engine exactly as a hand or mouse would, for testing.
   window.__LAB.feed = (x, y, grip, gripping, span) => {
+    if (examinationOpen()) { pauseExaminationInput(); return; }
     input.x = x; input.y = y; input.grip = grip;
     input.gripping = gripping; input.span = span || 0; input.source = 'test';
     if (dissection) dissection.update(input, 16);
@@ -1781,6 +1908,7 @@ async function startPreparedApp() {
   // This does not start a camera or replace a live tracker snapshot.
   window.__LAB.feedHandSnapshot = (snapshot, dt = 16) => {
     if (handMode) throw new Error('Stop the camera before synthetic tracking verification.');
+    if (examinationOpen()) { pauseExaminationInput(); return; }
     const previousHands = hands;
     try {
       hands = { snapshot }; handMode = true;
