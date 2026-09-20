@@ -55,6 +55,10 @@ function harness(options = {}) {
     __boot: () => { calls.push({ kind: 'boot' }); if (options.bootError) throw options.bootError; },
     __load: id => { if (!calls.some(call => call.kind === 'specimen')) assert.equal(ctx.window.__LAB.ready, false, 'ready cannot precede initial specimen creation'); calls.push({ kind: 'specimen', id }); },
   };
+  // These startup scenarios are standalone (window.parent === window). Keep
+  // window-level event wiring equivalent to the existing global event harness.
+  ctx.window.parent = ctx.window;
+  ctx.window.addEventListener = ctx.addEventListener;
   vm.createContext(ctx);
   const executable = main.replace(/^export\s+/gm, '').replace(/\bimport\s*\(/g, '__importModule(');
   // Replace only expensive external boundaries, retaining the complete actual

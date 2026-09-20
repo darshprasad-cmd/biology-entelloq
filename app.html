@@ -523,6 +523,26 @@ body main .sv-hero .sv-stat span{font-size:9px}
 </style>
 <!-- BIO-PREVIEWS:css:END -->
 <script defer src="src/ai/biology-ai.js" data-bioq-assistant="app"></script>
+<style id="launcher-exit-css">
+/* A child modal has its own close target in this corner. Native hidden must
+   outrank the launch button's authored display:flex while that modal is open. */
+#launchX[hidden]{display:none}
+#launchX{min-height:44px;min-width:44px;touch-action:manipulation}
+/* Reserve a stable app-level header for the embedded Lab. It must not sit on
+   the Lab's specimen switcher; modal handoff never resizes the iframe. */
+#launcher.lab-frame{--lab-header:calc(56px + env(safe-area-inset-top,0px))}
+#launcher.lab-frame::before{content:"";position:absolute;inset:0 0 auto;height:var(--lab-header);
+  background:var(--bg);border-bottom:1px solid var(--hair);z-index:61}
+#launcher.lab-frame #launchFrame{top:var(--lab-header);height:calc(100% - var(--lab-header))}
+#launchLabLabel{display:none}
+#launcher.lab-frame #launchLabLabel{display:flex;align-items:center;position:absolute;z-index:62;
+  top:env(safe-area-inset-top,0px);left:calc(14px + env(safe-area-inset-left,0px));height:56px;
+  color:var(--dim);font-size:12px;font-weight:600;pointer-events:none}
+#launcher.lab-frame #launchX{top:calc(6px + env(safe-area-inset-top,0px));right:calc(12px + env(safe-area-inset-right,0px))}
+/* These belong to the parent document, so the child's modal CSS cannot hide
+   them. Preserve each widget's own open/closed state while removing its hits. */
+body.lab-modal-active :is(#eqx-fab,#eqx-panel,#bioq-ai,#bio-background-toggle){visibility:hidden!important;pointer-events:none!important}
+</style>
 </head>
 <body>
 <!-- sidebar -->
@@ -865,7 +885,7 @@ function tintField(k){
 function go(k,{push=true,sub=null}={}){
   closeExplore();
   const v=Object.hasOwn(BYKEY,k)?BYKEY[k]:null; if(!v){k="home";}
-  if(LAUNCH.includes(BYKEY[k])){ ACT.visit(k); openLaunch(k); return; }  // immersive → overlay
+  if(LAUNCH.includes(BYKEY[k])){ ACT.visit(k); openLaunch(k,{push}); return; }  // immersive → overlay
   current=k; setActive(k); tintField(k);
   $("#routeLabel").textContent=BYKEY[k].label+(sub?" / "+(CMDS.find(c=>c.k===k&&c.sub===sub)?.label||sub.replace(/-/g," ")):"");
   if(k==="home"){
@@ -923,7 +943,7 @@ function routeByHref(href){
 // ── immersive launcher ─────────────────────────────────────────────────────
 const launcher=$("#launcher"), lframe=$("#launchFrame"), lload=$("#launchLoad");
 let launcherOpen=false;
-function openLaunch(k){
+function openLaunch(k,{push=true}={}){
   const v=BYKEY[k]; launcherOpen=true; setActive(k); tintField(k);
   launcher.classList.add("on");
   // `instant=1` tells the Lab to skip its five-second cold open: from inside the
@@ -941,7 +961,7 @@ function openLaunch(k){
     // navigate when the frame is not already on its way there.
     if(lframe.dataset.src!==src){ lframe.src=src; lframe.dataset.src=src; }
   }
-  try{history.pushState({launch:k},"","#"+k);}catch(e){}
+  if(push){try{history.pushState({launch:k},"","#"+k);}catch(e){}}
 }
 /* Warm the heaviest world in the background once the app is idle, so "Enter the
    Lab" is instant rather than a 2.4 MB cold start at the moment you click. */
@@ -997,7 +1017,7 @@ function closeLaunch(){
     lframe.src="about:blank"; lframe.dataset.src=""; lframe.dataset.ready="";
   },60000);
 }
-$("#launchX").addEventListener("click",()=>{ history.length>1?history.back():closeLaunch(); if(launcherOpen)closeLaunch(); });
+$("#launchX").addEventListener("click",()=>{ if(lframe.dataset.src==="./"+BYKEY.lab.file+"?instant=1"){closeLaunch();return;} history.length>1?history.back():closeLaunch(); if(launcherOpen)closeLaunch(); });
 // retry a failed section from the error boundary
 $("#oopsRetry").addEventListener("click",()=>{
   const k=oops.dataset.k||"home", sub=oops.dataset.sub||null;
@@ -1136,6 +1156,52 @@ buildHome();
 routeFromHash();
 prefetchLab();
 prefetchSections();
+})();
+</script>
+<script id="launcher-exit-bridge">
+/* Only the current same-origin Lab frame may hand off the launcher exit. Keep
+   this additive bridge outside the preserved launch/navigation implementation. */
+(() => {
+  const host = document.getElementById('launcher');
+  const frame = document.getElementById('launchFrame');
+  const exit = document.getElementById('launchX');
+  const defaultExitText = exit.textContent;
+  const label = document.createElement('div');
+  label.id = 'launchLabLabel'; label.textContent = 'Dissection lab';
+  host.insertBefore(label, frame);
+  let childModal = false, childSource = frame.getAttribute('src');
+  function isLabFrame() {
+    const url = new URL(frame.getAttribute('src') || 'about:blank', location.href);
+    return url.origin === location.origin && /\/lab\.html$/.test(url.pathname);
+  }
+  function syncExit() {
+    const source = frame.getAttribute('src');
+    if (source !== childSource) { childSource = source; childModal = false; }
+    const lab = isLabFrame();
+    host.classList.toggle('lab-frame', lab);
+    const exitText = lab ? '× Exit lab' : defaultExitText;
+    if (exit.textContent !== exitText) exit.textContent = exitText;
+    const hidden = host.classList.contains('on') && lab && childModal;
+    document.body.classList.toggle('lab-modal-active', hidden);
+    exit.hidden = hidden;
+    exit.inert = hidden;
+  }
+  function requestModalState() {
+    if (location.origin !== 'null' && isLabFrame())
+      frame.contentWindow.postMessage({ bioqLabModalRequest: true }, location.origin);
+  }
+  window.addEventListener('message', event => {
+    if (location.origin === 'null' || event.origin !== location.origin || event.source !== frame.contentWindow || !isLabFrame()) return;
+    if (!event.data || typeof event.data.bioqLabModal !== 'boolean') return;
+    childModal = event.data.bioqLabModal;
+    syncExit();
+  });
+  frame.addEventListener('load', () => { childModal = false; syncExit(); requestModalState(); });
+  const observer = new MutationObserver(syncExit);
+  observer.observe(host, { attributes: true, attributeFilter: ['class'] });
+  observer.observe(frame, { attributes: true, attributeFilter: ['src'] });
+  syncExit();
+  requestModalState();
 })();
 </script>
 <script id="atmo-js">

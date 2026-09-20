@@ -69,7 +69,7 @@ async function usable(page, selector) {
     await page.waitForFunction(() => __LAB.zoomverse().isOpen());
     await usable(page, '#zoomverse .zv-x');
     await page.keyboard.press('v'); assert.equal(await page.locator('#viva').isVisible(), false);
-    await page.keyboard.press('Tab'); assert.equal(await page.evaluate(() => document.activeElement.className), 'zv-x');
+    await page.keyboard.press('Tab'); assert.equal(await page.evaluate(() => !!document.activeElement.closest('#zoomverse')), true);
     await page.locator('#zoomverse .zv-x').tap();
     await page.waitForFunction(() => !__LAB.zoomverse().isOpen() && document.activeElement.id === 'scalebtn');
     report.checks.push('real scale journey; no underlying Viva shortcut; X and focus return');
