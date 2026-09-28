@@ -5566,22 +5566,64 @@ function buildCockroach(THREE) {
     note: 'The stomach of the insect and the main site of enzyme secretion and absorption. A peritrophic membrane lines it and wraps the food.',
     mesh: midgut,
   });
-  // Gastric caeca — 6-8 blind finger-like pouches encircling the midgut origin.
-  // The pick target is a real torus ring MESH (dissect.js raycasts a part's own
-  // geometry non-recursively, so a bare Group would be invisible to the probe);
-  // the eight fingers hang off it as decorative children.
-  const caeca = new THREE.Mesh(new THREE.TorusGeometry(0.26, 0.07, 8, 20),
-    mat(THREE, CAECA_C, { rough: 0.5, clear: 0.42, sheen: 0xe0c890 }));
-  caeca.position.set(0, -0.02, 0.02); caeca.rotation.x = Math.PI / 2;
+  // Gastric caeca — eight blind diverticula at the anterior midgut, following
+  // Fox's P. americana dissection guide (see ANATOMY.md). The root whorl lies
+  // in XY, transverse to the Z-running gut; there is no connecting torus organ.
+  // All pouches share ONE selectable geometry, not unpickable child ornaments.
+  // Closed root caps overlap the midgut wall: a surface connection, not a lumen.
+  // Lengths, curvature and spacing are illustrative model units, not measurements.
+  const caecalPositions = [], caecalIndices = [];
+  const caecalSegments = 40, caecalSides = 12;
   for (let k = 0; k < 8; k++) {
-    const a = (k / 8) * Math.PI * 2;
-    const c = organ(THREE, CAECA_C, 0.06, 0.06, 0.26, { rough: 0.5, clear: 0.4, seed: k });
-    childMesh(caeca, c, Math.cos(a) * 0.28, 0.05, Math.sin(a) * 0.12,
-      Math.PI / 2 + Math.sin(a) * 0.2, 0, a);
+    const a = (k + 0.5) * Math.PI / 4, x = Math.cos(a), y = Math.sin(a);
+    // The ventral pouches bend laterally along the gut, not down through the
+    // flattened body. Their underside stays above the existing midgut's floor.
+    const ventral = y < 0;
+    const path = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(x * 0.145, -0.04 + y * 0.145, -0.20),
+      new THREE.Vector3(x * 0.29, -0.04 + y * (ventral ? 0.13 : 0.25), -0.18),
+      new THREE.Vector3(x * 0.43, -0.04 + y * (ventral ? 0.12 : 0.32), 0.08),
+      new THREE.Vector3(x * 0.46, -0.04 + y * (ventral ? 0.11 : 0.33), 0.46 + 0.035 * Math.cos(a * 3)),
+    ]);
+    const frames = path.computeFrenetFrames(caecalSegments, false);
+    const start = caecalPositions.length / 3;
+    caecalPositions.push(...path.getPoint(0).toArray());
+    // Single cap vertices avoid coincident pole triangles; modulo indices weld
+    // the circumference. Every pouch is closed and has a rounded blind tip.
+    for (let i = 1; i < caecalSegments; i++) {
+      const t = i / caecalSegments, centre = path.getPointAt(t);
+      const rootCap = Math.max(0, 1 - t / 0.08), tipCap = Math.max(0, (t - 0.90) / 0.10);
+      const radius = 0.06 * (0.9 + 0.1 * Math.sin(Math.PI * t)) *
+        Math.sqrt(1 - Math.max(rootCap * rootCap, tipCap * tipCap));
+      for (let j = 0; j < caecalSides; j++) {
+        const theta = j * Math.PI * 2 / caecalSides;
+        const point = centre.clone().addScaledVector(frames.normals[i], Math.cos(theta) * radius)
+          .addScaledVector(frames.binormals[i], Math.sin(theta) * radius);
+        caecalPositions.push(...point.toArray());
+      }
+    }
+    const end = caecalPositions.length / 3;
+    caecalPositions.push(...path.getPoint(1).toArray());
+    for (let j = 0; j < caecalSides; j++) {
+      const next = (j + 1) % caecalSides, first = start + 1;
+      caecalIndices.push(start, first + next, first + j);
+      for (let i = 0; i < caecalSegments - 2; i++) {
+        const row = first + i * caecalSides, after = row + caecalSides;
+        caecalIndices.push(row + j, row + next, after + j,
+          row + next, after + next, after + j);
+      }
+      const last = first + (caecalSegments - 2) * caecalSides;
+      caecalIndices.push(last + j, last + next, end);
+    }
   }
+  const caecalGeometry = new THREE.BufferGeometry();
+  caecalGeometry.setAttribute('position', new THREE.Float32BufferAttribute(caecalPositions, 3));
+  caecalGeometry.setIndex(caecalIndices);
+  const caeca = new THREE.Mesh(seal(caecalGeometry),
+    mat(THREE, CAECA_C, { rough: 0.5, clear: 0.42, sheen: 0xe0c890 }));
   add({
     id: 'gastric-caeca', name: 'Gastric caeca', layer: 2, system: 'digestive', cuttable: true, detachable: true,
-    note: 'A ring of eight blind finger-like pouches at the front of the midgut. They enlarge the secretory and absorptive surface — a diagnostic cockroach feature.',
+    note: 'Eight blind-ended gastric caeca arise around the front of the midgut. These pouches provide surface for enzyme secretion and nutrient absorption. Their arrangement and proportions here are schematic.',
     mesh: caeca,
   });
   // Hindgut — ileum, colon and the wider rectum, ending at the anus.

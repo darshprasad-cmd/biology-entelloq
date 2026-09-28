@@ -25,6 +25,7 @@ User-supplied reference images were not substituted for the interactive models.
 | Mammalian heart | Aortic arch now curves anatomically left and posteriorly; its branches remain attached. | The three illustrative arch branches follow a human pattern. This is not a validated sheep heart or a universal mammalian branch pattern. |
 | Fish | The posterior swim-bladder chamber now lies posteriorly along the body, with a longitudinal connecting neck, rather than dropping ventrally into the gut. | The existing two-chamber design is retained; it is not a claim that all teleost species have this bladder shape. |
 | Cockroach | Crop now follows the foregut's longitudinal axis, between oesophagus and gizzard, instead of standing across the dorsoventral axis. | It remains a simplified storage sac. No reproductive structures or additional organs were invented. |
+| Cockroach (September 28) | Eight closed gastric pouches now meet the anterior midgut in a transverse whorl. Removed the artificial torus and disconnected, decorative child lobes; the pouches themselves are selectable. | Count and attachment follow a P. americana reference. Curvature, spacing and dimensions remain schematic; overlapping closed surfaces do not simulate a continuous lumen. |
 
 The whole-specimen tray orientations are kept separate from these local
 relationships: frog ventral surface up, cockroach and earthworm dorsal surface
@@ -91,11 +92,24 @@ Reference: [NCERT material hosted by IIT Kanpur SATHEE, Structural Organisation 
 The model is a generalized cockroach teaching approximation. Its foregut order,
 dorsal heart and ventral nerve-cord relationships are useful orientation cues,
 but its reproductive representation is not sex-specific: the current single
-midline body does not reproduce paired gonads and their ducts. The caecal-ring
-geometry and detailed tracheal/gland connections remain review items. These
+midline body does not reproduce paired gonads and their ducts. Detailed
+tracheal/gland connections and the simplified straight midgut remain review items. These
 limitations should not be concealed by more realistic surface rendering.
 
 Reference: [NCERT material hosted by IIT Kanpur SATHEE, Structural Organisation in Animals, Cockroach](https://sathee.iitk.ac.in/ncert-books/ncert-books-theory/class-11/nbt-bio-11/bio-11-chapter-7-structural-organisation-in-animals/).
+
+The September 28 caecal correction uses eight blind-ended pouches attached at
+the beginning of the midgut, following [Richard Fox, Lander University,
+Periplaneta americana, digestive system](https://lanwebs.lander.edu/faculty/rsfox/invertebrates/periplaneta.html).
+NCERT describes the broader teaching range of 6–8. This replaces a false visible
+ring and fixes actual mesh attachment and picking; it does not establish
+whole-specimen P. americana accuracy. Pouch lengths and their curved anterior
+display arrangement are illustrative, not reconstructed from specimen measurements.
+The roots are closed surfaces buried in the gut wall, not patent ducts. No
+reference photograph or diagram is included in the shipped assets.
+Ventral pouch curvature stays above the existing gut's lowest surface. The
+procedural abdominal shell does not fully enclose that pre-existing gut; neither
+that shell nor the prepared exterior's overall bounds validate cavity fit.
 
 ## Verification and next review
 
