@@ -1,0 +1,26 @@
+{
+  "base": "http://127.0.0.1:3007",
+  "errors": [],
+  "cameraRequests": 0,
+  "complete": true,
+  "limitation": "Isolated digestive-region diagnostic, not an end-to-end access sequence, educator review or webcam test.",
+  "artifactSha256": "9f03f49b7fb9cf993dce809a16a6df805b2218efacb7347116ec33dd3bf1d4b7",
+  "setup": {
+    "prepared": true,
+    "partCount": 27,
+    "vertices": 3760,
+    "triangles": 7488,
+    "decorativeChildren": 0
+  },
+  "interaction": {
+    "probe": "gastric-caeca",
+    "extracted": [
+      6.742338684201241,
+      -0.8650834578275682,
+      -7.619315445423126
+    ],
+    "cavityUnblocked": true,
+    "extractionUndoBoundaryPreserved": true,
+    "geometryPreserved": true
+  }
+}

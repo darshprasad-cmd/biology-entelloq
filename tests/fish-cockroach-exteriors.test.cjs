@@ -19,14 +19,23 @@ const baseline = {
   fish: { contracts: 'bc278d019b0735f959ed4702f9fd50c67b77d656e647b5844a7d7b06a978d2cd',
     interiors: '10630ae3b56f12966f0963d52c050eadc73d583c9541abb6682160cd447bef8c' },
   cockroach: { contracts: '77ce83635391bd3f1f71ba51909110c1641882db459c2cd324b38fb2a5f903fa',
-    interiors: '6e33c61f9e3c4d6fe7cef54754e7be772c073c4b1165f5bc8752ca2e23c6720a' },
+    interiors: '6e33c61f9e3c4d6fe7cef54754e7be772c073c4b1165f5bc8752ca2e23c6720a',
+    // September 28: only gastric-caeca geometry, transform and explanatory note
+    // intentionally change. These narrower hashes were captured from accepted
+    // 54a699ce447c7d9283fabae34bcf75a2e9256476, NOT the modified builder.
+    // All other 26 parts retain their original contract and internal vertices.
+    // cockroach-caeca.test.cjs covers the replacement's geometry and behavior.
+    retainedContracts: 'b87801f8d0af9a69cc209f98c53f48d97d868c5291cf8cb1ad9d3233e11f8122',
+    retainedInteriors: '1b0a90d61c83164fc66e69dc83b7ccfee2218d234125ef5c29d37dc0d5f7d652' },
 };
 
 for (const id of ['fish', 'cockroach']) {
-  test(`${id}: all original part metadata, cut/lift/pin contracts, anchors and interior geometry are identical`, () => {
-    const { parts } = build(THREE, id);
+  test(`${id}: unmodified parts retain original metadata, cut/lift/pin contracts, anchors and interior geometry`, () => {
+    const specimen = build(THREE, id);
+    const parts = specimen.parts.filter(part => id !== 'cockroach' || part.id !== 'gastric-caeca');
+    if (id === 'cockroach') assert.equal(parts.length, 26, 'only the explicitly revised caeca are excluded');
     assert.equal(hash(parts.map(({ mesh, ...part }) => ({ ...part, position: mesh.position.toArray(),
-      rotation: mesh.quaternion.toArray(), scale: mesh.scale.toArray() }))), baseline[id].contracts);
+      rotation: mesh.quaternion.toArray(), scale: mesh.scale.toArray() }))), baseline[id].retainedContracts || baseline[id].contracts);
     assert.equal(hash(parts.filter(part => part.layer > 0).map(part => {
       const arrays = [];
       part.mesh.traverse(mesh => {
@@ -34,7 +43,7 @@ for (const id of ['fish', 'cockroach']) {
           Array.from(mesh.geometry.attributes.position.array)]);
       });
       return [part.id, arrays];
-    })), baseline[id].interiors);
+    })), baseline[id].retainedInteriors || baseline[id].interiors);
   });
 
   test(`${id}: exterior geometry is finite, bounded, and never creates extra pick targets`, () => {
