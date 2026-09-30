@@ -22,6 +22,14 @@ Only the generated application is deployed, alongside `CNAME`, `.nojekyll`, and
 a small `404.html` that redirects legacy section URLs into the single file.
 No companion files are required when sharing the generated HTML itself.
 
+GitHub Pages must use **GitHub Actions** as its publishing source
+(`build_type: workflow`). Publishing from the root of the `main` branch serves
+the separate authoring pages and can race with the package deployment. The
+deployment workflow checks this setting before uploading. After changing the
+publishing mode, deploy a fresh commit and verify the live package marker and
+actual behavior; a successful deployment job alone does not establish which
+artifact the host serves.
+
 ## Verification
 
 - `node scripts/check-learning.cjs`: existing source contracts, scientific/model
