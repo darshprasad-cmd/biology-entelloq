@@ -27,10 +27,13 @@ function storage(initial = {}) {
 }
 const make = (store) => createLessonProgress(LESSONS, LENSES, () => store);
 
-test('all original science, questions, answers and simulation builders remain identical', () => {
-  // Approved main 50bcfb0: this release may change presentation/state only.
+test('lesson content preserves the reviewed science corrections and original simulation builders', () => {
+  // Learning-depth release: qualify enzyme Km and distinguish continuous logistic
+  // growth from discrete-map chaos in the population Math and Frontier text.
+  // These three reviewed prose fields are the only changes from main 50bcfb0;
+  // original questions, answers, equations and simulation builders are preserved.
   const sha = (text) => crypto.createHash('sha256').update(text).digest('hex');
-  assert.equal(sha(JSON.stringify({ LESSONS, LENSES })), '0adcab025e30928170c6ad1f334834c65ce42018822ae8e863d9f4fc56e8dd9d');
+  assert.equal(sha(JSON.stringify({ LESSONS, LENSES })), 'e100490014f131178e6a0f437e7d7b2b38e62b94871c2d8851615aa229e8e96b');
   assert.equal(sha(source.slice(source.indexOf('  // ── interactive builders'))), '50a8e790a9e58d4b05ca68d2656f661660e1cfe82e26553bf21590bfc52c7c06');
 });
 

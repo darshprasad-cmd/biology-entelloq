@@ -37,8 +37,8 @@ def render(page):
     styles = source('shared.css')
     scripts = source('context.js')
     if page == 'learn':
-        styles += source('learn.css')
-        scripts += source('topics.js') + source('learning-cards.js') + source('visuals.js') + source('learn.js')
+        styles += source('learn.css') + source('depth-study.css')
+        scripts += source('topics.js') + source('learning-cards.js') + source('depth-foundations.js') + source('depth-processes.js') + source('depth-study.js') + source('visuals.js') + source('learn.js')
         if '<!-- BIO-LIBRARY:learn-main:START -->' in text:
             text = slot(text, 'learn-main', source('learn-main.html'), '<main id="page">')
         # Mount immediately inside main, before the existing Learn experiences.
@@ -61,8 +61,8 @@ def render(page):
             content = (LIB / 'labs.js' if name == '_labs.js' else ROOT / 'src' / name).read_text(encoding='utf-8').rstrip()
             text = pattern.sub(lambda m: m[1] + content + '\n\n', text)
     elif page in ('reason', 'solve'):
-        styles += source('practice-bridge.css')
-        scripts += source('topics.js') + source('learning-cards.js') + source('visuals.js') + source('practice-bridge.js')
+        styles += source('practice-bridge.css') + source('depth-study.css')
+        scripts += source('topics.js') + source('learning-cards.js') + source('depth-foundations.js') + source('depth-processes.js') + source('depth-study.js') + source('visuals.js') + source('practice-bridge.js')
     else:
         raise ValueError('Unsupported library build target')
     text = slot(text, page + '-style', '<style>\n' + styles + '</style>\n', '</head>')

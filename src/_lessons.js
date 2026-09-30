@@ -48,7 +48,7 @@
         experience: { mount: "enzyme", blurb: "Substrates drift in; only the right shape docks in the active site, snaps into product, and releases. Slide the temperature: too cold and it crawls; at the optimum it races; too hot and the fold unravels — denatured, and dead." },
         predict: { q: "You heat an enzyme far above its optimum temperature. The reaction rate…", o: ["keeps rising — more heat, more speed", "rises, then crashes as the enzyme denatures", "stays exactly constant", "reverses direction"], a: 1, why: "Up to the optimum, heat gives molecules more energy and more collisions, so rate rises. Past it, the heat shakes apart the delicate folds holding the active site's shape — the enzyme DENATURES, the pocket is lost, and rate collapses. The shape IS the function." },
         visual: { title: "Lock, key — and a handshake", pts: ["Old model: 'lock and key' — the substrate fits the active site exactly.", "Better model: 'induced fit' — the site moulds around the substrate like a handshake, straining its bonds.", "That strain is the trick: it lowers the activation energy the reaction must climb.", "The enzyme emerges unchanged — a true catalyst, reused thousands of times a second."] },
-        math: { mount: "michaelis", equation: "v = Vₘₐₓ[S] / (Kₘ + [S])", blurb: "Michaelis–Menten kinetics. As substrate [S] rises, rate climbs then plateaus at Vₘₐₓ — every active site is busy (saturated). Kₘ is the [S] giving half-max rate: a low Kₘ means the enzyme grabs its substrate avidly." },
+        math: { mount: "michaelis", equation: "v = Vₘₐₓ[S] / (Kₘ + [S])", blurb: "Michaelis–Menten kinetics. As substrate [S] rises, rate climbs then approaches Vₘₐₓ as enzyme capacity becomes saturated. Kₘ is the [S] giving half-max rate in this simple model. It depends on reaction steps as well as binding, so a lower Kₘ does not universally mean tighter substrate binding." },
         frontier: { experiment: "Frances Arnold won the 2018 Nobel for 'directed evolution' — breeding enzymes in the lab across generations to do jobs nature never asked of them.", research: "Designer enzymes now digest PET plastic, hinting at engineered organisms that eat pollution.", question: "Can we compute a brand-new enzyme for any reaction from scratch — the inverse of protein folding?" },
         realworld: { title: "In your detergent and your gut", blurb: "The proteases and lipases in laundry powder are enzymes that chew stains apart in cold water — saving energy. Lactase pills give lactose-intolerant people the enzyme their gut lacks. Every meal you digest is an enzyme cascade, and every cell runs thousands of them at once." },
       },
@@ -64,8 +64,8 @@
         experience: { mount: "logistic", blurb: "Set the growth rate r and the carrying capacity K, then watch the population climb. Start it small and it looks exponential (the J); let it near K and competition brakes it into the S-curve. This is the same interactive as the Math lens — because here, the maths IS the experience." },
         predict: { q: "A population is far below its carrying capacity K. Its growth is…", o: ["near zero — too few to breed", "nearly exponential — resources are abundant", "already levelling off", "declining"], a: 1, why: "Well below K, the (1 − N/K) brake is close to 1, so growth is almost unrestricted — nearly exponential. The slowdown only bites as N approaches K and the term shrinks toward zero. Fastest ABSOLUTE growth actually occurs at N = K/2." },
         visual: { title: "The J and the S", pts: ["Exponential (J-curve): dN/dt = rN. Growth with no limits — a bacterial colony's first hours, an invasive species in a new land.", "Logistic (S-curve): the same, braked by (1 − N/K) as crowding sets in.", "Carrying capacity K: the ceiling a habitat can sustain — set by food, space, predators, disease.", "Real populations often OVERSHOOT K, then crash and oscillate around it."] },
-        math: { mount: "logistic", equation: "dN/dt = rN(1 − N/K)", blurb: "The logistic equation. r is the intrinsic growth rate; K the carrying capacity. The bracket is the 'environmental brake' — full open at low N, closed at N = K. Deceptively simple, it hides chaos: push r high enough and the population never settles." },
-        frontier: { experiment: "In 1976 Robert May showed this tidy equation, iterated, produces deterministic CHAOS — launching a whole field from one line of ecology.", research: "Modern ecology fits these curves to real data to forecast fishery collapses and disease outbreaks.", question: "Can we predict — and prevent — the tipping point where a population crashes rather than settles?" },
+        math: { mount: "logistic", equation: "dN/dt = rN(1 − N/K)", blurb: "The continuous logistic equation. r is the intrinsic growth rate; K the carrying capacity. The bracket is the 'environmental brake' — nearly one at low N, zero at N = K. With fixed positive r and K, a positive population approaches K; increasing r changes how quickly it approaches, not whether it becomes chaotic. Chaos can occur in a separate discrete-time logistic map." },
+        frontier: { experiment: "In 1976 Robert May explored deterministic chaos in the discrete-time logistic map — a model updated generation by generation, distinct from the continuous logistic equation shown here.", research: "Modern ecology fits these curves to real data to forecast fishery collapses and disease outbreaks.", question: "Can we predict — and prevent — the tipping point where a population crashes rather than settles?" },
         realworld: { title: "Fisheries, pandemics, and you", blurb: "Sustainable fishing harvests a stock at N = K/2, where growth is fastest — the 'maximum sustainable yield'. The same S-curve describes a virus spreading through a population until it runs out of susceptible hosts. And humanity's own 8-billion curve is the biggest open question in ecology." },
       },
       facts: ["Maximum growth RATE occurs at N = K/2, not at low N — a fact fisheries live and die by.", "Exponential growth is unsustainable by definition: nothing grows forever in a finite world.", "r-strategists (many cheap offspring) boom and bust; K-strategists (few, well-tended) hug the ceiling."],
@@ -188,6 +188,31 @@
     actionpotential: "Read the phases of a nerve impulse and explain all-or-nothing signalling.",
     cardiac: "Use pressure differences to explain valve movement through one heartbeat.",
   };
+  // The interactive lessons and the deeper library use distinct, stable IDs.
+  const LESSON_TOPICS = {
+    diffusion: "membrane-transport",
+    enzyme: "enzymes",
+    population: "population-growth",
+    photosynthesis: "photosynthesis",
+    respiration: "cellular-respiration",
+    replication: "dna-replication",
+    selection: "natural-selection",
+    actionpotential: "action-potential",
+    cardiac: "cardiac-cycle",
+  };
+  function depthLinks(lesson) {
+    const topic = LESSON_TOPICS[lesson.id];
+    if (!topic) return "";
+    return `<section class="les-depth" aria-labelledby="lesson-depth-title">
+      <h2 id="lesson-depth-title">Take this concept further</h2>
+      <p>Explore the mechanism and its evidence in Learn, then build an explanation in Reason or test it in Solve.</p>
+      <nav aria-label="Deeper study and practice for ${lesson.title}">
+        <a class="btn primary" href="./learn.html#topic/${topic}/advanced">Study the full concept →</a>
+        <a class="btn ghost" href="./reason.html#learn/${topic}/advanced">Reason it through →</a>
+        <a class="btn ghost" href="./solve.html#learn/${topic}/advanced">Test your understanding →</a>
+      </nav>
+    </section>`;
+  }
   const catalogue = { query: "", domain: "", level: "" };
   function searchText(value) {
     return String(value).normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[–—−]/g, "-");
@@ -403,11 +428,11 @@
       </div>
       <div class="les-stage" id="lensStage" role="tabpanel" tabindex="0"></div>
       <div class="les-foot reveal">
+        ${depthLinks(l)}
         <div class="les-sec"><h4>Key facts</h4><ul>${l.facts.map((f) => `<li>${f}</li>`).join("")}</ul></div>
         <div class="les-sec les-exam"><h4>★ Exam focus</h4><p>${l.exam}</p></div>
         <div class="les-sec"><h4>Connects to</h4><div class="les-conn">${l.connections.map((c) => `<span class="chip">${c}</span>`).join("")}</div></div>
         <div class="les-next">
-          <a class="btn ghost" href="./solve.html">Practise this →</a>
           <a class="btn ghost" href="./universe.html">See it in the Universe →</a>
           <a class="btn primary" href="./lab.html">Open the Lab →</a>
         </div>

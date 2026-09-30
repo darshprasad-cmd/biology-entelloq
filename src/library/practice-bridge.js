@@ -77,6 +77,12 @@
     const target = $(selector);
     if (target) target.focus({preventScroll:true});
   }
+  function mountDepth(route) {
+    const footer = host.querySelector('.tp-footer');
+    if (!footer || !global.BioDepth) return;
+    footer.insertAdjacentHTML('beforebegin',global.BioDepth.markup(route.topic,section));
+    global.BioDepth.mount(host,route.topic);
+  }
   function renderSolve(route, focus) {
     const questions = questionsFor(route.topic);
     if (!questions.length) { renderUnavailable(route); return; }
@@ -104,6 +110,7 @@
     });
     $('.tp-retry')?.addEventListener('click', () => {state.answers[index] = null; save(); renderSolve(route,true);});
     $('.tp-next')?.addEventListener('click', () => {state.index++; save(); renderSolve(route,true);});
+    mountDepth(route);
     if (focus) focusCurrent('#tpQuestion');
   }
   function validExample(topic) {
@@ -128,6 +135,7 @@
     $('#tpReflection')?.addEventListener('input', e => {state.reflection = e.target.value; save();});
     $('.tp-reveal')?.addEventListener('click', () => {if (!state.draft.trim()) return; state.revealed++; save(); renderReason(route,true);});
     $('.tp-revisit')?.addEventListener('click', () => {state.revealed = 0; save(); renderReason(route); focusCurrent('#tpDraft');});
+    mountDepth(route);
     if (focus) focusCurrent('.tp-step-status');
   }
   function renderUnavailable(route) {
