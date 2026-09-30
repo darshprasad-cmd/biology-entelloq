@@ -1,0 +1,14 @@
+{
+  "base": "http://127.0.0.1:3026",
+  "checks": [
+    "All 73 concepts render mechanisms, evidence tables and distinct transfer tasks. Answers start hidden.",
+    "Hints and model comparison are separate; notes and honest self-review persist across reload, Learn and Reason; revisit list resolves to the topic.",
+    "Solve retains its three graded checks plus the transfer task; rerendering does not erase drafts; study-note export contains both activity drafts.",
+    "320/390/768/1440 Learn widths fit; native disclosure and evidence table support keyboard focus under reduced motion.",
+    "Light-theme draft contrast meets 4.5:1; Reason/Solve layouts fit at phone/tablet/desktop widths; representative Lessons expose exact depth links.",
+    "The depth experience works inside the existing mobile app shell.",
+    "Blocked storage keeps drafts through mode changes and honestly reports session-only persistence."
+  ],
+  "errors": [],
+  "passed": true
+}
