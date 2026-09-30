@@ -5530,7 +5530,8 @@ function buildCockroach(THREE) {
   }
 
   /* ---------- layer 2: digestive tract -------------------------------------- */
-  // One continuous through-gut from the head to the tail, in real order.
+  // Alimentary sequence from head to tail. Overlapping teaching surfaces do
+  // not constitute a continuous simulated lumen (see ANATOMY.md).
   // Oesophagus (narrow, anterior).
   const oes = tube(THREE, CROP_C, [[0, -0.05, 4.2], [0, -0.05, 3.2], [0, -0.05, 2.4]], 0.11,
     { rough: 0.5, clear: 0.4, rad: 8, seg: 20 });
@@ -5558,12 +5559,73 @@ function buildCockroach(THREE) {
     note: 'A short, firm, muscular grinding chamber armed with chitinous teeth that triturate food before it passes to the midgut.',
     mesh: giz,
   });
-  // Midgut / mesenteron, ringed at its anterior end by finger-like gastric caeca.
-  const midgut = tube(THREE, MIDGUT_C, [[0, -0.04, -0.1], [0, -0.04, -1.0], [0, -0.04, -1.9]], 0.19,
-    { rough: 0.48, clear: 0.4, rad: 8, seg: 24 });
+  // P. americana reference route: rightward, back anteriorly, then ventrally
+  // before returning posteriorly/dorsally to the midline ileum (Fox, Lander).
+  // The anterior neck stays straight through the unchanged caecal attachments.
+  // Schematic model units: no measured length, specimen-specific coil or lumen.
+  // The inlet overlaps the gizzard; the outlet overlaps the existing hindgut
+  // slightly, closing the former visible gap without moving either neighbour.
+  // Exact tangent-continuous arcs avoid spline overshoot at the reverse bend.
+  // This local construction changes only the midgut, not the shared tube helper.
+  const midgutPath = new THREE.CurvePath();
+  const midgutLine = (start, end) => midgutPath.add(new THREE.LineCurve3(
+    new THREE.Vector3(...start), new THREE.Vector3(...end)));
+  const midgutArc = (cx, cz, rx, rz, from, to, height) => {
+    const arc = new THREE.Curve();
+    arc.getPoint = (t, target = new THREE.Vector3()) => {
+      const a = from + (to - from) * t;
+      return target.set(cx + rx * Math.cos(a), height(t, a), cz + rz * Math.sin(a));
+    };
+    arc.arcLengthDivisions = 96;
+    midgutPath.add(arc);
+  };
+  midgutLine([0, -0.04, 0.14], [0, -0.04, -0.4]);
+  midgutArc(0.5, -0.4, 0.5, 0.5, Math.PI, Math.PI * 1.5,
+    (_t, a) => -0.04 + 0.16 * smooth(1 + Math.cos(a)));
+  midgutArc(0.5, -1.4, 0.5, 0.5, Math.PI / 2, 0, () => 0.12);
+  midgutLine([1, 0.12, -1.4], [1, 0.12, -2.4]);
+  midgutArc(0.72, -2.4, 0.28, 0.28, 0, -Math.PI, () => 0.12);
+  midgutLine([0.44, 0.12, -2.4], [0.44, 0.12, -1.64]);
+  midgutArc(-0.28, -1.64, 0.72, 0.44, 0, Math.PI, (_t, a) =>
+    a <= Math.PI / 2 ? 0.12 - 0.16 * Math.sin(a) ** 2 : -0.04 - 0.02 * Math.cos(a) ** 2);
+  // Opposite-curvature arcs return to the midline with a posterior-facing
+  // tangent. Both gut mouths can then overlap axially rather than forming a
+  // side junction that leaves the hindgut's anterior mouth as a blind stub.
+  const returnRadius = (1.0 ** 2 + 0.30 ** 2) / (4 * 1.0);
+  const returnAngle = 2 * Math.atan2(1.0, 0.30);
+  midgutArc(-1.0 + returnRadius, -1.64, returnRadius, returnRadius, Math.PI, Math.PI + returnAngle,
+    t => -0.06 + 0.01 * smooth(t));
+  midgutArc(-returnRadius, -1.94, returnRadius, returnRadius, returnAngle, 0,
+    t => -0.05 + 0.01 * smooth(t));
+  midgutLine([0, -0.04, -1.94], [0, -0.04, -2.22]);
+  midgutPath.arcLengthDivisions = 1200;
+  const midgut = new THREE.Mesh(new THREE.TubeGeometry(midgutPath, 160, 0.19, 12, false),
+    mat(THREE, MIDGUT_C, { rough: 0.48, clear: 0.4 }));
+  // Bury the whole distal rim inside the narrower hindgut, not only its centre.
+  // A gradual terminal taper joins these separate surfaces without leaving a
+  // visible open crescent. It is not a reconstructed valve or continuous lumen.
+  {
+    const g = midgut.geometry, p = g.attributes.position;
+    const { path, tubularSegments: rings, radialSegments: sides } = g.parameters;
+    const length = path.getLength();
+    const point = new THREE.Vector3();
+    for (let i = 0; i <= rings; i++) {
+      // Keep the full outer wall over the hindgut inlet at z=-2.0; narrow only
+      // after entering it so the two rendered mouths both sit inside tissue.
+      const t = i / rings, radius = 0.19 - 0.04 * smooth(Math.max(0, (t * length - (length - 0.18)) / 0.18));
+      if (radius === 0.19) continue;
+      const centre = path.getPointAt(t);
+      for (let j = 0; j <= sides; j++) {
+        const index = i * (sides + 1) + j;
+        point.fromBufferAttribute(p, index).sub(centre).multiplyScalar(radius / 0.19).add(centre);
+        p.setXYZ(index, point.x, point.y, point.z);
+      }
+    }
+    seal(g);
+  }
   add({
     id: 'midgut', name: 'Midgut (mesenteron)', layer: 2, system: 'digestive', cuttable: true, detachable: false,
-    note: 'The stomach of the insect and the main site of enzyme secretion and absorption. A peritrophic membrane lines it and wraps the food.',
+    note: 'The midgut follows an asymmetric loop after the gastric caeca, then rejoins the hindgut near the Malpighian tubules. It supports enzyme secretion and nutrient absorption; a peritrophic membrane surrounds the food. The route and proportions shown are schematic.',
     mesh: midgut,
   });
   // Gastric caeca — eight blind diverticula at the anterior midgut, following

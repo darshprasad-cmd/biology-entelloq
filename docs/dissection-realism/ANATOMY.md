@@ -26,6 +26,7 @@ User-supplied reference images were not substituted for the interactive models.
 | Fish | The posterior swim-bladder chamber now lies posteriorly along the body, with a longitudinal connecting neck, rather than dropping ventrally into the gut. | The existing two-chamber design is retained; it is not a claim that all teleost species have this bladder shape. |
 | Cockroach | Crop now follows the foregut's longitudinal axis, between oesophagus and gizzard, instead of standing across the dorsoventral axis. | It remains a simplified storage sac. No reproductive structures or additional organs were invented. |
 | Cockroach (September 28) | Eight closed gastric pouches now meet the anterior midgut in a transverse whorl. Removed the artificial torus and disconnected, decorative child lobes; the pouches themselves are selectable. | Count and attachment follow a P. americana reference. Curvature, spacing and dimensions remain schematic; overlapping closed surfaces do not simulate a continuous lumen. |
+| Cockroach (September 30) | Replaced the straight midgut with an asymmetric returning loop and seated its ends in the existing gizzard and hindgut surfaces. | Directional routing follows a P. americana reference, but lengths, curvature and proportions are illustrative. Surface overlap is not a continuous lumen. All other parts remain unchanged. |
 
 The whole-specimen tray orientations are kept separate from these local
 relationships: frog ventral surface up, cockroach and earthworm dorsal surface
@@ -93,7 +94,7 @@ The model is a generalized cockroach teaching approximation. Its foregut order,
 dorsal heart and ventral nerve-cord relationships are useful orientation cues,
 but its reproductive representation is not sex-specific: the current single
 midline body does not reproduce paired gonads and their ducts. Detailed
-tracheal/gland connections and the simplified straight midgut remain review items. These
+tracheal/gland connections and specimen-specific digestive proportions remain review items. These
 limitations should not be concealed by more realistic surface rendering.
 
 Reference: [NCERT material hosted by IIT Kanpur SATHEE, Structural Organisation in Animals, Cockroach](https://sathee.iitk.ac.in/ncert-books/ncert-books-theory/class-11/nbt-bio-11/bio-11-chapter-7-structural-organisation-in-animals/).
@@ -110,6 +111,15 @@ reference photograph or diagram is included in the shipped assets.
 Ventral pouch curvature stays above the existing gut's lowest surface. The
 procedural abdominal shell does not fully enclose that pre-existing gut; neither
 that shell nor the prepared exterior's overall bounds validate cavity fit.
+
+The September 30 midgut revision follows the same Lander guide's rightward,
+anterior, ventral, then posterior/dorsal returning route to the midline ileum.
+It retains the straight anterior neck through the existing caecal attachments,
+and the outlet meets the existing hindgut near the Malpighian tubules. The
+curve is a schematic teaching surface, not a reconstruction of a measured
+adult gut or its lumen. Tests cover the curve's bends, selected neighbouring
+structures and connected endpoints; they do not certify complete cavity fit
+or every small tracheal branch. No reference diagram was copied.
 
 ## Verification and next review
 

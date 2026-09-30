@@ -20,20 +20,20 @@ const baseline = {
     interiors: '10630ae3b56f12966f0963d52c050eadc73d583c9541abb6682160cd447bef8c' },
   cockroach: { contracts: '77ce83635391bd3f1f71ba51909110c1641882db459c2cd324b38fb2a5f903fa',
     interiors: '6e33c61f9e3c4d6fe7cef54754e7be772c073c4b1165f5bc8752ca2e23c6720a',
-    // September 28: only gastric-caeca geometry, transform and explanatory note
-    // intentionally change. These narrower hashes were captured from accepted
-    // 54a699ce447c7d9283fabae34bcf75a2e9256476, NOT the modified builder.
-    // All other 26 parts retain their original contract and internal vertices.
-    // cockroach-caeca.test.cjs covers the replacement's geometry and behavior.
-    retainedContracts: 'b87801f8d0af9a69cc209f98c53f48d97d868c5291cf8cb1ad9d3233e11f8122',
-    retainedInteriors: '1b0a90d61c83164fc66e69dc83b7ccfee2218d234125ef5c29d37dc0d5f7d652' },
+    // September 30: only midgut geometry and its explanatory note change.
+    // Captured from accepted 87ab30281cec1ba5e2ba09d4afc4ce3c7bf3ad78,
+    // NOT the modified builder. All other 26 parts, including the September 28
+    // caecal correction, retain exact contracts and interior vertices.
+    // cockroach-midgut.test.cjs covers the replacement geometry and behavior.
+    retainedContracts: 'c7b48e4f56be5628403bb7262618810df113eab91ea08fa074309e5bd66e234b',
+    retainedInteriors: '8b384cf0bc5b6796d85acc94731bd6d781e1aa613fcf94bdb2d99846e61fe90c' },
 };
 
 for (const id of ['fish', 'cockroach']) {
   test(`${id}: unmodified parts retain original metadata, cut/lift/pin contracts, anchors and interior geometry`, () => {
     const specimen = build(THREE, id);
-    const parts = specimen.parts.filter(part => id !== 'cockroach' || part.id !== 'gastric-caeca');
-    if (id === 'cockroach') assert.equal(parts.length, 26, 'only the explicitly revised caeca are excluded');
+    const parts = specimen.parts.filter(part => id !== 'cockroach' || part.id !== 'midgut');
+    if (id === 'cockroach') assert.equal(parts.length, 26, 'only the explicitly revised midgut is excluded');
     assert.equal(hash(parts.map(({ mesh, ...part }) => ({ ...part, position: mesh.position.toArray(),
       rotation: mesh.quaternion.toArray(), scale: mesh.scale.toArray() }))), baseline[id].retainedContracts || baseline[id].contracts);
     assert.equal(hash(parts.filter(part => part.layer > 0).map(part => {
