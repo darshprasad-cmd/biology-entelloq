@@ -29,7 +29,8 @@ const report = {
   artifact: path.relative(root, artifact), bytes: bytes.length,
   sha256: crypto.createHash('sha256').update(bytes).digest('hex'),
   timestamp: new Date().toISOString(), complete: false, runs: [],
-  limitations: 'Isolated Chromium with software WebGL. No live AI, Google sign-in, billing, real camera or touch hardware was exercised.'
+  rendering: { backend: 'SwiftShader software WebGL', deviceScaleFactor: 0.5, desktopCSSViewport: '1440x1000', mobileCSSViewport: '390x844' },
+  limitations: 'Isolated Chromium with SwiftShader software WebGL at half device scale (one quarter of physical render pixels); CSS layout viewports remain unchanged. No live AI, Google sign-in, billing, real camera or touch hardware was exercised.'
 };
 const sections = [
   ['learn', '#bl-search'], ['lessons', '#lesson-search'], ['reason', '#rzSearch'],
@@ -68,18 +69,26 @@ async function noOverflow(page, frames, label, run) {
 async function screenshot(page, name) {
   await page.screenshot({ path: path.join(output, name + '.png'), timeout: 30000 });
 }
+function worldStep(run, step) {
+  (run.worldProgress ||= []).push({ step, timestamp: new Date().toISOString() });
+  console.log('[' + run.mode + '] ' + step);
+  fs.writeFileSync(path.join(output, reportName), JSON.stringify(report, null, 2) + '\n');
+}
 async function checkWorlds(page, url, run) {
+  worldStep(run, 'Open Home and enter the Dissection Lab');
   await page.goto(url + '#home', { waitUntil: 'domcontentloaded' });
   let shell = await workspace(page);
   await shell.locator('#nav [data-go="lab"]').click();
   await page.waitForURL(/#lab$/);
   await shell.locator('#launcher.on').waitFor();
   let world = await childFrame(shell, '#launchFrame');
+  worldStep(run, 'Wait for the actual lab runtime');
   await world.waitForFunction(() => window.__LAB?.ok && window.__LAB.ready && window.__LAB.dissection,
     null, { timeout: 90000 });
   await world.evaluate(() => window.__LAB.intro()?.skip());
   run.specimens = [];
   for (const id of ['frog', 'cockroach']) {
+    worldStep(run, 'Load and verify prepared ' + id);
     const specimen = await world.evaluate(async id => {
       await window.__LAB.requestSpecimen(id);
       const lab = window.__LAB;
@@ -98,56 +107,70 @@ async function checkWorlds(page, url, run) {
     assert.ok(specimen.parts > 5 && specimen.meshes > 5 && specimen.triangles > 0);
     assert.equal(specimen.finite, true, id + ': finite rendered geometry');
     run.specimens.push(specimen);
+    worldStep(run, 'Capture prepared ' + id);
     await screenshot(page, run.mode + '-' + id);
   }
+  worldStep(run, 'Open the controls dialog through its button');
   await world.locator('#helpbtn').click();
   await world.locator('#keys.on').waitFor();
   await shell.locator('#launchX').waitFor({ state: 'hidden' });
   assert.equal(await shell.locator('#launchX').evaluate(element => element.inert), true, 'The child modal owns the Exit corner');
+  worldStep(run, 'Capture dialog ownership of the Exit corner');
   await screenshot(page, run.mode + '-lab-modal');
+  worldStep(run, 'Close the controls dialog through its button');
   await world.locator('#keysclose').click();
   await world.locator('#keys.on').waitFor({ state: 'hidden' });
   await shell.locator('#launchX').waitFor({ state: 'visible' });
+  worldStep(run, 'Exit the lab through the shell button');
   await shell.locator('#launchX').click();
   await shell.locator('#launcher.on').waitFor({ state: 'hidden' });
   await page.waitForURL(/#home$/);
+  worldStep(run, 'Reload after leaving the lab');
   await page.reload({ waitUntil: 'domcontentloaded' });
   shell = await workspace(page);
   assert.equal(await shell.locator('#launcher.on').count(), 0, 'Closing the lab survives reload');
   run.checks.push('Prepared frog and cockroach assets load offline with finite geometry; child dialogs own the Exit corner; lab exit returns to Home and survives reload.');
 
+  worldStep(run, 'Open Biology Universe through its navigation button');
   await shell.locator('#nav [data-go="universe"]').click();
   await page.waitForURL(/#universe$/);
   await shell.locator('#launcher.on').waitFor();
   world = await childFrame(shell, '#launchFrame');
+  worldStep(run, 'Wait for all 13 Universe stages');
   await world.waitForFunction(() => window.__UNI, null, { timeout: 90000 });
   const universe = await world.evaluate(() => ({ count: __UNI.count,
     stages: __UNI.scene.children.filter(item => item.userData.stageKey).map(item => item.userData.stageKey) }));
   assert.equal(universe.count, 13);
   assert.equal(universe.stages.length, 13, 'Every Universe stage factory initializes offline');
   run.universe = universe;
+  worldStep(run, 'Inspect the Cell stage');
   await world.evaluate(() => { const i = __UNI_ORDER.indexOf('cell'); __UNI.Z.pos = __UNI.Z.posTarget = i; __UNI.jumpTo(i); __UNI._tick(0); });
   await world.locator('#uInspect').click();
   assert.equal(await world.evaluate(() => __UNI.viewMode), 'orbit');
   await screenshot(page, run.mode + '-universe');
+  worldStep(run, 'Close Universe through the shell button');
   await shell.locator('#launchX').click();
   await shell.locator('#launcher.on').waitFor({ state: 'hidden' });
   await page.waitForURL(/#home$/);
   run.checks.push('All 13 real Universe stages initialize offline, Cell inspection opens, and the Universe close control restores Home.');
 
+  worldStep(run, 'Open and reload the Universe DNA deep link');
   await page.goto(url + '#universe/dna', { waitUntil: 'domcontentloaded' });
   await page.reload({ waitUntil: 'domcontentloaded' });
   shell = await workspace(page);
   await shell.locator('#launcher.on').waitFor();
   world = await childFrame(shell, '#launchFrame');
   await world.waitForFunction(() => window.__UNI && window.__UNI_ORDER[__UNI.Z.posTarget] === 'dna', null, { timeout: 90000 });
+  worldStep(run, 'Navigate the warm Universe from DNA to Atom');
   await page.goto(url + '#universe/atom', { waitUntil: 'domcontentloaded' });
   await world.waitForFunction(() => window.__UNI && window.__UNI_ORDER[__UNI.Z.posTarget] === 'atom', null, { timeout: 30000 });
   await shell.locator('#launchLoad').waitFor({ state: 'hidden' });
+  worldStep(run, 'Follow the Universe brand link into the lab');
   await world.locator('.u-brand').click();
   await page.waitForURL(/#lab$/);
   world = await childFrame(shell, '#launchFrame');
   await world.waitForFunction(() => window.__LAB?.ok && window.__LAB.ready && window.__LAB.dissection, null, { timeout: 90000 });
+  worldStep(run, 'Switch from the active lab to Learn');
   await page.goto(url + '#learn', { waitUntil: 'domcontentloaded' });
   await shell.locator('#launcher.on').waitFor({ state: 'hidden' });
   await (await childFrame(shell, '#viewFrame')).locator('#bl-search').waitFor();
@@ -157,7 +180,7 @@ async function runSuite(browser, mode, url) {
   const run = { mode, checks: [], layouts: [], errors: [], requests: [], forbiddenDependencies: [], cameraRequests: 0, complete: false };
   report.runs.push(run);
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 },
-    reducedMotion: 'reduce', serviceWorkers: 'block', colorScheme: 'dark' });
+    deviceScaleFactor: 0.5, reducedMotion: 'reduce', serviceWorkers: 'block', colorScheme: 'dark' });
   await context.exposeBinding('__singleFileCameraAttempt', () => { run.cameraRequests++; });
   await context.addInitScript(() => {
     window.__singleFileCameraRequests = 0;
@@ -188,6 +211,7 @@ async function runSuite(browser, mode, url) {
   });
   const page = await context.newPage();
   page.setDefaultTimeout(30000);
+  page.setDefaultNavigationTimeout(90000);
   page.on('request', request => {
     const target = new URL(request.url());
     if (target.protocol === 'file:' && target.href.split('#')[0] !== url && !run.forbiddenDependencies.includes(target.href))
@@ -315,7 +339,7 @@ async function runSuite(browser, mode, url) {
   }
 }
 (async () => {
-  const browser = await chromium.launch({ headless: true, args: ['--enable-unsafe-swiftshader'] });
+  const browser = await chromium.launch({ headless: true, args: ['--enable-unsafe-swiftshader', '--use-angle=swiftshader'] });
   let copyDirectory;
   try {
     if (!fileOnly) await runSuite(browser, 'http', base);
