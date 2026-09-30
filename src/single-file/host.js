@@ -140,7 +140,7 @@
         // cleanup replace the browser history entry being restored.
         current.restoring = true;
         try {
-          if (name === 'app.html' && target.document.getElementById('launcher')?.classList.contains('on')) target.closeLaunch();
+          if (name === 'app.html' && target.document.getElementById('launcher')?.classList.contains('on')) target.dispatchEvent(new target.KeyboardEvent('keydown', {key:'Escape'}));
           current.url = route;
           target.dispatchEvent(fromHistory ? new target.PopStateEvent('popstate', {state:history.state}) : new target.HashChangeEvent('hashchange',{oldURL,newURL:route.href}));
           // Child-owned mode changes do not alter the authored shell's cached
