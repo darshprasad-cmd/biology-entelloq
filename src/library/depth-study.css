@@ -1,0 +1,45 @@
+/* Extend the current reading surfaces without changing the Biology shell. */
+.bd-study{margin:38px 0;color:var(--ink);min-width:0;line-height:1.7}
+.bd-study *{box-sizing:border-box}
+.bd-header{display:flex;align-items:end;justify-content:space-between;gap:24px;border-top:1px solid var(--hair);padding-top:28px;margin-bottom:22px}
+.bd-header h2{font:500 clamp(25px,3vw,34px)/1.2 var(--display);margin:8px 0}
+.bd-header>p{max-width:30ch;color:var(--dim);font-size:13px;margin:0}
+.bd-study h3{font:500 22px/1.35 var(--display);margin:10px 0 16px}
+.bd-study p,.bd-study li{max-width:78ch}
+.bd-study p{margin:12px 0}
+.bd-study details{border:1px solid var(--line);border-radius:6px;background:var(--panel)}
+.bd-study summary{cursor:pointer;padding:15px 18px;font-weight:500;line-height:1.5}
+.bd-study summary::marker{color:var(--em)}
+.bd-study details>p,.bd-study details>ol,.bd-study details>ul{margin:0 20px 20px}
+.bd-study details>ol,.bd-study details>ul{padding-left:22px}
+.bd-study li+li{margin-top:10px}
+.bd-mechanism{margin:24px 0}.bd-mechanism details+details{margin-top:8px}
+.bd-mechanism summary span{font:12px var(--mono);color:var(--em);margin-right:12px}
+.bd-misconception{border-left:3px solid var(--em)!important}
+.bd-exercise{background:var(--panel);border:1px solid var(--hair);border-radius:8px;padding:clamp(18px,3vw,30px);margin-top:22px;min-width:0}
+.bd-study .bd-question{font-weight:500;font-size:17px;margin:24px 0 18px}
+.bd-table-wrap{overflow-x:auto;max-width:100%;margin:20px 0;border:1px solid var(--line);border-radius:5px}
+.bd-study table{border-collapse:collapse;width:100%;font-size:13px;text-align:left}
+.bd-study caption{text-align:left;padding:12px 15px;font-weight:500;color:var(--em)}
+.bd-study th,.bd-study td{padding:12px 15px;border-top:1px solid var(--line);vertical-align:top;min-width:100px}
+.bd-study thead th{background:var(--bg-2);font-weight:500}.bd-study tbody th{font-weight:500}
+.bd-study label{display:block;font-size:13px;margin-bottom:8px}
+.bd-study textarea{display:block;width:100%;resize:vertical;min-height:120px;font:inherit;font-size:14px;line-height:1.7;color:var(--ink);background:var(--bg-2);border:1px solid var(--hair);border-radius:5px;padding:13px 15px}
+.bd-study .bd-note,.bd-study .bd-save{font-size:12px;color:var(--dim)}
+.bd-study .bd-hint,.bd-study .bd-answer{margin-top:12px}
+.bd-study .bd-limit{border-top:1px solid var(--line);padding-top:16px;font-size:13px;color:var(--dim)}
+.bd-review{border:0;padding:0;margin:20px 0 0;display:flex;flex-wrap:wrap;gap:9px}
+.bd-review legend{font-size:13px;margin-bottom:10px}
+.bd-study button,.bd-revisit a{cursor:pointer;font:inherit;font-size:12px;padding:10px 13px;background:var(--raise);color:var(--ink);border:1px solid var(--hair);border-radius:5px;text-align:left}
+.bd-study button[aria-pressed=true]{border-color:var(--em);background:var(--bg-2);color:var(--em)}
+.bd-review:disabled{opacity:.6}.bd-review:disabled button{cursor:default}
+.bd-footer{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding-top:20px;font-size:12px;color:var(--dim)}
+.bd-footer a{color:var(--em);overflow-wrap:anywhere}.bd-footer span{margin-left:auto}
+.bd-study :focus-visible,.bd-revisit :focus-visible{outline:2px solid var(--em);outline-offset:4px}
+.bd-revisit{margin:18px 0 26px;padding:18px;border:1px solid var(--hair);background:var(--panel);border-radius:6px}
+.bd-revisit h2{font:500 20px var(--display);margin:0 0 8px}.bd-revisit p{font-size:13px;color:var(--dim)}
+.bd-revisit nav{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.bl-library .bd-open{font:inherit;font-size:12px;color:var(--em);background:transparent;border:0;border-bottom:1px solid var(--hair);padding:8px 0;cursor:pointer;text-align:left}
+#bd-title{scroll-margin-top:160px}
+@media(max-width:760px){.bd-header{align-items:start;flex-direction:column;gap:8px}.bd-header>p{max-width:100%}.bd-study{font-size:14px}.bd-review{display:grid}.bd-footer{align-items:start;flex-direction:column}.bd-footer span{margin-left:0}.bd-study th,.bd-study td{padding:10px}.bd-study details>p,.bd-study details>ol,.bd-study details>ul{margin-left:15px;margin-right:15px}}
+@media(prefers-reduced-motion:reduce){.bd-study *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
