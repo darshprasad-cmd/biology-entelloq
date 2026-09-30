@@ -43,12 +43,20 @@ test('heart IDs, layers, transforms, interactions, and authored incisions remain
   assert.equal(heart.group.scale.x, .9);
 });
 
-test('internal valves, septum, chordae, and papillary muscles keep their geometry and remain hidden', () => {
+test('internal valves, chordae and papillary muscles keep their geometry; all internal parts remain hidden', () => {
   const internal = heart.parts.filter(p => p.layer === 2);
   assert.equal(internal.length, 14);
+  for (const p of internal) assert.equal(p.mesh.visible, false, p.id + ' must not become exterior decoration');
+  // Rebuilt from immutable ce38283 anatomy.js + heart.js using the shipped
+  // Three runtime and the exact digest loop below. The original full 14-part
+  // hash reproduced as 0b00e07c72a5bfbe49a3f19baa339894314e68fa737b4f1e6c46173a552a5bc8.
+  // Only septum vertices are now fitted inside the revised ventricular envelope.
+  // Its ID/layer/transform/interaction contract remains in the unchanged hash
+  // above. Keep every other internal geometry byte, index and child transform.
+  const retained = internal.filter(p => p.id !== 'septum');
+  assert.equal(retained.length, 13, 'exclude exactly the fitted septum, not another internal part');
   const hash = crypto.createHash('sha256');
-  for (const p of internal) {
-    assert.equal(p.mesh.visible, false, p.id + ' must not become exterior decoration');
+  for (const p of retained) {
     hash.update(p.id);
     p.mesh.traverse(mesh => {
       mesh.updateMatrix(); hash.update(JSON.stringify(mesh.matrix.elements));
@@ -60,7 +68,7 @@ test('internal valves, septum, chordae, and papillary muscles keep their geometr
       if (mesh.geometry.index) hash.update(Buffer.from(mesh.geometry.index.array.buffer));
     });
   }
-  assert.equal(hash.digest('hex'), '0b00e07c72a5bfbe49a3f19baa339894314e68fa737b4f1e6c46173a552a5bc8');
+  assert.equal(hash.digest('hex'), '3e49e2387057ac476edfd844d7f875461c347bc46ee4286b1b386a0b8cc236ac');
 });
 
 test('the sac is finite and tapered, while fat is localized opaque tissue instead of an enclosing veil', () => {

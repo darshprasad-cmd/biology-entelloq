@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 MODULES = ("anatomy.js", "frog.js", "heart.js", "fish.js",
            "cockroach.js", "dissect.js", "env.js", "shell.js", "main.js",
            "cutting.js", "surface.js", "hands.js", "earthworm.js", "softbody.js",
-           "zoomverse.js", "blood.js")  # September 30: specimen-specific fluid realism.
+           "zoomverse.js", "blood.js", "strata.js")  # September 30: fluids and the actual specimen envelope.
 STARTUP = "// Module-scoped bindings are invisible to an injected eval"
 
 

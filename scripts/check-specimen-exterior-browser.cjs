@@ -46,6 +46,24 @@ const report = { specimens: [], errors: [], cameraRequests: 0, limitations: 'Vis
       }, id);
       await page.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
       await page.screenshot({ path: path.join(output, id + '-exterior.png') });
+      if (process.env.BIOLOGY_EXTERIOR_ANGLES === '1' && id === 'heart') {
+        for (const [name,angle] of [['side',Math.PI/2],['posterior',Math.PI]]) {
+          await page.evaluate(angle=>{
+            const lab=__LAB, group=lab.parts[0].mesh.parent;
+            group.userData.reviewQuaternion ||= group.quaternion.clone();
+            group.quaternion.copy(group.userData.reviewQuaternion);
+            group.rotateOnWorldAxis(new lab.THREE.Vector3(0,1,0),angle);
+            group.updateMatrixWorld(true);
+          },angle);
+          await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
+          await page.screenshot({path:path.join(output,'heart-'+name+'.png')});
+        }
+        await page.evaluate(()=>{
+          const group=__LAB.parts[0].mesh.parent;
+          group.quaternion.copy(group.userData.reviewQuaternion); delete group.userData.reviewQuaternion;
+          group.updateMatrixWorld(true);
+        });
+      }
       if (process.env.BIOLOGY_EXTERIOR_DIAGNOSTIC === '1' && id === 'heart') {
         console.log('Heart surfaces:', await page.evaluate(() => window.__LAB.parts.filter(p => p.mesh.visible).map(p => ({id:p.id, transmission:p.mesh.material.transmission, opacity:p.mesh.material.opacity}))));
         await page.evaluate(() => window.__LAB.parts.forEach(p => p.mesh.traverse(m => { if (m.material && p.id !== 'pericardium') { m.material.transmission = 0; m.material.needsUpdate = true; } })));

@@ -172,7 +172,10 @@ for (const partId of ['lv-free-wall', 'rv-free-wall']) {
     const span = worldBox.max.z - worldBox.min.z, points = [], rayDirection = new THREE.Vector3(0, -1, 0);
     const normalMatrix = new THREE.Matrix3().getNormalMatrix(mesh.matrixWorld);
     for (let i = 0; i < 13; i++) {
-      const ray = new THREE.Raycaster(new THREE.Vector3(worldCenter.x, worldBox.max.y + 2,
+      // The anterior RV now occupies its own mesh, rather than covering a full
+      // duplicate LV shell. Contact the exposed anatomical-left LV surface.
+      const cutX = worldCenter.x + (partId === 'lv-free-wall' ? -(worldBox.max.x-worldBox.min.x)*.22 : 0);
+      const ray = new THREE.Raycaster(new THREE.Vector3(cutX, worldBox.max.y + 2,
         worldCenter.z + span * (-0.3 + 0.6 * i / 12)), rayDirection);
       const hit = ray.intersectObject(mesh, false)[0];
       if (hit) {

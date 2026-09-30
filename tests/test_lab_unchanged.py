@@ -108,7 +108,11 @@ class DissectionUnchanged(unittest.TestCase):
         self.assertEqual(scope["additionalSlots"], ["blood.js"])
         self.assertEqual(scope["previousShellSha256"],
                          (ROOT / "tests/fixtures/dissection-shell.sha256").read_text().strip())
-        expected = scope["expandedShellSha256"]
+        specimen_scope = json.loads((ROOT / "tests/fixtures/dissection-specimen-scope.json").read_text())
+        self.assertEqual(specimen_scope["base"], BASE)
+        self.assertEqual(specimen_scope["additionalSlots"], ["strata.js"])
+        self.assertEqual(specimen_scope["previousShellSha256"], scope["expandedShellSha256"])
+        expected = specimen_scope["expandedShellSha256"]
         after = (ROOT / "lab.html").read_text(encoding="utf-8")
         for name in BUILDER.MODULES:
             pattern = BUILDER.slot_pattern(name)

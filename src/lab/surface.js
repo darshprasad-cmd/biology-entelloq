@@ -799,7 +799,7 @@ function SUR_finishProfile(specimen, part) {
     if (/pericardium/.test(id) && part.mesh.material.transparent && part.mesh.material.opacity <= 0.2)
       return profile('serous', 0xd2c5aa, 0.12, 0.32, 0.18, 0.48);
     if (/free-wall|atrium|auricle|^septum$|papillary|moderator/.test(id))
-      return profile('myocardium', 0xa9584d, 0.62, 0.46, 0.22, 0.32);
+      return profile('myocardium', 0x80685d, 0.20, 0.66, 0.14, 0.48);
     if (/pericardium|leaflet|chordae|cusp/.test(id))
       return profile('serous', 0xd2c5aa, 0.28, 0.65, 0.24, 0.44);
     return null;
@@ -939,7 +939,7 @@ export function createSurfaceDetail(THREE, parts, specimenId, group) {
       // Authored close-fitting exterior sheets/pads already have controlled
       // relief. Whole-bounding-box displacement makes the separate pads tear
       // and moves a conforming sac through the muscle it surrounds.
-      if (rec.disp && !['localized-fat', 'conforming-sac'].includes(p.mesh.userData.exteriorDetail))
+      if (rec.disp && !['localized-fat', 'conforming-sac', 'joined-ventricular-wall'].includes(p.mesh.userData.exteriorDetail))
         SUR_displaceBlob(THREE, geo, rec.disp, seed);
       if (rec.kids) {
         // Fat bodies carry their finger lobes as children; lobulating only the
@@ -985,7 +985,9 @@ export function createSurfaceDetail(THREE, parts, specimenId, group) {
         m.sheenColor.lerp(new THREE.Color(cfg.tone), 0.5);
         m.roughnessMap = maps.rough;
         m.clearcoatRoughnessMap = maps.rough;
-        if (!m.map) m.map = maps.tint;
+        // A shared spatial pigment field keeps adjoining chamber meshes the
+        // same colour at their seam; independent UV tint would paint a patch.
+        if (!m.map && !mesh.userData.spatialPigment) m.map = maps.tint;
         if (maps.normal) { m.normalMap = maps.normal; m.normalScale.set(0.18, 0.18); }
         else m.normalScale.multiplyScalar(0.65);
         m.needsUpdate = true;
