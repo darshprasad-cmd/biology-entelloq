@@ -244,6 +244,15 @@ test('only explicitly measured/selected deep cutting can produce the retained pe
   s.cuts.dispose(); s.api.dispose();
 });
 
+test('deep cutting does not damage an organ beside the blade or beyond its bounded reach', () => {
+  for (const position of [[6, 0, -0.5], [0, 0, -3]]) {
+    const s = interaction({ getCutDepth: () => .95 });
+    s.hidden.position.set(...position); s.cut();
+    assert.equal(s.api.state.damage.length, 0);
+    s.cuts.dispose(); s.api.dispose();
+  }
+});
+
 test('forceps click does not auto-remove; off-surface pull completes and cannot leave a ghost wound', () => {
   const s = interaction(); s.cut();
   s.api.setTool('forceps');
