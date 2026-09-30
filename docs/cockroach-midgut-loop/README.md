@@ -60,9 +60,11 @@ reproductive anatomy and other omissions remain documented in
   over six viewport families. This does not validate real webcam tracking.
 
 Preview: `BIOLOGY_PREVIEW_URL=http://127.0.0.1:3008`. Use the evidence-output
-environment variables to write all reports within this folder. All browser
-reports must say `complete: true`, have no unexpected page errors, and identify
-the tested artifact. Camera requests are denied and counted. Local screenshots
+environment variables to write all reports within this folder. All reports
+must say `complete: true` and have no unexpected page errors; real-render
+reports also identify the tested artifact. Camera requests are denied and
+counted in the rendered app checks; the hand-layout harness loads no tracker.
+Local screenshots
 are not deployment evidence; after green checks and merge, compare production
 HTTPS bytes with the merged commit and repeat the focused browser check live.
 
@@ -82,3 +84,27 @@ HTTPS bytes with the merged commit and repeat the focused browser check live.
 - Exact line/arc construction avoids interpolation-induced tight bends. The
   eight midgut tests also passed a separate three-times-denser curve sampling
   check; the committed routine tests remain bounded for regular CI.
+- The unchanged fast-check command passed in the required Node 22 Linux CI on
+  source commit `58057c718b8654221650656374aad8f935963018`
+  ([CI run 42](https://github.com/darshprasad-cmd/biology-entelloq/actions/runs/36693064036)).
+  The final evidence commit must also receive a green check before merge.
+
+## Final rendered and responsive results
+
+- All five normal rendered cut/forceps access sequences passed, including the
+  frog's native phone-tap and keyboard access-layer Undo checks. Removed access
+  coverings did not remain as blocking ray targets.
+- All five loaded specimens passed table-contact and dissection-axis checks;
+  preserved tissue stayed still with physiology off.
+- All 60 hand-shell observations across six viewport families passed, with no
+  reported overlaps, inaccessible hand targets or page errors. This is a shell
+  harness, not a rendered specimen view or a webcam test.
+- All three real-render reports are complete, with zero page errors and zero
+  camera requests. They check the same `lab.html` SHA-256:
+  `8ad5f694368a960f79baa4eba8e2edb9f27efa83fd1f53ad1b129e72fca0c983`.
+
+Complete JSON reports and representative screenshots are included. Optional
+remote bloom addons are intentionally blocked in these checks; the vendored
+core renderer remains in use. Software-GPU screenshot stall warnings are
+recorded, not presented as a frame-rate benchmark. Deployment verification
+still requires green final CI, merge, HTTPS byte comparison and a live probe run.

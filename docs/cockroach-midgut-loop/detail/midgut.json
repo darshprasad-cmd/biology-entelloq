@@ -1,0 +1,21 @@
+{
+  "base": "http://127.0.0.1:3008",
+  "errors": [],
+  "cameraRequests": 0,
+  "complete": true,
+  "limitation": "Exposed digestive-region diagnostic, not the normal opening sequence, educator review or webcam validation.",
+  "artifactSha256": "8ad5f694368a960f79baa4eba8e2edb9f27efa83fd1f53ad1b129e72fca0c983",
+  "setup": {
+    "prepared": true,
+    "partCount": 27,
+    "vertices": 2093,
+    "triangles": 3840,
+    "decorativeChildren": 0
+  },
+  "interaction": {
+    "probeRegions": 3,
+    "directMeshPicking": true,
+    "nonDetachablePreserved": true,
+    "intactGeometryPreserved": true
+  }
+}
