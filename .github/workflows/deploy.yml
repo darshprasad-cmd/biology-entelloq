@@ -6,8 +6,8 @@
 # commit. A deploy that silently reverts is the worst failure mode a deploy can
 # have — a fix looks pushed, looks green in git, and simply is not on the site.
 #
-# This uploads the repository as-is. There is no build step and there never should
-# be: every page here is already a self-contained HTML file.
+# Authoring pages remain separate to preserve their tested scopes. Deployment
+# packages their code, images and specimen models into one portable application.
 name: Deploy to GitHub Pages
 
 on:
@@ -34,6 +34,9 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
 
       # Cheap guard against the class of bug that has actually bitten this site:
       # a page that ships but renders blank. Both of these were real.
@@ -58,9 +61,14 @@ jobs:
           fi
           echo "checks passed"
 
+      - name: Package the complete single-file application
+        run: |
+          python scripts/build-single-file.py
+          python scripts/build-single-file.py --check
+
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: dist
       - id: deployment
         uses: actions/deploy-pages@v4

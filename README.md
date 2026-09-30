@@ -5,6 +5,48 @@ The biological sibling of [Physics Entelloq](https://physics.entelloq.com).
 
 Live at **[biology.entelloq.com](https://biology.entelloq.com)**
 
+## One HTML application
+
+The complete published product is now **one portable `index.html`**: the landing
+page, workspace, eight learning sections, Dissection Lab and Biology Universe.
+Navigation stays inside this file. Its scripts, styles, preview images, Three.js,
+and prepared frog/cockroach models are embedded; no companion folder is needed.
+
+```bash
+python scripts/build-single-file.py
+```
+
+Open `dist/index.html`, or copy and rename that file anywhere. Current Chrome,
+Edge, Firefox and Safari support the browser decompression used by the package.
+The existing pages and modules remain editable source inputs, with separate
+document scopes inside the bundle so their styles and simulations cannot collide.
+Run the relevant source builder first after editing a generated source slot, then
+rebuild the single-file application.
+
+GitHub Pages publishes only `dist/`. Its `404.html` is a small compatibility
+redirect for old links such as `/app.html#lab` or `/lessons.html#diffusion`;
+it contains no additional application. `CNAME` and `.nojekyll` are hosting metadata.
+The application itself can be shared using **only `dist/index.html`**.
+
+Local lessons, experiments, notebooks, specimen models and Universe work without
+network access. Live AI, Google sign-in, optional hand-tracking model downloads,
+and web fonts still use their existing online services. Fonts have local system
+fallbacks. Stored progress on the website keeps its existing storage keys and
+origin; a separately opened file has its own browser storage and does not copy
+website progress. Keep the same file path to retain that local-file storage.
+
+Validate with:
+
+```bash
+node scripts/check-learning.cjs
+python scripts/build-single-file.py --check
+node scripts/check-single-file-browser.cjs
+```
+
+The browser check uses Playwright (`BIOLOGY_PLAYWRIGHT_MODULES` can point to its
+`node_modules` directory). It opens the real artifact with all network requests
+blocked except its initial HTML, then tests a copy in an otherwise empty folder.
+
 ---
 
 ## What this is
@@ -76,9 +118,9 @@ sent; saved hypotheses, trials and observations remain on-device. The
 **No gamification.** Deliberately. No XP, no badges, no streaks, no leaderboards.
 Progress is shown because it is useful to you, never to make you come back.
 
-**Everything works offline.** Each page is a single self-contained HTML file with
-its dependencies inlined, including three.js. Open one off a USB stick on a
-laptop with no internet and the dissection theatre still runs.
+**The learning workspace works offline.** The complete distributable embeds its
+local dependencies, including Three.js and prepared specimen models. Copy just
+`dist/index.html` to a USB stick and open it on a laptop without internet.
 
 Live AI explanations need a connection. The app and standalone dissection lab
 offer a contextual **Ask Entelloq AI** panel. The Learn/Lab learning guide,
@@ -86,7 +128,7 @@ Universe tutor questions and introductory questions on About use the same servic
 authored examples when it is unavailable. The deterministic dissection tutor
 continues to ask, assess and grade locally; AI never changes its scorecard.
 
-The public client is `src/ai/biology-ai.js`, loaded directly by the static pages.
+The public client is `src/ai/biology-ai.js`, inlined into the distributable.
 It sends only the submitted question, bounded topic context and recent chat
 turns to `https://groq-proxy.physicsedge.workers.dev/v1/chat/completions`.
 Conversation stays in tab memory; profile, storage, camera frames and hidden
@@ -110,14 +152,16 @@ to a single still frame and repaints only when you change theme or section.
 ## Repository layout
 
 ```
-index.html              public landing page
-app.html                the app shell — sidebar, command palette, section router
-learn.html  …           the pillar pages, each a standalone single-file app
-lab.html                the Dissection Lab
-universe.html           Biology Universe
+dist/index.html         complete generated, portable application (deployment)
+index.html              authored public landing page
+app.html                authored app shell — sidebar, command palette, router
+learn.html  …           authored pillar documents
+lab.html                generated Dissection Lab input
+universe.html           generated Biology Universe input
 CNAME .nojekyll 404.html
 
 src/
+  single-file/         portable shell and embedded-document navigation bridge
   physics-layout/       shared app and pillar presentation layers
   _atmo.js              the Living Field shader, self-installing
   _lessons.js/.css      the six-lens lesson engine + every lesson
@@ -127,7 +171,7 @@ src/
   build_page.py         compose a pillar page from the template
   inject_embed.py       make a page embeddable in the app shell
   inject_atmo.py        inline the Living Field into every page
-  build_site.py         turn the shipped products into this website
+  build_site.py         legacy import of the original standalone products
   lab/                  the Dissection Lab modules + assemble.py
   universe/             the Biology Universe modules + assemble.py
 ```
@@ -179,7 +223,8 @@ Do not regenerate the fingerprint fixture to make a change pass.
 See `docs/learning-polish/QA.md` for the bounded,
 optional browser workflow, which does not enter or interact with the lab.
 
-The full-product assemblers below are separate tools, not part of that workflow.
+The full-product assemblers below are legacy authoring tools, not the deployment
+workflow. Use `scripts/build-single-file.py` for the published application.
 
 The products are **concatenated, not bundled** — each module is written with no
 imports so the assembler only has to strip `export` keywords and check for

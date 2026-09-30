@@ -23,6 +23,26 @@ jobs:
           node-version: "22"
       - name: Learning workflow and original-lab boundary
         run: node scripts/check-learning.cjs
+      - name: Build the single-file application
+        run: |
+          python scripts/build-single-file.py
+          python scripts/build-single-file.py --check
+          node --check src/single-file/host.js
+          node --check src/single-file/bridge.js
+      - name: Verify isolated single-file browser behavior
+        env:
+          BIOLOGY_PLAYWRIGHT_MODULES: ${{ runner.temp }}/biology-browser/node_modules
+        run: |
+          npm install --prefix "$RUNNER_TEMP/biology-browser" --no-save playwright@1.62.1
+          "$RUNNER_TEMP/biology-browser/node_modules/.bin/playwright" install --with-deps chromium
+          node scripts/check-single-file-browser.cjs
+      - name: Save single-file browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: single-file-browser-evidence
+          path: docs/single-file/
+          if-no-files-found: ignore
       - name: Preserve deploy invariants
         run: |
           test -f index.html
