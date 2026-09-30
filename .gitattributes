@@ -1,0 +1,2 @@
+# Preserve exact upstream source formatting, including whitespace in GLSL strings.
+src/single-file/vendor/three-addons/** -whitespace linguist-vendored=true

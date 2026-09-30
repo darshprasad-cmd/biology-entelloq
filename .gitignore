@@ -10,3 +10,8 @@ node_modules/
 !.env.example
 *.local
 .wrangler/
+
+# The deployable single-file application is generated deterministically.
+dist/
+docs/single-file/*.png
+docs/single-file/*browser-report.json

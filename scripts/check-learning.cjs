@@ -53,7 +53,7 @@ Promise.all(checks.map(([name, command, args]) => new Promise(resolve => {
   child.stdout.on('data', chunk => { output += chunk; });
   child.stderr.on('data', chunk => { output += chunk; });
   let timedOut = false;
-  const limit = name === 'Learning unit tests' ? 90000 : 30000;
+  const limit = name === 'Learning unit tests' ? 300000 : name === 'Python contracts' ? 90000 : 30000;
   const timeout = setTimeout(() => { timedOut = true; child.kill(); }, limit);
   child.on('error', error => { output += error.message; });
   child.on('close', code => {

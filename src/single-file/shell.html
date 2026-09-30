@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Biology Entelloq — the complete learning workspace, dissection lab and Biology Universe in one HTML file.">
+<title>Biology Entelloq</title>
+<link rel="canonical" href="https://biology.entelloq.com/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23081016'/%3E%3Cpath d='M10 6c0 10 12 10 12 20M22 6c0 10-12 10-12 20M11 9h10M11 23h10M12 14h8M12 18h8' fill='none' stroke='%236ee7b7' stroke-width='2'/%3E%3C/svg%3E">
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#081016;color:#e8f1f3;font:15px/1.6 system-ui,sans-serif}
+#bioq-workspace{display:block;border:0;width:100%;height:100%;height:100dvh;background:#081016}
+#bioq-loading{position:fixed;inset:0;display:grid;place-content:center;text-align:center;padding:24px;background:#081016;z-index:2}
+#bioq-loading[hidden]{display:none}#bioq-loading strong{font-size:24px;font-weight:500;letter-spacing:-.04em}#bioq-loading p{color:#a9b9c2;max-width:36rem}
+#bioq-retry{font:inherit;color:#081016;background:#6ee7b7;border:0;border-radius:8px;padding:10px 20px;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="bioq-loading" role="status"><strong>Biology Entelloq</strong><p id="bioq-loading-message">Opening your biology workspace…</p><button id="bioq-retry" hidden onclick="location.reload()">Try again</button></div>
+<iframe id="bioq-workspace" title="Biology Entelloq" allow="camera; fullscreen" allowfullscreen></iframe>
+<noscript>Enable JavaScript to open the interactive biology workspace.</noscript>
+<script id="bioq-manifest" type="application/json">__BIOQ_MANIFEST__</script>
+<script>__BIOQ_HOST__</script>
+</body>
+</html>
