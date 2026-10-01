@@ -38,6 +38,23 @@ jobs:
         with:
           python-version: "3.x"
 
+      - name: Require the single-file publishing workflow
+        shell: python
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          import json, os, urllib.request
+          request = urllib.request.Request(
+              'https://api.github.com/repos/' + os.environ['GITHUB_REPOSITORY'] + '/pages',
+              headers={'Authorization': 'Bearer ' + os.environ['GH_TOKEN'],
+                       'Accept': 'application/vnd.github+json',
+                       'X-GitHub-Api-Version': '2022-11-28'})
+          with urllib.request.urlopen(request, timeout=30) as response:
+              pages = json.load(response)
+          if pages.get('build_type') != 'workflow':
+              raise SystemExit('Set Settings > Pages > Source to GitHub Actions. A branch build publishes the separate authoring pages and can overwrite this package.')
+          print('GitHub Pages publishes through Actions only.')
+
       # Cheap guard against the class of bug that has actually bitten this site:
       # a page that ships but renders blank. Both of these were real.
       - name: Sanity-check the built pages
