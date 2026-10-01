@@ -1,5 +1,11 @@
 /* Exterior contracts use real geometry, not source-string presence. The hashes
-   below freeze the pre-pass skin envelope and hidden anatomy, not new visuals. */
+   freeze the pre-pass skin envelope and hidden anatomy outside the explicitly
+   authorized small/large-intestine revision. Expected hashes and anchors were
+   derived by executing anatomy.js and frog.js from parent commit fa16524 with
+   that commit's shipped Three.js runtime, not by blessing the current output.
+   The original all-internal checksum from that parent was independently
+   reproduced: 95146dda76f1494a22118bd4dc4a68c4a8a9582773fdea67b861c56f4fb96c31.
+   Gut geometry itself is checked in frog-gut-continuity.test.cjs. */
 const assert = require('node:assert/strict');
 const fs = require('node:fs'), path = require('node:path'), vm = require('node:vm');
 const crypto = require('node:crypto');
@@ -21,18 +27,42 @@ const part = id => frog.parts.find(p => p.id === id);
 const child = name => frog.group.getObjectByName(name);
 const hashArray = array => crypto.createHash('sha256').update(Buffer.from(array.buffer)).digest('hex');
 
-test('the complete cuttable skin envelope and every internal organ stay unchanged', () => {
+test('the complete cuttable skin envelope and the 20 untouched internal organs stay unchanged', () => {
   assert.equal(frog.parts.length, 27);
   assert.equal(new Set(frog.parts.map(p => p.id)).size, 27);
   assert.equal(hashArray(part('skin').mesh.geometry.attributes.position.array), '7464beab80109f9d9e278e6c86d8bd7fe77f52dd7f45ee52ef76136862d0ae59');
+  const revisedGut = new Set(['small-intestine', 'large-intestine']);
+  const preserved = frog.parts.filter(p => p.layer > 0 && !revisedGut.has(p.id));
+  assert.equal(preserved.length, 20, 'only the two explicitly revised gut meshes are excluded');
   const hash = crypto.createHash('sha256');
-  for (const p of frog.parts.filter(p => p.layer > 0)) {
+  for (const p of preserved) {
     p.mesh.updateMatrix(); hash.update(p.id); hash.update(JSON.stringify(p.mesh.matrix.elements));
     p.mesh.traverse(o => { if (o.geometry?.attributes.position) hash.update(Buffer.from(o.geometry.attributes.position.array.buffer)); });
   }
-  assert.equal(hash.digest('hex'), '95146dda76f1494a22118bd4dc4a68c4a8a9582773fdea67b861c56f4fb96c31');
+  assert.equal(hash.digest('hex'), 'de23396ed91eda3c03e26af8c7da3040a5ee5fe42b551b728c815dbfc443e4b5');
   assert.deepEqual(JSON.parse(JSON.stringify(part('skin').incision)), [[0, .98, 3.2], [0, 1.02, 1.6], [0, 1.02, -.4], [0, .96, -2.3], [0, .82, -3.5]]);
   assert.equal(frog.group.rotation.x, 0);
+});
+
+test('the gut revision preserves prior organ anchors and the complete cloacal surface', () => {
+  const baselineAnchors = {
+    stomach: [-0.5, 0, 0.35],
+    'small-intestine': [0, 0, 0],
+    'large-intestine': [0, 0, 0],
+    cloaca: [0, -0.16, -3.28],
+    spleen: [0.5, -0.06, -0.55],
+    'kidney-left': [-0.66, -0.6, -1.05],
+    'kidney-right': [0.66, -0.6, -1.05],
+  };
+  for (const [id, position] of Object.entries(baselineAnchors)) {
+    const mesh = part(id).mesh;
+    assert.deepEqual(mesh.position.toArray(), position, id + ': parent-commit anchor');
+    assert.deepEqual(mesh.rotation.toArray(), id === 'stomach' ? [0.1, 2.25, 0.2, 'XYZ'] : [0, 0, 0, 'XYZ'], id + ': parent-commit orientation');
+    assert.deepEqual(mesh.scale.toArray(), [1, 1, 1], id + ': parent-commit scale');
+  }
+  assert.equal(hashArray(part('cloaca').mesh.geometry.attributes.position.array),
+    'f79f2b4b4489d4000020d27ce91066ff708de545b25b1c005b5577a7c69fd305',
+    'only the rectal endpoint moved; the cloaca itself retains its original geometry');
 });
 
 test('eyes are small inset dorsolateral domes with narrow pupils, not exposed gold spheres', () => {

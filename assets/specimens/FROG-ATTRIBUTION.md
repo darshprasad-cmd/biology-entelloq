@@ -7,3 +7,12 @@ The downloaded source records **CC0-1.0** in its embedded asset metadata. Its or
 The prepared derivative excludes the scan's separate calibration chart, joins the original export chunks, reduces polygon count, colour-only bakes the three original textures into one 2048-pixel low-poly UV map, and separates five functional exterior regions for the existing lab. Lighting and gloss are not baked into that colour map. The scan's naturally folded pose is retained, with a static supine orientation. No generated replacement skin or reference photographs are included.
 
 This is an educational exterior approximation. Region seams are authored geometry, not a scientifically segmented scan; the existing internal anatomy is a generalized teaching model, not a species-matched reconstruction. Visual acceptance and actual tool/cavity tests are required before release. Preparation metrics and stills are retained in `docs/specimen-exteriors/prepared/frog/`.
+
+The September 30 surface update appends tangent-space normals baked from the
+same original high-resolution scan geometry onto the existing fitted UVs. Its
+restrained roughness variation is an authored response to that geometric relief,
+not measured skin roughness. Every byte of the original fitted geometry and
+colour-image binary payload is preserved. No normals were inferred from colour,
+and no limbs, seams or pin/cut surfaces were re-exported. Reproduce with the
+existing preparation script's `--surface-only` option; source alignment and
+payload hashes are recorded in `docs/specimen-exteriors/prepared/frog/surface-bake.json`.

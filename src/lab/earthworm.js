@@ -80,10 +80,10 @@ function buildEarthworm(THREE) {
       * Math.sqrt(Math.max(0, 1 - posterior * posterior));
     const clit = Math.exp(-Math.pow((z - 2.6) / 0.61, 4));
     const groove = Math.pow(0.5 - 0.5 * Math.cos(ewAnnularPhase(t, annuli)), 2);
-    const fullness = 1 + 0.024 * Math.sin(t * Math.PI) + 0.012 * Math.sin(t * Math.PI * 3)
-      + 0.008 * Math.sin(t * Math.PI * 7) * Math.sin(t * Math.PI);
+    const fullness = 1 + 0.058 * Math.sin(t * Math.PI) + 0.020 * Math.sin(t * Math.PI * 3)
+      + 0.012 * Math.sin(t * Math.PI * 7) * Math.sin(t * Math.PI);
     return taper * fullness * (1 + 0.068 * clit)
-      * (1 - 0.018 * groove * (1 - 0.94 * clit));
+      * (1 - 0.024 * groove * (1 - 0.94 * clit));
   }
 
   function ewBody(rad, halfLen, o = {}) {
@@ -95,11 +95,11 @@ function buildEarthworm(THREE) {
     const p = g.attributes.position, v = new THREE.Vector3();
     const colors = new Float32Array(p.count * 3);
     const c = new THREE.Color();
-    const dorsal   = new THREE.Color(0x946257);   // subdued rose-brown pigment
-    const dorsalDk = new THREE.Color(0x644139);   // darker mid-dorsal pigment stripe
-    const flank    = new THREE.Color(0xb17b70);
-    const ventral  = new THREE.Color(0xd4afa0);   // paler warm underside
-    const glandular = new THREE.Color(0xb68174);
+    const dorsal   = new THREE.Color(0x89564e);   // muted red-brown dorsal pigment
+    const dorsalDk = new THREE.Color(0x623e39);   // darker mid-dorsal pigment stripe
+    const flank    = new THREE.Color(0xb17c70);
+    const ventral  = new THREE.Color(0xd8b3a0);   // paler warm underside
+    const glandular = new THREE.Color(0xb9806c);
     const nSeg = o.nSeg || 44;
     const z0 = o.z0 == null ? -halfLen : o.z0, z1 = o.z1 == null ? halfLen : o.z1;
     for (let i = 0; i < p.count; i++) {
@@ -124,9 +124,11 @@ function buildEarthworm(THREE) {
       // material pasted over it. A world-length field shared by body and sleeve
       // keeps both shoulders continuous where the pickable sleeve emerges.
       const clitTint = Math.exp(-Math.pow((z - 2.6) / 0.62, 4));
-      c.lerp(glandular, clitTint * 0.25);
+      c.lerp(glandular, clitTint * 0.38);
       const banding = 0.5 - 0.5 * Math.cos(ewAnnularPhase(t, nSeg));      // groove shadowing
-      c.multiplyScalar(1 - banding * 0.028);
+      // Fine annular pigment remains visible at the working camera without
+      // turning every segment into a separate bead. The glandular band is smooth.
+      c.multiplyScalar(1 - banding * 0.075 * (1 - clitTint * .92));
       const m = vnoise(v.x * 5 + 2, t * 18 - 9, v.z * 5 + 6);
       c.multiplyScalar(0.97 + m * 0.06);
       colors[i * 3] = c.r; colors[i * 3 + 1] = c.g; colors[i * 3 + 2] = c.b;
@@ -145,11 +147,11 @@ function buildEarthworm(THREE) {
     // Same optical model on every external root. Flat brown/orange material
     // multipliers used to suppress these meshes' shared vertex colours and
     // make the terminal caps and clitellum look like separately painted pieces.
-    // Low transmission avoids showing the green tray through opaque body wall;
+    // Opaque wall avoids showing the green tray through the tapered ends;
     // the surface module supplies fine cuticle maps and final highlight finish.
     return mat(THREE, 0xffffff, { tissue: 'skin', vcol: true,
       rough: 0.52, clear: 0.26, clearRough: 0.38, sheen: 0xb17770, sheenAmt: 0.22,
-      transmission: 0.03, thickness: 0.8, atten: 0x97625b, attenDist: 0.8,
+      transmission: 0, thickness: 0.8, atten: 0x97625b, attenDist: 0.8,
       side: THREE.DoubleSide });
   }
 

@@ -476,57 +476,88 @@ function buildFrog(THREE) {
     mesh: oeso,
   });
 
-  // Small intestine: a straight DUODENUM leaving the pylorus and running forward
-  // parallel to the stomach (the U-loop), then a long, highly-coiled ILEUM held in
-  // a translucent mesentery, enlarging posteriorly to join the rectum.
+  // The duodenal return leads into depth-separated ileal folds. The previous
+  // shrinking spiral repeatedly passed its tube through itself in one plane.
+  // These are illustrative folds, not a species-specific length or loop count.
+  const rectalInlet = [0.1, -0.06, -2.1];
   const siPts = [
-    pyloricEnd,            // begins on the stomach, not at an estimated position
-    [-0.18, 0.0, 0.05],     // duodenum ascending
-    [0.12, -0.01, 0.48],    // duodenal apex (U-turn)
-    [0.46, -0.02, 0.46],
-    [0.5, -0.03, 0.12],     // descending into the coil
+    pyloricEnd,
+    [-0.18, 0.0, 0.05], [0.12, -0.01, 0.48], [0.46, -0.02, 0.46],
+    [0.84, 0.11, 0.12], [0.99, 0.28, -0.44],
   ];
-  for (let i = 0; i <= 42; i++) {
-    const t = i / 42;
-    const ang = t * Math.PI * 2 * 2.8;             // ~2.8 loops
-    const rad = 0.72 * (1 - 0.3 * t);
+  for (let i = 0; i <= 16; i++) {
+    const t = i / 16, ang = -t * Math.PI * 2 * 1.6;
+    const rad = 0.9 * (1 - 0.12 * t);
     siPts.push([
-      Math.cos(ang) * rad * 0.94,
-      -0.05 + Math.cos(ang * 1.3) * 0.06,
-      0.05 - t * 1.6 + Math.sin(ang) * rad * 0.52,
+      Math.cos(ang) * rad,
+      0.09 + Math.sin(ang) * 0.43,
+      -0.78 - t * 1.15,
     ]);
   }
-  const si = tube(THREE, 0xd2a37e, siPts, 0.17, { rough: 0.5, clear: 0.4, sheen: 0xe8b8a0, seg: 170, rad: 9 });
-  // translucent mesentery fan holding the coil, with fine vessels painted on it
-  const mesGeo = new THREE.PlaneGeometry(2.0, 1.5, 12, 9);
-  {
-    const mp = mesGeo.attributes.position, mv = new THREE.Vector3();
-    for (let i = 0; i < mp.count; i++) {
-      mv.fromBufferAttribute(mp, i);
-      mp.setXYZ(i, mv.x, mv.y, vnoise(mv.x * 2 + 5, mv.y * 2, 0) * 0.14 - 0.07);
+  siPts.push([-0.28, 0.47, -2.08], [0.08, 0.24, -2.13], rectalInlet);
+  const siRadius = 0.13;
+  const si = tube(THREE, 0xd2a37e, siPts, siRadius,
+    { rough: 0.5, clear: 0.4, sheen: 0xe8b8a0, seg: 216, rad: 12 });
+
+  // A folded mesenteric sheet runs from a short dorsal attachment line to the
+  // actual dorsal border of the ileum. It used to be an unrelated rectangle.
+  // Keep its bowel edge just inside the serosa so surface relief cannot open a
+  // visible gap. This is attached display geometry, not a force-bearing solver.
+  const gutPath = si.geometry.parameters.path;
+  const mesPoint = (t, across) => {
+    const centre = gutPath.getPointAt(t), tangent = gutPath.getTangentAt(t);
+    const dorsal = new THREE.Vector3(0, -1, 0);
+    dorsal.addScaledVector(tangent, -dorsal.dot(tangent)).normalize();
+    const border = centre.clone().addScaledVector(dorsal, siRadius * 0.88);
+    const root = new THREE.Vector3(0.04, -0.56, centre.z);
+    const p = root.lerp(border, across);
+    p.y += Math.sin(across * Math.PI) * Math.sin(t * 28) * 0.025;
+    return p;
+  };
+  const mesRows = 64, mesCols = 8, mesStart = 0.32, mesEnd = 0.94;
+  const mesPositions = [], mesIndices = [];
+  for (let row = 0; row <= mesRows; row++) {
+    const t = mesStart + (mesEnd - mesStart) * row / mesRows;
+    for (let col = 0; col <= mesCols; col++) {
+      mesPositions.push(...mesPoint(t, col / mesCols).toArray());
+      if (row < mesRows && col < mesCols) {
+        const a = row * (mesCols + 1) + col, b = a + mesCols + 1;
+        mesIndices.push(a, b, a + 1, b, b + 1, a + 1);
+      }
     }
-    seal(mesGeo);
   }
+  const mesGeo = new THREE.BufferGeometry();
+  mesGeo.setAttribute('position', new THREE.Float32BufferAttribute(mesPositions, 3));
+  mesGeo.setIndex(mesIndices); seal(mesGeo);
   const mesentery = new THREE.Mesh(mesGeo,
-    mat(THREE, 0xe7c7b6, { trans: true, opacity: 0.2, rough: 0.6, clear: 0.3, side: THREE.DoubleSide, transmission: 0.42, thickness: 0.2 }));
+    mat(THREE, 0xe7c7b6, { trans: true, opacity: 0.22, rough: 0.6, clear: 0.3,
+      side: THREE.DoubleSide, transmission: 0.42, thickness: 0.06 }));
+  mesentery.name = 'ileal-mesentery';
   mesentery.material.depthWrite = false;
-  childMesh(si, mesentery, 0, -0.2, -0.7, Math.PI / 2, 0, 0);
-  // mesenteric vessels: a couple of fine red lines converging on the root
-  [-0.5, 0.0, 0.5].forEach((sx, k) => {
-    const vsl = tube(THREE, 0xc24a3e, [[sx, -0.18, -1.4], [sx * 0.5, -0.16, -0.9], [0.05, -0.14, -0.55]], 0.02,
-      { rough: 0.5, rad: 5, seg: 12 });
+  si.add(mesentery);
+  // Fine branches sit within the sheet and finish on its bowel attachment.
+  // They remain schematic; the shared surface module adds serosal vessels.
+  [0.4, 0.57, 0.75, 0.88].forEach(t => {
+    const points = [];
+    for (let step = 0; step <= 8; step++) points.push(mesPoint(t, step / 8).toArray());
+    const vsl = tube(THREE, 0xb75a50, points, 0.012,
+      { rough: 0.5, rad: 5, seg: 16 });
+    vsl.name = 'mesenteric-branch';
     si.add(vsl);
   });
   add({
     id: 'small-intestine', name: 'Small intestine', layer: 2, system: 'digestive',
     cuttable: true, detachable: true,
-    note: 'A straight duodenum forms a U-loop off the pylorus, then the ileum coils tightly in a transparent mesentery. Tease the mesentery, never cut it.', mesh: si,
+    note: 'The duodenum returns from the pylorus into slender ileal folds, held by a thin mesentery and continuing into the wider rectum. Fold shape and length are illustrative.', mesh: si,
   });
 
+  const cloaca = organ(THREE, 0xa87a68, 0.27, 0.23, 0.29, { amp: 0.05, rough: 0.55, seed: 9 });
+  cloaca.position.set(0, -0.16, -3.28);
   // Large intestine (rectum): distinctly WIDER than the ileum, running straight
-  // back to the cloaca at the posterior midline.
+  // back to the cloaca at the posterior midline. Shared ileal endpoint and a
+  // slightly buried distal end avoid a disconnected or visibly open junction.
   const li = tube(THREE, 0xc09472,
-    [[0.1, -0.06, -1.55], [0.16, -0.06, -2.0], [0.05, -0.1, -2.5], [0, -0.14, -2.95]],
+    [rectalInlet, [0.11, -0.06, -2.27], [0.05, -0.1, -2.5], [0, -0.14, -3.12]],
     0.27, { rough: 0.52, clear: 0.4, sheen: 0xd8a888, seg: 44, rad: 10 });
   add({
     id: 'large-intestine', name: 'Large intestine (rectum)', layer: 2, system: 'digestive',
@@ -534,8 +565,6 @@ function buildFrog(THREE) {
     note: 'Markedly wider than the small intestine, running straight back to the cloaca.', mesh: li,
   });
 
-  const cloaca = organ(THREE, 0xa87a68, 0.27, 0.23, 0.29, { amp: 0.05, rough: 0.55, seed: 9 });
-  cloaca.position.set(0, -0.16, -3.28);
   add({
     id: 'cloaca', name: 'Cloaca', layer: 2, system: 'urogenital', cuttable: true, detachable: false,
     note: 'The common chamber where the gut, the urinary tract and the gonads all discharge to the vent.', mesh: cloaca,

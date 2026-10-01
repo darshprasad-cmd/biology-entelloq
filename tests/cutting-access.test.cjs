@@ -172,7 +172,10 @@ for (const partId of ['lv-free-wall', 'rv-free-wall']) {
     const span = worldBox.max.z - worldBox.min.z, points = [], rayDirection = new THREE.Vector3(0, -1, 0);
     const normalMatrix = new THREE.Matrix3().getNormalMatrix(mesh.matrixWorld);
     for (let i = 0; i < 13; i++) {
-      const ray = new THREE.Raycaster(new THREE.Vector3(worldCenter.x, worldBox.max.y + 2,
+      // The anterior RV now occupies its own mesh, rather than covering a full
+      // duplicate LV shell. Contact the exposed anatomical-left LV surface.
+      const cutX = worldCenter.x + (partId === 'lv-free-wall' ? -(worldBox.max.x-worldBox.min.x)*.22 : 0);
+      const ray = new THREE.Raycaster(new THREE.Vector3(cutX, worldBox.max.y + 2,
         worldCenter.z + span * (-0.3 + 0.6 * i / 12)), rayDirection);
       const hit = ray.intersectObject(mesh, false)[0];
       if (hit) {
@@ -242,6 +245,15 @@ test('only explicitly measured/selected deep cutting can produce the retained pe
   const s = interaction({ getCutDepth: () => 0.95 }); s.cut();
   assert.ok(s.api.state.damage.some(d => d.kind === 'perforated'));
   s.cuts.dispose(); s.api.dispose();
+});
+
+test('deep cutting does not damage an organ beside the blade or beyond its bounded reach', () => {
+  for (const position of [[6, 0, -0.5], [0, 0, -3]]) {
+    const s = interaction({ getCutDepth: () => .95 });
+    s.hidden.position.set(...position); s.cut();
+    assert.equal(s.api.state.damage.length, 0);
+    s.cuts.dispose(); s.api.dispose();
+  }
 });
 
 test('forceps click does not auto-remove; off-surface pull completes and cannot leave a ghost wound', () => {

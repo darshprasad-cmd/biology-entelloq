@@ -455,7 +455,7 @@ body:not(.bioq-phone).physio-on #hand{max-height:calc(100dvh - 340px)}
 .bchip[data-k="3"] i{background:var(--bad);box-shadow:0 0 7px rgba(232,115,94,.85)}
 
 /* drawer sections */
-.dsec{display:flex;flex-direction:column;gap:8px}
+.dsec{display:flex;flex-direction:column;gap:8px;flex:none}
 .dsec.hide{display:none}
 .dsec.flash{animation:dflash 1.1s ease}
 @keyframes dflash{0%,100%{box-shadow:none}22%{box-shadow:0 0 0 1px rgba(232,115,94,.4)}}
@@ -891,8 +891,8 @@ const SHELL_IMG_MODES = [
 const SHELL_BLEED = [
   { k: 0,    label: 'Off',      note: 'No blood at all. Nothing else about the specimen changes.' },
   { k: 0.3,  label: 'Light',    note: 'A trace at the cut edge — enough to read the tissue planes.' },
-  { k: 0.55, label: 'Moderate', note: 'What a well-drained preserved specimen actually does.' },
-  { k: 1,    label: 'Full',     note: 'Fresh-tissue bleeding, as it would be in theatre.' },
+  { k: 0.55, label: 'Moderate', note: 'Visible cut-edge fluid. Amounts are illustrative, not measured.' },
+  { k: 1,    label: 'Full',     note: 'More visible fluid; specimen condition still determines its behavior.' },
 ];
 
 /* Fallback for setKeymap(null) — the app should never show an empty help sheet. */
@@ -1122,7 +1122,20 @@ export function buildShell(root) {
       <div id="drawbody" class="chrome">
         <div class="dsec" id="secblood"><span class="lbl">Blood</span>
           <div class="seg bleed" id="bleedseg"></div>
-          <div class="dnote" id="bleednote"></div></div>
+          <div class="dnote" id="bleednote"></div>
+          <span class="lbl">Specimen condition</span>
+          <div class="seg" id="preparationseg" role="group" aria-label="Specimen condition">
+            <button type="button" data-preparation="preserved" aria-pressed="true" class="on">Preserved</button>
+            <button type="button" data-preparation="fresh" aria-pressed="false">Fresh tissue</button>
+          </div>
+          <div class="dnote" id="preparationnote" aria-live="polite"></div></div>
+        <div class="dsec" id="seccut"><span class="lbl">Blade depth</span>
+          <div class="seg" id="cutdepthseg" role="group" aria-label="Blade depth">
+            <button type="button" data-depth="0.18" aria-pressed="false">Shallow</button>
+            <button type="button" data-depth="0.55" aria-pressed="true" class="on">Controlled</button>
+            <button type="button" data-depth="0.9" aria-pressed="false">Deep</button>
+          </div>
+          <div class="dnote" id="cutdepthnote" aria-live="polite">A controlled cut can open the current layer. Depth is relative, not a measurement.</div></div>
         <div class="dsec" id="seclevel"><span class="lbl">Level</span>
           <div class="seg" id="levelseg"></div></div>
         <div class="dsec off" id="secimg"><span class="lbl">Imaging</span>
@@ -1467,7 +1480,7 @@ export function buildShell(root) {
       { id: 'imaging', label: 'Imaging', detail: 'X-ray, CT, MRI and ultrasound', disabled: !featureAvailability.imaging },
       { id: 'pathology', label: 'Pathology cases', detail: 'Choose a case for this specimen', disabled: secCases.classList.contains('hide') },
       { id: 'layers', label: 'Layers', detail: 'Review the current dissection depth', disabled: secDepth.classList.contains('hide') },
-      { id: 'physiology', label: 'Physiology', detail: 'Start or pause the live simulation', disabled: !featureAvailability.physiology },
+      { id: 'physiology', label: 'Physiology', detail: featureAvailability.physiology ? 'Optional circulation demonstration' : 'Available for frog and heart only', disabled: !featureAvailability.physiology },
       { id: 'tutor', label: 'Ask tutor', detail: 'A question about your dissection', disabled: !featureAvailability.tutor },
       { id: 'tutor-answer', label: 'Answer tutor', detail: 'Respond to the current question', disabled: !featureAvailability.tutor },
       { id: 'tutor-hint', label: 'Tutor hint', detail: 'Get a clue for the current question', disabled: !featureAvailability.tutor },
@@ -1558,7 +1571,10 @@ export function buildShell(root) {
   function applyBleed(i, emit) {
     bleedIdx = Math.max(0, Math.min(SHELL_BLEED.length - 1, i | 0));
     const b = SHELL_BLEED[bleedIdx];
-    bleedSeg.querySelectorAll('button').forEach((x, n) => x.classList.toggle('on', n === bleedIdx));
+    bleedSeg.querySelectorAll('button').forEach((x, n) => {
+      x.classList.toggle('on', n === bleedIdx);
+      x.setAttribute('aria-pressed', String(n === bleedIdx));
+    });
     bleedNote.textContent = b.note;
     bloodChip.dataset.k = String(bleedIdx);
     bloodChip.querySelector('span').textContent = 'Blood · ' + b.label;
@@ -1577,6 +1593,39 @@ export function buildShell(root) {
       return;
     }
     applyBleed(bleedIdx, false);
+  }
+
+  drawer.querySelectorAll('[data-preparation]').forEach(button => {
+    button.onclick = () => fire('preparation', button.dataset.preparation);
+  });
+  drawer.querySelectorAll('[data-depth]').forEach(button => {
+    button.onclick = () => {
+      const depth = Number(button.dataset.depth);
+      drawer.querySelectorAll('[data-depth]').forEach(choice => {
+        const selected = choice === button;
+        choice.classList.toggle('on', selected);
+        choice.setAttribute('aria-pressed', String(selected));
+      });
+      drawer.querySelector('#cutdepthnote').textContent = depth < .3
+        ? 'Scores the surface. A shallow score does not release a tissue flap.'
+        : depth > .8 ? 'A deep cut can damage a nearby underlying structure. Relative teaching depth.'
+          : 'A controlled cut can open the current layer. Depth is relative, not a measurement.';
+      fire('blade-depth', depth);
+    };
+  });
+  function setPreparation({ mode = 'preserved', specimenId = 'frog', selection = 'preserved' } = {}) {
+    drawer.querySelectorAll('[data-preparation]').forEach(button => {
+      const selected = mode !== 'circulation' && button.dataset.preparation === selection;
+      button.classList.toggle('on', selected);
+      button.setAttribute('aria-pressed', String(selected));
+    });
+    const note = mode === 'circulation'
+      ? 'Circulation demonstration is running. Pulsing flow is simulated; this is not preserved-specimen behavior.'
+      : mode === 'preserved'
+        ? 'Fixed tissue: localized residue at accepted cuts, without active bleeding or a heartbeat.'
+        : 'Excised tissue: brief, passive seepage at accepted cuts. No heartbeat or pressurized flow.';
+    drawer.querySelector('#preparationnote').textContent = note + (specimenId === 'cockroach'
+      ? ' Cockroach hemolymph is nearly clear; a pale tint makes it visible here.' : ' Fluid amounts and tissue motion are illustrative.');
   }
 
   /* level */
@@ -1704,7 +1753,7 @@ export function buildShell(root) {
   function setPhysio(s) {
     s = s || {};
     if (!s.running) { physline.classList.remove('on'); return; }
-    const bits = ['<b>Physiology live</b>'];
+    const bits = ['<b>Circulation demo</b>'];
     if (typeof s.hr === 'number') bits.push('HR ' + Math.round(s.hr));
     if (s.bp != null) {
       const bp = typeof s.bp === 'string' ? s.bp
@@ -2120,7 +2169,7 @@ export function buildShell(root) {
     // Phase 2–4 surfaces. Every one is safe to call with null/undefined, and
     // the app boots identically if main.js never calls any of them.
     setVignette, askInput, inputOpen, setCases, setLevel, setXR,
-    setImaging, setBleeding, setStrata, setPhysio, setKeymap, setActions,
+    setImaging, setBleeding, setPreparation, setStrata, setPhysio, setKeymap, setActions,
     setFeatureAvailability, showFeatureChoices, featureOpen, closeFeatures, revealConsole,
     // Reopen the specimen chooser. The cold open auto-loads the frog and hides
     // the picker, so this is how the heart (and any future specimen) stays
