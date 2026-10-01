@@ -1,0 +1,33 @@
+{
+  "specimens": [
+    {
+      "id": "heart",
+      "buildMs": 151.69999992847443,
+      "partCount": 35,
+      "triangles": 61206,
+      "meshes": 88,
+      "finite": true,
+      "placement": {
+        "offsetY": 0.9386424841572021,
+        "supportY": -1.38,
+        "minY": -1.38,
+        "width": 7.5,
+        "length": 10.638244651573132,
+        "x": 0.08204394578933716,
+        "z": -0.9791222614135493
+      }
+    }
+  ],
+  "errors": [],
+  "cameraRequests": 0,
+  "limitations": "Visual review capture, not proof of reference equivalence, measured anatomy or hardware tracking.",
+  "warnings": [
+    "post-processing addons unavailable; running without bloom TypeError: Failed to fetch dynamically imported module: https://unpkg.com/three@0.160.0/examples/jsm/postprocessing/EffectComposer.js",
+    "[.WebGL-0x4f34001ba200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x4f34001ba200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x4f34001ba200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x4f34001ba200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  ],
+  "artifactSha256": "72cac85c05fc94ed812f480beb50ff9d831309f9c2b119e2da01032ecdd28441",
+  "complete": true
+}

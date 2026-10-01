@@ -18,4 +18,13 @@ Only anatomical references and asset license metadata were consulted for the hea
 
 ## Verification
 
-The main-model changes retain independent cuttable parts and the existing interaction route. Geometry checks cover outward-facing walls, matched chamber seams, soft-body recovery, surface-fitted vessels, septal clearance, prepared scan preservation, lighting fit, and retained internal anatomy. Required workflow checks and final browser evidence are recorded when the combined build completes verification.
+The main-model changes retain independent cuttable parts and the existing interaction route. Geometry checks cover outward-facing walls, matched chamber seams, soft-body recovery, surface-fitted vessels, septal clearance, prepared scan preservation, lighting fit, and retained internal anatomy.
+
+Verified against built `lab.html` SHA-256 `72cac85c05fc94ed812f480beb50ff9d831309f9c2b119e2da01032ecdd28441` and prepared frog GLB SHA-256 `3103b8a55b5db6cf75653fe542522579df1d60b2c59701c47a23a06f777786f0`:
+
+- All 13 local check groups passed. [CI run 36724173076](https://github.com/darshprasad-cmd/biology-entelloq/actions/runs/36724173076) passed for the product source in commit `384e389`.
+- The [five-specimen exterior report](exteriors/exteriors.json) completed with finite geometry, correct tray support, zero page errors and zero camera requests. Adjacent `*-exterior.png` files show the finished initial views.
+- The [heart angle report](heart-angles/exteriors.json) and its [side](heart-angles/heart-side.png) and [posterior](heart-angles/heart-posterior.png) captures inspect the actual additional faces. The capture harness rotates about the heart's longitudinal axis and re-seats it on the tray before each capture.
+- The [five-specimen interaction report](interactions/interactions.json) completed actual cuts and forceps removal through every required access layer, including the reshaped heart. All specimens recorded zero unintended deep injuries, page errors or camera requests. Native phone Undo and keyboard Undo restored the frog's last sheet and incision respectively.
+
+Browser checks use software WebGL and synthetic tracker snapshots where specified. Optional external bloom addons are blocked by the harness; its warnings include that expected fallback and screenshot readback stalls. This evidence does not validate physical camera tracking, device rendering performance or measured tissue mechanics.

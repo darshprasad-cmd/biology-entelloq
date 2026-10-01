@@ -51,8 +51,15 @@ const report = { specimens: [], errors: [], cameraRequests: 0, limitations: 'Vis
           await page.evaluate(angle=>{
             const lab=__LAB, group=lab.parts[0].mesh.parent;
             group.userData.reviewQuaternion ||= group.quaternion.clone();
+            group.userData.reviewPosition ||= group.position.clone();
             group.quaternion.copy(group.userData.reviewQuaternion);
-            group.rotateOnWorldAxis(new lab.THREE.Vector3(0,1,0),angle);
+            group.position.copy(group.userData.reviewPosition);
+            // The heart's local Y is its longitudinal axis. World Y only spins
+            // an anterior-up specimen in the tray and never shows its back.
+            group.rotateOnAxis(new lab.THREE.Vector3(0,1,0),angle);
+            group.updateMatrixWorld(true);
+            const bounds=new lab.THREE.Box3().setFromObject(group);
+            group.position.y += lab.environment().placement.supportY-bounds.min.y;
             group.updateMatrixWorld(true);
           },angle);
           await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
@@ -60,7 +67,9 @@ const report = { specimens: [], errors: [], cameraRequests: 0, limitations: 'Vis
         }
         await page.evaluate(()=>{
           const group=__LAB.parts[0].mesh.parent;
-          group.quaternion.copy(group.userData.reviewQuaternion); delete group.userData.reviewQuaternion;
+          group.quaternion.copy(group.userData.reviewQuaternion);
+          group.position.copy(group.userData.reviewPosition);
+          delete group.userData.reviewQuaternion; delete group.userData.reviewPosition;
           group.updateMatrixWorld(true);
         });
       }

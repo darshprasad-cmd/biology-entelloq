@@ -2,6 +2,8 @@
 
 This change is available on the `codex/dissection-tissue-realism` branch and in the local preview. It has not been published to production.
 
+The subsequent animal and heart model revision has its own [completed review and browser evidence](../specimen-realism/REVIEW.md). The evidence below records the earlier tissue/fluid build; the later review identifies the current combined artifact.
+
 ## What changed
 
 - Accepted incisions create fluid at the contacted tissue. Refused cuts, hovering, stationary contact and cursor motion over empty space do not create blood.
