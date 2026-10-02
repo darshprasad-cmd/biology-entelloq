@@ -1,0 +1,24 @@
+{
+  "url": "http://127.0.0.1:3018/dist/#lab",
+  "packaged": true,
+  "complete": true,
+  "errors": [],
+  "cameraRequests": 0,
+  "limitation": "Exposed respiratory subset with synthetic input, not normal tissue access, full airway anatomy, physical touch or webcam validation.",
+  "artifactSha256": "eac7a556d5e474b788681395caec3f061fbb83ae9476c63afdf6bd25c692c57b",
+  "setup": {
+    "prepared": true,
+    "partCount": 27,
+    "vertices": 1474,
+    "triangles": 2360,
+    "decorativeChildren": 0
+  },
+  "interaction": {
+    "probedTrunks": 2,
+    "probedBranches": 10,
+    "rightBranchExtraction": true,
+    "cavityUnblocked": true,
+    "extractionUndoBoundaryPreserved": true,
+    "geometryPreserved": true
+  }
+}

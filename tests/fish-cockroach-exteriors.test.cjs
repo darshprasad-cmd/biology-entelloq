@@ -25,15 +25,22 @@ const baseline = {
     // NOT the modified builder. All other 26 parts, including the September 28
     // caecal correction, retain exact contracts and interior vertices.
     // cockroach-midgut.test.cjs covers the replacement geometry and behavior.
-    retainedContracts: 'c7b48e4f56be5628403bb7262618810df113eab91ea08fa074309e5bd66e234b',
-    retainedInteriors: '8b384cf0bc5b6796d85acc94731bd6d781e1aa613fcf94bdb2d99846e61fe90c' },
+    september30RetainedContracts: 'c7b48e4f56be5628403bb7262618810df113eab91ea08fa074309e5bd66e234b',
+    september30RetainedInteriors: '8b384cf0bc5b6796d85acc94731bd6d781e1aa613fcf94bdb2d99846e61fe90c',
+    // October 2: exempt ONLY tracheae, whose formerly decorative
+    // right trunk/branches become one selectable surface with seated roots.
+    // Independently derived via git show from accepted main 841c0a7b1269728490756fab4e89e1632a4fbdf9.
+    // All other 26 parts are exact, INCLUDING the accepted caeca and midgut.
+    // Dedicated geometry/interaction tests also guard those accepted corrections.
+    retainedContracts: '92a95834782ae5beb54856ebf762661f2449bd6974b51171fa842663fb084b0b',
+    retainedInteriors: '3445f56a4738da8f46a215a23758dff147ff3af8250eb6ad521ae31c6af89be2' },
 };
 
 for (const id of ['fish', 'cockroach']) {
   test(`${id}: unmodified parts retain original metadata, cut/lift/pin contracts, anchors and interior geometry`, () => {
     const specimen = build(THREE, id);
-    const parts = specimen.parts.filter(part => id !== 'cockroach' || part.id !== 'midgut');
-    if (id === 'cockroach') assert.equal(parts.length, 26, 'only the explicitly revised midgut is excluded');
+    const parts = specimen.parts.filter(part => id !== 'cockroach' || part.id !== 'tracheae');
+    if (id === 'cockroach') assert.equal(parts.length, 26, 'only the explicitly revised tracheae are excluded');
     assert.equal(hash(parts.map(({ mesh, ...part }) => ({ ...part, position: mesh.position.toArray(),
       rotation: mesh.quaternion.toArray(), scale: mesh.scale.toArray() }))), baseline[id].retainedContracts || baseline[id].contracts);
     assert.equal(hash(parts.filter(part => part.layer > 0).map(part => {
