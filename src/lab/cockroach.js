@@ -597,28 +597,48 @@ function buildCockroach(THREE) {
     note: 'The "brain" — a fused ganglion above the oesophagus that innervates the eyes and antennae. A decapitated cockroach still walks: the thoracic ganglia are largely autonomous.',
     mesh: brain,
   });
-  // Tracheae — silvery branching air tubes radiating from the lateral spiracles.
-  // The two longitudinal tracheal TRUNKS (left + right) are one real carrier mesh;
-  // the fine transverse branches to the organs hang off it as children.
-  const trunkPts = [];
-  for (let k = 0; k <= 10; k++) { const t = k / 10; trunkPts.push([-1.25, -0.08, 2.0 - t * 6.6]); }
-  const trach = tube(THREE, TRACHEA_C, trunkPts, 0.045, { rough: 0.3, clear: 0.7, sheen: 0xf0f6f8, rad: 6, seg: 40 });
-  // the right-side trunk, mirrored, as a child
-  const rTrunkPts = trunkPts.map(([x, y, z]) => [-x, y, z]);
-  childMesh(trach, tube(THREE, TRACHEA_C, rTrunkPts, 0.045, { rough: 0.3, clear: 0.7, sheen: 0xf0f6f8, rad: 6, seg: 40 }), 0, 0, 0);
+  // A schematic subset of the P. americana tracheal network: paired lateral
+  // trunks and representative transverse branches, not all three trunk pairs,
+  // spiracles or terminal tracheoles (Fox, Lander; see ANATOMY.md).
+  // The picker tests each part's own geometry, NOT its children. Batch every
+  // visible tube into the same selectable surface so either side can be probed
+  // and lifted together. Keep the original tube dimensions/material and part ID.
+  const trachealPositions = [], trachealNormals = [], trachealUVs = [], trachealIndices = [];
+  const appendTrachea = (pts, radius, segments, sides) => {
+    const curve = new THREE.CatmullRomCurve3(pts.map(p => new THREE.Vector3(...p)));
+    const geometry = new THREE.TubeGeometry(curve, segments, radius, sides, false);
+    const offset = trachealPositions.length / 3;
+    trachealPositions.push(...geometry.attributes.position.array);
+    trachealNormals.push(...geometry.attributes.normal.array);
+    trachealUVs.push(...geometry.attributes.uv.array);
+    trachealIndices.push(...Array.from(geometry.index.array, i => i + offset));
+    geometry.dispose();
+  };
   for (let s = -1; s <= 1; s += 2) {
+    const trunkPts = [];
+    for (let k = 0; k <= 10; k++) { const t = k / 10; trunkPts.push([s * 1.25, -0.08, 2.0 - t * 6.6]); }
+    appendTrachea(trunkPts, 0.045, 40, 6);
     for (let k = 0; k < 5; k++) {
       const z = 1.6 - k * 1.1;
+      // Bury the narrow branch inlet rim in the actual lateral trunk. Separate
+      // overlapping tube surfaces do not claim a reconstructed continuous lumen.
       const tpts = [
-        [s * 1.3, -0.08, z], [s * 0.8, -0.04, z - 0.1],
+        [s * 1.25, -0.08, z], [s * 0.8, -0.04, z - 0.1],
         [s * 0.3, 0.0, z - 0.05], [0, 0.04, z],
       ];
-      childMesh(trach, tube(THREE, TRACHEA_C, tpts, 0.028, { rough: 0.3, clear: 0.7, sheen: 0xf0f6f8, rad: 5, seg: 14 }), 0, 0, 0);
+      appendTrachea(tpts, 0.028, 14, 5);
     }
   }
+  const trachealGeometry = new THREE.BufferGeometry();
+  trachealGeometry.setAttribute('position', new THREE.Float32BufferAttribute(trachealPositions, 3));
+  trachealGeometry.setAttribute('normal', new THREE.Float32BufferAttribute(trachealNormals, 3));
+  trachealGeometry.setAttribute('uv', new THREE.Float32BufferAttribute(trachealUVs, 2));
+  trachealGeometry.setIndex(trachealIndices);
+  const trach = new THREE.Mesh(trachealGeometry,
+    mat(THREE, TRACHEA_C, { rough: 0.3, clear: 0.7, sheen: 0xf0f6f8 }));
   add({
     id: 'tracheae', name: 'Tracheal system', layer: 3, system: 'respiratory', cuttable: false, detachable: true,
-    note: 'Silvery branching air tubes that carry oxygen DIRECTLY to every tissue from the lateral spiracles — the blood plays no part in gas transport. The reason insects stay small.',
+    note: 'Silvery air tubes deliver oxygen from lateral spiracles to the tissues, independently of the haemolymph. Probe either side of this schematic: one pair of lateral trunks and five illustrative branch pairs. Additional dorsal and ventral trunks, spiracle valves, fine tracheoles and ventilation are not modeled. Lifting this subset as one unit is an exploration aid, not a realistic dissection procedure.',
     mesh: trach,
   });
   // Reproductive organs at the posterior abdomen (generic paired bodies + a duct).

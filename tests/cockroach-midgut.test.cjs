@@ -125,15 +125,44 @@ test('midgut has no collapsed inner bend or nonlocal self-intersection', () => {
 test('loop clears the nerve cord, dorsal vessel and both longitudinal tracheal trunks', () => {
   const f = fixture(), points = samples(f.mesh), radius = f.mesh.geometry.parameters.radius;
   const trachea = f.part('tracheae').mesh;
-  const trunks = [trachea, ...trachea.children.filter(m => {
-    const curve = m.geometry?.parameters?.path;
-    return curve && Math.abs(curve.getPoint(1).z - curve.getPoint(0).z) > 5;
-  })];
-  assert.equal(trunks.length, 2);
-  for (const mesh of [f.part('nerve-cord').mesh, f.part('dorsal-heart').mesh, ...trunks]) {
+  for (const mesh of [f.part('nerve-cord').mesh, f.part('dorsal-heart').mesh]) {
     const neighbour = samples(mesh), required = radius + mesh.geometry.parameters.radius;
     const clearance = points.reduce((best, p) => Math.min(best, nearestDistance(neighbour, p)), Infinity);
-    assert.ok(clearance >= required, `${mesh.userData.partId || 'right tracheal trunk'}: centreline distance ${clearance} < combined radii ${required}`);
+    assert.ok(clearance >= required, `${mesh.userData.partId}: centreline distance ${clearance} < combined radii ${required}`);
+  }
+  // Both trunks now live in one selectable mesh. Derive their conservative
+  // cylindrical envelopes from actual indexed components/vertices, not stale
+  // TubeGeometry parameters or implementation-only curve metadata.
+  const g = trachea.geometry, adjacency = Array.from({ length: g.attributes.position.count }, () => new Set());
+  for (let i = 0; i < g.index.count; i += 3) {
+    const [a, b, c] = [g.index.getX(i), g.index.getX(i + 1), g.index.getX(i + 2)];
+    for (const [u, v] of [[a, b], [b, c], [c, a]]) { adjacency[u].add(v); adjacency[v].add(u); }
+  }
+  const seen = new Set(), trunks = [];
+  for (let start = 0; start < adjacency.length; start++) {
+    if (seen.has(start)) continue;
+    const indices = [], queue = [start]; seen.add(start);
+    while (queue.length) {
+      const index = queue.pop(); indices.push(index);
+      for (const next of adjacency[index]) if (!seen.has(next)) { seen.add(next); queue.push(next); }
+    }
+    const surface = indices.map(i => new THREE.Vector3().fromBufferAttribute(g.attributes.position, i).applyMatrix4(trachea.matrixWorld));
+    const box = new THREE.Box3().setFromPoints(surface);
+    if (box.max.z - box.min.z > 5) trunks.push({ surface, box });
+  }
+  assert.equal(trunks.length, 2, 'both real longitudinal components still exist');
+  for (const { surface, box } of trunks) {
+    // Six-sided tubes have symmetric opposite vertices; their XY bounds locate
+    // the actual axis. The maximum radial vertex distance encloses every wall
+    // triangle, so clearing this cylinder also clears the real polygonal tube.
+    const centre = box.getCenter(new THREE.Vector3());
+    assert.ok(box.max.x - box.min.x < .1 && box.max.y - box.min.y < .1);
+    const envelopeRadius = Math.max(...surface.map(p => Math.hypot(p.x - centre.x, p.y - centre.y)));
+    const axis = new THREE.Line3(new THREE.Vector3(centre.x, centre.y, box.min.z), new THREE.Vector3(centre.x, centre.y, box.max.z));
+    const projected = new THREE.Vector3();
+    const clearance = points.reduce((best, p) => Math.min(best, axis.closestPointToPoint(p, true, projected).distanceTo(p)), Infinity);
+    assert.ok(clearance >= radius + envelopeRadius,
+      `tracheal wall at x=${centre.x}: clearance ${clearance} < combined envelope radii ${radius + envelopeRadius}`);
   }
 });
 

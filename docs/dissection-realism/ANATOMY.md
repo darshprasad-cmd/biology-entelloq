@@ -27,6 +27,7 @@ User-supplied reference images were not substituted for the interactive models.
 | Cockroach | Crop now follows the foregut's longitudinal axis, between oesophagus and gizzard, instead of standing across the dorsoventral axis. | It remains a simplified storage sac. No reproductive structures or additional organs were invented. |
 | Cockroach (September 28) | Eight closed gastric pouches now meet the anterior midgut in a transverse whorl. Removed the artificial torus and disconnected, decorative child lobes; the pouches themselves are selectable. | Count and attachment follow a P. americana reference. Curvature, spacing and dimensions remain schematic; overlapping closed surfaces do not simulate a continuous lumen. |
 | Cockroach (September 30) | Replaced the straight midgut with an asymmetric returning loop and seated its ends in the existing gizzard and hindgut surfaces. | Directional routing follows a P. americana reference, but lengths, curvature and proportions are illustrative. Surface overlap is not a continuous lumen. All other parts remain unchanged. |
+| Cockroach (October 2) | Both lateral tracheal trunks and all ten displayed transverse branches now form one directly selectable mesh. Branch mouths sit within the side trunks instead of protruding beyond them. | A picking and surface-connection correction to the existing schematic subset, not a complete airway reconstruction. Additional trunks, spiracles and terminal branches remain absent. |
 
 The whole-specimen tray orientations are kept separate from these local
 relationships: frog ventral surface up, cockroach and earthworm dorsal surface
@@ -120,6 +121,19 @@ curve is a schematic teaching surface, not a reconstruction of a measured
 adult gut or its lumen. Tests cover the curve's bends, selected neighbouring
 structures and connected endpoints; they do not certify complete cavity fit
 or every small tracheal branch. No reference diagram was copied.
+
+The October 2 tracheal correction makes the previously decorative right trunk
+and ten branches part of the tool-contact surface. Their narrow inlet rims now
+overlap the lateral trunks. The prior outboard mouths crossed those trunks, so
+this is not presented as repairing wholly detached branches. The visible subset
+retains its illustrative dimensions and routes, with no continuous lumen.
+[Herhold et al. (2023), P. americana tracheal-system treatment](https://zenodo.org/records/7733331)
+supports connected lateral trunks and segmental branching, not this branch count
+or geometry. Its scanned specimen also has resolution and fluid-infill limits.
+The model omits additional dorsal/ventral trunks, spiracle valves, tracheoles and
+ventilation; unchanged medial overlaps with digestive tissues are not validated
+airway attachments. Moving the subset as one unit remains an exploration aid,
+not a faithful surgical maneuver. Qualified educator review is still needed.
 
 ## Verification and next review
 
