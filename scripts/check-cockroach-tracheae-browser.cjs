@@ -27,11 +27,15 @@ const report = { url, packaged, complete: false, errors: [], cameraRequests: 0,
       window.__cameraRequests = 0;
       navigator.mediaDevices.getUserMedia = async () => { window.__cameraRequests++; throw new Error('Camera forbidden in tracheal diagnostic'); };
     });
-    const response = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 90000 });
+    // The 26 MB portable response can be evicted from Chromium's inspector
+    // cache while its nested documents initialize. Verify bytes independently
+    // before navigation rather than relying on that transient inspector buffer.
+    const response = await page.request.get(url.split('#')[0], { headers: { 'Cache-Control': 'no-cache' }, timeout: 90000 });
     assert.equal(response.status(), 200);
     const served = await response.body();
     assert.ok(served.equals(fs.readFileSync(artifact)), 'served application matches the current built artifact');
     report.artifactSha256 = crypto.createHash('sha256').update(served).digest('hex');
+    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 90000 });
     let world = page;
     if (packaged) {
       const shellElement = await page.locator('#bioq-workspace').elementHandle();

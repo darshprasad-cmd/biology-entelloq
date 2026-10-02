@@ -52,12 +52,44 @@ This is not a species-certified reconstruction or clinical validation.
 
 ## Release evidence
 
-Final release checks and exact artifact hashes are recorded below after the
-browser suites finish. The focused airway diagnostic intentionally exposes only
-the respiratory subset; it is not evidence of a normal dissection sequence.
-The separate five-specimen suite exercises actual cut/forceps access. Hand-panel
-checks use synthetic shell state and do not validate webcam hardware.
+All source/render evidence below uses the final product code. The focused airway
+diagnostic intentionally exposes only the respiratory subset; it is not evidence
+of a normal dissection sequence. The separate five-specimen suite exercises
+actual cut/forceps access. Hand-panel checks use synthetic shell state and do not
+validate webcam hardware.
+
+| Check | Result / retained evidence |
+| --- | --- |
+| Narrow dissection builder and portable builder checks | Passed; protected slots retained, deterministic portable package verified. |
+| `node scripts/check-learning.cjs` | All 13 groups passed in 89.5 seconds on the final source and test set. |
+| Real-render airway diagnostic | Both trunks and all ten branches directly probed; right-branch extraction cleared the cavity; unchanged extraction-Undo boundary. `detail/tracheae.json` |
+| Normal access interactions | All five specimens completed cut/forceps access without residual access sheets; frog phone/keyboard access-layer Undo passed. `interactions/interactions.json` |
+| Actual tray placement | All five specimens contact the pad, retain dissection orientation and remain still. `bench/browser.json` |
+| Responsive hand panels | 60 observations across six viewport families; zero layout issues. `hand-layout/hand-layout.json` |
+| Actual portable package | Same airway probe/extraction checks passed inside the nested packaged lab; zero page errors or camera requests. `packaged/tracheae.json` |
+
+Standalone source artifact SHA-256 (Windows preview bytes):
+`6f6da294f3fcd2e6bb3827e4b55d187fc48946cb20903134a4b0da8723c37330`.
+The source diagnostics, access suite and tray suite all report this same hash.
+Portable deployment artifact SHA-256:
+`eac7a556d5e474b788681395caec3f061fbb83ae9476c63afdf6bd25c692c57b`.
+The latter is generated with normalized newlines and does not depend on checkout
+CRLF. The generated package is ignored by Git and rebuilt by existing CI/Pages.
+
+The full offline packaged-app browser suite remains a required, unchanged CI
+check on the final head of [PR #26](https://github.com/darshprasad-cmd/biology-entelloq/pull/26).
+Its reports include desktop/mobile navigation, saved data, prepared models,
+Universe stages and modal/exit ownership; CI retains those reports separately.
+Merge and live verification are gated on that check, not inferred from the
+focused diagnostic. No actual camera, account or live AI service is exercised.
 
 The first Windows checkout run exposed CRLF-versus-LF drift in unchanged learning
 pages. Only checkout line endings were normalized; those pages have no Git
 content diff. No checks or tolerances were relaxed.
+One later local run exceeded the existing unit-test time limit and was not
+counted as passing; the clean rerun above completed. The new diagnostic initially
+hit Chromium inspector-cache eviction on the 26 MB package; it now compares HTTP
+bytes independently before opening that URL. This changes only the diagnostic,
+not the packaged app or its tests. Source browser runs intentionally deny the
+optional remote bloom dependency; software-renderer readback warnings are not
+device-performance measurements.
