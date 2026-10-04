@@ -28,6 +28,7 @@ User-supplied reference images were not substituted for the interactive models.
 | Cockroach (September 28) | Eight closed gastric pouches now meet the anterior midgut in a transverse whorl. Removed the artificial torus and disconnected, decorative child lobes; the pouches themselves are selectable. | Count and attachment follow a P. americana reference. Curvature, spacing and dimensions remain schematic; overlapping closed surfaces do not simulate a continuous lumen. |
 | Cockroach (September 30) | Replaced the straight midgut with an asymmetric returning loop and seated its ends in the existing gizzard and hindgut surfaces. | Directional routing follows a P. americana reference, but lengths, curvature and proportions are illustrative. Surface overlap is not a continuous lumen. All other parts remain unchanged. |
 | Cockroach (October 2) | Both lateral tracheal trunks and all ten displayed transverse branches now form one directly selectable mesh. Branch mouths sit within the side trunks instead of protruding beyond them. | A picking and surface-connection correction to the existing schematic subset, not a complete airway reconstruction. Additional trunks, spiracles and terminal branches remain absent. |
+| Cockroach (October 5) | Replaced the shared Malpighian placeholder lump with six small ampullary attachments at the midgut–hindgut junction and 18 directly selectable, blind-ended representative tubules. | Six attachment groups follow P. americana references. The reduced count, shortened routes, angular spacing and dimensions are illustrative, not a measured specimen or continuous lumen. |
 
 The whole-specimen tray orientations are kept separate from these local
 relationships: frog ventral surface up, cockroach and earthworm dorsal surface
@@ -134,6 +135,23 @@ The model omits additional dorsal/ventral trunks, spiracle valves, tracheoles an
 ventilation; unchanged medial overlaps with digestive tissues are not validated
 airway attachments. Moving the subset as one unit remains an exploration aid,
 not a faithful surgical maneuver. Qualified educator review is still needed.
+
+The October 5 Malpighian correction follows [Wall, Oschman and Schmidt (1975),
+Morphology and function of Malpighian tubules and associated structures in
+P. americana](https://pubmed.ncbi.nlm.nih.gov/1152069/) and the Lander guide above.
+The primary study describes approximately 150 tubules draining through six
+ampullae at the midgut–hindgut junction; the guide describes six clusters of
+blind-ended threads. The model shows only three shortened tubules per ampulla
+for clarity. This is not a biological count or life-stage reconstruction.
+The six compact root forms replace the former large shared carrier bulb.
+Each root overlaps the gut surface, and each tubule overlaps its own ampulla;
+all are closed rendered surfaces, not continuous, functioning excretory ducts.
+The individual paths, colour, proportions and angular spacing are authored
+approximations. Distal surfaces taper to closed tips, not open cut ends.
+Every visible strand belongs to the actual pick surface. Moving the full group
+with forceps remains an exploration aid, not an anatomically faithful extraction.
+No reference imagery was copied. Other organ models and known cavity-fit limits
+are unchanged. Educator review is still required for anatomical validation.
 
 ## Verification and next review
 
