@@ -11,6 +11,8 @@ The complete published product is now **one portable `index.html`**: the landing
 page, workspace, eight learning sections, Dissection Lab and Biology Universe.
 Navigation stays inside this file. Its scripts, styles, preview images, Three.js,
 and prepared frog/cockroach models are embedded; no companion folder is needed.
+The workspace starts before the large specimen payloads finish downloading.
+Models remain inside the same file and are prepared when a specimen is opened.
 
 ```bash
 python scripts/build-single-file.py
@@ -41,6 +43,9 @@ Validate with:
 node scripts/check-learning.cjs
 python scripts/build-single-file.py --check
 node scripts/check-single-file-browser.cjs
+node scripts/check-opening-browser.cjs
+node scripts/check-exam-answers-browser.cjs
+node tests/check-ai-answer-formatting.cjs
 ```
 
 The browser check uses Playwright (`BIOLOGY_PLAYWRIGHT_MODULES` can point to its

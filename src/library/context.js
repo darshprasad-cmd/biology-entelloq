@@ -92,7 +92,8 @@
   async function answer(question) {
     stop();
     question = String(question || '').trim() || 'What should I consider next?';
-    dialog.querySelector('.bio-guide-answer').textContent = reply(question);
+    const output = dialog.querySelector('.bio-guide-answer');
+    output.style.whiteSpace = 'pre-wrap'; output.textContent = reply(question);
     dialog.querySelector('.bio-guide-source').textContent = 'On-device guidance below. An AI explanation is loading; only your question and selected topic are sent.';
     window.dispatchEvent(new CustomEvent('bioq:ask', { detail: { question, context } }));
     const controller = new AbortController(), gen = generation, selected = contextKey(context), reference = publicContext(context);
@@ -103,7 +104,7 @@
       if (gen !== generation || controller.signal.aborted || !dialog.open) return;
       const result = await ai.ask({ question, context: reference, signal: controller.signal });
       if (gen !== generation || selected !== contextKey(context) || !dialog.open) return;
-      dialog.querySelector('.bio-guide-answer').textContent = result;
+      ai.renderAnswer(output, result);
       dialog.querySelector('.bio-guide-source').textContent = 'AI explanation · verify important details. Experiment records remain on this device.';
     } catch (error) {
       if (gen !== generation || controller.signal.aborted || !dialog.open) return;

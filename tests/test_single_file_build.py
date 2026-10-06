@@ -142,6 +142,24 @@ class SingleFileBuild(unittest.TestCase):
         self.assertNotIn("</script", data.lower())
         self.assertNotIn("__BIOQ_MANIFEST__", output)
         self.assertNotIn("__BIOQ_HOST__", output)
+        self.assertNotIn("__BIOQ_DEFERRED_ASSETS__", output)
+
+    def test_specimen_payloads_follow_startup_without_changing_their_bytes(self):
+        with patch.object(BUILDER, "build_manifest", return_value=self.manifest):
+            output = BUILDER.render_output()
+        data = re.search(r'<script id="bioq-manifest" type="application/json">([\s\S]*?)</script>', output).group(1)
+        initial = json.loads(data)
+        first_payload = output.index('<script type="application/octet-stream"')
+        self.assertLess(first_payload, len(output) * .30, "learning must start before the model-heavy tail")
+        self.assertLess(output.index('window.BioqPackage ='), first_payload)
+        self.assertIn('window.BioqPackage.assetReady("assets/specimens/frog.glb")', output)
+        self.assertEqual(initial['assets']['assets/specimens/frog.glb']['deferred'], 'bioq-deferred-asset-0')
+        for name in ('assets/specimens/frog.glb', 'assets/specimens/cockroach.glb'):
+            entry = initial['assets'][name]
+            self.assertNotIn('data', entry)
+            payload = re.search(r'id="' + entry['deferred'] + r'">([^<]+)</script>', output).group(1)
+            self.assertEqual(payload, self.manifest['assets'][name]['data'])
+            self.assertEqual(unpack(payload), (ROOT / name).read_bytes())
 
 
 class SingleFileTransform(unittest.TestCase):

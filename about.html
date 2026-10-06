@@ -1524,12 +1524,12 @@ function wireCell(){
 /* ============================================================================
    AI QUESTIONS (live, with labeled offline examples)
    ========================================================================== */
-let aiTimer=null,aiGen=0,aiAbort=null;
+let aiGen=0,aiAbort=null;
 function cancelAIDemo(){
-  const interrupted=aiTimer!==null||aiAbort!==null;
-  ++aiGen;clearTimeout(aiTimer);aiTimer=null;if(aiAbort)aiAbort.abort();aiAbort=null;
-  // Returning from another About section must not leave an abandoned Thinking
-  // indicator or a half-typed answer looking like a complete explanation.
+  const interrupted=aiAbort!==null;
+  ++aiGen;if(aiAbort)aiAbort.abort();aiAbort=null;
+  // Returning from another About section must not leave an abandoned request
+  // showing Thinking or allow its later answer to replace the current view.
   const out=$('#aiOut');
   if(interrupted&&out){out.classList.remove('think');out.textContent='Request stopped. Choose a question to try again.';}
 }
@@ -1545,7 +1545,7 @@ async function askAI(i){
   let answer=item.a,label='Offline example · Biology Entelloq knowledge base';
   try{
     if(!window.BIOQ_AI)throw new Error('unavailable');
-    answer=await window.BIOQ_AI.ask({question:item.q,context:'Introductory biology. Explain the concept in a short paragraph and offer a guiding question.',signal:controller.signal});
+    answer=await window.BIOQ_AI.ask({question:item.q,context:'Introductory biology. Give a direct answer, explain the mechanism in connected sentences, and use an example if helpful.',signal:controller.signal});
     label='AI explanation · verify important details';
   }catch(error){
     if(controller.signal.aborted)return;
@@ -1556,14 +1556,8 @@ async function askAI(i){
   const out=body.querySelector('#aiOut');if(!out)return;
   out.classList.remove('think');out.style.whiteSpace='pre-wrap';out.textContent='';
   const source=document.createElement('p');source.textContent=label;source.style.cssText='font-size:11px;color:var(--dim);margin:12px 0 0';
-  function done(){aiTimer=null;out.appendChild(source);body.scrollTop=body.scrollHeight;}
-  if(REDUCED){out.textContent=answer;done();return;}
-  let n=0;
-  (function type(){
-    if(gen!==aiGen)return;
-    n+=Math.max(1,Math.round(answer.length/120));out.textContent=answer.slice(0,n);body.scrollTop=body.scrollHeight;
-    if(n<answer.length)aiTimer=setTimeout(type,16);else done();
-  })();
+  if(window.BIOQ_AI?.renderAnswer)window.BIOQ_AI.renderAnswer(out,answer);else out.textContent=answer;
+  out.appendChild(source);body.scrollTop=body.scrollHeight;
 }
 
 /* ============================================================================

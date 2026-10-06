@@ -16,10 +16,12 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#081016;col
 </style>
 </head>
 <body>
-<div id="bioq-loading" role="status"><strong>Biology Entelloq</strong><p id="bioq-loading-message">Opening your biology workspace…</p><button id="bioq-retry" hidden onclick="location.reload()">Try again</button></div>
+<div id="bioq-loading" role="status"><strong>Biology Entelloq</strong><p id="bioq-loading-message">Downloading your biology workspace…</p><button id="bioq-retry" hidden onclick="location.reload()">Try again</button></div>
 <iframe id="bioq-workspace" title="Biology Entelloq" allow="camera; fullscreen" allowfullscreen></iframe>
 <noscript>Enable JavaScript to open the interactive biology workspace.</noscript>
+<script>window.__bioqOpeningTimer=setTimeout(()=>{if(!window.BioqPackage){document.getElementById('bioq-loading-message').textContent='Still downloading. You can wait, or try again if the connection stopped.';document.getElementById('bioq-retry').hidden=false;}},12000);</script>
 <script id="bioq-manifest" type="application/json">__BIOQ_MANIFEST__</script>
 <script>__BIOQ_HOST__</script>
+__BIOQ_DEFERRED_ASSETS__
 </body>
 </html>

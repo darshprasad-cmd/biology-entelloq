@@ -11,12 +11,20 @@ uses deterministic gzip payloads, checks local dependency paths and rewrites
 document navigation APIs only in executable code. Protected lab/source
 fingerprints and the existing scientific model tests still apply.
 
-The host decompresses the embedded payloads and uses same-origin `srcdoc`
+The host decompresses the learning documents and ordinary assets in bounded
+batches and uses same-origin `srcdoc`
 documents to preserve the existing script and CSS scopes. A document bridge
 resolves packaged resources and synchronizes logical routes with the containing
 file's browser history. Hosted storage retains the existing origin and keys.
 The prepared-model loader still validates its byte budget, GLB schema, anatomy
 part contract and resource lifecycle; its bytes come from the package.
+
+The two large GLBs are inert payload blocks after the startup runtime. Their
+manifest entries identify those blocks, and an arrival signal allows a waiting
+specimen request to continue. Learning can therefore start before the remaining
+HTML download completes. GLB decoding is deferred until needed; aborted,
+truncated and corrupt downloads have explicit recovery paths. This remains a
+single response and single physical file, including when opened from disk.
 
 Only the generated application is deployed, alongside `CNAME`, `.nojekyll`, and
 a small `404.html` that redirects legacy section URLs into the single file.
@@ -43,6 +51,14 @@ artifact the host serves.
 - `tests/test_single_file_build.py`: complete inventory, dependency validation,
   binary preservation, lexical transform regressions, module graph, source
   containment, compatibility routing and deterministic serialization.
+- `node scripts/check-opening-browser.cjs`: withhold the embedded model tail,
+  operate Solve before the document finishes downloading, then verify exact
+  specimen bytes; also cover abort, timeout, corruption and truncated downloads.
+- `node scripts/check-exam-answers-browser.cjs`: submit real practice answers,
+  check worked explanations and diagrams, and preserve scoring and saved state.
+- `node tests/check-ai-answer-formatting.cjs`: safe DOM rendering, formula
+  fallback, tables, keyboard focus and responsive assistant output with a mock
+  provider. Live provider accuracy is a separate, bounded manual check.
 
 Browser screenshots and structured results are written to this directory but
 are excluded from source control. `--worlds-only` and `--file-only` are bounded
