@@ -129,6 +129,6 @@ const base=process.env.BIOLOGY_PREVIEW_URL||'http://127.0.0.1:3014';
   await restricted.locator('.tp-feedback').waitFor();
   assert(await restricted.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Solve mobile overflow');
   assert.deepEqual(errors,[]);
-  console.log('PASS: 73 topic Solve routes, three-question feedback/retry, standalone and embedded Learn ↔ Reason ↔ Solve returns/reloads, persisted drafts/reflections, original Reason catalog, restricted storage and mobile layout.');
+  console.log('PASS: '+catalog.length+' topic Solve routes, three-question feedback/retry, standalone and embedded Learn ↔ Reason ↔ Solve returns/reloads, persisted drafts/reflections, original Reason catalog, restricted storage and mobile layout.');
  }finally{await browser.close();}
 })().catch(error=>{console.error(error);process.exitCode=1;});

@@ -1,11 +1,11 @@
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
 const root=path.resolve(__dirname,'..'),window={};
-for(const name of ['topics','depth-foundations','depth-processes','depth-study']) vm.runInNewContext(fs.readFileSync(path.join(root,'src/library',name+'.js'),'utf8'),{window});
+for(const name of ['topics','depth-foundations','depth-processes','extended-core','extended-systems','depth-study']) vm.runInNewContext(fs.readFileSync(path.join(root,'src/library',name+'.js'),'utf8'),{window});
 const topics=window.BIO_LIBRARY.topics,units=window.BIO_DEPTH;
 const words=text=>String(text).trim().split(/\s+/).length;
 test('all published concepts, and only published concepts, receive substantive authored depth',()=>{
  assert.deepEqual(Object.keys(units).sort(),Array.from(topics,t=>t.id).sort());
- assert.equal(topics.length,73);
+ assert.equal(topics.length,109);
  for(const topic of topics){
   const unit=units[topic.id];assert.equal(unit.objectives.length,3,topic.id);
   assert.equal(unit.mechanism.length,3,topic.id);
