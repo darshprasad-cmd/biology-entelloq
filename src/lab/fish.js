@@ -226,20 +226,67 @@ function buildFish(THREE) {
     mat(THREE, 0xffffff, { vcol: true, rough: 0.42, clear: 0.62, clearRough: 0.4,
       sheen: 0xd6dcc8, sheenAmt: 0.7, transmission: 0, specular: 0.55 }));
 
+  // A body-owned pigment atlas follows the sphere's actual longitudinal axis.
+  // The generic surface tiling put large overlapping arcs across the smooth
+  // snout. Fine staggered scale fields now fade before the head, while a gently
+  // curved lateral line belongs to the flank. Illustrative teleost pigment,
+  // not a species reconstruction. Shared like anatomy.js's other tissue maps.
+  if (!buildFish.scalePigmentAtlas) {
+    const width = 512, height = 256, data = new Uint8Array(width * height * 4);
+    const wrap = x => x - Math.floor(x), clamp = x => Math.max(0, Math.min(1, x));
+    for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) {
+      const u = x / width, v = y / (height - 1), theta = (1 - v) * Math.PI, phi = u * Math.PI * 2;
+      const px = -Math.cos(phi) * Math.sin(theta), py = Math.cos(theta), pz = Math.sin(phi) * Math.sin(theta);
+      const t = (pz + 1) / 2, around = wrap(Math.atan2(py, px) / (Math.PI * 2) + .5) * 26;
+      const row = Math.floor(around), across = wrap(around), along = wrap(t * 36 + (row % 2) * .5);
+      const arc = .46 + .29 * Math.sin(Math.PI * across);
+      const edge = Math.exp(-Math.pow((along - arc) / .075, 2)) * Math.pow(Math.sin(Math.PI * across), .6);
+      const mask = smooth(clamp((t - .10) / .12)) * smooth(clamp((.78 - t) / .12));
+      const mott = vnoise(px * 17 + 2, py * 17 + 5, pz * 20 + 9);
+      const ll = Math.exp(-Math.pow((py - .04 - .08 * (t - .4)) / .018, 2)) * mask;
+      const shade = .95 + .035 * mott - mask * edge * .11 - ll * .14;
+      const i = (y * width + x) * 4;
+      data[i] = Math.round(clamp(shade * .995) * 255);
+      data[i + 1] = Math.round(clamp(shade) * 255);
+      data[i + 2] = Math.round(clamp(shade * (.98 + .018 * mott)) * 255);
+      data[i + 3] = 255;
+    }
+    const atlas = new THREE.DataTexture(data, width, height, THREE.RGBAFormat);
+    atlas.colorSpace = THREE.SRGBColorSpace;
+    atlas.wrapS = THREE.RepeatWrapping; atlas.wrapT = THREE.ClampToEdgeWrapping;
+    atlas.magFilter = THREE.LinearFilter; atlas.minFilter = THREE.LinearMipmapLinearFilter;
+    atlas.generateMipmaps = true; atlas.anisotropy = 2; atlas.needsUpdate = true;
+    atlas.name = 'fish-longitudinal-scale-pigment';
+    buildFish.scalePigmentAtlas = atlas;
+  }
+  skin.material.map = buildFish.scalePigmentAtlas;
+
   // Head detail — a large lateral eye, a nostril, and the inferior mouth with the
   // fleshy lips typical of a bottom-feeding cyprinid. All decorative children.
   const iris = new THREE.Mesh(new THREE.SphereGeometry(0.2, 20, 16),
-    mat(THREE, 0xa39d76, { rough: 0.26, clear: 0.9, clearRough: 0.14, sheen: 0xd4d7bf }));
-  iris.scale.set(0.52, 0.9, 0.9); iris.userData.exteriorDetail = 'eye';
-  const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.11, 16, 12),
+    mat(THREE, 0xffffff, { vcol: true, rough: 0.34, clear: 0.72, clearRough: 0.18, sheen: 0xd4d7bf, noTex: true }));
+  const eyeColors = [], eyeVertex = new THREE.Vector3(), eyeColor = new THREE.Color();
+  for (let i = 0; i < iris.geometry.attributes.position.count; i++) {
+    eyeVertex.fromBufferAttribute(iris.geometry.attributes.position, i);
+    const angle = Math.atan2(eyeVertex.z, eyeVertex.y), radial = Math.hypot(eyeVertex.y, eyeVertex.z) / .2;
+    const striation = .5 + .5 * Math.sin(angle * 31 + radial * 9);
+    eyeColor.setHex(0x928c6e).lerp(new THREE.Color(0x4c5149), striation * .22 + Math.pow(radial, 6) * .38);
+    eyeColors.push(eyeColor.r, eyeColor.g, eyeColor.b);
+  }
+  iris.geometry.setAttribute('color', new THREE.Float32BufferAttribute(eyeColors, 3));
+  iris.scale.set(0.34, 0.9, 0.9); iris.userData.exteriorDetail = 'eye';
+  const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.135, 16, 12),
     mat(THREE, 0x080a06, { rough: 0.18, clear: 1, clearRough: 0.08 }));
-  childMesh(iris, pupil, -0.1, 0, 0);
-  childMesh(skin, iris, -0.42, 0.42, 2.55);
+  pupil.scale.set(.55, 1, 1);
+  childMesh(iris, pupil, -0.165, 0, 0);
+  const eyeSeat = new THREE.Raycaster(new THREE.Vector3(-2, .42, 2.55), new THREE.Vector3(1, 0, 0))
+    .intersectObject(skin, false)[0];
+  childMesh(skin, iris, (eyeSeat ? eyeSeat.point.x : -.42) - .008, 0.42, 2.55);
   // Both flanks must remain coherent when the student rotates the specimen.
   // Mirror only the existing external detail; anatomy and pick targets stay put.
   const farIris = iris.clone(true);
-  farIris.position.x = 0.42;
-  farIris.children[0].position.x = 0.1;
+  farIris.position.x = -iris.position.x;
+  farIris.children[0].position.x = 0.165;
   skin.add(farIris);
   const nostril = new THREE.Mesh(new THREE.SphereGeometry(0.03, 8, 6), mat(THREE, 0x15170f, { rough: 0.6 }));
   childMesh(skin, nostril, -0.34, 0.5, 2.95);
@@ -330,10 +377,11 @@ function buildFish(THREE) {
     const sample = { x: hit ? hit.point.x : -0.40, color }; opSamples.set(key, sample); return sample;
   };
   const opPositions = opGeo.attributes.position, opColors = [], opPoint = new THREE.Vector3();
+  const opercularOutline = (y, z) => [0.035 + y * (1.00 - 0.22 * Math.max(0, z)),
+    1.68 + z * 0.72 + .065 * y - .025 * y * y];
   for (let i = 0; i < opPositions.count; i++) {
     opPoint.fromBufferAttribute(opPositions, i);
-    const y = 0.035 + opPoint.y * (1.00 - 0.16 * Math.max(0, opPoint.z));
-    const z = 1.68 + opPoint.z * 0.72, sample = flankAt(y, z);
+    const [y, z] = opercularOutline(opPoint.y, opPoint.z), sample = flankAt(y, z);
     opPoint.set(sample.x - 0.012 + opPoint.x * 0.025, y, z).applyMatrix4(opInverse);
     opPositions.setXYZ(i, opPoint.x, opPoint.y, opPoint.z);
     opColors.push(sample.color.r, sample.color.g, sample.color.b);
@@ -343,10 +391,10 @@ function buildFish(THREE) {
   // The free posterior edge is a restrained crescent; no circular raised rim.
   const seamPoints = [];
   for (let i = 0; i <= 18; i++) {
-    const angle = i / 18 * Math.PI, y = 0.035 + Math.cos(angle), z = 1.68 - 0.72 * Math.sin(angle);
+    const angle = i / 18 * Math.PI, [y, z] = opercularOutline(Math.cos(angle), -Math.sin(angle));
     seamPoints.push(new THREE.Vector3(flankAt(y, z).x - 0.022, y, z).applyMatrix4(opInverse).toArray());
   }
-  const seam = tube(THREE, 0x687674, seamPoints, 0.006, { rough: 0.58, clear: 0.25, rad: 4, seg: 28 });
+  const seam = tube(THREE, 0x687674, seamPoints, 0.004, { rough: 0.58, clear: 0.25, rad: 4, seg: 28 });
   seam.name = 'opercular-margin'; seam.userData.exteriorDetail = 'opercular-seam'; operculum.add(seam);
   add({
     id: 'operculum', name: 'Operculum (gill cover)', layer: 0, system: 'skeletal',

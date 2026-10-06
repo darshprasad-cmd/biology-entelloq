@@ -132,7 +132,7 @@ test('clitellum is a close-fitting band with a continuous shoulder, not a sphere
   assert.ok(bounds.max.z - bounds.min.z > 1.3, 'girdle extends longitudinally');
 });
 
-test('all four outer pieces use the same low-transmission vertex-coloured cuticle optics', () => {
+test('all four outer pieces use the same opaque vertex-coloured cuticle optics', () => {
   const spec = build(), materials = new Set();
   const optics = m => [m.color.getHex(), m.roughness, m.clearcoat, m.clearcoatRoughness,
     m.sheen, m.sheenColor.getHex(), m.transmission, m.thickness, m.attenuationColor.getHex(), m.attenuationDistance];
@@ -141,7 +141,7 @@ test('all four outer pieces use the same low-transmission vertex-coloured cuticl
     const mesh = part(spec, id).mesh, m = mesh.material;
     assert.ok(m.vertexColors && mesh.geometry.attributes.color, id + ': no flat colour cap');
     assert.equal(m.color.getHex(), 0xffffff, id + ': pigment is in vertices, not a second multiplier');
-    assert.equal(m.opacity, 1); assert.equal(m.transmission, 0.03);
+    assert.equal(m.opacity, 1); assert.equal(m.transmission, 0, 'opaque wall must not show the green tray through the tapered ends');
     assert.deepEqual(optics(m), optics(body), id + ': no discontinuous optics at joins');
     materials.add(m);
   }

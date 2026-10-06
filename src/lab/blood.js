@@ -1,77 +1,19 @@
 /*
- * blood.js — cut tissue bleeds, blood runs downhill, it pools, it clots, and you
- * wipe it away with gauze.
+ * Blood and specimen fluid presentation. Preserved is the default: accepted
+ * incisions leave small host-bound residue marks, with no active fluid source.
+ * Fresh excised tissue seeps passively for a short time. An explicitly enabled
+ * frog/heart circulation demonstration can use the legacy pulsatile registers.
+ * Cockroach hemolymph stays pale and non-pulsatile in every condition.
  *
- * This is a presence module, not a gore module. The thing that makes a dissection
- * feel real is not quantity of red — it is that the fluid OBEYS THE ANATOMY. Blood
- * that tracks the contour of a liver lobe, gathers in the low point of the cavity,
- * goes tacky and brown-black over a minute, and leaves the serosa glossy under the
- * theatre lamp reads as a specimen. Blood that sprays as a screen-space particle
- * effect reads as a video game. Everything here is built around that one idea.
+ * Colours, durations, viscosity, gravity and quantities are authored visual
+ * approximations, not calibrated physiology or a surgical training model.
+ * No quantitative blood-loss value is presented to the learner or connected to
+ * the physiology model. BLD_TOTAL_ML is a legacy demo normalization only.
  *
- * THREE BLEEDING REGISTERS, deliberately distinguishable at a glance. A student
- * should be able to name the vessel they have opened from the behaviour alone,
- * which is a genuine clinical skill:
- *
- *   capillary — dark, slow, low-pressure. Wells up and BEADS along the cut edge,
- *     surface tension holding each drop until it is heavy enough to creep. Stops
- *     on its own inside ~13 s: that is haemostasis, the platelet plug forming.
- *   venous    — dark red-purple (deoxygenated haemoglobin), steady, non-pulsatile,
- *     under low pressure so it does not throw. It just RUNS, and where it runs is
- *     decided entirely by the shape of the organ under it.
- *   arterial  — bright scarlet (~98% saturated), and PULSATILE. It is ejected in
- *     time with systole, so it arcs, lands away from the wound, and the volume
- *     visibly rises and falls with the beat. Synchronised to physio.js's cardiac
- *     phase when one is supplied; falls back to a plausible ~1.1 Hz otherwise.
- *
- * HOW BLOOD STICKS TO THE ANATOMY. A running droplet does not integrate against a
- * collision mesh — far too expensive for 400 of them. Instead each droplet knows
- * the surface normal it is sitting on, walks along the DOWNHILL TANGENT of that
- * plane, and then re-snaps itself to the specimen with one very short ray fired
- * into the surface. Snapping (rather than colliding) is what makes it track the
- * contours of a lobe instead of tunnelling through it, and it costs one ray per
- * droplet per re-snap instead of per frame.
- *
- * PERFORMANCE CONTRACT, because this runs on a school laptop next to hand tracking:
- *   - Everything is pooled and pre-allocated. update() allocates NOTHING.
- *   - Hard cap of 400 droplets and 384 stains (4 instance pools of 96: two blob
- *     shapes x glossy/matte). Full pools recycle the oldest mark.
- *   - Hard cap of BLD_RAY_BUDGET raycasts per frame, spent round-robin. Stationary
- *     droplets never cast at all. A hundred droplets running at once degrades to
- *     slightly laggier surface tracking, never to a frame-rate collapse.
- *   - Two draw calls for every stain in the scene, one for every droplet.
- *
- * DEFEATABLE BY DESIGN. A squeamish fourteen-year-old and a medical student are
- * both users of this program. setIntensity(0) retires everything already on the
- * specimen and stops new bleeding; setEnabled(false) hides it outright and gives
- * every borrowed material property back. Default intensity is 0.55 — enough that a
- * cut obviously bleeds, nowhere near a horror film.
- *
- * PHYSIOLOGICAL COUPLING. physio.js exposes setBloodVolume(fraction) and drives it
- * through Starling -> stroke volume -> pulse pressure -> baroreflex, exactly as
- * haemorrhage does in an animal. Nothing was calling it, so a specimen could be
- * bled white while the monitor showed an untroubled 48 bpm — the one thing a
- * physiology lesson about haemorrhage must not do. setVolumeSink(physio.setBloodVolume)
- * closes that loop; see the BLD_TOTAL_ML note for how the millilitres are counted.
- *
- * Contract:
- *   createBlood(THREE, scene) -> {
- *     bleed(o), stain(point, normal, radius, darkness, partId[, kind]),
- *     swab(point, radius) -> count, wetness(partId) -> 0..1,
- *     setEnabled(on), setIntensity(k), setPhaseSource(fn), setVolumeSink(fn),
- *     setSpecimen(parts), update(dtMsOrSec), clear(), dispose(),
- *     get enabled, get intensity, get bloodLostML, get bloodFraction, get stats }
- *   o = { point:Vector3, normal:Vector3, partId, severity:0..1,
- *         kind:'capillary'|'venous'|'arterial' }
- *
- * Every public method sanitises its own arguments and none of them throws; a
- * plain {x,y,z} or an unnormalised normal is accepted. update() additionally
- * catches, because it is called from a render loop this module does not own and a
- * throw from here would freeze the whole lab over a cosmetic subsystem.
- *
- * WIRING. This module is optional and, as of this writing, main.js does not
- * construct it — see the note at the bottom of the file for the three lines that
- * do, and for why they are not written here.
+ * Droplets/stains are pooled, with a fixed raycast budget. Stains follow their
+ * host transform; callers retire marks with clearPart when an access sheet is
+ * removed. Gauze removes fluid without changing accepted incision geometry.
+ * Intensity changes visibility, while setContext controls specimen behavior.
  */
 
 const BLD_MAX_DROPLETS = 400;   // hard cap, per the module brief
@@ -110,48 +52,9 @@ const BLD_G = 14;               // gravity, units/s^2 — see BLD_note_gravity b
 // pooling around the specimen is a real and immediately readable thing.
 const BLD_TABLE_Y = -1.7;
 
-/* Blood volume, and why this module is allowed to have an opinion about it.
- *
- * physio.js exposes setBloodVolume(fraction) and drives it through Starling ->
- * stroke volume -> pulse pressure -> baroreflex, exactly as haemorrhage does in
- * an animal. Nothing was calling it, so a specimen could be bled for two minutes
- * with the monitor showing an untroubled 48 bpm — the one thing a physiology
- * lesson about haemorrhage must not do.
- *
- * The numbers: Rana pipiens carries roughly 5-6 % of body mass as blood, so a
- * 30 g frog holds about 1.7 mL. One world unit is a centimetre (see the gravity
- * note), so a droplet of diameter d units has volume (pi/6)d^3 cm^3 — a 0.05-unit
- * bead is about 0.065 uL.
- *
- * The sampling factor is the honest part, it lives PER REGISTER (see `sample` in
- * BLD_REGISTER), and it is bounded by physiology rather than chosen for feel.
- *
- * Why per register and not one global number. What is drawn is a SAMPLE of the
- * flow, and the three registers are sampled at wildly different fidelity because
- * they are drawn to look like themselves. An arterial jet ATOMISES — it is drawn
- * as many small fast droplets, so droplet volume badly under-represents the real
- * flow. A venous runnel is a coherent stream and the drawn droplets are close to
- * life size. Capillary blood wells as discrete beads and is very nearly 1:1.
- *
- * With one global factor the arithmetic came out backwards: arterial lost 16 uL/s
- * against venous at 27, because arterial droplets are drawn smaller and volume
- * goes as the cube of diameter. That inverts the single most important fact about
- * bleeding — arterial haemorrhage is the emergency, which is WHY it is taught
- * first — so the drawn droplets are not the accounting unit. Per-register factors
- * are, and they are calibrated against measured droplet throughput.
- *
- * The ceiling is real physiology: BLOOD CANNOT LEAVE FASTER THAN THE HEART
- * DELIVERS IT. A frog's cardiac output is on the order of 5-10 mL/min, i.e.
- * 80-170 uL/s, and no single wound may exceed it. Calibrated worst case, wound
- * held open at severity 1 and intensity 1:
- *
- *   arterial  ~70 uL/s  -> exsanguinated in ~25 s   (a large fraction of output)
- *   venous    ~28 uL/s  -> ~60 s
- *   capillary  ~3 uL/s  -> self-limiting; a single nick costs ~15 uL, under 1 %
- *
- * An earlier draft used a flat 60, which emptied a frog in ten seconds at five to
- * nine times its cardiac output. It looked dramatic and it was nonsense.
- */
+// Legacy demonstration normalization. Model units are not calibrated cm and
+// rendered drops do not measure blood loss. Do not use this value for a species
+// claim, learner assessment, or physiology coupling without a reviewed model.
 const BLD_TOTAL_ML = 1.7;
 
 /*
@@ -167,6 +70,24 @@ const BLD_TOTAL_ML = 1.7;
 /* Per-register physiology. These numbers are the whole personality of each kind of
  * bleeding, so they live in one table where they can be read side by side. */
 const BLD_REGISTER = {
+  // Presentation profiles, not measured flow rates. Fixed classroom specimens
+  // leave residue; fresh excised tissue can seep but has no pumping circulation.
+  residue: {
+    fresh: 0x69463b, dry: 0x43352e, rate: 0, ttl: 0, speed: [0, 0],
+    size: [0.02, 0.035], jet: 0, slopeGate: 1, spread: 0.025,
+    stainR: [0.025, 0.05], life: [1, 2], pulse: false, sample: 0,
+  },
+  seep: {
+    fresh: 0x661b20, dry: 0x321a16, rate: 4, ttl: 4, speed: [0.03, 0.09],
+    size: [0.025, 0.046], jet: 0, slopeGate: 0.3, spread: 0.035,
+    stainR: [0.035, 0.065], life: [2, 4], pulse: false, sample: 0,
+  },
+  hemolymph: {
+    // A pale tint makes an otherwise almost clear fluid visible on the model.
+    fresh: 0xcac5a5, dry: 0x8b8264, rate: 2, ttl: 3, speed: [0.02, 0.07],
+    size: [0.02, 0.038], jet: 0, slopeGate: 0.35, spread: 0.025,
+    stainR: [0.025, 0.05], life: [2, 3], pulse: false, sample: 0,
+  },
   capillary: {
     fresh: 0x7c1216,      // dark: capillary blood is a mix, and it is thin and slow
     rate: 8,              // droplets/s at severity 1, intensity 1
@@ -208,6 +129,15 @@ const BLD_REGISTER = {
     sample: 22,           // a jet ATOMISES: many small drawn droplets, huge flow
   },
 };
+
+function BLD_contextKind(specimen, preparation, requested) {
+  if (specimen === 'cockroach') return 'hemolymph';
+  if (preparation === 'preserved') return 'residue';
+  if (preparation === 'circulation' && ['frog', 'heart'].includes(specimen)) {
+    return ['capillary', 'venous', 'arterial'].includes(requested) ? requested : 'capillary';
+  }
+  return 'seep';
+}
 
 // Where every stain ends up: oxidised, denatured, brown-black clot. Real dried
 // blood is emphatically NOT red, and getting this wrong is the single most common
@@ -372,6 +302,7 @@ export function createBlood(THREE, scene) {
 
   let enabled = true;
   let intensity = 0.55;         // moderate by default; see the header
+  let specimenId = 'frog', preparation = 'preserved';
   let phaseSrc = null;          // physio.js injects a cardiac phase getter here
   let clock = 0;
   let frame = 0;
@@ -758,7 +689,9 @@ export function createBlood(THREE, scene) {
      * anything, and a droplet swabbed up has still been lost. Volume of a sphere
      * of diameter d, times the sampling factor that turns the 400 drawn droplets
      * back into the flow they represent. */
-    lostML += (Math.PI / 6) * d.size * d.size * d.size * (reg.sample || 5);
+    if (preparation === 'circulation') {
+      lostML += (Math.PI / 6) * d.size * d.size * d.size * (reg.sample ?? 5);
+    }
     dropsLive++;
     return d;
   }
@@ -1008,13 +941,14 @@ export function createBlood(THREE, scene) {
     // above it can be a millimetre apart and must never merge into one blob.
     for (let i = 0; i < stains.length; i++) {
       const s = stains[i];
-      if (!s.alive || s.dying) continue;
+      if (!s.alive || s.dying || s.partId !== (partId || null) || s.kind !== kind) continue;
       if (s.nrm.dot(nrm) < 0.55) continue;
       const d2 = s.pos.distanceToSquared(pos);
       const reach = Math.min((s.r + r) * BLD_MERGE, BLD_MERGE_MAX);
       if (d2 < reach * reach) {
         // Area-additive growth.
-        s.rTarget = Math.min(BLD_STAIN_R_MAX, Math.sqrt(s.r * s.r + r * r * 0.8));
+        s.rTarget = Math.min(preparation === 'preserved' ? 0.09 : BLD_STAIN_R_MAX,
+          Math.sqrt(s.r * s.r + r * r * 0.8));
         // Fresh blood arriving on an old stain partially rejuvenates it — the
         // centre of a re-bleeding pool really is redder than its rim.
         s.born += (clock - s.born) * 0.4;
@@ -1068,6 +1002,7 @@ export function createBlood(THREE, scene) {
     const reg = BLD_REGISTER[s.kind] || BLD_REGISTER.venous;
     const age = clock - s.born;
     let hex = reg.fresh;
+    if (reg.dry) return BLD_mix(hex, reg.dry, BLD_smooth(age / BLD_CLOT_SECONDS));
     if (!reg.pulse) {
       // Dark venous/capillary blood oxygenates on contact with air and brightens
       // for a few seconds. Arterial blood is already saturated and skips this.
@@ -1381,7 +1316,7 @@ export function createBlood(THREE, scene) {
   /* ---- public: bleed ------------------------------------------------------ */
   function bleed(o) {
     if (!enabled || intensity <= 0 || !o || !o.point) return null;
-    const kind = BLD_REGISTER[o.kind] ? o.kind : 'venous';
+    const kind = BLD_contextKind(specimenId, preparation, o.kind);
     const reg = BLD_REGISTER[kind];
     const severity = BLD_clamp(BLD_num(o.severity == null ? 0.5 : o.severity), 0, 1);
 
@@ -1389,6 +1324,13 @@ export function createBlood(THREE, scene) {
     // record write below works off a known-good unit normal and a finite point.
     vecTo(o.point, _pt, _ZERO);
     normalTo(o.normal, _nr);
+
+    // Fixed tissue never becomes a continuously replenished fluid source. Keep
+    // the mark on its host so it follows a reflected flap, and let gauze lift it.
+    if (preparation === 'preserved') {
+      return stain(_pt, _nr, reg.stainR[0] * (0.7 + severity) * Math.sqrt(intensity),
+        0.5, o.partId, kind);
+    }
 
     // Reuse the source already sitting on this wound rather than stacking two on
     // top of each other, or a scalpel dragged along a cut edge would multiply the
@@ -1526,6 +1468,27 @@ export function createBlood(THREE, scene) {
       for (let i = 0; i < sources.length; i++) sources[i].alive = false;
       restoreAll();                   // give every borrowed property straight back
     } else wetAt = -1;
+  }
+
+  function setContext(specimen, mode) {
+    const nextSpecimen = ['frog', 'heart', 'fish', 'earthworm', 'cockroach'].includes(specimen) ? specimen : 'frog';
+    let nextMode = ['preserved', 'fresh', 'circulation'].includes(mode) ? mode : 'preserved';
+    if (nextMode === 'circulation' && !['frog', 'heart'].includes(nextSpecimen)) nextMode = 'fresh';
+    if (specimenId !== nextSpecimen || preparation !== nextMode) clear();
+    specimenId = nextSpecimen;
+    preparation = nextMode;
+    return { specimenId, preparation, fluid: BLD_contextKind(specimenId, preparation, 'capillary') };
+  }
+
+  function clearPart(partId) {
+    for (const source of sources) if (source.partId === partId) source.alive = false;
+    for (const mark of stains) if (mark.alive && mark.partId === partId) releaseStain(mark);
+    for (const drop of drops) if (drop.alive && drop.partId === partId) {
+      drop.held = false; killDroplet(drop, false);
+    }
+    lastCut.delete(partId);
+    wetAt = -1;
+    applyWetness();
   }
 
   function setIntensity(k) {
@@ -1675,12 +1638,12 @@ export function createBlood(THREE, scene) {
 
   return {
     bleed, stain, swab, wetness,
-    setEnabled, setIntensity, setPhaseSource, setVolumeSink, setSpecimen,
-    update, clear, dispose,
+    setEnabled, setIntensity, setPhaseSource, setVolumeSink, setSpecimen, setContext,
+    update, clear, clearPart, dispose,
     get enabled() { return enabled; },
     get intensity() { return intensity; },
-    // Millilitres lost, and the fraction remaining. Exposed so the shell can put
-    // an estimated blood loss on screen, which is a real number a surgeon tracks.
+    get context() { return { specimenId, preparation, fluid: BLD_contextKind(specimenId, preparation, 'capillary') }; },
+    // Legacy demo ledger only; never present these as measured blood loss.
     get bloodLostML() { return lostML; },
     get bloodFraction() { return BLD_clamp(1 - lostML / BLD_TOTAL_ML, 0, 1); },
     // For scripted verification and for anyone poking at it from the console.
@@ -1690,7 +1653,7 @@ export function createBlood(THREE, scene) {
       let nb = 0;
       for (let i = 0; i < sources.length; i++) if (sources[i].alive) nb++;
       return { droplets: dropsLive, stains: ns, sources: nb, phase: phase(),
-        targets: targets.length, lostML, faulted, disposed };
+        targets: targets.length, lostML, faulted, disposed, specimenId, preparation };
     },
   };
 }

@@ -100,7 +100,19 @@ class DissectionUnchanged(unittest.TestCase):
         # Derived once from BASE:lab.html after replacing only the approved slot
         # bodies with the sentinel below. A separate shell hash lets a shallow
         # CI checkout verify preservation without fetching old Git history.
-        expected = (ROOT / "tests/fixtures/dissection-shell.sha256").read_text().strip()
+        # September 30 explicitly reopens blood behavior. Keep the original
+        # fingerprint untouched; the expanded reference is derived from BASE,
+        # never from the edited page. It removes exactly the blood source slot.
+        scope = json.loads((ROOT / "tests/fixtures/dissection-blood-scope.json").read_text())
+        self.assertEqual(scope["base"], BASE)
+        self.assertEqual(scope["additionalSlots"], ["blood.js"])
+        self.assertEqual(scope["previousShellSha256"],
+                         (ROOT / "tests/fixtures/dissection-shell.sha256").read_text().strip())
+        specimen_scope = json.loads((ROOT / "tests/fixtures/dissection-specimen-scope.json").read_text())
+        self.assertEqual(specimen_scope["base"], BASE)
+        self.assertEqual(specimen_scope["additionalSlots"], ["strata.js"])
+        self.assertEqual(specimen_scope["previousShellSha256"], scope["expandedShellSha256"])
+        expected = specimen_scope["expandedShellSha256"]
         after = (ROOT / "lab.html").read_text(encoding="utf-8")
         for name in BUILDER.MODULES:
             pattern = BUILDER.slot_pattern(name)

@@ -22,6 +22,7 @@ User-supplied reference images were not substituted for the interactive models.
 | --- | --- | --- |
 | Frog | Oesophagus and duodenum now meet the stomach's actual deformed surface instead of independent estimated endpoints. | The procedural stomach and gut are still simplified, closed meshes; touching surfaces are not a simulated continuous lumen. |
 | Frog | Removed a duplicated longitudinal taper that turned the already rounded sphere into a pointed leaf silhouette. | This is bounded geometric shaping, not reconstruction from measured frog morphology. Organ positions and root orientation are preserved. |
+| Frog (September 30) | Replaced the self-crossing planar ileum with narrower depth-separated folds, joined its end to the proximal rectum, and seated the rectum inside the cloaca. The mesentery now follows the bowel border instead of floating below it as a rectangle. | The proximal rectal centerline was moved posteriorly to accommodate the folds; stomach, spleen, kidney and cloacal anchors and all part IDs remain unchanged. Loop count, radii and membrane folds are illustrative. Surface continuity is not a continuous, functioning lumen or a biomechanical mesentery. |
 | Mammalian heart | Aortic arch now curves anatomically left and posteriorly; its branches remain attached. | The three illustrative arch branches follow a human pattern. This is not a validated sheep heart or a universal mammalian branch pattern. |
 | Fish | The posterior swim-bladder chamber now lies posteriorly along the body, with a longitudinal connecting neck, rather than dropping ventrally into the gut. | The existing two-chamber design is retained; it is not a claim that all teleost species have this bladder shape. |
 | Cockroach | Crop now follows the foregut's longitudinal axis, between oesophagus and gizzard, instead of standing across the dorsoventral axis. | It remains a simplified storage sac. No reproductive structures or additional organs were invented. |
@@ -53,6 +54,14 @@ those structures and validate the organ-to-duct connections together.
 Reference: [NCERT, Structural Organisation in Animals, pp.81–84, figures 7.2–7.4](https://ncert.nic.in/textbook/pdf/kebo107.pdf).
 This supports the alimentary sequence, kidney/cloaca connections and organ
 relationships, not the model's arbitrary dimensions or tissue mechanics.
+
+The September 30 gut correction is checked in
+`tests/frog-gut-continuity.test.cjs`: distinct coil clearances, local bend radii,
+splenic clearance, a shared ileum–rectum endpoint, actual cloacal mesh entry and
+membrane-to-bowel attachment. Those checks concern the resting procedural
+geometry. They do not validate whole-abdomen organ packing, deformation during
+forceps manipulation, vascular completeness or species-specific morphology.
+The existing missing pancreas/duct and urogenital structures remain review items.
 
 ### Mammalian heart
 

@@ -1,0 +1,33 @@
+{
+  "sourceSHA256": "d03d6b33b1d64da045632e62fdb5202860ccb503f03ecc77532717cc4e924c26",
+  "baseline": {
+    "glbSHA256": "64ccc2056475153d70b5f68a2b3b94ff075f0491c63c76a65b7157e7f7c349bc",
+    "binaryBytes": 6137208,
+    "binarySHA256": "9322990cab9dfaf946156559bbb7f2615a7e3f3f80429f98ab160a2a3c36027e",
+    "bufferViews": 21
+  },
+  "outputSHA256": "3103b8a55b5db6cf75653fe542522579df1d60b2c59701c47a23a06f777786f0",
+  "outputBytes": 12127908,
+  "alignment": {
+    "translation": [
+      -0.13022669293485217,
+      0.43969306635546684,
+      -1.7653472818306644
+    ],
+    "p95Distance": 0.005755965132266283,
+    "maxDistance": 0.013219492509961128
+  },
+  "normalMap": {
+    "size": 2048,
+    "scale": 0.28,
+    "origin": "Tangent normal bake from locked CC0 high-poly scan geometry"
+  },
+  "roughness": {
+    "range": [
+      0.48,
+      0.6
+    ],
+    "origin": "Authored restrained response to baked geometric relief; not measured roughness"
+  },
+  "preservation": "All original BIN bytes retained, including fitted positions, indices, normals, UVs and original colour PNG. No mesh re-export, fitting, repartitioning or original-asset writes."
+}
