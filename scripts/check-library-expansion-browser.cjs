@@ -105,6 +105,24 @@ const ids = 'water carbohydrates lipids proteins gene-regulation sex-linked-inhe
     await world.locator('.tp-next').waitFor();
     assert.equal(await world.locator('[data-depth-task="transfer"]').count(), 1);
     report.checks.push('A new topic keeps its evidence draft across Learn/Reason and has three graded checks plus transfer practice in Solve.');
+    for (const id of ids) {
+      if (packaged) await page.evaluate(id => { location.hash = 'solve/learn/' + id + '/advanced'; }, id);
+      else await world.evaluate(id => { location.hash = 'learn/' + id + '/advanced'; }, id);
+      await world.locator('[data-depth-topic="' + id + '"]').waitFor();
+      const questions = await world.evaluate(id => BioPractice.questionsFor(BIO_LIBRARY.topics.find(t => t.id === id)), id);
+      for (let index = 0; index < questions.length; index++) {
+        await world.locator('.tp-dot').nth(index).click();
+        if (await world.locator('.tp-submit').count()) {
+          await world.locator('.tp-options input').first().check();
+          await world.locator('.tp-submit').click();
+        }
+        const explanation = world.locator('.tp-feedback .bioq-exam-answer');
+        await explanation.waitFor();
+        assert.equal(await explanation.locator('.be-options dl > div').count(), questions[index].options.length, id + ': every option has its own rationale');
+        assert.ok((await explanation.locator('.be-direct').innerText()).includes(questions[index].options[questions[index].answer]), id + ': feedback matches the actual answer');
+      }
+    }
+    report.checks.push('All 108 new questions display graded feedback and a distinct authored rationale for each option inside the real Solve flow.');
     for (const width of [320, 390, 768, 1440]) {
       await page.setViewportSize({ width, height: 950 });
       for (const route of ['library', 'topic/nephron/advanced']) {

@@ -89,7 +89,7 @@ transfer exercise and added specific sources for eukaryotic regulation, protein
 disorder and trained innate responses. These agent reviews do not replace a
 qualified biology educator's review.
 
-## Local release evidence (October 6, 2026)
+## Initial local evidence (October 6, 2026, before main integration)
 
 - All 13 fast-check groups passed, including the full unit suite, source-drift
   contracts and original-dissection boundaries.
@@ -103,3 +103,19 @@ qualified biology educator's review.
   `a413aa36f81fa43bfb2beffd63912d88f9734f4dbb9b34d583b581000c90734b`.
   This local package fingerprint is not a claim of production byte parity;
   deployment verification must use the actual CI-produced artifact.
+
+## Integration with the concurrent exam-answer release
+
+Main advanced to `80c8ac6` while this branch's first CI run was passing. The
+generated Reason/Solve style conflicts are resolved by the narrow builder, with
+both the new reading styles and the incoming exam-answer styles retained. The
+incoming responsive-startup implementation and all existing answer formatting
+are inherited unchanged, not reverted.
+
+`exam-extended-core.js` and `exam-extended-systems.js` supply exact-question,
+exact-option rationales for all 108 new questions. They extend the incoming
+maps after the original rationale modules load; grading and saved-answer
+formats remain untouched. Tests must now cover all 109 concepts and 327 topic
+questions, including option rotation, rather than silently checking only the
+original 73. Final integration checks and deployment must run on the merged
+tree; the initial artifact hash above is not the integrated release hash.

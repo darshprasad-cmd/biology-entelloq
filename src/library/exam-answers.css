@@ -1,0 +1,43 @@
+/* Readable worked answers share the surrounding theme; no motion or network assets. */
+.bioq-exam-answer{margin-top:16px;text-align:left;font-size:15px;line-height:1.75;overflow-wrap:anywhere;color:var(--ink)}
+.bioq-exam-answer p{max-width:78ch;margin:0 0 14px}
+.bioq-exam-answer .be-direct{padding:16px 18px;background:color-mix(in srgb,var(--lc,var(--accent,#34d399)) 9%,transparent);border:1px solid var(--line);border-radius:12px;font-size:17px;line-height:1.6}
+.be-direct>strong,.be-precision>strong{display:block;margin-bottom:6px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted,var(--ink))}
+.bioq-exam-answer h3{font-size:15px;line-height:1.5;margin:24px 0 12px;color:var(--ink)}
+.be-options dl,.be-principles{margin:0;padding:0}
+.be-options dl>div,.be-principles>div{padding:14px 0;border-top:1px solid var(--line)}
+.be-options dt,.be-principles dt{font-weight:650;line-height:1.6;color:var(--ink)}
+.be-options dt>span{display:inline-grid;place-items:center;width:24px;height:24px;margin-right:8px;border:1px solid var(--line);border-radius:6px;font-size:12px}
+.be-options dt>small,.be-principles dt>small{display:block;font-size:11px;font-weight:500;color:var(--muted);margin:4px 0}
+.be-options dd,.be-principles dd{margin:6px 0 0;color:var(--ink);line-height:1.75;max-width:78ch}
+.be-option-correct{border-left:3px solid var(--lc,var(--accent,#34d399));padding-left:12px!important}
+.bioq-exam-answer .be-precision{padding:14px 16px;border-left:3px solid var(--line);background:var(--surface,transparent);margin:20px 0 4px}
+.be-diagram{margin:22px 0;padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--surface,transparent);min-width:0}
+.be-diagram>figcaption{font-size:13px;line-height:1.6;font-weight:600;margin-bottom:14px}
+.be-flow{display:grid;grid-template-columns:1fr;gap:26px;list-style:none;margin:0;padding:0}
+.be-flow li{position:relative;padding:14px;border:1px solid var(--line);border-radius:10px;background:var(--bg,transparent);min-width:0}
+.be-flow-index{display:block;font-size:11px;color:var(--muted);margin-bottom:6px}
+.be-flow strong,.be-flow li>span:not(.be-flow-index){display:block;line-height:1.6}
+.be-flow strong{font-size:13px}.be-flow li>span:not(.be-flow-index){font-size:13px;margin-top:6px}
+.be-flow-arrow{position:absolute;left:calc(50% - 12px);bottom:-27px;display:block;width:24px;text-align:center;font-size:21px;line-height:26px;color:var(--muted)}
+.bioq-exam-answer .be-diagram-note{margin:14px 0 0;font-size:13px;color:var(--muted)}
+.be-table-scroll{width:100%;overflow-x:auto;border-radius:8px;overscroll-behavior-inline:contain}
+.be-table-scroll:focus-visible{outline:2px solid var(--accent,#34d399);outline-offset:3px}
+.be-table-scroll table{width:100%;border-collapse:collapse;font-size:13px;line-height:1.65;text-align:left;color:var(--ink)}
+.be-table-scroll caption{font-size:13px;text-align:left;font-weight:650;margin-bottom:12px}
+.be-table-scroll th,.be-table-scroll td{padding:10px 12px;border:1px solid var(--line);vertical-align:top;min-width:90px}
+.be-table-scroll th{font-weight:650;background:var(--surface,transparent)}
+.be-case-solutions>section{padding:8px 0 24px;border-bottom:1px solid var(--line)}
+.be-case-solutions>section>h3{font-size:16px;line-height:1.6;margin-top:16px}
+.be-session-answers{margin:28px 0 36px;text-align:left}
+.be-session-answers>p{font-size:14px;line-height:1.7;color:var(--muted);margin:8px 0 18px}
+.be-session-question{border:1px solid var(--line);border-radius:12px;margin:10px 0;min-width:0}
+.be-session-question>summary{display:flex;justify-content:space-between;gap:16px;cursor:pointer;padding:16px;font-size:14px;line-height:1.6;min-height:48px}
+.be-session-question>summary>span:first-child:before{content:'＋';margin-right:10px}
+.be-session-question[open]>summary>span:first-child:before{content:'−'}
+.be-session-question>summary>span:last-child{white-space:nowrap;color:var(--muted)}
+.be-session-question>summary:focus-visible{outline:2px solid var(--accent,#34d399);outline-offset:3px;border-radius:12px}
+.be-session-body{padding:4px 16px 18px;overflow-wrap:anywhere}
+.be-session-body>h3{font-size:16px;line-height:1.65;margin:8px 0 12px}
+.be-session-body>p{font-size:14px;line-height:1.75;margin:12px 0}
+@media(max-width:620px){.bioq-exam-answer{font-size:14px}.bioq-exam-answer .be-direct{font-size:15px;padding:13px}.be-diagram{padding:12px}.be-table-scroll th,.be-table-scroll td{padding:8px}.be-options dt>small{margin-left:0}}

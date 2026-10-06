@@ -66,8 +66,8 @@ def render(page):
             content = (LIB / 'labs.js' if name == '_labs.js' else ROOT / 'src' / name).read_text(encoding='utf-8').rstrip()
             text = pattern.sub(lambda m: m[1] + content + '\n\n', text)
     elif page in ('reason', 'solve'):
-        styles += source('practice-bridge.css') + source('depth-study.css')
-        scripts += source('topics.js') + source('learning-cards.js') + source('depth-foundations.js') + source('depth-processes.js') + extensions() + source('depth-study.js') + source('visuals.js') + source('practice-bridge.js')
+        styles += source('practice-bridge.css') + source('depth-study.css') + source('exam-answers.css')
+        scripts += source('topics.js') + source('learning-cards.js') + source('depth-foundations.js') + source('depth-processes.js') + extensions() + source('depth-study.js') + source('visuals.js') + source('exam-solve-data.js') + source('exam-reason-data.js') + source('exam-topic-rationales.js') + source('exam-checkpoint-foundations.js') + source('exam-checkpoint-processes.js') + source('exam-extended-core.js') + source('exam-extended-systems.js') + source('exam-answers.js') + source('practice-bridge.js')
     else:
         raise ValueError('Unsupported library build target')
     text = slot(text, page + '-style', '<style>\n' + styles + '</style>\n', '</head>')
