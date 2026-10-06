@@ -1,0 +1,1613 @@
+{
+  "scope": "full application",
+  "artifact": "dist\\index.html",
+  "bytes": 26712656,
+  "sha256": "a413aa36f81fa43bfb2beffd63912d88f9734f4dbb9b34d583b581000c90734b",
+  "timestamp": "2026-10-06T15:20:38.670Z",
+  "complete": true,
+  "runs": [
+    {
+      "mode": "http",
+      "checks": [
+        "Landing and Start Exploring load the application from the one supplied HTML file.",
+        "All eight embedded sections open real content with no horizontal overflow on desktop.",
+        "Browser Back between different section documents restores both the outer route and active navigation.",
+        "Cell Structure Visual deep link opens correctly; mode changes update the outer URL, browser Back restores Visual, and reload preserves it.",
+        "Theme changes reach the embedded section and persist after reload.",
+        "A real experimental notebook preserves its hypothesis, two measured trials and conclusion after reload.",
+        "Prepared frog and cockroach assets load offline with finite geometry; child dialogs own the Exit corner; lab exit returns to Home and survives reload.",
+        "All 13 real Universe stages initialize offline, Cell inspection opens, and the Universe close control restores Home.",
+        "A direct Universe DNA deep link survives reload, warm navigation selects Atom, its Biology Lab link opens the real lab, and switching to Learn closes the immersive launcher.",
+        "Landing, Home, every section and the saved notebook fit a 390-pixel mobile viewport."
+      ],
+      "layouts": [
+        {
+          "label": "landing desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "landing desktop",
+          "name": "landing",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "learn desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "learn desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "learn desktop",
+          "name": "learn",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "lessons desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "lessons desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "lessons desktop",
+          "name": "lessons",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "reason desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "reason desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "reason desktop",
+          "name": "reason",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "labs desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "labs desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "labs desktop",
+          "name": "labs",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "solve desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "solve desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "solve desktop",
+          "name": "solve",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "explore desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "explore desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "explore desktop",
+          "name": "explore",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "me desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "me desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "me desktop",
+          "name": "me",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "about desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "about desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "about desktop",
+          "name": "about",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "landing mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "landing mobile",
+          "name": "landing",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "home mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "home mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "learn mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "learn mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "learn mobile",
+          "name": "learn",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "lessons mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "lessons mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "lessons mobile",
+          "name": "lessons",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "reason mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "reason mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "reason mobile",
+          "name": "reason",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "labs mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "labs mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "labs mobile",
+          "name": "labs",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "solve mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "solve mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "solve mobile",
+          "name": "solve",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "explore mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "explore mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "explore mobile",
+          "name": "explore",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "me mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "me mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "me mobile",
+          "name": "me",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "about mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "about mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "about mobile",
+          "name": "about",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "notebook mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "notebook mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "notebook mobile",
+          "name": "notebook",
+          "width": 390,
+          "scroll": 390
+        }
+      ],
+      "errors": [],
+      "requests": [
+        {
+          "url": "http://bioentelloq.single-file.test/index.html",
+          "action": "single HTML fulfilled"
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@300;350;400;450;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "http://bioentelloq.single-file.test/index.html",
+          "action": "single HTML fulfilled"
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "http://bioentelloq.single-file.test/index.html",
+          "action": "single HTML fulfilled"
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "http://bioentelloq.single-file.test/index.html",
+          "action": "single HTML fulfilled"
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "http://bioentelloq.single-file.test/index.html",
+          "action": "single HTML fulfilled"
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "http://bioentelloq.single-file.test/index.html",
+          "action": "single HTML fulfilled"
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "http://bioentelloq.single-file.test/index.html",
+          "action": "single HTML fulfilled"
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@300;350;400;450;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        }
+      ],
+      "forbiddenDependencies": [],
+      "cameraRequests": 0,
+      "complete": true,
+      "worldProgress": [
+        {
+          "step": "Open Home and enter the Dissection Lab",
+          "timestamp": "2026-10-06T15:20:51.997Z"
+        },
+        {
+          "step": "Wait for the actual lab runtime",
+          "timestamp": "2026-10-06T15:20:52.768Z"
+        },
+        {
+          "step": "Load and verify prepared frog",
+          "timestamp": "2026-10-06T15:20:53.630Z"
+        },
+        {
+          "step": "Capture prepared frog",
+          "timestamp": "2026-10-06T15:20:53.776Z"
+        },
+        {
+          "step": "Load and verify prepared cockroach",
+          "timestamp": "2026-10-06T15:20:55.495Z"
+        },
+        {
+          "step": "Capture prepared cockroach",
+          "timestamp": "2026-10-06T15:20:55.867Z"
+        },
+        {
+          "step": "Open the controls dialog through its button",
+          "timestamp": "2026-10-06T15:20:58.684Z"
+        },
+        {
+          "step": "Capture dialog ownership of the Exit corner",
+          "timestamp": "2026-10-06T15:20:59.509Z"
+        },
+        {
+          "step": "Close the controls dialog through its button",
+          "timestamp": "2026-10-06T15:21:02.338Z"
+        },
+        {
+          "step": "Exit the lab through the shell button",
+          "timestamp": "2026-10-06T15:21:03.274Z"
+        },
+        {
+          "step": "Reload after leaving the lab",
+          "timestamp": "2026-10-06T15:21:03.612Z"
+        },
+        {
+          "step": "Open Biology Universe through its navigation button",
+          "timestamp": "2026-10-06T15:21:08.413Z"
+        },
+        {
+          "step": "Wait for all 13 Universe stages",
+          "timestamp": "2026-10-06T15:21:09.736Z"
+        },
+        {
+          "step": "Inspect the Cell stage",
+          "timestamp": "2026-10-06T15:21:09.753Z"
+        },
+        {
+          "step": "Close Universe through the shell button",
+          "timestamp": "2026-10-06T15:21:12.382Z"
+        },
+        {
+          "step": "Open and reload the Universe DNA deep link",
+          "timestamp": "2026-10-06T15:21:12.700Z"
+        },
+        {
+          "step": "Navigate the warm Universe from DNA to Atom",
+          "timestamp": "2026-10-06T15:21:16.804Z"
+        },
+        {
+          "step": "Follow the Universe brand link into the lab",
+          "timestamp": "2026-10-06T15:21:16.811Z"
+        },
+        {
+          "step": "Switch from the active lab to Learn",
+          "timestamp": "2026-10-06T15:21:19.277Z"
+        }
+      ],
+      "specimens": [
+        {
+          "id": "frog",
+          "prepared": true,
+          "parts": 29,
+          "meshes": 100,
+          "triangles": 111636,
+          "finite": true
+        },
+        {
+          "id": "cockroach",
+          "prepared": true,
+          "parts": 27,
+          "meshes": 48,
+          "triangles": 78480,
+          "finite": true
+        }
+      ],
+      "universe": {
+        "count": 13,
+        "stages": [
+          "universe",
+          "earth",
+          "biome",
+          "ecosystem",
+          "organism",
+          "organ",
+          "tissue",
+          "cell",
+          "organelle",
+          "protein",
+          "dna",
+          "nucleotide",
+          "atom"
+        ]
+      }
+    },
+    {
+      "mode": "file",
+      "checks": [
+        "Landing and Start Exploring load the application from the one supplied HTML file.",
+        "All eight embedded sections open real content with no horizontal overflow on desktop.",
+        "Browser Back between different section documents restores both the outer route and active navigation.",
+        "Cell Structure Visual deep link opens correctly; mode changes update the outer URL, browser Back restores Visual, and reload preserves it.",
+        "Theme changes reach the embedded section and persist after reload.",
+        "A real experimental notebook preserves its hypothesis, two measured trials and conclusion after reload.",
+        "Prepared frog and cockroach assets load offline with finite geometry; child dialogs own the Exit corner; lab exit returns to Home and survives reload.",
+        "All 13 real Universe stages initialize offline, Cell inspection opens, and the Universe close control restores Home.",
+        "A direct Universe DNA deep link survives reload, warm navigation selects Atom, its Biology Lab link opens the real lab, and switching to Learn closes the immersive launcher.",
+        "Landing, Home, every section and the saved notebook fit a 390-pixel mobile viewport."
+      ],
+      "layouts": [
+        {
+          "label": "landing desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "landing desktop",
+          "name": "landing",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "learn desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "learn desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "learn desktop",
+          "name": "learn",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "lessons desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "lessons desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "lessons desktop",
+          "name": "lessons",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "reason desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "reason desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "reason desktop",
+          "name": "reason",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "labs desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "labs desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "labs desktop",
+          "name": "labs",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "solve desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "solve desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "solve desktop",
+          "name": "solve",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "explore desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "explore desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "explore desktop",
+          "name": "explore",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "me desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "me desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "me desktop",
+          "name": "me",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "about desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "about desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "about desktop",
+          "name": "about",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "landing mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "landing mobile",
+          "name": "landing",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "home mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "home mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "learn mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "learn mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "learn mobile",
+          "name": "learn",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "lessons mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "lessons mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "lessons mobile",
+          "name": "lessons",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "reason mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "reason mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "reason mobile",
+          "name": "reason",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "labs mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "labs mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "labs mobile",
+          "name": "labs",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "solve mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "solve mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "solve mobile",
+          "name": "solve",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "explore mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "explore mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "explore mobile",
+          "name": "explore",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "me mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "me mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "me mobile",
+          "name": "me",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "about mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "about mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "about mobile",
+          "name": "about",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "notebook mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "notebook mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "notebook mobile",
+          "name": "notebook",
+          "width": 390,
+          "scroll": 390
+        }
+      ],
+      "errors": [],
+      "requests": [
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@300;350;400;450;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@300;350;400;450;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        }
+      ],
+      "forbiddenDependencies": [],
+      "cameraRequests": 0,
+      "complete": true,
+      "worldProgress": [
+        {
+          "step": "Open Home and enter the Dissection Lab",
+          "timestamp": "2026-10-06T15:21:39.444Z"
+        },
+        {
+          "step": "Wait for the actual lab runtime",
+          "timestamp": "2026-10-06T15:21:40.268Z"
+        },
+        {
+          "step": "Load and verify prepared frog",
+          "timestamp": "2026-10-06T15:21:41.153Z"
+        },
+        {
+          "step": "Capture prepared frog",
+          "timestamp": "2026-10-06T15:21:41.305Z"
+        },
+        {
+          "step": "Load and verify prepared cockroach",
+          "timestamp": "2026-10-06T15:21:42.949Z"
+        },
+        {
+          "step": "Capture prepared cockroach",
+          "timestamp": "2026-10-06T15:21:43.351Z"
+        },
+        {
+          "step": "Open the controls dialog through its button",
+          "timestamp": "2026-10-06T15:21:45.631Z"
+        },
+        {
+          "step": "Capture dialog ownership of the Exit corner",
+          "timestamp": "2026-10-06T15:21:46.351Z"
+        },
+        {
+          "step": "Close the controls dialog through its button",
+          "timestamp": "2026-10-06T15:21:48.974Z"
+        },
+        {
+          "step": "Exit the lab through the shell button",
+          "timestamp": "2026-10-06T15:21:49.913Z"
+        },
+        {
+          "step": "Reload after leaving the lab",
+          "timestamp": "2026-10-06T15:21:50.243Z"
+        },
+        {
+          "step": "Open Biology Universe through its navigation button",
+          "timestamp": "2026-10-06T15:21:53.076Z"
+        },
+        {
+          "step": "Wait for all 13 Universe stages",
+          "timestamp": "2026-10-06T15:21:54.273Z"
+        },
+        {
+          "step": "Inspect the Cell stage",
+          "timestamp": "2026-10-06T15:21:54.290Z"
+        },
+        {
+          "step": "Close Universe through the shell button",
+          "timestamp": "2026-10-06T15:21:57.086Z"
+        },
+        {
+          "step": "Open and reload the Universe DNA deep link",
+          "timestamp": "2026-10-06T15:21:57.309Z"
+        },
+        {
+          "step": "Navigate the warm Universe from DNA to Atom",
+          "timestamp": "2026-10-06T15:22:00.772Z"
+        },
+        {
+          "step": "Follow the Universe brand link into the lab",
+          "timestamp": "2026-10-06T15:22:00.780Z"
+        },
+        {
+          "step": "Switch from the active lab to Learn",
+          "timestamp": "2026-10-06T15:22:03.488Z"
+        }
+      ],
+      "specimens": [
+        {
+          "id": "frog",
+          "prepared": true,
+          "parts": 29,
+          "meshes": 100,
+          "triangles": 111636,
+          "finite": true
+        },
+        {
+          "id": "cockroach",
+          "prepared": true,
+          "parts": 27,
+          "meshes": 48,
+          "triangles": 78480,
+          "finite": true
+        }
+      ],
+      "universe": {
+        "count": 13,
+        "stages": [
+          "universe",
+          "earth",
+          "biome",
+          "ecosystem",
+          "organism",
+          "organ",
+          "tissue",
+          "cell",
+          "organelle",
+          "protein",
+          "dna",
+          "nucleotide",
+          "atom"
+        ]
+      }
+    }
+  ],
+  "rendering": {
+    "backend": "SwiftShader software WebGL",
+    "deviceScaleFactor": 0.5,
+    "desktopCSSViewport": "1440x1000",
+    "mobileCSSViewport": "390x844"
+  },
+  "limitations": "Isolated Chromium with SwiftShader software WebGL at half device scale (one quarter of physical render pixels); CSS layout viewports remain unchanged. No live AI, Google sign-in, billing, real camera or touch hardware was exercised."
+}

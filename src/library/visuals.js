@@ -192,8 +192,31 @@
     return b;
   }
   function process(steps,step) {
-    const active=steps[step]||{};
-    return circle(300,137,79,'var(--cy)',.07)+`<circle cx="300" cy="137" r="79" fill="none" stroke="var(--cy)" stroke-opacity=".45"/>`+T(300,133,String(step+1).padStart(2,'0'),39,'var(--cy)')+T(300,163,'Explore the sequence',11,'var(--dim)')+T(300,250,active.title||'Follow the mechanism',16)+pathway(steps.map((_,i)=>String(i+1)),step,287);
+    const stages=steps.length?steps:[{title:'Follow the mechanism'}];
+    const current=Math.min(Math.max(Number.isFinite(step)?Math.floor(step):0,0),stages.length-1);
+    const gap=244/stages.length, height=Math.min(65,gap-17), size=stages.length>4?17:22;
+    // Authored titles, not invented anatomical shapes. Word wrapping keeps the
+    // complete sequence readable in both a lesson and its static card preview.
+    const titleLines=title=>{
+      const lines=[];let row='';
+      for(const word of String(title||'Follow the mechanism').split(/\s+/)){
+        if(row&&(row+' '+word).length>39){lines.push(row);row='';}
+        row+=(row?' ':'')+word;
+      }
+      if(row)lines.push(row);
+      return lines;
+    };
+    let body=`<g data-process-sequence="true" data-stage-count="${stages.length}"><desc>${esc('Conceptual sequence; not an anatomical image or a timing model. Current stage '+(current+1)+' of '+stages.length+': '+stages[current].title+'. Ordered stages: '+stages.map((item,index)=>(index+1)+'. '+item.title).join('; '))}</desc>`;
+    body+=T(30,29,'Conceptual sequence',18,'var(--cy)','start')+T(569,28,'STEP '+String(current+1).padStart(2,'0')+' / '+String(stages.length).padStart(2,'0'),13,'var(--dim)','end');
+    stages.forEach((item,index)=>{
+      const y=53+index*gap, center=y+height/2, active=index===current, color=active?'var(--cy)':'var(--dim)';
+      const lines=titleLines(item.title), lineHeight=size*1.2;
+      if(index<stages.length-1)body+=line(49,center+19,49,53+(index+1)*gap+height/2-24,'var(--cy)',true,1.7);
+      body+=`<g data-process-stage="${index}" data-active="${active}"><title>${esc((index+1)+'. '+item.title+(active?' — current stage':''))}</title><rect x="83" y="${y}" width="487" height="${height}" rx="9" fill="${active?'var(--cy)':'var(--panel)'}" fill-opacity="${active?'.12':'.8'}" stroke="${color}" stroke-opacity="${active?'.9':'.25'}" stroke-width="${active?2:1}"/>`;
+      body+=`<circle cx="49" cy="${center}" r="18" fill="var(--bg-2)" stroke="${color}" stroke-width="${active?2:1}"/>`+T(49,center+5,String(index+1).padStart(2,'0'),14,color);
+      body+=`<g font-weight="${active?'600':'400'}">`+lines.map((text,lineIndex)=>T(101,center+size*.34+(lineIndex-(lines.length-1)/2)*lineHeight,text,size,active?'var(--ink)':'var(--dim)','start')).join('')+'</g></g>';
+    });
+    return body+T(30,320,'Order of ideas · not anatomy or elapsed time',13,'var(--dim)','start')+'</g>';
   }
   // These diagrams also power the catalog previews. Each represents the actual
   // mechanism rather than borrowing the illustration of a neighbouring topic.
@@ -275,7 +298,7 @@
       const body=renderModel(kind,topic,steps,step,selected,a,b);
       const item=kind==='cell'?organelles.find(o=>o.id===selected):steps[step];
       const target=kind==='cell'?findOrganelle(selected):null;
-      container.innerHTML=`<div class="bl-diagram"><div class="bl-vis-top"><span>${esc(labels[kind]||topic.title)}</span><span>${kind==='cell'?'Click to inspect':kind==='genetics'?'Change the parents':kind==='photosynthesis'?'Six scales':kind==='special'?'Concept diagram':'Interactive model'}</span></div>${wrapSVG(labels[kind]||topic.title,body)}
+      container.innerHTML=`<div class="bl-diagram"><div class="bl-vis-top"><span>${esc(labels[kind]||topic.title)}</span><span>${kind==='cell'?'Click to inspect':kind==='genetics'?'Change the parents':kind==='photosynthesis'?'Six scales':kind==='special'?'Concept diagram':kind==='process'?'Conceptual sequence':'Interactive model'}</span></div>${wrapSVG(labels[kind]||topic.title,body)}
         ${kind==='cell'?`<div class="bl-organelles" aria-label="Choose an organelle">${organelles.map(o=>`<button type="button" data-select-organelle="${o.id}" aria-pressed="${selected===o.id}">${o.name}</button>`).join('')}</div>`:''}
         ${kind==='genetics'?`<div class="bl-genotype"><label>Parent 1 genotype<select data-parent="a">${['AA','Aa','aa'].map(v=>`<option ${a===v?'selected':''}>${v}</option>`).join('')}</select></label><label>Parent 2 genotype<select data-parent="b">${['AA','Aa','aa'].map(v=>`<option ${b===v?'selected':''}>${v}</option>`).join('')}</select></label></div><p class="bl-result-summary" role="status">${punnettSummary(a,b)}</p>`:''}
         ${kind==='photosynthesis'?`<div class="bl-zoompath" aria-label="Scale of observation">${steps.map((s,i)=>`<button type="button" data-zoom="${i}" aria-pressed="${step===i}">${esc(s.title)}${i<steps.length-1?' ›':''}</button>`).join('')}</div>`:''}

@@ -13,7 +13,7 @@ const root = path.resolve(__dirname, '..');
 const modules = process.env.BIOLOGY_PLAYWRIGHT_MODULES || path.resolve(root, '../biology-entelloq/node_modules');
 const { chromium } = createRequire(path.join(modules, '__single_file_check__.cjs'))('playwright');
 const artifact = path.resolve(process.env.BIOLOGY_SINGLE_HTML || path.join(root, 'dist/index.html'));
-const output = path.join(root, 'docs/single-file');
+const output = path.resolve(process.env.BIOLOGY_SINGLE_OUTPUT || path.join(root, 'docs/single-file'));
 const base = 'http://bioentelloq.single-file.test/index.html';
 // These existing online services are optional. Every other HTTP request is a
 // packaging failure, including CDN modules that silently fall back when denied.

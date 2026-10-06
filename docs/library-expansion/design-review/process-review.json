@@ -1,0 +1,273 @@
+{
+  "complete": true,
+  "errors": [],
+  "cameraRequests": 0,
+  "views": [
+    {
+      "width": 390,
+      "theme": "dark",
+      "topic": "nephron",
+      "stageCount": 4,
+      "selected": [
+        "Filter",
+        "Recover",
+        "Separate salt and water",
+        "Fine-tune"
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "topic": "pedigrees",
+      "stageCount": 3,
+      "selected": [
+        "Define the evidence and assumptions",
+        "Assign only constrained genotypes",
+        "Condition probabilities on known information"
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "topic": "nephron",
+      "stageCount": 4,
+      "selected": [
+        "Filter",
+        "Recover",
+        "Separate salt and water",
+        "Fine-tune"
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "topic": "pedigrees",
+      "stageCount": 3,
+      "selected": [
+        "Define the evidence and assumptions",
+        "Assign only constrained genotypes",
+        "Condition probabilities on known information"
+      ]
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "topic": "nephron",
+      "stageCount": 4,
+      "selected": [
+        "Filter",
+        "Recover",
+        "Separate salt and water",
+        "Fine-tune"
+      ]
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "topic": "pedigrees",
+      "stageCount": 3,
+      "selected": [
+        "Define the evidence and assumptions",
+        "Assign only constrained genotypes",
+        "Condition probabilities on known information"
+      ]
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "topic": "nephron",
+      "stageCount": 4,
+      "selected": [
+        "Filter",
+        "Recover",
+        "Separate salt and water",
+        "Fine-tune"
+      ]
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "topic": "pedigrees",
+      "stageCount": 3,
+      "selected": [
+        "Define the evidence and assumptions",
+        "Assign only constrained genotypes",
+        "Condition probabilities on known information"
+      ]
+    }
+  ],
+  "bounds": [
+    {
+      "width": 390,
+      "theme": "dark",
+      "tested": [
+        "water",
+        "carbohydrates",
+        "lipids",
+        "proteins",
+        "gene-regulation",
+        "sex-linked-inheritance",
+        "pedigrees",
+        "hardy-weinberg",
+        "speciation",
+        "phylogenetic-trees",
+        "biodiversity",
+        "conservation",
+        "fungi",
+        "microbiome",
+        "recombinant-dna",
+        "dna-sequencing",
+        "bioinformatics",
+        "surface-area-volume",
+        "digestive-system",
+        "nutrient-absorption",
+        "endocrine-system",
+        "insulin-glucagon",
+        "kidney",
+        "nephron",
+        "osmoregulation",
+        "muscle-contraction",
+        "reproductive-anatomy",
+        "gametogenesis",
+        "fertilization",
+        "innate-immunity",
+        "plant-tissues",
+        "plant-hormones",
+        "tropisms",
+        "plant-reproduction",
+        "pollination",
+        "seed-germination"
+      ],
+      "errors": []
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "tested": [
+        "water",
+        "carbohydrates",
+        "lipids",
+        "proteins",
+        "gene-regulation",
+        "sex-linked-inheritance",
+        "pedigrees",
+        "hardy-weinberg",
+        "speciation",
+        "phylogenetic-trees",
+        "biodiversity",
+        "conservation",
+        "fungi",
+        "microbiome",
+        "recombinant-dna",
+        "dna-sequencing",
+        "bioinformatics",
+        "surface-area-volume",
+        "digestive-system",
+        "nutrient-absorption",
+        "endocrine-system",
+        "insulin-glucagon",
+        "kidney",
+        "nephron",
+        "osmoregulation",
+        "muscle-contraction",
+        "reproductive-anatomy",
+        "gametogenesis",
+        "fertilization",
+        "innate-immunity",
+        "plant-tissues",
+        "plant-hormones",
+        "tropisms",
+        "plant-reproduction",
+        "pollination",
+        "seed-germination"
+      ],
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "tested": [
+        "water",
+        "carbohydrates",
+        "lipids",
+        "proteins",
+        "gene-regulation",
+        "sex-linked-inheritance",
+        "pedigrees",
+        "hardy-weinberg",
+        "speciation",
+        "phylogenetic-trees",
+        "biodiversity",
+        "conservation",
+        "fungi",
+        "microbiome",
+        "recombinant-dna",
+        "dna-sequencing",
+        "bioinformatics",
+        "surface-area-volume",
+        "digestive-system",
+        "nutrient-absorption",
+        "endocrine-system",
+        "insulin-glucagon",
+        "kidney",
+        "nephron",
+        "osmoregulation",
+        "muscle-contraction",
+        "reproductive-anatomy",
+        "gametogenesis",
+        "fertilization",
+        "innate-immunity",
+        "plant-tissues",
+        "plant-hormones",
+        "tropisms",
+        "plant-reproduction",
+        "pollination",
+        "seed-germination"
+      ],
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "tested": [
+        "water",
+        "carbohydrates",
+        "lipids",
+        "proteins",
+        "gene-regulation",
+        "sex-linked-inheritance",
+        "pedigrees",
+        "hardy-weinberg",
+        "speciation",
+        "phylogenetic-trees",
+        "biodiversity",
+        "conservation",
+        "fungi",
+        "microbiome",
+        "recombinant-dna",
+        "dna-sequencing",
+        "bioinformatics",
+        "surface-area-volume",
+        "digestive-system",
+        "nutrient-absorption",
+        "endocrine-system",
+        "insulin-glucagon",
+        "kidney",
+        "nephron",
+        "osmoregulation",
+        "muscle-contraction",
+        "reproductive-anatomy",
+        "gametogenesis",
+        "fertilization",
+        "innate-immunity",
+        "plant-tissues",
+        "plant-hormones",
+        "tropisms",
+        "plant-reproduction",
+        "pollination",
+        "seed-germination"
+      ],
+      "errors": []
+    }
+  ]
+}

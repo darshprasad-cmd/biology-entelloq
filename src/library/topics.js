@@ -38,7 +38,7 @@
   var topics = [];
   var modes = ['layman','intuition','visual','scientific','advanced','realWorld'];
   function add(meta, explanations, terms, steps, check) {
-    var topic = Object.assign({aliases:[],relatedTopics:[],prerequisites:[],labs:[],curriculumTags:['Foundation','CBSE / ICSE','AP Biology','A-Level','IB','Introductory University'],difficulty:'school',sources:[],status:'complete'},meta);
+    var topic = Object.assign({aliases:[],relatedTopics:[],prerequisites:[],labs:[],curriculumTags:['Foundation','CBSE / ICSE','NEET','AP Biology','A-Level','IB','Introductory University'],difficulty:'school',sources:[],status:'complete'},meta);
     topic.explanations = {};
     modes.forEach(function (mode,i) { topic.explanations[mode] = explanations[i]; });
     topic.keyTerms = terms.map(function (t) { return {term:t[0],definition:t[1]}; });

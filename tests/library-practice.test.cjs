@@ -9,6 +9,7 @@ const context = {window};
 vm.runInNewContext(fs.readFileSync(path.join(root,'src/library/topics.js'),'utf8'),context);
 const enrichmentPath = path.join(root,'src/library/learning-cards.js');
 vm.runInNewContext(fs.readFileSync(enrichmentPath,'utf8'),context);
+for(const name of ['extended-core','extended-systems']) vm.runInNewContext(fs.readFileSync(path.join(root,'src/library',name+'.js'),'utf8'),context);
 vm.runInNewContext(fs.readFileSync(path.join(root,'src/library/practice-bridge.js'),'utf8'),context);
 const bridge = window.BioPractice;
 

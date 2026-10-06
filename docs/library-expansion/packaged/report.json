@@ -1,0 +1,15 @@
+{
+  "base": "http://127.0.0.1:3027/dist",
+  "packaged": true,
+  "complete": true,
+  "checks": [
+    "All 109 concepts are browsable in 13 fields; NEET and search discover the new kidney lesson.",
+    "All 36 additions render six usable explanation modes, conceptual diagrams, mechanisms and both evidence tasks.",
+    "Three suggested paths resolve to completed concepts; keyboard disclosure and all four lesson jumps preserve routing and focus.",
+    "A new topic keeps its evidence draft across Learn/Reason and has three graded checks plus transfer practice in Solve.",
+    "Catalog and new lesson retain keyboard access and unique IDs at 320/390/768/1440 px without horizontal overflow; light theme captured."
+  ],
+  "errors": [],
+  "cameraRequests": 0,
+  "artifactSha256": "a413aa36f81fa43bfb2beffd63912d88f9734f4dbb9b34d583b581000c90734b"
+}

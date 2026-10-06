@@ -1,12 +1,12 @@
 # Biology Entelloq learning content
 
-The Learn extension uses **73 completed canonical concepts across all 13 requested fields**. Each completed concept has six independently written perspectives, a staged visual narrative, key terms, related concepts, prerequisites and a retrieval question with explanatory feedback. All 18 first-priority concepts and all 15 requested major organelles are included.
+The Learn extension uses **109 completed canonical concepts across all 13 requested fields**. Each completed concept has six independently written perspectives, a staged visual narrative, key terms, related concepts, prerequisites and retrieval questions with explanatory feedback. All 18 first-priority concepts and all 15 requested major organelles are included. The October expansion adds 36 concepts for school biology, NEET/AP/IB-level study and introductory university depth; these levels are not formal syllabus certification.
 
-There are **438 explanations, 247 visual steps, 164 key-term definitions and 73 quick checks**. Explanations contain approximately 15,784 words in total. Another **175 concepts are indexed as planned dedicated lessons**, not counted as finished lessons and not populated with generated placeholder explanations. Several planned dedicated subtopics are already introduced within the completed parent lesson.
+There are **654 explanations, 373 visual steps, 272 key-term definitions and 327 retrieval checks** (109 quick checks plus 218 additional practice questions). Explanations contain approximately 24,600 words in total. All 109 concepts also include mechanism, evidence-investigation and transfer activities. Another **139 concepts are indexed as planned dedicated lessons**, not counted as finished lessons and not populated with generated placeholder explanations. Several planned dedicated subtopics are already introduced within the completed parent lesson.
 
 ## Source and rendering contract
 
-`src/library/topics.js` is the editable content source. It exports `window.BIO_LIBRARY` in a browser and `globalThis.BIO_LIBRARY` in a non-browser JavaScript context. It requires no framework, network, DOM or package dependency. The registry is separate from Learn rendering and laboratory simulation code.
+`src/library/topics.js` is the original editable content source. The authored additions in `src/library/extended-core.js` and `src/library/extended-systems.js` extend its registry identically in Home, Learn, Reason and Solve. It exports `window.BIO_LIBRARY` in a browser and `globalThis.BIO_LIBRARY` in a non-browser JavaScript context. It requires no framework, network, DOM or package dependency. The registry is separate from Learn rendering and laboratory simulation code.
 
 The exported object contains:
 
@@ -28,19 +28,19 @@ All `parentId`, `relatedTopics` and `prerequisites` in completed topics resolve 
 
 | Canonical field | Completed concepts |
 | --- | ---: |
-| Cell Biology | 19 |
-| Biomolecules | 3 |
+| Cell Biology | 20 |
+| Biomolecules | 7 |
 | Bioenergetics | 10 |
 | Cell Division | 4 |
-| Genetics | 5 |
-| Molecular Biology | 3 |
-| Human Physiology | 10 |
-| Plant Biology | 4 |
-| Evolution | 2 |
-| Ecology | 5 |
-| Microbiology | 3 |
+| Genetics | 7 |
+| Molecular Biology | 5 |
+| Human Physiology | 22 |
+| Plant Biology | 10 |
+| Evolution | 5 |
+| Ecology | 7 |
+| Microbiology | 5 |
 | Developmental Biology | 2 |
-| Biotechnology | 3 |
+| Biotechnology | 5 |
 
 These counts use the primary category only, so each concept is counted once. Cross-field browsing may show additional linked concepts.
 
@@ -73,6 +73,8 @@ Aliases provide local search matches for “cell powerhouse,” “protein facto
 
 Explanations, examples and assessment wording were written for this library. Linked references were used for selected mechanism verification and further reading; no textbook images or copied paragraph blocks are included. This is an authored educational release with documented checks, not a claim of full independent scientific peer review. Curriculum tags indicate shared levels of explanation, not formal certification against each board’s current examination specification.
 
+The October additions and their numerical assumptions are documented separately in [core sources](EXTENDED-CORE-SOURCES.md) and [systems sources](EXTENDED-SYSTEMS-SOURCES.md). Their investigations use explicitly synthetic or theoretical datasets; they are not measured experiments or clinical guidance.
+
 Sources checked on 2026-09-13/14 include:
 
 - [NCBI Bookshelf: Intracellular Compartments and Protein Sorting](https://www.ncbi.nlm.nih.gov/books/NBK21053/) — compartment identities and trafficking distinctions.
@@ -101,4 +103,4 @@ Sources checked on 2026-09-13/14 include:
 5. Verify mechanism-specific claims with suitable references. State units, assumptions and approximations for quantitative relationships.
 6. Evaluate the file with Node `vm` or a browser and validate uniqueness, references, explanation keys, answer bounds and source IDs. Then verify the topic’s actual rendered visual, mode switching and related navigation.
 
-The initial content contract check confirmed all 73 completed IDs were unique, all 175 roadmap IDs were unique and distinct from completed IDs, all six modes were nonempty, all completed concept references resolved, and every answer index was in range. Browser behavior and scientific simulations are validated separately by the integration workflow.
+The current content contract checks all 109 completed IDs and 139 distinct roadmap IDs, all six explanation modes, resolved concept and source references, and assessment answer bounds. A separate regression hash preserves the original 73 topic records apart from the added NEET level tag. Browser behavior and scientific simulations are validated separately by the integration workflow.

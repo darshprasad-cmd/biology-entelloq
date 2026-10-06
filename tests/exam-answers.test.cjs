@@ -6,7 +6,7 @@ const vm = require('node:vm');
 const root = path.resolve(__dirname, '..');
 const read = name => fs.readFileSync(path.join(root,name),'utf8');
 const ctx = vm.createContext({window:{}});
-for (const name of ['topics.js','learning-cards.js','exam-solve-data.js','exam-reason-data.js','exam-topic-rationales.js','exam-answers.js']) vm.runInContext(read('src/library/'+name),ctx,{filename:name});
+for (const name of ['topics.js','learning-cards.js','extended-core.js','extended-systems.js','exam-solve-data.js','exam-reason-data.js','exam-topic-rationales.js','exam-checkpoint-foundations.js','exam-checkpoint-processes.js','exam-extended-core.js','exam-extended-systems.js','exam-answers.js']) vm.runInContext(read('src/library/'+name),ctx,{filename:name});
 const api = ctx.window.BioExamAnswers;
 const solve = read('solve.html');
 vm.runInContext(solve.slice(solve.indexOf('const QBANK='),solve.indexOf('const GEN_TEMPLATES='))+';globalThis.bank=QBANK;',ctx);
@@ -91,12 +91,16 @@ test('all three guided workouts explain principles, MCQ alternatives and the com
 });
 
 test('canonical concept feedback resolves option rationales after rotation', () => {
+  assert.equal(ctx.window.BIO_LIBRARY.topics.length, 109);
+  let questions = 0;
   for (const topic of ctx.window.BIO_LIBRARY.topics) {
-    for (const q of topic.quickCheck) {
+    for (const q of [...topic.quickCheck, ...ctx.window.BIO_ENRICHMENT[topic.id].checkpoints]) {
+      questions++;
       const html = api.topic(q,topic);
       assert.match(html,/Check each option/,topic.id);
       assert.equal((html.match(/<dd>/g)||[]).length,q.options.length,topic.id);
       assert.match(html,/be-explanation/,topic.id);
+      assert.doesNotMatch(html,/undefined|\[object Object\]/,topic.id);
     }
     const example = ctx.window.BIO_ENRICHMENT[topic.id]?.workedExample;
     assert.ok(example,topic.id);
@@ -104,6 +108,7 @@ test('canonical concept feedback resolves option rationales after rotation', () 
     assert.match(html,/Model answer/);
     assert.match(html,/be-explanation/);
   }
+  assert.equal(questions, 327);
   const enzymes = ctx.window.BIO_LIBRARY.topics.find(t=>t.id==='enzymes');
   assert.match(api.reason(ctx.window.BIO_ENRICHMENT.enzymes.workedExample,enzymes),/kcat/);
   assert.match(api.reason(ctx.window.BIO_ENRICHMENT.enzymes.workedExample,enzymes),/be-diagram/);

@@ -6,7 +6,7 @@ const vm = require('node:vm');
 const root = path.resolve(__dirname, '..');
 const window = {};
 const context = {window};
-for (const name of ['topics', 'learning-cards']) {
+for (const name of ['topics', 'learning-cards', 'extended-core', 'extended-systems']) {
   vm.runInNewContext(fs.readFileSync(path.join(root, 'src/library', name + '.js'), 'utf8'), context);
 }
 const library = window.BIO_LIBRARY;
@@ -19,7 +19,7 @@ const selected = (id, index) => {
 
 test('every published topic has a complete compact enrichment; roadmap entries are not presented as finished', () => {
   assert.deepEqual(Object.keys(cards).sort(), Array.from(library.topics, topic => topic.id).sort());
-  assert.equal(Object.keys(cards).length, 73);
+  assert.equal(Object.keys(cards).length, 109);
   const sourceIds = new Set(library.sources.map(source => source.id));
   for (const [id, card] of Object.entries(cards)) {
     assert.ok(card.curiosity.title.trim(), id + ' curiosity title');
@@ -52,7 +52,7 @@ test('practice receives three distinct, answerable questions for each topic with
       answerPositions[question.answer]++;
     }
   }
-  assert.equal(allQuestions.size, 146);
+  assert.equal(allQuestions.size, 218);
   assert.ok(Math.max(...answerPositions) - Math.min(...answerPositions) <= 1, 'correct positions must not systematically reveal the answer');
 });
 

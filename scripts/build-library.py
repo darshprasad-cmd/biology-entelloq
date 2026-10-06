@@ -15,6 +15,11 @@ def source(name):
     return (LIB / name).read_text(encoding='utf-8').rstrip() + '\n'
 
 
+def extensions():
+    """Authored additions share the canonical registry across every entry point."""
+    return source('extended-core.js') + source('extended-systems.js')
+
+
 def slot(text, name, body, before):
     start, end = '<!-- BIO-LIBRARY:' + name + ':START -->', '<!-- BIO-LIBRARY:' + name + ':END -->'
     block = start + '\n' + body + end
@@ -32,13 +37,13 @@ def render(page):
     before = path.read_bytes()
     text = before.decode('utf-8').replace('\r\n', '\n')
     if page == 'app':
-        text = slot(text, 'app-script', '<script>\n' + source('topics.js') + source('visuals.js') + source('app-library.js') + '</script>\n', '</body>')
+        text = slot(text, 'app-script', '<script>\n' + source('topics.js') + extensions() + source('visuals.js') + source('app-library.js') + '</script>\n', '</body>')
         return path, before, text.encode('utf-8')
     styles = source('shared.css')
     scripts = source('context.js')
     if page == 'learn':
         styles += source('learn.css') + source('depth-study.css')
-        scripts += source('topics.js') + source('learning-cards.js') + source('depth-foundations.js') + source('depth-processes.js') + source('depth-study.js') + source('visuals.js') + source('learn.js')
+        scripts += source('topics.js') + source('learning-cards.js') + source('depth-foundations.js') + source('depth-processes.js') + extensions() + source('depth-study.js') + source('visuals.js') + source('learn.js')
         if '<!-- BIO-LIBRARY:learn-main:START -->' in text:
             text = slot(text, 'learn-main', source('learn-main.html'), '<main id="page">')
         # Mount immediately inside main, before the existing Learn experiences.
@@ -62,7 +67,7 @@ def render(page):
             text = pattern.sub(lambda m: m[1] + content + '\n\n', text)
     elif page in ('reason', 'solve'):
         styles += source('practice-bridge.css') + source('depth-study.css') + source('exam-answers.css')
-        scripts += source('topics.js') + source('learning-cards.js') + source('depth-foundations.js') + source('depth-processes.js') + source('depth-study.js') + source('visuals.js') + source('exam-solve-data.js') + source('exam-reason-data.js') + source('exam-topic-rationales.js') + source('exam-checkpoint-foundations.js') + source('exam-checkpoint-processes.js') + source('exam-answers.js') + source('practice-bridge.js')
+        scripts += source('topics.js') + source('learning-cards.js') + source('depth-foundations.js') + source('depth-processes.js') + extensions() + source('depth-study.js') + source('visuals.js') + source('exam-solve-data.js') + source('exam-reason-data.js') + source('exam-topic-rationales.js') + source('exam-checkpoint-foundations.js') + source('exam-checkpoint-processes.js') + source('exam-extended-core.js') + source('exam-extended-systems.js') + source('exam-answers.js') + source('practice-bridge.js')
     else:
         raise ValueError('Unsupported library build target')
     text = slot(text, page + '-style', '<style>\n' + styles + '</style>\n', '</head>')

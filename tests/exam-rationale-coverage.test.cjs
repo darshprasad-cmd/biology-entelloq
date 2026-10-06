@@ -6,10 +6,19 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 const window = {};
-for (const file of ['topics.js', 'learning-cards.js', 'exam-topic-rationales.js',
-  'exam-checkpoint-foundations.js', 'exam-checkpoint-processes.js', 'exam-answers.js']) {
-  vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../src/library', file), 'utf8'), { window });
+const extensions = ['extended-core.js', 'extended-systems.js'];
+const extendedRationales = ['exam-extended-core.js', 'exam-extended-systems.js'];
+const baseFiles = ['topics.js', 'learning-cards.js', 'exam-topic-rationales.js',
+  'exam-checkpoint-foundations.js', 'exam-checkpoint-processes.js'];
+function load(files, target = window) {
+  for (const file of files) {
+    vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../src/library', file), 'utf8'), { window: target });
+  }
+  return target;
 }
+load(['topics.js', 'learning-cards.js', ...extensions, 'exam-topic-rationales.js',
+  'exam-checkpoint-foundations.js', 'exam-checkpoint-processes.js', ...extendedRationales, 'exam-answers.js']);
+const plain = value => JSON.parse(JSON.stringify(value));
 
 function checkCoverage(questions, rationales) {
   const seen = new Set();
@@ -28,11 +37,46 @@ function checkCoverage(questions, rationales) {
 }
 
 test('every core question retains exact question and option rationale coverage', () => {
+  assert.equal(window.BIO_LIBRARY.topics.length, 109);
+  assert.equal(window.BIO_LIBRARY.topics.flatMap(topic => topic.quickCheck || []).length, 109);
   checkCoverage(window.BIO_LIBRARY.topics.flatMap(topic => topic.quickCheck || []), window.BIO_EXAM_TOPIC_RATIONALES);
 });
 
 test('every enrichment checkpoint retains exact question and option rationale coverage', () => {
+  assert.equal(Object.keys(window.BIO_ENRICHMENT).length, 109);
+  assert.equal(Object.values(window.BIO_ENRICHMENT).flatMap(topic => topic.checkpoints).length, 218);
   checkCoverage(Object.values(window.BIO_ENRICHMENT).flatMap(topic => topic.checkpoints), window.BIO_EXAM_CHECKPOINT_RATIONALES);
+});
+
+test('all 327 question identities are unambiguous across both rationale registries', () => {
+  const questions = window.BIO_LIBRARY.topics.flatMap(topic => [
+    ...topic.quickCheck, ...window.BIO_ENRICHMENT[topic.id].checkpoints
+  ]);
+  assert.equal(questions.length, 327);
+  assert.equal(new Set(questions.map(q => q.question)).size, 327);
+  const keys = [...Object.keys(window.BIO_EXAM_TOPIC_RATIONALES), ...Object.keys(window.BIO_EXAM_CHECKPOINT_RATIONALES)];
+  assert.equal(keys.length, 327);
+  assert.equal(new Set(keys).size, 327, 'A question must not shadow feedback in the other registry');
+});
+
+test('extension rationale modules append without changing original feedback and are idempotent', () => {
+  const fresh = load(baseFiles, {});
+  const registries = ['BIO_EXAM_TOPIC_RATIONALES', 'BIO_EXAM_CHECKPOINT_RATIONALES'];
+  const original = Object.fromEntries(registries.map(key => [key, plain(fresh[key])]));
+  assert.equal(Object.keys(original.BIO_EXAM_TOPIC_RATIONALES).length, 73);
+  assert.equal(Object.keys(original.BIO_EXAM_CHECKPOINT_RATIONALES).length, 146);
+  load([...extensions, ...extendedRationales], fresh);
+  for (const key of registries) {
+    for (const [question, reasons] of Object.entries(original[key])) {
+      assert.deepEqual(plain(fresh[key][question]), reasons, 'Original feedback changed: ' + question);
+    }
+  }
+  assert.equal(Object.keys(fresh.BIO_EXAM_TOPIC_RATIONALES).length, 109);
+  assert.equal(Object.keys(fresh.BIO_EXAM_CHECKPOINT_RATIONALES).length, 218);
+  const retained = ['BIO_LIBRARY', 'BIO_DEPTH', 'BIO_ENRICHMENT', ...registries];
+  const once = Object.fromEntries(retained.map(key => [key, plain(fresh[key])]));
+  load([...extensions, ...extendedRationales], fresh);
+  for (const key of retained) assert.deepEqual(plain(fresh[key]), once[key], key + ' changed on repeated extension load');
 });
 
 test('rotating displayed options preserves the correct text and its own explanation', () => {

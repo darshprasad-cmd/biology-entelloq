@@ -2,11 +2,12 @@ const test=require('node:test'),assert=require('node:assert/strict'),fs=require(
 const root=path.resolve(__dirname,'..'),window={};
 const context={window,LABS:{register(){}},console};
 vm.runInNewContext(fs.readFileSync(path.join(root,'src/library/topics.js'),'utf8'),context);
+for(const name of ['extended-core','extended-systems']) vm.runInNewContext(fs.readFileSync(path.join(root,'src/library',name+'.js'),'utf8'),context);
 vm.runInNewContext(fs.readFileSync(path.join(root,'src/library/lab-metadata.js'),'utf8'),context);
 const lib=window.BIO_LIBRARY,topics=lib.topics,byId=new Map(topics.map(t=>[t.id,t]));
 const priorities=['cell-structure','membrane-transport','biomolecules','enzymes','photosynthesis','cellular-respiration','mitosis','meiosis','dna','protein-synthesis','mendelian-genetics','heart-circulation','gas-exchange','nervous-system','immunity','plant-transport','natural-selection','ecology'];
 test('all priority subjects and all 13 fields have completed authored content',()=>{
- assert.equal(lib.categories.length,13);assert.ok(topics.length>=73);assert.equal(byId.size,topics.length);
+ assert.equal(lib.categories.length,13);assert.equal(topics.length,109);assert.equal(byId.size,topics.length);
  for(const id of priorities)assert.ok(byId.has(id),id);
  for(const c of lib.categories)assert.ok(topics.some(t=>t.category===c.id),c.id);
 });
