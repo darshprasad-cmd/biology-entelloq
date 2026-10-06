@@ -41,6 +41,15 @@ async function noOverflow(page, child, label) {
     assert.ok(size.scroll <= size.width + 1, `${label}: ${name} overflows (${size.scroll}/${size.width})`);
   }
 }
+async function answerScreenshot(page, target, name) {
+  // Element screenshots inside nested fixed-height frames are clipped at the
+  // frame boundary. Preserve the responsive width and grow only capture height.
+  const viewport = page.viewportSize(), box = await target.boundingBox();
+  try {
+    await page.setViewportSize({width:viewport.width,height:Math.ceil(box.height) + 180});
+    await target.screenshot({path:path.join(root,'docs/single-file',name),scale:'css'});
+  } finally {await page.setViewportSize(viewport);}
+}
 async function feedback(child, q) {
   const shown = child.locator('#svFeedback');
   await shown.locator('.bioq-exam-answer').first().waitFor();
@@ -108,7 +117,7 @@ async function bankSession(page, solve, width) {
     const verdict = await solve.locator('#svFeedback .fh').innerText();
     assert.ok(verdict.includes(q.id === 'cell1' ? 'Not quite' : q.type === 'match' || q.type === 'case' ? 'Partly right' : 'Correct'), q.id + ' retains grading');
     await noOverflow(page,solve,`${width}px ${q.id} feedback`);
-    if (q.id === 'gen4') await solve.locator('#svFeedback .sv-feedback').screenshot({path:path.join(root,`docs/single-file/exam-punnett-${width}.png`),scale:'css'});
+    if (q.id === 'gen4') await answerScreenshot(page,solve.locator('#svFeedback .sv-feedback'),`exam-punnett-${width}.png`);
     await solve.locator('#svPrimary').click();
   }
   const history = await solve.evaluate(() => JSON.parse(localStorage.getItem('bioq_solve_history')));
@@ -225,7 +234,7 @@ async function workouts(page, width) {
     assert.equal(await reason.locator('.rz-step:last-child .be-flow li').count(),4);
     assert.match(await reason.locator('.rz-step:last-child .be-direct').innerText(), /Model exam answer/i);
     await noOverflow(page,reason,`${width}px ${p.id} model answer`);
-    if (p.id === 'glucose') await reason.locator('.rz-step:last-child .bioq-exam-answer').screenshot({path:path.join(root,`docs/single-file/exam-reason-${width}.png`),scale:'css'});
+    if (p.id === 'glucose') await answerScreenshot(page,reason.locator('.rz-step:last-child .bioq-exam-answer'),`exam-reason-${width}.png`);
     await reason.locator('.rz-next').last().click();
     await reason.locator('.rz-done').waitFor();
   }
