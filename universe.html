@@ -2571,10 +2571,11 @@ function buildUniverseUI(core) {
         }
         if (!current()) return;
         panelAbort = null; button.textContent = 'Ask again';
-        typeInto(ans, answer, () => {
-          if (!current()) return;
-          const cite = el('span', 'cite'); cite.textContent = source; ans.appendChild(cite);
-        }, current);
+        // Format the completed answer at once: partial Markdown or TeX should
+        // never flash during an artificial typing animation.
+        if (window.BIOQ_AI?.renderAnswer) window.BIOQ_AI.renderAnswer(ans, answer);
+        else ans.textContent = answer;
+        const cite = el('span', 'cite'); cite.textContent = source; ans.appendChild(cite);
       });
     }
     panel.classList.add('open');
@@ -2586,19 +2587,6 @@ function buildUniverseUI(core) {
     e.stopPropagation();
     if (e.key === 'Escape') { e.preventDefault(); closePanel(); }
   });
-
-  // typewriter that respects reduced motion
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-  function typeInto(node, text, done, current) {
-    if (current && !current()) return;
-    if (reduced.matches || document.body.classList.contains('u-keyboard')) { node.textContent = text; if (done) done(); return; }
-    node.textContent = ''; let n = 0;
-    (function t() {
-      if (current && !current()) return;
-      n += Math.max(1, Math.round(text.length / 90)); node.textContent = text.slice(0, n);
-      if (n < text.length) setTimeout(t, 16); else if (done) done();
-    })();
-  }
 
   // ── keyboard help ────────────────────────────────────────────────────────
   const help = el('div', 'u-help'); help.id = 'uHelp';

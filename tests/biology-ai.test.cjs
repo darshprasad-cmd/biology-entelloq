@@ -34,6 +34,10 @@ test('uses the shared public proxy, bounded context and history, with no browser
   assert.equal(sent.body.messages[2].content.length, 2000);
   assert.equal(sent.body.messages.filter(m => m.role === 'system').length, 1);
   assert.equal(sent.body.messages.some(m => m.content.includes('Ignore biology')), false);
+  assert.match(sent.body.messages[0].content, /Answer the question first/);
+  assert.match(sent.body.messages[0].content, /substantive model answer/);
+  assert.match(sent.body.messages[0].content, /why each other option fails/);
+  assert.match(sent.body.messages[0].content, /Do not emit LaTeX commands/);
 });
 
 test('accepts legacy proxy responses for gradual shared-service rollout', async () => {
@@ -44,7 +48,7 @@ test('accepts legacy proxy responses for gradual shared-service rollout', async 
 });
 
 test('rejects empty or reasoning-only responses without treating them as an answer', async () => {
-  for (const data of [{ choices: [{ message: { content: '', reasoning: 'private reasoning' } }] }, { text: '   ' }, { result: { content: 'not text' } }]) {
+  for (const data of [{ choices: [{ message: { content: '', reasoning: 'private reasoning' } }] }, { text: '   ' }, { text: '```text\n```' }, { text:'$$' }, { result: { content: 'not text' } }]) {
     const client = setup(async () => ({ ok: true, json: async () => data }));
     await assert.rejects(client.ask({ question: 'Explain membranes' }), e => e.code === 'unavailable');
   }
@@ -116,28 +120,27 @@ test('malformed JSON and transport failures produce a recoverable service error'
   await assert.rejects(offline.ask({ question: 'Why do we breathe?' }), e => e.code === 'unavailable');
 });
 
-test('leaving the About demo cancels work and clears stale thinking or partial answers', () => {
+test('leaving the About demo cancels work and clears stale thinking', () => {
   const html = fs.readFileSync(path.join(__dirname, '../about.html'), 'utf8');
-  const start = html.indexOf('let aiTimer=null,aiGen=0,aiAbort=null;');
+  const start = html.indexOf('let aiGen=0,aiAbort=null;');
   const stop = html.indexOf("window.addEventListener('pagehide',cancelAIDemo);", start);
   const code = html.slice(start, stop);
-  for (const active of ['aiAbort={abort(){record.aborted=true;}};', 'aiTimer=123;']) {
-    const out = { textContent: 'Thinking…', classList: { remove() {} } }, record = {};
-    vm.runInNewContext(code + active + 'cancelAIDemo();record.gen=aiGen;', { $: () => out, clearTimeout() {}, record });
-    assert.match(out.textContent, /Request stopped/);
-    assert.equal(record.gen, 1);
-    if (active.startsWith('aiAbort')) assert.equal(record.aborted, true);
-  }
+  const out = { textContent: 'Thinking…', classList: { remove() {} } }, record = {};
+  vm.runInNewContext(code + 'aiAbort={abort(){record.aborted=true;}};cancelAIDemo();record.gen=aiGen;', { $: () => out, record });
+  assert.match(out.textContent, /Request stopped/);
+  assert.equal(record.gen, 1);
+  assert.equal(record.aborted, true);
 });
 
 test('the learning guide sends selected concept reference but keeps experiment records local', async () => {
   const nodes = new Map(), dialogEvents = new Map();
-  const node = key => { if (!nodes.has(key)) nodes.set(key, { textContent: '', value: '', addEventListener() {}, focus() {} }); return nodes.get(key); };
+  const node = key => { if (!nodes.has(key)) nodes.set(key, { textContent: '', style: {}, value: '', addEventListener() {}, focus() {} }); return nodes.get(key); };
   const dialog = { open: false, querySelector: node, addEventListener: (name, callback) => dialogEvents.set(name, callback), showModal() { this.open = true; } };
   let payload;
   const window = { dispatchEvent() {}, addEventListener() {},
     BIO_LIBRARY: { topics: [{ id: 'osmosis', explanations: { scientific: 'Water crosses a selectively permeable membrane.' } }] },
-    BIOQ_AI: { ask: async value => { payload = value; return 'A controlled comparison helps.'; }, explainError: () => 'Unavailable' } };
+    BIOQ_AI: { ask: async value => { payload = value; return 'A controlled comparison helps.'; }, explainError: () => 'Unavailable',
+      renderAnswer(target, value) { target.textContent = value; target.formatted = true; } } };
   const document = { createElement: () => dialog, body: { append() {} }, activeElement: null };
   vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../src/library/context.js'), 'utf8'), {
     window, parent: window, document, location: { origin: 'https://biology.entelloq.com' }, AbortController,
@@ -152,6 +155,7 @@ test('the learning guide sends selected concept reference but keeps experiment r
   assert.doesNotMatch(JSON.stringify(payload), /PRIVATE_|privateVariable|12345/);
   assert.equal(window.BioContext.get(), records, 'AI must not mutate the original notebook context');
   assert.equal(node('.bio-guide-answer').textContent, 'A controlled comparison helps.');
+  assert.equal(node('.bio-guide-answer').formatted, true);
   assert.match(node('.bio-guide-source').textContent, /AI explanation/);
 });
 

@@ -5,6 +5,7 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const crypto = require('node:crypto');
+const { gunzipSync } = require('node:zlib');
 const assert = require('node:assert/strict');
 const { pathToFileURL } = require('node:url');
 const { createRequire } = require('node:module');
@@ -20,6 +21,26 @@ const base = 'http://bioentelloq.single-file.test/index.html';
 const optionalServiceHosts = new Set(['fonts.googleapis.com', 'fonts.gstatic.com',
   'accounts.google.com', 'groq-proxy.physicsedge.workers.dev']);
 const bytes = fs.readFileSync(artifact);
+// Check both layouts: older packages stored scan data in the initial manifest;
+// current packages name inert model blocks later in the same HTML response.
+const artifactText = bytes.toString('utf8');
+const manifestMatch = artifactText.match(/<script id="bioq-manifest" type="application\/json">([\s\S]*?)<\/script>/);
+assert.ok(manifestMatch, 'The distributable contains its initial manifest');
+const artifactManifest = JSON.parse(manifestMatch[1]);
+const embeddedSpecimens = ['frog','cockroach'].map(id => {
+  const name = 'assets/specimens/' + id + '.glb', entry = artifactManifest.assets[name];
+  assert.ok(entry, id + ': model metadata is embedded');
+  let payload = entry.data;
+  if (entry.deferred) {
+    assert.match(entry.deferred, /^bioq-deferred-asset-\d+$/);
+    payload = artifactText.match(new RegExp('id="' + entry.deferred + '">([^<]+)</script>'))?.[1];
+  }
+  assert.equal(typeof payload, 'string', id + ': compressed bytes exist inside this same HTML');
+  const decoded = gunzipSync(Buffer.from(payload,'base64'));
+  const digest = crypto.createHash('sha256').update(decoded).digest('hex');
+  assert.equal(digest,crypto.createHash('sha256').update(fs.readFileSync(path.join(root,name))).digest('hex'),id + ': embedded model is byte-identical');
+  return {id,deferred:!!entry.deferred,bytes:decoded.length,sha256:digest};
+});
 const worldsOnly = process.argv.includes('--worlds-only');
 const fileOnly = process.argv.includes('--file-only');
 const reportName = (worldsOnly ? 'worlds-' : '') + (fileOnly ? 'file-' : '') + 'browser-report.json';
@@ -28,6 +49,7 @@ const report = {
   scope: worldsOnly ? 'immersive worlds only' : 'full application',
   artifact: path.relative(root, artifact), bytes: bytes.length,
   sha256: crypto.createHash('sha256').update(bytes).digest('hex'),
+  embeddedSpecimens,
   timestamp: new Date().toISOString(), complete: false, runs: [],
   rendering: { backend: 'SwiftShader software WebGL', deviceScaleFactor: 0.5, desktopCSSViewport: '1440x1000', mobileCSSViewport: '390x844' },
   limitations: 'Isolated Chromium with SwiftShader software WebGL at half device scale (one quarter of physical render pixels); CSS layout viewports remain unchanged. No live AI, Google sign-in, billing, real camera or touch hardware was exercised.'

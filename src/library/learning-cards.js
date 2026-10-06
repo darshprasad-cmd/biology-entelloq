@@ -317,7 +317,7 @@
     'A membrane passes water but traps sugar. One side initially has more dissolved sugar at the same pressure. Which way does water move net?',
     ['Trapped sugar lowers water potential on the more concentrated side.','Water can cross while sugar cannot.','Net water movement is toward the lower water potential until opposing effects balance.'],
     'Water initially moves toward the side with more trapped sugar.',[
-      check('An animal cell loses water and shrinks after transfer to a solution. Under these conditions, the solution is what relative to the cell?',['Hypertonic','Isotonic','Hypotonic'],'A hypertonic solution contains an effective concentration of nonpenetrating solutes that causes net water loss from the cell.'),
+      check('An animal cell loses water and remains shrunken after equilibration with a solution. The solution is what relative to the cell?',['Hypertonic','Isotonic','Hypotonic'],'A hypertonic solution contains an effective concentration of nonpenetrating solutes that causes net water loss from the cell.'),
       check('Why does knowing total solute concentration alone sometimes fail to predict a cell’s final volume?',['Some solutes can cross the membrane','Only solute movement can change cell volume','All solutes are always actively pumped'],'Permeating solutes can redistribute. Tonicity depends on the effective osmotic influence of nonpenetrating solutes over the relevant time.')
     ]);
 

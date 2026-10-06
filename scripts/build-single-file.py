@@ -375,11 +375,23 @@ def render_output(root: Path = ROOT) -> str:
     shell = (root / "src/single-file/shell.html").read_text(encoding="utf-8")
     host = (root / "src/single-file/host.js").read_text(encoding="utf-8")
     manifest = build_manifest(root)
+    # The two prepared scans account for most of the download. Keep them in
+    # this same HTML, after the running workspace, so lessons do not wait for
+    # specimen bytes they do not use. Each payload remains byte-identical.
+    deferred = []
+    manifest = {**manifest, "assets": dict(manifest["assets"])}
+    for name, entry in sorted(manifest["assets"].items(), key=lambda item: (item[0] != "assets/specimens/frog.glb", item[0])):
+        if not name.endswith(".glb"):
+            continue
+        element_id = "bioq-deferred-asset-" + str(len(deferred))
+        manifest["assets"][name] = {"type": entry["type"], "deferred": element_id}
+        deferred.append('<script type="application/octet-stream" id="' + element_id + '">' + entry["data"] + '</script>\n'
+                        '<script>window.BioqPackage.assetReady(' + json.dumps(name) + ');</script>')
     data = json.dumps(manifest, ensure_ascii=True, separators=(",", ":")).replace("<", "\\u003c")
-    for placeholder in ("__BIOQ_MANIFEST__", "__BIOQ_HOST__"):
+    for placeholder in ("__BIOQ_MANIFEST__", "__BIOQ_HOST__", "__BIOQ_DEFERRED_ASSETS__"):
         if shell.count(placeholder) != 1:
             raise ValueError(f"Single-file shell requires exactly one {placeholder}")
-    return shell.replace("__BIOQ_MANIFEST__", data).replace("__BIOQ_HOST__", re.sub(r"</script", r"<\/script", host, flags=re.I))
+    return shell.replace("__BIOQ_MANIFEST__", data).replace("__BIOQ_HOST__", re.sub(r"</script", r"<\/script", host, flags=re.I)).replace("__BIOQ_DEFERRED_ASSETS__", "\n".join(deferred))
 
 
 def redirect_page() -> str:

@@ -5,7 +5,9 @@
   const workspace = document.getElementById('bioq-workspace');
   const loading = document.getElementById('bioq-loading');
   const manifest = JSON.parse(document.getElementById('bioq-manifest').textContent);
-  const pages = new Map(), assets = new Map(), contexts = new WeakMap();
+  clearTimeout(window.__bioqOpeningTimer);
+  document.getElementById('bioq-loading-message').textContent = 'Preparing your learning workspace…';
+  const pages = new Map(), assets = new Map(), contexts = new WeakMap(), pendingFrames = new WeakMap();
   const synthetic = 'https://biology.entelloq.com/__single__/';
   const base = new URL('./', location.href);
   const sections = new Set(['home','learn','lessons','reason','labs','solve','explore','me','about','lab','universe']);
@@ -22,6 +24,52 @@
     for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
     return new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer());
   }
+  // These inert blocks arrive later in this same HTML response. No specimen is
+  // decompressed until requested; the learning workspace can already run.
+  for (const [path, entry] of Object.entries(manifest.assets)) if (entry.deferred) {
+    const asset = {type:entry.type, elementId:entry.deferred, arrived:false};
+    asset.available = new Promise((resolve, reject) => {asset.arrive=resolve; asset.fail=reject;});
+    asset.available.catch(() => {}); // A truncated unused model is not an unhandled rejection.
+    assets.set(path, asset);
+  }
+  function waitFor(promise, signal, win = window) {
+    if (signal?.aborted) return Promise.reject(new win.DOMException('Request aborted', 'AbortError'));
+    return new Promise((resolve, reject) => {
+      const finish = (callback, value) => {clearTimeout(timer); signal?.removeEventListener('abort', abort); callback(value);};
+      const abort = () => finish(reject, new win.DOMException('Request aborted', 'AbortError'));
+      const timer = setTimeout(() => finish(reject, new Error('The specimen download is taking too long. Check your connection and try again.')), 90000);
+      signal?.addEventListener('abort', abort, {once:true});
+      promise.then(value => finish(resolve,value), error => finish(reject,error));
+    });
+  }
+  async function assetBytes(asset, signal, win = window) {
+    if (asset.bytes) return asset.bytes;
+    await waitFor(asset.available, signal, win);
+    // An abort can win between the arrival promise settling and this
+    // continuation. Do not start a model decode for an already-cancelled visit.
+    if (signal?.aborted) throw new win.DOMException('Request aborted', 'AbortError');
+    if (!asset.decoding) asset.decoding = (async () => {
+      const element = document.getElementById(asset.elementId);
+      if (!element) throw new Error('The specimen download is incomplete. Please reload to try again.');
+      try {
+        asset.bytes = await unpack(element.textContent.trim());
+        element.remove();
+        return asset.bytes;
+      } catch (_) {
+        throw new Error('The specimen download could not be read. Please reload to try again.');
+      }
+    })();
+    // Decoding is shared by later requests even if this caller stops waiting.
+    asset.decoding.catch(() => {});
+    return waitFor(asset.decoding, signal, win);
+  }
+  async function inBatches(entries, size, callback) {
+    for (let i=0; i<entries.length; i+=size) await Promise.all(entries.slice(i,i+size).map(callback));
+  }
+  addEventListener('DOMContentLoaded', () => {
+    for (const asset of assets.values()) if (asset.elementId && !asset.arrived)
+      asset.fail(new Error('The specimen download was interrupted. Please reload to try again.'));
+  }, {once:true});
   function logical(value, from = new URL('app.html', base).href) {
     try { return new URL(value, from); } catch (_) { return null; }
   }
@@ -97,6 +145,7 @@
     return html;
   }
   function loadFrame(frame, value, native) {
+    pendingFrames.delete(frame);
     const owner = contextFor(frame.ownerDocument.defaultView);
     const url = logical(value, owner?.url.href);
     const name = url && localPath(url.href);
@@ -110,8 +159,25 @@
     }
     // srcdoc takes precedence over src. Keep src as a logical identity for the
     // existing validated frame bridges and MutationObservers, without a fetch.
-    native.setAttribute.call(frame, 'srcdoc', render(name, url.href));
-    native.setAttribute.call(frame, 'src', url.href);
+    const mount = () => {
+      native.setAttribute.call(frame, 'srcdoc', render(name, url.href));
+      native.setAttribute.call(frame, 'src', url.href);
+    };
+    const frog = name === 'lab.html' && assets.get('assets/specimens/frog.glb');
+    if (frog && !frog.bytes) {
+      const request = {}; pendingFrames.set(frame,request);
+      const label = frame.ownerDocument.querySelector('#launchLoad > div > div');
+      if (label) label.textContent = 'Downloading the frog specimen… You can return to your lessons while it loads.';
+      assetBytes(frog).then(() => {
+        if (pendingFrames.get(frame) !== request || !frame.isConnected) return;
+        pendingFrames.delete(frame); if (label) label.textContent = 'Entering…'; mount();
+      }, error => {
+        if (pendingFrames.get(frame) !== request || !frame.isConnected) return;
+        pendingFrames.delete(frame);
+        const message = String(error.message).replace(/[&<>]/g, value => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[value]));
+        native.setAttribute.call(frame,'srcdoc','<!doctype html><meta charset="utf-8"><body style="background:#081016;color:#e8f1f3;font:16px system-ui;padding:10vh 8vw"><main role="alert"><h1>The specimen could not open</h1><p>'+message+'</p><button onclick="top.location.reload()" style="font:inherit;padding:12px 18px">Try again</button></main>');
+      });
+    } else mount();
     return true;
   }
   function navigate(win, value, mode = 'push') {
@@ -165,6 +231,11 @@
   }
   window.BioqPackage = {
     contexts, resource, rewriteMarkup, loadFrame, commit, navigate,
+    assetReady(path) {
+      const asset = assets.get(path);
+      if (!asset?.elementId || !document.getElementById(asset.elementId)) return;
+      asset.arrived = true; asset.arrive();
+    },
     connect(win, route) {
       const url = new URL(route), page = localPath(route);
       const context = {url, page, frame:win.frameElement, ready:false}; contexts.set(win, context);
@@ -182,16 +253,18 @@
       if (!asset) return nativeFetch(input, options);
       const signal = options?.signal || input?.signal;
       if (signal?.aborted) throw new win.DOMException('Request aborted', 'AbortError');
-      return new win.Response(asset.bytes, {headers:{'Content-Type':asset.type,'Content-Length':String(asset.bytes.byteLength)}});
+      const bytes = await assetBytes(asset,signal,win);
+      if (signal?.aborted) throw new win.DOMException('Request aborted', 'AbortError');
+      return new win.Response(bytes, {headers:{'Content-Type':asset.type,'Content-Length':String(bytes.byteLength)}});
     }
   };
   try {
     if (!window.DecompressionStream) throw new Error('Please open this file in a current version of Chrome, Edge, Firefox or Safari.');
-    await Promise.all(Object.entries(manifest.assets).map(async ([path, entry]) => {
+    await inBatches(Object.entries(manifest.assets).filter(([,entry]) => !entry.deferred), 8, async ([path, entry]) => {
       const bytes = await unpack(entry.data);
       assets.set(path, {bytes,type:entry.type,url:URL.createObjectURL(new Blob([bytes], {type:entry.type}))});
-    }));
-    await Promise.all(Object.entries(manifest.pages).map(async ([name, data]) => pages.set(name, new TextDecoder().decode(await unpack(data)))));
+    });
+    await inBatches(Object.entries(manifest.pages), 3, async ([name, data]) => pages.set(name, new TextDecoder().decode(await unpack(data))));
     document.getElementById('bioq-manifest').remove();
     delete manifest.assets; delete manifest.pages;
     addEventListener('popstate', () => showRoute(true));
