@@ -636,6 +636,9 @@ body:not(.embed) header .btn.primary{background:var(--cy);color:var(--bg);border
 .bl-library .bl-clear{align-self:end;min-height:45px}
 .bl-library .bl-searchhint{font-size:12px;color:var(--dim);margin:0 0 25px;line-height:1.7}
 .bl-library .bl-searchhint button{color:var(--cy);text-decoration:underline;text-underline-offset:3px;margin-left:4px}
+.bl-library #bl-show-results{margin-right:12px;font-weight:600}
+.bl-library #bl-results-title{scroll-margin-top:100px}
+.bl-library #bl-empty-reset{margin-top:18px;min-height:44px;white-space:normal;text-align:left}
 .bl-library .bl-browser{display:grid;grid-template-columns:205px minmax(0,1fr);gap:36px;align-items:start}
 .bl-library .bl-categories{display:flex;flex-direction:column;gap:2px;position:sticky;top:88px}
 .bl-library .bl-category{display:flex;align-items:center;justify-content:space-between;gap:10px;text-align:left;min-height:40px;padding:9px 11px;border-radius:5px;font-size:12px;color:var(--dim);border:1px solid transparent}
@@ -6519,6 +6522,19 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
       return `<details class="bl-path" data-learning-path="${path.id}"><summary><span class="bl-pathnumber" aria-hidden="true">0${index+1}</span><span><strong>${path.title}</strong><small>${steps.length} connected concepts${visited ? ' · '+visited+' visited' : ''}</small></span><span class="bl-pathplus" aria-hidden="true">+</span></summary><div class="bl-pathbody"><p>${path.summary}</p><ol>${steps.map(topic => `<li><a href="${url(topic)}"><span>${esc(topic.title)}</span><span aria-hidden="true">${progress.topics[topic.id]?.modes.length ? '✓' : '↗'}</span></a></li>`).join('')}</ol></div></details>`;
     }).join('')}</div></details>`;
   }
+  function showResults() {
+    const heading = root.querySelector('#bl-results-title');
+    heading.focus({preventScroll:true});
+    heading.scrollIntoView({block:'start', behavior:'instant'});
+  }
+  function resetFilters() {
+    query = ''; curriculum = 'all'; selectedCategory = 'all'; scope = 'start';
+    root.querySelector('#bl-search').value = '';
+    root.querySelector('#bl-curriculum').value = 'all';
+    updateCategories();
+    renderResults();
+    root.querySelector('#bl-search').focus();
+  }
   function renderIndex() {
     root.dataset.view = 'index';
     const revisit = window.BioDepth?.reviewItems(topics) || [];
@@ -6527,17 +6543,19 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
     root.innerHTML = `<header class="bl-intro"><div><p class="eyebrow">Learn / The visual library</p><h1 class="bl-library-title">One concept. <span class="grad">Six ways in.</span></h1><p class="lead">See the system. Trace the mechanism. Make the connections that turn facts into understanding.</p><div class="bl-hero-notes" aria-label="Inside each concept"><span>Interactive models</span><span>Mechanisms & evidence</span><span>Practice & reflection</span></div></div><div class="bl-progress"><span class="bl-label">Your living library</span><strong>${topics.length} concepts</strong><span>${categories.length} connected fields of biology</span><div class="bl-progress-track" role="meter" aria-label="Concepts visited" aria-valuemin="0" aria-valuemax="${topics.length}" aria-valuenow="${explored}" aria-valuetext="${explored} of ${topics.length} concepts visited; visits are not mastery"><span style="width:${topics.length ? explored/topics.length*100 : 0}%"></span></div><span>${explored} visited · explore at your own pace</span>${last ? `<a href="${url(last, progress.last.mode)}">Continue: ${esc(last.title)} →</a>` : '<a href="#topic/cell-structure/layman">Begin with the cell →</a>'}</div></header>
       ${revisit.length ? `<section class="bd-revisit" aria-labelledby="bd-revisit-title"><h2 id="bd-revisit-title">Ideas you wanted to revisit</h2><p>Your own review choices, ready when you are.</p><nav aria-label="Revisit a concept">${revisit.map(t=>`<a href="${url(t,'scientific')}">${esc(t.title)} →</a>`).join('')}</nav></section>` : ''}
       <form class="bl-searchbar" role="search" aria-label="Search biology concepts"><label class="bl-field"><span class="bl-label">Find a concept</span><input id="bl-search" type="search" placeholder="Search all ${topics.length} concepts…" value="${esc(query)}" autocomplete="off" aria-controls="bl-results"></label><label class="bl-field"><span class="bl-label">Curriculum</span><select id="bl-curriculum">${curriculumOptions.map(([id, label]) => `<option value="${id}" ${curriculum === id ? 'selected' : ''}>${label}</option>`).join('')}</select></label><button type="button" class="btn ghost bl-clear" id="bl-clear">Reset filters</button></form>
-      <p class="bl-searchhint">Try an idea: <button type="button" data-search="cell powerhouse">cell powerhouse</button> · <button type="button" data-search="plant food">plant food</button> · <button type="button" data-search="protein factory">protein factory</button></p>
+      <p class="bl-searchhint"><button type="button" id="bl-show-results" aria-controls="bl-results">Show results <span aria-hidden="true">↓</span></button><span>Try an idea:</span> <button type="button" data-search="cell powerhouse">cell powerhouse</button> · <button type="button" data-search="plant food">plant food</button> · <button type="button" data-search="protein factory">protein factory</button></p>
       <p class="bl-curriculum-note">Curriculum tags indicate a suitable learning level, not complete or official exam-board syllabus coverage.</p>
       ${learningPaths()}
-      <div class="bl-browser"><nav class="bl-categories" aria-label="Biology units"><p class="bl-label">Browse by field</p>${[{id:'all', title:'All biology'}, ...categories].map(c => `<button type="button" class="bl-category" data-category="${esc(c.id)}" aria-pressed="${selectedCategory === c.id}"><span>${esc(c.title)}</span><span>${topics.filter(t => inCategory(t,c.id)).length}</span></button>`).join('')}</nav><div class="bl-results" id="bl-results"></div></div>
+      <div class="bl-browser"><nav class="bl-categories" aria-label="Biology units"><p class="bl-label">Browse by field</p>${[{id:'all', title:'All biology'}, ...categories].map(c => `<button type="button" class="bl-category" data-category="${esc(c.id)}" aria-pressed="${selectedCategory === c.id}"><span>${esc(c.title)}</span><span>${topics.filter(t => inCategory(t,c.id)).length}</span></button>`).join('')}</nav><section class="bl-results" id="bl-results" aria-labelledby="bl-results-title"><div class="bl-resulthead"><div><h2 id="bl-results-title" tabindex="-1" aria-describedby="bl-result-status"></h2><p id="bl-result-status" role="status" aria-live="polite" aria-atomic="true"></p></div><div class="bl-scope" aria-label="Library view"><button type="button" data-scope="start">Starting points</button><button type="button" data-scope="all">All ${topics.length}</button></div></div><div id="bl-result-items"></div></section></div>
       <div class="bl-legacy"><span>Keep exploring</span><a href="#cell">Interactive cell</a><a href="#microscope">Virtual microscope</a><a href="./lessons.html">Six-lens lessons</a><a href="./labs.html">Open the lab →</a></div>`;
-    root.querySelector('form').addEventListener('submit', e => e.preventDefault());
+    root.querySelector('form').addEventListener('submit', e => { e.preventDefault(); showResults(); });
+    root.querySelector('#bl-show-results').addEventListener('click', showResults);
     root.querySelector('#bl-search').addEventListener('input', e => { query = e.target.value; renderResults(); });
     root.querySelector('#bl-curriculum').addEventListener('change', e => { curriculum = e.target.value; renderResults(); });
-    root.querySelector('#bl-clear').addEventListener('click', () => { query = ''; curriculum = 'all'; selectedCategory = 'all'; scope = 'start'; renderIndex(); root.querySelector('#bl-search').focus(); });
+    root.querySelector('#bl-clear').addEventListener('click', resetFilters);
     root.querySelectorAll('[data-search]').forEach(button => button.addEventListener('click', () => { query = button.dataset.search; selectedCategory = 'all'; root.querySelector('#bl-search').value = query; updateCategories(); renderResults(); root.querySelector('#bl-search').focus(); }));
     root.querySelectorAll('[data-category]').forEach(button => button.addEventListener('click', () => { selectedCategory = button.dataset.category; updateCategories(); renderResults(); }));
+    root.querySelectorAll('[data-scope]').forEach(button => button.addEventListener('click', () => { scope = button.dataset.scope; renderResults(); }));
     renderResults();
   }
   function updateCategories() { root.querySelectorAll('[data-category]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.category === selectedCategory))); }
@@ -6550,9 +6568,14 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
       return `<article class="bl-topicrow" data-preview-topic="${esc(topic.id)}"><a class="bl-topiclink" href="${url(topic)}" aria-labelledby="bl-card-${esc(topic.id)}" aria-describedby="bl-card-desc-${esc(topic.id)}"><div class="bl-preview" aria-hidden="true">${preview(topic)}<span class="bl-preview-open">Explore <span aria-hidden="true">↗</span></span></div><div class="bl-cardbody"><p class="bl-overline">${esc(parent ? parent.title : categoryTitle(topic.category))}${connected ? ' · related' : ''}</p><h3 id="bl-card-${esc(topic.id)}">${esc(topic.title)}</h3><p class="bl-card-summary" id="bl-card-desc-${esc(topic.id)}">${esc(topic.summary)}</p><div class="bl-rowmeta"><span>${sub.length ? sub.length + ' concepts inside' : esc(level)}</span><span class="${record?.modes.length ? 'bl-done' : ''}">${record?.modes.length ? record.modes.length+'/6 explored' : 'Six perspectives'}</span></div></div></a>${sub.length ? `<details class="bl-card-topics"><summary>Explore ${sub.length} subtopics</summary><ul>${sub.map(t => `<li><a href="${url(t)}">${esc(t.title)}<span aria-hidden="true">↗</span></a></li>`).join('')}</ul></details>` : ''}</article>`;
     };
     const groups = !query && selectedCategory === 'all' && scope === 'all';
-    root.querySelector('#bl-results').innerHTML = `<div class="bl-resulthead"><div><h2>${esc(title)}</h2><p role="status" aria-live="polite">${hits.length} complete concepts${curriculum !== 'all' ? ' · ' + esc(curriculumOptions.find(c => c[0] === curriculum)?.[1] || '') : ''}</p></div>${selectedCategory === 'all' && !query ? `<div class="bl-scope" aria-label="Library view"><button type="button" data-scope="start" aria-pressed="${scope === 'start'}">Starting points</button><button type="button" data-scope="all" aria-pressed="${scope === 'all'}">All ${topics.length}</button></div>` : ''}</div>
-      ${selectedCategory !== 'all' && !query ? `<p class="bl-category-description">${esc(categoryById.get(selectedCategory)?.summary || '')}</p>` : ''}${hits.length ? groups ? categories.map(category => {const group = hits.filter(({topic}) => topic.category === category.id); return group.length ? `<section class="bl-topicgroup" aria-label="${esc(category.title)}"><div class="bl-grouphead"><div><h3>${esc(category.title)}</h3><p>${esc(category.summary)}</p></div><span>${group.length} concepts</span></div><div class="bl-topiclist">${group.map(card).join('')}</div></section>` : '';}).join('') : `<div class="bl-topiclist">${hits.map(card).join('')}</div>` : `<div class="bl-empty"><h3>No concepts match these filters.</h3><p>Try a broader term, another curriculum, or reset the filters.</p></div>`}`;
-    root.querySelectorAll('[data-scope]').forEach(button => button.addEventListener('click', () => {scope=button.dataset.scope;renderResults();root.querySelector('[data-scope="'+scope+'"]')?.focus({preventScroll:true});}));
+    // Keep the live region and focus targets mounted before their content changes.
+    // Only the cards are replaced; typing and filter changes never move focus.
+    root.querySelector('#bl-results-title').textContent = title;
+    root.querySelector('#bl-result-status').textContent = `${hits.length} complete concept${hits.length === 1 ? '' : 's'}${selectedCategory !== 'all' ? ' · ' + categoryTitle(selectedCategory) : ''}${curriculum !== 'all' ? ' · ' + (curriculumOptions.find(c => c[0] === curriculum)?.[1] || '') : ''}`;
+    root.querySelector('.bl-scope').hidden = selectedCategory !== 'all' || !!query;
+    root.querySelectorAll('[data-scope]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.scope === scope)));
+    root.querySelector('#bl-result-items').innerHTML = `${selectedCategory !== 'all' && !query ? `<p class="bl-category-description">${esc(categoryById.get(selectedCategory)?.summary || '')}</p>` : ''}${hits.length ? groups ? categories.map(category => {const group = hits.filter(({topic}) => topic.category === category.id); return group.length ? `<section class="bl-topicgroup" aria-label="${esc(category.title)}"><div class="bl-grouphead"><div><h3>${esc(category.title)}</h3><p>${esc(category.summary)}</p></div><span>${group.length} concepts</span></div><div class="bl-topiclist">${group.map(card).join('')}</div></section>` : '';}).join('') : `<div class="bl-topiclist">${hits.map(card).join('')}</div>` : `<div class="bl-empty"><h3>No concepts match these filters.</h3><p>Try a broader term, another curriculum, or reset the filters.</p><button type="button" class="btn ghost" id="bl-empty-reset">Reset filters and search again</button></div>`}`;
+    root.querySelector('#bl-empty-reset')?.addEventListener('click', resetFilters);
   }
   function prose(value) {
     // Keep the complete authored explanation, but give it a readable first layer.
