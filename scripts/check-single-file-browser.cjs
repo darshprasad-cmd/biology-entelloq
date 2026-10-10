@@ -9,6 +9,7 @@ const { gunzipSync } = require('node:zlib');
 const assert = require('node:assert/strict');
 const { pathToFileURL } = require('node:url');
 const { createRequire } = require('node:module');
+const { checkLibrarySearch } = require('../tests/library-search-browser.cjs');
 const root = path.resolve(__dirname, '..');
 const modules = process.env.BIOLOGY_PLAYWRIGHT_MODULES || path.resolve(root, '../biology-entelloq/node_modules');
 const { chromium } = createRequire(path.join(modules, '__single_file_check__.cjs'))('playwright');
@@ -276,6 +277,7 @@ async function runSuite(browser, mode, url) {
     run.checks.push('All eight embedded sections open real content with no horizontal overflow on desktop.');
 
     let navigation = await section(page, url, 'learn', '#bl-search');
+    run.checks.push('Learn search desktop: ' + await checkLibrarySearch(page, navigation.frame));
     await navigation.shell.locator('#nav .navi[data-go="lessons"]:not(.quick-action)').click();
     await page.waitForURL(/#lessons$/);
     await (await childFrame(navigation.shell, '#viewFrame')).locator('#lesson-search').waitFor();
@@ -339,6 +341,7 @@ async function runSuite(browser, mode, url) {
     for (const [key, ready] of sections) {
       opened = await section(page, url, key, ready);
       await noOverflow(page, [['shell', opened.shell], [key, opened.frame]], key + ' mobile', run);
+      if (key === 'learn') run.checks.push('Learn search mobile: ' + await checkLibrarySearch(page, opened.frame));
     }
     opened = await section(page, url, 'labs/photosynthesis-rate', '#lab-record');
     await noOverflow(page, [['shell', opened.shell], ['notebook', opened.frame]], 'notebook mobile', run);
