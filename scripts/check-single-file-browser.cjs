@@ -303,6 +303,28 @@ async function runSuite(browser, mode, url) {
     await frame.locator('#bl-mode-visual[aria-selected="true"]').waitFor();
     run.checks.push('Cell Structure Visual deep link opens correctly; mode changes update the outer URL, browser Back restores Visual, and reload preserves it.');
 
+    // Embedded site-footer suppression must not hide lesson actions or sources.
+    const studyActions = frame.getByRole('group', { name: 'Study notes and reference reading', exact: true });
+    await studyActions.waitFor({ state: 'visible' });
+    const noteDraft = 'A private cell-structure explanation exported from the isolated single-file app.';
+    await frame.locator('[data-depth-task="investigation"] textarea').fill(noteDraft);
+    const exportButton = studyActions.locator('[data-depth-export]');
+    await exportButton.focus();
+    assert.equal(await exportButton.evaluate(el => el === document.activeElement), true);
+    const sources = studyActions.locator('a');
+    assert.ok(await sources.count() > 0);
+    for (const link of await sources.all()) assert.equal(await link.isVisible(), true);
+    const downloaded = page.waitForEvent('download');
+    await page.keyboard.press('Enter');
+    const studyDownload = await downloaded;
+    assert.equal(studyDownload.suggestedFilename(), 'biology-cell-structure-study-notes.md');
+    const studyPath = path.join(output, mode + '-study-notes.md');
+    await studyDownload.saveAs(studyPath);
+    const studyText = fs.readFileSync(studyPath, 'utf8');
+    assert.ok(studyText.includes(noteDraft));
+    assert.ok(studyText.includes('## Reference reading'));
+    run.checks.push('Embedded study references are visible and keyboard activation downloads actual private notes with external network blocked.');
+
     const originalTheme = await shell.locator('html').getAttribute('data-theme');
     await shell.locator('#themeBtn').click();
     const expectedTheme = originalTheme === 'light' ? 'dark' : 'light';
