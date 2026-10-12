@@ -129,6 +129,23 @@ fs.mkdirSync(output, { recursive: true });
       assert.ok(await group.evaluate(el => el.scrollWidth <= el.clientWidth + 1), 'Study actions do not overflow on narrow screens');
       return { referenceLinks: count, exportKeyboardReachable: true, referencesKeyboardReachable: true };
     }
+    async function selectTheme(world, theme) {
+      const owner = packaged ? world.parentFrame() : world;
+      if (await owner.locator('html').getAttribute('data-theme') !== theme) {
+        if (await owner.locator('#themeBtn').isVisible()) {
+          await owner.locator('#themeBtn').click();
+        } else {
+          assert.ok(packaged, 'Standalone theme control must remain visible');
+          await owner.locator('#exploreBtn').click();
+          await owner.locator('#exploreTheme').click();
+          await owner.locator('#exploreClose').click();
+        }
+      }
+      await owner.waitForFunction(theme => document.documentElement.dataset.theme === theme, theme);
+      await world.waitForFunction(theme => document.documentElement.dataset.theme === theme, theme);
+      // Allow the existing color transitions to settle after the real theme action.
+      await page.waitForTimeout(350);
+    }
 
     if (packaged) {
       const expected = path.resolve(process.env.BIOLOGY_DEPLOYED_ARTIFACT || path.join(root, 'dist/index.html'));
@@ -241,10 +258,7 @@ fs.mkdirSync(output, { recursive: true });
       for (const section of ['learn', 'reason', 'solve']) {
         world = await open(section);
         for (const theme of ['dark', 'light']) {
-          await page.evaluate(theme => { document.documentElement.dataset.theme = theme; }, theme);
-          await world.evaluate(theme => { document.documentElement.dataset.theme = theme; }, theme);
-          // Existing theme colors transition; wait for a settled visual capture.
-          await page.waitForTimeout(350);
+          await selectTheme(world, theme);
           const studyActions = await assertStudyGroup(world);
           assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'Outer document fits ' + width);
           assert.ok(await world.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), section + ' document fits ' + width);
@@ -282,9 +296,7 @@ fs.mkdirSync(output, { recursive: true });
       for (const section of ['learn', 'reason', 'solve']) {
         world = await open(section, 'photosynthesis');
         for (const theme of ['dark', 'light']) {
-          await page.evaluate(theme => { document.documentElement.dataset.theme = theme; }, theme);
-          await world.evaluate(theme => { document.documentElement.dataset.theme = theme; }, theme);
-          await page.waitForTimeout(350);
+          await selectTheme(world, theme);
           const studyActions = await assertStudyGroup(world);
           assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
           assert.ok(await world.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
