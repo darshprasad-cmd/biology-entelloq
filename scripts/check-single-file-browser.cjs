@@ -10,6 +10,7 @@ const assert = require('node:assert/strict');
 const { pathToFileURL } = require('node:url');
 const { createRequire } = require('node:module');
 const { checkLibrarySearch } = require('../tests/library-search-browser.cjs');
+const { checkLibraryAnswer } = require('../tests/library-answer-browser.cjs');
 const root = path.resolve(__dirname, '..');
 const modules = process.env.BIOLOGY_PLAYWRIGHT_MODULES || path.resolve(root, '../biology-entelloq/node_modules');
 const { chromium } = createRequire(path.join(modules, '__single_file_check__.cjs'))('playwright');
@@ -302,6 +303,8 @@ async function runSuite(browser, mode, url) {
     let frame = await childFrame(shell, '#viewFrame');
     await frame.locator('#bl-mode-visual[aria-selected="true"]').waitFor();
     run.checks.push('Cell Structure Visual deep link opens correctly; mode changes update the outer URL, browser Back restores Visual, and reload preserves it.');
+
+    run.checks.push('Learn quick-check focus: ' + JSON.stringify(await checkLibraryAnswer(page, frame)));
 
     // Embedded site-footer suppression must not hide lesson actions or sources.
     const studyActions = frame.getByRole('group', { name: 'Study notes and reference reading', exact: true });

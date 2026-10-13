@@ -115,6 +115,7 @@
 .bl-library .bl-option[data-result=incorrect]{border-color:var(--rose);color:var(--ink);opacity:1}
 .bl-library .bl-feedback{border-left:2px solid var(--cy);padding:0 0 0 13px;margin-top:14px;font-size:13px;line-height:1.8;color:var(--dim)}
 .bl-library .bl-feedback strong{display:block;color:var(--ink);font-weight:550}
+.bl-library .bl-answer-explanation{margin:0;scroll-margin-block:24px}
 .bl-library .bl-feedback button{color:var(--cy);font-size:12px;margin-top:7px;min-height:34px;text-decoration:underline;text-underline-offset:3px}
 .bl-library .bl-connections{border-top:1px solid var(--hair);padding-top:19px}
 .bl-library .bl-connections h3{font-size:19px;margin-bottom:12px}
