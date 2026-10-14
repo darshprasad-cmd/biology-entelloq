@@ -1,0 +1,146 @@
+{
+  "source": "Biology Entelloq - Google Chrome 2026-09-19 12-42-58.mp4",
+  "source_dimensions": [
+    1920,
+    1080
+  ],
+  "source_duration_seconds": 147.96,
+  "output_video_format": "H.264 / yuv420p / 24 fps / no audio / faststart",
+  "notes": [
+    "Source browser chrome and taskbar removed.",
+    "Cuts use only the supplied real product footage. No generated anatomy or interpolation.",
+    "Source interaction frame rate varies; output maintains recorded motion."
+  ],
+  "clips": [
+    {
+      "id": "dissection-01",
+      "label": "Make the first incision",
+      "start": 34,
+      "duration": 13,
+      "poster_second": 9,
+      "description": "Tracked-hand scalpel interaction followed by the skin opening.",
+      "source_end": 47,
+      "crop": {
+        "x": 0,
+        "y": 32,
+        "width": 1920,
+        "height": 1032
+      },
+      "dimensions": [
+        1280,
+        688
+      ],
+      "video": "dissection-01.mp4",
+      "poster": "dissection-01.webp",
+      "video_bytes": 604781,
+      "poster_bytes": 50548,
+      "decode_verified": true,
+      "verified_duration_seconds": 12.96,
+      "verified_stream": "Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1280x688 [SAR 1:1 DAR 80:43], 370 kb/s, 24 fps, 24 tbr, 12288 tbn (default)",
+      "no_audio_verified": true,
+      "faststart_verified": true
+    },
+    {
+      "id": "dissection-02",
+      "label": "Explore every layer",
+      "start": 82,
+      "duration": 12,
+      "poster_second": 10,
+      "description": "Forceps lift the superficial layer to expose the muscle wall.",
+      "source_end": 94,
+      "crop": {
+        "x": 0,
+        "y": 32,
+        "width": 1920,
+        "height": 1032
+      },
+      "dimensions": [
+        1280,
+        688
+      ],
+      "video": "dissection-02.mp4",
+      "poster": "dissection-02.webp",
+      "video_bytes": 730778,
+      "poster_bytes": 46156,
+      "decode_verified": true,
+      "verified_duration_seconds": 12.0,
+      "verified_stream": "Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1280x688 [SAR 1:1 DAR 80:43], 484 kb/s, 24 fps, 24 tbr, 12288 tbn (default)",
+      "no_audio_verified": true,
+      "faststart_verified": true
+    },
+    {
+      "id": "dissection-03",
+      "label": "Reveal the anatomy",
+      "start": 125,
+      "duration": 12,
+      "poster_second": 8,
+      "description": "The final membrane opens to expose the organs.",
+      "source_end": 137,
+      "crop": {
+        "x": 0,
+        "y": 32,
+        "width": 1920,
+        "height": 1032
+      },
+      "dimensions": [
+        1280,
+        688
+      ],
+      "video": "dissection-03.mp4",
+      "poster": "dissection-03.webp",
+      "video_bytes": 594405,
+      "poster_bytes": 55324,
+      "decode_verified": true,
+      "verified_duration_seconds": 11.96,
+      "verified_stream": "Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1280x688 [SAR 1:1 DAR 80:43], 394 kb/s, 24 fps, 24 tbr, 12288 tbn (default)",
+      "no_audio_verified": true,
+      "faststart_verified": true
+    },
+    {
+      "id": "dissection-hero",
+      "label": "Dissection in motion",
+      "duration": 12,
+      "source_ranges": [
+        [
+          39,
+          43
+        ],
+        [
+          88,
+          92
+        ],
+        [
+          130,
+          134
+        ]
+      ],
+      "crop": {
+        "x": 500,
+        "y": 32,
+        "width": 1040,
+        "height": 1032
+      },
+      "dimensions": [
+        720,
+        900
+      ],
+      "padding": {
+        "top": 48,
+        "bottom": 138
+      },
+      "description": "Three four-second excerpts: skin opening, muscle-wall reveal, and organs. Full specimen preserved in a portrait-friendly dark frame.",
+      "video": "dissection-hero.mp4",
+      "poster": "dissection-hero.webp",
+      "video_bytes": 512936,
+      "poster_bytes": 41522,
+      "decode_verified": true,
+      "verified_duration_seconds": 11.83,
+      "verified_stream": "Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 720x900 [SAR 1:1 DAR 4:5], 342 kb/s, 24.08 fps, 24 tbr, 1000k tbn (default)",
+      "no_audio_verified": true,
+      "faststart_verified": true
+    }
+  ],
+  "total_video_bytes": 2442900,
+  "total_poster_bytes": 193550,
+  "visual_review": "All four posters and a half-second hero contact sheet inspected: real dissection stages and hand tracking preserved, no browser chrome or taskbar visible."
+}

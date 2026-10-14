@@ -22,8 +22,11 @@ class LibraryBuild(unittest.TestCase):
         for page in builder.PAGES:
             _,before,after=builder.render(page);self.assertEqual(before,after,'Run python scripts/build-background.py')
         source=(ROOT/'src/library/backdrop.js').read_text(encoding='utf-8')
-        self.assertIn('assets/biology-dna-hero.webp',source)
-        self.assertIn('bioq_landing_motion',source)
+        self.assertIn('assets/launch/biology-cell.webp',source)
+        self.assertNotIn('requestAnimationFrame(',source)
+        self.assertNotIn('@keyframes',source)
+        self.assertNotIn('animation:',source)
+        self.assertNotIn('blur(',source)
 
     def test_original_learn_interactives_still_exist(self):
         page=(ROOT/'learn.html').read_text(encoding='utf-8')

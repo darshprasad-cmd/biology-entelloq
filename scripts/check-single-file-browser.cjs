@@ -254,7 +254,7 @@ async function runSuite(browser, mode, url) {
     }
     await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
     let shell = await workspace(page, '#bio-title');
-    assert.match(await shell.locator('#bio-title').textContent(), /Biology/);
+    assert.match(await shell.locator('#bio-title').textContent(), /Life reveals more/);
     await noOverflow(page, [['landing', shell]], 'landing desktop', run);
     await screenshot(page, mode + '-landing-desktop');
     await page.goto(url + '#pe-worlds', { waitUntil: 'domcontentloaded' });

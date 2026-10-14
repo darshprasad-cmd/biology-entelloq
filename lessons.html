@@ -314,31 +314,31 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);background:v
 /* Physics Entelloq's reading surfaces, adapted to Biology's existing pillars.
    Keep this layer separate from authored lessons, scientific models and shared chrome. */
 html:root{
-  --bg:#050b08;--bg-2:#09100a;--panel:#0d180f;--raise:#16251a;
-  --ink:#e9ece5;--dim:#b2bdb0;--faint:#91a48a;
-  --line:rgba(166,197,162,.19);--line-2:rgba(166,197,162,.12);--hair:#38523c;
-  --em:#a8d8b3;--em-2:#c5f2c7;--cy:#b6d9b8;--cy-2:#a1c0a6;
+  --bg:#080b0d;--bg-2:#0e1413;--panel:#121a16;--raise:#1b2821;
+  --ink:#f4f1e9;--dim:#b6c3ba;--faint:#a0b2a4;
+  --line:rgba(154,219,189,.18);--line-2:rgba(154,219,189,.1);--hair:#3c5548;
+  --em:#9adbbd;--em-2:#c5f5db;--cy:#9adbbd;--cy-2:#a8cab7;
   --indigo:#b7b5df;--indigo-2:#b7b5df;--amber:#e8bc86;--rose:#e7a6b6;
-  --glass:#09100a;--glass-strong:#09100a;
+  --glass:#0e1413;--glass-strong:#0e1413;
   --shadow-1:none;--shadow-2:none;--shadow-glow:none;--spot:transparent;
   --sans:'Inter',system-ui,-apple-system,sans-serif;
-  --display:'Space Grotesk','Inter',system-ui,sans-serif;
+  --display:'Inter',system-ui,sans-serif;
   --mono:'JetBrains Mono',ui-monospace,monospace;
   --r-sm:6px;--r:8px;--r-lg:9px;--r-xl:10px;
   --edge:clamp(24px,4vw,64px);--maxw:1200px;
 }
 html:root[data-theme=light]{
-  --bg:#f1f5ed;--bg-2:#e8eee3;--panel:#f8fbf5;--raise:#e1eadb;
-  --ink:#172c1b;--dim:#415b44;--faint:#567052;
-  --line:#c4d3bc;--line-2:#d9e2d3;--hair:#a9bda2;
+  --bg:#f4f1e9;--bg-2:#ebece3;--panel:#fffef8;--raise:#e4ece2;
+  --ink:#14261b;--dim:#475e4c;--faint:#5e705f;
+  --line:#c3d1c4;--line-2:#d8e0d4;--hair:#a2b5a5;
   --em:#32683f;--em-2:#2b5936;--cy:#386642;--cy-2:#386642;
   --indigo:#665c92;--indigo-2:#665c92;--amber:#885a24;--rose:#a04660;
-  --glass:#e8eee3;--glass-strong:#e8eee3;
+  --glass:#ebece3;--glass-strong:#ebece3;
 }
 /* Outrank the authored light-theme blue button gradient without changing its shape. */
 html:root[data-theme=light] body .btn.primary{background:var(--cy);color:var(--bg);border-color:var(--cy)}
 html:root[data-theme=light] body main .btn.primary:hover{background:var(--em);border-color:var(--em)}
-body #launch{background:#050b08}
+body #launch{background:#080b0d}
 html:root,html body{background:var(--bg)!important;color:var(--ink)}
 html body{font:16px/1.65 var(--sans);letter-spacing:0}
 body>#fx,body>#atmo,body>.bg-veil{display:none!important}
@@ -390,7 +390,7 @@ body main .cat-head{margin-bottom:20px}
 body main .cat-head h3{font:450 23px/1.4 var(--display);letter-spacing:-.5px}
 body main :is(.btn,.bx-btn,.sv-ghostbtn,.ghostbtn){
   min-height:42px;padding:10px 16px;font:450 13px/1.4 var(--sans);border:1px solid var(--hair);
-  border-radius:6px;box-shadow:none;transition:background 140ms,transform 140ms;
+  border-radius:999px;box-shadow:none;transition:background 140ms,transform 140ms;
 }
 body main :is(.btn.primary,.bx-btn.pri){background:var(--cy);color:var(--bg);border-color:var(--cy);font-weight:550}
 body main .btn.ghost{background:transparent;color:var(--ink)}
@@ -1754,35 +1754,24 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
 })();</script>
 
 <script id="atmo-js">
-/* The launch photograph continues through the application as one persistent scene. */
+/* The launch's cell continues into study as a static, cached backdrop.
+   No animation loop, full-screen compositor layer, or backdrop blur is needed. */
 (function(){
   'use strict';
   const embedded = new URLSearchParams(location.search).has('embed');
   const style=document.createElement('style');style.id='bio-launch-backdrop-css';
-  style.textContent=`html:root{background:var(--bg,#050b08)!important}html body,body .stage,body .home{background:transparent!important}body>#atmo,body>#fx,body>.bg-veil{display:none!important}
-    #bio-app-backdrop{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:#050b08}
-    #bio-app-backdrop:before{content:'';position:absolute;inset:-3%;background:url('./assets/biology-dna-hero.webp') center right/cover no-repeat;opacity:.62;animation:bio-app-drift 28s ease-in-out infinite alternate}
-    #bio-app-backdrop:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#050b08e0 3%,#050b08a8 48%,#050b0866),linear-gradient(0deg,#050b0899,transparent 70%)}
-    html[data-theme=light] #bio-app-backdrop{background:#eef3e9}html[data-theme=light] #bio-app-backdrop:before{opacity:.23}html[data-theme=light] #bio-app-backdrop:after{background:linear-gradient(90deg,#f1f5edee,#f1f5edb0)}
-    body .side,body .topbar{background:color-mix(in srgb,var(--bg-2) 93%,transparent);backdrop-filter:blur(12px)}
-    #bio-background-toggle{position:fixed;right:18px;bottom:16px;z-index:45;padding:8px 11px;border:1px solid var(--hair,#38523c);border-radius:6px;background:var(--panel,#0d180f);color:var(--dim,#b2bdb0);font:11px var(--sans,system-ui);cursor:pointer}
-    #bio-background-toggle:focus-visible{outline:2px solid var(--em);outline-offset:3px}
-    #bio-app-backdrop[data-paused=true]:before{animation-play-state:paused}
-    @keyframes bio-app-drift{from{transform:scale(1.015)}to{transform:translate3d(-7px,4px,0) scale(1.055)}}
-    @media(max-width:760px){#bio-background-toggle{bottom:calc(76px + env(safe-area-inset-bottom));right:12px;font-size:10px;padding:7px 9px}#bio-app-backdrop:before{background-position:62% center;opacity:.5}}
-    @media(prefers-reduced-motion:reduce){#bio-app-backdrop:before{animation:none!important;transform:none!important}}`;
+  style.textContent=`html:root{background:var(--bg,#080b0d)!important}html body,body .stage,body .home{background:transparent!important}body>#atmo,body>#fx,body>.bg-veil{display:none!important}
+    #bio-app-backdrop{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:#080b0d}
+    #bio-app-backdrop:before{content:'';position:absolute;inset:0;background:url('./assets/launch/biology-cell.webp') center right/cover no-repeat;opacity:.23}
+    #bio-app-backdrop:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#080b0df5 3%,#080b0dc4 48%,#080b0d70),linear-gradient(0deg,#080b0dbb,transparent 70%)}
+    html[data-theme=light] #bio-app-backdrop{background:#f4f1e9}html[data-theme=light] #bio-app-backdrop:before{opacity:.09}html[data-theme=light] #bio-app-backdrop:after{background:linear-gradient(90deg,#f4f1e9f5,#f4f1e9bf)}
+    body .side,body .topbar{background:var(--bg-2);backdrop-filter:none}
+    @media(max-width:760px){#bio-app-backdrop:before{background-position:62% center;opacity:.16}}`;
   if(embedded) style.textContent+='html:root,html body{background:transparent!important}';
   document.head.append(style);
   window.BIOQ_ATMO={theme(){},setSection(){},mouse:null,mode:embedded?'embedded':'launch-image'};
   if(embedded)return;
   const bg=document.createElement('div');bg.id='bio-app-backdrop';bg.setAttribute('aria-hidden','true');document.body.prepend(bg);
-  const toggle=document.createElement('button');toggle.id='bio-background-toggle';toggle.type='button';document.body.append(toggle);
-  const reduced=matchMedia('(prefers-reduced-motion:reduce)');let stored=false;
-  try{stored=localStorage.getItem('bioq_landing_motion')==='paused';}catch(_){}
-  function refresh(){const paused=stored||reduced.matches||document.hidden;bg.dataset.paused=String(paused);toggle.textContent=reduced.matches?'Reduced background motion':stored?'▷ Background motion':'Ⅱ Background motion';toggle.setAttribute('aria-label',reduced.matches?'Reduced background motion enabled':stored?'Resume background motion':'Pause background motion');toggle.setAttribute('aria-pressed',String(stored||reduced.matches));toggle.disabled=reduced.matches;}
-  toggle.onclick=()=>{stored=!stored;try{localStorage.setItem('bioq_landing_motion',stored?'paused':'running');}catch(_){}refresh();};
-  reduced.addEventListener('change',refresh);document.addEventListener('visibilitychange',refresh);
-  addEventListener('storage',e=>{if(e.key==='bioq_landing_motion'){stored=e.newValue==='paused';refresh();}});refresh();
 })();
 </script>
 <script id="auth-js">
