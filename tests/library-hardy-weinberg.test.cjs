@@ -14,6 +14,7 @@ const prefix = 'bioq.depth-study.v1.';
 const plain = value => JSON.parse(JSON.stringify(value));
 const signature = task => JSON.stringify([task.question, task.answer, task.rows || []]);
 const closeTo = (actual, expected, label) => assert.ok(Math.abs(actual - expected) < 1e-10, label + ': ' + actual + ' ≠ ' + expected);
+const recombinantBaseline = require('./fixtures/recombinant-evidence-0aea0f3.json');
 
 // Captured from the accepted add81f2 release, not reconstructed from the new
 // prompt. These exact strings and rows formed the prior saved-task signature.
@@ -209,6 +210,14 @@ test('all other authored lessons and all MCQs remain identical to the accepted r
   const {window} = setup();
   const retained = {topics:plain(window.BIO_LIBRARY.topics), depth:plain(window.BIO_DEPTH), enrichment:plain(window.BIO_ENRICHMENT)};
   assert.equal(retained.topics.length, 109);
+  // The later, separately tested recombinant-evidence release changes only
+  // these four slots. Restore their independently captured accepted contents
+  // for this HISTORICAL hash; do not refresh the hash or exclude that lesson.
+  // library-recombinant.test.cjs also protects the complete accepted HW unit.
+  retained.topics.find(topic => topic.id === 'recombinant-dna').sources = plain(recombinantBaseline.topic.sources);
+  retained.depth['recombinant-dna'].investigation = plain(recombinantBaseline.depth.investigation);
+  retained.depth['recombinant-dna'].sources = plain(recombinantBaseline.depth.sources);
+  retained.enrichment['recombinant-dna'].workedExample = plain(recombinantBaseline.enrichment.workedExample);
   // Only the named investigation, its derived Reason example and the same
   // lesson's references are permitted to change; objectives remain protected.
   delete retained.topics.find(topic => topic.id === id).sources;
