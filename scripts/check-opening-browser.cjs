@@ -50,12 +50,46 @@ async function exactFrog(page){
   return {hash,bytes:bytes.byteLength};
  },frog);
 }
+async function readingReadyWithHeldImage(browser,base){
+ const context=await browser.newContext({viewport:{width:1280,height:900},reducedMotion:'reduce'});let heldImage;
+ try{
+  await context.route('**/*',route=>{
+   const url=new URL(route.request().url());
+   if(url.origin===base&&url.pathname==='/held-decoration.png'){heldImage=route;return;}
+   if(url.origin===base&&url.pathname==='/truncated')return route.continue();
+   if(['http:','https:'].includes(url.protocol))return route.abort('blockedbyclient');
+   return route.continue();
+  });
+  await context.addInitScript(base=>document.addEventListener('DOMContentLoaded',()=>{
+   if(window.BioqLocation?.pathname.endsWith('/learn.html')){const image=document.createElement('img');image.src=base+'/held-decoration.png';image.hidden=true;document.body.append(image);}
+  }),base);
+  const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));
+  await page.goto(base+'/truncated#learn/topic/cell-structure/visual',{waitUntil:'domcontentloaded'});
+  const shell=await frame(page,'#bioq-workspace');await shell.locator('#viewFrame.on').waitFor();const lesson=await frame(shell,'#viewFrame');
+  await lesson.locator('#bl-mode-visual[aria-selected=true]').waitFor();await shell.locator('#skel.on').waitFor({state:'hidden'});
+  assert.equal(await lesson.evaluate(()=>document.readyState),'interactive','The noncritical image still delays native load');
+  await lesson.locator('.bl-quiz [data-check="0"]').first().click();await lesson.locator('[data-feedback="0"]').waitFor({state:'visible'});
+  await page.waitForTimeout(15500);
+  assert.equal(await shell.locator('#oops.on').count(),0,'A ready lesson must not hit the unchanged 15-second load deadline');
+  await lesson.getByRole('button',{name:'Try this check again',exact:true}).click();assert.equal(await lesson.locator('.bl-quiz [data-check="0"]').first().isEnabled(),true);
+  report.checks.push('Learn answers and retries remain usable beyond the unchanged 15-second deadline while a noncritical image deliberately withholds native iframe load.');
+  await page.goto(base+'/truncated#home',{waitUntil:'domcontentloaded'});
+  const home=await frame(page,'#bioq-workspace');await home.locator('#homeIn .cc-world').first().waitFor();
+  await page.evaluate(()=>{window.originalLoadFrame=BioqPackage.loadFrame;BioqPackage.loadFrame=(target,value,...rest)=>target.id==='viewFrame'?true:originalLoadFrame(target,value,...rest);});
+  await home.locator('#nav [data-go="learn"]:not(.quick-action)').click();await home.locator('#oops.on').waitFor({timeout:20000});
+  assert.match(await home.locator('#oopsMsg').textContent(),/took too long/,'A genuinely unmounted section still reaches the unchanged deadline');
+  await page.evaluate(()=>{BioqPackage.loadFrame=originalLoadFrame;delete window.originalLoadFrame;});await home.locator('#oopsRetry').click();
+  const retried=await frame(home,'#viewFrame');await retried.locator('#bl-search').waitFor();await home.locator('#skel.on').waitFor({state:'hidden'});assert.equal(await home.locator('#oops.on').count(),0,JSON.stringify(await retried.evaluate(()=>({ready:BioqContext.ready,state:document.readyState,page:BioqContext.page,src:frameElement.getAttribute('src'),url:BioqContext.url.href,body:document.body.children.length}))));
+  report.checks.push('A withheld reading document still shows the 15-second recovery screen; restoring its loader and choosing Retry opens the real Learn page.');
+ }finally{await heldImage?.abort().catch(()=>{});await context.close();}
+}
 (async()=>{
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
  const base='http://127.0.0.1:'+server.address().port;
  const browser=await chromium.launch({headless:true,args:['--enable-unsafe-swiftshader','--use-angle=swiftshader']});
  let isolatedDirectory;
  try{
+  await readingReadyWithHeldImage(browser,base);
   const begin=Date.now();
   const held=await open(browser,base+'/held#solve',url=>url.origin===base&&url.pathname==='/held');
   report.solveReadyMs=Date.now()-begin;

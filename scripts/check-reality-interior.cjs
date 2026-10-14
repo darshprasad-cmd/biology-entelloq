@@ -15,7 +15,7 @@ async function audit(scope){return scope.evaluate(()=>{const style=getComputedSt
   await page.setViewportSize({width,height:width<800?844:1000});
   for(const theme of ['dark','light']){
    await page.evaluate(value=>{document.documentElement.dataset.theme=value;localStorage.setItem('bioq_theme',value);},theme);
-   const state=await audit(page);assert.ok(state.scroll<=state.width+1);assert.equal(state.bg,theme==='dark'?'#080b0d':'#f4f1e9');assert.equal(state.animation,'none');assert.equal(state.filter,'none');assert.ok(state.display.startsWith("'Inter'"));
+   await page.waitForTimeout(180);const state=await audit(page);assert.ok(state.scroll<=state.width+1);assert.equal(state.bg,theme==='dark'?'#080b0d':'#f4f1e9');assert.equal(state.animation,'none');assert.equal(state.filter,'none');assert.ok(state.display.startsWith("'Inter'"));
    const ink=theme==='dark'?[244,241,233]:[20,38,27],dim=theme==='dark'?[182,195,186]:[71,94,76],panel=theme==='dark'?[18,26,22]:[255,254,248];assert.ok(contrast(ink,panel)>=4.5);assert.ok(contrast(dim,panel)>=4.5);
    report.viewports.push({width,theme,...state,textContrast:+contrast(ink,panel).toFixed(2),secondaryContrast:+contrast(dim,panel).toFixed(2)});
    if([1600,390].includes(width))await page.screenshot({path:path.join(out,`biology-interior-${width}-${theme}.png`)});

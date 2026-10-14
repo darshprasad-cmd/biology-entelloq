@@ -14,6 +14,41 @@ function setup(unpack, delay = value => value) {
   return {api:context.api,removed:()=>removed};
 }
 const tick = () => new Promise(resolve=>setImmediate(resolve));
+
+test('reading readiness releases only the current authored document after its DOM handlers',()=>{
+  const tasks=[],events=[];
+  const context={page:'learn.html',ready:true};
+  const win={document:{readyState:'interactive'},BioqContext:context};
+  const frame=context.frame={id:'viewFrame',source:'learn.html?embed=1',getAttribute(){return this.source;},isConnected:true,contentWindow:win,ownerDocument:{defaultView:{Event}},dispatchEvent:event=>events.push(event.type)};
+  const sandbox=vm.createContext({setTimeout:callback=>tasks.push(callback),contextFor:target=>target.BioqContext});
+  vm.runInContext(source.slice(source.indexOf('  function readingReady('),source.indexOf('  function loadFrame('))+';globalThis.ready=readingReady;',sandbox);
+  sandbox.ready(win,context);assert.deepEqual(events,[],'Authored DOM callbacks finish first');tasks.shift()();assert.deepEqual(events,['load']);
+  for(const change of [()=>{context.ready=false;},()=>{frame.isConnected=false;},()=>{win.BioqContext={};},()=>{win.document={readyState:'interactive'};},()=>{frame.source='solve.html?embed=1';}]){
+    context.ready=true;frame.isConnected=true;win.BioqContext=context;win.document={readyState:'interactive'};sandbox.ready(win,context);change();tasks.shift()();assert.equal(events.length,1,'Unready, removed or replaced documents cannot complete a later load');
+  }
+  context.ready=true;frame.isConnected=true;win.BioqContext=context;win.document={readyState:'complete'};sandbox.ready(win,context);tasks.shift()();assert.equal(events.length,1,'A completed native load is not duplicated');
+  sandbox.ready(win,context,true);tasks.shift()();assert.equal(events.length,2,'Reusing an already-complete document for a new fragment still completes the shell load request');
+  context.page='lab.html';sandbox.ready(win,context);assert.equal(tasks.length,0,'Immersive models retain their own readiness');
+});
+test('same-document fragment reuse reports readiness without remounting the lesson',()=>{
+  const old={page:'learn.html',url:new URL('https://biology.entelloq.com/learn.html?embed=1#topic/cell-structure/visual'),ready:true},events=[],ready=[];
+  const owner={BioqContext:{url:new URL('https://biology.entelloq.com/app.html')}},win={BioqContext:old,HashChangeEvent:class {constructor(type){this.type=type;}},dispatchEvent:event=>events.push(event.type)};
+  const frame={id:'viewFrame',contentWindow:win,ownerDocument:{defaultView:owner}};
+  const sandbox=vm.createContext({pendingFrames:new WeakMap(),pages:new Set(['learn.html']),contextFor:target=>target.BioqContext,logical:(value,base)=>new URL(value,base),localPath:value=>new URL(value).pathname.slice(1),readingReady:(...args)=>ready.push(args)});
+  vm.runInContext(source.slice(source.indexOf('  function loadFrame('),source.indexOf('  function navigate('))+';globalThis.load=loadFrame;',sandbox);
+  assert.equal(sandbox.load(frame,'https://biology.entelloq.com/learn.html?embed=1',{setAttribute(){throw new Error('Fragment reuse must not rebuild content');}}),true);
+  assert.deepEqual(events,['hashchange']);assert.equal(ready.length,1);assert.equal(ready[0][0],win);assert.equal(ready[0][1],old);assert.equal(ready[0][2],true);assert.equal(old.ready,true);
+});
+test('same-URL document replacement invalidates readiness before the new DOM commits',()=>{
+  const old={page:'learn.html',url:new URL('https://biology.entelloq.com/learn.html?embed=1'),ready:true};
+  const owner={BioqContext:{url:new URL('https://biology.entelloq.com/app.html')}},win={BioqContext:old};
+  const frame={contentWindow:win,ownerDocument:{defaultView:owner}},writes=[];
+  const sandbox=vm.createContext({pendingFrames:new WeakMap(),pages:new Set(['learn.html']),assets:new Map(),contextFor:target=>target.BioqContext,
+    logical:(value,base)=>new URL(value,base),localPath:value=>new URL(value).pathname.slice(1),render:()=>{assert.equal(old.ready,false,'Invalidate before mounting, while the previous WindowProxy/document still exists');return '<body>Reading</body>';}});
+  vm.runInContext(source.slice(source.indexOf('  function loadFrame('),source.indexOf('  function navigate('))+';globalThis.load=loadFrame;',sandbox);
+  assert.equal(sandbox.load(frame,old.url.href,{setAttribute(name,value){writes.push([name,value]);}}),true);
+  assert.equal(old.ready,false);assert.deepEqual(writes.map(item=>item[0]),['srcdoc','src']);
+});
 test('cancellation between arrival and continuation prevents specimen decoding',async()=>{
   let decodes = 0;
   const {api} = setup(async()=>{decodes++;throw new Error('corrupt payload');});

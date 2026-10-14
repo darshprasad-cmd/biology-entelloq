@@ -7,6 +7,8 @@ Home and eight reading surfaces keep their established geometry, navigation, lea
 
 Validate both dark and light themes, desktop/tablet/mobile, reading navigation and the generated package. Record synthetic idle-task timing without claiming real-user or hardware performance.
 
+The release browser suite exposed an existing package readiness mismatch: a rendered Learn page reported DOM readiness while the shell still waited for the iframe's native load event. A deliberately withheld noncritical image reproduced a false timeout over a working quiz after 15 seconds. The package now signals the existing reading-frame load handler after authored DOMContentLoaded callbacks, checking the active context, document, frame and logical source. Reused reading documents also complete the shell's fragment-navigation request. Starting a genuine replacement invalidates an older queued signal even when the URL stays the same. The existing nonempty-document guard and 15-second failure deadline remain unchanged; immersive worlds retain their own readiness. A browser regression exercises both a working quiz with a stalled image and a genuinely withheld document followed by successful Retry.
+
 ## Preservation inventory (before implementation)
 - Authoring surface: root index.html; packaged artifact: dist/index.html. Preserve all learning source/artifacts, including the existing recombinant-evidence branch work.
 - Immediate app.html#home guest entry; Learn, Lessons, Reason, Labs, Solve, Explore, Me, Dissection and Universe entry points.

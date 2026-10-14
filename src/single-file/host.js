@@ -144,6 +144,18 @@
     html = html.replace(/<head\b[^>]*>/i, match => match + bootstrap + (importmap ? '' : '<script type="importmap">' + encode({imports:moduleMap}) + '<\/script>'));
     return html;
   }
+  function readingReady(win, context, reused = false) {
+    const frame = context.frame, doc = win.document, source = frame?.getAttribute('src');
+    if (frame?.id !== 'viewFrame' || !['learn.html','lessons.html','reason.html','labs.html','solve.html','explore.html','me.html','about.html'].includes(context.page)) return;
+    // A reading document is usable after its authored DOMContentLoaded handlers.
+    // Images and optional services can keep native iframe load pending much longer.
+    // Keep the shell's existing nonempty-document check and failure deadline; only
+    // hand it the ready document, never a stale navigation or an immersive world.
+    setTimeout(() => {
+      if (!context.ready || !frame.isConnected || frame.contentWindow !== win || contextFor(win) !== context || frame.getAttribute('src') !== source || win.document !== doc || (!reused && doc.readyState === 'complete')) return;
+      frame.dispatchEvent(new frame.ownerDocument.defaultView.Event('load'));
+    }, 0);
+  }
   function loadFrame(frame, value, native) {
     pendingFrames.delete(frame);
     const owner = contextFor(frame.ownerDocument.defaultView);
@@ -154,9 +166,12 @@
     if (old && old.page === name && old.url.search === url.search && old.url.hash !== url.hash && old.ready) {
       const oldURL = old.url.href; old.url = url;
       frame.contentWindow.dispatchEvent(new frame.contentWindow.HashChangeEvent('hashchange', {oldURL,newURL:url.href}));
+      if (frame.id === 'viewFrame') readingReady(frame.contentWindow, old, true);
       if (frame.id === 'launchFrame') queueMicrotask(() => frame.dispatchEvent(new frame.ownerDocument.defaultView.Event('load')));
       return true;
     }
+    // Invalidate a queued ready signal even when a forced reload uses the same URL.
+    if (old) old.ready = false;
     // srcdoc takes precedence over src. Keep src as a logical identity for the
     // existing validated frame bridges and MutationObservers, without a fetch.
     const mount = () => {
@@ -242,6 +257,7 @@
       win.BioqContext = context;
       win.addEventListener('DOMContentLoaded', () => {
         context.ready = true;
+        readingReady(win, context);
         if (context.frame === workspace) { document.title = win.document.title || 'Biology Entelloq'; loading.hidden = true; }
         if (context.url.hash) win.document.getElementById(context.url.hash.slice(1))?.scrollIntoView();
       }, {once:true});
