@@ -8,6 +8,7 @@ async function inner(page){return (await page.locator('#bioq-workspace').element
  const context=await browser.newContext({viewport:{width:1600,height:1000}});const page=await context.newPage();page.on('pageerror',e=>report.errors.push(e.message));
  await page.goto(base+'/dist/index.html',{waitUntil:'domcontentloaded'});await page.locator('#bioq-workspace').waitFor();let frame=await inner(page);await frame.locator('#bio-title').waitFor();await page.locator('#bioq-loading').waitFor({state:'hidden'});
  await page.screenshot({path:path.join(out,'biology-final-desktop.png')});
+ assert.equal(await frame.locator('.pe-founder img').evaluate(e=>getComputedStyle(e).filter),'none','Founder portrait retains its original full color');
  assert.equal(await frame.locator('#bio-motion-toggle').evaluate(e=>e.parentElement.id),'lnd');
  const story=await frame.locator('#bio-cell-story').evaluate(e=>({top:e.offsetTop,travel:e.offsetHeight-innerHeight}));
  for(const progress of [0,.18,.26,.45,1]){await frame.evaluate(y=>scrollTo({top:y,behavior:'instant'}),story.top+story.travel*progress);await page.waitForTimeout(180);const state=await frame.locator('.bio-cell-window').evaluate(e=>({photo:+e.style.getPropertyValue('--cell-observation-opacity'),diagram:+e.style.getPropertyValue('--cell-diagram-opacity')}));assert.ok(state.photo<.01||state.diagram<.01,'Photographic and diagram organelles do not overlap');}
