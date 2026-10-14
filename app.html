@@ -832,11 +832,16 @@ function loadSection(k, sub, force){
   skel.classList.add("on");
   loadTimer=setTimeout(()=>{ if(pending&&pending.src===src){ pending=null; failSection(k,sub,"It took too long to respond."); } }, 15000);
   frame.onload=()=>{
+    // A late success may arrive after the recovery screen. Only the current,
+    // ready document can acknowledge this request or dismiss its error.
+    if(loadedSrc!==src)return;
+    try{const context=frame.contentWindow.BioqContext;if(context&&(!context.ready||context.page!==v.file))return;}catch(e){}
     clearTimeout(loadTimer); pending=null;
     let ok=true;
     try{ const d=frame.contentDocument; if(d&&d.body) ok=d.body.children.length>1||d.body.innerHTML.length>400; }
     catch(e){ ok=true; }                       // cross-origin: trust it
     if(!ok){ failSection(k,sub,"It loaded, but came back empty."); return; }
+    oops.classList.remove("on");
     skel.classList.remove("on"); postTheme(frame); useShellNavigation();
   };
   frame.onerror=()=>{ clearTimeout(loadTimer); pending=null; failSection(k,sub,"The file could not be opened."); };

@@ -26,8 +26,8 @@ test('reading readiness releases only the current authored document after its DO
   for(const change of [()=>{context.ready=false;},()=>{frame.isConnected=false;},()=>{win.BioqContext={};},()=>{win.document={readyState:'interactive'};},()=>{frame.source='solve.html?embed=1';}]){
     context.ready=true;frame.isConnected=true;win.BioqContext=context;win.document={readyState:'interactive'};sandbox.ready(win,context);change();tasks.shift()();assert.equal(events.length,1,'Unready, removed or replaced documents cannot complete a later load');
   }
-  context.ready=true;frame.isConnected=true;win.BioqContext=context;win.document={readyState:'complete'};sandbox.ready(win,context);tasks.shift()();assert.equal(events.length,1,'A completed native load is not duplicated');
-  sandbox.ready(win,context,true);tasks.shift()();assert.equal(events.length,2,'Reusing an already-complete document for a new fragment still completes the shell load request');
+  context.ready=true;frame.isConnected=true;win.BioqContext=context;win.document={readyState:'complete'};sandbox.ready(win,context);tasks.shift()();assert.equal(events.length,2,'Document completion does not prove the shell acknowledged its request');
+  sandbox.ready(win,context);tasks.shift()();assert.equal(events.length,3,'Repeated valid completion is safe for the idempotent shell handler');
   context.page='lab.html';sandbox.ready(win,context);assert.equal(tasks.length,0,'Immersive models retain their own readiness');
 });
 test('same-document fragment reuse reports readiness without remounting the lesson',()=>{
@@ -37,7 +37,7 @@ test('same-document fragment reuse reports readiness without remounting the less
   const sandbox=vm.createContext({pendingFrames:new WeakMap(),pages:new Set(['learn.html']),contextFor:target=>target.BioqContext,logical:(value,base)=>new URL(value,base),localPath:value=>new URL(value).pathname.slice(1),readingReady:(...args)=>ready.push(args)});
   vm.runInContext(source.slice(source.indexOf('  function loadFrame('),source.indexOf('  function navigate('))+';globalThis.load=loadFrame;',sandbox);
   assert.equal(sandbox.load(frame,'https://biology.entelloq.com/learn.html?embed=1',{setAttribute(){throw new Error('Fragment reuse must not rebuild content');}}),true);
-  assert.deepEqual(events,['hashchange']);assert.equal(ready.length,1);assert.equal(ready[0][0],win);assert.equal(ready[0][1],old);assert.equal(ready[0][2],true);assert.equal(old.ready,true);
+  assert.deepEqual(events,['hashchange']);assert.equal(ready.length,1);assert.equal(ready[0][0],win);assert.equal(ready[0][1],old);assert.equal(old.ready,true);
 });
 test('same-URL document replacement invalidates readiness before the new DOM commits',()=>{
   const old={page:'learn.html',url:new URL('https://biology.entelloq.com/learn.html?embed=1'),ready:true};
@@ -49,6 +49,26 @@ test('same-URL document replacement invalidates readiness before the new DOM com
   assert.equal(sandbox.load(frame,old.url.href,{setAttribute(name,value){writes.push([name,value]);}}),true);
   assert.equal(old.ready,false);assert.deepEqual(writes.map(item=>item[0]),['srcdoc','src']);
 });
+test('shell completion recovers a late current document while retaining invalid-document errors',()=>{
+  const app=fs.readFileSync(path.join(__dirname,'../app.html'),'utf8');
+  const load=app.slice(app.indexOf('function loadSection('),app.indexOf('function useShellNavigation('));
+  for(const scenario of ['current','unready','wrong-page','empty','replaced']){
+    const classes=()=>{const values=new Set();return {add:v=>values.add(v),remove:v=>values.delete(v),contains:v=>values.has(v)};};
+    const oops={classList:classes()},skel={classList:classes()},timers=[];
+    const frame={contentWindow:{BioqContext:{page:'learn.html',ready:false}},contentDocument:{body:{children:[{},{}],innerHTML:'valid reading document'}}};
+    const sandbox=vm.createContext({frame,oops,skel,BYKEY:{learn:{file:'learn.html'}},loadedSrc:null,pending:null,loadTimer:null,
+      setTimeout:(callback,ms)=>{assert.equal(ms,15000);timers.push(callback);return timers.length;},clearTimeout(){},postTheme(){},useShellNavigation(){},failSection(){oops.classList.add('on');skel.classList.remove('on');}});
+    vm.runInContext(load+';globalThis.load=loadSection;',sandbox);sandbox.load('learn','topic/cell-structure/visual',false);timers.shift()();
+    assert.equal(oops.classList.contains('on'),true,'The real deadline shows recovery before completion');
+    frame.contentWindow.BioqContext.ready=true;
+    if(scenario==='unready')frame.contentWindow.BioqContext.ready=false;
+    if(scenario==='wrong-page')frame.contentWindow.BioqContext.page='solve.html';
+    if(scenario==='empty')frame.contentDocument.body={children:[],innerHTML:''};
+    if(scenario==='replaced')sandbox.loadedSrc='./solve.html?embed=1';
+    frame.onload();assert.equal(oops.classList.contains('on'),scenario!=='current',scenario+' completion handles recovery safely');
+  }
+});
+
 test('cancellation between arrival and continuation prevents specimen decoding',async()=>{
   let decodes = 0;
   const {api} = setup(async()=>{decodes++;throw new Error('corrupt payload');});

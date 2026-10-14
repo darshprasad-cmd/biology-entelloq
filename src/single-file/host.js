@@ -144,7 +144,7 @@
     html = html.replace(/<head\b[^>]*>/i, match => match + bootstrap + (importmap ? '' : '<script type="importmap">' + encode({imports:moduleMap}) + '<\/script>'));
     return html;
   }
-  function readingReady(win, context, reused = false) {
+  function readingReady(win, context) {
     const frame = context.frame, doc = win.document, source = frame?.getAttribute('src');
     if (frame?.id !== 'viewFrame' || !['learn.html','lessons.html','reason.html','labs.html','solve.html','explore.html','me.html','about.html'].includes(context.page)) return;
     // A reading document is usable after its authored DOMContentLoaded handlers.
@@ -152,7 +152,7 @@
     // Keep the shell's existing nonempty-document check and failure deadline; only
     // hand it the ready document, never a stale navigation or an immersive world.
     setTimeout(() => {
-      if (!context.ready || !frame.isConnected || frame.contentWindow !== win || contextFor(win) !== context || frame.getAttribute('src') !== source || win.document !== doc || (!reused && doc.readyState === 'complete')) return;
+      if (!context.ready || !frame.isConnected || frame.contentWindow !== win || contextFor(win) !== context || frame.getAttribute('src') !== source || win.document !== doc) return;
       frame.dispatchEvent(new frame.ownerDocument.defaultView.Event('load'));
     }, 0);
   }
@@ -166,7 +166,7 @@
     if (old && old.page === name && old.url.search === url.search && old.url.hash !== url.hash && old.ready) {
       const oldURL = old.url.href; old.url = url;
       frame.contentWindow.dispatchEvent(new frame.contentWindow.HashChangeEvent('hashchange', {oldURL,newURL:url.href}));
-      if (frame.id === 'viewFrame') readingReady(frame.contentWindow, old, true);
+      if (frame.id === 'viewFrame') readingReady(frame.contentWindow, old);
       if (frame.id === 'launchFrame') queueMicrotask(() => frame.dispatchEvent(new frame.ownerDocument.defaultView.Event('load')));
       return true;
     }

@@ -4,6 +4,7 @@
 'use strict';
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
 const {createRequire}=require('node:module'),{pathToFileURL}=require('node:url'),{createHash}=require('node:crypto');
+const {gunzipSync,gzipSync}=require('node:zlib');
 const root=path.resolve(__dirname,'..');
 const modules=process.env.BIOLOGY_PLAYWRIGHT_MODULES||path.resolve(root,'../biology-entelloq/node_modules');
 const {chromium}=createRequire(path.join(modules,'__opening_check__.cjs'))('playwright');
@@ -14,9 +15,15 @@ const prefix=html.slice(0,boundary),tail=html.slice(boundary);
 const frog='assets/specimens/frog.glb',frogHash=createHash('sha256').update(fs.readFileSync(path.join(root,frog))).digest('hex');
 const report={complete:false,initialBytes:Buffer.byteLength(prefix),totalBytes:Buffer.byteLength(html),checks:[],errors:[],unexpectedRequests:[]};
 const reportPath=path.join(root,'docs/single-file/opening-browser-report.json');
+const latePrefix=prefix.replace(/(<script id="bioq-manifest" type="application\/json">)([\s\S]*?)(<\/script>)/,(_,start,data,end)=>{
+ const manifest=JSON.parse(data),lesson=gunzipSync(Buffer.from(manifest.pages['learn.html'],'base64')).toString('utf8');
+ manifest.pages['learn.html']=gzipSync(Buffer.from(lesson.replace('</body>','<script src="https://biology-reading-test.invalid/held.js"></script></body>'))).toString('base64');
+ return start+JSON.stringify(manifest).replace(/</g,'\\u003c')+end;
+});
 let waitingResponse;
 const server=http.createServer((req,res)=>{
  if(req.url==='/held') {res.writeHead(200,{'Content-Type':'text/html; charset=utf-8'});res.write(prefix);waitingResponse=res;return;}
+ if(req.url==='/late-reading') {res.writeHead(200,{'Content-Type':'text/html; charset=utf-8'});res.end(latePrefix+'</body></html>');return;}
  if(req.url==='/truncated') {res.writeHead(200,{'Content-Type':'text/html; charset=utf-8'});res.end(prefix+'</body></html>');return;}
  if(req.url==='/corrupt') {res.writeHead(200,{'Content-Type':'text/html; charset=utf-8'});res.end(prefix+marker+'not-a-valid-gzip-payload</script><script>BioqPackage.assetReady("'+frog+'");</script></body></html>');return;}
  res.writeHead(404);res.end();
@@ -49,6 +56,27 @@ async function exactFrog(page){
   const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),byte=>byte.toString(16).padStart(2,'0')).join('');
   return {hash,bytes:bytes.byteLength};
  },frog);
+}
+async function readingReadyAfterTimeout(browser,base){
+ const context=await browser.newContext({viewport:{width:1280,height:900},reducedMotion:'reduce'});let heldScript;
+ try{
+  await context.route('**/*',route=>{
+   const url=new URL(route.request().url());
+   if(url.hostname==='biology-reading-test.invalid'){heldScript=route;return;}
+   if(url.origin===base&&url.pathname==='/late-reading')return route.continue();
+   if(['http:','https:'].includes(url.protocol))return route.abort('blockedbyclient');
+   return route.continue();
+  });
+  const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));
+  await page.goto(base+'/late-reading#learn/topic/cell-structure/visual',{waitUntil:'domcontentloaded'});
+  const shell=await frame(page,'#bioq-workspace');await shell.locator('#viewFrame.on').waitFor();const lesson=await frame(shell,'#viewFrame');
+  await shell.locator('#oops.on').waitFor({timeout:20000});assert.match(await shell.locator('#oopsMsg').textContent(),/took too long/);
+  assert.equal(await lesson.evaluate(()=>BioqContext.ready),false,'The real timeout precedes authored readiness');
+  assert.ok(heldScript,'The test holds the same reading document before completion');await heldScript.fulfill({contentType:'text/javascript',body:''});heldScript=null;
+  await lesson.waitForFunction(()=>BioqContext.ready);await shell.locator('#oops.on').waitFor({state:'hidden'});await shell.locator('#skel.on').waitFor({state:'hidden'});
+  await require('../tests/library-answer-browser.cjs').checkLibraryAnswer(page,lesson);
+  report.checks.push('A reading document that genuinely exceeds the 15-second deadline first shows recovery, then late validated completion dismisses it and restores real keyboard/pointer quiz answers and retries.');
+ }finally{await heldScript?.abort().catch(()=>{});await context.close();}
 }
 async function readingReadyWithHeldImage(browser,base){
  const context=await browser.newContext({viewport:{width:1280,height:900},reducedMotion:'reduce'});let heldImage;
@@ -89,6 +117,7 @@ async function readingReadyWithHeldImage(browser,base){
  const browser=await chromium.launch({headless:true,args:['--enable-unsafe-swiftshader','--use-angle=swiftshader']});
  let isolatedDirectory;
  try{
+  await readingReadyAfterTimeout(browser,base);
   await readingReadyWithHeldImage(browser,base);
   const begin=Date.now();
   const held=await open(browser,base+'/held#solve',url=>url.origin===base&&url.pathname==='/held');
