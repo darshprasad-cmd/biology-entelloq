@@ -29,7 +29,12 @@ test('evidence is honestly labeled, interpretable and accompanied by limitations
   assert.ok(!transfers.has(unit.transfer.question),id+' repeated transfer question');transfers.add(unit.transfer.question);
   const mechanism=unit.mechanism.map(s=>s.body).join(' ');assert.ok(!mechanisms.has(mechanism),id+' repeated mechanism');mechanisms.add(mechanism);
   assert.ok(unit.sources.length>=1&&unit.sources.length<=2,id);
-  for(const source of unit.sources){assert.ok(source.title.trim());const url=new URL(source.url);assert.equal(url.protocol,'https:');assert.match(url.hostname,/(^|\.)(openstax\.org|nih\.gov|genome\.gov|nasa\.gov|cdc\.gov)$/);}
+  for(const source of unit.sources){
+   assert.ok(source.title.trim());const url=new URL(source.url);assert.equal(url.protocol,'https:');
+   if(id==='recombinant-dna'&&source.id==='extended-core-diagnosticDigest'&&source.url==='https://www.addgene.org/protocols/diagnostic-digest/'){
+    assert.equal(source.title,'Addgene: Diagnostic Restriction Digest');
+   }else assert.match(url.hostname,/(^|\.)(openstax\.org|nih\.gov|genome\.gov|nasa\.gov|cdc\.gov)$/);
+  }
  }
 });
 test('depth remains available in Learn, Reason and Solve with safely escaped student-facing content',()=>{

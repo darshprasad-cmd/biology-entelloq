@@ -1,0 +1,212 @@
+{
+  "provenance": {
+    "commit": "0aea0f3f60ee10627a8160698cccdc099a73cff1",
+    "sourceFiles": [
+      "src/library/topics.js",
+      "src/library/learning-cards.js",
+      "src/library/depth-foundations.js",
+      "src/library/depth-processes.js",
+      "src/library/extended-core.js",
+      "src/library/extended-systems.js"
+    ],
+    "method": "Captured by evaluating accepted commit sources in a fresh Node vm; one unchanged lesson, not reconstructed from revised content.",
+    "sha256": "f0c6bbd0ad96bdeba9ceaca4fb83f66cc0230f9db5c2ccd9717347b66b136cce"
+  },
+  "topic": {
+    "aliases": [
+      "gene cloning",
+      "plasmid vector",
+      "restriction enzymes",
+      "DNA ligase"
+    ],
+    "relatedTopics": [
+      "pcr",
+      "gel-electrophoresis",
+      "dna-sequencing"
+    ],
+    "prerequisites": [
+      "dna",
+      "dna-replication"
+    ],
+    "labs": [],
+    "difficulty": "school",
+    "status": "complete",
+    "curriculumTags": [
+      "Foundation",
+      "CBSE / ICSE",
+      "NEET",
+      "AP Biology",
+      "A-Level",
+      "IB",
+      "Introductory University"
+    ],
+    "sources": [
+      "extended-core-recombinant"
+    ],
+    "id": "recombinant-dna",
+    "title": "Recombinant DNA",
+    "category": "biotechnology",
+    "summary": "Understand how DNA fragments are joined, maintained and checked in a cloning workflow.",
+    "explanations": {
+      "layman": "Recombinant DNA combines DNA segments into a constructed molecule. A plasmid can carry an inserted sequence in a host cell, allowing researchers to copy or study it. Joining DNA is only the start: the result must be checked because a surviving cell does not guarantee the intended construct.",
+      "intuition": "A vector is a carrier with requirements of its own, not an empty envelope. It needs features that let it persist in the chosen host, and an expression construct needs suitable control sequences. Carrying a gene and making its product are related but distinct engineering goals.",
+      "visual": "Follow design, assembly and verification as separate stages. Mark the insert and vector backbone, then ask which observation confirms size, which confirms orientation and which confirms sequence. The cards explain a conceptual workflow rather than providing a laboratory protocol or biosafety approval.",
+      "scientific": "DNA fragments can be assembled using restriction enzymes and ligase or other compatible assembly methods. A plasmid vector commonly includes an origin of replication and a selectable marker. Selection enriches cells with a marker; screening and sequence verification evaluate whether the intended insert and arrangement are present.",
+      "advanced": "A circular plasmid cut once becomes one linear molecule, whereas two cuts can yield two fragments. Diagnostic patterns depend on restriction-site positions and complete digestion. Expression also depends on promoter compatibility, reading frame, RNA processing and host biology, so a correctly cloned sequence may still fail to produce an active protein.",
+      "realWorld": "Recombinant constructs are used to investigate gene function and produce selected proteins under regulated conditions. Responsible work includes containment, permissions and risk assessment appropriate to the organism and construct. Learning the logic does not make every genetic engineering activity safe or appropriate outside a supervised setting."
+    },
+    "keyTerms": [
+      {
+        "term": "Vector",
+        "definition": "A DNA carrier used to maintain or deliver an inserted sequence."
+      },
+      {
+        "term": "DNA ligase",
+        "definition": "An enzyme that joins suitable DNA backbone ends."
+      },
+      {
+        "term": "Selectable marker",
+        "definition": "A feature used to enrich for cells carrying a particular construct or trait."
+      }
+    ],
+    "visual": {
+      "kind": "process",
+      "steps": [
+        {
+          "title": "Design a construct for its purpose",
+          "detail": "Identify whether the goal is maintaining a sequence or expressing a product. The vector must function in the intended host, and the insert must be compatible with the planned assembly. Expression additionally requires suitable regulatory information and sequence arrangement; insertion alone is not sufficient."
+        },
+        {
+          "title": "Join and maintain the DNA",
+          "detail": "Compatible DNA segments can be joined into a recombinant molecule and introduced into an appropriate host under supervised conditions. An origin can support replication, while a marker helps select candidate cells. These steps produce candidates rather than proving the final DNA matches the original design."
+        },
+        {
+          "title": "Verify several independent properties",
+          "detail": "A size check can reveal gross differences but may miss a reversed insert or a single-base error. Diagnostic fragment patterns, junction analysis and sequencing answer complementary questions. A successful verification should connect the observed evidence to the specific errors the design needs to exclude."
+        }
+      ]
+    },
+    "quickCheck": [
+      {
+        "question": "What does selection for a plasmid marker establish most directly?",
+        "options": [
+          "Every insert base is correct",
+          "Candidate cells possess the selected marker under the assay conditions",
+          "The encoded protein must be active"
+        ],
+        "answer": 1,
+        "explanation": "Selection identifies the marker phenotype; it does not fully verify insert sequence or expression."
+      }
+    ]
+  },
+  "depth": {
+    "objectives": [
+      "Distinguish vector maintenance from gene expression.",
+      "Explain selection, screening and verification.",
+      "Interpret a simplified diagnostic fragment pattern."
+    ],
+    "mechanism": [
+      {
+        "title": "Design a construct for its purpose",
+        "body": "Identify whether the goal is maintaining a sequence or expressing a product. The vector must function in the intended host, and the insert must be compatible with the planned assembly. Expression additionally requires suitable regulatory information and sequence arrangement; insertion alone is not sufficient."
+      },
+      {
+        "title": "Join and maintain the DNA",
+        "body": "Compatible DNA segments can be joined into a recombinant molecule and introduced into an appropriate host under supervised conditions. An origin can support replication, while a marker helps select candidate cells. These steps produce candidates rather than proving the final DNA matches the original design."
+      },
+      {
+        "title": "Verify several independent properties",
+        "body": "A size check can reveal gross differences but may miss a reversed insert or a single-base error. Diagnostic fragment patterns, junction analysis and sequencing answer complementary questions. A successful verification should connect the observed evidence to the specific errors the design needs to exclude."
+      }
+    ],
+    "misconception": {
+      "claim": "If a cell survives selection, the inserted gene must be correct.",
+      "correction": "Selection tests the marker phenotype, which can be present in an empty or incorrectly assembled vector. Insert size, orientation and sequence need appropriate independent checks before the intended construct is confirmed."
+    },
+    "investigation": {
+      "title": "Check more than survival",
+      "context": "Synthetic diagnostic model: a 3 kb circular backbone should contain a 1 kb insert, with restriction sites flanking the insertion position. Assume complete digestion.",
+      "columns": [
+        "Candidate",
+        "Selected marker present?",
+        "Digest fragments (kb)"
+      ],
+      "rows": [
+        [
+          "A",
+          "Yes",
+          "3 and 1"
+        ],
+        [
+          "B",
+          "Yes",
+          "3"
+        ],
+        [
+          "C",
+          "No",
+          "No recoverable plasmid"
+        ]
+      ],
+      "question": "Which candidate fits the expected insert size, and why does that pattern still not establish an error-free insert sequence?",
+      "hint": "Separate fragment length from the order of individual bases.",
+      "answer": "Candidate A fits the expected 3 kb backbone plus 1 kb insert, but identical fragment lengths can still conceal sequence substitutions or other errors.",
+      "reasoning": [
+        "The planned total plasmid size is 3 + 1 = 4 kb.",
+        "Candidate A yields the expected flanking-digest sizes of 3 and 1 kb.",
+        "Length agreement does not read individual bases or prove every junction correct."
+      ],
+      "limitation": "This theoretical digest omits partial cutting, fragment detection limits and unexpected sites; actual constructs require sequence-level verification."
+    },
+    "transfer": {
+      "question": "Why could a correctly inserted coding sequence fail to produce protein in a chosen host?",
+      "hint": "Ask what is needed beyond preserving the DNA itself.",
+      "answer": "The host may not recognize the promoter, process the transcript correctly or translate the intended reading frame. Expression conditions, regulatory compatibility and product stability matter in addition to the presence of the DNA sequence."
+    },
+    "sources": [
+      {
+        "id": "extended-core-recombinant",
+        "title": "NHGRI: Recombinant DNA Technology",
+        "url": "https://www.genome.gov/genetics-glossary/Recombinant-DNA-Technology"
+      }
+    ]
+  },
+  "enrichment": {
+    "curiosity": {
+      "title": "Selection is a filter, not a full proof",
+      "body": "A selected cell is a candidate for further checking. The marker and the inserted sequence can answer different questions about the constructed DNA.",
+      "sourceId": "extended-core-recombinant"
+    },
+    "workedExample": {
+      "question": "Which candidate fits the expected insert size, and why does that pattern still not establish an error-free insert sequence?",
+      "steps": [
+        "The planned total plasmid size is 3 + 1 = 4 kb.",
+        "Candidate A yields the expected flanking-digest sizes of 3 and 1 kb.",
+        "Length agreement does not read individual bases or prove every junction correct."
+      ],
+      "answer": "Candidate A fits the expected 3 kb backbone plus 1 kb insert, but identical fragment lengths can still conceal sequence substitutions or other errors."
+    },
+    "checkpoints": [
+      {
+        "question": "What is the main role of a plasmid origin of replication?",
+        "options": [
+          "Specifying every amino acid in the insert",
+          "Guaranteeing the absence of mutations",
+          "Supporting replication in a compatible host"
+        ],
+        "answer": 2,
+        "explanation": "A compatible origin supports DNA replication but does not verify the insert or its expression."
+      },
+      {
+        "question": "Which check directly examines nucleotide order?",
+        "options": [
+          "Counting surviving colonies alone",
+          "DNA sequencing",
+          "Only measuring total culture volume"
+        ],
+        "answer": 1,
+        "explanation": "Sequencing evaluates nucleotide order, whereas colony survival and volume cannot establish the insert sequence."
+      }
+    ]
+  }
+}
