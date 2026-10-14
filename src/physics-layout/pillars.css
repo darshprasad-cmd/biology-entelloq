@@ -1,31 +1,31 @@
 /* Physics Entelloq's reading surfaces, adapted to Biology's existing pillars.
    Keep this layer separate from authored lessons, scientific models and shared chrome. */
 html:root{
-  --bg:#050b08;--bg-2:#09100a;--panel:#0d180f;--raise:#16251a;
-  --ink:#e9ece5;--dim:#b2bdb0;--faint:#91a48a;
-  --line:rgba(166,197,162,.19);--line-2:rgba(166,197,162,.12);--hair:#38523c;
-  --em:#a8d8b3;--em-2:#c5f2c7;--cy:#b6d9b8;--cy-2:#a1c0a6;
+  --bg:#080b0d;--bg-2:#0e1413;--panel:#121a16;--raise:#1b2821;
+  --ink:#f4f1e9;--dim:#b6c3ba;--faint:#a0b2a4;
+  --line:rgba(154,219,189,.18);--line-2:rgba(154,219,189,.1);--hair:#3c5548;
+  --em:#9adbbd;--em-2:#c5f5db;--cy:#9adbbd;--cy-2:#a8cab7;
   --indigo:#b7b5df;--indigo-2:#b7b5df;--amber:#e8bc86;--rose:#e7a6b6;
-  --glass:#09100a;--glass-strong:#09100a;
+  --glass:#0e1413;--glass-strong:#0e1413;
   --shadow-1:none;--shadow-2:none;--shadow-glow:none;--spot:transparent;
   --sans:'Inter',system-ui,-apple-system,sans-serif;
-  --display:'Space Grotesk','Inter',system-ui,sans-serif;
+  --display:'Inter',system-ui,sans-serif;
   --mono:'JetBrains Mono',ui-monospace,monospace;
   --r-sm:6px;--r:8px;--r-lg:9px;--r-xl:10px;
   --edge:clamp(24px,4vw,64px);--maxw:1200px;
 }
 html:root[data-theme=light]{
-  --bg:#f1f5ed;--bg-2:#e8eee3;--panel:#f8fbf5;--raise:#e1eadb;
-  --ink:#172c1b;--dim:#415b44;--faint:#567052;
-  --line:#c4d3bc;--line-2:#d9e2d3;--hair:#a9bda2;
+  --bg:#f4f1e9;--bg-2:#ebece3;--panel:#fffef8;--raise:#e4ece2;
+  --ink:#14261b;--dim:#475e4c;--faint:#5e705f;
+  --line:#c3d1c4;--line-2:#d8e0d4;--hair:#a2b5a5;
   --em:#32683f;--em-2:#2b5936;--cy:#386642;--cy-2:#386642;
   --indigo:#665c92;--indigo-2:#665c92;--amber:#885a24;--rose:#a04660;
-  --glass:#e8eee3;--glass-strong:#e8eee3;
+  --glass:#ebece3;--glass-strong:#ebece3;
 }
 /* Outrank the authored light-theme blue button gradient without changing its shape. */
 html:root[data-theme=light] body .btn.primary{background:var(--cy);color:var(--bg);border-color:var(--cy)}
 html:root[data-theme=light] body main .btn.primary:hover{background:var(--em);border-color:var(--em)}
-body #launch{background:#050b08}
+body #launch{background:#080b0d}
 html:root,html body{background:var(--bg)!important;color:var(--ink)}
 html body{font:16px/1.65 var(--sans);letter-spacing:0}
 body>#fx,body>#atmo,body>.bg-veil{display:none!important}
@@ -77,7 +77,7 @@ body main .cat-head{margin-bottom:20px}
 body main .cat-head h3{font:450 23px/1.4 var(--display);letter-spacing:-.5px}
 body main :is(.btn,.bx-btn,.sv-ghostbtn,.ghostbtn){
   min-height:42px;padding:10px 16px;font:450 13px/1.4 var(--sans);border:1px solid var(--hair);
-  border-radius:6px;box-shadow:none;transition:background 140ms,transform 140ms;
+  border-radius:999px;box-shadow:none;transition:background 140ms,transform 140ms;
 }
 body main :is(.btn.primary,.bx-btn.pri){background:var(--cy);color:var(--bg);border-color:var(--cy);font-weight:550}
 body main .btn.ghost{background:transparent;color:var(--ink)}

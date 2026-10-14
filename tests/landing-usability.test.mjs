@@ -72,7 +72,7 @@ test('cinematic landing has a keyboard main target, actual entry routes and nati
     if (href.startsWith('app.html#')) assert.ok(routes.has(href.split('#')[1]), `Unknown route ${href}`);
   }
   assert.match(html, /href="app.html\?tutorial=dissection"/);
-  for (const name of ['dna-hero', 'cells', 'leaf', 'neurons', 'wing']) {
+  for (const name of ['cells', 'leaf', 'neurons', 'wing']) {
     assert.ok(fs.existsSync(new URL(`assets/biology-${name}.webp`, root)));
     assert.ok(html.includes(`assets/biology-${name}.webp`));
   }
@@ -134,6 +134,33 @@ test('a missing canvas preserves the static enzyme illustration and scientific r
   assert.notEqual(e.get('.pe-orbit-fallback').hidden, true);
   assert.equal(e.callbacks.size, 0);
   assert.ok(e.get('pe-rate').innerHTML.startsWith('50.0'));
+});
+
+test('global launch pause also stops the scientific preview without changing its readout', () => {
+  const e = environment();
+  vm.runInContext(script('biology-landing-experiment'), e.sandbox);
+  assert.equal(e.callbacks.size, 1);
+  e.get('lnd').dataset.motion = 'paused';
+  e.document.events['bioq-launch-motion']();
+  assert.equal(e.callbacks.size, 0);
+  e.get('pe-substrate').value = '10';
+  e.get('pe-substrate').events.input();
+  assert.ok(e.get('pe-rate').innerHTML.startsWith('90.9'));
+  e.get('lnd').dataset.motion = 'running';
+  e.document.events['bioq-launch-motion']();
+  assert.equal(e.callbacks.size, 1);
+});
+
+test('cell illustration and authentic footage have qualified sources and motion controls', () => {
+  assert.match(html, /generalized animal cell/i);
+  assert.match(html, /Not microscopy/);
+  assert.match(html, /not a biological process/);
+  assert.match(html, /<source media="\(max-width:800px\)" srcset="assets\/launch\/biology-cell-mobile.webp"/);
+  assert.match(html, /<video data-launch-video controls muted playsinline loop preload="none"/);
+  assert.equal((html.match(/data-organelle-button=/g) || []).length, 3);
+  for (const name of ['biology-cell.webp', 'biology-cell-mobile.webp', 'dissection-poster.webp', 'dissection-demo.mp4']) {
+    assert.ok(fs.existsSync(new URL('assets/launch/' + name, root)), name);
+  }
 });
 
 test('search opens an accessible dialog, finds existing learning routes, and skip moves keyboard focus', () => {

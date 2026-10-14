@@ -1,0 +1,13 @@
+{
+  "created": "2026-10-14",
+  "tool": "built-in image_gen",
+  "purpose": "Original cinematic Entelloq launch visuals",
+  "assets": [
+    {
+      "name": "biology",
+      "prompt": "Use case: scientific-educational. Asset type: premium cinematic biology website hero backdrop, wide landscape 16:9. Create an original beautifully art-directed 3D scientific illustration, clearly illustrative rather than a microscope photograph. A single translucent ANIMAL CELL floats on the RIGHT HALF against near-black graphite void. It has a gently irregular rounded membrane with very fine lipid-like texture, translucent jade cytoplasm, one distinct spherical nucleus with darker nucleolus, several individually recognizable orange-amber oval mitochondria with folded inner cristae, understated curved membrane stacks of endoplasmic reticulum near nucleus, and a few tiny ribosome dots. The cell is subtly cut away and translucent enough to reveal internal structures coherently. No cell wall, no chloroplasts, no central plant vacuole. Physically plausible spatial organization with organelles inside membrane, not spilling out. Stylized luminous jade glass and soft amber biological material, elegant and tactile, restrained teal and gold illumination with natural internal scattering, razor-thin silver rim catching edge. Monumental floating specimen, premium nature documentary opening title still, quiet wonder, immaculate detail, intense shadow, subdued cinematic grain. Keep LEFT 45% empty and very dark for HTML text. No text, labels, callouts, diagrams, arrows, UI, logos, watermark. Avoid horror, gross slime, candy colors, plastic toys, excessive particles, exaggerated magical light.",
+      "source": "C:\\Users\\darsh\\.codex\\generated_images\\01a139dc-57ff-7000-9feb-024ea1376df1\\exec-7c092701-0dd4-41b1-a932-80ac01efe3f4.png",
+      "file": "C:\\Users\\darsh\\entelloq-cinematic-assets\\biology-original.png"
+    }
+  ]
+}
