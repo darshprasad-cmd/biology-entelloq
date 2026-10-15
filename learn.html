@@ -1129,6 +1129,21 @@ body.embed .bl-library{scroll-margin-top:20px}body.embed .bl-library .bl-modes{t
 .bl-library .bd-open{min-height:44px;line-height:1.7;padding:10px 0}
 @media(max-width:760px){.bd-study{font-size:14px}.bd-header{align-items:start}.bd-mechanism{padding-left:14px}.bd-study summary{padding:14px 16px;font-size:13px;min-height:48px}.bd-exercise{padding:19px 17px}.bd-exercise>h3{font-size:23px}.bd-study .bd-question{font-size:16px;padding-left:13px}.bd-study th,.bd-study td{padding:12px 13px;font-size:12px}.bd-review button{width:100%}.bd-footer span{margin-top:10px}.bd-study textarea{font-size:16px}.bd-revisit{padding:19px}}
 @media(prefers-reduced-motion:reduce){.bd-study button:active:not(:disabled){transform:none}}
+
+/* Keep the condition beside its evidence when a phone table scrolls.
+   A 100px label leaves room for a complete 120px value column at 320px.
+   Native table semantics, scrolling and keyboard focus remain unchanged. */
+@media(max-width:760px){
+  .bd-table-wrap table{border-collapse:separate;border-spacing:0}
+  .bd-table-wrap th,.bd-table-wrap td{overflow-wrap:anywhere}
+  .bd-table-wrap thead th:first-child,.bd-table-wrap tbody th[scope=row]{
+    position:sticky;left:0;z-index:1;
+    width:100px;min-width:100px;max-width:100px;
+    background:var(--panel);box-shadow:1px 0 0 var(--hair);
+  }
+  .bd-table-wrap thead th:first-child{background:var(--bg-2)}
+  .bd-table-wrap tbody tr:nth-child(even) th[scope=row]{background:color-mix(in srgb,var(--em) 3%,var(--panel))}
+}
 </style>
 <!-- BIO-LIBRARY:learn-style:END -->
 <!-- BIO-PREVIEWS:css:START -->
