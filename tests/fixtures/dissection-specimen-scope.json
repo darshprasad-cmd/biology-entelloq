@@ -1,0 +1,8 @@
+{
+  "base": "4dcb67d2b1654d74d065b588acbde7831e6f5737",
+  "additionalSlots": [
+    "strata.js"
+  ],
+  "previousShellSha256": "a6758ba39c8b0d63175e0ff83c873ec8df58e12e0eccb32006ee23c41af92cc7",
+  "expandedShellSha256": "33815f61177fd747fc6c379962a13e46f77d98edac5d573104225590f354748c"
+}

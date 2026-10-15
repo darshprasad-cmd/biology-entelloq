@@ -6,13 +6,23 @@ let THREE;
 test.before(async () => {
   THREE = await import('data:text/javascript;base64,' + fs.readFileSync(path.join(root, 'src/lab/vendor/three.module.min.js')).toString('base64'));
 });
-function environment() {
-  const fit = source.slice(source.indexOf('  function fitSpecimen(group)'), source.indexOf('  /* ---- instrument tray'));
-  const mesh = () => new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial());
-  const setup = new Function('THREE', 'specimenTray', 'trayBase', 'pad', 'rims', 'contactMesh',
-    'const TABLE_Y=-1.7, supportY=-1.38; let placement=null, removalZ=-8, removalX=0, removalColumnWidth=0; const tray=new THREE.Group();\n' + fit + '\nreturn fitSpecimen;');
-  const tray = new THREE.Group(), pad = mesh();
-  return { fit: setup(THREE, tray, mesh(), pad, [mesh(), mesh(), mesh(), mesh()], mesh()), pad };
+function environment(handheld = false) {
+  // Exercise the real setup and fit with real Three geometry/lights. Canvas and
+  // PMREM are CPU stubs: this checks placement/coverage, not rendered appearance.
+  const gradient = () => ({ addColorStop() {} });
+  const context = { createRadialGradient: gradient, createLinearGradient: gradient,
+    fillRect() {}, beginPath() {}, moveTo() {}, lineTo() {}, stroke() {} };
+  const document = { createElement: () => ({ width: 1, height: 1, getContext: () => context }) };
+  const runtime = { ...THREE, PMREMGenerator: class {
+    compileEquirectangularShader() {}
+    fromEquirectangular() { return { texture: new THREE.Texture(), dispose() {} }; }
+    dispose() {}
+  } };
+  const setup = new Function('THREE', 'document', 'SH_PHONE',
+    source.replace(/^export\s+/gm, '') + '\nreturn setupEnvironment;')(runtime, document, handheld);
+  const scene = new THREE.Scene(), renderer = { shadowMap: {}, render() {} };
+  const env = setup(runtime, {}, { scene, camera: new THREE.PerspectiveCamera(), renderer });
+  return { ...env, fit: env.fitSpecimen, scene, renderer, pad: scene.getObjectByName('dissection-pad') };
 }
 test('support fit uses visible transformed exterior vertices, not hidden organs', () => {
   const group = new THREE.Group(), outer = new THREE.Mesh(new THREE.BoxGeometry(2, 3, 4));
@@ -30,6 +40,50 @@ test('empty support geometry fails instead of producing NaN transforms', () => {
   const group = new THREE.Group();
   assert.throws(() => environment().fit(group), /finite exterior bounds/);
   assert.equal(group.position.y, 0);
+});
+test('the complete translated specimen fits inside both lamps bright cones without changing tissue', () => {
+  const env = environment(), group = new THREE.Group();
+  const skin = new THREE.Mesh(new THREE.BoxGeometry(14, 3, 18), new THREE.MeshStandardMaterial({ color: 0x704428 }));
+  const hidden = new THREE.Mesh(new THREE.BoxGeometry(70, 70, 70)); hidden.visible = false;
+  group.add(skin, hidden); group.position.set(7, 4, -11); group.rotation.y = .32;
+  const positions = skin.geometry.attributes.position.array.slice(), material = skin.material;
+  env.fit(group);
+  const bounds = new THREE.Box3().setFromObject(skin, true), centre = bounds.getCenter(new THREE.Vector3());
+  for (const name of ['specimen-key-light', 'specimen-satellite-light']) {
+    const lamp = env.scene.getObjectByName(name), direction = lamp.target.position.clone().sub(lamp.position).normalize();
+    assert.ok(lamp.target.position.distanceTo(centre) < 1e-7, name + ': follows actual specimen centre');
+    for (let i = 0; i < skin.geometry.attributes.position.count; i++) {
+      const point = new THREE.Vector3().fromBufferAttribute(skin.geometry.attributes.position, i).applyMatrix4(skin.matrixWorld);
+      const ray = point.sub(lamp.position), angle = direction.angleTo(ray);
+      assert.ok(angle < lamp.angle * (1 - lamp.penumbra), name + ': exterior is inside bright cone, not feathered edge');
+      assert.ok(ray.length() < lamp.distance * .5, name + ': no strong distance-cutoff dimming at appendages');
+    }
+  }
+  assert.deepEqual(skin.geometry.attributes.position.array, positions);
+  assert.equal(skin.material, material, 'lighting does not recolour or replace tissue');
+  const key = env.scene.getObjectByName('specimen-key-light'), fixture = env.scene.getObjectByName('specimen-lamp-fixture');
+  assert.ok(fixture.position.distanceTo(key.position) < 1e-9, 'visible fixture remains at its light source');
+  const firstPosition = key.position.clone(), firstIntensity = key.intensity;
+  env.fit(group);
+  assert.ok(firstPosition.distanceTo(key.position) < 1e-7);
+  assert.equal(key.intensity, firstIntensity, 'repeat fit cannot compound intensity');
+  env.dispose();
+});
+
+test('lighting refits between large and small specimens with the original desktop/mobile shadow budget', () => {
+  for (const handheld of [false, true]) {
+    const env = environment(handheld);
+    const make = (x, z) => { const group = new THREE.Group(); group.add(new THREE.Mesh(new THREE.BoxGeometry(x, 2, z))); return group; };
+    env.fit(make(40, 3));
+    const lamp = env.scene.getObjectByName('specimen-key-light'), farIntensity = lamp.intensity;
+    env.fit(make(3, 5));
+    assert.ok(lamp.intensity < farIntensity, 'small specimens reset to near-field lighting');
+    const casting = env.scene.children.filter(o => o.isLight && o.castShadow);
+    assert.equal(casting.length, 1, 'no second shadow pass');
+    assert.deepEqual(casting[0].shadow.mapSize.toArray(), handheld ? [512, 512] : [1024, 1024]);
+    assert.equal(env.renderer.toneMappingExposure, 1.15, 'fill replaces exposure inflation');
+    env.dispose();
+  }
 });
 test('generated lab module parses without executing camera, imports or GPU code', () => {
   const html = fs.readFileSync(path.join(root, 'lab.html'), 'utf8');

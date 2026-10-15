@@ -1,0 +1,8 @@
+{
+  "base": "4dcb67d2b1654d74d065b588acbde7831e6f5737",
+  "additionalSlots": [
+    "blood.js"
+  ],
+  "previousShellSha256": "76c6cb7fa99f53dbce1809d84bfee9796d1ddf45c6f35da628eba32d00ec8dba",
+  "expandedShellSha256": "a6758ba39c8b0d63175e0ff83c873ec8df58e12e0eccb32006ee23c41af92cc7"
+}

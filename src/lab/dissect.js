@@ -203,9 +203,12 @@ export function createDissection(THREE, ctx) {
   /* ---- incision --------------------------------------------------------- */
   function beginStroke(part, point, grip) {
     beginAction('cut', part);
+    const selectedDepth = typeof ctx.getCutDepth === 'function' ? ctx.getCutDepth(part) : 0.55;
     stroke = {
       partId: part.id,
+      depth: Number.isFinite(selectedDepth) ? Math.max(0, Math.min(1, selectedDepth)) : 0.55,
       pts: [point.clone()],
+      normals: [contact?.normal.clone() || new THREE.Vector3(0, 1, 0)],
       speeds: [],
       lastT: performance.now(),
       lastP: point.clone(),
@@ -220,6 +223,7 @@ export function createDissection(THREE, ctx) {
     if (d < 0.045) return;                       // ignore jitter
     stroke.speeds.push(d / dt * 16);
     stroke.pts.push(point.clone());
+    stroke.normals.push(contact?.normal.clone() || stroke.normals.at(-1).clone());
     stroke.lastP.copy(point);
     stroke.lastT = now;
 
@@ -227,7 +231,7 @@ export function createDissection(THREE, ctx) {
     // over them, or leave that tube hanging after the access sheet is removed.
     if (stroke.pts.length >= 3 && typeof ctx.onCutProgress === 'function') {
       const part = byId.get(stroke.partId);
-      ctx.onCutProgress(part, stroke.pts);
+      ctx.onCutProgress(part, stroke.pts, stroke.depth);
     }
   }
 
@@ -246,10 +250,11 @@ export function createDissection(THREE, ctx) {
     const sawing = variance > 6.5 && stroke.speeds.length > 4;
     // Mouse buttons and camera pinch strength measure a grip, NOT tissue depth.
     // Only an explicit depth control may supply evidence of a deep cut.
-    const depth = typeof ctx.getCutDepth === 'function' ? ctx.getCutDepth(part) : null;
+    const depth = stroke.depth;
     const plunged = Number.isFinite(depth) && depth > 0.8;
+    const superficial = depth < 0.3; // authored practice threshold, not a measured thickness
 
-    state.incisions.set(part.id, { points: pts, length, opened: false });
+    state.incisions.set(part.id, { points: pts, length, depth, opened: false });
     if (pending) pending.changed = true;
 
     if (sawing) {
@@ -258,34 +263,35 @@ export function createDissection(THREE, ctx) {
 
     // A plunging first stroke goes through the layer into whatever is beneath it.
     if (plunged) {
-      // Nearest cuttable structure the blade would actually reach: same layer
-      // first (a vessel running within the wall), then the layer below.
-      const cutMid = pts[Math.floor(pts.length / 2)];
-      const reach = (p) => {
-        const b = new THREE.Box3().setFromObject(p.mesh);
-        return b.distanceToPoint(cutMid);
-      };
-      const sameLayer = parts.filter((p) => p.layer === part.layer && p.id !== part.id && p.cuttable);
-      const below = parts.filter((p) => p.layer === part.layer + 1 && p.cuttable);
-      const pool = sameLayer.length ? sameLayer : below;
-      const victim = pool.length
-        ? pool.reduce((best, p) => (reach(p) < reach(best) ? p : best))
-        : null;
+      // Only tissue actually under the blade can be perforated. Choosing a
+      // nearest bounding box could damage a distant organ beside the stroke.
+      // Reach is an authored model-space practice bound, not measured depth.
+      const mid = Math.floor(pts.length / 2), cutMid = pts[mid];
+      const inward = stroke.normals[mid].clone().negate().normalize();
+      const injuryRay = new THREE.Raycaster(cutMid, inward, 0.005, 0.7);
+      const pool = parts.filter(p => p.id !== part.id && p.cuttable
+        && !state.removed.has(p.id) && !state.opened.has(p.id)
+        && (p.layer === part.layer || p.layer === part.layer + 1));
+      const hit = injuryRay.intersectObjects(pool.map(p => p.mesh), false)[0];
+      const victim = hit ? pool.find(p => p.mesh === hit.object) : null;
       if (victim) {
         damage(victim, 'perforated',
           'The blade went in too deep on the first stroke and caught the ' + victim.name + '.');
       }
     }
 
-    if (length > 1.1) {
+    part.mesh.userData.peelable = length > 1.1 && !superficial;
+    if (part.mesh.userData.peelable) {
       emit('incise', part.id,
         'Incision made in ' + part.name + (sawing ? ' — but the stroke was uneven.' : '.'),
-        { length: +length.toFixed(2), sawing, plunged });
+        { length: +length.toFixed(2), sawing, plunged, depth });
       // Long enough to reflect: the part becomes peelable with forceps.
       part.mesh.userData.peelable = true;
     } else {
-      emit('incise', part.id, 'A short nick in ' + part.name + ' — not long enough to open it.',
-        { length: +length.toFixed(2) });
+      emit('incise', part.id, superficial
+        ? 'A shallow score in ' + part.name + ' — choose a controlled depth to open the layer.'
+        : 'A short nick in ' + part.name + ' — not long enough to open it.',
+        { length: +length.toFixed(2), depth, superficial });
     }
     stroke = null;
     finishAction();

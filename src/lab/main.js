@@ -30,6 +30,8 @@ let histology = null, imaging = null, pathology = null;
 // Phase 4 — alive.
 let physio = null, tutor = null, xr = null, zoomverse = null;
 let specimenId = null;
+let specimenPreparation = 'preserved';
+let bladeDepth = 0.55;
 let examinedPartId = null, examinationReturnFocus = null;
 let lastT = 0;
 let preparedFrog = null, preparedInstall = null, installExterior = null;
@@ -672,7 +674,7 @@ function onEvent(evt) {
     if (inc && part) {
       cutting.open({
         partId: part.id, mesh: part.mesh, points: inc.points,
-        system: part.system, depth: 0.55, amount: 0.62,
+        system: part.system, depth: inc.depth ?? 0.55, amount: 0.62,
         rest: cutRest.get(part.id),
       });
     }
@@ -682,15 +684,17 @@ function onEvent(evt) {
     cutting.releaseSurface(evt.partId);
     cutting.remove(evt.partId);
   }
+  if (evt.kind === 'peel') blood?.clearPart?.(evt.partId);
 
   // Injury bleeds harder than a clean cut, and a torn artery is not a graze.
-  if (blood && dissection && dissection.contact && /damage|incise/.test(evt.kind)) {
+  if (blood && dissection && dissection.contact && evt.kind === 'damage' && !evt.meta?.refused) {
     const c = dissection.contact;
-    const hard = evt.kind === 'damage';
-    blood.bleed({
-      point: c.point, normal: c.normal, partId: evt.partId || c.partId,
-      severity: hard ? 0.9 : 0.5,
-      kind: hard ? (/heart|aort|arter/.test(evt.partId || '') ? 'arterial' : 'venous') : 'capillary',
+    const injuryPoint = evt.meta?.point || dissection.state.incisions.get(evt.partId)?.points.at(-1);
+    // A damaged deeper structure is not necessarily at the surface contact.
+    // Do not put its blood on whichever organ the cursor happens to be over.
+    if (injuryPoint && c.partId === evt.partId) blood.bleed({
+      point: injuryPoint, normal: c.normal, partId: evt.partId, severity: 0.8,
+      kind: /aort|arter/.test(evt.partId || '') ? 'arterial' : 'venous',
     });
   }
 
@@ -923,6 +927,20 @@ function setPhysiology(on) {
   // corner; shell.js reads this class to pick its floor.
   document.body.classList.toggle('physio-on', !!on);
   if (shell.setPhysio) shell.setPhysio({ running: on });
+  refreshSpecimenPreparation();
+}
+
+function refreshSpecimenPreparation() {
+  const mode = physio?.running() ? 'circulation' : specimenPreparation;
+  blood?.setContext?.(specimenId, mode);
+  shell?.setPreparation?.({ mode, specimenId, selection: specimenPreparation });
+}
+
+function setSpecimenPreparation(mode) {
+  specimenPreparation = mode === 'fresh' ? 'fresh' : 'preserved';
+  // Selecting an excised specimen condition always leaves the pumping demo.
+  if (physio?.running()) setPhysiology(false);
+  refreshSpecimenPreparation();
 }
 
 function doAction(id, partId) {
@@ -1079,6 +1097,11 @@ function loadSpecimen(id) {
   if (constraints) { constraints.dispose(); constraints = null; }
   if (pathology) { pathology.dispose(); pathology = null; }
   if (physio) { physio.dispose(); physio = null; }
+  document.body.classList.remove('physio-on');
+  shell.setPhysio?.({ running: false });
+  sfx?.setBreathing(false);
+  sfx?.setPhaseSource(null);
+  blood?.setPhaseSource(null);
   if (surface) { surface.dispose(); surface = null; }
   if (strata) { strata.dispose(); strata = null; }
   if (cutting) cutting.clear();
@@ -1178,11 +1201,18 @@ function loadSpecimen(id) {
       if (cutting) cutting.restore(partId, saved?.cut, cutRest.get(partId));
     },
     onHistoryChange: updateUndoState,
-    onCutProgress: (part, points) => {
-      if (!cutting) return;
-      if (cutting.has(part.id)) cutting.grow(part.id, points);
-      else cutting.open({ partId: part.id, mesh: part.mesh, points,
-        system: part.system, depth: 0.55, amount: 0.62, rest: cutRest.get(part.id) });
+    getCutDepth: () => bladeDepth,
+    onCutProgress: (part, points, depth = 0.55) => {
+      if (cutting?.has(part.id) && cutting.depthOf(part.id) === depth) cutting.grow(part.id, points);
+      else cutting?.open({ partId: part.id, mesh: part.mesh, points,
+        system: part.system, depth, amount: 0.62, rest: cutRest.get(part.id) });
+      const contact = dissection?.contact;
+      // Only an accepted stroke that has advanced through tissue creates fluid.
+      // Hovering, jitter, a refused cut, and holding the blade still do not.
+      if (blood && contact?.partId === part.id) blood.bleed({
+        point: points[points.length - 1], normal: contact.normal,
+        partId: part.id, severity: 0.45, kind: 'capillary',
+      });
     },
   });
   dissection.setTool(currentTool === 'swab' ? 'probe' : currentTool);
@@ -1204,7 +1234,7 @@ function loadSpecimen(id) {
     try { pathology = createPathology(THREE, parts, id); }
     catch (e) { console.warn('pathology failed', e); pathology = null; }
   }
-  if (typeof createPhysiology === 'function') {
+  if (typeof createPhysiology === 'function' && ['frog', 'heart'].includes(id)) {
     try {
       physio = createPhysiology(THREE, parts, id);
       physio.onEvent(onEvent);
@@ -1220,6 +1250,7 @@ function loadSpecimen(id) {
   }
 
   shell.setSpecimen(spec, parts);
+  refreshSpecimenPreparation();
   if (tutor) tutor.setSpecimen(id);
   if (strata && shell.setStrata) shell.setStrata(strata.stack, 0);
   if (shell.setVignette) shell.setVignette(null);
@@ -1354,12 +1385,6 @@ function tick(t) {
 
   if (blood) {
     const c = !scanning && dissection ? dissection.contact : null;
-    if (c && input.gripping && currentTool === 'scalpel') {
-      blood.bleed({
-        point: c.point, normal: c.normal, partId: c.partId,
-        severity: 0.35 + input.grip * 0.45, kind: 'capillary',
-      });
-    }
     if (c && input.gripping && currentTool === 'swab') blood.swab(c.point, 0.9);
     blood.update(dt);
   }
@@ -1513,7 +1538,11 @@ function onKey(e) {
   if (e.key === '[' || e.key === ']') {
     const d = e.key === '[' ? -1 : 1;
     if (scanning) imaging.setSlice(imaging.slice + d * 0.02);
-    else if (blood) blood.setIntensity(Math.max(0, Math.min(1, blood.intensity + d * 0.25)));
+    else if (blood) {
+      blood.setIntensity(Math.max(0, Math.min(1, blood.intensity + d * 0.25)));
+      blood.setEnabled(blood.intensity > 0);
+      shell.setBleeding({ intensity: blood.intensity, enabled: blood.enabled });
+    }
     return;
   }
   if (k === 'w' && scanning) { imaging.cycleWindow(); refreshImagingControls(); return; }
@@ -1532,7 +1561,9 @@ function onKey(e) {
     return;
   }
   if (k === 'b' && blood) {
+    if (!blood.enabled && blood.intensity <= 0) blood.setIntensity(0.55);
     blood.setEnabled(!blood.enabled);
+    shell.setBleeding({ intensity: blood.intensity, enabled: blood.enabled });
     shell.say(blood.enabled ? 'Bleeding on.' : 'Bleeding off — a bloodless field.');
     return;
   }
@@ -1778,6 +1809,8 @@ async function startPreparedApp() {
   if (shell.setActions) shell.setActions([], doAction);
   shell.on('level', (l) => { if (tutor) tutor.setLevel(l); });
   shell.on('bleeding', (k) => { if (blood) { blood.setIntensity(k); blood.setEnabled(k > 0); } });
+  shell.on('preparation', setSpecimenPreparation);
+  shell.on('blade-depth', depth => { if ([0.18, 0.55, 0.9].includes(depth)) bladeDepth = depth; });
   shell.on('imaging', (m) => { if (imaging) { imaging.setMode(m); refreshImagingControls(); } });
   shell.on('imaging-window', () => { if (imaging && imaging.mode() !== 'off') { imaging.cycleWindow(); refreshImagingControls(); } });
   shell.on('imaging-weighting', () => {

@@ -29,6 +29,40 @@
  * -y inferior (apex).
  */
 
+// One authored outer profile is shared by the ventricular walls and their
+// adherent membrane. These are relative model coordinates, not patient data.
+function HEART_radius(y) {
+  const stations = [[-3.55, 0], [-3.35, .24], [-2.8, .72], [-2.0, 1.30],
+    [-1.0, 1.84], [0, 2.18], [1.1, 2.36], [1.9, 2.20], [2.6, 1.62], [3.15, .66], [3.4, 0]];
+  if (y <= stations[0][0] || y >= stations.at(-1)[0]) return 0;
+  let i = 1; while (y > stations[i][0]) i++;
+  const a = stations[i - 1], b = stations[i], t = (y - a[0]) / (b[0] - a[0]);
+  // Cubic Hermite interpolation with centred, bounded tangents avoids terraces.
+  const prev = stations[Math.max(0, i - 2)], next = stations[Math.min(stations.length - 1, i + 1)];
+  const m0 = (b[1] - prev[1]) / (b[0] - prev[0]), m1 = (next[1] - a[1]) / (next[0] - a[0]);
+  return Math.max(0, (2*t*t*t-3*t*t+1)*a[1] + (t*t*t-2*t*t+t)*(b[0]-a[0])*m0
+    + (-2*t*t*t+3*t*t)*b[1] + (t*t*t-t*t)*(b[0]-a[0])*m1);
+}
+
+function HEART_surfacePoint(THREE, y, phi, right = false, envelope = false) {
+  let radius = HEART_radius(y);
+  const lo = -.12 * Math.PI, hi = .58 * Math.PI;
+  const edge = Math.max(0, Math.min(1, (phi-lo)/.34, (hi-phi)/.34));
+  const ends = smooth(Math.max(0, Math.min(1, (y+1.85)/.65, (2.9-y)/.55)));
+  const rightOffset = .465 * smooth(edge) * ends - .065;
+  if (right) radius += envelope ? Math.max(0, rightOffset) : rightOffset;
+  // Anterior interventricular furrow and a flatter posterior face distinguish
+  // the oblique ventricular mass from an ellipsoid with a second bowl on top.
+  const groovePhi = -.20 + (1.5-y)*.025;
+  const groove = Math.exp(-Math.pow((phi-groovePhi)/.09, 2))
+    * smooth(Math.max(0, Math.min(1, (y+3.2)/.7, (2.65-y)/.5)));
+  radius *= 1 - .045 * groove;
+  const lean = Math.max(0, 1.4-y)*.16;
+  const x = Math.sin(phi)*radius - lean;
+  const z = Math.cos(phi)*radius*(Math.cos(phi) >= 0 ? .87 : .75) + lean*.32;
+  return new THREE.Vector3(x, y, z);
+}
+
 function buildHeart(THREE) {
   const group = new THREE.Group();
   const parts = [];
@@ -63,11 +97,19 @@ function buildHeart(THREE) {
       }
       g.index.needsUpdate = true;
     }
-    // displace/seal recompute normals from the corrected faces.
-    displace(THREE, g, o.amp != null ? o.amp : 0.024, o.freq || 2.4, o.seed || 0);
+    const pos = g.attributes.position;
+    for (let i = 0; i < pos.count; i++) {
+      const phi = Math.atan2(pos.getX(i), pos.getZ(i));
+      const y = pos.getY(i);
+      const right = phi >= -.12*Math.PI-1e-6 && phi <= .58*Math.PI+1e-6 && y >= -1.85-1e-6 && y <= 2.9+1e-6;
+      const v = HEART_surfacePoint(THREE, y, phi, right, true);
+      const grain = (vnoise(v.x*3.1+2, v.y*2.8, v.z*3.1)-.5)*.018;
+      pos.setXYZ(i, v.x + Math.sin(phi)*grain, v.y, v.z + Math.cos(phi)*grain);
+    }
     seal(g);
     return new THREE.Mesh(g, mat(THREE, color, {
-      rough: 0.6, clear: 0.5, clearRough: 0.36, sheen: 0xff6a55, sheenAmt: 0.5, ...(o.mat || {}) }));
+      rough: 0.67, clear: 0.16, clearRough: 0.48, transmission: 0,
+      sheen: 0xb99a8a, sheenAmt: 0.20, ...(o.mat || {}) }));
   }
 
   // Swing the lower half of a body toward -x (and slightly anterior) so the apex
@@ -94,7 +136,7 @@ function buildHeart(THREE) {
       const fine = vnoise(x * 8.3 - 3.2, y * 7.9 + 6.1, z * 8.1 - 1.7);
       const strands = 0.5 + 0.5 * Math.sin(y * 21 + x * 5 + z * 3 + broad * 2);
       const shade = fatty ? 0.81 + broad * 0.16 + fine * 0.03
-        : 0.72 + broad * 0.23 + fine * 0.04 + strands * 0.01;
+        : 0.56 + broad * 0.36 + fine * 0.06 + strands * 0.02;
       colors[i * 3] = shade;
       colors[i * 3 + 1] = shade * (fatty ? 0.96 + fine * 0.04 : 0.93 + fine * 0.06);
       colors[i * 3 + 2] = shade * (fatty ? 0.85 + broad * 0.10 : 0.90 + broad * 0.08);
@@ -103,6 +145,7 @@ function buildHeart(THREE) {
     mesh.material.vertexColors = true;
     mesh.material.needsUpdate = true;
     mesh.userData.tissuePigment = fatty ? 'lobulated-fat' : 'preserved-myocardium';
+    mesh.userData.spatialPigment = true;
   }
 
   // A single tensile cord between two world-space points (chordae tendineae).
@@ -146,15 +189,36 @@ function buildHeart(THREE) {
 
   // Left ventricle: a full, thick-walled cone drawn to a fine apex.
   const lvProf = [];
-  for (let i = 0; i <= 30; i++) {
-    const t = i / 30;
-    const y = 3.1 - t * 6.55;                         // base 3.1  ->  apex -3.45
-    let r = Math.sin(t * Math.PI * 0.92 + 0.13) * 2.46 * (1 - t * 0.10) + 0.08;
-    if (t > 0.83) r *= 1 - (t - 0.83) * 4.0;          // draw the apex to a point
-    lvProf.push(new THREE.Vector2(Math.max(0.05, r), y));
+  for (let i = 0; i <= 48; i++) {
+    const y = 3.15 - i / 48 * 6.65;
+    lvProf.push(new THREE.Vector2(Math.max(.025, HEART_radius(y)), y));
   }
-  const lv = heartWall(lvProf, 54, 0, Math.PI * 2, 0x6e4b42, { tissue: 'muscle', amp: 0.026, seed: 1 });
-  heartApexLean(lv.geometry, 0.16, 1.4);
+
+  function foldAuricle(mesh, side) {
+    const p = mesh.geometry.attributes.position;
+    for (let i = 0; i < p.count; i++) {
+      const x=p.getX(i), y=p.getY(i), z=p.getZ(i);
+      const tip = Math.max(0, side*x);
+      const crease = Math.sin(x*9 + y*3) * .035 * Math.max(0, 1-Math.abs(y)/.7);
+      p.setXYZ(i, x, y + tip*tip*.28, z*.76 + tip*tip*.30 + crease);
+    }
+    seal(mesh.geometry);
+  }
+  // Both walls meet on the same sampled boundary. The LV does not remain a
+  // closed second shell beneath the anterior RV patch: that caused a hard
+  // overlapping lip and self-shadow in the original intact model.
+  for (const y of [2.9, -1.85]) lvProf.push(new THREE.Vector2(HEART_radius(y), y));
+  lvProf.sort((a,b)=>b.y-a.y);
+  const lv = heartWall(lvProf, 80, -1.12*Math.PI, Math.PI * 2, 0x9c7b6d, { tissue: 'muscle' });
+  const lvIndices = [], lvRows = lvProf.length;
+  for (let i=0; i<lv.geometry.index.count; i+=3) {
+    const tri=[lv.geometry.index.getX(i),lv.geometry.index.getX(i+1),lv.geometry.index.getX(i+2)];
+    const columns=tri.map(index=>Math.floor(index/lvRows));
+    const y=tri.reduce((sum,index)=>sum+lvProf[index%lvRows].y,0)/3;
+    if(Math.min(...columns)>=40 && Math.max(...columns)<=68 && y> -1.85 && y<2.9) continue;
+    lvIndices.push(...tri);
+  }
+  lv.geometry.setIndex(lvIndices); seal(lv.geometry);
   add({ id: 'lv-free-wall', name: 'Left ventricle — free wall', layer: 1, system: 'circulatory',
         cuttable: true, detachable: false, mesh: lv,
         note: 'Thick, firm and dark. Its wall is 3–6× the right\'s — compliance is how you tell left from right.',
@@ -162,16 +226,28 @@ function buildHeart(THREE) {
 
   // Right ventricle: a thinner, paler crescent over the anterior-right flank,
   // stopping short of the apex (the apex belongs to the LV).
-  const rvProf = [];
-  for (let i = 0; i <= 22; i++) {
-    const t = i / 22;
-    const y = 2.9 - t * 4.75;                          // base 2.9  ->  -1.85 (no apex)
-    const r = Math.sin(t * Math.PI * 0.72 + 0.34) * 2.66 * (1 - t * 0.05) + 0.1;
-    rvProf.push(new THREE.Vector2(Math.max(0.05, r), y));
+  const rvProf = lvProf.filter(p=>p.y<=2.9 && p.y>=-1.85).map(p=>p.clone());
+  const rv = heartWall(rvProf, 28, -Math.PI * 0.12, Math.PI * 0.70, 0x9c7b6d,
+    { right: true, mat: { rough: 0.66, side: THREE.DoubleSide } });
+  const wallSeams = new Map();
+  for (const wall of [lv,rv]) {
+    wall.userData.exteriorDetail='joined-ventricular-wall';
+    wall.userData.sharedTissueBoundary='ventricular';
+    const p=wall.geometry.attributes.position,n=wall.geometry.attributes.normal;
+    const used=new Set(wall.geometry.index.array);
+    for(let i=0;i<p.count;i++) {
+      if(!used.has(i)) continue;
+      const key=[p.getX(i),p.getY(i),p.getZ(i)].map(v=>Math.round(v*1e5)).join(',');
+      if(!wallSeams.has(key)) wallSeams.set(key,[]);
+      wallSeams.get(key).push({wall,n,i});
+    }
   }
-  const rv = heartWall(rvProf, 48, -Math.PI * 0.12, Math.PI * 0.70, 0x855a4e,
-    { amp: 0.02, seed: 2, mat: { rough: 0.62, side: THREE.DoubleSide } });
-  heartApexLean(rv.geometry, 0.14, 1.4);
+  for(const matches of wallSeams.values()) {
+    if(new Set(matches.map(v=>v.wall)).size<2) continue;
+    const normal=new THREE.Vector3();
+    matches.forEach(({n,i})=>normal.add(new THREE.Vector3().fromBufferAttribute(n,i)));
+    normal.normalize(); matches.forEach(({n,i})=>n.setXYZ(i,normal.x,normal.y,normal.z));
+  }
   add({ id: 'rv-free-wall', name: 'Right ventricle — free wall', layer: 1, system: 'circulatory',
         cuttable: true, detachable: false, mesh: rv,
         note: 'Thin-walled, paler and compliant, wrapped over the front-right. It only has to reach the lungs.' });
@@ -196,6 +272,7 @@ function buildHeart(THREE) {
   const rAur = lobe(THREE, 0x8a3a34, 1.0, 0.62, 0.34,
     { amp: 0.14, seed: 7, rough: 0.62, clear: 0.35, sheen: 0xc25a4e });
   rAur.position.set(1.55, 2.95, 0.95); rAur.rotation.set(0.5, -0.4, 0.4);
+  foldAuricle(rAur, -1);
   add({ id: 'right-auricle', name: 'Right auricle', layer: 1, system: 'circulatory',
         cuttable: true, detachable: false, mesh: rAur,
         note: 'The ear-like flap of the right atrium, curling forward over the aortic root.' });
@@ -203,6 +280,7 @@ function buildHeart(THREE) {
   const lAur = lobe(THREE, 0x883833, 0.92, 0.55, 0.3,
     { amp: 0.14, seed: 8, rough: 0.62, clear: 0.35, sheen: 0xbe564c });
   lAur.position.set(-1.35, 3.0, 0.35); lAur.rotation.set(0.6, 0.5, -0.4);
+  foldAuricle(lAur, 1);
   add({ id: 'left-auricle', name: 'Left auricle', layer: 1, system: 'circulatory',
         cuttable: true, detachable: false, mesh: lAur,
         note: 'The hooked ear-flap of the left atrium, reaching over the pulmonary trunk.' });
@@ -267,6 +345,17 @@ function buildHeart(THREE) {
 
   /* ---- LAYER 1 : coronary tree in the grooves -------------------------------- */
 
+  function cardiacSurfacePath(points, lift = .018) {
+    const curve = new THREE.CatmullRomCurve3(points.map(p => new THREE.Vector3(...p)));
+    return Array.from({length: 33}, (_, i) => {
+      const p = curve.getPoint(i/32), lean = Math.max(0, 1.4-p.y)*.16;
+      const phi = Math.atan2(p.x+lean, p.z-lean*.32);
+      const front = phi > -.12*Math.PI && phi < .58*Math.PI && p.y >= -1.85 && p.y <= 2.9;
+      return HEART_surfacePoint(THREE, p.y, phi, front, true)
+        .add(new THREE.Vector3(Math.sin(phi), 0, Math.cos(phi)).multiplyScalar(lift)).toArray();
+    });
+  }
+
   const cors = [
     ['lad', 'Left anterior descending artery',
       [[-0.15, 2.9, 1.75], [-0.35, 1.6, 2.05], [-0.5, 0.2, 1.95], [-0.62, -1.2, 1.5], [-0.55, -2.5, 0.85]],
@@ -283,13 +372,15 @@ function buildHeart(THREE) {
       null],
   ];
   cors.forEach(([cid, nm, pts, branches]) => {
-    const m = tube(THREE, 0xd4564a, pts, 0.085, { rough: 0.5, clear: 0.5, sheen: 0xe87868, rad: 8, seg: 48 });
+    const m = tube(THREE, 0x846651, cardiacSurfacePath(pts), 0.055,
+      { rough: 0.63, clear: 0.16, transmission: 0, sheen: 0xb68a72, rad: 8, seg: 64 });
     // Branch tubes are built in the same (group) space as the trunk and attached
     // as CHILDREN of the trunk mesh, which sits at the origin with an identity
     // transform. That keeps them geometrically correct AND makes them inherit the
     // trunk's visibility, so revealLayer(1) shows the whole vessel at once.
     (branches || []).forEach((bp) => {
-      m.add(tube(THREE, 0xd4564a, bp, 0.055, { rough: 0.5, clear: 0.5, sheen: 0xe87868, rad: 6, seg: 16 }));
+      m.add(tube(THREE, 0x846651, cardiacSurfacePath(bp, .012), 0.029,
+        { rough: 0.63, clear: 0.16, transmission: 0, sheen: 0xb68a72, rad: 6, seg: 32 }));
     });
     const note = cid === 'posterior-iv-branch'
       ? 'Runs in the posterior interventricular groove from the crux to the apex. Here it springs from the RCA — this heart is right-dominant.'
@@ -305,7 +396,7 @@ function buildHeart(THREE) {
   // Coronary sinus — the great cardiac vein in the posterior AV groove, draining
   // into the right atrium. Wider and darker than the arteries.
   const csinus = tube(THREE, 0x5a4a6a,
-    [[-1.35, 0.6, -1.8], [-0.4, 0.35, -2.15], [0.6, 0.25, -1.95], [1.4, 0.55, -1.15]], 0.13,
+    cardiacSurfacePath([[-1.35, 0.6, -1.8], [-0.4, 0.35, -2.15], [0.6, 0.25, -1.95], [1.4, 0.55, -1.15]], .04), 0.13,
     { rough: 0.55, clear: 0.3, sheen: 0x7a6a8a, rad: 10, seg: 36 });
   add({ id: 'coronary-sinus', name: 'Coronary sinus', layer: 1, system: 'circulatory',
         cuttable: true, detachable: false, mesh: csinus,
@@ -319,6 +410,19 @@ function buildHeart(THREE) {
     new THREE.CylinderGeometry(1.55, 1.1, 4.9, 40, 1, true, Math.PI * 0.60, Math.PI * 0.80),
     mat(THREE, 0x8f3330, { side: THREE.DoubleSide, rough: 0.62, clear: 0.4, sheen: 0xd05a50 }));
   sep.position.set(0.2, 0.1, -0.05);
+  // Keep the septal attachment/descriptor, but fit its distal muscle inside the
+  // revised ventricular mass; the old straight cylinder pierced the tapered wall.
+  const septalPos = sep.geometry.attributes.position;
+  for (let i=0; i<septalPos.count; i++) {
+    const y=septalPos.getY(i)+sep.position.y, lean=Math.max(0,1.4-y)*.16;
+    let x=septalPos.getX(i)+sep.position.x+lean;
+    let z=septalPos.getZ(i)+sep.position.z-lean*.32;
+    const radial=Math.hypot(x,z/(z>=0?.87:.75));
+    const factor=Math.min(1,HEART_radius(y)*.88/Math.max(.001,radial));
+    x*=factor; z*=factor;
+    septalPos.setXYZ(i,x-lean-sep.position.x,y-sep.position.y,z+lean*.32-sep.position.z);
+  }
+  seal(sep.geometry);
   add({ id: 'septum', name: 'Interventricular septum', layer: 2, system: 'circulatory',
         cuttable: false, detachable: false, mesh: sep,
         note: 'Thick, muscular and complete — no blood crosses it in a normal heart. The probe will not pass through.' });
@@ -419,10 +523,12 @@ function buildHeart(THREE) {
   const sac = new THREE.SphereGeometry(1, 48, 36), sp = sac.attributes.position;
   for (let i = 0; i < sp.count; i++) {
     const y = .325 + sp.getY(i) * 3.925, phi = Math.atan2(sp.getX(i), sp.getZ(i));
-    const r = envelopeRadius(y, phi) * 1.045;
-    const lean = Math.max(0, 1.4 - y) * .155;
-    sp.setXYZ(i, Math.sin(phi) * r - lean, y / peri.scale.y,
-      (Math.cos(phi) * r + lean * .32) / peri.scale.z);
+    const r = envelopeRadius(y, phi) * 1.035;
+    const point = HEART_surfacePoint(THREE, y, phi, y>=-1.85 && y<=2.9 && phi>-.12*Math.PI && phi<.58*Math.PI, true);
+    const atrial = Math.max(0, r - HEART_radius(y)) * smooth(Math.max(0,Math.min(1,(y-1.8)/1.0)));
+    const margin = HEART_radius(y) > .02 || atrial > .02 ? .09 : 0;
+    sp.setXYZ(i, point.x + Math.sin(phi)*(margin+atrial), y / peri.scale.y,
+      (point.z + Math.cos(phi)*(margin+atrial*.85)) / peri.scale.z);
   }
   seal(sac); peri.geometry.dispose(); peri.geometry = sac;
   peri.userData.exteriorDetail = 'conforming-sac';

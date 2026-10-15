@@ -5,13 +5,13 @@
  * a theatre makes you feel you are standing over a specimen. The difference is
  * almost entirely in the light:
  *
- *   - one hard, warm, overhead surgical lamp that actually exists in the world
+ *   - one overhead surgical lamp that actually exists in the world
  *     (you can see the fixture) and casts a real shadow onto the table,
- *   - a cold, dim blue room around it, so shadows read clinical rather than grey,
+ *   - neutral fill that keeps dark skin and thin appendages readable,
  *   - a contact shadow hugging the specimen so it sits ON the table,
  *   - brushed steel underneath that catches a wet sheen.
  *
- * Warm key against cool ambient is the whole trick. Everything else recedes.
+ * The lighting follows the specimen's real bounds; the surrounding room recedes.
  *
  * Contract (main.js depends on it):
  *   setupEnvironment(THREE, deps, refs) -> { render, resize, setBloom, dispose }
@@ -84,15 +84,18 @@ export function setupEnvironment(THREE, deps, refs) {
   }
 
   /* ---- light rig --------------------------------------------------------- */
-  // Cold room fill. Deliberately weak: it defines the dark, it does not light
-  // the specimen.
-  addTo(new THREE.HemisphereLight(0x33506b, 0x04070a, 0.42));
-  const roomFill = addTo(new THREE.DirectionalLight(0x7fa8c8, 0.30));
+  // Neutral broad fill lifts dark appendages without raising exposure on the
+  // pale frog belly. Keep this unshadowed: only the key spends a shadow map.
+  addTo(new THREE.HemisphereLight(0xa9b6b7, 0x222c29, 0.60));
+  const roomFill = addTo(new THREE.DirectionalLight(0xdde3df, 0.58));
+  roomFill.name = 'specimen-room-fill';
   roomFill.position.set(-7, 5, -8);
+  addTo(roomFill.target);
 
-  // THE surgical lamp. Warm-white, hard, from directly above and slightly front,
-  // where a real theatre lamp hangs. This does nearly all the modelling.
-  const lamp = addTo(new THREE.SpotLight(0xfff2e2, 210, 44, 0.40, 0.45, 1.7));
+  // Less dominant than the former narrow hot spot; fitSpecimen sets the cone so
+  // the whole animal is inside its bright region, not at the feathered edge.
+  const lamp = addTo(new THREE.SpotLight(0xfff5e9, 160, 44, 0.60, 0.40, 1.7));
+  lamp.name = 'specimen-key-light';
   lamp.position.set(0.6, 15.5, 4.2);
   lamp.target.position.set(0, 0, 0);
   addTo(lamp.target);
@@ -108,18 +111,22 @@ export function setupEnvironment(THREE, deps, refs) {
 
   // A softer satellite head — real theatres run twin lamps to kill the shadow
   // the surgeon's own hands throw. No shadow map on this one.
-  const lamp2 = addTo(new THREE.SpotLight(0xffe9d0, 42, 34, 0.46, 0.7, 1.7));
+  const lamp2 = addTo(new THREE.SpotLight(0xeaf0ee, 54, 34, 0.65, 0.45, 1.7));
+  lamp2.name = 'specimen-satellite-light';
   lamp2.position.set(-6.5, 12.0, -3.0);
   lamp2.target.position.set(0, 0, 0);
   addTo(lamp2.target);
 
-  // A dim neutral-green rim separates the specimen without staining the tissue cyan.
+  // A restrained rim separates the silhouette without staining tissue cyan.
   const rim = addTo(new THREE.DirectionalLight(0xc1d8d2, 0.45));
+  rim.name = 'specimen-rim-light';
   rim.position.set(-6, 3.5, -7);
+  addTo(rim.target);
 
   /* ---- the visible lamp fixture ------------------------------------------ */
   // Seeing the source of the light is a large part of believing the room.
   const fixture = new THREE.Group();
+  fixture.name = 'specimen-lamp-fixture';
   fixture.add(new THREE.Mesh(
     track(new THREE.CylinderGeometry(2.5, 3.05, 0.5, 40)),
     track(new THREE.MeshStandardMaterial({ color: 0x11161b, roughness: 0.42, metalness: 0.85 }))));
@@ -252,6 +259,42 @@ export function setupEnvironment(THREE, deps, refs) {
   let removalZ = -8;
   let removalX = 0, removalColumnWidth = 0;
 
+  function fitLighting(bounds) {
+    const centre = bounds.getCenter(new THREE.Vector3());
+    const radius = Math.max(0.5, bounds.getSize(new THREE.Vector3()).length() * 0.5);
+    // A bounding sphere covers every actual exterior vertex, including folded
+    // feet and antennae. Move back for long specimens rather than cutting them
+    // off with a fixed cone; compensate distance falloff, not camera exposure.
+    for (const [light, offset, intensity] of [
+      [lamp, new THREE.Vector3(0.6, 15.5, 4.2), 160],
+      [lamp2, new THREE.Vector3(-6.5, 12, -3), 54],
+    ]) {
+      const baseDistance = offset.length();
+      const distance = Math.max(baseDistance, radius / Math.sin(0.52));
+      light.position.copy(centre).addScaledVector(offset, distance / baseDistance);
+      light.target.position.copy(centre);
+      const coverageAngle = Math.asin(Math.min(0.99, radius / distance));
+      light.angle = Math.max(0.42, coverageAngle / (1 - light.penumbra) + 0.035);
+      light.intensity = intensity * Math.pow(distance / baseDistance, light.decay);
+      light.distance = Math.max(34, (distance + radius) * 2.2);
+      // Keep the existing single 512/1024 shadow map. Only its clipping range
+      // follows the fitted lamp so a larger specimen cannot lose its shadow.
+      if (light.castShadow) light.shadow.camera.far = distance + radius + 8;
+    }
+    for (const [light, offset] of [
+      [roomFill, new THREE.Vector3(-7, 5, -8)],
+      [rim, new THREE.Vector3(-6, 3.5, -7)],
+    ]) {
+      light.position.copy(centre).add(offset);
+      light.target.position.copy(centre);
+    }
+    fixture.position.copy(lamp.position);
+    fixture.quaternion.setFromUnitVectors(new THREE.Vector3(0, -1, 0),
+      centre.clone().sub(lamp.position).normalize());
+    poolMesh.position.x = centre.x;
+    poolMesh.position.z = centre.z;
+  }
+
   function fitSpecimen(group) {
     // Visible external geometry only. Hidden deep anatomy is not a support
     // surface, and Box3.setFromObject would incorrectly include it.
@@ -276,6 +319,7 @@ export function setupEnvironment(THREE, deps, refs) {
     const length = Math.max(10, bounds.max.z - bounds.min.z + 2.2);
     const x = (bounds.min.x + bounds.max.x) / 2;
     const z = (bounds.min.z + bounds.max.z) / 2;
+    fitLighting(bounds.clone().translate(new THREE.Vector3(0, offsetY, 0)));
     removalZ = -8;
     removalX = 0; removalColumnWidth = 0;
     // Keep instruments on the opposite side of the removed-organ work area.
@@ -336,15 +380,16 @@ export function setupEnvironment(THREE, deps, refs) {
     pmrem.compileEquirectangularShader();
     const { cv, ctx } = canvas2d(256, 128);
     const g = ctx.createLinearGradient(0, 0, 0, 128);
-    g.addColorStop(0.00, '#2a3a48');    // cool ceiling
-    g.addColorStop(0.40, '#141c24');
-    g.addColorStop(1.00, '#05080b');    // dark floor
+    g.addColorStop(0.00, '#43504f');    // broad neutral ceiling reflection
+    g.addColorStop(0.40, '#242f2e');
+    g.addColorStop(1.00, '#080c0b');    // dark floor
     ctx.fillStyle = g; ctx.fillRect(0, 0, 256, 128);
-    // A bright band where the lamp is, so speculars have a highlight to catch.
-    const lg = ctx.createRadialGradient(128, 12, 0, 128, 12, 54);
-    lg.addColorStop(0, 'rgba(255,246,232,1)');
-    lg.addColorStop(1, 'rgba(255,246,232,0)');
-    ctx.fillStyle = lg; ctx.fillRect(0, 0, 256, 60);
+    // A wider, lower-contrast reflection models the broad lamp face rather than
+    // a sharp white streak that makes textured chitin look like polished metal.
+    const lg = ctx.createRadialGradient(128, 12, 0, 128, 12, 78);
+    lg.addColorStop(0, 'rgba(218,224,218,0.90)');
+    lg.addColorStop(1, 'rgba(218,224,218,0)');
+    ctx.fillStyle = lg; ctx.fillRect(0, 0, 256, 92);
     const eqTex = new THREE.CanvasTexture(cv);
     eqTex.mapping = THREE.EquirectangularReflectionMapping;
     if ('colorSpace' in eqTex) eqTex.colorSpace = THREE.SRGBColorSpace;

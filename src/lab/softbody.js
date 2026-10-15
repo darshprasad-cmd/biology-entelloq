@@ -51,13 +51,16 @@ export function createSoftBody(THREE, parts) {
   // Split scanned surfaces still share one physical boundary. Anchor matching
   // world-space seams and taper motion near them; otherwise a breathing skin
   // root opens cracks against a limb that is not independently breathing.
-  const exterior = parts.filter(p => p.mesh?.userData.preparedExterior?.role === 'part');
+  const exterior = parts.filter(p => p.mesh?.userData.preparedExterior?.role === 'part'
+    || p.mesh?.userData.sharedTissueBoundary === 'ventricular');
   const seams = new Map(), weights = new Map();
   const keyOf = v => [v.x, v.y, v.z].map(n => Math.round(n * 1e5)).join(',');
   for (const p of exterior) {
     p.mesh.updateWorldMatrix(true, false);
     const attr = p.mesh.geometry.attributes.position;
+    const used = p.mesh.geometry.index ? new Set(p.mesh.geometry.index.array) : null;
     for (let i = 0; i < attr.count; i++) {
+      if (used && !used.has(i)) continue;
       _v.fromBufferAttribute(attr, i).applyMatrix4(p.mesh.matrixWorld);
       const key = keyOf(_v);
       if (!seams.has(key)) seams.set(key, { owners: new Set(), point: _v.clone() });

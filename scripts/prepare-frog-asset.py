@@ -87,6 +87,7 @@ def main():
     parser.add_argument("asset", type=Path)
     parser.add_argument("output", type=Path)
     parser.add_argument("--faces", type=int, default=18000)
+    parser.add_argument("--surface-only", action="store_true", help="Bake scan normal/roughness maps onto the existing fitted GLB without changing geometry")
     args = parser.parse_args(sys.argv[sys.argv.index("--") + 1:])
     source, output = args.asset.resolve(strict=True), args.output.resolve()
     expected = "d03d6b33b1d64da045632e62fdb5202860ccb503f03ecc77532717cc4e924c26"
@@ -95,6 +96,12 @@ def main():
     report_dir = output.parents[2] / "docs/specimen-exteriors/prepared/frog"
     output.parent.mkdir(parents=True, exist_ok=True)
     report_dir.mkdir(parents=True, exist_ok=True)
+    if args.surface_only:
+        import runpy
+        helper = runpy.run_path(str(Path(__file__).with_name('frog-surface-bake.py')))
+        helper['enhance_existing_surface'](source, output, report_dir, log)
+        assert hashlib.sha256(source.read_bytes()).hexdigest() == expected
+        return
     bpy.ops.object.select_all(action="SELECT")
     bpy.ops.object.delete(use_global=False)
     bpy.ops.import_scene.gltf(filepath=str(source))

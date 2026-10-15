@@ -20,7 +20,7 @@ function fixture(specimenId = 'frog') {
   const launcher = { isConnected: true, getClientRects: () => [{}], focus: options => calls.push(['focus', 'launcher', options]) };
   const scaleClose = { focus: options => calls.push(['focus', 'scale-close', options]) };
   const context = {
-    specimenId, specimenAbort: null, examinationReturnFocus: null, examinedPartId: null,
+    specimenId, specimenPreparation: 'preserved', blood: null, specimenAbort: null, examinationReturnFocus: null, examinedPartId: null,
     specimenGripRelease: false, mouse: { down: true }, input: { grip: .8, gripping: true, span: .7 },
     TCH: { claimed: 12, ids: new Set([12]) },
     dissection: { hovered: null },

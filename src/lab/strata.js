@@ -204,13 +204,21 @@ function ST_heartFilm(THREE) {
     const y = yMid + v.y * yHalf;
     const w = ST_band(Math.atan2(dx, dz), phi0, phi1, 0.30);
     const env = Math.max(ST_heartLvR(y), ST_heartRvR(y) * w);
+    if (typeof HEART_surfacePoint === 'function') {
+      const phi = Math.atan2(dx, dz);
+      const point = HEART_surfacePoint(THREE, y, phi,
+        phi > phi0 && phi < phi1 && y >= -1.85 && y <= 2.9, true);
+      const offset = HEART_radius(y) > .02 ? .055 : 0;
+      p.setXYZ(i, point.x + dx*offset, y, point.z + dz*offset);
+      continue;
+    }
     // Stand the film off the muscle by a hair (×1.03 + 0.05) — a serous membrane
     // is adherent, not floating, so this is about a millimetre at specimen scale.
     const r = env * 1.03 + (env > 0.02 ? 0.05 : 0)
             + ST_serosaField(dx * 2.2, y * 0.55, dz * 2.2) * 0.024;
     p.setXYZ(i, dx * r, y, dz * r);
   }
-  ST_heartLean(THREE, g, 0.155, 1.4);
+  if (typeof HEART_surfacePoint !== 'function') ST_heartLean(THREE, g, 0.155, 1.4);
   seal(g);
   return g;
 }
@@ -490,10 +498,10 @@ export function buildStrata(THREE, specimenId, parts, group) {
      * cutting the film takes the haze away. */
     if (!have.has('epicardium')) {
       const epi = new THREE.Mesh(ST_heartFilm(THREE), mat(THREE, 0xe2e8e6, {
-        tissue: 'serous', trans: true, opacity: 0.94,
-        rough: 0.22, clear: 0.95, clearRough: 0.09,
-        transmission: 0.85, thickness: 0.07, ior: 1.35, attenDist: 2.2, atten: 0xd8e4e0,
-        sheen: 0xffd8cc, sheenAmt: 0.55, sheenRough: 0.3, side: THREE.DoubleSide,
+        tissue: 'serous', trans: true, opacity: 0.16,
+        rough: 0.45, clear: 0.18, clearRough: 0.42,
+        transmission: 0, thickness: 0.07, ior: 1.35,
+        sheen: 0xe0caba, sheenAmt: 0.18, sheenRough: 0.5, side: THREE.DoubleSide,
       }));
       ST_membrane(epi, 2, 0.3, 1.3);
       push({
@@ -516,17 +524,21 @@ export function buildStrata(THREE, specimenId, parts, group) {
     const fatMat = { tissue: 'fat', rough: 0.76, clear: 0.24, clearRough: 0.55,
       sheen: 0xffe6a4, sheenAmt: 0.4, transmission: 0.3, thickness: 0.4,
       atten: 0x6a4a1e, attenDist: 0.85 };
+    const coronaryPath = (id, fallback) => {
+      const path = parts.find(p => p.id === id)?.mesh.geometry.parameters?.path;
+      return path ? Array.from({length: 33}, (_, i) => path.getPoint(i/32).toArray()) : fallback;
+    };
 
     if (!have.has('av-groove-fat')) {
       // Left AV groove (over the circumflex) as the pickable body; the right AV
       // groove rides as a child so the whole ring reveals and hides as one — the
       // same trick heart.js uses for coronary branches.
       const cx = tube(THREE, 0xecd08a,
-        [[-0.85, 2.90, 1.30], [-1.80, 2.25, 0.40], [-2.05, 1.30, -0.85], [-1.40, 0.60, -1.80]],
+        coronaryPath('circumflex', [[-0.85, 2.90, 1.30], [-1.80, 2.25, 0.40], [-2.05, 1.30, -0.85], [-1.40, 0.60, -1.80]]),
         0.30, { ...fatMat, seg: 48, rad: 12 });
       ST_lumpTube(THREE, cx, 0.11, 2.2, 3);
       const rc = tube(THREE, 0xe8ca80,
-        [[0.70, 2.85, 1.35], [1.70, 2.15, 0.50], [2.05, 1.20, -0.70], [1.60, 0.40, -1.60], [0.60, -0.05, -2.00]],
+        coronaryPath('rca', [[0.70, 2.85, 1.35], [1.70, 2.15, 0.50], [2.05, 1.20, -0.70], [1.60, 0.40, -1.60], [0.60, -0.05, -2.00]]),
         0.28, { ...fatMat, seg: 54, rad: 12 });
       ST_lumpTube(THREE, rc, 0.10, 2.2, 7);
       cx.add(rc);
@@ -540,11 +552,11 @@ export function buildStrata(THREE, specimenId, parts, group) {
 
     if (!have.has('iv-groove-fat')) {
       const lad = tube(THREE, 0xefd694,
-        [[-0.15, 2.90, 1.75], [-0.35, 1.60, 2.05], [-0.50, 0.20, 1.95], [-0.62, -1.20, 1.50], [-0.55, -2.50, 0.85]],
+        coronaryPath('lad', [[-0.15, 2.90, 1.75], [-0.35, 1.60, 2.05], [-0.50, 0.20, 1.95], [-0.62, -1.20, 1.50], [-0.55, -2.50, 0.85]]),
         0.25, { ...fatMat, seg: 52, rad: 12 });
       ST_lumpTube(THREE, lad, 0.09, 2.4, 11);
       const piv = tube(THREE, 0xe9cd88,
-        [[0.60, -0.05, -2.00], [0.25, -1.10, -1.70], [-0.05, -2.25, -1.10]],
+        coronaryPath('posterior-iv-branch', [[0.60, -0.05, -2.00], [0.25, -1.10, -1.70], [-0.05, -2.25, -1.10]]),
         0.22, { ...fatMat, seg: 30, rad: 10 });
       ST_lumpTube(THREE, piv, 0.08, 2.4, 13);
       lad.add(piv);

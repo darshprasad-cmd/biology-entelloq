@@ -87,6 +87,31 @@ test('actual prepared frog has all five independent static roots and bounded fin
   }
 });
 
+test('scan-derived surface maps preserve the original fitted geometry, UV definitions and colour payload byte for byte', () => {
+  const bytes = fs.readFileSync(path.join(root, 'assets/specimens/frog.glb'));
+  const jsonLength = bytes.readUInt32LE(12), doc = JSON.parse(bytes.subarray(20, 20 + jsonLength));
+  const bin = bytes.subarray(28 + jsonLength);
+  // Independently derived from fa16524:assets/specimens/frog.glb. Only appended
+  // maps/material references may change; the complete original BIN is frozen.
+  assert.equal(crypto.createHash('sha256').update(bin.subarray(0, 6137208)).digest('hex'),
+    '9322990cab9dfaf946156559bbb7f2615a7e3f3f80429f98ab160a2a3c36027e');
+  const definition = { accessors: doc.accessors, bufferViews: doc.bufferViews.slice(0, 21),
+    meshes: doc.meshes, nodes: doc.nodes, scenes: doc.scenes };
+  assert.equal(crypto.createHash('sha256').update(JSON.stringify(definition)).digest('hex'),
+    '4e72f73eda5bb05e777ceac69a9e2ea4a9ac4efa4424113df9db8db1e6abf558',
+    'original buffer bytes must still be addressed by their unchanged geometry definitions');
+  assert.equal(doc.images.length, 3); assert.equal(doc.textures.length, 3);
+  for (const mesh of loaded.prepared.children) {
+    const material = mesh.material;
+    assert.ok(material.normalMap?.isTexture && material.roughnessMap?.isTexture);
+    assert.equal(material.normalMap.image.width, 2048);
+    assert.equal(material.roughnessMap.image.width, 2048);
+    assert.ok(material.normalScale.x > 0 && material.normalScale.x <= .3, 'scan relief stays restrained');
+    assert.equal(material.metalness, 0, 'skin remains non-metallic');
+    assert.notEqual(material.map, material.normalMap, 'photographed colour is not substituted for a normal map');
+  }
+});
+
 for (const id of ids.filter(id => id !== 'skin')) test(`${id}: one position-welded surface with a coincident body seam`, () => {
   const limb = topology(loaded.prepared.getObjectByName(id)), body = topology(loaded.prepared.getObjectByName('skin'));
   assert.equal(limb.components.length, 1, `${id} contains disconnected triangle components: ${limb.components.join(', ')}`);

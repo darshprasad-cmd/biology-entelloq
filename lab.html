@@ -3272,57 +3272,88 @@ function buildFrog(THREE) {
     mesh: oeso,
   });
 
-  // Small intestine: a straight DUODENUM leaving the pylorus and running forward
-  // parallel to the stomach (the U-loop), then a long, highly-coiled ILEUM held in
-  // a translucent mesentery, enlarging posteriorly to join the rectum.
+  // The duodenal return leads into depth-separated ileal folds. The previous
+  // shrinking spiral repeatedly passed its tube through itself in one plane.
+  // These are illustrative folds, not a species-specific length or loop count.
+  const rectalInlet = [0.1, -0.06, -2.1];
   const siPts = [
-    pyloricEnd,            // begins on the stomach, not at an estimated position
-    [-0.18, 0.0, 0.05],     // duodenum ascending
-    [0.12, -0.01, 0.48],    // duodenal apex (U-turn)
-    [0.46, -0.02, 0.46],
-    [0.5, -0.03, 0.12],     // descending into the coil
+    pyloricEnd,
+    [-0.18, 0.0, 0.05], [0.12, -0.01, 0.48], [0.46, -0.02, 0.46],
+    [0.84, 0.11, 0.12], [0.99, 0.28, -0.44],
   ];
-  for (let i = 0; i <= 42; i++) {
-    const t = i / 42;
-    const ang = t * Math.PI * 2 * 2.8;             // ~2.8 loops
-    const rad = 0.72 * (1 - 0.3 * t);
+  for (let i = 0; i <= 16; i++) {
+    const t = i / 16, ang = -t * Math.PI * 2 * 1.6;
+    const rad = 0.9 * (1 - 0.12 * t);
     siPts.push([
-      Math.cos(ang) * rad * 0.94,
-      -0.05 + Math.cos(ang * 1.3) * 0.06,
-      0.05 - t * 1.6 + Math.sin(ang) * rad * 0.52,
+      Math.cos(ang) * rad,
+      0.09 + Math.sin(ang) * 0.43,
+      -0.78 - t * 1.15,
     ]);
   }
-  const si = tube(THREE, 0xd2a37e, siPts, 0.17, { rough: 0.5, clear: 0.4, sheen: 0xe8b8a0, seg: 170, rad: 9 });
-  // translucent mesentery fan holding the coil, with fine vessels painted on it
-  const mesGeo = new THREE.PlaneGeometry(2.0, 1.5, 12, 9);
-  {
-    const mp = mesGeo.attributes.position, mv = new THREE.Vector3();
-    for (let i = 0; i < mp.count; i++) {
-      mv.fromBufferAttribute(mp, i);
-      mp.setXYZ(i, mv.x, mv.y, vnoise(mv.x * 2 + 5, mv.y * 2, 0) * 0.14 - 0.07);
+  siPts.push([-0.28, 0.47, -2.08], [0.08, 0.24, -2.13], rectalInlet);
+  const siRadius = 0.13;
+  const si = tube(THREE, 0xd2a37e, siPts, siRadius,
+    { rough: 0.5, clear: 0.4, sheen: 0xe8b8a0, seg: 216, rad: 12 });
+
+  // A folded mesenteric sheet runs from a short dorsal attachment line to the
+  // actual dorsal border of the ileum. It used to be an unrelated rectangle.
+  // Keep its bowel edge just inside the serosa so surface relief cannot open a
+  // visible gap. This is attached display geometry, not a force-bearing solver.
+  const gutPath = si.geometry.parameters.path;
+  const mesPoint = (t, across) => {
+    const centre = gutPath.getPointAt(t), tangent = gutPath.getTangentAt(t);
+    const dorsal = new THREE.Vector3(0, -1, 0);
+    dorsal.addScaledVector(tangent, -dorsal.dot(tangent)).normalize();
+    const border = centre.clone().addScaledVector(dorsal, siRadius * 0.88);
+    const root = new THREE.Vector3(0.04, -0.56, centre.z);
+    const p = root.lerp(border, across);
+    p.y += Math.sin(across * Math.PI) * Math.sin(t * 28) * 0.025;
+    return p;
+  };
+  const mesRows = 64, mesCols = 8, mesStart = 0.32, mesEnd = 0.94;
+  const mesPositions = [], mesIndices = [];
+  for (let row = 0; row <= mesRows; row++) {
+    const t = mesStart + (mesEnd - mesStart) * row / mesRows;
+    for (let col = 0; col <= mesCols; col++) {
+      mesPositions.push(...mesPoint(t, col / mesCols).toArray());
+      if (row < mesRows && col < mesCols) {
+        const a = row * (mesCols + 1) + col, b = a + mesCols + 1;
+        mesIndices.push(a, b, a + 1, b, b + 1, a + 1);
+      }
     }
-    seal(mesGeo);
   }
+  const mesGeo = new THREE.BufferGeometry();
+  mesGeo.setAttribute('position', new THREE.Float32BufferAttribute(mesPositions, 3));
+  mesGeo.setIndex(mesIndices); seal(mesGeo);
   const mesentery = new THREE.Mesh(mesGeo,
-    mat(THREE, 0xe7c7b6, { trans: true, opacity: 0.2, rough: 0.6, clear: 0.3, side: THREE.DoubleSide, transmission: 0.42, thickness: 0.2 }));
+    mat(THREE, 0xe7c7b6, { trans: true, opacity: 0.22, rough: 0.6, clear: 0.3,
+      side: THREE.DoubleSide, transmission: 0.42, thickness: 0.06 }));
+  mesentery.name = 'ileal-mesentery';
   mesentery.material.depthWrite = false;
-  childMesh(si, mesentery, 0, -0.2, -0.7, Math.PI / 2, 0, 0);
-  // mesenteric vessels: a couple of fine red lines converging on the root
-  [-0.5, 0.0, 0.5].forEach((sx, k) => {
-    const vsl = tube(THREE, 0xc24a3e, [[sx, -0.18, -1.4], [sx * 0.5, -0.16, -0.9], [0.05, -0.14, -0.55]], 0.02,
-      { rough: 0.5, rad: 5, seg: 12 });
+  si.add(mesentery);
+  // Fine branches sit within the sheet and finish on its bowel attachment.
+  // They remain schematic; the shared surface module adds serosal vessels.
+  [0.4, 0.57, 0.75, 0.88].forEach(t => {
+    const points = [];
+    for (let step = 0; step <= 8; step++) points.push(mesPoint(t, step / 8).toArray());
+    const vsl = tube(THREE, 0xb75a50, points, 0.012,
+      { rough: 0.5, rad: 5, seg: 16 });
+    vsl.name = 'mesenteric-branch';
     si.add(vsl);
   });
   add({
     id: 'small-intestine', name: 'Small intestine', layer: 2, system: 'digestive',
     cuttable: true, detachable: true,
-    note: 'A straight duodenum forms a U-loop off the pylorus, then the ileum coils tightly in a transparent mesentery. Tease the mesentery, never cut it.', mesh: si,
+    note: 'The duodenum returns from the pylorus into slender ileal folds, held by a thin mesentery and continuing into the wider rectum. Fold shape and length are illustrative.', mesh: si,
   });
 
+  const cloaca = organ(THREE, 0xa87a68, 0.27, 0.23, 0.29, { amp: 0.05, rough: 0.55, seed: 9 });
+  cloaca.position.set(0, -0.16, -3.28);
   // Large intestine (rectum): distinctly WIDER than the ileum, running straight
-  // back to the cloaca at the posterior midline.
+  // back to the cloaca at the posterior midline. Shared ileal endpoint and a
+  // slightly buried distal end avoid a disconnected or visibly open junction.
   const li = tube(THREE, 0xc09472,
-    [[0.1, -0.06, -1.55], [0.16, -0.06, -2.0], [0.05, -0.1, -2.5], [0, -0.14, -2.95]],
+    [rectalInlet, [0.11, -0.06, -2.27], [0.05, -0.1, -2.5], [0, -0.14, -3.12]],
     0.27, { rough: 0.52, clear: 0.4, sheen: 0xd8a888, seg: 44, rad: 10 });
   add({
     id: 'large-intestine', name: 'Large intestine (rectum)', layer: 2, system: 'digestive',
@@ -3330,8 +3361,6 @@ function buildFrog(THREE) {
     note: 'Markedly wider than the small intestine, running straight back to the cloaca.', mesh: li,
   });
 
-  const cloaca = organ(THREE, 0xa87a68, 0.27, 0.23, 0.29, { amp: 0.05, rough: 0.55, seed: 9 });
-  cloaca.position.set(0, -0.16, -3.28);
   add({
     id: 'cloaca', name: 'Cloaca', layer: 2, system: 'urogenital', cuttable: true, detachable: false,
     note: 'The common chamber where the gut, the urinary tract and the gonads all discharge to the vent.', mesh: cloaca,
@@ -3468,6 +3497,40 @@ function buildFrog(THREE) {
  * -y inferior (apex).
  */
 
+// One authored outer profile is shared by the ventricular walls and their
+// adherent membrane. These are relative model coordinates, not patient data.
+function HEART_radius(y) {
+  const stations = [[-3.55, 0], [-3.35, .24], [-2.8, .72], [-2.0, 1.30],
+    [-1.0, 1.84], [0, 2.18], [1.1, 2.36], [1.9, 2.20], [2.6, 1.62], [3.15, .66], [3.4, 0]];
+  if (y <= stations[0][0] || y >= stations.at(-1)[0]) return 0;
+  let i = 1; while (y > stations[i][0]) i++;
+  const a = stations[i - 1], b = stations[i], t = (y - a[0]) / (b[0] - a[0]);
+  // Cubic Hermite interpolation with centred, bounded tangents avoids terraces.
+  const prev = stations[Math.max(0, i - 2)], next = stations[Math.min(stations.length - 1, i + 1)];
+  const m0 = (b[1] - prev[1]) / (b[0] - prev[0]), m1 = (next[1] - a[1]) / (next[0] - a[0]);
+  return Math.max(0, (2*t*t*t-3*t*t+1)*a[1] + (t*t*t-2*t*t+t)*(b[0]-a[0])*m0
+    + (-2*t*t*t+3*t*t)*b[1] + (t*t*t-t*t)*(b[0]-a[0])*m1);
+}
+
+function HEART_surfacePoint(THREE, y, phi, right = false, envelope = false) {
+  let radius = HEART_radius(y);
+  const lo = -.12 * Math.PI, hi = .58 * Math.PI;
+  const edge = Math.max(0, Math.min(1, (phi-lo)/.34, (hi-phi)/.34));
+  const ends = smooth(Math.max(0, Math.min(1, (y+1.85)/.65, (2.9-y)/.55)));
+  const rightOffset = .465 * smooth(edge) * ends - .065;
+  if (right) radius += envelope ? Math.max(0, rightOffset) : rightOffset;
+  // Anterior interventricular furrow and a flatter posterior face distinguish
+  // the oblique ventricular mass from an ellipsoid with a second bowl on top.
+  const groovePhi = -.20 + (1.5-y)*.025;
+  const groove = Math.exp(-Math.pow((phi-groovePhi)/.09, 2))
+    * smooth(Math.max(0, Math.min(1, (y+3.2)/.7, (2.65-y)/.5)));
+  radius *= 1 - .045 * groove;
+  const lean = Math.max(0, 1.4-y)*.16;
+  const x = Math.sin(phi)*radius - lean;
+  const z = Math.cos(phi)*radius*(Math.cos(phi) >= 0 ? .87 : .75) + lean*.32;
+  return new THREE.Vector3(x, y, z);
+}
+
 function buildHeart(THREE) {
   const group = new THREE.Group();
   const parts = [];
@@ -3502,11 +3565,19 @@ function buildHeart(THREE) {
       }
       g.index.needsUpdate = true;
     }
-    // displace/seal recompute normals from the corrected faces.
-    displace(THREE, g, o.amp != null ? o.amp : 0.024, o.freq || 2.4, o.seed || 0);
+    const pos = g.attributes.position;
+    for (let i = 0; i < pos.count; i++) {
+      const phi = Math.atan2(pos.getX(i), pos.getZ(i));
+      const y = pos.getY(i);
+      const right = phi >= -.12*Math.PI-1e-6 && phi <= .58*Math.PI+1e-6 && y >= -1.85-1e-6 && y <= 2.9+1e-6;
+      const v = HEART_surfacePoint(THREE, y, phi, right, true);
+      const grain = (vnoise(v.x*3.1+2, v.y*2.8, v.z*3.1)-.5)*.018;
+      pos.setXYZ(i, v.x + Math.sin(phi)*grain, v.y, v.z + Math.cos(phi)*grain);
+    }
     seal(g);
     return new THREE.Mesh(g, mat(THREE, color, {
-      rough: 0.6, clear: 0.5, clearRough: 0.36, sheen: 0xff6a55, sheenAmt: 0.5, ...(o.mat || {}) }));
+      rough: 0.67, clear: 0.16, clearRough: 0.48, transmission: 0,
+      sheen: 0xb99a8a, sheenAmt: 0.20, ...(o.mat || {}) }));
   }
 
   // Swing the lower half of a body toward -x (and slightly anterior) so the apex
@@ -3533,7 +3604,7 @@ function buildHeart(THREE) {
       const fine = vnoise(x * 8.3 - 3.2, y * 7.9 + 6.1, z * 8.1 - 1.7);
       const strands = 0.5 + 0.5 * Math.sin(y * 21 + x * 5 + z * 3 + broad * 2);
       const shade = fatty ? 0.81 + broad * 0.16 + fine * 0.03
-        : 0.72 + broad * 0.23 + fine * 0.04 + strands * 0.01;
+        : 0.56 + broad * 0.36 + fine * 0.06 + strands * 0.02;
       colors[i * 3] = shade;
       colors[i * 3 + 1] = shade * (fatty ? 0.96 + fine * 0.04 : 0.93 + fine * 0.06);
       colors[i * 3 + 2] = shade * (fatty ? 0.85 + broad * 0.10 : 0.90 + broad * 0.08);
@@ -3542,6 +3613,7 @@ function buildHeart(THREE) {
     mesh.material.vertexColors = true;
     mesh.material.needsUpdate = true;
     mesh.userData.tissuePigment = fatty ? 'lobulated-fat' : 'preserved-myocardium';
+    mesh.userData.spatialPigment = true;
   }
 
   // A single tensile cord between two world-space points (chordae tendineae).
@@ -3585,15 +3657,36 @@ function buildHeart(THREE) {
 
   // Left ventricle: a full, thick-walled cone drawn to a fine apex.
   const lvProf = [];
-  for (let i = 0; i <= 30; i++) {
-    const t = i / 30;
-    const y = 3.1 - t * 6.55;                         // base 3.1  ->  apex -3.45
-    let r = Math.sin(t * Math.PI * 0.92 + 0.13) * 2.46 * (1 - t * 0.10) + 0.08;
-    if (t > 0.83) r *= 1 - (t - 0.83) * 4.0;          // draw the apex to a point
-    lvProf.push(new THREE.Vector2(Math.max(0.05, r), y));
+  for (let i = 0; i <= 48; i++) {
+    const y = 3.15 - i / 48 * 6.65;
+    lvProf.push(new THREE.Vector2(Math.max(.025, HEART_radius(y)), y));
   }
-  const lv = heartWall(lvProf, 54, 0, Math.PI * 2, 0x6e4b42, { tissue: 'muscle', amp: 0.026, seed: 1 });
-  heartApexLean(lv.geometry, 0.16, 1.4);
+
+  function foldAuricle(mesh, side) {
+    const p = mesh.geometry.attributes.position;
+    for (let i = 0; i < p.count; i++) {
+      const x=p.getX(i), y=p.getY(i), z=p.getZ(i);
+      const tip = Math.max(0, side*x);
+      const crease = Math.sin(x*9 + y*3) * .035 * Math.max(0, 1-Math.abs(y)/.7);
+      p.setXYZ(i, x, y + tip*tip*.28, z*.76 + tip*tip*.30 + crease);
+    }
+    seal(mesh.geometry);
+  }
+  // Both walls meet on the same sampled boundary. The LV does not remain a
+  // closed second shell beneath the anterior RV patch: that caused a hard
+  // overlapping lip and self-shadow in the original intact model.
+  for (const y of [2.9, -1.85]) lvProf.push(new THREE.Vector2(HEART_radius(y), y));
+  lvProf.sort((a,b)=>b.y-a.y);
+  const lv = heartWall(lvProf, 80, -1.12*Math.PI, Math.PI * 2, 0x9c7b6d, { tissue: 'muscle' });
+  const lvIndices = [], lvRows = lvProf.length;
+  for (let i=0; i<lv.geometry.index.count; i+=3) {
+    const tri=[lv.geometry.index.getX(i),lv.geometry.index.getX(i+1),lv.geometry.index.getX(i+2)];
+    const columns=tri.map(index=>Math.floor(index/lvRows));
+    const y=tri.reduce((sum,index)=>sum+lvProf[index%lvRows].y,0)/3;
+    if(Math.min(...columns)>=40 && Math.max(...columns)<=68 && y> -1.85 && y<2.9) continue;
+    lvIndices.push(...tri);
+  }
+  lv.geometry.setIndex(lvIndices); seal(lv.geometry);
   add({ id: 'lv-free-wall', name: 'Left ventricle — free wall', layer: 1, system: 'circulatory',
         cuttable: true, detachable: false, mesh: lv,
         note: 'Thick, firm and dark. Its wall is 3–6× the right\'s — compliance is how you tell left from right.',
@@ -3601,16 +3694,28 @@ function buildHeart(THREE) {
 
   // Right ventricle: a thinner, paler crescent over the anterior-right flank,
   // stopping short of the apex (the apex belongs to the LV).
-  const rvProf = [];
-  for (let i = 0; i <= 22; i++) {
-    const t = i / 22;
-    const y = 2.9 - t * 4.75;                          // base 2.9  ->  -1.85 (no apex)
-    const r = Math.sin(t * Math.PI * 0.72 + 0.34) * 2.66 * (1 - t * 0.05) + 0.1;
-    rvProf.push(new THREE.Vector2(Math.max(0.05, r), y));
+  const rvProf = lvProf.filter(p=>p.y<=2.9 && p.y>=-1.85).map(p=>p.clone());
+  const rv = heartWall(rvProf, 28, -Math.PI * 0.12, Math.PI * 0.70, 0x9c7b6d,
+    { right: true, mat: { rough: 0.66, side: THREE.DoubleSide } });
+  const wallSeams = new Map();
+  for (const wall of [lv,rv]) {
+    wall.userData.exteriorDetail='joined-ventricular-wall';
+    wall.userData.sharedTissueBoundary='ventricular';
+    const p=wall.geometry.attributes.position,n=wall.geometry.attributes.normal;
+    const used=new Set(wall.geometry.index.array);
+    for(let i=0;i<p.count;i++) {
+      if(!used.has(i)) continue;
+      const key=[p.getX(i),p.getY(i),p.getZ(i)].map(v=>Math.round(v*1e5)).join(',');
+      if(!wallSeams.has(key)) wallSeams.set(key,[]);
+      wallSeams.get(key).push({wall,n,i});
+    }
   }
-  const rv = heartWall(rvProf, 48, -Math.PI * 0.12, Math.PI * 0.70, 0x855a4e,
-    { amp: 0.02, seed: 2, mat: { rough: 0.62, side: THREE.DoubleSide } });
-  heartApexLean(rv.geometry, 0.14, 1.4);
+  for(const matches of wallSeams.values()) {
+    if(new Set(matches.map(v=>v.wall)).size<2) continue;
+    const normal=new THREE.Vector3();
+    matches.forEach(({n,i})=>normal.add(new THREE.Vector3().fromBufferAttribute(n,i)));
+    normal.normalize(); matches.forEach(({n,i})=>n.setXYZ(i,normal.x,normal.y,normal.z));
+  }
   add({ id: 'rv-free-wall', name: 'Right ventricle — free wall', layer: 1, system: 'circulatory',
         cuttable: true, detachable: false, mesh: rv,
         note: 'Thin-walled, paler and compliant, wrapped over the front-right. It only has to reach the lungs.' });
@@ -3635,6 +3740,7 @@ function buildHeart(THREE) {
   const rAur = lobe(THREE, 0x8a3a34, 1.0, 0.62, 0.34,
     { amp: 0.14, seed: 7, rough: 0.62, clear: 0.35, sheen: 0xc25a4e });
   rAur.position.set(1.55, 2.95, 0.95); rAur.rotation.set(0.5, -0.4, 0.4);
+  foldAuricle(rAur, -1);
   add({ id: 'right-auricle', name: 'Right auricle', layer: 1, system: 'circulatory',
         cuttable: true, detachable: false, mesh: rAur,
         note: 'The ear-like flap of the right atrium, curling forward over the aortic root.' });
@@ -3642,6 +3748,7 @@ function buildHeart(THREE) {
   const lAur = lobe(THREE, 0x883833, 0.92, 0.55, 0.3,
     { amp: 0.14, seed: 8, rough: 0.62, clear: 0.35, sheen: 0xbe564c });
   lAur.position.set(-1.35, 3.0, 0.35); lAur.rotation.set(0.6, 0.5, -0.4);
+  foldAuricle(lAur, 1);
   add({ id: 'left-auricle', name: 'Left auricle', layer: 1, system: 'circulatory',
         cuttable: true, detachable: false, mesh: lAur,
         note: 'The hooked ear-flap of the left atrium, reaching over the pulmonary trunk.' });
@@ -3706,6 +3813,17 @@ function buildHeart(THREE) {
 
   /* ---- LAYER 1 : coronary tree in the grooves -------------------------------- */
 
+  function cardiacSurfacePath(points, lift = .018) {
+    const curve = new THREE.CatmullRomCurve3(points.map(p => new THREE.Vector3(...p)));
+    return Array.from({length: 33}, (_, i) => {
+      const p = curve.getPoint(i/32), lean = Math.max(0, 1.4-p.y)*.16;
+      const phi = Math.atan2(p.x+lean, p.z-lean*.32);
+      const front = phi > -.12*Math.PI && phi < .58*Math.PI && p.y >= -1.85 && p.y <= 2.9;
+      return HEART_surfacePoint(THREE, p.y, phi, front, true)
+        .add(new THREE.Vector3(Math.sin(phi), 0, Math.cos(phi)).multiplyScalar(lift)).toArray();
+    });
+  }
+
   const cors = [
     ['lad', 'Left anterior descending artery',
       [[-0.15, 2.9, 1.75], [-0.35, 1.6, 2.05], [-0.5, 0.2, 1.95], [-0.62, -1.2, 1.5], [-0.55, -2.5, 0.85]],
@@ -3722,13 +3840,15 @@ function buildHeart(THREE) {
       null],
   ];
   cors.forEach(([cid, nm, pts, branches]) => {
-    const m = tube(THREE, 0xd4564a, pts, 0.085, { rough: 0.5, clear: 0.5, sheen: 0xe87868, rad: 8, seg: 48 });
+    const m = tube(THREE, 0x846651, cardiacSurfacePath(pts), 0.055,
+      { rough: 0.63, clear: 0.16, transmission: 0, sheen: 0xb68a72, rad: 8, seg: 64 });
     // Branch tubes are built in the same (group) space as the trunk and attached
     // as CHILDREN of the trunk mesh, which sits at the origin with an identity
     // transform. That keeps them geometrically correct AND makes them inherit the
     // trunk's visibility, so revealLayer(1) shows the whole vessel at once.
     (branches || []).forEach((bp) => {
-      m.add(tube(THREE, 0xd4564a, bp, 0.055, { rough: 0.5, clear: 0.5, sheen: 0xe87868, rad: 6, seg: 16 }));
+      m.add(tube(THREE, 0x846651, cardiacSurfacePath(bp, .012), 0.029,
+        { rough: 0.63, clear: 0.16, transmission: 0, sheen: 0xb68a72, rad: 6, seg: 32 }));
     });
     const note = cid === 'posterior-iv-branch'
       ? 'Runs in the posterior interventricular groove from the crux to the apex. Here it springs from the RCA — this heart is right-dominant.'
@@ -3744,7 +3864,7 @@ function buildHeart(THREE) {
   // Coronary sinus — the great cardiac vein in the posterior AV groove, draining
   // into the right atrium. Wider and darker than the arteries.
   const csinus = tube(THREE, 0x5a4a6a,
-    [[-1.35, 0.6, -1.8], [-0.4, 0.35, -2.15], [0.6, 0.25, -1.95], [1.4, 0.55, -1.15]], 0.13,
+    cardiacSurfacePath([[-1.35, 0.6, -1.8], [-0.4, 0.35, -2.15], [0.6, 0.25, -1.95], [1.4, 0.55, -1.15]], .04), 0.13,
     { rough: 0.55, clear: 0.3, sheen: 0x7a6a8a, rad: 10, seg: 36 });
   add({ id: 'coronary-sinus', name: 'Coronary sinus', layer: 1, system: 'circulatory',
         cuttable: true, detachable: false, mesh: csinus,
@@ -3758,6 +3878,19 @@ function buildHeart(THREE) {
     new THREE.CylinderGeometry(1.55, 1.1, 4.9, 40, 1, true, Math.PI * 0.60, Math.PI * 0.80),
     mat(THREE, 0x8f3330, { side: THREE.DoubleSide, rough: 0.62, clear: 0.4, sheen: 0xd05a50 }));
   sep.position.set(0.2, 0.1, -0.05);
+  // Keep the septal attachment/descriptor, but fit its distal muscle inside the
+  // revised ventricular mass; the old straight cylinder pierced the tapered wall.
+  const septalPos = sep.geometry.attributes.position;
+  for (let i=0; i<septalPos.count; i++) {
+    const y=septalPos.getY(i)+sep.position.y, lean=Math.max(0,1.4-y)*.16;
+    let x=septalPos.getX(i)+sep.position.x+lean;
+    let z=septalPos.getZ(i)+sep.position.z-lean*.32;
+    const radial=Math.hypot(x,z/(z>=0?.87:.75));
+    const factor=Math.min(1,HEART_radius(y)*.88/Math.max(.001,radial));
+    x*=factor; z*=factor;
+    septalPos.setXYZ(i,x-lean-sep.position.x,y-sep.position.y,z+lean*.32-sep.position.z);
+  }
+  seal(sep.geometry);
   add({ id: 'septum', name: 'Interventricular septum', layer: 2, system: 'circulatory',
         cuttable: false, detachable: false, mesh: sep,
         note: 'Thick, muscular and complete — no blood crosses it in a normal heart. The probe will not pass through.' });
@@ -3858,10 +3991,12 @@ function buildHeart(THREE) {
   const sac = new THREE.SphereGeometry(1, 48, 36), sp = sac.attributes.position;
   for (let i = 0; i < sp.count; i++) {
     const y = .325 + sp.getY(i) * 3.925, phi = Math.atan2(sp.getX(i), sp.getZ(i));
-    const r = envelopeRadius(y, phi) * 1.045;
-    const lean = Math.max(0, 1.4 - y) * .155;
-    sp.setXYZ(i, Math.sin(phi) * r - lean, y / peri.scale.y,
-      (Math.cos(phi) * r + lean * .32) / peri.scale.z);
+    const r = envelopeRadius(y, phi) * 1.035;
+    const point = HEART_surfacePoint(THREE, y, phi, y>=-1.85 && y<=2.9 && phi>-.12*Math.PI && phi<.58*Math.PI, true);
+    const atrial = Math.max(0, r - HEART_radius(y)) * smooth(Math.max(0,Math.min(1,(y-1.8)/1.0)));
+    const margin = HEART_radius(y) > .02 || atrial > .02 ? .09 : 0;
+    sp.setXYZ(i, point.x + Math.sin(phi)*(margin+atrial), y / peri.scale.y,
+      (point.z + Math.cos(phi)*(margin+atrial*.85)) / peri.scale.z);
   }
   seal(sac); peri.geometry.dispose(); peri.geometry = sac;
   peri.userData.exteriorDetail = 'conforming-sac';
@@ -4039,10 +4174,10 @@ function buildEarthworm(THREE) {
       * Math.sqrt(Math.max(0, 1 - posterior * posterior));
     const clit = Math.exp(-Math.pow((z - 2.6) / 0.61, 4));
     const groove = Math.pow(0.5 - 0.5 * Math.cos(ewAnnularPhase(t, annuli)), 2);
-    const fullness = 1 + 0.024 * Math.sin(t * Math.PI) + 0.012 * Math.sin(t * Math.PI * 3)
-      + 0.008 * Math.sin(t * Math.PI * 7) * Math.sin(t * Math.PI);
+    const fullness = 1 + 0.058 * Math.sin(t * Math.PI) + 0.020 * Math.sin(t * Math.PI * 3)
+      + 0.012 * Math.sin(t * Math.PI * 7) * Math.sin(t * Math.PI);
     return taper * fullness * (1 + 0.068 * clit)
-      * (1 - 0.018 * groove * (1 - 0.94 * clit));
+      * (1 - 0.024 * groove * (1 - 0.94 * clit));
   }
 
   function ewBody(rad, halfLen, o = {}) {
@@ -4054,11 +4189,11 @@ function buildEarthworm(THREE) {
     const p = g.attributes.position, v = new THREE.Vector3();
     const colors = new Float32Array(p.count * 3);
     const c = new THREE.Color();
-    const dorsal   = new THREE.Color(0x946257);   // subdued rose-brown pigment
-    const dorsalDk = new THREE.Color(0x644139);   // darker mid-dorsal pigment stripe
-    const flank    = new THREE.Color(0xb17b70);
-    const ventral  = new THREE.Color(0xd4afa0);   // paler warm underside
-    const glandular = new THREE.Color(0xb68174);
+    const dorsal   = new THREE.Color(0x89564e);   // muted red-brown dorsal pigment
+    const dorsalDk = new THREE.Color(0x623e39);   // darker mid-dorsal pigment stripe
+    const flank    = new THREE.Color(0xb17c70);
+    const ventral  = new THREE.Color(0xd8b3a0);   // paler warm underside
+    const glandular = new THREE.Color(0xb9806c);
     const nSeg = o.nSeg || 44;
     const z0 = o.z0 == null ? -halfLen : o.z0, z1 = o.z1 == null ? halfLen : o.z1;
     for (let i = 0; i < p.count; i++) {
@@ -4083,9 +4218,11 @@ function buildEarthworm(THREE) {
       // material pasted over it. A world-length field shared by body and sleeve
       // keeps both shoulders continuous where the pickable sleeve emerges.
       const clitTint = Math.exp(-Math.pow((z - 2.6) / 0.62, 4));
-      c.lerp(glandular, clitTint * 0.25);
+      c.lerp(glandular, clitTint * 0.38);
       const banding = 0.5 - 0.5 * Math.cos(ewAnnularPhase(t, nSeg));      // groove shadowing
-      c.multiplyScalar(1 - banding * 0.028);
+      // Fine annular pigment remains visible at the working camera without
+      // turning every segment into a separate bead. The glandular band is smooth.
+      c.multiplyScalar(1 - banding * 0.075 * (1 - clitTint * .92));
       const m = vnoise(v.x * 5 + 2, t * 18 - 9, v.z * 5 + 6);
       c.multiplyScalar(0.97 + m * 0.06);
       colors[i * 3] = c.r; colors[i * 3 + 1] = c.g; colors[i * 3 + 2] = c.b;
@@ -4104,11 +4241,11 @@ function buildEarthworm(THREE) {
     // Same optical model on every external root. Flat brown/orange material
     // multipliers used to suppress these meshes' shared vertex colours and
     // make the terminal caps and clitellum look like separately painted pieces.
-    // Low transmission avoids showing the green tray through opaque body wall;
+    // Opaque wall avoids showing the green tray through the tapered ends;
     // the surface module supplies fine cuticle maps and final highlight finish.
     return mat(THREE, 0xffffff, { tissue: 'skin', vcol: true,
       rough: 0.52, clear: 0.26, clearRough: 0.38, sheen: 0xb17770, sheenAmt: 0.22,
-      transmission: 0.03, thickness: 0.8, atten: 0x97625b, attenDist: 0.8,
+      transmission: 0, thickness: 0.8, atten: 0x97625b, attenDist: 0.8,
       side: THREE.DoubleSide });
   }
 
@@ -4708,20 +4845,67 @@ function buildFish(THREE) {
     mat(THREE, 0xffffff, { vcol: true, rough: 0.42, clear: 0.62, clearRough: 0.4,
       sheen: 0xd6dcc8, sheenAmt: 0.7, transmission: 0, specular: 0.55 }));
 
+  // A body-owned pigment atlas follows the sphere's actual longitudinal axis.
+  // The generic surface tiling put large overlapping arcs across the smooth
+  // snout. Fine staggered scale fields now fade before the head, while a gently
+  // curved lateral line belongs to the flank. Illustrative teleost pigment,
+  // not a species reconstruction. Shared like anatomy.js's other tissue maps.
+  if (!buildFish.scalePigmentAtlas) {
+    const width = 512, height = 256, data = new Uint8Array(width * height * 4);
+    const wrap = x => x - Math.floor(x), clamp = x => Math.max(0, Math.min(1, x));
+    for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) {
+      const u = x / width, v = y / (height - 1), theta = (1 - v) * Math.PI, phi = u * Math.PI * 2;
+      const px = -Math.cos(phi) * Math.sin(theta), py = Math.cos(theta), pz = Math.sin(phi) * Math.sin(theta);
+      const t = (pz + 1) / 2, around = wrap(Math.atan2(py, px) / (Math.PI * 2) + .5) * 26;
+      const row = Math.floor(around), across = wrap(around), along = wrap(t * 36 + (row % 2) * .5);
+      const arc = .46 + .29 * Math.sin(Math.PI * across);
+      const edge = Math.exp(-Math.pow((along - arc) / .075, 2)) * Math.pow(Math.sin(Math.PI * across), .6);
+      const mask = smooth(clamp((t - .10) / .12)) * smooth(clamp((.78 - t) / .12));
+      const mott = vnoise(px * 17 + 2, py * 17 + 5, pz * 20 + 9);
+      const ll = Math.exp(-Math.pow((py - .04 - .08 * (t - .4)) / .018, 2)) * mask;
+      const shade = .95 + .035 * mott - mask * edge * .11 - ll * .14;
+      const i = (y * width + x) * 4;
+      data[i] = Math.round(clamp(shade * .995) * 255);
+      data[i + 1] = Math.round(clamp(shade) * 255);
+      data[i + 2] = Math.round(clamp(shade * (.98 + .018 * mott)) * 255);
+      data[i + 3] = 255;
+    }
+    const atlas = new THREE.DataTexture(data, width, height, THREE.RGBAFormat);
+    atlas.colorSpace = THREE.SRGBColorSpace;
+    atlas.wrapS = THREE.RepeatWrapping; atlas.wrapT = THREE.ClampToEdgeWrapping;
+    atlas.magFilter = THREE.LinearFilter; atlas.minFilter = THREE.LinearMipmapLinearFilter;
+    atlas.generateMipmaps = true; atlas.anisotropy = 2; atlas.needsUpdate = true;
+    atlas.name = 'fish-longitudinal-scale-pigment';
+    buildFish.scalePigmentAtlas = atlas;
+  }
+  skin.material.map = buildFish.scalePigmentAtlas;
+
   // Head detail — a large lateral eye, a nostril, and the inferior mouth with the
   // fleshy lips typical of a bottom-feeding cyprinid. All decorative children.
   const iris = new THREE.Mesh(new THREE.SphereGeometry(0.2, 20, 16),
-    mat(THREE, 0xa39d76, { rough: 0.26, clear: 0.9, clearRough: 0.14, sheen: 0xd4d7bf }));
-  iris.scale.set(0.52, 0.9, 0.9); iris.userData.exteriorDetail = 'eye';
-  const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.11, 16, 12),
+    mat(THREE, 0xffffff, { vcol: true, rough: 0.34, clear: 0.72, clearRough: 0.18, sheen: 0xd4d7bf, noTex: true }));
+  const eyeColors = [], eyeVertex = new THREE.Vector3(), eyeColor = new THREE.Color();
+  for (let i = 0; i < iris.geometry.attributes.position.count; i++) {
+    eyeVertex.fromBufferAttribute(iris.geometry.attributes.position, i);
+    const angle = Math.atan2(eyeVertex.z, eyeVertex.y), radial = Math.hypot(eyeVertex.y, eyeVertex.z) / .2;
+    const striation = .5 + .5 * Math.sin(angle * 31 + radial * 9);
+    eyeColor.setHex(0x928c6e).lerp(new THREE.Color(0x4c5149), striation * .22 + Math.pow(radial, 6) * .38);
+    eyeColors.push(eyeColor.r, eyeColor.g, eyeColor.b);
+  }
+  iris.geometry.setAttribute('color', new THREE.Float32BufferAttribute(eyeColors, 3));
+  iris.scale.set(0.34, 0.9, 0.9); iris.userData.exteriorDetail = 'eye';
+  const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.135, 16, 12),
     mat(THREE, 0x080a06, { rough: 0.18, clear: 1, clearRough: 0.08 }));
-  childMesh(iris, pupil, -0.1, 0, 0);
-  childMesh(skin, iris, -0.42, 0.42, 2.55);
+  pupil.scale.set(.55, 1, 1);
+  childMesh(iris, pupil, -0.165, 0, 0);
+  const eyeSeat = new THREE.Raycaster(new THREE.Vector3(-2, .42, 2.55), new THREE.Vector3(1, 0, 0))
+    .intersectObject(skin, false)[0];
+  childMesh(skin, iris, (eyeSeat ? eyeSeat.point.x : -.42) - .008, 0.42, 2.55);
   // Both flanks must remain coherent when the student rotates the specimen.
   // Mirror only the existing external detail; anatomy and pick targets stay put.
   const farIris = iris.clone(true);
-  farIris.position.x = 0.42;
-  farIris.children[0].position.x = 0.1;
+  farIris.position.x = -iris.position.x;
+  farIris.children[0].position.x = 0.165;
   skin.add(farIris);
   const nostril = new THREE.Mesh(new THREE.SphereGeometry(0.03, 8, 6), mat(THREE, 0x15170f, { rough: 0.6 }));
   childMesh(skin, nostril, -0.34, 0.5, 2.95);
@@ -4812,10 +4996,11 @@ function buildFish(THREE) {
     const sample = { x: hit ? hit.point.x : -0.40, color }; opSamples.set(key, sample); return sample;
   };
   const opPositions = opGeo.attributes.position, opColors = [], opPoint = new THREE.Vector3();
+  const opercularOutline = (y, z) => [0.035 + y * (1.00 - 0.22 * Math.max(0, z)),
+    1.68 + z * 0.72 + .065 * y - .025 * y * y];
   for (let i = 0; i < opPositions.count; i++) {
     opPoint.fromBufferAttribute(opPositions, i);
-    const y = 0.035 + opPoint.y * (1.00 - 0.16 * Math.max(0, opPoint.z));
-    const z = 1.68 + opPoint.z * 0.72, sample = flankAt(y, z);
+    const [y, z] = opercularOutline(opPoint.y, opPoint.z), sample = flankAt(y, z);
     opPoint.set(sample.x - 0.012 + opPoint.x * 0.025, y, z).applyMatrix4(opInverse);
     opPositions.setXYZ(i, opPoint.x, opPoint.y, opPoint.z);
     opColors.push(sample.color.r, sample.color.g, sample.color.b);
@@ -4825,10 +5010,10 @@ function buildFish(THREE) {
   // The free posterior edge is a restrained crescent; no circular raised rim.
   const seamPoints = [];
   for (let i = 0; i <= 18; i++) {
-    const angle = i / 18 * Math.PI, y = 0.035 + Math.cos(angle), z = 1.68 - 0.72 * Math.sin(angle);
+    const angle = i / 18 * Math.PI, [y, z] = opercularOutline(Math.cos(angle), -Math.sin(angle));
     seamPoints.push(new THREE.Vector3(flankAt(y, z).x - 0.022, y, z).applyMatrix4(opInverse).toArray());
   }
-  const seam = tube(THREE, 0x687674, seamPoints, 0.006, { rough: 0.58, clear: 0.25, rad: 4, seg: 28 });
+  const seam = tube(THREE, 0x687674, seamPoints, 0.004, { rough: 0.58, clear: 0.25, rad: 4, seg: 28 });
   seam.name = 'opercular-margin'; seam.userData.exteriorDetail = 'opercular-seam'; operculum.add(seam);
   add({
     id: 'operculum', name: 'Operculum (gill cover)', layer: 0, system: 'skeletal',
@@ -6697,7 +6882,7 @@ function SUR_finishProfile(specimen, part) {
     if (/pericardium/.test(id) && part.mesh.material.transparent && part.mesh.material.opacity <= 0.2)
       return profile('serous', 0xd2c5aa, 0.12, 0.32, 0.18, 0.48);
     if (/free-wall|atrium|auricle|^septum$|papillary|moderator/.test(id))
-      return profile('myocardium', 0xa9584d, 0.62, 0.46, 0.22, 0.32);
+      return profile('myocardium', 0x80685d, 0.20, 0.66, 0.14, 0.48);
     if (/pericardium|leaflet|chordae|cusp/.test(id))
       return profile('serous', 0xd2c5aa, 0.28, 0.65, 0.24, 0.44);
     return null;
@@ -6837,7 +7022,7 @@ function createSurfaceDetail(THREE, parts, specimenId, group) {
       // Authored close-fitting exterior sheets/pads already have controlled
       // relief. Whole-bounding-box displacement makes the separate pads tear
       // and moves a conforming sac through the muscle it surrounds.
-      if (rec.disp && !['localized-fat', 'conforming-sac'].includes(p.mesh.userData.exteriorDetail))
+      if (rec.disp && !['localized-fat', 'conforming-sac', 'joined-ventricular-wall'].includes(p.mesh.userData.exteriorDetail))
         SUR_displaceBlob(THREE, geo, rec.disp, seed);
       if (rec.kids) {
         // Fat bodies carry their finger lobes as children; lobulating only the
@@ -6883,7 +7068,9 @@ function createSurfaceDetail(THREE, parts, specimenId, group) {
         m.sheenColor.lerp(new THREE.Color(cfg.tone), 0.5);
         m.roughnessMap = maps.rough;
         m.clearcoatRoughnessMap = maps.rough;
-        if (!m.map) m.map = maps.tint;
+        // A shared spatial pigment field keeps adjoining chamber meshes the
+        // same colour at their seam; independent UV tint would paint a patch.
+        if (!m.map && !mesh.userData.spatialPigment) m.map = maps.tint;
         if (maps.normal) { m.normalMap = maps.normal; m.normalScale.set(0.18, 0.18); }
         else m.normalScale.multiplyScalar(0.65);
         m.needsUpdate = true;
@@ -7340,13 +7527,21 @@ function ST_heartFilm(THREE) {
     const y = yMid + v.y * yHalf;
     const w = ST_band(Math.atan2(dx, dz), phi0, phi1, 0.30);
     const env = Math.max(ST_heartLvR(y), ST_heartRvR(y) * w);
+    if (typeof HEART_surfacePoint === 'function') {
+      const phi = Math.atan2(dx, dz);
+      const point = HEART_surfacePoint(THREE, y, phi,
+        phi > phi0 && phi < phi1 && y >= -1.85 && y <= 2.9, true);
+      const offset = HEART_radius(y) > .02 ? .055 : 0;
+      p.setXYZ(i, point.x + dx*offset, y, point.z + dz*offset);
+      continue;
+    }
     // Stand the film off the muscle by a hair (×1.03 + 0.05) — a serous membrane
     // is adherent, not floating, so this is about a millimetre at specimen scale.
     const r = env * 1.03 + (env > 0.02 ? 0.05 : 0)
             + ST_serosaField(dx * 2.2, y * 0.55, dz * 2.2) * 0.024;
     p.setXYZ(i, dx * r, y, dz * r);
   }
-  ST_heartLean(THREE, g, 0.155, 1.4);
+  if (typeof HEART_surfacePoint !== 'function') ST_heartLean(THREE, g, 0.155, 1.4);
   seal(g);
   return g;
 }
@@ -7626,10 +7821,10 @@ function buildStrata(THREE, specimenId, parts, group) {
      * cutting the film takes the haze away. */
     if (!have.has('epicardium')) {
       const epi = new THREE.Mesh(ST_heartFilm(THREE), mat(THREE, 0xe2e8e6, {
-        tissue: 'serous', trans: true, opacity: 0.94,
-        rough: 0.22, clear: 0.95, clearRough: 0.09,
-        transmission: 0.85, thickness: 0.07, ior: 1.35, attenDist: 2.2, atten: 0xd8e4e0,
-        sheen: 0xffd8cc, sheenAmt: 0.55, sheenRough: 0.3, side: THREE.DoubleSide,
+        tissue: 'serous', trans: true, opacity: 0.16,
+        rough: 0.45, clear: 0.18, clearRough: 0.42,
+        transmission: 0, thickness: 0.07, ior: 1.35,
+        sheen: 0xe0caba, sheenAmt: 0.18, sheenRough: 0.5, side: THREE.DoubleSide,
       }));
       ST_membrane(epi, 2, 0.3, 1.3);
       push({
@@ -7652,17 +7847,21 @@ function buildStrata(THREE, specimenId, parts, group) {
     const fatMat = { tissue: 'fat', rough: 0.76, clear: 0.24, clearRough: 0.55,
       sheen: 0xffe6a4, sheenAmt: 0.4, transmission: 0.3, thickness: 0.4,
       atten: 0x6a4a1e, attenDist: 0.85 };
+    const coronaryPath = (id, fallback) => {
+      const path = parts.find(p => p.id === id)?.mesh.geometry.parameters?.path;
+      return path ? Array.from({length: 33}, (_, i) => path.getPoint(i/32).toArray()) : fallback;
+    };
 
     if (!have.has('av-groove-fat')) {
       // Left AV groove (over the circumflex) as the pickable body; the right AV
       // groove rides as a child so the whole ring reveals and hides as one — the
       // same trick heart.js uses for coronary branches.
       const cx = tube(THREE, 0xecd08a,
-        [[-0.85, 2.90, 1.30], [-1.80, 2.25, 0.40], [-2.05, 1.30, -0.85], [-1.40, 0.60, -1.80]],
+        coronaryPath('circumflex', [[-0.85, 2.90, 1.30], [-1.80, 2.25, 0.40], [-2.05, 1.30, -0.85], [-1.40, 0.60, -1.80]]),
         0.30, { ...fatMat, seg: 48, rad: 12 });
       ST_lumpTube(THREE, cx, 0.11, 2.2, 3);
       const rc = tube(THREE, 0xe8ca80,
-        [[0.70, 2.85, 1.35], [1.70, 2.15, 0.50], [2.05, 1.20, -0.70], [1.60, 0.40, -1.60], [0.60, -0.05, -2.00]],
+        coronaryPath('rca', [[0.70, 2.85, 1.35], [1.70, 2.15, 0.50], [2.05, 1.20, -0.70], [1.60, 0.40, -1.60], [0.60, -0.05, -2.00]]),
         0.28, { ...fatMat, seg: 54, rad: 12 });
       ST_lumpTube(THREE, rc, 0.10, 2.2, 7);
       cx.add(rc);
@@ -7676,11 +7875,11 @@ function buildStrata(THREE, specimenId, parts, group) {
 
     if (!have.has('iv-groove-fat')) {
       const lad = tube(THREE, 0xefd694,
-        [[-0.15, 2.90, 1.75], [-0.35, 1.60, 2.05], [-0.50, 0.20, 1.95], [-0.62, -1.20, 1.50], [-0.55, -2.50, 0.85]],
+        coronaryPath('lad', [[-0.15, 2.90, 1.75], [-0.35, 1.60, 2.05], [-0.50, 0.20, 1.95], [-0.62, -1.20, 1.50], [-0.55, -2.50, 0.85]]),
         0.25, { ...fatMat, seg: 52, rad: 12 });
       ST_lumpTube(THREE, lad, 0.09, 2.4, 11);
       const piv = tube(THREE, 0xe9cd88,
-        [[0.60, -0.05, -2.00], [0.25, -1.10, -1.70], [-0.05, -2.25, -1.10]],
+        coronaryPath('posterior-iv-branch', [[0.60, -0.05, -2.00], [0.25, -1.10, -1.70], [-0.05, -2.25, -1.10]]),
         0.22, { ...fatMat, seg: 30, rad: 10 });
       ST_lumpTube(THREE, piv, 0.08, 2.4, 13);
       lad.add(piv);
@@ -7951,9 +8150,12 @@ function createDissection(THREE, ctx) {
   /* ---- incision --------------------------------------------------------- */
   function beginStroke(part, point, grip) {
     beginAction('cut', part);
+    const selectedDepth = typeof ctx.getCutDepth === 'function' ? ctx.getCutDepth(part) : 0.55;
     stroke = {
       partId: part.id,
+      depth: Number.isFinite(selectedDepth) ? Math.max(0, Math.min(1, selectedDepth)) : 0.55,
       pts: [point.clone()],
+      normals: [contact?.normal.clone() || new THREE.Vector3(0, 1, 0)],
       speeds: [],
       lastT: performance.now(),
       lastP: point.clone(),
@@ -7968,6 +8170,7 @@ function createDissection(THREE, ctx) {
     if (d < 0.045) return;                       // ignore jitter
     stroke.speeds.push(d / dt * 16);
     stroke.pts.push(point.clone());
+    stroke.normals.push(contact?.normal.clone() || stroke.normals.at(-1).clone());
     stroke.lastP.copy(point);
     stroke.lastT = now;
 
@@ -7975,7 +8178,7 @@ function createDissection(THREE, ctx) {
     // over them, or leave that tube hanging after the access sheet is removed.
     if (stroke.pts.length >= 3 && typeof ctx.onCutProgress === 'function') {
       const part = byId.get(stroke.partId);
-      ctx.onCutProgress(part, stroke.pts);
+      ctx.onCutProgress(part, stroke.pts, stroke.depth);
     }
   }
 
@@ -7994,10 +8197,11 @@ function createDissection(THREE, ctx) {
     const sawing = variance > 6.5 && stroke.speeds.length > 4;
     // Mouse buttons and camera pinch strength measure a grip, NOT tissue depth.
     // Only an explicit depth control may supply evidence of a deep cut.
-    const depth = typeof ctx.getCutDepth === 'function' ? ctx.getCutDepth(part) : null;
+    const depth = stroke.depth;
     const plunged = Number.isFinite(depth) && depth > 0.8;
+    const superficial = depth < 0.3; // authored practice threshold, not a measured thickness
 
-    state.incisions.set(part.id, { points: pts, length, opened: false });
+    state.incisions.set(part.id, { points: pts, length, depth, opened: false });
     if (pending) pending.changed = true;
 
     if (sawing) {
@@ -8006,34 +8210,35 @@ function createDissection(THREE, ctx) {
 
     // A plunging first stroke goes through the layer into whatever is beneath it.
     if (plunged) {
-      // Nearest cuttable structure the blade would actually reach: same layer
-      // first (a vessel running within the wall), then the layer below.
-      const cutMid = pts[Math.floor(pts.length / 2)];
-      const reach = (p) => {
-        const b = new THREE.Box3().setFromObject(p.mesh);
-        return b.distanceToPoint(cutMid);
-      };
-      const sameLayer = parts.filter((p) => p.layer === part.layer && p.id !== part.id && p.cuttable);
-      const below = parts.filter((p) => p.layer === part.layer + 1 && p.cuttable);
-      const pool = sameLayer.length ? sameLayer : below;
-      const victim = pool.length
-        ? pool.reduce((best, p) => (reach(p) < reach(best) ? p : best))
-        : null;
+      // Only tissue actually under the blade can be perforated. Choosing a
+      // nearest bounding box could damage a distant organ beside the stroke.
+      // Reach is an authored model-space practice bound, not measured depth.
+      const mid = Math.floor(pts.length / 2), cutMid = pts[mid];
+      const inward = stroke.normals[mid].clone().negate().normalize();
+      const injuryRay = new THREE.Raycaster(cutMid, inward, 0.005, 0.7);
+      const pool = parts.filter(p => p.id !== part.id && p.cuttable
+        && !state.removed.has(p.id) && !state.opened.has(p.id)
+        && (p.layer === part.layer || p.layer === part.layer + 1));
+      const hit = injuryRay.intersectObjects(pool.map(p => p.mesh), false)[0];
+      const victim = hit ? pool.find(p => p.mesh === hit.object) : null;
       if (victim) {
         damage(victim, 'perforated',
           'The blade went in too deep on the first stroke and caught the ' + victim.name + '.');
       }
     }
 
-    if (length > 1.1) {
+    part.mesh.userData.peelable = length > 1.1 && !superficial;
+    if (part.mesh.userData.peelable) {
       emit('incise', part.id,
         'Incision made in ' + part.name + (sawing ? ' — but the stroke was uneven.' : '.'),
-        { length: +length.toFixed(2), sawing, plunged });
+        { length: +length.toFixed(2), sawing, plunged, depth });
       // Long enough to reflect: the part becomes peelable with forceps.
       part.mesh.userData.peelable = true;
     } else {
-      emit('incise', part.id, 'A short nick in ' + part.name + ' — not long enough to open it.',
-        { length: +length.toFixed(2) });
+      emit('incise', part.id, superficial
+        ? 'A shallow score in ' + part.name + ' — choose a controlled depth to open the layer.'
+        : 'A short nick in ' + part.name + ' — not long enough to open it.',
+        { length: +length.toFixed(2), depth, superficial });
     }
     stroke = null;
     finishAction();
@@ -8382,13 +8587,16 @@ function createSoftBody(THREE, parts) {
   // Split scanned surfaces still share one physical boundary. Anchor matching
   // world-space seams and taper motion near them; otherwise a breathing skin
   // root opens cracks against a limb that is not independently breathing.
-  const exterior = parts.filter(p => p.mesh?.userData.preparedExterior?.role === 'part');
+  const exterior = parts.filter(p => p.mesh?.userData.preparedExterior?.role === 'part'
+    || p.mesh?.userData.sharedTissueBoundary === 'ventricular');
   const seams = new Map(), weights = new Map();
   const keyOf = v => [v.x, v.y, v.z].map(n => Math.round(n * 1e5)).join(',');
   for (const p of exterior) {
     p.mesh.updateWorldMatrix(true, false);
     const attr = p.mesh.geometry.attributes.position;
+    const used = p.mesh.geometry.index ? new Set(p.mesh.geometry.index.array) : null;
     for (let i = 0; i < attr.count; i++) {
+      if (used && !used.has(i)) continue;
       _v.fromBufferAttribute(attr, i).applyMatrix4(p.mesh.matrixWorld);
       const key = keyOf(_v);
       if (!seams.has(key)) seams.set(key, { owners: new Set(), point: _v.clone() });
@@ -8705,9 +8913,8 @@ function createSoftBody(THREE, parts) {
  * be examined on. Order is ALWAYS outside-in, i.e. the order the blade meets them.
  */
 const CUT_STRATA = {
-  // Vertebrate integument. The frog's is thin, only lightly keratinised, and its
-  // dermis holds mucous and granular (poison) glands rather than much fat — but
-  // the column reads the same: epidermis, dermis, subcutis, deep fascia, muscle.
+  // Generic integument fallback. Authored frog exteriors use amphibianSkin
+  // below rather than inheriting this mammalian-style teaching column.
   skin: [
     { t: 0.07, c: 0xeadcc4, n: 'Epidermis' },              // keratinised, pale, avascular
     { t: 0.13, c: 0xd5817c, n: 'Papillary dermis' },       // capillary-rich, bright pink
@@ -8715,6 +8922,26 @@ const CUT_STRATA = {
     { t: 0.28, c: 0xe7c263, n: 'Subcutis (hypodermis)' },  // adipose / lymph sac, buttery
     { t: 0.07, c: 0xedeae0, n: 'Deep fascia' },            // the white glint; it is a mirror
     { t: 0.25, c: 0x8c2b26, n: 'Skeletal muscle' },        // dark red
+  ],
+  // The frog skin is its own removable surface. Muscle is a separate body-wall
+  // part; do not paint muscle or a mammalian fat pad into this skin incision.
+  // Fractions are illustrative display spacing, not measured histology.
+  amphibianSkin: [
+    { t: 0.10, c: 0xd8cdad, n: 'Epidermis' },
+    { t: 0.36, c: 0xc6aa98, n: 'Spongy dermis (gland-bearing)' },
+    { t: 0.34, c: 0xd2c8b2, n: 'Compact dermis' },
+    { t: 0.08, c: 0xd1c6ac, n: 'Hypodermis (loose connective tissue)' },
+    { t: 0.12, c: 0xa68f79, n: 'Subcutaneous lymph space' },
+  ],
+  cuticle: [
+    { t: 0.14, c: 0x604331, n: 'Epicuticle' },
+    { t: 0.39, c: 0xa27442, n: 'Exocuticle' },
+    { t: 0.37, c: 0xc4ab7a, n: 'Endocuticle' },
+    { t: 0.10, c: 0xc8b6a0, n: 'Epidermis' },
+  ],
+  membrane: [
+    { t: 0.25, c: 0xe7dfd0, n: 'Serosal surface' },
+    { t: 0.75, c: 0xc7bda7, n: 'Supporting connective tissue' },
   ],
   fat: [
     { t: 0.05, c: 0xe8e4d6, n: 'Fascial film' },
@@ -8791,6 +9018,24 @@ const CUT_STRATA = {
 const CUT_OPEN_MS = 500;        // tissue does not snap open
 const CUT_EPS = 0.010;          // lining stand-off along the surface normal
 const CUT_GAPE_MAX = 0.12;      // world units of lateral parting at amount = 1
+// Art-directed relative responses. These are display units, not millimetres,
+// material measurements, or a tissue-mechanics solver. A membrane should stay
+// thin; cuticle should keep a firm edge; a nerve must not receive a red pool.
+const CUT_PROFILES = {
+  skin:          { min: .14, max: .44, gape: 1,    roll: .20, run: 1.15, rough: .55, wet: .65, relief: .003, pattern: 'grain' },
+  amphibianSkin: { min: .06, max: .24, gape: .80,  roll: .14, run: 1.15, rough: .50, wet: .70, relief: .003, pattern: 'grain' },
+  fat:           { min: .10, max: .38, gape: .85,  roll: .13, run: 1.25, rough: .64, wet: .35, relief: .006, pattern: 'lobules' },
+  fascia:        { min: .025,max: .12, gape: .55,  roll: .07, run: 1.2,  rough: .42, wet: .55, relief: .002, pattern: 'fibres' },
+  membrane:      { min: .018,max: .07,gape: .45,  roll: .05, run: 1.25, rough: .35, wet: .60, relief: .001, pattern: 'fibres' },
+  muscle:        { min: .12, max: .44, gape: 1.05, roll: .10, run: 1.0,  rough: .54, wet: .55, relief: .005, pattern: 'fibres' },
+  serous:        { min: .08, max: .30, gape: .75,  roll: .09, run: 1.15, rough: .47, wet: .65, relief: .004, pattern: 'pores' },
+  parenchyma:    { min: .14, max: .46, gape: .65,  roll: .05, run: 1.0,  rough: .57, wet: .60, relief: .005, pattern: 'grain' },
+  gut:           { min: .07, max: .28, gape: 1.05, roll: .16, run: 1.1,  rough: .50, wet: .70, relief: .005, pattern: 'folds' },
+  vessel:        { min: .05, max: .21, gape: .80,  roll: .12, run: 1.1,  rough: .43, wet: .70, relief: .002, pattern: 'fibres' },
+  bone:          { min: .06, max: .25, gape: .12,  roll: 0,   run: .8,   rough: .78, wet: .12, relief: .004, pattern: 'pores' },
+  nerve:         { min: .035,max: .14, gape: .35,  roll: .03, run: 1.0,  rough: .52, wet: .35, relief: .002, pattern: 'fibres' },
+  cuticle:       { min: .025,max: .12, gape: .18,  roll: 0,   run: .8,   rough: .69, wet: .10, relief: .002, pattern: 'grain' },
+};
 const CUT_RN = 0.42;            // reject the far side of a closed shell
 // These are removable access films, not structural body walls or head-bearing
 // skin. Retaining half a transparent sac with an opaque rim makes a false hoop.
@@ -8834,7 +9079,13 @@ function CUT_inferTissue(opts) {
   const sys = String(opts.system || '');
   const both = id + ' ' + sys;
 
-  if (/skin|integument|derm/i.test(both)) return 'skin';
+  if (/exoskeleton|cuticle|elytr|tergite|sternite/i.test(id)) return 'cuticle';
+  if (/skin/i.test(id) && (opts.specimenId === 'frog' || opts.mesh?.userData?.exteriorTissue === 'frog-hide'
+      || opts.mesh?.userData?.preparedExterior?.specimenId === 'frog')) return 'amphibianSkin';
+  if (/pericardium|epicardium|pleura|serosa/i.test(id)) return 'membrane';
+  // A broad system hint must not turn subcutaneous fascia into skin merely
+  // because both structures belong to the integumentary system.
+  if (/skin|derm/i.test(id)) return 'skin';
   if (/fat|adipose/i.test(id)) return 'fat';
   if (/vertebra|skeletal|bone|femur|skull|cartilage|sternum|girdle/i.test(both)) return 'bone';
   if (/nerve|sciatic|ganglion|neural|vagus|spinal/i.test(id)) return 'nerve';
@@ -8848,6 +9099,7 @@ function CUT_inferTissue(opts) {
   if (/muscle|wall|ventricle|atrium|auricle|myocard|heart|papillar|septum|band|conus|muscular/i.test(both)) return 'muscle';
 
   // Weak system-level hint, last, before the default.
+  if (/skin|integument|derm/i.test(sys)) return 'skin';
   if (/digestive/i.test(sys)) return 'gut';
   if (/circulatory/i.test(sys)) return 'vessel';
   if (/urogenital/i.test(sys)) return 'parenchyma';
@@ -8858,18 +9110,21 @@ function CUT_inferTissue(opts) {
 // a HARD colour boundary (the shared-depth pair collapses to a zero-area quad the
 // GPU discards, and the two colours never interpolate into each other). A gradient
 // here would turn six named layers into one brown smear.
-function CUT_ringPlan(strata, hi) {
+function CUT_ringPlan(strata, hi, reach = 1) {
   const rings = [];
+  const total = strata.reduce((sum, layer) => sum + Math.max(1e-4, layer.t), 0) || 1;
   let acc = 0;
   for (let k = 0; k < strata.length; k++) {
-    const t = Math.max(1e-4, strata[k].t);
-    rings.push({ phi: acc, hex: strata[k].c });
-    if (hi && t > 0.18) rings.push({ phi: acc + t * 0.5, hex: strata[k].c });
+    const t = Math.max(1e-4, strata[k].t) / total;
+    if (acc >= reach) break;
+    const end = Math.min(reach, acc + t);
+    const subdivisions = hi ? 4 : 2;
+    for (let j = 0; j <= subdivisions; j++) {
+      const depth = acc + (end - acc) * j / subdivisions;
+      rings.push({ phi: depth / reach, depth, hex: strata[k].c, layer: k });
+    }
     acc += t;
-    rings.push({ phi: acc, hex: strata[k].c });
   }
-  const total = acc || 1;
-  for (let i = 0; i < rings.length; i++) rings[i].phi /= total;
   return rings;
 }
 
@@ -8912,8 +9167,8 @@ function createCutting(THREE, scene) {
     vertexColors: true,
     roughness: 0.55,
     metalness: 0,
-    // A cut face is WET. The clearcoat is the single biggest cue that this is
-    // living tissue and not a painted decal.
+    // A moist cut face catches light. Each tissue overrides these defaults;
+    // a prepared specimen is not automatically living or perfused.
     clearcoat: 0.9,
     clearcoatRoughness: 0.18,
     sheen: 0.45,
@@ -9065,7 +9320,7 @@ function createCutting(THREE, scene) {
   // reason they stay welded together.
   function buildProfile(rec) {
     const K = rec.K, prof = rec.prof;
-    const D = rec.depthMax, G = CUT_GAPE_MAX, RS = rec.troughRun;
+    const D = rec.depthMax, G = CUT_GAPE_MAX * rec.profile.gape, RS = rec.troughRun;
     for (let i = 0; i < K; i++) {
       const s = K > 1 ? i / (K - 1) : 0.5;
       const sn = Math.sin(Math.PI * s);
@@ -9074,7 +9329,7 @@ function createCutting(THREE, scene) {
       prof[i * 4] = G * tw;                                  // gape
       prof[i * 4 + 1] = D * td;                              // depth
       prof[i * 4 + 2] = RS * (0.30 + 0.70 * tw);             // trough half-run
-      prof[i * 4 + 3] = 0.20 * D * td;                       // eversion amplitude
+      prof[i * 4 + 3] = rec.profile.roll * D * td;            // eversion amplitude
     }
   }
 
@@ -9244,6 +9499,7 @@ function createCutting(THREE, scene) {
     const colr = new Float32Array(vcount * 3);
     const O = rec.O, N = rec.N, B = rec.B, prof = rec.prof;
     const RP = rec.pushRun;
+    const profile = rec.profile;
 
     for (let i = 0; i < K; i++) {
       const i3 = i * 3;
@@ -9257,7 +9513,19 @@ function createCutting(THREE, scene) {
         const phi = rings[r].phi;
         const ur = rs * CUT_fallInv(phi);                 // rest cross-track for this DEPTH
         const lat = side * (ur + g * CUT_fall(ur / RP));  // ...displaced exactly as the parent is
-        const hgt = -d * phi + ev * CUT_bump(ur / RP) + CUT_EPS;
+        // Small, deterministic relief breaks the smooth manufactured channel.
+        // It fades at the outer lip and floor, and stays below the stand-off;
+        // those joins remain welded to the original displacement field.
+        const along = i / Math.max(1, K - 1) * rec.length;
+        const across = rings[r].depth;
+        let texture;
+        if (profile.pattern === 'fibres') texture = Math.sin(along * 31 + across * 5 + side * .7);
+        else if (profile.pattern === 'folds') texture = Math.sin(along * 14 + across * 10 + side * .5);
+        else if (profile.pattern === 'lobules') texture = Math.sin(along * 18 + side) * Math.sin(across * 23);
+        else if (profile.pattern === 'pores') texture = Math.pow(CUT_hash(i * .73 + side, across * 37), 3) * 2 - 1;
+        else texture = CUT_hash(i * .7 + side * 3.1, across * 19) * 2 - 1;
+        const relief = texture * profile.relief * Math.sin(Math.PI * phi) * Math.sin(Math.PI * i / (K - 1));
+        const hgt = -d * phi + ev * CUT_bump(ur / RP) + CUT_EPS + relief;
         // Closed state: the same ring collapsed to a hairline on the surface.
         const lat0 = side * ur * 0.05;
 
@@ -9270,16 +9538,13 @@ function createCutting(THREE, scene) {
         delta[o + 1] = O[i3 + 1] + B[i3 + 1] * lat + N[i3 + 1] * hgt - by;
         delta[o + 2] = O[i3 + 2] + B[i3 + 2] * lat + N[i3 + 2] * hgt - bz;
 
-        // Colour. Ambient occlusion by depth is not decoration — without it the
-        // bands read as a painted stripe. Light does not reach the floor of a
-        // wound, and blood pools there, so the column also drifts venous with
-        // depth.
+        // Occlusion and tissue texture, without inventing a universal blood
+        // pool. The blood system owns blood, including the preparation mode.
+        // Nerve, cuticle and connective tissue keep their own cut-face colours.
         _c.setHex(rings[r].hex);
-        const ao = 0.30 + 0.70 * Math.pow(1 - phi, 1.3);
-        const mott = 1 + (CUT_hash(i * 0.7 + 3.1, r * 1.9) - 0.5) * 0.16;
-        let rr = _c.r * ao * mott, gg = _c.g * ao * mott, bb = _c.b * ao * mott;
-        const pool = phi * phi * 0.22;
-        rr += (0.055 - rr) * pool; gg += (0.010 - gg) * pool; bb += (0.013 - bb) * pool;
+        const ao = 0.48 + 0.52 * Math.pow(1 - phi, 1.15);
+        const mott = 1 + texture * .12;
+        const rr = _c.r * ao * mott, gg = _c.g * ao * mott, bb = _c.b * ao * mott;
         colr[o] = rr; colr[o + 1] = gg; colr[o + 2] = bb;
       }
     }
@@ -9301,6 +9566,10 @@ function createCutting(THREE, scene) {
     geo.computeVertexNormals();
     geo.computeBoundingSphere();
     geo.computeBoundingBox();
+    geo.userData.cutFace = {
+      tissue: rec.tissue, depth: rec.depth, schematic: true,
+      exposedStrata: [...new Set(rings.map(ring => rec.strata[ring.layer].n))],
+    };
 
     rec.linBase = base;
     rec.linDelta = delta;
@@ -9321,6 +9590,11 @@ function createCutting(THREE, scene) {
       rec.lining = m;
       rec.group.add(m);
     }
+    rec.lining.material.roughness = profile.rough;
+    rec.lining.material.clearcoat = profile.wet;
+    rec.lining.material.clearcoatRoughness = .24;
+    rec.lining.material.sheen = .18;
+    rec.lining.material.sheenColor.setHex(0xe7dac5);
     rec.linDirty = true;
   }
 
@@ -9362,7 +9636,7 @@ function createCutting(THREE, scene) {
     rec.N = new Float32Array(rec.K * 3);
     rec.B = new Float32Array(rec.K * 3);
     rec.prof = new Float32Array(rec.K * 4);
-    rec.rings = CUT_ringPlan(CUT_STRATA[rec.tissue] || CUT_STRATA.muscle, hi);
+    rec.rings = CUT_ringPlan(rec.strata, hi, rec.reach);
 
     if (!buildFrames(rec, rec.local)) return false;
     buildProfile(rec);
@@ -9508,14 +9782,15 @@ function createCutting(THREE, scene) {
     rec.pos = geo.attributes.position;
     rec.mesh = opts.mesh;
 
-    rec.tissue = CUT_inferTissue({ partId, tissue: opts.tissue, system: opts.system });
-    // A frog's body wall is millimetres thick; a liver is not. depth 0..1 spans a
-    // shallow score to a full-thickness incision through to the layer beneath.
-    const depth = opts.depth == null ? 0.55 : CUT_clamp(opts.depth, 0, 1);
-    rec.depthMax = 0.14 + depth * 0.30;
-    rec.troughRun = rec.depthMax * 1.15;    // ~40 degree wall: steep enough to be a
-                                            // cut, shallow enough that the bands are
-                                            // not edge-on to a top-down camera.
+    rec.tissue = CUT_inferTissue({ ...opts, partId });
+    rec.strata = CUT_STRATA[rec.tissue] || CUT_STRATA.muscle;
+    rec.profile = CUT_PROFILES[rec.tissue] || CUT_PROFILES.muscle;
+    // Depth is a relative teaching control, not measured blade penetration.
+    // Only reached bands appear: a shallow skin score cannot reveal muscle.
+    rec.depth = opts.depth == null ? 0.55 : CUT_clamp(opts.depth, 0, 1);
+    rec.reach = .02 + rec.depth * .98;
+    rec.depthMax = rec.profile.min + rec.depth * (rec.profile.max - rec.profile.min);
+    rec.troughRun = rec.depthMax * rec.profile.run;
     rec.pushRun = rec.troughRun * 2.1;      // tension distorts far wider than it parts
     rec.local = restSpace(rec, toLocal(rec, opts.points));
     if (rec.local.length < 2 || !rebuild(rec)) {
@@ -9800,7 +10075,7 @@ function createCutting(THREE, scene) {
   function snapshot(partId) {
     const rec = wounds.get(partId);
     return rec ? { mesh: rec.mesh, local: rec.local.map(p => p.clone()), rest: rec.rest,
-      tissue: rec.tissue, depth: (rec.depthMax - 0.14) / 0.30, amount: rec.kTo } : null;
+      tissue: rec.tissue, depth: rec.depth, amount: rec.kTo } : null;
   }
 
   function removeRemnant(partId) {
@@ -9948,6 +10223,7 @@ function createCutting(THREE, scene) {
     open, grow, gape, close, releaseSurface, remove, snapshot, restore, update, setQuality, clear, dispose,
     get count() { return wounds.size; },
     has: (partId) => wounds.has(partId),
+    depthOf: (partId) => wounds.get(partId)?.depth,
     // Read-only peek for the shell / viva: which strata the blade actually
     // crossed, outermost first. Returns NAMED bands — a bare list of hex ints
     // (which is what this used to hand back) tells a student nothing and cannot
@@ -9959,8 +10235,7 @@ function createCutting(THREE, scene) {
     strataOf: (partId) => {
       const rec = wounds.get(partId);
       if (!rec) return null;
-      const col = CUT_STRATA[rec.tissue] || CUT_STRATA.muscle;
-      const reach = CUT_clamp((rec.depthMax - 0.14) / 0.30, 0, 1);
+      const col = rec.strata;
       let acc = 0, total = 0;
       for (let i = 0; i < col.length; i++) total += col[i].t;
       const out = [];
@@ -9973,7 +10248,7 @@ function createCutting(THREE, scene) {
           c: col[i].c,
           fraction: +(col[i].t / (total || 1)).toFixed(3),
           // Did the blade open this band, or is it still intact under the floor?
-          breached: from < 0.02 + reach * 0.98,
+          breached: from < rec.reach,
         });
       }
       out.tissue = rec.tissue;
@@ -9993,79 +10268,21 @@ function createCutting(THREE, scene) {
 
 /* ===== blood.js ================================================== */
 /*
- * blood.js — cut tissue bleeds, blood runs downhill, it pools, it clots, and you
- * wipe it away with gauze.
+ * Blood and specimen fluid presentation. Preserved is the default: accepted
+ * incisions leave small host-bound residue marks, with no active fluid source.
+ * Fresh excised tissue seeps passively for a short time. An explicitly enabled
+ * frog/heart circulation demonstration can use the legacy pulsatile registers.
+ * Cockroach hemolymph stays pale and non-pulsatile in every condition.
  *
- * This is a presence module, not a gore module. The thing that makes a dissection
- * feel real is not quantity of red — it is that the fluid OBEYS THE ANATOMY. Blood
- * that tracks the contour of a liver lobe, gathers in the low point of the cavity,
- * goes tacky and brown-black over a minute, and leaves the serosa glossy under the
- * theatre lamp reads as a specimen. Blood that sprays as a screen-space particle
- * effect reads as a video game. Everything here is built around that one idea.
+ * Colours, durations, viscosity, gravity and quantities are authored visual
+ * approximations, not calibrated physiology or a surgical training model.
+ * No quantitative blood-loss value is presented to the learner or connected to
+ * the physiology model. BLD_TOTAL_ML is a legacy demo normalization only.
  *
- * THREE BLEEDING REGISTERS, deliberately distinguishable at a glance. A student
- * should be able to name the vessel they have opened from the behaviour alone,
- * which is a genuine clinical skill:
- *
- *   capillary — dark, slow, low-pressure. Wells up and BEADS along the cut edge,
- *     surface tension holding each drop until it is heavy enough to creep. Stops
- *     on its own inside ~13 s: that is haemostasis, the platelet plug forming.
- *   venous    — dark red-purple (deoxygenated haemoglobin), steady, non-pulsatile,
- *     under low pressure so it does not throw. It just RUNS, and where it runs is
- *     decided entirely by the shape of the organ under it.
- *   arterial  — bright scarlet (~98% saturated), and PULSATILE. It is ejected in
- *     time with systole, so it arcs, lands away from the wound, and the volume
- *     visibly rises and falls with the beat. Synchronised to physio.js's cardiac
- *     phase when one is supplied; falls back to a plausible ~1.1 Hz otherwise.
- *
- * HOW BLOOD STICKS TO THE ANATOMY. A running droplet does not integrate against a
- * collision mesh — far too expensive for 400 of them. Instead each droplet knows
- * the surface normal it is sitting on, walks along the DOWNHILL TANGENT of that
- * plane, and then re-snaps itself to the specimen with one very short ray fired
- * into the surface. Snapping (rather than colliding) is what makes it track the
- * contours of a lobe instead of tunnelling through it, and it costs one ray per
- * droplet per re-snap instead of per frame.
- *
- * PERFORMANCE CONTRACT, because this runs on a school laptop next to hand tracking:
- *   - Everything is pooled and pre-allocated. update() allocates NOTHING.
- *   - Hard cap of 400 droplets and 384 stains (4 instance pools of 96: two blob
- *     shapes x glossy/matte). Full pools recycle the oldest mark.
- *   - Hard cap of BLD_RAY_BUDGET raycasts per frame, spent round-robin. Stationary
- *     droplets never cast at all. A hundred droplets running at once degrades to
- *     slightly laggier surface tracking, never to a frame-rate collapse.
- *   - Two draw calls for every stain in the scene, one for every droplet.
- *
- * DEFEATABLE BY DESIGN. A squeamish fourteen-year-old and a medical student are
- * both users of this program. setIntensity(0) retires everything already on the
- * specimen and stops new bleeding; setEnabled(false) hides it outright and gives
- * every borrowed material property back. Default intensity is 0.55 — enough that a
- * cut obviously bleeds, nowhere near a horror film.
- *
- * PHYSIOLOGICAL COUPLING. physio.js exposes setBloodVolume(fraction) and drives it
- * through Starling -> stroke volume -> pulse pressure -> baroreflex, exactly as
- * haemorrhage does in an animal. Nothing was calling it, so a specimen could be
- * bled white while the monitor showed an untroubled 48 bpm — the one thing a
- * physiology lesson about haemorrhage must not do. setVolumeSink(physio.setBloodVolume)
- * closes that loop; see the BLD_TOTAL_ML note for how the millilitres are counted.
- *
- * Contract:
- *   createBlood(THREE, scene) -> {
- *     bleed(o), stain(point, normal, radius, darkness, partId[, kind]),
- *     swab(point, radius) -> count, wetness(partId) -> 0..1,
- *     setEnabled(on), setIntensity(k), setPhaseSource(fn), setVolumeSink(fn),
- *     setSpecimen(parts), update(dtMsOrSec), clear(), dispose(),
- *     get enabled, get intensity, get bloodLostML, get bloodFraction, get stats }
- *   o = { point:Vector3, normal:Vector3, partId, severity:0..1,
- *         kind:'capillary'|'venous'|'arterial' }
- *
- * Every public method sanitises its own arguments and none of them throws; a
- * plain {x,y,z} or an unnormalised normal is accepted. update() additionally
- * catches, because it is called from a render loop this module does not own and a
- * throw from here would freeze the whole lab over a cosmetic subsystem.
- *
- * WIRING. This module is optional and, as of this writing, main.js does not
- * construct it — see the note at the bottom of the file for the three lines that
- * do, and for why they are not written here.
+ * Droplets/stains are pooled, with a fixed raycast budget. Stains follow their
+ * host transform; callers retire marks with clearPart when an access sheet is
+ * removed. Gauze removes fluid without changing accepted incision geometry.
+ * Intensity changes visibility, while setContext controls specimen behavior.
  */
 
 const BLD_MAX_DROPLETS = 400;   // hard cap, per the module brief
@@ -10104,48 +10321,9 @@ const BLD_G = 14;               // gravity, units/s^2 — see BLD_note_gravity b
 // pooling around the specimen is a real and immediately readable thing.
 const BLD_TABLE_Y = -1.7;
 
-/* Blood volume, and why this module is allowed to have an opinion about it.
- *
- * physio.js exposes setBloodVolume(fraction) and drives it through Starling ->
- * stroke volume -> pulse pressure -> baroreflex, exactly as haemorrhage does in
- * an animal. Nothing was calling it, so a specimen could be bled for two minutes
- * with the monitor showing an untroubled 48 bpm — the one thing a physiology
- * lesson about haemorrhage must not do.
- *
- * The numbers: Rana pipiens carries roughly 5-6 % of body mass as blood, so a
- * 30 g frog holds about 1.7 mL. One world unit is a centimetre (see the gravity
- * note), so a droplet of diameter d units has volume (pi/6)d^3 cm^3 — a 0.05-unit
- * bead is about 0.065 uL.
- *
- * The sampling factor is the honest part, it lives PER REGISTER (see `sample` in
- * BLD_REGISTER), and it is bounded by physiology rather than chosen for feel.
- *
- * Why per register and not one global number. What is drawn is a SAMPLE of the
- * flow, and the three registers are sampled at wildly different fidelity because
- * they are drawn to look like themselves. An arterial jet ATOMISES — it is drawn
- * as many small fast droplets, so droplet volume badly under-represents the real
- * flow. A venous runnel is a coherent stream and the drawn droplets are close to
- * life size. Capillary blood wells as discrete beads and is very nearly 1:1.
- *
- * With one global factor the arithmetic came out backwards: arterial lost 16 uL/s
- * against venous at 27, because arterial droplets are drawn smaller and volume
- * goes as the cube of diameter. That inverts the single most important fact about
- * bleeding — arterial haemorrhage is the emergency, which is WHY it is taught
- * first — so the drawn droplets are not the accounting unit. Per-register factors
- * are, and they are calibrated against measured droplet throughput.
- *
- * The ceiling is real physiology: BLOOD CANNOT LEAVE FASTER THAN THE HEART
- * DELIVERS IT. A frog's cardiac output is on the order of 5-10 mL/min, i.e.
- * 80-170 uL/s, and no single wound may exceed it. Calibrated worst case, wound
- * held open at severity 1 and intensity 1:
- *
- *   arterial  ~70 uL/s  -> exsanguinated in ~25 s   (a large fraction of output)
- *   venous    ~28 uL/s  -> ~60 s
- *   capillary  ~3 uL/s  -> self-limiting; a single nick costs ~15 uL, under 1 %
- *
- * An earlier draft used a flat 60, which emptied a frog in ten seconds at five to
- * nine times its cardiac output. It looked dramatic and it was nonsense.
- */
+// Legacy demonstration normalization. Model units are not calibrated cm and
+// rendered drops do not measure blood loss. Do not use this value for a species
+// claim, learner assessment, or physiology coupling without a reviewed model.
 const BLD_TOTAL_ML = 1.7;
 
 /*
@@ -10161,6 +10339,24 @@ const BLD_TOTAL_ML = 1.7;
 /* Per-register physiology. These numbers are the whole personality of each kind of
  * bleeding, so they live in one table where they can be read side by side. */
 const BLD_REGISTER = {
+  // Presentation profiles, not measured flow rates. Fixed classroom specimens
+  // leave residue; fresh excised tissue can seep but has no pumping circulation.
+  residue: {
+    fresh: 0x69463b, dry: 0x43352e, rate: 0, ttl: 0, speed: [0, 0],
+    size: [0.02, 0.035], jet: 0, slopeGate: 1, spread: 0.025,
+    stainR: [0.025, 0.05], life: [1, 2], pulse: false, sample: 0,
+  },
+  seep: {
+    fresh: 0x661b20, dry: 0x321a16, rate: 4, ttl: 4, speed: [0.03, 0.09],
+    size: [0.025, 0.046], jet: 0, slopeGate: 0.3, spread: 0.035,
+    stainR: [0.035, 0.065], life: [2, 4], pulse: false, sample: 0,
+  },
+  hemolymph: {
+    // A pale tint makes an otherwise almost clear fluid visible on the model.
+    fresh: 0xcac5a5, dry: 0x8b8264, rate: 2, ttl: 3, speed: [0.02, 0.07],
+    size: [0.02, 0.038], jet: 0, slopeGate: 0.35, spread: 0.025,
+    stainR: [0.025, 0.05], life: [2, 3], pulse: false, sample: 0,
+  },
   capillary: {
     fresh: 0x7c1216,      // dark: capillary blood is a mix, and it is thin and slow
     rate: 8,              // droplets/s at severity 1, intensity 1
@@ -10202,6 +10398,15 @@ const BLD_REGISTER = {
     sample: 22,           // a jet ATOMISES: many small drawn droplets, huge flow
   },
 };
+
+function BLD_contextKind(specimen, preparation, requested) {
+  if (specimen === 'cockroach') return 'hemolymph';
+  if (preparation === 'preserved') return 'residue';
+  if (preparation === 'circulation' && ['frog', 'heart'].includes(specimen)) {
+    return ['capillary', 'venous', 'arterial'].includes(requested) ? requested : 'capillary';
+  }
+  return 'seep';
+}
 
 // Where every stain ends up: oxidised, denatured, brown-black clot. Real dried
 // blood is emphatically NOT red, and getting this wrong is the single most common
@@ -10366,6 +10571,7 @@ function createBlood(THREE, scene) {
 
   let enabled = true;
   let intensity = 0.55;         // moderate by default; see the header
+  let specimenId = 'frog', preparation = 'preserved';
   let phaseSrc = null;          // physio.js injects a cardiac phase getter here
   let clock = 0;
   let frame = 0;
@@ -10752,7 +10958,9 @@ function createBlood(THREE, scene) {
      * anything, and a droplet swabbed up has still been lost. Volume of a sphere
      * of diameter d, times the sampling factor that turns the 400 drawn droplets
      * back into the flow they represent. */
-    lostML += (Math.PI / 6) * d.size * d.size * d.size * (reg.sample || 5);
+    if (preparation === 'circulation') {
+      lostML += (Math.PI / 6) * d.size * d.size * d.size * (reg.sample ?? 5);
+    }
     dropsLive++;
     return d;
   }
@@ -11002,13 +11210,14 @@ function createBlood(THREE, scene) {
     // above it can be a millimetre apart and must never merge into one blob.
     for (let i = 0; i < stains.length; i++) {
       const s = stains[i];
-      if (!s.alive || s.dying) continue;
+      if (!s.alive || s.dying || s.partId !== (partId || null) || s.kind !== kind) continue;
       if (s.nrm.dot(nrm) < 0.55) continue;
       const d2 = s.pos.distanceToSquared(pos);
       const reach = Math.min((s.r + r) * BLD_MERGE, BLD_MERGE_MAX);
       if (d2 < reach * reach) {
         // Area-additive growth.
-        s.rTarget = Math.min(BLD_STAIN_R_MAX, Math.sqrt(s.r * s.r + r * r * 0.8));
+        s.rTarget = Math.min(preparation === 'preserved' ? 0.09 : BLD_STAIN_R_MAX,
+          Math.sqrt(s.r * s.r + r * r * 0.8));
         // Fresh blood arriving on an old stain partially rejuvenates it — the
         // centre of a re-bleeding pool really is redder than its rim.
         s.born += (clock - s.born) * 0.4;
@@ -11062,6 +11271,7 @@ function createBlood(THREE, scene) {
     const reg = BLD_REGISTER[s.kind] || BLD_REGISTER.venous;
     const age = clock - s.born;
     let hex = reg.fresh;
+    if (reg.dry) return BLD_mix(hex, reg.dry, BLD_smooth(age / BLD_CLOT_SECONDS));
     if (!reg.pulse) {
       // Dark venous/capillary blood oxygenates on contact with air and brightens
       // for a few seconds. Arterial blood is already saturated and skips this.
@@ -11375,7 +11585,7 @@ function createBlood(THREE, scene) {
   /* ---- public: bleed ------------------------------------------------------ */
   function bleed(o) {
     if (!enabled || intensity <= 0 || !o || !o.point) return null;
-    const kind = BLD_REGISTER[o.kind] ? o.kind : 'venous';
+    const kind = BLD_contextKind(specimenId, preparation, o.kind);
     const reg = BLD_REGISTER[kind];
     const severity = BLD_clamp(BLD_num(o.severity == null ? 0.5 : o.severity), 0, 1);
 
@@ -11383,6 +11593,13 @@ function createBlood(THREE, scene) {
     // record write below works off a known-good unit normal and a finite point.
     vecTo(o.point, _pt, _ZERO);
     normalTo(o.normal, _nr);
+
+    // Fixed tissue never becomes a continuously replenished fluid source. Keep
+    // the mark on its host so it follows a reflected flap, and let gauze lift it.
+    if (preparation === 'preserved') {
+      return stain(_pt, _nr, reg.stainR[0] * (0.7 + severity) * Math.sqrt(intensity),
+        0.5, o.partId, kind);
+    }
 
     // Reuse the source already sitting on this wound rather than stacking two on
     // top of each other, or a scalpel dragged along a cut edge would multiply the
@@ -11520,6 +11737,27 @@ function createBlood(THREE, scene) {
       for (let i = 0; i < sources.length; i++) sources[i].alive = false;
       restoreAll();                   // give every borrowed property straight back
     } else wetAt = -1;
+  }
+
+  function setContext(specimen, mode) {
+    const nextSpecimen = ['frog', 'heart', 'fish', 'earthworm', 'cockroach'].includes(specimen) ? specimen : 'frog';
+    let nextMode = ['preserved', 'fresh', 'circulation'].includes(mode) ? mode : 'preserved';
+    if (nextMode === 'circulation' && !['frog', 'heart'].includes(nextSpecimen)) nextMode = 'fresh';
+    if (specimenId !== nextSpecimen || preparation !== nextMode) clear();
+    specimenId = nextSpecimen;
+    preparation = nextMode;
+    return { specimenId, preparation, fluid: BLD_contextKind(specimenId, preparation, 'capillary') };
+  }
+
+  function clearPart(partId) {
+    for (const source of sources) if (source.partId === partId) source.alive = false;
+    for (const mark of stains) if (mark.alive && mark.partId === partId) releaseStain(mark);
+    for (const drop of drops) if (drop.alive && drop.partId === partId) {
+      drop.held = false; killDroplet(drop, false);
+    }
+    lastCut.delete(partId);
+    wetAt = -1;
+    applyWetness();
   }
 
   function setIntensity(k) {
@@ -11669,12 +11907,12 @@ function createBlood(THREE, scene) {
 
   return {
     bleed, stain, swab, wetness,
-    setEnabled, setIntensity, setPhaseSource, setVolumeSink, setSpecimen,
-    update, clear, dispose,
+    setEnabled, setIntensity, setPhaseSource, setVolumeSink, setSpecimen, setContext,
+    update, clear, clearPart, dispose,
     get enabled() { return enabled; },
     get intensity() { return intensity; },
-    // Millilitres lost, and the fraction remaining. Exposed so the shell can put
-    // an estimated blood loss on screen, which is a real number a surgeon tracks.
+    get context() { return { specimenId, preparation, fluid: BLD_contextKind(specimenId, preparation, 'capillary') }; },
+    // Legacy demo ledger only; never present these as measured blood loss.
     get bloodLostML() { return lostML; },
     get bloodFraction() { return BLD_clamp(1 - lostML / BLD_TOTAL_ML, 0, 1); },
     // For scripted verification and for anyone poking at it from the console.
@@ -11684,7 +11922,7 @@ function createBlood(THREE, scene) {
       let nb = 0;
       for (let i = 0; i < sources.length; i++) if (sources[i].alive) nb++;
       return { droplets: dropsLive, stains: ns, sources: nb, phase: phase(),
-        targets: targets.length, lostML, faulted, disposed };
+        targets: targets.length, lostML, faulted, disposed, specimenId, preparation };
     },
   };
 }
@@ -26713,13 +26951,13 @@ function createZoomverse(THREE, renderer) {
  * a theatre makes you feel you are standing over a specimen. The difference is
  * almost entirely in the light:
  *
- *   - one hard, warm, overhead surgical lamp that actually exists in the world
+ *   - one overhead surgical lamp that actually exists in the world
  *     (you can see the fixture) and casts a real shadow onto the table,
- *   - a cold, dim blue room around it, so shadows read clinical rather than grey,
+ *   - neutral fill that keeps dark skin and thin appendages readable,
  *   - a contact shadow hugging the specimen so it sits ON the table,
  *   - brushed steel underneath that catches a wet sheen.
  *
- * Warm key against cool ambient is the whole trick. Everything else recedes.
+ * The lighting follows the specimen's real bounds; the surrounding room recedes.
  *
  * Contract (main.js depends on it):
  *   setupEnvironment(THREE, deps, refs) -> { render, resize, setBloom, dispose }
@@ -26792,15 +27030,18 @@ function setupEnvironment(THREE, deps, refs) {
   }
 
   /* ---- light rig --------------------------------------------------------- */
-  // Cold room fill. Deliberately weak: it defines the dark, it does not light
-  // the specimen.
-  addTo(new THREE.HemisphereLight(0x33506b, 0x04070a, 0.42));
-  const roomFill = addTo(new THREE.DirectionalLight(0x7fa8c8, 0.30));
+  // Neutral broad fill lifts dark appendages without raising exposure on the
+  // pale frog belly. Keep this unshadowed: only the key spends a shadow map.
+  addTo(new THREE.HemisphereLight(0xa9b6b7, 0x222c29, 0.60));
+  const roomFill = addTo(new THREE.DirectionalLight(0xdde3df, 0.58));
+  roomFill.name = 'specimen-room-fill';
   roomFill.position.set(-7, 5, -8);
+  addTo(roomFill.target);
 
-  // THE surgical lamp. Warm-white, hard, from directly above and slightly front,
-  // where a real theatre lamp hangs. This does nearly all the modelling.
-  const lamp = addTo(new THREE.SpotLight(0xfff2e2, 210, 44, 0.40, 0.45, 1.7));
+  // Less dominant than the former narrow hot spot; fitSpecimen sets the cone so
+  // the whole animal is inside its bright region, not at the feathered edge.
+  const lamp = addTo(new THREE.SpotLight(0xfff5e9, 160, 44, 0.60, 0.40, 1.7));
+  lamp.name = 'specimen-key-light';
   lamp.position.set(0.6, 15.5, 4.2);
   lamp.target.position.set(0, 0, 0);
   addTo(lamp.target);
@@ -26816,18 +27057,22 @@ function setupEnvironment(THREE, deps, refs) {
 
   // A softer satellite head — real theatres run twin lamps to kill the shadow
   // the surgeon's own hands throw. No shadow map on this one.
-  const lamp2 = addTo(new THREE.SpotLight(0xffe9d0, 42, 34, 0.46, 0.7, 1.7));
+  const lamp2 = addTo(new THREE.SpotLight(0xeaf0ee, 54, 34, 0.65, 0.45, 1.7));
+  lamp2.name = 'specimen-satellite-light';
   lamp2.position.set(-6.5, 12.0, -3.0);
   lamp2.target.position.set(0, 0, 0);
   addTo(lamp2.target);
 
-  // A dim neutral-green rim separates the specimen without staining the tissue cyan.
+  // A restrained rim separates the silhouette without staining tissue cyan.
   const rim = addTo(new THREE.DirectionalLight(0xc1d8d2, 0.45));
+  rim.name = 'specimen-rim-light';
   rim.position.set(-6, 3.5, -7);
+  addTo(rim.target);
 
   /* ---- the visible lamp fixture ------------------------------------------ */
   // Seeing the source of the light is a large part of believing the room.
   const fixture = new THREE.Group();
+  fixture.name = 'specimen-lamp-fixture';
   fixture.add(new THREE.Mesh(
     track(new THREE.CylinderGeometry(2.5, 3.05, 0.5, 40)),
     track(new THREE.MeshStandardMaterial({ color: 0x11161b, roughness: 0.42, metalness: 0.85 }))));
@@ -26960,6 +27205,42 @@ function setupEnvironment(THREE, deps, refs) {
   let removalZ = -8;
   let removalX = 0, removalColumnWidth = 0;
 
+  function fitLighting(bounds) {
+    const centre = bounds.getCenter(new THREE.Vector3());
+    const radius = Math.max(0.5, bounds.getSize(new THREE.Vector3()).length() * 0.5);
+    // A bounding sphere covers every actual exterior vertex, including folded
+    // feet and antennae. Move back for long specimens rather than cutting them
+    // off with a fixed cone; compensate distance falloff, not camera exposure.
+    for (const [light, offset, intensity] of [
+      [lamp, new THREE.Vector3(0.6, 15.5, 4.2), 160],
+      [lamp2, new THREE.Vector3(-6.5, 12, -3), 54],
+    ]) {
+      const baseDistance = offset.length();
+      const distance = Math.max(baseDistance, radius / Math.sin(0.52));
+      light.position.copy(centre).addScaledVector(offset, distance / baseDistance);
+      light.target.position.copy(centre);
+      const coverageAngle = Math.asin(Math.min(0.99, radius / distance));
+      light.angle = Math.max(0.42, coverageAngle / (1 - light.penumbra) + 0.035);
+      light.intensity = intensity * Math.pow(distance / baseDistance, light.decay);
+      light.distance = Math.max(34, (distance + radius) * 2.2);
+      // Keep the existing single 512/1024 shadow map. Only its clipping range
+      // follows the fitted lamp so a larger specimen cannot lose its shadow.
+      if (light.castShadow) light.shadow.camera.far = distance + radius + 8;
+    }
+    for (const [light, offset] of [
+      [roomFill, new THREE.Vector3(-7, 5, -8)],
+      [rim, new THREE.Vector3(-6, 3.5, -7)],
+    ]) {
+      light.position.copy(centre).add(offset);
+      light.target.position.copy(centre);
+    }
+    fixture.position.copy(lamp.position);
+    fixture.quaternion.setFromUnitVectors(new THREE.Vector3(0, -1, 0),
+      centre.clone().sub(lamp.position).normalize());
+    poolMesh.position.x = centre.x;
+    poolMesh.position.z = centre.z;
+  }
+
   function fitSpecimen(group) {
     // Visible external geometry only. Hidden deep anatomy is not a support
     // surface, and Box3.setFromObject would incorrectly include it.
@@ -26984,6 +27265,7 @@ function setupEnvironment(THREE, deps, refs) {
     const length = Math.max(10, bounds.max.z - bounds.min.z + 2.2);
     const x = (bounds.min.x + bounds.max.x) / 2;
     const z = (bounds.min.z + bounds.max.z) / 2;
+    fitLighting(bounds.clone().translate(new THREE.Vector3(0, offsetY, 0)));
     removalZ = -8;
     removalX = 0; removalColumnWidth = 0;
     // Keep instruments on the opposite side of the removed-organ work area.
@@ -27044,15 +27326,16 @@ function setupEnvironment(THREE, deps, refs) {
     pmrem.compileEquirectangularShader();
     const { cv, ctx } = canvas2d(256, 128);
     const g = ctx.createLinearGradient(0, 0, 0, 128);
-    g.addColorStop(0.00, '#2a3a48');    // cool ceiling
-    g.addColorStop(0.40, '#141c24');
-    g.addColorStop(1.00, '#05080b');    // dark floor
+    g.addColorStop(0.00, '#43504f');    // broad neutral ceiling reflection
+    g.addColorStop(0.40, '#242f2e');
+    g.addColorStop(1.00, '#080c0b');    // dark floor
     ctx.fillStyle = g; ctx.fillRect(0, 0, 256, 128);
-    // A bright band where the lamp is, so speculars have a highlight to catch.
-    const lg = ctx.createRadialGradient(128, 12, 0, 128, 12, 54);
-    lg.addColorStop(0, 'rgba(255,246,232,1)');
-    lg.addColorStop(1, 'rgba(255,246,232,0)');
-    ctx.fillStyle = lg; ctx.fillRect(0, 0, 256, 60);
+    // A wider, lower-contrast reflection models the broad lamp face rather than
+    // a sharp white streak that makes textured chitin look like polished metal.
+    const lg = ctx.createRadialGradient(128, 12, 0, 128, 12, 78);
+    lg.addColorStop(0, 'rgba(218,224,218,0.90)');
+    lg.addColorStop(1, 'rgba(218,224,218,0)');
+    ctx.fillStyle = lg; ctx.fillRect(0, 0, 256, 92);
     const eqTex = new THREE.CanvasTexture(cv);
     eqTex.mapping = THREE.EquirectangularReflectionMapping;
     if ('colorSpace' in eqTex) eqTex.colorSpace = THREE.SRGBColorSpace;
@@ -29922,7 +30205,7 @@ body:not(.bioq-phone).physio-on #hand{max-height:calc(100dvh - 340px)}
 .bchip[data-k="3"] i{background:var(--bad);box-shadow:0 0 7px rgba(232,115,94,.85)}
 
 /* drawer sections */
-.dsec{display:flex;flex-direction:column;gap:8px}
+.dsec{display:flex;flex-direction:column;gap:8px;flex:none}
 .dsec.hide{display:none}
 .dsec.flash{animation:dflash 1.1s ease}
 @keyframes dflash{0%,100%{box-shadow:none}22%{box-shadow:0 0 0 1px rgba(232,115,94,.4)}}
@@ -30358,8 +30641,8 @@ const SHELL_IMG_MODES = [
 const SHELL_BLEED = [
   { k: 0,    label: 'Off',      note: 'No blood at all. Nothing else about the specimen changes.' },
   { k: 0.3,  label: 'Light',    note: 'A trace at the cut edge — enough to read the tissue planes.' },
-  { k: 0.55, label: 'Moderate', note: 'What a well-drained preserved specimen actually does.' },
-  { k: 1,    label: 'Full',     note: 'Fresh-tissue bleeding, as it would be in theatre.' },
+  { k: 0.55, label: 'Moderate', note: 'Visible cut-edge fluid. Amounts are illustrative, not measured.' },
+  { k: 1,    label: 'Full',     note: 'More visible fluid; specimen condition still determines its behavior.' },
 ];
 
 /* Fallback for setKeymap(null) — the app should never show an empty help sheet. */
@@ -30589,7 +30872,20 @@ function buildShell(root) {
       <div id="drawbody" class="chrome">
         <div class="dsec" id="secblood"><span class="lbl">Blood</span>
           <div class="seg bleed" id="bleedseg"></div>
-          <div class="dnote" id="bleednote"></div></div>
+          <div class="dnote" id="bleednote"></div>
+          <span class="lbl">Specimen condition</span>
+          <div class="seg" id="preparationseg" role="group" aria-label="Specimen condition">
+            <button type="button" data-preparation="preserved" aria-pressed="true" class="on">Preserved</button>
+            <button type="button" data-preparation="fresh" aria-pressed="false">Fresh tissue</button>
+          </div>
+          <div class="dnote" id="preparationnote" aria-live="polite"></div></div>
+        <div class="dsec" id="seccut"><span class="lbl">Blade depth</span>
+          <div class="seg" id="cutdepthseg" role="group" aria-label="Blade depth">
+            <button type="button" data-depth="0.18" aria-pressed="false">Shallow</button>
+            <button type="button" data-depth="0.55" aria-pressed="true" class="on">Controlled</button>
+            <button type="button" data-depth="0.9" aria-pressed="false">Deep</button>
+          </div>
+          <div class="dnote" id="cutdepthnote" aria-live="polite">A controlled cut can open the current layer. Depth is relative, not a measurement.</div></div>
         <div class="dsec" id="seclevel"><span class="lbl">Level</span>
           <div class="seg" id="levelseg"></div></div>
         <div class="dsec off" id="secimg"><span class="lbl">Imaging</span>
@@ -30934,7 +31230,7 @@ function buildShell(root) {
       { id: 'imaging', label: 'Imaging', detail: 'X-ray, CT, MRI and ultrasound', disabled: !featureAvailability.imaging },
       { id: 'pathology', label: 'Pathology cases', detail: 'Choose a case for this specimen', disabled: secCases.classList.contains('hide') },
       { id: 'layers', label: 'Layers', detail: 'Review the current dissection depth', disabled: secDepth.classList.contains('hide') },
-      { id: 'physiology', label: 'Physiology', detail: 'Start or pause the live simulation', disabled: !featureAvailability.physiology },
+      { id: 'physiology', label: 'Physiology', detail: featureAvailability.physiology ? 'Optional circulation demonstration' : 'Available for frog and heart only', disabled: !featureAvailability.physiology },
       { id: 'tutor', label: 'Ask tutor', detail: 'A question about your dissection', disabled: !featureAvailability.tutor },
       { id: 'tutor-answer', label: 'Answer tutor', detail: 'Respond to the current question', disabled: !featureAvailability.tutor },
       { id: 'tutor-hint', label: 'Tutor hint', detail: 'Get a clue for the current question', disabled: !featureAvailability.tutor },
@@ -31025,7 +31321,10 @@ function buildShell(root) {
   function applyBleed(i, emit) {
     bleedIdx = Math.max(0, Math.min(SHELL_BLEED.length - 1, i | 0));
     const b = SHELL_BLEED[bleedIdx];
-    bleedSeg.querySelectorAll('button').forEach((x, n) => x.classList.toggle('on', n === bleedIdx));
+    bleedSeg.querySelectorAll('button').forEach((x, n) => {
+      x.classList.toggle('on', n === bleedIdx);
+      x.setAttribute('aria-pressed', String(n === bleedIdx));
+    });
     bleedNote.textContent = b.note;
     bloodChip.dataset.k = String(bleedIdx);
     bloodChip.querySelector('span').textContent = 'Blood · ' + b.label;
@@ -31044,6 +31343,39 @@ function buildShell(root) {
       return;
     }
     applyBleed(bleedIdx, false);
+  }
+
+  drawer.querySelectorAll('[data-preparation]').forEach(button => {
+    button.onclick = () => fire('preparation', button.dataset.preparation);
+  });
+  drawer.querySelectorAll('[data-depth]').forEach(button => {
+    button.onclick = () => {
+      const depth = Number(button.dataset.depth);
+      drawer.querySelectorAll('[data-depth]').forEach(choice => {
+        const selected = choice === button;
+        choice.classList.toggle('on', selected);
+        choice.setAttribute('aria-pressed', String(selected));
+      });
+      drawer.querySelector('#cutdepthnote').textContent = depth < .3
+        ? 'Scores the surface. A shallow score does not release a tissue flap.'
+        : depth > .8 ? 'A deep cut can damage a nearby underlying structure. Relative teaching depth.'
+          : 'A controlled cut can open the current layer. Depth is relative, not a measurement.';
+      fire('blade-depth', depth);
+    };
+  });
+  function setPreparation({ mode = 'preserved', specimenId = 'frog', selection = 'preserved' } = {}) {
+    drawer.querySelectorAll('[data-preparation]').forEach(button => {
+      const selected = mode !== 'circulation' && button.dataset.preparation === selection;
+      button.classList.toggle('on', selected);
+      button.setAttribute('aria-pressed', String(selected));
+    });
+    const note = mode === 'circulation'
+      ? 'Circulation demonstration is running. Pulsing flow is simulated; this is not preserved-specimen behavior.'
+      : mode === 'preserved'
+        ? 'Fixed tissue: localized residue at accepted cuts, without active bleeding or a heartbeat.'
+        : 'Excised tissue: brief, passive seepage at accepted cuts. No heartbeat or pressurized flow.';
+    drawer.querySelector('#preparationnote').textContent = note + (specimenId === 'cockroach'
+      ? ' Cockroach hemolymph is nearly clear; a pale tint makes it visible here.' : ' Fluid amounts and tissue motion are illustrative.');
   }
 
   /* level */
@@ -31171,7 +31503,7 @@ function buildShell(root) {
   function setPhysio(s) {
     s = s || {};
     if (!s.running) { physline.classList.remove('on'); return; }
-    const bits = ['<b>Physiology live</b>'];
+    const bits = ['<b>Circulation demo</b>'];
     if (typeof s.hr === 'number') bits.push('HR ' + Math.round(s.hr));
     if (s.bp != null) {
       const bp = typeof s.bp === 'string' ? s.bp
@@ -31587,7 +31919,7 @@ function buildShell(root) {
     // Phase 2–4 surfaces. Every one is safe to call with null/undefined, and
     // the app boots identically if main.js never calls any of them.
     setVignette, askInput, inputOpen, setCases, setLevel, setXR,
-    setImaging, setBleeding, setStrata, setPhysio, setKeymap, setActions,
+    setImaging, setBleeding, setPreparation, setStrata, setPhysio, setKeymap, setActions,
     setFeatureAvailability, showFeatureChoices, featureOpen, closeFeatures, revealConsole,
     // Reopen the specimen chooser. The cold open auto-loads the frog and hides
     // the picker, so this is how the heart (and any future specimen) stays
@@ -31654,6 +31986,8 @@ let histology = null, imaging = null, pathology = null;
 // Phase 4 — alive.
 let physio = null, tutor = null, xr = null, zoomverse = null;
 let specimenId = null;
+let specimenPreparation = 'preserved';
+let bladeDepth = 0.55;
 let examinedPartId = null, examinationReturnFocus = null;
 let lastT = 0;
 let preparedFrog = null, preparedInstall = null, installExterior = null;
@@ -32296,7 +32630,7 @@ function onEvent(evt) {
     if (inc && part) {
       cutting.open({
         partId: part.id, mesh: part.mesh, points: inc.points,
-        system: part.system, depth: 0.55, amount: 0.62,
+        system: part.system, depth: inc.depth ?? 0.55, amount: 0.62,
         rest: cutRest.get(part.id),
       });
     }
@@ -32306,15 +32640,17 @@ function onEvent(evt) {
     cutting.releaseSurface(evt.partId);
     cutting.remove(evt.partId);
   }
+  if (evt.kind === 'peel') blood?.clearPart?.(evt.partId);
 
   // Injury bleeds harder than a clean cut, and a torn artery is not a graze.
-  if (blood && dissection && dissection.contact && /damage|incise/.test(evt.kind)) {
+  if (blood && dissection && dissection.contact && evt.kind === 'damage' && !evt.meta?.refused) {
     const c = dissection.contact;
-    const hard = evt.kind === 'damage';
-    blood.bleed({
-      point: c.point, normal: c.normal, partId: evt.partId || c.partId,
-      severity: hard ? 0.9 : 0.5,
-      kind: hard ? (/heart|aort|arter/.test(evt.partId || '') ? 'arterial' : 'venous') : 'capillary',
+    const injuryPoint = evt.meta?.point || dissection.state.incisions.get(evt.partId)?.points.at(-1);
+    // A damaged deeper structure is not necessarily at the surface contact.
+    // Do not put its blood on whichever organ the cursor happens to be over.
+    if (injuryPoint && c.partId === evt.partId) blood.bleed({
+      point: injuryPoint, normal: c.normal, partId: evt.partId, severity: 0.8,
+      kind: /aort|arter/.test(evt.partId || '') ? 'arterial' : 'venous',
     });
   }
 
@@ -32547,6 +32883,20 @@ function setPhysiology(on) {
   // corner; shell.js reads this class to pick its floor.
   document.body.classList.toggle('physio-on', !!on);
   if (shell.setPhysio) shell.setPhysio({ running: on });
+  refreshSpecimenPreparation();
+}
+
+function refreshSpecimenPreparation() {
+  const mode = physio?.running() ? 'circulation' : specimenPreparation;
+  blood?.setContext?.(specimenId, mode);
+  shell?.setPreparation?.({ mode, specimenId, selection: specimenPreparation });
+}
+
+function setSpecimenPreparation(mode) {
+  specimenPreparation = mode === 'fresh' ? 'fresh' : 'preserved';
+  // Selecting an excised specimen condition always leaves the pumping demo.
+  if (physio?.running()) setPhysiology(false);
+  refreshSpecimenPreparation();
 }
 
 function doAction(id, partId) {
@@ -32703,6 +33053,11 @@ function loadSpecimen(id) {
   if (constraints) { constraints.dispose(); constraints = null; }
   if (pathology) { pathology.dispose(); pathology = null; }
   if (physio) { physio.dispose(); physio = null; }
+  document.body.classList.remove('physio-on');
+  shell.setPhysio?.({ running: false });
+  sfx?.setBreathing(false);
+  sfx?.setPhaseSource(null);
+  blood?.setPhaseSource(null);
   if (surface) { surface.dispose(); surface = null; }
   if (strata) { strata.dispose(); strata = null; }
   if (cutting) cutting.clear();
@@ -32802,11 +33157,18 @@ function loadSpecimen(id) {
       if (cutting) cutting.restore(partId, saved?.cut, cutRest.get(partId));
     },
     onHistoryChange: updateUndoState,
-    onCutProgress: (part, points) => {
-      if (!cutting) return;
-      if (cutting.has(part.id)) cutting.grow(part.id, points);
-      else cutting.open({ partId: part.id, mesh: part.mesh, points,
-        system: part.system, depth: 0.55, amount: 0.62, rest: cutRest.get(part.id) });
+    getCutDepth: () => bladeDepth,
+    onCutProgress: (part, points, depth = 0.55) => {
+      if (cutting?.has(part.id) && cutting.depthOf(part.id) === depth) cutting.grow(part.id, points);
+      else cutting?.open({ partId: part.id, mesh: part.mesh, points,
+        system: part.system, depth, amount: 0.62, rest: cutRest.get(part.id) });
+      const contact = dissection?.contact;
+      // Only an accepted stroke that has advanced through tissue creates fluid.
+      // Hovering, jitter, a refused cut, and holding the blade still do not.
+      if (blood && contact?.partId === part.id) blood.bleed({
+        point: points[points.length - 1], normal: contact.normal,
+        partId: part.id, severity: 0.45, kind: 'capillary',
+      });
     },
   });
   dissection.setTool(currentTool === 'swab' ? 'probe' : currentTool);
@@ -32828,7 +33190,7 @@ function loadSpecimen(id) {
     try { pathology = createPathology(THREE, parts, id); }
     catch (e) { console.warn('pathology failed', e); pathology = null; }
   }
-  if (typeof createPhysiology === 'function') {
+  if (typeof createPhysiology === 'function' && ['frog', 'heart'].includes(id)) {
     try {
       physio = createPhysiology(THREE, parts, id);
       physio.onEvent(onEvent);
@@ -32844,6 +33206,7 @@ function loadSpecimen(id) {
   }
 
   shell.setSpecimen(spec, parts);
+  refreshSpecimenPreparation();
   if (tutor) tutor.setSpecimen(id);
   if (strata && shell.setStrata) shell.setStrata(strata.stack, 0);
   if (shell.setVignette) shell.setVignette(null);
@@ -32978,12 +33341,6 @@ function tick(t) {
 
   if (blood) {
     const c = !scanning && dissection ? dissection.contact : null;
-    if (c && input.gripping && currentTool === 'scalpel') {
-      blood.bleed({
-        point: c.point, normal: c.normal, partId: c.partId,
-        severity: 0.35 + input.grip * 0.45, kind: 'capillary',
-      });
-    }
     if (c && input.gripping && currentTool === 'swab') blood.swab(c.point, 0.9);
     blood.update(dt);
   }
@@ -33137,7 +33494,11 @@ function onKey(e) {
   if (e.key === '[' || e.key === ']') {
     const d = e.key === '[' ? -1 : 1;
     if (scanning) imaging.setSlice(imaging.slice + d * 0.02);
-    else if (blood) blood.setIntensity(Math.max(0, Math.min(1, blood.intensity + d * 0.25)));
+    else if (blood) {
+      blood.setIntensity(Math.max(0, Math.min(1, blood.intensity + d * 0.25)));
+      blood.setEnabled(blood.intensity > 0);
+      shell.setBleeding({ intensity: blood.intensity, enabled: blood.enabled });
+    }
     return;
   }
   if (k === 'w' && scanning) { imaging.cycleWindow(); refreshImagingControls(); return; }
@@ -33156,7 +33517,9 @@ function onKey(e) {
     return;
   }
   if (k === 'b' && blood) {
+    if (!blood.enabled && blood.intensity <= 0) blood.setIntensity(0.55);
     blood.setEnabled(!blood.enabled);
+    shell.setBleeding({ intensity: blood.intensity, enabled: blood.enabled });
     shell.say(blood.enabled ? 'Bleeding on.' : 'Bleeding off — a bloodless field.');
     return;
   }
@@ -33402,6 +33765,8 @@ async function startPreparedApp() {
   if (shell.setActions) shell.setActions([], doAction);
   shell.on('level', (l) => { if (tutor) tutor.setLevel(l); });
   shell.on('bleeding', (k) => { if (blood) { blood.setIntensity(k); blood.setEnabled(k > 0); } });
+  shell.on('preparation', setSpecimenPreparation);
+  shell.on('blade-depth', depth => { if ([0.18, 0.55, 0.9].includes(depth)) bladeDepth = depth; });
   shell.on('imaging', (m) => { if (imaging) { imaging.setMode(m); refreshImagingControls(); } });
   shell.on('imaging-window', () => { if (imaging && imaging.mode() !== 'off') { imaging.cycleWindow(); refreshImagingControls(); } });
   shell.on('imaging-weighting', () => {

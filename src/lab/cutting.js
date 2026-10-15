@@ -78,9 +78,8 @@
  * be examined on. Order is ALWAYS outside-in, i.e. the order the blade meets them.
  */
 const CUT_STRATA = {
-  // Vertebrate integument. The frog's is thin, only lightly keratinised, and its
-  // dermis holds mucous and granular (poison) glands rather than much fat — but
-  // the column reads the same: epidermis, dermis, subcutis, deep fascia, muscle.
+  // Generic integument fallback. Authored frog exteriors use amphibianSkin
+  // below rather than inheriting this mammalian-style teaching column.
   skin: [
     { t: 0.07, c: 0xeadcc4, n: 'Epidermis' },              // keratinised, pale, avascular
     { t: 0.13, c: 0xd5817c, n: 'Papillary dermis' },       // capillary-rich, bright pink
@@ -88,6 +87,26 @@ const CUT_STRATA = {
     { t: 0.28, c: 0xe7c263, n: 'Subcutis (hypodermis)' },  // adipose / lymph sac, buttery
     { t: 0.07, c: 0xedeae0, n: 'Deep fascia' },            // the white glint; it is a mirror
     { t: 0.25, c: 0x8c2b26, n: 'Skeletal muscle' },        // dark red
+  ],
+  // The frog skin is its own removable surface. Muscle is a separate body-wall
+  // part; do not paint muscle or a mammalian fat pad into this skin incision.
+  // Fractions are illustrative display spacing, not measured histology.
+  amphibianSkin: [
+    { t: 0.10, c: 0xd8cdad, n: 'Epidermis' },
+    { t: 0.36, c: 0xc6aa98, n: 'Spongy dermis (gland-bearing)' },
+    { t: 0.34, c: 0xd2c8b2, n: 'Compact dermis' },
+    { t: 0.08, c: 0xd1c6ac, n: 'Hypodermis (loose connective tissue)' },
+    { t: 0.12, c: 0xa68f79, n: 'Subcutaneous lymph space' },
+  ],
+  cuticle: [
+    { t: 0.14, c: 0x604331, n: 'Epicuticle' },
+    { t: 0.39, c: 0xa27442, n: 'Exocuticle' },
+    { t: 0.37, c: 0xc4ab7a, n: 'Endocuticle' },
+    { t: 0.10, c: 0xc8b6a0, n: 'Epidermis' },
+  ],
+  membrane: [
+    { t: 0.25, c: 0xe7dfd0, n: 'Serosal surface' },
+    { t: 0.75, c: 0xc7bda7, n: 'Supporting connective tissue' },
   ],
   fat: [
     { t: 0.05, c: 0xe8e4d6, n: 'Fascial film' },
@@ -164,6 +183,24 @@ const CUT_STRATA = {
 const CUT_OPEN_MS = 500;        // tissue does not snap open
 const CUT_EPS = 0.010;          // lining stand-off along the surface normal
 const CUT_GAPE_MAX = 0.12;      // world units of lateral parting at amount = 1
+// Art-directed relative responses. These are display units, not millimetres,
+// material measurements, or a tissue-mechanics solver. A membrane should stay
+// thin; cuticle should keep a firm edge; a nerve must not receive a red pool.
+const CUT_PROFILES = {
+  skin:          { min: .14, max: .44, gape: 1,    roll: .20, run: 1.15, rough: .55, wet: .65, relief: .003, pattern: 'grain' },
+  amphibianSkin: { min: .06, max: .24, gape: .80,  roll: .14, run: 1.15, rough: .50, wet: .70, relief: .003, pattern: 'grain' },
+  fat:           { min: .10, max: .38, gape: .85,  roll: .13, run: 1.25, rough: .64, wet: .35, relief: .006, pattern: 'lobules' },
+  fascia:        { min: .025,max: .12, gape: .55,  roll: .07, run: 1.2,  rough: .42, wet: .55, relief: .002, pattern: 'fibres' },
+  membrane:      { min: .018,max: .07,gape: .45,  roll: .05, run: 1.25, rough: .35, wet: .60, relief: .001, pattern: 'fibres' },
+  muscle:        { min: .12, max: .44, gape: 1.05, roll: .10, run: 1.0,  rough: .54, wet: .55, relief: .005, pattern: 'fibres' },
+  serous:        { min: .08, max: .30, gape: .75,  roll: .09, run: 1.15, rough: .47, wet: .65, relief: .004, pattern: 'pores' },
+  parenchyma:    { min: .14, max: .46, gape: .65,  roll: .05, run: 1.0,  rough: .57, wet: .60, relief: .005, pattern: 'grain' },
+  gut:           { min: .07, max: .28, gape: 1.05, roll: .16, run: 1.1,  rough: .50, wet: .70, relief: .005, pattern: 'folds' },
+  vessel:        { min: .05, max: .21, gape: .80,  roll: .12, run: 1.1,  rough: .43, wet: .70, relief: .002, pattern: 'fibres' },
+  bone:          { min: .06, max: .25, gape: .12,  roll: 0,   run: .8,   rough: .78, wet: .12, relief: .004, pattern: 'pores' },
+  nerve:         { min: .035,max: .14, gape: .35,  roll: .03, run: 1.0,  rough: .52, wet: .35, relief: .002, pattern: 'fibres' },
+  cuticle:       { min: .025,max: .12, gape: .18,  roll: 0,   run: .8,   rough: .69, wet: .10, relief: .002, pattern: 'grain' },
+};
 const CUT_RN = 0.42;            // reject the far side of a closed shell
 // These are removable access films, not structural body walls or head-bearing
 // skin. Retaining half a transparent sac with an opaque rim makes a false hoop.
@@ -207,7 +244,13 @@ function CUT_inferTissue(opts) {
   const sys = String(opts.system || '');
   const both = id + ' ' + sys;
 
-  if (/skin|integument|derm/i.test(both)) return 'skin';
+  if (/exoskeleton|cuticle|elytr|tergite|sternite/i.test(id)) return 'cuticle';
+  if (/skin/i.test(id) && (opts.specimenId === 'frog' || opts.mesh?.userData?.exteriorTissue === 'frog-hide'
+      || opts.mesh?.userData?.preparedExterior?.specimenId === 'frog')) return 'amphibianSkin';
+  if (/pericardium|epicardium|pleura|serosa/i.test(id)) return 'membrane';
+  // A broad system hint must not turn subcutaneous fascia into skin merely
+  // because both structures belong to the integumentary system.
+  if (/skin|derm/i.test(id)) return 'skin';
   if (/fat|adipose/i.test(id)) return 'fat';
   if (/vertebra|skeletal|bone|femur|skull|cartilage|sternum|girdle/i.test(both)) return 'bone';
   if (/nerve|sciatic|ganglion|neural|vagus|spinal/i.test(id)) return 'nerve';
@@ -221,6 +264,7 @@ function CUT_inferTissue(opts) {
   if (/muscle|wall|ventricle|atrium|auricle|myocard|heart|papillar|septum|band|conus|muscular/i.test(both)) return 'muscle';
 
   // Weak system-level hint, last, before the default.
+  if (/skin|integument|derm/i.test(sys)) return 'skin';
   if (/digestive/i.test(sys)) return 'gut';
   if (/circulatory/i.test(sys)) return 'vessel';
   if (/urogenital/i.test(sys)) return 'parenchyma';
@@ -231,18 +275,21 @@ function CUT_inferTissue(opts) {
 // a HARD colour boundary (the shared-depth pair collapses to a zero-area quad the
 // GPU discards, and the two colours never interpolate into each other). A gradient
 // here would turn six named layers into one brown smear.
-function CUT_ringPlan(strata, hi) {
+function CUT_ringPlan(strata, hi, reach = 1) {
   const rings = [];
+  const total = strata.reduce((sum, layer) => sum + Math.max(1e-4, layer.t), 0) || 1;
   let acc = 0;
   for (let k = 0; k < strata.length; k++) {
-    const t = Math.max(1e-4, strata[k].t);
-    rings.push({ phi: acc, hex: strata[k].c });
-    if (hi && t > 0.18) rings.push({ phi: acc + t * 0.5, hex: strata[k].c });
+    const t = Math.max(1e-4, strata[k].t) / total;
+    if (acc >= reach) break;
+    const end = Math.min(reach, acc + t);
+    const subdivisions = hi ? 4 : 2;
+    for (let j = 0; j <= subdivisions; j++) {
+      const depth = acc + (end - acc) * j / subdivisions;
+      rings.push({ phi: depth / reach, depth, hex: strata[k].c, layer: k });
+    }
     acc += t;
-    rings.push({ phi: acc, hex: strata[k].c });
   }
-  const total = acc || 1;
-  for (let i = 0; i < rings.length; i++) rings[i].phi /= total;
   return rings;
 }
 
@@ -285,8 +332,8 @@ export function createCutting(THREE, scene) {
     vertexColors: true,
     roughness: 0.55,
     metalness: 0,
-    // A cut face is WET. The clearcoat is the single biggest cue that this is
-    // living tissue and not a painted decal.
+    // A moist cut face catches light. Each tissue overrides these defaults;
+    // a prepared specimen is not automatically living or perfused.
     clearcoat: 0.9,
     clearcoatRoughness: 0.18,
     sheen: 0.45,
@@ -438,7 +485,7 @@ export function createCutting(THREE, scene) {
   // reason they stay welded together.
   function buildProfile(rec) {
     const K = rec.K, prof = rec.prof;
-    const D = rec.depthMax, G = CUT_GAPE_MAX, RS = rec.troughRun;
+    const D = rec.depthMax, G = CUT_GAPE_MAX * rec.profile.gape, RS = rec.troughRun;
     for (let i = 0; i < K; i++) {
       const s = K > 1 ? i / (K - 1) : 0.5;
       const sn = Math.sin(Math.PI * s);
@@ -447,7 +494,7 @@ export function createCutting(THREE, scene) {
       prof[i * 4] = G * tw;                                  // gape
       prof[i * 4 + 1] = D * td;                              // depth
       prof[i * 4 + 2] = RS * (0.30 + 0.70 * tw);             // trough half-run
-      prof[i * 4 + 3] = 0.20 * D * td;                       // eversion amplitude
+      prof[i * 4 + 3] = rec.profile.roll * D * td;            // eversion amplitude
     }
   }
 
@@ -617,6 +664,7 @@ export function createCutting(THREE, scene) {
     const colr = new Float32Array(vcount * 3);
     const O = rec.O, N = rec.N, B = rec.B, prof = rec.prof;
     const RP = rec.pushRun;
+    const profile = rec.profile;
 
     for (let i = 0; i < K; i++) {
       const i3 = i * 3;
@@ -630,7 +678,19 @@ export function createCutting(THREE, scene) {
         const phi = rings[r].phi;
         const ur = rs * CUT_fallInv(phi);                 // rest cross-track for this DEPTH
         const lat = side * (ur + g * CUT_fall(ur / RP));  // ...displaced exactly as the parent is
-        const hgt = -d * phi + ev * CUT_bump(ur / RP) + CUT_EPS;
+        // Small, deterministic relief breaks the smooth manufactured channel.
+        // It fades at the outer lip and floor, and stays below the stand-off;
+        // those joins remain welded to the original displacement field.
+        const along = i / Math.max(1, K - 1) * rec.length;
+        const across = rings[r].depth;
+        let texture;
+        if (profile.pattern === 'fibres') texture = Math.sin(along * 31 + across * 5 + side * .7);
+        else if (profile.pattern === 'folds') texture = Math.sin(along * 14 + across * 10 + side * .5);
+        else if (profile.pattern === 'lobules') texture = Math.sin(along * 18 + side) * Math.sin(across * 23);
+        else if (profile.pattern === 'pores') texture = Math.pow(CUT_hash(i * .73 + side, across * 37), 3) * 2 - 1;
+        else texture = CUT_hash(i * .7 + side * 3.1, across * 19) * 2 - 1;
+        const relief = texture * profile.relief * Math.sin(Math.PI * phi) * Math.sin(Math.PI * i / (K - 1));
+        const hgt = -d * phi + ev * CUT_bump(ur / RP) + CUT_EPS + relief;
         // Closed state: the same ring collapsed to a hairline on the surface.
         const lat0 = side * ur * 0.05;
 
@@ -643,16 +703,13 @@ export function createCutting(THREE, scene) {
         delta[o + 1] = O[i3 + 1] + B[i3 + 1] * lat + N[i3 + 1] * hgt - by;
         delta[o + 2] = O[i3 + 2] + B[i3 + 2] * lat + N[i3 + 2] * hgt - bz;
 
-        // Colour. Ambient occlusion by depth is not decoration — without it the
-        // bands read as a painted stripe. Light does not reach the floor of a
-        // wound, and blood pools there, so the column also drifts venous with
-        // depth.
+        // Occlusion and tissue texture, without inventing a universal blood
+        // pool. The blood system owns blood, including the preparation mode.
+        // Nerve, cuticle and connective tissue keep their own cut-face colours.
         _c.setHex(rings[r].hex);
-        const ao = 0.30 + 0.70 * Math.pow(1 - phi, 1.3);
-        const mott = 1 + (CUT_hash(i * 0.7 + 3.1, r * 1.9) - 0.5) * 0.16;
-        let rr = _c.r * ao * mott, gg = _c.g * ao * mott, bb = _c.b * ao * mott;
-        const pool = phi * phi * 0.22;
-        rr += (0.055 - rr) * pool; gg += (0.010 - gg) * pool; bb += (0.013 - bb) * pool;
+        const ao = 0.48 + 0.52 * Math.pow(1 - phi, 1.15);
+        const mott = 1 + texture * .12;
+        const rr = _c.r * ao * mott, gg = _c.g * ao * mott, bb = _c.b * ao * mott;
         colr[o] = rr; colr[o + 1] = gg; colr[o + 2] = bb;
       }
     }
@@ -674,6 +731,10 @@ export function createCutting(THREE, scene) {
     geo.computeVertexNormals();
     geo.computeBoundingSphere();
     geo.computeBoundingBox();
+    geo.userData.cutFace = {
+      tissue: rec.tissue, depth: rec.depth, schematic: true,
+      exposedStrata: [...new Set(rings.map(ring => rec.strata[ring.layer].n))],
+    };
 
     rec.linBase = base;
     rec.linDelta = delta;
@@ -694,6 +755,11 @@ export function createCutting(THREE, scene) {
       rec.lining = m;
       rec.group.add(m);
     }
+    rec.lining.material.roughness = profile.rough;
+    rec.lining.material.clearcoat = profile.wet;
+    rec.lining.material.clearcoatRoughness = .24;
+    rec.lining.material.sheen = .18;
+    rec.lining.material.sheenColor.setHex(0xe7dac5);
     rec.linDirty = true;
   }
 
@@ -735,7 +801,7 @@ export function createCutting(THREE, scene) {
     rec.N = new Float32Array(rec.K * 3);
     rec.B = new Float32Array(rec.K * 3);
     rec.prof = new Float32Array(rec.K * 4);
-    rec.rings = CUT_ringPlan(CUT_STRATA[rec.tissue] || CUT_STRATA.muscle, hi);
+    rec.rings = CUT_ringPlan(rec.strata, hi, rec.reach);
 
     if (!buildFrames(rec, rec.local)) return false;
     buildProfile(rec);
@@ -881,14 +947,15 @@ export function createCutting(THREE, scene) {
     rec.pos = geo.attributes.position;
     rec.mesh = opts.mesh;
 
-    rec.tissue = CUT_inferTissue({ partId, tissue: opts.tissue, system: opts.system });
-    // A frog's body wall is millimetres thick; a liver is not. depth 0..1 spans a
-    // shallow score to a full-thickness incision through to the layer beneath.
-    const depth = opts.depth == null ? 0.55 : CUT_clamp(opts.depth, 0, 1);
-    rec.depthMax = 0.14 + depth * 0.30;
-    rec.troughRun = rec.depthMax * 1.15;    // ~40 degree wall: steep enough to be a
-                                            // cut, shallow enough that the bands are
-                                            // not edge-on to a top-down camera.
+    rec.tissue = CUT_inferTissue({ ...opts, partId });
+    rec.strata = CUT_STRATA[rec.tissue] || CUT_STRATA.muscle;
+    rec.profile = CUT_PROFILES[rec.tissue] || CUT_PROFILES.muscle;
+    // Depth is a relative teaching control, not measured blade penetration.
+    // Only reached bands appear: a shallow skin score cannot reveal muscle.
+    rec.depth = opts.depth == null ? 0.55 : CUT_clamp(opts.depth, 0, 1);
+    rec.reach = .02 + rec.depth * .98;
+    rec.depthMax = rec.profile.min + rec.depth * (rec.profile.max - rec.profile.min);
+    rec.troughRun = rec.depthMax * rec.profile.run;
     rec.pushRun = rec.troughRun * 2.1;      // tension distorts far wider than it parts
     rec.local = restSpace(rec, toLocal(rec, opts.points));
     if (rec.local.length < 2 || !rebuild(rec)) {
@@ -1173,7 +1240,7 @@ export function createCutting(THREE, scene) {
   function snapshot(partId) {
     const rec = wounds.get(partId);
     return rec ? { mesh: rec.mesh, local: rec.local.map(p => p.clone()), rest: rec.rest,
-      tissue: rec.tissue, depth: (rec.depthMax - 0.14) / 0.30, amount: rec.kTo } : null;
+      tissue: rec.tissue, depth: rec.depth, amount: rec.kTo } : null;
   }
 
   function removeRemnant(partId) {
@@ -1321,6 +1388,7 @@ export function createCutting(THREE, scene) {
     open, grow, gape, close, releaseSurface, remove, snapshot, restore, update, setQuality, clear, dispose,
     get count() { return wounds.size; },
     has: (partId) => wounds.has(partId),
+    depthOf: (partId) => wounds.get(partId)?.depth,
     // Read-only peek for the shell / viva: which strata the blade actually
     // crossed, outermost first. Returns NAMED bands — a bare list of hex ints
     // (which is what this used to hand back) tells a student nothing and cannot
@@ -1332,8 +1400,7 @@ export function createCutting(THREE, scene) {
     strataOf: (partId) => {
       const rec = wounds.get(partId);
       if (!rec) return null;
-      const col = CUT_STRATA[rec.tissue] || CUT_STRATA.muscle;
-      const reach = CUT_clamp((rec.depthMax - 0.14) / 0.30, 0, 1);
+      const col = rec.strata;
       let acc = 0, total = 0;
       for (let i = 0; i < col.length; i++) total += col[i].t;
       const out = [];
@@ -1346,7 +1413,7 @@ export function createCutting(THREE, scene) {
           c: col[i].c,
           fraction: +(col[i].t / (total || 1)).toFixed(3),
           // Did the blade open this band, or is it still intact under the floor?
-          breached: from < 0.02 + reach * 0.98,
+          breached: from < rec.reach,
         });
       }
       out.tissue = rec.tissue;
