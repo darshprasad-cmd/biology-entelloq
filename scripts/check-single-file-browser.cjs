@@ -384,7 +384,7 @@ async function runSuite(browser, mode, url) {
       }
     }
     run.evidenceTables = evidenceChecks;
-    run.checks.push('Phone evidence tables keep row labels and every selected result column readable together in both themes, with native keyboard scrolling and unchanged study state.');
+    run.checks.push('Phone evidence tables keep row labels and every selected result column readable together in both themes, with native keyboard scrolling and unchanged authored table content.');
     await page.setViewportSize({ width: 390, height: 844 });
     opened = await section(page, url, 'labs/photosynthesis-rate', '#lab-record');
     await noOverflow(page, [['shell', opened.shell], ['notebook', opened.frame]], 'notebook mobile', run);
