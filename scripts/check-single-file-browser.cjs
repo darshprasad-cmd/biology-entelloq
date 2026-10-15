@@ -11,6 +11,7 @@ const { pathToFileURL } = require('node:url');
 const { createRequire } = require('node:module');
 const { checkLibrarySearch } = require('../tests/library-search-browser.cjs');
 const { checkLibraryAnswer } = require('../tests/library-answer-browser.cjs');
+const { checkEvidenceTable } = require('../tests/evidence-tables-browser.cjs');
 const root = path.resolve(__dirname, '..');
 const modules = process.env.BIOLOGY_PLAYWRIGHT_MODULES || path.resolve(root, '../biology-entelloq/node_modules');
 const { chromium } = createRequire(path.join(modules, '__single_file_check__.cjs'))('playwright');
@@ -368,6 +369,23 @@ async function runSuite(browser, mode, url) {
       await noOverflow(page, [['shell', opened.shell], [key, opened.frame]], key + ' mobile', run);
       if (key === 'learn') run.checks.push('Learn search mobile: ' + await checkLibrarySearch(page, opened.frame));
     }
+    const evidenceChecks = [];
+    for (const [width, topic] of [[320, 'recombinant-dna'], [320, 'plant-transport'], [390, 'active-transport']]) {
+      await page.setViewportSize({ width, height: 844 });
+      opened = await section(page, url, 'learn/topic/' + topic + '/advanced', '[data-depth-topic="' + topic + '"]');
+      for (const theme of ['dark', 'light']) {
+        if (await opened.shell.locator('html').getAttribute('data-theme') !== theme) {
+          await opened.shell.locator('#exploreBtn').click();
+          await opened.shell.locator('#exploreTheme').click();
+          await opened.shell.locator('#exploreClose').click();
+        }
+        await opened.frame.waitForFunction(theme => document.documentElement.dataset.theme === theme, theme);
+        evidenceChecks.push({ width, topic, theme, result: await checkEvidenceTable(page, opened.frame) });
+      }
+    }
+    run.evidenceTables = evidenceChecks;
+    run.checks.push('Phone evidence tables keep row labels and every selected result column readable together in both themes, with native keyboard scrolling and unchanged study state.');
+    await page.setViewportSize({ width: 390, height: 844 });
     opened = await section(page, url, 'labs/photosynthesis-rate', '#lab-record');
     await noOverflow(page, [['shell', opened.shell], ['notebook', opened.frame]], 'notebook mobile', run);
     await screenshot(page, mode + '-notebook-mobile');
