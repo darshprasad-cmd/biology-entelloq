@@ -1,0 +1,48 @@
+{
+  "base": "http://127.0.0.1:3039",
+  "complete": true,
+  "viewports": [
+    {
+      "width": 1600,
+      "scroll": 1600,
+      "sections": 10,
+      "images": 13
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "sections": 10,
+      "images": 13
+    },
+    {
+      "width": 360,
+      "scroll": 360,
+      "sections": 10,
+      "images": 13
+    },
+    {
+      "width": 768,
+      "scroll": 768,
+      "sections": 10,
+      "images": 13
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "sections": 10,
+      "images": 13
+    },
+    {
+      "width": 1920,
+      "scroll": 1920,
+      "sections": 10,
+      "images": 13
+    }
+  ],
+  "checks": [
+    "Six widths: original heading, four teasers, ten sections, no pinned scene, complete images, no overflow, original-color founder, valid anchors, search, FAQ and unchanged enzyme rates.",
+    "Keyboard skip/focus, persisted global pause, offscreen hero animation suspension, returning hero resumes, immediate app Home entry."
+  ],
+  "errors": [],
+  "failedAssets": []
+}

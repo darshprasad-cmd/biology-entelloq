@@ -6,13 +6,16 @@ import vm from 'node:vm';
 
 const root = new URL('../', import.meta.url);
 const html = fs.readFileSync(new URL('index.html', root), 'utf8').replace(/\r\n/g, '\n');
-const script = id => html.match(new RegExp(`<script id="${id}">([\\s\\S]*?)<\\/script>`))[1];
+const script = id => id === 'biology-landing-motion'
+  ? fs.readFileSync(new URL('src/launch/restored-motion.js', root), 'utf8')
+  : html.match(new RegExp(`<script id="${id}">([\\s\\S]*?)<\\/script>`))[1];
 const digest = text => crypto.createHash('sha256').update(text).digest('hex');
 
 function node() {
   return {
     value: '', innerHTML: '', textContent: '', children: [], attributes: {}, events: {}, dataset: {}, disabled: false,
     addEventListener(type, fn) { this.events[type] = fn; },
+    dispatchEvent(event) { this.events[event.type]?.(event); },
     setAttribute(name, value) { this.attributes[name] = value; },
     getAttribute(name) { return this.attributes[name]; },
     append(...children) { this.children.push(...children); },
@@ -43,10 +46,11 @@ function environment({ reduced = false, context = {}, savedMotion = null } = {})
     querySelectorAll: () => [],
     createElement: () => node(),
     addEventListener(type, fn) { this.events[type] = fn; },
+    dispatchEvent(event) { this.events[event.type]?.(event); },
   };
   let nextFrame = 0;
   const sandbox = vm.createContext({
-    document, innerHeight: 800, devicePixelRatio: 1,
+    document, Event, innerHeight: 800, devicePixelRatio: 1,
     matchMedia: query => query.includes('prefers-reduced-motion') ? preference : { matches: true },
     requestAnimationFrame(fn) { const id = ++nextFrame; callbacks.set(id, fn); return id; },
     cancelAnimationFrame(id) { callbacks.delete(id); },
@@ -56,12 +60,12 @@ function environment({ reduced = false, context = {}, savedMotion = null } = {})
   return { get, document, sandbox, callbacks, preference, globals, stores, styles };
 }
 
-test('cinematic landing has a keyboard main target, actual entry routes and native disclosures', () => {
+test('restored landing has a keyboard main target, actual entry routes and native disclosures', () => {
   assert.equal((html.match(/<main\b/g) || []).length, 1);
   assert.equal((html.match(/<\/main>/g) || []).length, 1);
   assert.match(html, /<a class="pe-skip" href="#pe-main">Skip to content<\/a>/);
   assert.match(html, /<main id="pe-main" tabindex="-1">/);
-  assert.equal((html.match(/<a class="bio-teaser"/g) || []).length, 4);
+  assert.equal((html.match(/<a class="bio-teaser[ "]/g) || []).length, 4);
   assert.equal((html.match(/<details><summary>/g) || []).length, 4);
   assert.match(html, /<div data-bioq-account><\/div>/);
   assert.doesNotMatch(html, /500K|Watch the Film|Real Research\. Real Data/);
@@ -151,16 +155,14 @@ test('global launch pause also stops the scientific preview without changing its
   assert.equal(e.callbacks.size, 1);
 });
 
-test('cell illustration and authentic footage have qualified sources and motion controls', () => {
-  assert.match(html, /generalized animal cell/i);
-  assert.match(html, /Not microscopy/);
-  assert.match(html, /not a biological process/);
-  assert.match(html, /<source media="\(max-width:800px\)" srcset="assets\/launch\/biology-cell-mobile.webp"/);
-  assert.match(html, /<video data-launch-video controls muted playsinline loop preload="none"/);
-  assert.equal((html.match(/data-organelle-button=/g) || []).length, 3);
-  for (const name of ['biology-cell.webp', 'biology-cell-mobile.webp', 'dissection-poster.webp', 'dissection-demo.mp4']) {
-    assert.ok(fs.existsSync(new URL('assets/launch/' + name, root)), name);
-  }
+test('original DNA composition keeps the new cell within a qualified teaser', () => {
+  assert.match(html, /Where Biology/);
+  assert.match(html, /assets\/biology-dna-hero.webp/);
+  assert.match(html, /Illustrative animal cell/);
+  assert.match(html, /ILLUSTRATIVE CELL/);
+  assert.match(html, /structure and scale simplified/);
+  assert.doesNotMatch(html, /id="bio-cell-story"/);
+  assert.ok(fs.existsSync(new URL('assets/launch/biology-cell.webp', root)));
 });
 
 test('search opens an accessible dialog, finds existing learning routes, and skip moves keyboard focus', () => {
@@ -174,6 +176,10 @@ test('search opens an accessible dialog, finds existing learning routes, and ski
   e.get('bio-search-input').events.input();
   assert.equal(e.get('bio-search-results').children.length, 1);
   assert.equal(e.get('bio-search-results').children[0].href, 'app.html#labs');
+  let escapePrevented = false;
+  e.get('bio-search').events.keydown({ key: 'Escape', preventDefault() { escapePrevented = true; } });
+  assert.equal(escapePrevented, true);
+  assert.equal(e.get('bio-search').open, false);
   e.get('bio-search-input').value = '<script>alert(1)</script>';
   e.get('bio-search-input').events.input();
   assert.match(e.get('bio-search-results').children[0].textContent, /^No match yet/);
@@ -196,6 +202,13 @@ test('background motion can be paused persistently and pointer motion is bounded
   [...e.callbacks.values()][0]();
   assert.equal(e.styles.get('--bio-px'), '4.00px');
   assert.equal(e.styles.get('--bio-py'), '-4.00px');
+  e.document.hidden = true;
+  e.document.events.visibilitychange();
+  assert.equal(hero.dataset.motionActive, 'false');
+  assert.equal(e.styles.get('--bio-px'), '0px');
+  e.document.hidden = false;
+  e.document.events.visibilitychange();
+  assert.equal(hero.dataset.motionActive, 'true');
   e.get('bio-motion-toggle').events.click();
   assert.equal(e.get('lnd').dataset.motion, 'paused');
   assert.equal(e.get('bio-motion-toggle').attributes['aria-pressed'], 'true');
