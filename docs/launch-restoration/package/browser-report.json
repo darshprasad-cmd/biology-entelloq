@@ -1,0 +1,19 @@
+{
+  "url": "http://127.0.0.1:3039/dist/index.html",
+  "complete": true,
+  "checks": [
+    "1440: packaged original hero, four teasers, no overflow, first-Escape search close, full-color founder, fragment route, Home entry, Learn ready without overlay.",
+    "390: packaged original hero, four teasers, no overflow, first-Escape search close, full-color founder, fragment route, Home entry, Learn ready without overlay."
+  ],
+  "errors": [],
+  "metrics": [
+    {
+      "width": 1440,
+      "domContentLoadedMs": 230
+    },
+    {
+      "width": 390,
+      "domContentLoadedMs": 215
+    }
+  ]
+}
