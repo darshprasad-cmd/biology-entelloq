@@ -8,6 +8,7 @@ const path = require('node:path');
 const vm = require('node:vm');
 const crypto = require('node:crypto');
 const baseline = require('./fixtures/recombinant-evidence-0aea0f3.json');
+const phylogenyBaseline = require('./fixtures/phylogeny-evidence-e34914e.json');
 const root = path.resolve(__dirname, '..');
 const files = ['topics', 'learning-cards', 'depth-foundations', 'depth-processes', 'extended-core', 'extended-systems', 'depth-study'];
 const id = 'recombinant-dna', prefix = 'bioq.depth-study.v1.';
@@ -203,6 +204,15 @@ test('the entire accepted library changes only the named investigation, derived 
   retained.depth[id].sources = retained.depth[id].sources.filter(source => source.id !== approvedSource.id);
   delete retained.depth[id].investigation;
   delete retained.enrichment[id].workedExample;
+  // Keep this historical checksum intact. The later phylogeny release has an
+  // independent full-library baseline and normalizes only its exact new ref.
+  const phylogenyId = 'phylogenetic-trees', phylogenySource = 'extended-core-phylogenyPrimer';
+  retained.library.sources = retained.library.sources.filter(source => source.id !== phylogenySource);
+  retained.library.topics.find(item => item.id === phylogenyId).visual = plain(phylogenyBaseline.topic.visual);
+  retained.library.topics.find(item => item.id === phylogenyId).sources = plain(phylogenyBaseline.topic.sources);
+  retained.depth[phylogenyId].investigation = plain(phylogenyBaseline.depth.investigation);
+  retained.depth[phylogenyId].sources = plain(phylogenyBaseline.depth.sources);
+  retained.enrichment[phylogenyId].workedExample = plain(phylogenyBaseline.enrichment.workedExample);
   assert.equal(digest(retained), '89c1fbe0b85cf2f4d9872ea7b9f8fe566d640200e34f74b52fb7052707fa6266',
     'Independently derived from accepted 0aea0f3: includes complete HW upgrade, all references, roadmap, six-mode lessons, MCQs and transfer tasks');
 });

@@ -15,6 +15,7 @@ const plain = value => JSON.parse(JSON.stringify(value));
 const signature = task => JSON.stringify([task.question, task.answer, task.rows || []]);
 const closeTo = (actual, expected, label) => assert.ok(Math.abs(actual - expected) < 1e-10, label + ': ' + actual + ' ≠ ' + expected);
 const recombinantBaseline = require('./fixtures/recombinant-evidence-0aea0f3.json');
+const phylogenyBaseline = require('./fixtures/phylogeny-evidence-e34914e.json');
 
 // Captured from the accepted add81f2 release, not reconstructed from the new
 // prompt. These exact strings and rows formed the prior saved-task signature.
@@ -218,6 +219,13 @@ test('all other authored lessons and all MCQs remain identical to the accepted r
   retained.depth['recombinant-dna'].investigation = plain(recombinantBaseline.depth.investigation);
   retained.depth['recombinant-dna'].sources = plain(recombinantBaseline.depth.sources);
   retained.enrichment['recombinant-dna'].workedExample = plain(recombinantBaseline.enrichment.workedExample);
+  // Later phylogeny-only visual/evidence changes have their own exact baseline
+  // and behavioral tests. Restore only those accepted slots for this old hash.
+  retained.topics.find(topic => topic.id === 'phylogenetic-trees').visual = plain(phylogenyBaseline.topic.visual);
+  retained.topics.find(topic => topic.id === 'phylogenetic-trees').sources = plain(phylogenyBaseline.topic.sources);
+  retained.depth['phylogenetic-trees'].investigation = plain(phylogenyBaseline.depth.investigation);
+  retained.depth['phylogenetic-trees'].sources = plain(phylogenyBaseline.depth.sources);
+  retained.enrichment['phylogenetic-trees'].workedExample = plain(phylogenyBaseline.enrichment.workedExample);
   // Only the named investigation, its derived Reason example and the same
   // lesson's references are permitted to change; objectives remain protected.
   delete retained.topics.find(topic => topic.id === id).sources;

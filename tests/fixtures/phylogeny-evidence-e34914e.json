@@ -1,0 +1,207 @@
+{
+  "provenance": {
+    "commit": "e34914e0415b2f2f2254a2bdb1fde9d2c7987427",
+    "sourceFiles": [
+      "src/library/topics.js",
+      "src/library/learning-cards.js",
+      "src/library/depth-foundations.js",
+      "src/library/depth-processes.js",
+      "src/library/extended-core.js",
+      "src/library/extended-systems.js"
+    ],
+    "method": "Captured by evaluating accepted commit sources in a fresh Node vm; one unchanged lesson, not reconstructed from revised content.",
+    "sha256": "8c0d7942d219747f75ae5e6b0e7c747e1ba0a536f37e0901c1a5a77d02dce082"
+  },
+  "topic": {
+    "aliases": [
+      "cladograms",
+      "clades",
+      "sister taxa",
+      "common ancestry"
+    ],
+    "relatedTopics": [
+      "speciation",
+      "natural-selection",
+      "bioinformatics"
+    ],
+    "prerequisites": [
+      "natural-selection"
+    ],
+    "labs": [],
+    "difficulty": "school",
+    "status": "complete",
+    "curriculumTags": [
+      "Foundation",
+      "CBSE / ICSE",
+      "NEET",
+      "AP Biology",
+      "A-Level",
+      "IB",
+      "Introductory University"
+    ],
+    "sources": [
+      "extended-core-trees"
+    ],
+    "id": "phylogenetic-trees",
+    "title": "Phylogenetic Trees",
+    "category": "evolution",
+    "summary": "Read evolutionary relationships by common ancestry rather than by the order of names on a page.",
+    "explanations": {
+      "layman": "A phylogenetic tree is a hypothesis about evolutionary relationships. Branch points represent shared ancestry, and the tips represent the sampled lineages. To compare relatedness, trace branches back to their shared ancestor instead of judging which names happen to be printed next to one another.",
+      "intuition": "A tree is not a ladder from primitive to advanced. Rotating branches around a node changes the drawing without changing who shares an ancestor. Like rotating a family-tree page, the layout can move while the underlying relationship stays the same.",
+      "visual": "Begin at the tips, trace to the most recent shared node and identify the whole descendant group. Check whether branch length has a scale before interpreting it as time or amount of change. The branching order conveys relationships even when the diagram is not calibrated.",
+      "scientific": "A clade contains an ancestor and all its descendants. Sister taxa share an immediate common ancestral node in the tree. Shared derived characters can support clades, but similar traits can also evolve independently. An outgroup helps orient character interpretation and root an analysis under appropriate assumptions.",
+      "advanced": "A gene tree need not equal the species tree because of incomplete lineage sorting, gene duplication or horizontal transfer. Statistical support describes how strongly the analyzed data support a grouping under a method; it is not a guarantee of historical truth. Broader sampling can change an inferred tree.",
+      "realWorld": "Trees help organize comparative biology, classify organisms and investigate the history of genes. They do not show that a living species is the ancestor of every neighboring tip. Humans and other living apes share ancestors; each present-day lineage has continued evolving since their divergence."
+    },
+    "keyTerms": [
+      {
+        "term": "Clade",
+        "definition": "An ancestor together with all its descendants."
+      },
+      {
+        "term": "Sister taxa",
+        "definition": "Two lineages joined at the same immediate ancestral node."
+      },
+      {
+        "term": "Homoplasy",
+        "definition": "Similarity not inherited from the relevant common ancestor, such as convergence."
+      }
+    ],
+    "visual": {
+      "kind": "process",
+      "steps": [
+        {
+          "title": "Separate topology from page layout",
+          "detail": "The branching pattern specifies relationships, while the left-to-right order of tips is a drawing choice. Rotating branches around a node preserves the topology. Students should trace connections through nodes rather than measure physical distance between labels printed on the page."
+        },
+        {
+          "title": "Identify shared ancestry",
+          "detail": "To compare two tips, trace each toward the root until their paths meet. That node represents their most recent common ancestor in the hypothesis. A clade then includes every descendant of a selected node, not only the descendants that happen to share an obvious appearance."
+        },
+        {
+          "title": "Evaluate the supporting evidence",
+          "detail": "Characters and sequence comparisons provide evidence for a tree, but convergence and other processes can mislead simple similarity judgments. Branch-length scales and uncertainty must be read explicitly. A diagram lacking a time scale cannot establish the date of a split from line length alone."
+        }
+      ]
+    },
+    "quickCheck": [
+      {
+        "question": "Does rotating two branches around their shared node change the relationships in a tree?",
+        "options": [
+          "Yes, it changes their ancestor",
+          "No, the branching connections stay the same",
+          "Yes, it makes one tip more advanced"
+        ],
+        "answer": 1,
+        "explanation": "Node rotation changes the layout but preserves the ancestor-descendant connections."
+      }
+    ]
+  },
+  "depth": {
+    "objectives": [
+      "Identify clades and most recent common ancestors.",
+      "Distinguish topology from branch length and drawing order.",
+      "Explain why similarity alone may mislead inference."
+    ],
+    "mechanism": [
+      {
+        "title": "Separate topology from page layout",
+        "body": "The branching pattern specifies relationships, while the left-to-right order of tips is a drawing choice. Rotating branches around a node preserves the topology. Students should trace connections through nodes rather than measure physical distance between labels printed on the page."
+      },
+      {
+        "title": "Identify shared ancestry",
+        "body": "To compare two tips, trace each toward the root until their paths meet. That node represents their most recent common ancestor in the hypothesis. A clade then includes every descendant of a selected node, not only the descendants that happen to share an obvious appearance."
+      },
+      {
+        "title": "Evaluate the supporting evidence",
+        "body": "Characters and sequence comparisons provide evidence for a tree, but convergence and other processes can mislead simple similarity judgments. Branch-length scales and uncertainty must be read explicitly. A diagram lacking a time scale cannot establish the date of a split from line length alone."
+      }
+    ],
+    "misconception": {
+      "claim": "The species drawn furthest to the right is the most evolved.",
+      "correction": "Tip order is a layout convention and can be changed without changing the tree. Living lineages have all continued evolving; a tree describes ancestry rather than ranking organisms along a universal scale of progress."
+    },
+    "investigation": {
+      "title": "Read a topology without a picture",
+      "context": "Theoretical four-tip tree written as ((A,B),(C,D)). All four tips are living samples; no branch lengths or dates are supplied.",
+      "columns": [
+        "Pair",
+        "Most recent shared node"
+      ],
+      "rows": [
+        [
+          "A and B",
+          "AB node"
+        ],
+        [
+          "C and D",
+          "CD node"
+        ],
+        [
+          "A and C",
+          "Root joining AB and CD"
+        ]
+      ],
+      "question": "Is A more closely related to C or D in this tree, and can the diagram tell us when those splits happened?",
+      "hint": "Trace the shared node for A with each of the other tips.",
+      "answer": "A is equally related to C and D through the same shared ancestral node; the topology alone supplies no dates for the splits.",
+      "reasoning": [
+        "A joins C only at the root of the given tree.",
+        "A joins D at that same ancestral root node.",
+        "No time calibration is supplied, so dates cannot be calculated."
+      ],
+      "limitation": "This theoretical topology contains no molecular data or statistical support and illustrates reading conventions rather than reconstructing a real lineage."
+    },
+    "transfer": {
+      "question": "Why might two distant lineages both have wings without being each other’s closest relatives?",
+      "hint": "Distinguish a useful trait from evidence of a recent shared origin.",
+      "answer": "Similar selective pressures can favor analogous structures independently. Wing presence alone can therefore be homoplastic; a relationship hypothesis should consider many characters and their evolutionary histories, not one useful trait."
+    },
+    "sources": [
+      {
+        "id": "extended-core-trees",
+        "title": "OpenStax Biology 2e: Organizing Life on Earth",
+        "url": "https://openstax.org/books/biology-2e/pages/20-1-organizing-life-on-earth"
+      }
+    ]
+  },
+  "enrichment": {
+    "curiosity": {
+      "title": "Rotate the node, keep the relationship",
+      "body": "Swapping the left and right positions of sister branches does not change ancestry. The connections matter more than the order of labels.",
+      "sourceId": "extended-core-trees"
+    },
+    "workedExample": {
+      "question": "Is A more closely related to C or D in this tree, and can the diagram tell us when those splits happened?",
+      "steps": [
+        "A joins C only at the root of the given tree.",
+        "A joins D at that same ancestral root node.",
+        "No time calibration is supplied, so dates cannot be calculated."
+      ],
+      "answer": "A is equally related to C and D through the same shared ancestral node; the topology alone supplies no dates for the splits."
+    },
+    "checkpoints": [
+      {
+        "question": "Which group is a clade?",
+        "options": [
+          "One ancestor and all its descendants",
+          "Any three similarly colored species",
+          "Only the oldest tip on a diagram"
+        ],
+        "answer": 0,
+        "explanation": "A clade is defined by inclusive descent from an ancestor, not by superficial similarity."
+      },
+      {
+        "question": "When can branch length be interpreted as elapsed time?",
+        "options": [
+          "In every tree without checking the legend",
+          "Only when the line is horizontal",
+          "When the tree explicitly uses an appropriate time scale"
+        ],
+        "answer": 2,
+        "explanation": "A time interpretation requires calibration or an explicit time scale rather than an arbitrary drawn length."
+      }
+    ]
+  }
+}

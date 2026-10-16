@@ -218,10 +218,33 @@
     });
     return body+T(30,320,'Order of ideas · not anatomy or elapsed time',13,'var(--dim)','start')+'</g>';
   }
+  function phylogeny(topic,step) {
+    const views=topic.visual.trees, index=Math.min(Math.max(0,step),views.length-1), tree=views[index];
+    const notation='('+tree.groups.map(group=>'('+group.join(',')+')').join(',')+')';
+    const descendants=group=>[...group].sort().join(' ');
+    const node=(x,y,tips,color,label)=>`<g data-phylogeny-clade="${esc(descendants(tips))}">${circle(x,y,7,color)}${label}</g>`;
+    const edge=(x1,y1,x2,y2,color)=>`<path data-phylogeny-edge d="M${x1} ${y1}L${x2} ${y2}" fill="none" stroke="${color}" stroke-width="3"/>`;
+    const description=tree.id+': root joins '+tree.groups.map(group=>group.join(' and ')).join(' with ')+'. Each pair shares its own internal node. All four tips are living sampled lineages. No time or change scale is supplied.';
+    let body=`<g data-phylogeny-view="${index}" data-tree-id="${tree.id}"><desc>${esc(description)}</desc>`;
+    body+=T(30,32,tree.id+' · rooted hypothesis',24,'var(--ink)','start')+T(570,32,'Living tips',24,'var(--dim)','end');
+    tree.groups.forEach((group,i)=>{
+      const y=105+i*120, clade=descendants(group), color=({'A B':'var(--cy)','C D':'var(--indigo)','A C':'var(--amber)','B D':'var(--rose)'})[clade];
+      body+=edge(100,165,260,y,color);
+      group.forEach((tip,j)=>{
+        const tipY=y-30+j*60;
+        body+=edge(260,y,480,tipY,color);
+        body+=node(480,tipY,[tip],color,`<text data-phylogeny-tip="${tip}" x="520" y="${tipY+11}" font-size="32" style="fill:var(--ink)">${tip}</text>`);
+      });
+      body+=node(260,y,group,color,T(260,y-20,clade.replace(' ',' + '),26,color));
+    });
+    body+=node(100,165,tree.groups.flat(),'var(--ink)',T(95,207,'Root',24));
+    return body+T(30,313,notation,24,'var(--ink)','start')+T(570,313,'No time scale',24,'var(--dim)','end')+'</g>';
+  }
   // These diagrams also power the catalog previews. Each represents the actual
   // mechanism rather than borrowing the illustration of a neighbouring topic.
   function specialized(topic,step) {
     const id=topic.id, accent='var(--cy)', muted='var(--dim)';
+    if(id==='phylogenetic-trees') return phylogeny(topic,step);
     if(id==='bacteria') return `<rect x="133" y="77" width="328" height="174" rx="87" fill="var(--cy)" fill-opacity=".07" stroke="var(--cy)" stroke-width="3"/><rect x="145" y="89" width="304" height="150" rx="75" fill="none" stroke="var(--cy)" stroke-opacity=".45"/><path d="M231 151Q277 91 310 161T369 143Q338 208 287 155T231 151" fill="none" stroke="var(--indigo)" stroke-width="4"/><path d="M459 164Q519 86 526 163T577 167" fill="none" stroke="var(--amber)" stroke-width="3"/>`+[0,1,2,3,4,5,6,7].map(i=>circle(191+(i%4)*66,126+Math.floor(i/4)*83,4,'var(--sky,var(--cy))',.7)).join('')+T(294,179,'Nucleoid',13)+T(293,291,'DNA and ribosomes · no membrane-enclosed nucleus',13,muted);
     if(id==='viruses') return box(318,57,233,230,accent,65)+T(435,88,'Host cell',14,muted)+`<path d="M${155+step*50} 101l42 24v48l-42 24l-42-24v-48Z" fill="var(--rose)" fill-opacity=".1" stroke="var(--rose)" stroke-width="3"/><path d="M${140+step*50} 134q28-25 28 12t-26 17" fill="none" stroke="var(--indigo)" stroke-width="3"/>`+line(207,237,376,237,accent,true)+T(164,57,'Viral particle',14,'var(--rose)')+T(300,319,['Attach and enter a suitable host','Use host machinery to make components','Assemble new particles and release'][step%3],12,muted);
     if(id==='pcr') return T(300,41,'Template → amplified target',17)+[0,1,2].map(i=>{const x=124+i*175;return box(x-63,77,127,173,i===step%3?accent:muted,12)+T(x,111,['Separate','Anneal','Extend'][i],14)+T(x,233,['~95 °C','Primer-specific','~72 °C'][i],11,muted)+[0,1,2,3].map(j=>line(x-32,140+j*18,x+(i===0?-8:32),140+j*18,i===2&&j%2?'var(--amber)':accent,false,3)).join('')+(i<2?line(x+71,164,x+100,164,accent,true):'');}).join('')+T(300,292,'Repeated cycles copy the region between the primers',12,muted);
@@ -286,6 +309,7 @@
     return wrapSVG(topic.title+' — model preview',body,marker);
   }
   function mount(container, topic, config) {
+    const isPhylogeny=topic.id==='phylogenetic-trees';
     const kind=specialized(topic,0)!==null?'special':kindFor(topic,config.topics||[]);
     let steps=stageSets[kind] || topic.visual?.steps || [];
     if(!steps.length) steps=[{title:topic.title,detail:topic.summary}];
@@ -298,12 +322,12 @@
       const body=renderModel(kind,topic,steps,step,selected,a,b);
       const item=kind==='cell'?organelles.find(o=>o.id===selected):steps[step];
       const target=kind==='cell'?findOrganelle(selected):null;
-      container.innerHTML=`<div class="bl-diagram"><div class="bl-vis-top"><span>${esc(labels[kind]||topic.title)}</span><span>${kind==='cell'?'Click to inspect':kind==='genetics'?'Change the parents':kind==='photosynthesis'?'Six scales':kind==='special'?'Concept diagram':kind==='process'?'Conceptual sequence':'Interactive model'}</span></div>${wrapSVG(labels[kind]||topic.title,body)}
+      container.innerHTML=`<div class="bl-diagram"><div class="bl-vis-top"><span>${esc(labels[kind]||topic.title)}</span><span>${isPhylogeny?'Alternative tree drawings':kind==='cell'?'Click to inspect':kind==='genetics'?'Change the parents':kind==='photosynthesis'?'Six scales':kind==='special'?'Concept diagram':kind==='process'?'Conceptual sequence':'Interactive model'}</span></div>${wrapSVG(labels[kind]||topic.title,body)}
         ${kind==='cell'?`<div class="bl-organelles" aria-label="Choose an organelle">${organelles.map(o=>`<button type="button" data-select-organelle="${o.id}" aria-pressed="${selected===o.id}">${o.name}</button>`).join('')}</div>`:''}
         ${kind==='genetics'?`<div class="bl-genotype"><label>Parent 1 genotype<select data-parent="a">${['AA','Aa','aa'].map(v=>`<option ${a===v?'selected':''}>${v}</option>`).join('')}</select></label><label>Parent 2 genotype<select data-parent="b">${['AA','Aa','aa'].map(v=>`<option ${b===v?'selected':''}>${v}</option>`).join('')}</select></label></div><p class="bl-result-summary" role="status">${punnettSummary(a,b)}</p>`:''}
         ${kind==='photosynthesis'?`<div class="bl-zoompath" aria-label="Scale of observation">${steps.map((s,i)=>`<button type="button" data-zoom="${i}" aria-pressed="${step===i}">${esc(s.title)}${i<steps.length-1?' ›':''}</button>`).join('')}</div>`:''}
-        ${!['cell','genetics'].includes(kind)?`<div class="bl-vis-controls"><button type="button" data-visual-action="back" aria-label="Previous ${kind==='photosynthesis'?'scale':'stage'}" ${step===0?'disabled':''}>← ${kind==='photosynthesis'?'Zoom out':'Back'}</button>${kind!=='special'?`<button type="button" data-visual-action="play" aria-label="${playing?'Pause':'Play'} visual sequence">${playing?'Pause':'Play sequence'}</button>`:''}<button type="button" data-visual-action="next" aria-label="Next ${kind==='photosynthesis'?'scale':'stage'}">${kind==='photosynthesis'?'Zoom in':kind==='special'?'Next annotation':'Next'} →</button><span class="bl-stepcount">${step+1} / ${steps.length}</span></div>`:''}
-        <div class="bl-stepdetail" aria-live="${playing?'off':'polite'}"><strong>${esc(item?.title||item?.name||topic.title)}</strong>${esc(item?.detail||topic.summary)}${target&&target.id!==topic.id?`<br><a class="bl-organelle-link" href="${config.url(target,config.mode)}">Explore ${esc(target.title)} in six modes →</a>`:''}</div></div><p class="bl-vis-note">${kind==='genetics'?'Assumes random fertilisation, equal segregation, and one autosomal gene. Probabilities apply independently to each offspring.':kind==='selection'?'Illustrative frequencies explain selection; this is not a fitted population model.':'A conceptual model, with structures and timing simplified for learning.'}${reduced?' Reduced motion is enabled.':''}</p>`;
+        ${!['cell','genetics'].includes(kind)?`<div class="bl-vis-controls"><button type="button" data-visual-action="back" aria-label="Previous ${isPhylogeny?'annotation':kind==='photosynthesis'?'scale':'stage'}" ${step===0?'disabled':''}>← ${kind==='photosynthesis'?'Zoom out':'Back'}</button>${kind!=='special'?`<button type="button" data-visual-action="play" aria-label="${playing?'Pause':'Play'} visual sequence">${playing?'Pause':'Play sequence'}</button>`:''}<button type="button" data-visual-action="next" aria-label="Next ${isPhylogeny?'annotation':kind==='photosynthesis'?'scale':'stage'}">${kind==='photosynthesis'?'Zoom in':kind==='special'?'Next annotation':'Next'} →</button><span class="bl-stepcount">${step+1} / ${steps.length}</span></div>`:''}
+        <div class="bl-stepdetail" aria-live="${playing?'off':'polite'}"><strong>${esc(item?.title||item?.name||topic.title)}</strong>${esc(item?.detail||topic.summary)}${target&&target.id!==topic.id?`<br><a class="bl-organelle-link" href="${config.url(target,config.mode)}">Explore ${esc(target.title)} in six modes →</a>`:''}</div></div><p class="bl-vis-note">${isPhylogeny?'Invented rooted trees, not observations or successive evolutionary stages. Branch lengths encode neither time nor amount of change.':kind==='genetics'?'Assumes random fertilisation, equal segregation, and one autosomal gene. Probabilities apply independently to each offspring.':kind==='selection'?'Illustrative frequencies explain selection; this is not a fitted population model.':'A conceptual model, with structures and timing simplified for learning.'}${reduced?' Reduced motion is enabled.':''}</p>`;
       container.querySelectorAll('[data-organelle],[data-select-organelle]').forEach(control=>{const select=()=>{selected=control.dataset.organelle||control.dataset.selectOrganelle;const focusKey=selected;draw();container.querySelector(`[data-select-organelle="${focusKey}"]`)?.focus({preventScroll:true});config.onContext?.(organelles.find(o=>o.id===selected)?.name||selected);};control.addEventListener('click',select);if(control.matches('[data-organelle]'))control.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();select();}});});
       container.querySelectorAll('[data-zoom]').forEach(button=>button.addEventListener('click',()=>{stop();step=Number(button.dataset.zoom);draw();container.querySelector(`[data-zoom="${step}"]`)?.focus({preventScroll:true});config.onContext?.(steps[step].title);}));
       container.querySelectorAll('[data-parent]').forEach(select=>select.addEventListener('change',()=>{const id=select.dataset.parent;if(id==='a')a=select.value;else b=select.value;draw();container.querySelector(`[data-parent="${id}"]`)?.focus({preventScroll:true});}));
@@ -311,7 +335,7 @@
         const action=button.dataset.visualAction;
         if(action==='play'){if(playing)stop();else{playing=true;timer=setInterval(()=>{if(!alive)return;const focused=document.activeElement?.dataset?.visualAction;step=(step+1)%steps.length;draw();if(focused)container.querySelector(`[data-visual-action="${focused}"]`)?.focus({preventScroll:true});},reduced?2400:1800);}}
         else{stop();step=action==='back'?Math.max(0,step-1):(step+1)%steps.length;config.onContext?.(steps[step].title);}
-        draw();container.querySelector(`[data-visual-action="${action}"]`)?.focus({preventScroll:true});
+        draw();container.querySelector(`[data-visual-action="${isPhylogeny&&action==='back'&&step===0?'next':action}"]`)?.focus({preventScroll:true});
       }));
     }
     function stop(){playing=false;if(timer){clearInterval(timer);timer=null;}}

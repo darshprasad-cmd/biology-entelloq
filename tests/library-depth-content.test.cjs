@@ -33,6 +33,8 @@ test('evidence is honestly labeled, interpretable and accompanied by limitations
    assert.ok(source.title.trim());const url=new URL(source.url);assert.equal(url.protocol,'https:');
    if(id==='recombinant-dna'&&source.id==='extended-core-diagnosticDigest'&&source.url==='https://www.addgene.org/protocols/diagnostic-digest/'){
     assert.equal(source.title,'Addgene: Diagnostic Restriction Digest');
+   }else if(id==='phylogenetic-trees'&&source.id==='extended-core-phylogenyPrimer'&&source.url==='https://evolution.berkeley.edu/evolution-101/the-history-of-life-looking-at-the-patterns/understanding-phylogenies/'){
+    assert.equal(source.title,'UC Museum of Paleontology: Understanding phylogenies');
    }else assert.match(url.hostname,/(^|\.)(openstax\.org|nih\.gov|genome\.gov|nasa\.gov|cdc\.gov)$/);
   }
  }
