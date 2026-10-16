@@ -9,11 +9,11 @@
   "metrics": [
     {
       "width": 1440,
-      "domContentLoadedMs": 230
+      "domContentLoadedMs": 177
     },
     {
       "width": 390,
-      "domContentLoadedMs": 215
+      "domContentLoadedMs": 171
     }
   ]
 }
