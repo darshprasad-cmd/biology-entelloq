@@ -12,6 +12,7 @@ const { createRequire } = require('node:module');
 const { checkLibrarySearch } = require('../tests/library-search-browser.cjs');
 const { checkLibraryAnswer } = require('../tests/library-answer-browser.cjs');
 const { checkEvidenceTable } = require('../tests/evidence-tables-browser.cjs');
+const { checkPhylogeny } = require('../tests/phylogeny-browser.cjs');
 const root = path.resolve(__dirname, '..');
 const modules = process.env.BIOLOGY_PLAYWRIGHT_MODULES || path.resolve(root, '../biology-entelloq/node_modules');
 const { chromium } = createRequire(path.join(modules, '__single_file_check__.cjs'))('playwright');
@@ -385,6 +386,21 @@ async function runSuite(browser, mode, url) {
     }
     run.evidenceTables = evidenceChecks;
     run.checks.push('Phone evidence tables keep row labels and every selected result column readable together in both themes, with native keyboard scrolling and unchanged authored table content.');
+    run.phylogeny = [];
+    for (const width of [320, 390]) {
+      await page.setViewportSize({ width, height: 844 });
+      opened = await section(page, url, 'learn/topic/phylogenetic-trees/visual', '[data-depth-topic="phylogenetic-trees"]');
+      for (const theme of ['dark', 'light']) {
+        if (await opened.shell.locator('html').getAttribute('data-theme') !== theme) {
+          await opened.shell.locator('#exploreBtn').click();
+          await opened.shell.locator('#exploreTheme').click();
+          await opened.shell.locator('#exploreClose').click();
+        }
+        await opened.frame.waitForFunction(theme => document.documentElement.dataset.theme === theme, theme);
+        run.phylogeny.push({ width, theme, result: await checkPhylogeny(page, opened.frame) });
+      }
+    }
+    run.checks.push('Three phylogeny drawings have independently verified branch connections and legible phone labels, with native keyboard annotation controls and unchanged private study records.');
     await page.setViewportSize({ width: 390, height: 844 });
     opened = await section(page, url, 'labs/photosynthesis-rate', '#lab-record');
     await noOverflow(page, [['shell', opened.shell], ['notebook', opened.frame]], 'notebook mobile', run);
