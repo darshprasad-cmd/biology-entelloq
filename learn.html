@@ -6750,20 +6750,32 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
     if (save) { entryFor(topic.id).checked[index] = chosen; persist(); feedback.querySelector('.bl-answer-explanation').focus(); }
   }
   let lastTopic = null;
-  function route() {
+  function route(event) {
+    const navigating = event?.type === 'hashchange';
     if (typeof visualCleanup === 'function') visualCleanup();
     visualCleanup = null;
     let parts;
     try { parts = location.hash.slice(1).split('/').map(decodeURIComponent); } catch (_) { parts = []; }
     if (parts[0] === 'topic' && byId.has(parts[1])) {
       renderTopic(byId.get(parts[1]), parts[2]);
-      if (lastTopic !== parts[1]) root.scrollIntoView({block:'start', behavior:'instant'});
+      if (lastTopic !== parts[1]) {
+        // A replaced catalog/connection link cannot retain keyboard focus.
+        // Start in the new lesson, but do not steal focus on initial loading
+        // or override the selected explanation tab on same-topic changes.
+        if (navigating) root.querySelector('#bl-topic-title').focus({preventScroll:true});
+        root.scrollIntoView({block:'start', behavior:'instant'});
+      }
       lastTopic = parts[1];
     } else {
-      if (parts[0] === 'category' && categoryById.has(parts[1])) { selectedCategory = parts[1]; query = ''; }
+      const isCategory = parts[0] === 'category' && categoryById.has(parts[1]);
+      if (isCategory) { selectedCategory = parts[1]; query = ''; }
       if (parts[0] === 'library') selectedCategory = 'all';
       renderIndex();
-      if (parts[0] === 'library' || parts[0] === 'category') root.scrollIntoView({block:'start', behavior:'instant'});
+      if (parts[0] === 'library' || isCategory) {
+        const heading = root.querySelector(isCategory ? '#bl-results-title' : '.bl-library-title');
+        if (navigating) { heading.setAttribute('tabindex','-1'); heading.focus({preventScroll:true}); }
+        (navigating && isCategory ? heading : root).scrollIntoView({block:'start', behavior:'instant'});
+      }
       if (parts[0] === 'cell' || parts[0] === 'microscope') document.getElementById(parts[0])?.scrollIntoView({block:'start', behavior:'instant'});
       lastTopic = null;
     }
