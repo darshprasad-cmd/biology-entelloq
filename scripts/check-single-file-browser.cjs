@@ -11,6 +11,7 @@ const { pathToFileURL } = require('node:url');
 const { createRequire } = require('node:module');
 const { checkLibrarySearch } = require('../tests/library-search-browser.cjs');
 const { checkLibraryAnswer } = require('../tests/library-answer-browser.cjs');
+const { checkLibraryRoute } = require('../tests/library-route-browser.cjs');
 const { checkEvidenceTable } = require('../tests/evidence-tables-browser.cjs');
 const { checkPhylogeny } = require('../tests/phylogeny-browser.cjs');
 const root = path.resolve(__dirname, '..');
@@ -281,6 +282,10 @@ async function runSuite(browser, mode, url) {
 
     let navigation = await section(page, url, 'learn', '#bl-search');
     run.checks.push('Learn search desktop: ' + await checkLibrarySearch(page, navigation.frame));
+    run.checks.push('Learn route focus desktop: ' + JSON.stringify(await checkLibraryRoute(page, navigation.frame, {
+      getWorld: async () => childFrame(await workspace(page), '#viewFrame')
+    })));
+    navigation = await section(page, url, 'learn', '#bl-search');
     await navigation.shell.locator('#nav .navi[data-go="lessons"]:not(.quick-action)').click();
     await page.waitForURL(/#lessons$/);
     await (await childFrame(navigation.shell, '#viewFrame')).locator('#lesson-search').waitFor();
@@ -368,7 +373,12 @@ async function runSuite(browser, mode, url) {
     for (const [key, ready] of sections) {
       opened = await section(page, url, key, ready);
       await noOverflow(page, [['shell', opened.shell], [key, opened.frame]], key + ' mobile', run);
-      if (key === 'learn') run.checks.push('Learn search mobile: ' + await checkLibrarySearch(page, opened.frame));
+      if (key === 'learn') {
+        run.checks.push('Learn search mobile: ' + await checkLibrarySearch(page, opened.frame));
+        run.checks.push('Learn route focus mobile: ' + JSON.stringify(await checkLibraryRoute(page, opened.frame, {
+          getWorld: async () => childFrame(await workspace(page), '#viewFrame')
+        })));
+      }
     }
     const evidenceChecks = [];
     for (const [width, topic] of [[320, 'recombinant-dna'], [320, 'plant-transport'], [390, 'active-transport']]) {
