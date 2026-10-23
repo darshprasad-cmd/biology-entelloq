@@ -1,0 +1,6 @@
+{
+  "name":"entelloq-biology-next","private":true,"version":"1.0.0","type":"module",
+  "scripts":{"build":"node scripts/build.mjs","test:browser":"node tests/browser.mjs"},
+  "dependencies":{"@kitware/vtk.js":"37.4.6"},
+  "devDependencies":{"esbuild":"0.25.12"}
+}

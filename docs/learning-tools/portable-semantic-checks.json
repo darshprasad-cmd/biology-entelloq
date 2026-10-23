@@ -1,0 +1,341 @@
+{
+  "checkedAt": "2026-10-23T21:04:06.275Z",
+  "host": "C:\\Users\\darsh\\.codex\\worktrees\\entelloq-learning-next\\wh\\work\\hosts\\biology",
+  "status": "passed",
+  "checks": [
+    "Portable Biology Concept search mounts through Learn and keyword search makes no model/runtime network requests",
+    "Cancel during real asset/model loading terminates workers, releases prepared Blob URLs and restores keyword mode",
+    "Actual pinned q8 MiniLM starts in a Blob worker with package-hydrated MJS/WASM and emits 384-dimensional embeddings",
+    "A new Biology question runs through actual local inference and retrieves enzyme saturation among its first three results",
+    "Turning semantic search off after inference releases worker and runtime Blob URLs"
+  ],
+  "pageErrors": [],
+  "expectedFontRequests": [
+    {
+      "url": "https://fonts.googleapis.com/css2",
+      "beforeEnable": true,
+      "blocked": true
+    },
+    {
+      "url": "https://fonts.googleapis.com/css2",
+      "beforeEnable": true,
+      "blocked": true
+    },
+    {
+      "url": "https://fonts.googleapis.com/css2",
+      "beforeEnable": true,
+      "blocked": true
+    }
+  ],
+  "deniedRequests": [],
+  "externalRequests": [
+    {
+      "url": "https://huggingface.co/Xenova/all-MiniLM-L6-v2/resolve/751bff37182d3f1213fa05d7196b954e230abad9/config.json",
+      "afterEnable": true,
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/Xenova/all-MiniLM-L6-v2/resolve/751bff37182d3f1213fa05d7196b954e230abad9/tokenizer.json",
+      "afterEnable": true,
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/Xenova/all-MiniLM-L6-v2/resolve/751bff37182d3f1213fa05d7196b954e230abad9/tokenizer_config.json",
+      "afterEnable": true,
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/Xenova/all-MiniLM-L6-v2/resolve/751bff37182d3f1213fa05d7196b954e230abad9/config.json",
+      "afterEnable": true,
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/Xenova/all-MiniLM-L6-v2/resolve/751bff37182d3f1213fa05d7196b954e230abad9/tokenizer.json",
+      "afterEnable": true,
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/Xenova/all-MiniLM-L6-v2/resolve/751bff37182d3f1213fa05d7196b954e230abad9/tokenizer_config.json",
+      "afterEnable": true,
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/Xenova/all-MiniLM-L6-v2/resolve/751bff37182d3f1213fa05d7196b954e230abad9/onnx/model_quantized.onnx",
+      "afterEnable": true,
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/Xenova/all-MiniLM-L6-v2/resolve/751bff37182d3f1213fa05d7196b954e230abad9/tokenizer.json",
+      "afterEnable": true,
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/Xenova/all-MiniLM-L6-v2/resolve/751bff37182d3f1213fa05d7196b954e230abad9/onnx/model_quantized.onnx",
+      "afterEnable": true,
+      "method": "GET"
+    }
+  ],
+  "serverRequests": [
+    "/dist/index.html"
+  ],
+  "workers": [
+    "blob:http://127.0.0.1:51634/2a9adb54-1aa9-4e3a-a155-10786d1e31c1",
+    "blob:http://127.0.0.1:51634/ab531576-e559-4913-ad6d-08106d5316a2"
+  ],
+  "inference": {
+    "query": "Why does the rate plateau when I keep increasing substrate but use the same amount of enzyme?",
+    "status": "Semantic search ready. 8 concepts indexed locally with 384-dimension MiniLM embeddings. Your query stays in this browser.",
+    "ready": {
+      "type": "ready",
+      "model": "Xenova/all-MiniLM-L6-v2",
+      "revision": "751bff37182d3f1213fa05d7196b954e230abad9",
+      "dimensions": 384,
+      "count": 8
+    },
+    "scores": [
+      {
+        "id": "enzyme",
+        "score": 0.7688275291558111
+      },
+      {
+        "id": "inhibition",
+        "score": 0.589593067011823
+      },
+      {
+        "id": "protein",
+        "score": 0.2860209595423607
+      },
+      {
+        "id": "respiration",
+        "score": 0.2599793559857553
+      },
+      {
+        "id": "feedback",
+        "score": 0.25419262509904184
+      }
+    ],
+    "titles": [
+      "Enzymes and rate",
+      "Competitive inhibition",
+      "Protein structure",
+      "Respiration and ATP",
+      "Homeostasis"
+    ],
+    "elapsedMs": 6079
+  },
+  "cancelledAttempt": {
+    "preparations": [
+      {
+        "aborted": true,
+        "fetches": 3
+      }
+    ],
+    "fetches": [
+      {
+        "url": "https://biology.entelloq.com/__single__/assets/learning-tools/learning/semantic-worker.js",
+        "aborted": false,
+        "status": 200,
+        "type": "text/javascript"
+      },
+      {
+        "url": "https://biology.entelloq.com/__single__/assets/learning-tools/learning/runtime/ort-wasm-simd-threaded.jsep.mjs",
+        "aborted": false,
+        "status": 200,
+        "type": "text/javascript"
+      },
+      {
+        "url": "https://biology.entelloq.com/__single__/assets/learning-tools/learning/runtime/ort-wasm-simd-threaded.jsep.wasm",
+        "aborted": false,
+        "status": 200,
+        "type": "application/wasm"
+      }
+    ],
+    "blobs": [
+      {
+        "url": "blob:http://127.0.0.1:51634/2a9adb54-1aa9-4e3a-a155-10786d1e31c1",
+        "type": "text/javascript",
+        "size": 703248,
+        "revoked": true
+      },
+      {
+        "url": "blob:http://127.0.0.1:51634/7e1f0daf-0b00-442e-aaa9-b7d71767cbaa",
+        "type": "text/javascript",
+        "size": 46851,
+        "revoked": true
+      },
+      {
+        "url": "blob:http://127.0.0.1:51634/835e9c89-0819-4572-8ba0-e0a495e75f13",
+        "type": "application/wasm",
+        "size": 28352885,
+        "revoked": true
+      }
+    ],
+    "workers": [
+      {
+        "url": "blob:http://127.0.0.1:51634/2a9adb54-1aa9-4e3a-a155-10786d1e31c1",
+        "terminated": true,
+        "load": {
+          "assets": {
+            "worker": "blob:http://127.0.0.1:51634/2a9adb54-1aa9-4e3a-a155-10786d1e31c1",
+            "mjs": "blob:http://127.0.0.1:51634/7e1f0daf-0b00-442e-aaa9-b7d71767cbaa",
+            "wasm": "blob:http://127.0.0.1:51634/835e9c89-0819-4572-8ba0-e0a495e75f13"
+          },
+          "documents": 8
+        }
+      }
+    ],
+    "ready": [],
+    "results": []
+  },
+  "runtimeTrace": {
+    "preparations": [
+      {
+        "aborted": true,
+        "fetches": 3
+      },
+      {
+        "aborted": true,
+        "fetches": 3
+      }
+    ],
+    "fetches": [
+      {
+        "url": "https://biology.entelloq.com/__single__/assets/learning-tools/learning/semantic-worker.js",
+        "aborted": false,
+        "status": 200,
+        "type": "text/javascript"
+      },
+      {
+        "url": "https://biology.entelloq.com/__single__/assets/learning-tools/learning/runtime/ort-wasm-simd-threaded.jsep.mjs",
+        "aborted": false,
+        "status": 200,
+        "type": "text/javascript"
+      },
+      {
+        "url": "https://biology.entelloq.com/__single__/assets/learning-tools/learning/runtime/ort-wasm-simd-threaded.jsep.wasm",
+        "aborted": false,
+        "status": 200,
+        "type": "application/wasm"
+      },
+      {
+        "url": "https://biology.entelloq.com/__single__/assets/learning-tools/learning/semantic-worker.js",
+        "aborted": false,
+        "status": 200,
+        "type": "text/javascript"
+      },
+      {
+        "url": "https://biology.entelloq.com/__single__/assets/learning-tools/learning/runtime/ort-wasm-simd-threaded.jsep.mjs",
+        "aborted": false,
+        "status": 200,
+        "type": "text/javascript"
+      },
+      {
+        "url": "https://biology.entelloq.com/__single__/assets/learning-tools/learning/runtime/ort-wasm-simd-threaded.jsep.wasm",
+        "aborted": false,
+        "status": 200,
+        "type": "application/wasm"
+      }
+    ],
+    "blobs": [
+      {
+        "url": "blob:http://127.0.0.1:51634/2a9adb54-1aa9-4e3a-a155-10786d1e31c1",
+        "type": "text/javascript",
+        "size": 703248,
+        "revoked": true
+      },
+      {
+        "url": "blob:http://127.0.0.1:51634/7e1f0daf-0b00-442e-aaa9-b7d71767cbaa",
+        "type": "text/javascript",
+        "size": 46851,
+        "revoked": true
+      },
+      {
+        "url": "blob:http://127.0.0.1:51634/835e9c89-0819-4572-8ba0-e0a495e75f13",
+        "type": "application/wasm",
+        "size": 28352885,
+        "revoked": true
+      },
+      {
+        "url": "blob:http://127.0.0.1:51634/ab531576-e559-4913-ad6d-08106d5316a2",
+        "type": "text/javascript",
+        "size": 703248,
+        "revoked": true
+      },
+      {
+        "url": "blob:http://127.0.0.1:51634/2326f49d-22d7-43d7-b650-38954f4baea8",
+        "type": "text/javascript",
+        "size": 46851,
+        "revoked": true
+      },
+      {
+        "url": "blob:http://127.0.0.1:51634/c139f89d-c859-40ff-a904-cf40f0e85320",
+        "type": "application/wasm",
+        "size": 28352885,
+        "revoked": true
+      }
+    ],
+    "workers": [
+      {
+        "url": "blob:http://127.0.0.1:51634/2a9adb54-1aa9-4e3a-a155-10786d1e31c1",
+        "terminated": true,
+        "load": {
+          "assets": {
+            "worker": "blob:http://127.0.0.1:51634/2a9adb54-1aa9-4e3a-a155-10786d1e31c1",
+            "mjs": "blob:http://127.0.0.1:51634/7e1f0daf-0b00-442e-aaa9-b7d71767cbaa",
+            "wasm": "blob:http://127.0.0.1:51634/835e9c89-0819-4572-8ba0-e0a495e75f13"
+          },
+          "documents": 8
+        }
+      },
+      {
+        "url": "blob:http://127.0.0.1:51634/ab531576-e559-4913-ad6d-08106d5316a2",
+        "terminated": true,
+        "load": {
+          "assets": {
+            "worker": "blob:http://127.0.0.1:51634/ab531576-e559-4913-ad6d-08106d5316a2",
+            "mjs": "blob:http://127.0.0.1:51634/2326f49d-22d7-43d7-b650-38954f4baea8",
+            "wasm": "blob:http://127.0.0.1:51634/c139f89d-c859-40ff-a904-cf40f0e85320"
+          },
+          "documents": 8
+        }
+      }
+    ],
+    "ready": [
+      {
+        "type": "ready",
+        "model": "Xenova/all-MiniLM-L6-v2",
+        "revision": "751bff37182d3f1213fa05d7196b954e230abad9",
+        "dimensions": 384,
+        "count": 8
+      }
+    ],
+    "results": [
+      {
+        "type": "results",
+        "results": [
+          {
+            "id": "enzyme",
+            "score": 0.7688275291558111
+          },
+          {
+            "id": "inhibition",
+            "score": 0.589593067011823
+          },
+          {
+            "id": "protein",
+            "score": 0.2860209595423607
+          },
+          {
+            "id": "respiration",
+            "score": 0.2599793559857553
+          },
+          {
+            "id": "feedback",
+            "score": 0.25419262509904184
+          }
+        ],
+        "requestId": 4
+      }
+    ]
+  }
+}

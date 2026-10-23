@@ -1,0 +1,25 @@
+{
+  "complete": true,
+  "checks": [
+    "vtk stays unloaded before opening",
+    "real Tellurium result plotted",
+    "conservation shown",
+    "CSV export",
+    "real vtk canvas",
+    "physical coordinate and orientation",
+    "changing plane redraws actual pixels",
+    "3D controls match view",
+    "returning from volume redraws slice pixels",
+    "provenance export",
+    "mobile does not overflow",
+    "light palette",
+    "view settings persisted",
+    "offline service shows honest error",
+    "cancellation explains boundary",
+    "unmount releases UI",
+    "no page errors",
+    "no third-party runtime requests"
+  ],
+  "errors": [],
+  "rendering": "Chromium / SwiftShader. Real vtk renderer and loopback Tellurium engine; not a hardware GPU benchmark."
+}

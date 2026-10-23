@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "entry": "index.html",
+  "scripts": "classic-iife",
+  "remoteModel": {
+    "id": "Xenova/all-MiniLM-L6-v2",
+    "revision": "751bff37182d3f1213fa05d7196b954e230abad9",
+    "dtype": "q8",
+    "optIn": true
+  },
+  "assets": [
+    {
+      "path": "index.html",
+      "bytes": 438,
+      "sha256": "9c5e0a8679518505772bbca2e919286fa300cfed489e3ded11b84f2a95e41789"
+    },
+    {
+      "path": "styles.css",
+      "bytes": 4984,
+      "sha256": "6ac574570c4dcda419ce1638ac66366cafc3b68c10e26092991155298e0ba203"
+    },
+    {
+      "path": "main.js",
+      "bytes": 133008,
+      "sha256": "4decf5d04b11e33b0da391ab08cf595571db757f6ba71e54ac8a94c9b6643a02"
+    },
+    {
+      "path": "semantic-worker.js",
+      "bytes": 703248,
+      "sha256": "94b4c90d376bde00872ccfec38cc2d5a97bf95c49d78eebf7f75f821d8313e25"
+    },
+    {
+      "path": "runtime/ort-wasm-simd-threaded.jsep.mjs",
+      "bytes": 46851,
+      "sha256": "c2f80e915e9df63289788a99d434d8c4e00e64e9c1f030f4b80b022458dd2c99"
+    },
+    {
+      "path": "runtime/ort-wasm-simd-threaded.jsep.wasm",
+      "bytes": 28352885,
+      "sha256": "62ff86b2f2fa3a79eb87a7e4720e8ea9051942bf975f314181bf7dcef2feac06"
+    },
+    {
+      "path": "THIRD-PARTY-NOTICES.md",
+      "bytes": 28270,
+      "sha256": "655f787b56bb232ce21080a863b384bbb2d09221747c24c70be81a1f50cf2861"
+    }
+  ]
+}

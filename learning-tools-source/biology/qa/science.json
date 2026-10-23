@@ -1,0 +1,49 @@
+{
+  "engine": "Tellurium / libRoadRunner CVODE",
+  "version": "2.2.13.1",
+  "model": "Closed single-compartment mass-action enzyme mechanism",
+  "parameters": {
+    "substrate": 10.0,
+    "enzyme": 0.5,
+    "kcat": 0.3,
+    "duration": 30.0
+  },
+  "columns": [
+    "time_s",
+    "substrate_uM",
+    "enzyme_uM",
+    "complex_uM",
+    "product_uM"
+  ],
+  "units": {
+    "time": "s",
+    "concentration": "µM",
+    "kon": "µM⁻¹ s⁻¹",
+    "koff": "s⁻¹",
+    "kcat": "s⁻¹"
+  },
+  "fixedRates": {
+    "kon": 2,
+    "koff": 1
+  },
+  "conservation": {
+    "substrateMoietyMaxError_uM": 4.4497738826976274e-12,
+    "enzymeMoietyMaxError_uM": 1.3322676295501878e-15,
+    "minimumConcentration_uM": 0.0
+  },
+  "assumptions": [
+    "Well-mixed closed compartment of constant volume",
+    "Fixed temperature and rate constants",
+    "No diffusion, inhibition, synthesis or degradation",
+    "Generic educational mechanism; no organism-specific experimental calibration",
+    "Conserved moieties, not an elemental or atom-balanced chemical reaction"
+  ],
+  "finalRow": [
+    30.0,
+    5.428090002737879,
+    0.053375111677285814,
+    0.4466248883227154,
+    4.1252851089349685
+  ],
+  "independentDOP853MaxError_uM": 7.488352160578415e-09
+}

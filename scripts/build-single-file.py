@@ -20,6 +20,7 @@ PREFIX = "https://biology.entelloq.com/__single__/"
 PAGES = ("index.html", "app.html", "learn.html", "lessons.html", "reason.html",
          "labs.html", "solve.html", "explore.html", "me.html", "about.html",
          "lab.html", "universe.html")
+PAGES += ("assets/learning-tools/biology/index.html", "assets/learning-tools/learning/index.html", "src/learning-tools/guide.html")
 MODULES = ("src/lab/prepared-loader.js", "src/lab/specimen-assets.js",
            "src/lab/vendor/loaders/GLTFLoader.js",
            "src/lab/vendor/utils/BufferGeometryUtils.js")
@@ -32,6 +33,7 @@ MIME = {".js": "text/javascript", ".css": "text/css", ".png": "image/png",
         ".svg": "image/svg+xml", ".gif": "image/gif", ".glb": "model/gltf-binary",
         ".md": "text/plain", ".txt": "text/plain", ".json": "application/json",
         ".woff": "font/woff", ".woff2": "font/woff2", ".mp4": "video/mp4"}
+MIME.update({".mjs": "text/javascript", ".wasm": "application/wasm"})
 BLOCKS = re.compile(r"<!--[\s\S]*?-->|<style\b[^>]*>[\s\S]*?</style\s*>|"
                     r"<script\b(?P<attrs>[^>]*)>(?P<body>[\s\S]*?)</script\s*>", re.I)
 ATTRS = re.compile(r"(?P<name>[-\w:]+)\s*=\s*(?P<q>['\"])(?P<value>[\s\S]*?)(?P=q)")
@@ -264,7 +266,11 @@ class Package:
                 if source.count(needle) != 1:
                     raise ValueError("Prepared loader pageURL contract changed")
                 source = source.replace(needle, "pageURL = () => 'https://biology.entelloq.com/lab.html'", 1)
-            source = self.imports(transform_js(source), name)
+            # The semantic runtime executes in a Worker without a page bridge.
+            # Its globals must remain native Worker globals, including location.
+            if name != "assets/learning-tools/learning/semantic-worker.js":
+                source = transform_js(source)
+            source = self.imports(source, name)
             data = source.encode("utf-8")
         elif suffix == ".css":
             data = self.css(data.decode("utf-8"), name).encode("utf-8")
@@ -350,6 +356,10 @@ class Package:
         pages = {name: packed(self.document(name).encode("utf-8")) for name in PAGES}
         for name in (*MODULES, *EXTRA_ASSETS):
             self.add(name)
+        learning = json.loads((self.root / "assets/learning-tools/manifest.json").read_text(encoding="utf-8"))
+        for entries in learning["modules"].values():
+            for entry in entries:
+                self.add(entry["path"])
         previews = self.root / "assets/previews"
         if not previews.is_dir():
             raise ValueError("Missing dynamic preview directory: assets/previews")
@@ -383,7 +393,7 @@ def render_output(root: Path = ROOT) -> str:
     deferred = []
     manifest = {**manifest, "assets": dict(manifest["assets"])}
     for name, entry in sorted(manifest["assets"].items(), key=lambda item: (item[0] != "assets/specimens/frog.glb", item[0])):
-        if not name.endswith(".glb") and name != "assets/protein/vendor/molstar.js":
+        if not name.endswith(".glb") and name != "assets/protein/vendor/molstar.js" and not name.startswith("assets/learning-tools/"):
             continue
         element_id = "bioq-deferred-asset-" + str(len(deferred))
         manifest["assets"][name] = {"type": entry["type"], "deferred": element_id}

@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-10-23T21:04:26.251Z",
+  "live": null,
+  "checks": [
+    "Microscopy opens inside Biology Explore through the existing app router",
+    "Sources and companion setup open within the workspace without losing the portable route",
+    "Returning restores the original Explore content and removes the viewer frame",
+    "Biochemical dynamics is reachable in Labs with companion status",
+    "Explicit FSRS retrieval rating persists through host reload",
+    "Yjs notes survive host navigation/reload with sharing boundaries visible",
+    "Keyword search works and inference assets are not downloaded before opt-in",
+    "Mobile host and embedded tool fit viewport with reduced motion"
+  ],
+  "errors": []
+}
