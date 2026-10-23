@@ -12,6 +12,7 @@ const { createRequire } = require('node:module');
 const { checkLibrarySearch } = require('../tests/library-search-browser.cjs');
 const { checkLibraryAnswer } = require('../tests/library-answer-browser.cjs');
 const { checkLibraryRoute } = require('../tests/library-route-browser.cjs');
+const { checkPracticeFocus } = require('../tests/practice-focus-browser.cjs');
 const { checkEvidenceTable } = require('../tests/evidence-tables-browser.cjs');
 const { checkPhylogeny } = require('../tests/phylogeny-browser.cjs');
 const root = path.resolve(__dirname, '..');
@@ -280,6 +281,11 @@ async function runSuite(browser, mode, url) {
     }
     run.checks.push('All eight embedded sections open real content with no horizontal overflow on desktop.');
 
+    const practiceDesktop = await section(page, url, 'solve/learn/photosynthesis/visual', '.tp-question');
+    run.checks.push('Practice focus desktop: ' + JSON.stringify(await checkPracticeFocus(page, practiceDesktop.frame, {
+      getWorld: async () => childFrame(await workspace(page), '#viewFrame')
+    })));
+
     let navigation = await section(page, url, 'learn', '#bl-search');
     run.checks.push('Learn search desktop: ' + await checkLibrarySearch(page, navigation.frame));
     run.checks.push('Learn route focus desktop: ' + JSON.stringify(await checkLibraryRoute(page, navigation.frame, {
@@ -380,6 +386,10 @@ async function runSuite(browser, mode, url) {
         })));
       }
     }
+    opened = await section(page, url, 'solve/learn/photosynthesis/visual', '.tp-question');
+    run.checks.push('Practice focus mobile: ' + JSON.stringify(await checkPracticeFocus(page, opened.frame, {
+      getWorld: async () => childFrame(await workspace(page), '#viewFrame')
+    })));
     const evidenceChecks = [];
     for (const [width, topic] of [[320, 'recombinant-dna'], [320, 'plant-transport'], [390, 'active-transport']]) {
       await page.setViewportSize({ width, height: 844 });
