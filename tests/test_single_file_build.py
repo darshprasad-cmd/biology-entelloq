@@ -58,6 +58,18 @@ class SingleFileBuild(unittest.TestCase):
                         expected = expected.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
                     self.assertEqual(data, expected)
 
+    def test_protein_atlas_has_one_host_entry_and_included_offline_resources(self):
+        explore = unpack(self.manifest["pages"]["explore.html"]).decode("utf-8")
+        app = unpack(self.manifest["pages"]["app.html"]).decode("utf-8")
+        self.assertEqual(len(re.findall(r'\bid=["\']proteins["\']', explore)), 1)
+        self.assertEqual(app.count('sub:"proteins"'), 1)
+        for name in ("assets/protein/1CRN.pdb.txt", "assets/protein/vendor/molstar.js",
+                     "assets/protein/vendor/molstar.css", "assets/protein/vendor/MOLSTAR-LICENSE.txt"):
+            self.assertIn(name, self.manifest["assets"])
+        pdb = unpack(self.manifest["assets"]["assets/protein/1CRN.pdb.txt"]["data"])
+        self.assertEqual(sum(line.startswith(b"ATOM  ") for line in pdb.splitlines()), 327)
+        self.assertNotIn('src/protein-atlas/', explore)
+
     def test_all_local_script_and_stylesheet_dependencies_are_inlined(self):
         for name, payload in self.manifest["pages"].items():
             document = unpack(payload).decode("utf-8")
@@ -154,12 +166,15 @@ class SingleFileBuild(unittest.TestCase):
         self.assertLess(output.index('window.BioqPackage ='), first_payload)
         self.assertIn('window.BioqPackage.assetReady("assets/specimens/frog.glb")', output)
         self.assertEqual(initial['assets']['assets/specimens/frog.glb']['deferred'], 'bioq-deferred-asset-0')
-        for name in ('assets/specimens/frog.glb', 'assets/specimens/cockroach.glb'):
+        for name in ('assets/specimens/frog.glb', 'assets/specimens/cockroach.glb', 'assets/protein/vendor/molstar.js'):
             entry = initial['assets'][name]
             self.assertNotIn('data', entry)
+            self.assertIn('window.BioqPackage.assetReady(' + json.dumps(name) + ')', output)
             payload = re.search(r'id="' + entry['deferred'] + r'">([^<]+)</script>', output).group(1)
             self.assertEqual(payload, self.manifest['assets'][name]['data'])
-            self.assertEqual(unpack(payload), (ROOT / name).read_bytes())
+            source = (ROOT / name).read_bytes()
+            expected = BUILDER.transform_js(source.decode('utf-8')).encode('utf-8') if name.endswith('.js') else source
+            self.assertEqual(unpack(payload), expected)
 
 
 class SingleFileTransform(unittest.TestCase):

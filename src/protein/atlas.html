@@ -1,0 +1,34 @@
+<section class="band wrap" id="proteins" aria-labelledby="proteinTitle">
+  <div class="sec-head">
+    <div class="eyebrow">Protein Atlas · Experimental structures</div>
+    <h2 class="h2" id="proteinTitle">From a chain to a working shape.</h2>
+    <p class="lead">Explore deposited protein coordinates. Trace a fold, switch to atoms, and find the small molecules held inside a binding site.</p>
+  </div>
+  <div class="pa-layout">
+    <div class="pa-main">
+      <div class="pa-card">
+        <div class="pa-title"><div><span class="pa-kicker" id="pa-id">PDB 1CRN</span><h3 id="pa-name">Crambin</h3></div><span class="pa-badge" id="pa-origin">Included offline</span></div>
+        <div class="pa-stage" id="pa-stage" data-loaded="false">
+          <div id="pa-host" aria-label="Interactive protein model. Drag to rotate; scroll or pinch to zoom."></div>
+          <div class="pa-cover" id="pa-cover"><div class="pa-cover-icon" aria-hidden="true">α ↔ β</div><strong id="pa-cover-title">A whole fold, in 46 residues.</strong><p id="pa-cover-note">The 3D viewer loads when you open a structure. Crambin is included in Biology Entelloq.</p><button type="button" class="btn primary" id="pa-load">Open 3D structure <span aria-hidden="true">→</span></button></div>
+        </div>
+        <div class="pa-toolbar">
+          <div class="pa-segment" role="group" aria-label="Protein representation"><button type="button" data-pa-mode="polymer-and-ligand" aria-pressed="true" disabled>Fold + ligands</button><button type="button" data-pa-mode="atomic-detail" aria-pressed="false" disabled>Atoms</button><button type="button" data-pa-mode="molecular-surface" aria-pressed="false" disabled>Surface</button></div>
+          <button type="button" class="pa-reset" id="pa-reset" disabled>Reset view</button>
+        </div>
+        <div class="pa-caption"><span id="pa-status" role="status" aria-live="polite">Ready to explore · no structure loaded</span><span>Drag to rotate · scroll or pinch to zoom</span></div>
+      </div>
+      <div class="pa-reading"><span class="pa-kicker">READ THE MODEL</span><p id="pa-question">Compare the ribbon and atom views. The ribbon makes the backbone fold easier to follow; the atom view shows the recorded positions that the ribbon summarizes.</p><div class="pa-key" id="pa-key"><span><i class="pa-helix"></i>Alpha helices</span><span><i class="pa-sheet"></i>Sheets</span><span><i class="pa-loop"></i>Coils</span><span><i class="pa-turn"></i>Turns / bends</span></div></div>
+      <p class="pa-boundary">Experimental X-ray coordinates, first deposited model. Colours help distinguish structure; they are not the protein’s natural colour. This is a structural view, not a simulation of folding, movement or binding affinity.</p>
+    </div>
+    <aside class="pa-aside" aria-label="Protein structures and evidence">
+      <div class="pa-kicker">Choose a structure</div>
+      <div id="pa-choices" class="pa-choices">
+        <button type="button" data-pa-protein="1CRN" aria-pressed="true"><span>1CRN <small>Included offline</small></span><strong>Crambin</strong><em>A compact plant protein</em></button>
+        <button type="button" data-pa-protein="1STP" aria-pressed="false"><span>1STP <small>Internet required</small></span><strong>Streptavidin + biotin</strong><em>Explore a binding site</em></button>
+        <button type="button" data-pa-protein="1HHO" aria-pressed="false"><span>1HHO <small>Internet required</small></span><strong>Oxyhaemoglobin</strong><em>Find the heme groups</em></button>
+      </div>
+      <div class="pa-evidence"><span class="pa-kicker">Structure notes</span><p id="pa-notes">A compact 46-residue plant protein. Look for helices, a small sheet and the turns that connect them.</p><dl><div><dt>Method</dt><dd>X-ray diffraction</dd></div><div><dt>Resolution</dt><dd id="pa-resolution">1.50 Å</dd></div><div><dt>Organism</dt><dd id="pa-organism">Crambe hispanica</dd></div><div><dt>Source</dt><dd>RCSB PDB</dd></div></dl><button type="button" id="pa-ligand" class="btn primary" hidden disabled>Focus ligand</button><a id="pa-source" href="https://www.rcsb.org/structure/1CRN" target="_blank" rel="noopener noreferrer">Source and validation ↗</a><a class="pa-license" href="./assets/protein/vendor/MOLSTAR-LICENSE.txt" target="_blank" rel="noopener">Mol* 5.13.1 · MIT licence ↗</a></div>
+    </aside>
+  </div>
+</section>

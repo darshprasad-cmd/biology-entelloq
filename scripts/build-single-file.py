@@ -377,13 +377,13 @@ def render_output(root: Path = ROOT) -> str:
     cbse_style = "\n".join((root / "src/cbse" / name).read_text(encoding="utf-8") for name in ("entry.css", "practicals-ui.css"))
     cbse_entry = "\n".join((root / "src/cbse" / name).read_text(encoding="utf-8") for name in ("curriculum.js", "practicals-data.js", "practicals-ui.js", "entry.js"))
     manifest = build_manifest(root)
-    # The two prepared scans account for most of the download. Keep them in
-    # this same HTML, after the running workspace, so lessons do not wait for
-    # specimen bytes they do not use. Each payload remains byte-identical.
+    # Keep prepared scans and the optional protein renderer after the running
+    # workspace, so lessons do not wait for engines or specimens they do not
+    # use. Each payload remains byte-identical inside this same portable HTML.
     deferred = []
     manifest = {**manifest, "assets": dict(manifest["assets"])}
     for name, entry in sorted(manifest["assets"].items(), key=lambda item: (item[0] != "assets/specimens/frog.glb", item[0])):
-        if not name.endswith(".glb"):
+        if not name.endswith(".glb") and name != "assets/protein/vendor/molstar.js":
             continue
         element_id = "bioq-deferred-asset-" + str(len(deferred))
         manifest["assets"][name] = {"type": entry["type"], "deferred": element_id}
