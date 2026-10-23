@@ -257,6 +257,7 @@ async function workouts(page, width) {
       const page = await context.newPage(); page.setDefaultTimeout(30000);
       page.on('pageerror',error=>report.errors.push(error.message));
       await page.goto(base + '/#solve',{waitUntil:'commit'});
+      await require('../tests/cbse-browser-helper.cjs').dismissCBSE(page);
       const solve = await navigate(page,'solve','#svConfigCard');
       await bankSession(page,solve,width);
       await topicSession(page,width);

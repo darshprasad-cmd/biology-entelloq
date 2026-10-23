@@ -2,6 +2,7 @@
  * connection and prove Solve works before the parent document finishes.
  * No WebGL worlds, camera, accounts or live AI are started by this check. */
 'use strict';
+const {dismissCBSE}=require('../tests/cbse-browser-helper.cjs');
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
 const {createRequire}=require('node:module'),{pathToFileURL}=require('node:url'),{createHash}=require('node:crypto');
 const {gunzipSync,gzipSync}=require('node:zlib');
@@ -30,6 +31,7 @@ const server=http.createServer((req,res)=>{
 });
 async function frame(parent,selector){const handle=await parent.locator(selector).elementHandle();return handle.contentFrame();}
 async function ready(page){
+ await dismissCBSE(page);
  const shell=await frame(page,'#bioq-workspace');await shell.locator('#viewFrame.on').waitFor({timeout:30000});
  const solve=await frame(shell,'#viewFrame');await solve.locator('#svConfigCard').waitFor({timeout:30000});
  await page.locator('#bioq-loading').waitFor({state:'hidden'});
@@ -69,6 +71,7 @@ async function readingReadyAfterTimeout(browser,base){
   });
   const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));
   await page.goto(base+'/late-reading#learn/topic/cell-structure/visual',{waitUntil:'domcontentloaded'});
+  await dismissCBSE(page);
   const shell=await frame(page,'#bioq-workspace');await shell.locator('#viewFrame.on').waitFor();const lesson=await frame(shell,'#viewFrame');
   await shell.locator('#oops.on').waitFor({timeout:20000});assert.match(await shell.locator('#oopsMsg').textContent(),/took too long/);
   assert.equal(await lesson.evaluate(()=>BioqContext.ready),false,'The real timeout precedes authored readiness');
@@ -93,6 +96,7 @@ async function readingReadyWithHeldImage(browser,base){
   }),base);
   const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));
   await page.goto(base+'/truncated#learn/topic/cell-structure/visual',{waitUntil:'domcontentloaded'});
+  await dismissCBSE(page);
   const shell=await frame(page,'#bioq-workspace');await shell.locator('#viewFrame.on').waitFor();const lesson=await frame(shell,'#viewFrame');
   await lesson.locator('#bl-mode-visual[aria-selected=true]').waitFor();await shell.locator('#skel.on').waitFor({state:'hidden'});
   assert.equal(await lesson.evaluate(()=>document.readyState),'interactive','The noncritical image still delays native load');

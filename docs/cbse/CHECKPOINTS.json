@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "academicYear": "2026-27",
+  "sourceChecked": "2026-10-24",
+  "scope": "Physics and Biology only; Classes 9–10 are strands of integrated Science. Class 9 standard course.",
+  "completionDefinition": "An objective is complete only after the evidence gates in WORKFLOW.md. This ledger is an audit queue, not an exhaustive objective inventory or a student mastery record.",
+  "milestone": {
+    "name": "First-visit questionnaire and class-specific study paths",
+    "status": "verified-local",
+    "releaseEvidence": "RELEASE.md"
+  },
+  "tracks": [
+    {
+      "id": "cbse-9-physics",
+      "class": 9,
+      "subject": "physics",
+      "objectiveAudit": "pending",
+      "verifiedCompleteObjectives": 0,
+      "objectiveDenominator": null,
+      "fullCoverageClaim": false,
+      "nextAction": "Audit official objectives against supporting lesson links; record missing explanations, practice, evidence and practical support."
+    },
+    {
+      "id": "cbse-10-physics",
+      "class": 10,
+      "subject": "physics",
+      "objectiveAudit": "pending",
+      "verifiedCompleteObjectives": 0,
+      "objectiveDenominator": null,
+      "fullCoverageClaim": false,
+      "nextAction": "Audit official objectives against supporting lesson links; record missing explanations, practice, evidence and practical support."
+    },
+    {
+      "id": "cbse-11-physics",
+      "class": 11,
+      "subject": "physics",
+      "objectiveAudit": "pending",
+      "verifiedCompleteObjectives": 0,
+      "objectiveDenominator": null,
+      "fullCoverageClaim": false,
+      "nextAction": "Audit official objectives against supporting lesson links; record missing explanations, practice, evidence and practical support."
+    },
+    {
+      "id": "cbse-12-physics",
+      "class": 12,
+      "subject": "physics",
+      "objectiveAudit": "pending",
+      "verifiedCompleteObjectives": 0,
+      "objectiveDenominator": null,
+      "fullCoverageClaim": false,
+      "nextAction": "Audit official objectives against supporting lesson links; record missing explanations, practice, evidence and practical support."
+    },
+    {
+      "id": "cbse-9-biology",
+      "class": 9,
+      "subject": "biology",
+      "objectiveAudit": "pending",
+      "verifiedCompleteObjectives": 0,
+      "objectiveDenominator": null,
+      "fullCoverageClaim": false,
+      "nextAction": "Audit official objectives against supporting lesson links; record missing explanations, practice, evidence and practical support."
+    },
+    {
+      "id": "cbse-10-biology",
+      "class": 10,
+      "subject": "biology",
+      "objectiveAudit": "pending",
+      "verifiedCompleteObjectives": 0,
+      "objectiveDenominator": null,
+      "fullCoverageClaim": false,
+      "nextAction": "Audit official objectives against supporting lesson links; record missing explanations, practice, evidence and practical support."
+    },
+    {
+      "id": "cbse-11-biology",
+      "class": 11,
+      "subject": "biology",
+      "objectiveAudit": "pending",
+      "verifiedCompleteObjectives": 0,
+      "objectiveDenominator": null,
+      "fullCoverageClaim": false,
+      "nextAction": "Audit official objectives against supporting lesson links; record missing explanations, practice, evidence and practical support."
+    },
+    {
+      "id": "cbse-12-biology",
+      "class": 12,
+      "subject": "biology",
+      "objectiveAudit": "pending",
+      "verifiedCompleteObjectives": 0,
+      "objectiveDenominator": null,
+      "fullCoverageClaim": false,
+      "nextAction": "Audit official objectives against supporting lesson links; record missing explanations, practice, evidence and practical support."
+    }
+  ]
+}
