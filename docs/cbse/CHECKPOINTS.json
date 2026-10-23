@@ -6,8 +6,19 @@
   "completionDefinition": "An objective is complete only after the evidence gates in WORKFLOW.md. This ledger is an audit queue, not an exhaustive objective inventory or a student mastery record.",
   "milestone": {
     "name": "First-visit questionnaire and class-specific study paths",
-    "status": "verified-local",
+    "status": "released-live-verified",
     "releaseEvidence": "RELEASE.md"
+  },
+  "practicalMilestone": {
+    "status": "verified-local",
+    "inventory": "practicals.json",
+    "releaseEvidence": "PRACTICAL-RELEASE.md",
+    "standardBiologyGuides": 44,
+    "accessibleBiologyGuides": 15,
+    "newInteractiveInstruments": [],
+    "fullInteractiveCoverage": false,
+    "schoolPracticalCompletionClaim": false,
+    "nextAction": "Verify release and live parity, then add genuine missing practical interactions rather than relabelling existing partial lab models. Baseline inventory statuses precede this guide release. Apparatus familiarity remains an unverified physical/accessibility assessment, not another completed experiment."
   },
   "tracks": [
     {

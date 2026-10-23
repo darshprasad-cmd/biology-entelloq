@@ -1,0 +1,5548 @@
+{
+  "schemaVersion": 1,
+  "academicYear": "2026-27",
+  "auditedAt": "2026-10-24",
+  "scope": {
+    "classes": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "class9Track": "Science STANDARD",
+    "primaryApps": [
+      "Physics",
+      "Biology"
+    ],
+    "chemistry": "Class 9/10 Chemistry entries retained for completeness; deferred outside these two apps.",
+    "inventoryUnit": "One row per official numbered item. Compound objectives remain components; OR alternatives are labelled. Accessible alternatives and suggested projects are not extra mandatory experiments.",
+    "baselineCommits": {
+      "biology": "476703c73cffe0c4a3510f87e34e47cc1768c979",
+      "physics": "cb0ea8a998c79e361e31c74612b5d9a38e9a39b4"
+    },
+    "laterImplementation": "This is a source-audit baseline. New work must update evidence, not silently inherit completion."
+  },
+  "sources": [
+    {
+      "id": "s9",
+      "url": "https://cbseacademic.nic.in/web_material/CurriculumMain27/SecPart1/ScienceSt_SecP1_2026-27.pdf",
+      "title": "CBSE Class IX Science STANDARD 2026–27",
+      "practicalPages": [
+        19
+      ]
+    },
+    {
+      "id": "s10",
+      "url": "https://cbseacademic.nic.in/web_material/CurriculumMain27/SecPart1/Science_SecP1_2026-27.pdf",
+      "title": "CBSE Class X Science 2026–27",
+      "practicalPages": [
+        7,
+        8
+      ]
+    },
+    {
+      "id": "p1112",
+      "url": "https://cbseacademic.nic.in/web_material/CurriculumMain27/SecPart2/Physics_SecP2_2026-27.pdf",
+      "title": "CBSE Physics XI–XII 2026–27",
+      "practicalPages": [
+        7,
+        8,
+        9,
+        10,
+        17,
+        18,
+        19,
+        20,
+        21
+      ]
+    },
+    {
+      "id": "b1112",
+      "url": "https://cbseacademic.nic.in/web_material/CurriculumMain27/SecPart2/Biology_SecP2_2026-27.pdf",
+      "title": "CBSE Biology XI–XII 2026–27",
+      "practicalPages": [
+        6,
+        7,
+        8,
+        12,
+        13,
+        14
+      ]
+    }
+  ],
+  "statusDefinitions": {
+    "existing-simulation": "Source has a parameter/action-driven virtual exercise for the stated core objective. Not a claim of real apparatus practice, browser QA, or school credit.",
+    "existing-protocol": "An authored procedure with relevant objective/observations exists, but the corresponding hands-on apparatus is not implemented. Preview animation is not a simulation.",
+    "partial": "Some relevant behavior/content exists, but one or more prescribed apparatus, specimens, measurements or procedure components are missing.",
+    "missing": "No matching practical implementation or authored protocol identified in the audited apps. Related theory text is not coverage."
+  },
+  "evidenceLimitations": [
+    "Read-only source audit; no new runtime/browser/assistive-technology or hardware validation is claimed.",
+    "Status records existing app capability, never student completion. All schoolPracticalCompleted values remain false.",
+    "Canonical IDs below are audit IDs. Source selectors and registration IDs identify actual current resources; this JSON does not add routes.",
+    "Physics PeqBench.has returns true for every name; its mount returns only stop and draws elapsed-time previews. These previews are not completed interactive apparatus.",
+    "Physics SIMS.pendulum is a double pendulum. Separate Research pendulum-g generates synthetic simple-pendulum readings.",
+    "Biology microscope uses original illustrated slides, not photomicrographs; no claim of species/clinical accuracy.",
+    "Digital rehearsal does not replace supervised school practicals, assessed records, teacher observation or tactile accommodations.",
+    "Accessible alternative lists are curriculum scope, not proof of accessible software. Every eventual bench requires keyboard, screen-reader, text-table and reduced-motion checks."
+  ],
+  "sourceDiscrepancies": [
+    {
+      "sourceId": "p1112",
+      "pages": [
+        20,
+        21
+      ],
+      "detail": "Guidelines refer to ten alternative experiments; the Class XII printed list contains eight numbered items. Inventory follows those eight; no items are invented."
+    },
+    {
+      "sourceId": "b1112",
+      "pages": [
+        8,
+        13,
+        14
+      ],
+      "detail": "General guidelines refer to ten alternatives; the printed Biology lists have eight for XI and seven for XII. Preserve the published lists and ask the teacher for local assessment instructions."
+    },
+    {
+      "sourceId": "b1112",
+      "pages": [
+        12,
+        14
+      ],
+      "detail": "Human pedigree examples in the syllabus include traits often oversimplified as single-gene. Use fictional validated Mendelian traits or an appropriately qualified colour-vision/ABO example; do not teach tongue rolling, earlobes or widow’s peak as universally simple Mendelian."
+    },
+    {
+      "sourceId": "s10",
+      "pages": [
+        5,
+        6
+      ],
+      "detail": "The year-end assessment note conflicts with preceding heredity/current listings. Practical inventory is independently explicit on pp7–8; teacher confirmation is required for exam-coverage claims."
+    }
+  ],
+  "resourceCatalog": [
+    {
+      "id": "physics:protocol:0:0",
+      "app": "Physics",
+      "kind": "protocol",
+      "title": "Simple Pendulum — measure g",
+      "sourcePath": "index.html",
+      "locator": {
+        "view": "lab",
+        "selector": "[data-xsec=\"0\"][data-xit=\"0\"]"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Lengths and periods; T²–L slope",
+      "limits": "No simulated stopwatch, mass comparison or seconds-pendulum inference."
+    },
+    {
+      "id": "physics:protocol:0:2",
+      "app": "Physics",
+      "kind": "protocol",
+      "title": "Hooke’s Law",
+      "sourcePath": "index.html",
+      "locator": {
+        "view": "lab",
+        "selector": "[data-xsec=\"0\"][data-xit=\"2\"]"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Load/extension procedure",
+      "limits": "No interactive spring measurement in this protocol; Research hooke-k is separate."
+    },
+    {
+      "id": "physics:protocol:0:3",
+      "app": "Physics",
+      "kind": "protocol",
+      "title": "Young’s Modulus",
+      "sourcePath": "index.html",
+      "locator": {
+        "view": "lab",
+        "selector": "[data-xsec=\"0\"][data-xit=\"3\"]"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Wire loading/unloading, diameter and stress–strain method",
+      "limits": "No wire-extension or micrometer apparatus."
+    },
+    {
+      "id": "physics:protocol:0:8",
+      "app": "Physics",
+      "kind": "protocol",
+      "title": "Friction — Static & Kinetic",
+      "sourcePath": "index.html",
+      "locator": {
+        "view": "lab",
+        "selector": "[data-xsec=\"0\"][data-xit=\"8\"]"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Normal force vs limiting/kinetic friction",
+      "limits": "Written readings; no drag force gauge."
+    },
+    {
+      "id": "physics:protocol:0:9",
+      "app": "Physics",
+      "kind": "protocol",
+      "title": "Inclined Plane",
+      "sourcePath": "index.html",
+      "locator": {
+        "view": "lab",
+        "selector": "[data-xsec=\"0\"][data-xit=\"9\"]"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Cart timing and acceleration vs slope",
+      "limits": "No prescribed distance-time/velocity-time recorder or roller-force gauge."
+    },
+    {
+      "id": "physics:protocol:0:12",
+      "app": "Physics",
+      "kind": "protocol",
+      "title": "Rolling Motion",
+      "sourcePath": "index.html",
+      "locator": {
+        "view": "lab",
+        "selector": "[data-xsec=\"0\"][data-xit=\"12\"]"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Compare rolling bodies on incline",
+      "limits": "No double incline or limiting rolling-friction measurement."
+    },
+    {
+      "id": "physics:protocol:1:1",
+      "app": "Physics",
+      "kind": "protocol",
+      "title": "Damped Oscillation",
+      "sourcePath": "index.html",
+      "locator": {
+        "view": "lab",
+        "selector": "[data-xsec=\"1\"][data-xit=\"1\"]"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Peak amplitudes and exponential decay plot",
+      "limits": "Uses ln(amplitude), not prescribed amplitude-squared graph."
+    },
+    {
+      "id": "physics:protocol:1:4",
+      "app": "Physics",
+      "kind": "protocol",
+      "title": "Wave Speed on a String",
+      "sourcePath": "index.html",
+      "locator": {
+        "view": "lab",
+        "selector": "[data-xsec=\"1\"][data-xit=\"4\"]"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Standing-wave wavelength and frequency",
+      "limits": "Not Class IX pulse flight-time procedure; no sonometer."
+    },
+    {
+      "id": "physics:protocol:2:1",
+      "app": "Physics",
+      "kind": "protocol",
+      "title": "Spherical Mirrors",
+      "sourcePath": "index.html",
+      "locator": {
+        "view": "lab",
+        "selector": "[data-xsec=\"2\"][data-xit=\"1\"]"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Screen focus and reciprocal object/image graph",
+      "limits": "Written only; not convex-mirror/auxiliary-lens procedure."
+    },
+    {
+      "id": "physics:protocol:2:3",
+      "app": "Physics",
+      "kind": "protocol",
+      "title": "Single-Slit Diffraction",
+      "sourcePath": "index.html",
+      "locator": {
+        "view": "lab",
+        "selector": "[data-xsec=\"2\"][data-xit=\"3\"]"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Slit minima and screen-distance procedure",
+      "limits": "Written only; laser safety needs supervised practice."
+    },
+    {
+      "id": "physics:protocol:3:0",
+      "app": "Physics",
+      "kind": "protocol",
+      "title": "Ohm’s Law",
+      "sourcePath": "index.html",
+      "locator": {
+        "view": "lab",
+        "selector": "[data-xsec=\"3\"][data-xit=\"0\"]"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "V–I observations and slope resistance",
+      "limits": "Written protocol; actual synthetic measurement bench is separate."
+    },
+    {
+      "id": "physics:protocol:3:1",
+      "app": "Physics",
+      "kind": "protocol",
+      "title": "Wheatstone Bridge",
+      "sourcePath": "index.html",
+      "locator": {
+        "view": "lab",
+        "selector": "[data-xsec=\"3\"][data-xit=\"1\"]"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Resistance-ratio null method",
+      "limits": "Not a metre-bridge wire/jockey implementation."
+    },
+    {
+      "id": "physics:protocol:3:2",
+      "app": "Physics",
+      "kind": "protocol",
+      "title": "Potentiometer",
+      "sourcePath": "index.html",
+      "locator": {
+        "view": "lab",
+        "selector": "[data-xsec=\"3\"][data-xit=\"2\"]"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Null method for cell EMF/internal resistance",
+      "limits": "Not steady-current wire potential gradient bench."
+    },
+    {
+      "id": "physics:protocol:3:4",
+      "app": "Physics",
+      "kind": "protocol",
+      "title": "RL Circuit",
+      "sourcePath": "index.html",
+      "locator": {
+        "view": "lab",
+        "selector": "[data-xsec=\"3\"][data-xit=\"4\"]"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Time constant from switched-coil current",
+      "limits": "Not an AC impedance/multimeter procedure."
+    },
+    {
+      "id": "physics:protocol:3:9",
+      "app": "Physics",
+      "kind": "protocol",
+      "title": "Transformer",
+      "sourcePath": "index.html",
+      "locator": {
+        "view": "lab",
+        "selector": "[data-xsec=\"3\"][data-xit=\"9\"]"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Turns and voltage ratios with loading",
+      "limits": "Written only; no safe interactive transformer apparatus."
+    },
+    {
+      "id": "physics:protocol:4:0",
+      "app": "Physics",
+      "kind": "protocol",
+      "title": "Boyle’s Law",
+      "sourcePath": "index.html",
+      "locator": {
+        "view": "lab",
+        "selector": "[data-xsec=\"4\"][data-xit=\"0\"]"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Isothermal pressure–volume observations",
+      "limits": "No manometer/volume apparatus; synthetic DesignLab data is separate."
+    },
+    {
+      "id": "physics:protocol:4:3",
+      "app": "Physics",
+      "kind": "protocol",
+      "title": "Heat Capacity — calorimetry",
+      "sourcePath": "index.html",
+      "locator": {
+        "view": "lab",
+        "selector": "[data-xsec=\"4\"][data-xit=\"3\"]"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Hot-solid/cool-water heat balance",
+      "limits": "Written only; Research specific-heat heats water and is a different method."
+    },
+    {
+      "id": "physics:protocol:4:4",
+      "app": "Physics",
+      "kind": "protocol",
+      "title": "Newton’s Law of Cooling",
+      "sourcePath": "index.html",
+      "locator": {
+        "view": "lab",
+        "selector": "[data-xsec=\"4\"][data-xit=\"4\"]"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Temperature–time curve and ambient correction",
+      "limits": "Written only; no thermometer, time or changing-condition apparatus."
+    },
+    {
+      "id": "physics:research:pendulum-g",
+      "app": "Physics",
+      "kind": "synthetic-data",
+      "title": "Simple-pendulum g",
+      "sourcePath": "index.html",
+      "locator": {
+        "view": "lab/research",
+        "selector": "[data-eid=\"pendulum-g\"]",
+        "api": "Research.list"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Length-controlled synthetic periods, table, T²–L fit and CSV.",
+      "limits": "No manual oscillation timing, bob-mass variable, energy readout or seconds-pendulum task."
+    },
+    {
+      "id": "physics:research:hooke-k",
+      "app": "Physics",
+      "kind": "synthetic-data",
+      "title": "Spring stiffness",
+      "sourcePath": "index.html",
+      "locator": {
+        "view": "lab/research",
+        "selector": "[data-eid=\"hooke-k\"]",
+        "api": "Research.list"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Force-controlled synthetic extension, table, fit and CSV.",
+      "limits": "Generated readings; no ruler parallax, measured least count or actual hanging masses."
+    },
+    {
+      "id": "physics:research:ohm-R",
+      "app": "Physics",
+      "kind": "synthetic-data",
+      "title": "Ohm resistance",
+      "sourcePath": "index.html",
+      "locator": {
+        "view": "lab/research",
+        "selector": "[data-eid=\"ohm-R\"]",
+        "api": "Research.list"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Voltage-controlled synthetic current, V–I fit and CSV.",
+      "limits": "Fixed ohmic sample; no wiring/polarity/range control or resistance combinations."
+    },
+    {
+      "id": "physics:research:newton-mass",
+      "app": "Physics",
+      "kind": "synthetic-data",
+      "title": "Newton’s law cart",
+      "sourcePath": "index.html",
+      "locator": {
+        "view": "lab/research",
+        "selector": "[data-eid=\"newton-mass\"]",
+        "api": "Research.list"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Applied-force synthetic acceleration, fitted mass.",
+      "limits": "Pulley picture, not a configurable hanging-mass trolley or real timing."
+    },
+    {
+      "id": "physics:research:wave-v",
+      "app": "Physics",
+      "kind": "synthetic-data",
+      "title": "String wave speed",
+      "sourcePath": "index.html",
+      "locator": {
+        "view": "lab/research",
+        "selector": "[data-eid=\"wave-v\"]",
+        "api": "Research.list"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Frequency-controlled synthetic wavelength and fitted wave speed.",
+      "limits": "Standing-wave data, not string/slinky pulse timing or sonometer apparatus."
+    },
+    {
+      "id": "physics:research:refraction-n",
+      "app": "Physics",
+      "kind": "synthetic-data",
+      "title": "Snell index",
+      "sourcePath": "index.html",
+      "locator": {
+        "view": "lab/research",
+        "selector": "[data-eid=\"refraction-n\"]",
+        "api": "Research.list"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Incidence-controlled synthetic refraction angles and index fit.",
+      "limits": "Single interface, not slab exit angle/lateral displacement or prism."
+    },
+    {
+      "id": "physics:research:resistivity",
+      "app": "Physics",
+      "kind": "synthetic-data",
+      "title": "Wire resistivity",
+      "sourcePath": "index.html",
+      "locator": {
+        "view": "lab/research",
+        "selector": "[data-eid=\"resistivity\"]",
+        "api": "Research.list"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Length-controlled synthetic wire resistance and fit.",
+      "limits": "Not V–I curves of two/three measured wires; no diameter measurement."
+    },
+    {
+      "id": "physics:research:specific-heat",
+      "app": "Physics",
+      "kind": "synthetic-data",
+      "title": "Specific heat of water",
+      "sourcePath": "index.html",
+      "locator": {
+        "view": "lab/research",
+        "selector": "[data-eid=\"specific-heat\"]",
+        "api": "Research.list"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Synthetic energy/temperature-rise data for one kilogram of water.",
+      "limits": "Not hot-solid method of mixtures."
+    },
+    {
+      "id": "physics:sim:lens",
+      "app": "Physics",
+      "kind": "concept-simulation",
+      "title": "Single convex lens",
+      "sourcePath": "index.html",
+      "locator": {
+        "api": "SIMS.lens"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Object-distance slider changes ray/image geometry.",
+      "limits": "No calibrated optical bench/screen focus; no two-lens, mirror-liquid or travelling-microscope procedure."
+    },
+    {
+      "id": "physics:sim:projectile",
+      "app": "Physics",
+      "kind": "concept-simulation",
+      "title": "Projectile model",
+      "sourcePath": "index.html",
+      "locator": {
+        "api": "SIMS.projectile"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Angle and speed controls change ballistic path.",
+      "limits": "No calibrated range table or manual launcher reading."
+    },
+    {
+      "id": "physics:sim:standing",
+      "app": "Physics",
+      "kind": "concept-simulation",
+      "title": "Standing waves",
+      "sourcePath": "index.html",
+      "locator": {
+        "api": "SIMS.standing"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Harmonic selector changes nodes and antinodes.",
+      "limits": "No tension, frequency or sonometer length measurement."
+    },
+    {
+      "id": "physics:sim:refraction",
+      "app": "Physics",
+      "kind": "concept-simulation",
+      "title": "Refraction/TIR",
+      "sourcePath": "index.html",
+      "locator": {
+        "api": "SIMS.refraction"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Angle and refractive-index controls change ray direction.",
+      "limits": "Single interface, not glass slab/prism or liquid-index apparatus."
+    },
+    {
+      "id": "physics:sim:pendulum",
+      "app": "Physics",
+      "kind": "concept-simulation",
+      "title": "Double pendulum",
+      "sourcePath": "index.html",
+      "locator": {
+        "api": "SIMS.pendulum"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Coupled nonlinear bob trajectories.",
+      "limits": "Not the simple-pendulum school practical."
+    },
+    {
+      "id": "physics:sim:spring",
+      "app": "Physics",
+      "kind": "concept-simulation",
+      "title": "Oscillating spring",
+      "sourcePath": "index.html",
+      "locator": {
+        "api": "SIMS.spring"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Mass/stiffness controls and energy display.",
+      "limits": "Not static spring ruler instrument; use Research hooke-k for synthetic loading data."
+    },
+    {
+      "id": "physics:sim:gas",
+      "app": "Physics",
+      "kind": "concept-simulation",
+      "title": "Gas kinetic model",
+      "sourcePath": "index.html",
+      "locator": {
+        "api": "SIMS.gas"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Gas variables alter a particle model.",
+      "limits": "No pressure-column or capillary apparatus."
+    },
+    {
+      "id": "physics:design:boyle",
+      "app": "Physics",
+      "kind": "synthetic-data",
+      "title": "DesignLab Boyle",
+      "sourcePath": "index.html",
+      "locator": {
+        "api": "DesignLab",
+        "phenomenon": "boyle"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Volume-controlled synthetic pressure data with candidate-model fitting.",
+      "limits": "No pressure gauge/manual measurement, and direct P–V plus P–1/V school graph workflow is not complete."
+    },
+    {
+      "id": "biology:lab:microscope",
+      "app": "Biology",
+      "kind": "simulation",
+      "title": "microscope",
+      "sourcePath": "src/_lab_bench.js",
+      "locator": {
+        "route": "labs.html#microscope",
+        "registrationId": "microscope"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Focus, stage XY, objectives, stain and annotation for onion, blood, stomata and bacteria.",
+      "limits": "No cheek/tissue/reproductive slides, mount preparation or apparatus-parts tour."
+    },
+    {
+      "id": "biology:lab:osmosis",
+      "app": "Biology",
+      "kind": "simulation",
+      "title": "osmosis",
+      "sourcePath": "src/library/experiments.js",
+      "locator": {
+        "route": "labs.html#osmosis",
+        "registrationId": "osmosis"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "External solute changes plant/animal cell volume; plant shrinkage shows plasmolysis.",
+      "limits": "Not potato osmometer/raisin apparatus or epidermal-peel preparation."
+    },
+    {
+      "id": "biology:lab:cellular-respiration",
+      "app": "Biology",
+      "kind": "simulation",
+      "title": "cellular-respiration",
+      "sourcePath": "src/library/experiments.js",
+      "locator": {
+        "route": "labs.html#cellular-respiration",
+        "registrationId": "cellular-respiration"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Oxygen, temperature and fuel alter yeast-like/muscle-like gas/ATP proxies.",
+      "limits": "No seed/bud/leaf respirometer, limewater/KOH control or measured capillary displacement."
+    },
+    {
+      "id": "biology:lab:mitosis",
+      "app": "Biology",
+      "kind": "simulation",
+      "title": "mitosis",
+      "sourcePath": "src/library/experiments.js",
+      "locator": {
+        "route": "labs.html#mitosis",
+        "registrationId": "mitosis"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Stepwise fictional 2n=4 chromosomes with spindle checkpoint.",
+      "limits": "Not onion-root squash, grasshopper slide, meiosis or gametogenesis specimen."
+    },
+    {
+      "id": "biology:lab:mendelian-genetics",
+      "app": "Biology",
+      "kind": "simulation",
+      "title": "mendelian-genetics",
+      "sourcePath": "src/library/experiments.js",
+      "locator": {
+        "route": "labs.html#mendelian-genetics",
+        "registrationId": "mendelian-genetics"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Controlled parental genotypes and sampled offspring probabilities.",
+      "limits": "Fictional organisms, not seed identification or pedigree construction."
+    },
+    {
+      "id": "biology:lab:dna-extraction",
+      "app": "Biology",
+      "kind": "simulation",
+      "title": "dna-extraction",
+      "sourcePath": "src/_lab_molecular.js",
+      "locator": {
+        "route": "labs.html#dna-extraction",
+        "registrationId": "dna-extraction"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Ordered lysis/salt/protease/ethanol/spooling state model; source and temperature choices.",
+      "limits": "Starts with model homogenate; no plant mashing/filtration, real yield/purity or supervised extraction."
+    },
+    {
+      "id": "biology:lab:plant-investigation",
+      "app": "Biology",
+      "kind": "simulation",
+      "title": "plant-investigation",
+      "sourcePath": "src/library/investigations.js",
+      "locator": {
+        "route": "labs.html#plant-investigation",
+        "registrationId": "plant-investigation"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Fictional greenhouse evidence choices.",
+      "limits": "Not paired stomatal counts/transpiration or chromatography."
+    },
+    {
+      "id": "biology:lab:ecosystem-investigation",
+      "app": "Biology",
+      "kind": "simulation",
+      "title": "ecosystem-investigation",
+      "sourcePath": "src/library/investigations.js",
+      "locator": {
+        "route": "labs.html#ecosystem-investigation",
+        "registrationId": "ecosystem-investigation"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Fictional pond evidence choices.",
+      "limits": "Not quadrat placement, counts, density or frequency."
+    },
+    {
+      "id": "biology:lab:frog-dissection",
+      "app": "Biology",
+      "kind": "simulation",
+      "title": "frog-dissection",
+      "sourcePath": "src/library/lab-metadata.js",
+      "locator": {
+        "route": "labs.html#frog-dissection",
+        "registrationId": "frog-dissection"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Registers working theatre iframe and specimen lifecycle.",
+      "limits": "Frog only; not whole required taxa identification set or species-validation evidence."
+    },
+    {
+      "id": "biology:lab:earthworm-dissection",
+      "app": "Biology",
+      "kind": "simulation",
+      "title": "earthworm-dissection",
+      "sourcePath": "src/library/lab-metadata.js",
+      "locator": {
+        "route": "labs.html#earthworm-dissection",
+        "registrationId": "earthworm-dissection"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Registers earthworm theatre loading and observations.",
+      "limits": "No taxonomic comparison against every prescribed specimen."
+    },
+    {
+      "id": "biology:lab:fish-dissection",
+      "app": "Biology",
+      "kind": "simulation",
+      "title": "fish-dissection",
+      "sourcePath": "src/library/lab-metadata.js",
+      "locator": {
+        "route": "labs.html#fish-dissection",
+        "registrationId": "fish-dissection"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Registers generic bony-fish theatre.",
+      "limits": "Does not establish Rohu identity; no shark specimen. Do not relabel as species-accurate Rohu."
+    },
+    {
+      "id": "biology:lab:cockroach-dissection",
+      "app": "Biology",
+      "kind": "simulation",
+      "title": "cockroach-dissection",
+      "sourcePath": "src/library/lab-metadata.js",
+      "locator": {
+        "route": "labs.html#cockroach-dissection",
+        "registrationId": "cockroach-dissection"
+      },
+      "verifiedBy": "source-inspection",
+      "behavior": "Registers cockroach theatre.",
+      "limits": "Existing anatomy access does not establish accessible tactile identification."
+    }
+  ],
+  "requirements": [
+    {
+      "id": "s9-e09",
+      "classYear": 9,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "s9",
+      "pages": [
+        19
+      ],
+      "sourceNumber": "9",
+      "objective": "Investigate simple-pendulum energy conservation.",
+      "components": [
+        "Compare energy across swing positions"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:research:pendulum-g",
+        "physics:protocol:0:0"
+      ],
+      "gap": "Existing simple-pendulum resources measure period/g, not position-resolved kinetic and potential energy; SIMS.pendulum is a different double-pendulum model.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "s9-e10",
+      "classYear": 9,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "s9",
+      "pages": [
+        19
+      ],
+      "sourceNumber": "10",
+      "objective": "Measure travel speed of a string or slinky pulse.",
+      "components": [
+        "Pulse distance",
+        "Elapsed travel time",
+        "Speed estimate"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:protocol:1:4",
+        "physics:research:wave-v"
+      ],
+      "gap": "Existing string work measures f and wavelength, not a timed pulse.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "s9-e11",
+      "classYear": 9,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "s9",
+      "pages": [
+        19
+      ],
+      "sourceNumber": "11",
+      "objective": "Measure lever mechanical advantage.",
+      "components": [
+        "Load",
+        "Effort",
+        "Load/effort ratio"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "s9-e12",
+      "classYear": 9,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "s9",
+      "pages": [
+        19
+      ],
+      "sourceNumber": "12",
+      "objective": "Test Newton’s second law using a trolley and hanging masses.",
+      "components": [
+        "Trolley/pulley/hanging-mass setup",
+        "Controlled force and mass trials",
+        "Acceleration observations"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:research:newton-mass"
+      ],
+      "gap": "Force–acceleration data model exists; no configurable trolley/pulley masses and measurement sequence.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "s9-e13",
+      "classYear": 9,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "s9",
+      "pages": [
+        19
+      ],
+      "sourceNumber": "13",
+      "objective": "Create motion graphs from an inclined-plane experiment.",
+      "components": [
+        "Distance-time observations",
+        "Velocity-time observations"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:protocol:0:9"
+      ],
+      "gap": "Incline protocol gives acceleration/angle data, not both prescribed time-series graphs.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "s9-e04",
+      "classYear": 9,
+      "subject": "Biology",
+      "category": "experiment",
+      "sourceId": "s9",
+      "pages": [
+        19
+      ],
+      "sourceNumber": "4",
+      "objective": "Compare stained plant and cheek cells.",
+      "components": [
+        "Prepare onion peel or Rhoeo leaf mount",
+        "Prepare human cheek-cell mount",
+        "Observe, record and label both"
+      ],
+      "status": "partial",
+      "resources": [
+        "biology:lab:microscope"
+      ],
+      "gap": "Onion observation/stain exists; no cheek/Rhoeo slides, mount preparation or paired-cell practical.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "s9-e05",
+      "classYear": 9,
+      "subject": "Biology",
+      "category": "experiment",
+      "sourceId": "s9",
+      "pages": [
+        19
+      ],
+      "sourceNumber": "5",
+      "objective": "Identify plant and muscle tissues from prepared slides.",
+      "components": [
+        "Parenchyma",
+        "Collenchyma",
+        "Sclerenchyma",
+        "Striped muscle",
+        "Smooth muscle",
+        "Cardiac muscle",
+        "Label distinguishing structures"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "s9-e06",
+      "classYear": 9,
+      "subject": "Biology",
+      "category": "experiment",
+      "sourceId": "s9",
+      "pages": [
+        19
+      ],
+      "sourceNumber": "6",
+      "objective": "Distinguish budding from spore formation on slides.",
+      "components": [
+        "Yeast budding",
+        "Hydra budding",
+        "Bread-mould spores"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "s9-e07",
+      "classYear": 9,
+      "subject": "Biology",
+      "category": "experiment",
+      "sourceId": "s9",
+      "pages": [
+        19
+      ],
+      "sourceNumber": "7",
+      "objective": "Identify and label a bisexual flower.",
+      "components": [
+        "Identify the floral whorls",
+        "Label male and female reproductive parts"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "s9-e08",
+      "classYear": 9,
+      "subject": "Biology",
+      "category": "specimen-identification",
+      "sourceId": "s9",
+      "pages": [
+        19
+      ],
+      "sourceNumber": "8",
+      "objective": "Identify the prescribed diversity specimens/models.",
+      "components": [
+        "Spirogyra",
+        "Mushroom",
+        "Moss",
+        "Fern",
+        "Pine cone",
+        "Amoeba",
+        "Hydra",
+        "Tapeworm",
+        "Ascaris",
+        "Earthworm",
+        "Butterfly",
+        "Snail",
+        "Starfish"
+      ],
+      "status": "partial",
+      "resources": [
+        "biology:lab:earthworm-dissection"
+      ],
+      "gap": "Earthworm anatomy supports one specimen; other listed taxa and a reasoned identification workflow are absent.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "s9-e01",
+      "classYear": 9,
+      "subject": "Chemistry",
+      "category": "experiment",
+      "sourceId": "s9",
+      "pages": [
+        19
+      ],
+      "sourceNumber": "1",
+      "objective": "Distinguish solution, suspension and colloid behavior.",
+      "components": [
+        "Salt/sugar/alum solutions",
+        "Soil/chalk/fine-sand suspensions",
+        "Starch and egg-albumin/milk colloids",
+        "Transparency",
+        "Filtration",
+        "Stability",
+        "Tyndall scattering"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "chemistry-deferred",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "s9-e02",
+      "classYear": 9,
+      "subject": "Chemistry",
+      "category": "experiment",
+      "sourceId": "s9",
+      "pages": [
+        19
+      ],
+      "sourceNumber": "2",
+      "objective": "Separate components using four suitable techniques.",
+      "components": [
+        "Oil/water separating funnel",
+        "Ink paper chromatography",
+        "Ammonium chloride/salt sublimation",
+        "Alum coagulation of muddy water"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "chemistry-deferred",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "s9-e03",
+      "classYear": 9,
+      "subject": "Chemistry",
+      "category": "experiment",
+      "sourceId": "s9",
+      "pages": [
+        19
+      ],
+      "sourceNumber": "3",
+      "objective": "Test mass conservation in a chemical change.",
+      "components": [
+        "Closed-system mass before/after",
+        "Compare measurement uncertainty"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "chemistry-deferred",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "s10-e04",
+      "classYear": 10,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "s10",
+      "pages": [
+        7,
+        8
+      ],
+      "sourceNumber": "4",
+      "objective": "Determine resistance from current–voltage observations.",
+      "components": [
+        "Vary potential difference",
+        "Record current",
+        "Plot V–I",
+        "Infer resistance"
+      ],
+      "status": "existing-simulation",
+      "resources": [
+        "physics:research:ohm-R",
+        "physics:protocol:3:0"
+      ],
+      "gap": "Core virtual readings/fit exist; wiring, meter scales and safety skill remain outside the synthetic-data bench.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "s10-e05",
+      "classYear": 10,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "s10",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "5",
+      "objective": "Measure equivalent resistance in two connection arrangements.",
+      "components": [
+        "Two resistors in series",
+        "Two resistors in parallel"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:protocol:3:0",
+        "physics:research:ohm-R"
+      ],
+      "gap": "Single fixed-resistor measurement does not implement series/parallel assembly or equivalent-resistance comparison.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "s10-e10",
+      "classYear": 10,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "s10",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "10",
+      "objective": "Estimate focal lengths from a distant-object image.",
+      "components": [
+        "Concave mirror",
+        "Convex lens",
+        "Locate a sharp image on a screen"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:sim:lens",
+        "physics:protocol:2:1"
+      ],
+      "gap": "Concept lens and mirror protocol exist; no distant-object focus procedure for both instruments.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "s10-e11",
+      "classYear": 10,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "s10",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "11",
+      "objective": "Trace a ray through a rectangular glass slab.",
+      "components": [
+        "Different incident angles",
+        "Measure incidence/refraction/emergence",
+        "Interpret parallel exit and displacement"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:sim:refraction",
+        "physics:research:refraction-n"
+      ],
+      "gap": "Single-interface refraction does not trace a two-face slab or emergence angle.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "s10-e13",
+      "classYear": 10,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "s10",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "13",
+      "objective": "Trace the ray path through a glass prism.",
+      "components": [
+        "Incident ray",
+        "Two refracting faces",
+        "Emergent ray and deviation"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:sim:refraction"
+      ],
+      "gap": "Refraction concept support only; no prism ray-tracing apparatus.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "s10-e06",
+      "classYear": 10,
+      "subject": "Biology",
+      "category": "experiment",
+      "sourceId": "s10",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "6",
+      "objective": "Prepare and observe a stomatal leaf-peel mount.",
+      "components": [
+        "Temporary leaf-peel preparation",
+        "Stomata and guard-cell observations"
+      ],
+      "status": "partial",
+      "resources": [
+        "biology:lab:microscope"
+      ],
+      "gap": "A stomatal illustration can be focused and annotated; peel/mount preparation is absent.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "s10-e07",
+      "classYear": 10,
+      "subject": "Biology",
+      "category": "experiment",
+      "sourceId": "s10",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "7",
+      "objective": "Test for carbon dioxide released during respiration.",
+      "components": [
+        "Respiring biological material",
+        "Matched control",
+        "Carbon-dioxide detection evidence"
+      ],
+      "status": "partial",
+      "resources": [
+        "biology:lab:cellular-respiration"
+      ],
+      "gap": "Cell metabolism proxy is available; prescribed experimental gas-test setup and controls are not.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "s10-e12",
+      "classYear": 10,
+      "subject": "Biology",
+      "category": "experiment",
+      "sourceId": "s10",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "12",
+      "objective": "Recognise asexual reproduction from prepared slides.",
+      "components": [
+        "Amoeba binary fission",
+        "Yeast budding",
+        "Hydra budding"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "s10-e14",
+      "classYear": 10,
+      "subject": "Biology",
+      "category": "experiment",
+      "sourceId": "s10",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "14",
+      "objective": "Identify a dicot seed embryo.",
+      "components": [
+        "Choose pea, gram or red kidney bean",
+        "Locate cotyledons, plumule and radicle"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "s10-e01",
+      "classYear": 10,
+      "subject": "Chemistry",
+      "category": "experiment",
+      "sourceId": "s10",
+      "pages": [
+        7
+      ],
+      "sourceNumber": "1",
+      "objective": "Compare pH and acid/base reaction evidence.",
+      "components": [
+        "pH: dilute HCl",
+        "pH: dilute NaOH",
+        "pH: dilute ethanoic acid",
+        "pH: lemon juice",
+        "pH: water",
+        "pH: dilute hydrogen carbonate",
+        "HCl/NaOH with red/blue litmus",
+        "HCl/NaOH reactions involving zinc",
+        "HCl/NaOH reactions involving sodium carbonate"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "chemistry-deferred",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "s10-e02",
+      "classYear": 10,
+      "subject": "Chemistry",
+      "category": "experiment",
+      "sourceId": "s10",
+      "pages": [
+        7
+      ],
+      "sourceNumber": "2",
+      "objective": "Classify four observed chemical reactions.",
+      "components": [
+        "Quicklime and water",
+        "Heating ferrous sulphate",
+        "Iron in copper sulphate",
+        "Sodium sulphate and barium chloride",
+        "Combination/decomposition/displacement/double-displacement classification"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "chemistry-deferred",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "s10-e03",
+      "classYear": 10,
+      "subject": "Chemistry",
+      "category": "experiment",
+      "sourceId": "s10",
+      "pages": [
+        7
+      ],
+      "sourceNumber": "3",
+      "objective": "Infer metal reactivity from displacement tests.",
+      "components": [
+        "Zinc, iron, copper and aluminium",
+        "Corresponding aqueous sulphate salts",
+        "Rank metal reactivity from evidence"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "chemistry-deferred",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "s10-e08",
+      "classYear": 10,
+      "subject": "Chemistry",
+      "category": "experiment",
+      "sourceId": "s10",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "8",
+      "objective": "Compare ethanoic-acid properties.",
+      "components": [
+        "Odour observation with supervised precautions",
+        "Water solubility",
+        "Litmus response",
+        "Hydrogen-carbonate reaction"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "chemistry-deferred",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "s10-e09",
+      "classYear": 10,
+      "subject": "Chemistry",
+      "category": "experiment",
+      "sourceId": "s10",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "9",
+      "objective": "Compare soap cleaning in soft and hard water.",
+      "components": [
+        "Controlled soap quantity",
+        "Soft-water sample",
+        "Hard-water sample",
+        "Comparative cleaning evidence"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "chemistry-deferred",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-a-a01",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "activity",
+      "sourceId": "p1112",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "A1",
+      "objective": "Construct a paper scale with a chosen least count.",
+      "components": [
+        "Example divisions 0.2 cm or 0.5 cm",
+        "Check spacing and readings"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-a-a02",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "activity",
+      "sourceId": "p1112",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "A2",
+      "objective": "Determine an unknown mass using moments.",
+      "components": [
+        "Metre-scale pivot",
+        "Known mass and lever arms",
+        "Moment balance"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-a-a03",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "activity",
+      "sourceId": "p1112",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "A3",
+      "objective": "Choose graph scales and display data uncertainty.",
+      "components": [
+        "Axes and units",
+        "Suitable scale",
+        "Error bars"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:research:ohm-R"
+      ],
+      "gap": "Research plots/fits data but lacks a given-data graph task with chosen axes scales and error bars.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-a-a04",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "activity",
+      "sourceId": "p1112",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "A4",
+      "objective": "Measure limiting rolling friction.",
+      "components": [
+        "Roller on horizontal plane",
+        "Threshold force"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-a-a05",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "activity",
+      "sourceId": "p1112",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "A5",
+      "objective": "Investigate projectile range versus launch angle.",
+      "components": [
+        "Fixed launch speed",
+        "Vary angle",
+        "Compare ranges"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:sim:projectile"
+      ],
+      "gap": "Angle/path interaction exists, but calibrated range readings and a complete observation table are missing.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-a-a06",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "activity",
+      "sourceId": "p1112",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "A6",
+      "objective": "Investigate energy conservation on a double incline.",
+      "components": [
+        "Ball rolls down first incline",
+        "Rise on second incline",
+        "Compare heights/energy"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:protocol:0:12"
+      ],
+      "gap": "Single-incline rolling comparison is not a double-incline energy experiment.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-a-a07",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "activity",
+      "sourceId": "p1112",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "A7",
+      "objective": "Measure dissipation in a simple pendulum.",
+      "components": [
+        "Successive amplitudes and times",
+        "Plot amplitude squared against time"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:protocol:1:1"
+      ],
+      "gap": "Existing damping guide uses ln(amplitude), not the prescribed amplitude-squared graph and simple-pendulum readings.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-a-e01",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        7
+      ],
+      "sourceNumber": "A1",
+      "objective": "Measure external and internal dimensions with vernier calipers.",
+      "components": [
+        "Sphere/cylinder external diameter",
+        "Beaker/calorimeter internal diameter",
+        "Container depth",
+        "Calculate volume"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-a-e02",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        7
+      ],
+      "sourceNumber": "A2",
+      "objective": "Measure fine dimensions with a screw gauge.",
+      "components": [
+        "Wire diameter",
+        "Sheet thickness"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-a-e03",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        7
+      ],
+      "sourceNumber": "A3",
+      "objective": "Determine an irregular lamina’s volume.",
+      "components": [
+        "Screw-gauge thickness",
+        "Lamina area estimate",
+        "Combine area and thickness"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-a-e04",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        7
+      ],
+      "sourceNumber": "A4",
+      "objective": "Measure a spherical surface’s radius of curvature.",
+      "components": [
+        "Spherometer readings",
+        "Leg spacing",
+        "Curvature calculation"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-a-e05",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        7
+      ],
+      "sourceNumber": "A5",
+      "objective": "Compare masses with a beam balance.",
+      "components": [
+        "First object mass",
+        "Second object mass"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-a-e06",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        7
+      ],
+      "sourceNumber": "A6",
+      "objective": "Determine weight using vector equilibrium.",
+      "components": [
+        "Parallelogram force apparatus",
+        "Balance forces",
+        "Infer unknown weight"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-a-e07",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "A7",
+      "objective": "Infer the effective length of a seconds pendulum from a graph.",
+      "components": [
+        "Length and period observations",
+        "Appropriate graph",
+        "Interpolate two-second period"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:research:pendulum-g",
+        "physics:protocol:0:0"
+      ],
+      "gap": "Length-period data and T²–L fit exist; no explicit seconds-length inference or timing apparatus.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-a-e08",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "A8",
+      "objective": "Test pendulum period against bob mass.",
+      "components": [
+        "Equal bob size",
+        "Fixed length",
+        "Different bob masses",
+        "Compare periods"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:research:pendulum-g",
+        "physics:protocol:0:0"
+      ],
+      "gap": "Existing simple-pendulum bench varies length only.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-a-e09",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "A9",
+      "objective": "Determine friction coefficient from limiting friction and normal load.",
+      "components": [
+        "Several normal loads",
+        "Limiting friction readings",
+        "Slope/coefficient"
+      ],
+      "status": "existing-protocol",
+      "resources": [
+        "physics:protocol:0:8"
+      ],
+      "gap": "Written procedure exists; force gauge and controlled sliding-block readings are absent.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-a-e10",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "A10",
+      "objective": "Measure a roller’s downslope gravitational force.",
+      "components": [
+        "Vary incline angle",
+        "Record force",
+        "Plot force against sin(angle)"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:protocol:0:9"
+      ],
+      "gap": "Existing incline protocol measures cart acceleration, not the specified roller force.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-b-a01",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "activity",
+      "sourceId": "p1112",
+      "pages": [
+        9
+      ],
+      "sourceNumber": "B1",
+      "objective": "Observe wax cooling through a change of state.",
+      "components": [
+        "Molten wax",
+        "Temperature-time curve",
+        "Phase-change interpretation"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-b-a02",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "activity",
+      "sourceId": "p1112",
+      "pages": [
+        9
+      ],
+      "sourceNumber": "B2",
+      "objective": "Observe thermal bending of a bimetal strip.",
+      "components": [
+        "Heat response",
+        "Unequal expansion explanation"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-b-a03",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "activity",
+      "sourceId": "p1112",
+      "pages": [
+        9
+      ],
+      "sourceNumber": "B3",
+      "objective": "Interpret liquid-level changes during heating.",
+      "components": [
+        "Container and liquid",
+        "Heating observations"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-b-a04",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "activity",
+      "sourceId": "p1112",
+      "pages": [
+        9
+      ],
+      "sourceNumber": "B4",
+      "objective": "Compare water capillary rise before and after detergent.",
+      "components": [
+        "Baseline rise",
+        "Detergent condition",
+        "Surface-tension inference"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-b-a05",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "activity",
+      "sourceId": "p1112",
+      "pages": [
+        9
+      ],
+      "sourceNumber": "B5",
+      "objective": "Test factors affecting liquid cooling rate.",
+      "components": [
+        "Vary one condition",
+        "Matched controls",
+        "Compare cooling curves"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:protocol:4:4"
+      ],
+      "gap": "Single cooling protocol lacks a structured multi-factor experiment.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-b-a06",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "activity",
+      "sourceId": "p1112",
+      "pages": [
+        9
+      ],
+      "sourceNumber": "B6",
+      "objective": "Compare loaded metre-scale deflection.",
+      "components": [
+        "End loading",
+        "Middle loading",
+        "Deflection under varied load"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-b-a07",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "activity",
+      "sourceId": "p1112",
+      "pages": [
+        9
+      ],
+      "sourceNumber": "B7",
+      "objective": "Relate fluid speed to pressure.",
+      "components": [
+        "Faster-flow condition",
+        "Reduced-pressure observation"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-b-e01",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        9
+      ],
+      "sourceNumber": "B1",
+      "objective": "Determine a wire’s Young modulus.",
+      "components": [
+        "Wire dimensions",
+        "Loading and extension",
+        "Stress–strain analysis"
+      ],
+      "status": "existing-protocol",
+      "resources": [
+        "physics:protocol:0:3"
+      ],
+      "gap": "Procedure exists; wire-extension instrument and dimension reading are not interactive.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-b-e02",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        9
+      ],
+      "sourceNumber": "B2",
+      "objective": "Determine spring stiffness from load and extension.",
+      "components": [
+        "Helical spring",
+        "Several loads",
+        "Load-extension graph"
+      ],
+      "status": "existing-simulation",
+      "resources": [
+        "physics:research:hooke-k",
+        "physics:protocol:0:2"
+      ],
+      "gap": "Core virtual data/fit exists; real ruler handling, unloading and measurement errors need a full apparatus workflow.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-b-e03",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        9
+      ],
+      "sourceNumber": "B3",
+      "objective": "Investigate air pressure and volume at constant temperature.",
+      "components": [
+        "Fixed air sample",
+        "Isothermal pressure-volume pairs",
+        "P–V graph",
+        "P–1/V graph"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:protocol:4:0",
+        "physics:design:boyle"
+      ],
+      "gap": "Protocol and synthetic model fitting exist; apparatus and both explicit school graphs are incomplete.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-b-e04",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        9
+      ],
+      "sourceNumber": "B4",
+      "objective": "Measure water surface tension using capillary rise.",
+      "components": [
+        "Capillary radius",
+        "Rise height",
+        "Surface-tension inference"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-b-e05",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        9
+      ],
+      "sourceNumber": "B5",
+      "objective": "Estimate liquid viscosity from a falling sphere.",
+      "components": [
+        "Sphere dimensions/density",
+        "Terminal speed",
+        "Viscosity inference"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-b-e06",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        9
+      ],
+      "sourceNumber": "B6",
+      "objective": "Record a hot body’s cooling curve.",
+      "components": [
+        "Temperature against time",
+        "Ambient temperature",
+        "Cooling relation"
+      ],
+      "status": "existing-protocol",
+      "resources": [
+        "physics:protocol:4:4"
+      ],
+      "gap": "Cooling procedure exists; thermometer/time-controlled virtual experiment is absent.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-b-e07",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        9
+      ],
+      "sourceNumber": "B7",
+      "objective": "Determine a solid’s specific heat by mixing.",
+      "components": [
+        "Hot solid",
+        "Water and calorimeter",
+        "Equilibrium temperature",
+        "Heat balance"
+      ],
+      "status": "existing-protocol",
+      "resources": [
+        "physics:protocol:4:3"
+      ],
+      "gap": "Method-of-mixtures guide exists; no mixing apparatus. Water-heating research bench is a different method.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-b-e08",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        9
+      ],
+      "sourceNumber": "B8",
+      "objective": "Test string frequency against length at fixed tension.",
+      "components": [
+        "Sonometer",
+        "Fixed tension",
+        "Resonance and frequency-length observations"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:protocol:1:4",
+        "physics:research:wave-v",
+        "physics:sim:standing"
+      ],
+      "gap": "Standing-wave support only; no sonometer bridges, tuning forks, physical length or fixed-tension measurement.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-b-e09",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        9
+      ],
+      "sourceNumber": "B9",
+      "objective": "Test string length against tension at fixed frequency.",
+      "components": [
+        "Sonometer",
+        "Fixed frequency",
+        "Resonance and length-tension observations"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:protocol:1:4",
+        "physics:sim:standing"
+      ],
+      "gap": "No sonometer tension/bridge measurement workflow.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-b-e10",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        9
+      ],
+      "sourceNumber": "B10",
+      "objective": "Measure sound speed with two air-column resonances.",
+      "components": [
+        "Resonance tube",
+        "First and second resonance positions",
+        "Room-temperature interpretation"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p11-vi-e01",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "accessible-alternative",
+      "sourceId": "p1112",
+      "pages": [
+        10
+      ],
+      "sourceNumber": "1",
+      "objective": "Use vernier calipers for external diameter.",
+      "components": [
+        "Sphere or cylinder"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "Dedicated accessible apparatus adaptation has not been verified; related standard resources are not accessibility evidence.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "p11-a-e01"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "p11-vi-e02",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "accessible-alternative",
+      "sourceId": "p1112",
+      "pages": [
+        10
+      ],
+      "sourceNumber": "2",
+      "objective": "Use vernier calipers for container dimensions and volume.",
+      "components": [
+        "Internal diameter",
+        "Depth",
+        "Volume"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "Dedicated accessible apparatus adaptation has not been verified; related standard resources are not accessibility evidence.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "p11-a-e01"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "p11-vi-e03",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "accessible-alternative",
+      "sourceId": "p1112",
+      "pages": [
+        10
+      ],
+      "sourceNumber": "3",
+      "objective": "Measure wire diameter with a screw gauge.",
+      "components": [
+        "Wire sample"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "Dedicated accessible apparatus adaptation has not been verified; related standard resources are not accessibility evidence.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "p11-a-e02"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "p11-vi-e04",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "accessible-alternative",
+      "sourceId": "p1112",
+      "pages": [
+        10
+      ],
+      "sourceNumber": "4",
+      "objective": "Measure sheet thickness with a screw gauge.",
+      "components": [
+        "Sheet sample"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "Dedicated accessible apparatus adaptation has not been verified; related standard resources are not accessibility evidence.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "p11-a-e02"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "p11-vi-e05",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "accessible-alternative",
+      "sourceId": "p1112",
+      "pages": [
+        10
+      ],
+      "sourceNumber": "5",
+      "objective": "Measure an object’s mass using a beam balance.",
+      "components": [
+        "Beam-balance comparison"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "Dedicated accessible apparatus adaptation has not been verified; related standard resources are not accessibility evidence.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "p11-a-e05"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "p11-vi-e06",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "accessible-alternative",
+      "sourceId": "p1112",
+      "pages": [
+        10
+      ],
+      "sourceNumber": "6",
+      "objective": "Find weight from a parallelogram force arrangement.",
+      "components": [
+        "Force equilibrium"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "Dedicated accessible apparatus adaptation has not been verified; related standard resources are not accessibility evidence.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "p11-a-e06"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "p11-vi-e07",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "accessible-alternative",
+      "sourceId": "p1112",
+      "pages": [
+        10
+      ],
+      "sourceNumber": "7",
+      "objective": "Infer seconds-pendulum length from length/period graphs.",
+      "components": [
+        "Suitable length values",
+        "L–T and appropriate graph inference"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "Dedicated accessible apparatus adaptation has not been verified; related standard resources are not accessibility evidence.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "p11-a-e07"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "p11-vi-e08",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "accessible-alternative",
+      "sourceId": "p1112",
+      "pages": [
+        10
+      ],
+      "sourceNumber": "8",
+      "objective": "Find spring stiffness using load-extension data.",
+      "components": [
+        "Helical spring",
+        "Graph"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "Dedicated accessible apparatus adaptation has not been verified; related standard resources are not accessibility evidence.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "p11-b-e02"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "p11-vi-e09",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "accessible-alternative",
+      "sourceId": "p1112",
+      "pages": [
+        10
+      ],
+      "sourceNumber": "9",
+      "objective": "Investigate both sonometer relations.",
+      "components": [
+        "Frequency versus length at fixed tension",
+        "Length versus tension at fixed frequency"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "Dedicated accessible apparatus adaptation has not been verified; related standard resources are not accessibility evidence.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "p11-b-e08",
+        "p11-b-e09"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "p11-vi-e10",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "accessible-alternative",
+      "sourceId": "p1112",
+      "pages": [
+        10
+      ],
+      "sourceNumber": "10",
+      "objective": "Find sound speed from two resonance-tube positions.",
+      "components": [
+        "First and second resonance positions",
+        "Room temperature"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "Dedicated accessible apparatus adaptation has not been verified; related standard resources are not accessibility evidence.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "p11-b-e10"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "b11-a-e01",
+      "classYear": 11,
+      "subject": "Biology",
+      "category": "experiment",
+      "sourceId": "b1112",
+      "pages": [
+        6
+      ],
+      "sourceNumber": "1",
+      "objective": "Describe a locally available flowering plant and dissect its flower.",
+      "components": [
+        "Solanaceae; geographically appropriate Poaceae/Asteraceae/Brassicaceae substitution allowed for this practical",
+        "Dissect and arrange floral whorls",
+        "Show anther and ovary chambers",
+        "Floral formula and floral diagram",
+        "Tap/adventitious roots",
+        "Herbaceous/woody stem",
+        "Leaf arrangement, shape, venation and simple/compound form"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b11-a-e02",
+      "classYear": 11,
+      "subject": "Biology",
+      "category": "experiment",
+      "sourceId": "b1112",
+      "pages": [
+        6
+      ],
+      "sourceNumber": "2",
+      "objective": "Prepare primary root and stem transverse sections.",
+      "components": [
+        "Dicot root",
+        "Monocot root",
+        "Dicot stem",
+        "Monocot stem"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b11-a-e03",
+      "classYear": 11,
+      "subject": "Biology",
+      "category": "experiment",
+      "sourceId": "b1112",
+      "pages": [
+        6
+      ],
+      "sourceNumber": "3",
+      "objective": "Investigate osmosis with a potato osmometer.",
+      "components": [
+        "Potato cup and solution level",
+        "Matched comparison/control",
+        "Explain water movement"
+      ],
+      "status": "partial",
+      "resources": [
+        "biology:lab:osmosis"
+      ],
+      "gap": "Cell-volume model supports mechanism only; potato-cup setup and readings are absent.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b11-a-e04",
+      "classYear": 11,
+      "subject": "Biology",
+      "category": "experiment",
+      "sourceId": "b1112",
+      "pages": [
+        6
+      ],
+      "sourceNumber": "4",
+      "objective": "Observe plasmolysis in epidermal peels.",
+      "components": [
+        "Rhoeo/lily/onion-scale epidermal peel",
+        "Compare solution conditions and membrane-wall separation"
+      ],
+      "status": "partial",
+      "resources": [
+        "biology:lab:osmosis"
+      ],
+      "gap": "Interactive plasmolysis mechanism exists, but no peel preparation or specimen-slide observations.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b11-a-e05",
+      "classYear": 11,
+      "subject": "Biology",
+      "category": "experiment",
+      "sourceId": "b1112",
+      "pages": [
+        6
+      ],
+      "sourceNumber": "5",
+      "objective": "Compare stomatal distribution on leaf surfaces.",
+      "components": [
+        "Upper epidermal counts",
+        "Lower epidermal counts",
+        "Comparable fields of view"
+      ],
+      "status": "partial",
+      "resources": [
+        "biology:lab:microscope"
+      ],
+      "gap": "One generic stomatal field exists; no paired leaf surfaces or distribution-count workflow.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b11-a-e06",
+      "classYear": 11,
+      "subject": "Biology",
+      "category": "experiment",
+      "sourceId": "b1112",
+      "pages": [
+        6,
+        7
+      ],
+      "sourceNumber": "6",
+      "objective": "Compare transpiration from upper and lower leaf surfaces.",
+      "components": [
+        "Upper-surface rate",
+        "Lower-surface rate",
+        "Matched conditions and inference"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b11-a-e07",
+      "classYear": 11,
+      "subject": "Biology",
+      "category": "experiment",
+      "sourceId": "b1112",
+      "pages": [
+        7
+      ],
+      "sourceNumber": "7",
+      "objective": "Test food material for four biochemical groups.",
+      "components": [
+        "Sugar test",
+        "Starch test",
+        "Protein test",
+        "Fat test",
+        "Suitable plant and animal material",
+        "Positive and negative controls"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b11-a-e08",
+      "classYear": 11,
+      "subject": "Biology",
+      "category": "experiment",
+      "sourceId": "b1112",
+      "pages": [
+        7
+      ],
+      "sourceNumber": "8",
+      "objective": "Separate leaf pigments by paper chromatography.",
+      "components": [
+        "Extract pigments",
+        "Develop separation",
+        "Record and interpret pigment bands"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b11-a-e09",
+      "classYear": 11,
+      "subject": "Biology",
+      "category": "experiment",
+      "sourceId": "b1112",
+      "pages": [
+        7
+      ],
+      "sourceNumber": "9",
+      "objective": "Compare respiration rates in living plant material.",
+      "components": [
+        "Flower buds",
+        "Leaf tissue",
+        "Germinating seeds",
+        "Matched temperature/biomass and controls"
+      ],
+      "status": "partial",
+      "resources": [
+        "biology:lab:cellular-respiration"
+      ],
+      "gap": "Yeast/muscle cell-rate model is not a bud/leaf/seed respirometer.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b11-a-e10",
+      "classYear": 11,
+      "subject": "Biology",
+      "category": "experiment",
+      "sourceId": "b1112",
+      "pages": [
+        7
+      ],
+      "sourceNumber": "10",
+      "objective": "Test a prepared urine sample for urea.",
+      "components": [
+        "Teacher-approved specimen or synthetic teaching sample",
+        "Observe chemical-test outcome"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "safety": "App implementation must use synthetic/virtual samples; no personal health results or unsupervised body-fluid collection. Real school work requires teacher-approved biosafety."
+    },
+    {
+      "id": "b11-a-e11",
+      "classYear": 11,
+      "subject": "Biology",
+      "category": "experiment",
+      "sourceId": "b1112",
+      "pages": [
+        7
+      ],
+      "sourceNumber": "11",
+      "objective": "Test a prepared urine sample for sugar.",
+      "components": [
+        "Teacher-approved specimen or synthetic teaching sample",
+        "Observe chemical-test outcome"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "safety": "App implementation must use synthetic/virtual samples; no personal health results or unsupervised body-fluid collection. Real school work requires teacher-approved biosafety."
+    },
+    {
+      "id": "b11-a-e12",
+      "classYear": 11,
+      "subject": "Biology",
+      "category": "experiment",
+      "sourceId": "b1112",
+      "pages": [
+        7
+      ],
+      "sourceNumber": "12",
+      "objective": "Test a prepared urine sample for albumin.",
+      "components": [
+        "Teacher-approved specimen or synthetic teaching sample",
+        "Observe chemical-test outcome"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "safety": "App implementation must use synthetic/virtual samples; no personal health results or unsupervised body-fluid collection. Real school work requires teacher-approved biosafety."
+    },
+    {
+      "id": "b11-a-e13",
+      "classYear": 11,
+      "subject": "Biology",
+      "category": "experiment",
+      "sourceId": "b1112",
+      "pages": [
+        7
+      ],
+      "sourceNumber": "13",
+      "objective": "Test a prepared urine sample for bile salts.",
+      "components": [
+        "Teacher-approved specimen or synthetic teaching sample",
+        "Observe chemical-test outcome"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "safety": "App implementation must use synthetic/virtual samples; no personal health results or unsupervised body-fluid collection. Real school work requires teacher-approved biosafety."
+    },
+    {
+      "id": "b11-b-s01",
+      "classYear": 11,
+      "subject": "Biology",
+      "category": "spotting",
+      "sourceId": "b1112",
+      "pages": [
+        7
+      ],
+      "sourceNumber": "1",
+      "objective": "Recognise compound-microscope components.",
+      "components": [
+        "Eyepiece",
+        "Objectives",
+        "Stage",
+        "Illumination/mirror",
+        "Coarse and fine adjustments"
+      ],
+      "status": "partial",
+      "resources": [
+        "biology:lab:microscope"
+      ],
+      "gap": "Functional digital controls exist, but no labelled apparatus-parts identification exercise.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b11-b-s02",
+      "classYear": 11,
+      "subject": "Biology",
+      "category": "spotting",
+      "sourceId": "b1112",
+      "pages": [
+        7
+      ],
+      "sourceNumber": "2",
+      "objective": "Identify the prescribed plant, microbial and fungal material with reasons.",
+      "components": [
+        "Bacteria",
+        "Oscillatoria",
+        "Spirogyra",
+        "Rhizopus",
+        "Mushroom",
+        "Yeast",
+        "Liverwort",
+        "Moss",
+        "Fern",
+        "Pine",
+        "One monocot plant",
+        "One dicot plant",
+        "One lichen"
+      ],
+      "status": "partial",
+      "resources": [
+        "biology:lab:microscope"
+      ],
+      "gap": "Illustrated mixed bacteria only; no full taxa set or reasoned spotting exercise.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b11-b-s03",
+      "classYear": 11,
+      "subject": "Biology",
+      "category": "spotting",
+      "sourceId": "b1112",
+      "pages": [
+        7
+      ],
+      "sourceNumber": "3",
+      "objective": "Identify prescribed animals from virtual specimens/slides/models.",
+      "components": [
+        "Amoeba",
+        "Hydra",
+        "Liver fluke",
+        "Ascaris",
+        "Leech",
+        "Earthworm",
+        "Prawn",
+        "Silkworm",
+        "Honeybee",
+        "Snail",
+        "Starfish",
+        "Shark",
+        "Rohu",
+        "Frog",
+        "Lizard",
+        "Pigeon",
+        "Rabbit"
+      ],
+      "status": "partial",
+      "resources": [
+        "biology:lab:frog-dissection",
+        "biology:lab:earthworm-dissection",
+        "biology:lab:fish-dissection"
+      ],
+      "gap": "Frog/earthworm are usable anatomical supports. Generic fish does not verify Rohu identity, and other required taxa/identification criteria are missing.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b11-b-s04",
+      "classYear": 11,
+      "subject": "Biology",
+      "category": "spotting",
+      "sourceId": "b1112",
+      "pages": [
+        7
+      ],
+      "sourceNumber": "4",
+      "objective": "Recognise mitosis in permanent plant and animal slides.",
+      "components": [
+        "Onion root-tip cells",
+        "Grasshopper cells"
+      ],
+      "status": "partial",
+      "resources": [
+        "biology:lab:mitosis"
+      ],
+      "gap": "Fictional chromosome-stage model is not either prescribed specimen slide.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b11-b-s05",
+      "classYear": 11,
+      "subject": "Biology",
+      "category": "spotting",
+      "sourceId": "b1112",
+      "pages": [
+        7
+      ],
+      "sourceNumber": "5",
+      "objective": "Distinguish inflorescence branching patterns.",
+      "components": [
+        "Cymose",
+        "Racemose"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b11-b-s06",
+      "classYear": 11,
+      "subject": "Biology",
+      "category": "spotting",
+      "sourceId": "b1112",
+      "pages": [
+        7
+      ],
+      "sourceNumber": "6",
+      "objective": "Recognise the human skeleton and joint types using virtual material.",
+      "components": [
+        "Human skeleton",
+        "Different joint types",
+        "Virtual images/models only"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b11-vi-e01",
+      "classYear": 11,
+      "subject": "Biology",
+      "category": "accessible-alternative",
+      "sourceId": "b1112",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "1",
+      "objective": "Identify stem and leaf form in a Solanaceae plant.",
+      "components": [
+        "Herbaceous/woody stem",
+        "Simple/compound leaf"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No dedicated accessible apparatus/identification adaptation verified.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "b11-a-e01"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "b11-vi-e02",
+      "classYear": 11,
+      "subject": "Biology",
+      "category": "accessible-alternative",
+      "sourceId": "b1112",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "2",
+      "objective": "Identify microscope parts with accessible apparatus exploration.",
+      "components": [
+        "Eyepiece",
+        "Objective lens",
+        "Mirror",
+        "Stage",
+        "Coarse and fine adjustment"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No dedicated accessible apparatus/identification adaptation verified.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "b11-b-s01"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "b11-vi-e03",
+      "classYear": 11,
+      "subject": "Biology",
+      "category": "accessible-alternative",
+      "sourceId": "b1112",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "3",
+      "objective": "Distinguish monocot and dicot venation.",
+      "components": [
+        "Venation patterns"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No dedicated accessible apparatus/identification adaptation verified.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "b11-a-e01"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "b11-vi-e04",
+      "classYear": 11,
+      "subject": "Biology",
+      "category": "accessible-alternative",
+      "sourceId": "b1112",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "4",
+      "objective": "Identify shoulder and hip ball-and-socket joints on models.",
+      "components": [
+        "Shoulder",
+        "Thigh/hip"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No dedicated accessible apparatus/identification adaptation verified.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "b11-b-s06"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "b11-vi-e05",
+      "classYear": 11,
+      "subject": "Biology",
+      "category": "accessible-alternative",
+      "sourceId": "b1112",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "5",
+      "objective": "Identify the rib cage on a model.",
+      "components": [
+        "Ribs and thoracic arrangement"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No dedicated accessible apparatus/identification adaptation verified.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "b11-b-s06"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "b11-vi-e06",
+      "classYear": 11,
+      "subject": "Biology",
+      "category": "accessible-alternative",
+      "sourceId": "b1112",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "6",
+      "objective": "Identify the prescribed animal models.",
+      "components": [
+        "Honeybee or butterfly",
+        "Snail through shell",
+        "Starfish",
+        "Pigeon"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No dedicated accessible apparatus/identification adaptation verified.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "b11-b-s03"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "b11-vi-e07",
+      "classYear": 11,
+      "subject": "Biology",
+      "category": "accessible-alternative",
+      "sourceId": "b1112",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "7",
+      "objective": "Identify mushroom and pine-cone material.",
+      "components": [
+        "Mushroom",
+        "Pine cone"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No dedicated accessible apparatus/identification adaptation verified.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "b11-b-s02"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "b11-vi-e08",
+      "classYear": 11,
+      "subject": "Biology",
+      "category": "accessible-alternative",
+      "sourceId": "b1112",
+      "pages": [
+        8
+      ],
+      "sourceNumber": "8",
+      "objective": "Connect an osmosis setup with its aim.",
+      "components": [
+        "Potato osmometer or raisin endosmosis"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No dedicated accessible apparatus/identification adaptation verified.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "b11-a-e03"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "p12-a-a01",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "activity",
+      "sourceId": "p1112",
+      "pages": [
+        18
+      ],
+      "sourceNumber": "A1",
+      "objective": "Compare inductor resistance and AC impedance.",
+      "components": [
+        "Without iron core",
+        "With iron core"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:protocol:3:4"
+      ],
+      "gap": "Existing RL transient guide is not AC impedance measurement with core changes.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p12-a-a02",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "activity",
+      "sourceId": "p1112",
+      "pages": [
+        18
+      ],
+      "sourceNumber": "A2",
+      "objective": "Practise multimeter measurement modes.",
+      "components": [
+        "Resistance",
+        "AC voltage",
+        "DC voltage",
+        "AC current",
+        "Continuity"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p12-a-a03",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "activity",
+      "sourceId": "p1112",
+      "pages": [
+        18
+      ],
+      "sourceNumber": "A3",
+      "objective": "Assemble a household-circuit model.",
+      "components": [
+        "Three bulbs",
+        "Three switches",
+        "Fuse",
+        "Power source"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching circuit assembly practical.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "safety": "Use a virtual circuit or teacher-approved low-voltage model; no home mains wiring."
+    },
+    {
+      "id": "p12-a-a04",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "activity",
+      "sourceId": "p1112",
+      "pages": [
+        18
+      ],
+      "sourceNumber": "A4",
+      "objective": "Assemble an electrical circuit from its diagram.",
+      "components": [
+        "Identify components",
+        "Connect prescribed arrangement",
+        "Check before powering"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p12-a-a05",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "activity",
+      "sourceId": "p1112",
+      "pages": [
+        18
+      ],
+      "sourceNumber": "A5",
+      "objective": "Relate wire potential drop to length at steady current.",
+      "components": [
+        "Fixed current",
+        "Several wire lengths",
+        "Potential-drop measurements"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:protocol:3:2"
+      ],
+      "gap": "Potentiometer null-balance protocol is related but not this wire potential-gradient observation task.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p12-a-a06",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "activity",
+      "sourceId": "p1112",
+      "pages": [
+        18
+      ],
+      "sourceNumber": "A6",
+      "objective": "Diagnose and repair a miswired circuit and diagram.",
+      "components": [
+        "Battery",
+        "Resistor or rheostat",
+        "Key",
+        "Ammeter",
+        "Voltmeter",
+        "Identify bad order/connections",
+        "Produce corrected diagram"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p12-a-e01",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        17
+      ],
+      "sourceNumber": "A1",
+      "objective": "Determine resistivity using several wires and V–I graphs.",
+      "components": [
+        "Two or three wire samples",
+        "Wire length and diameter",
+        "V–I resistance slopes",
+        "Calculate resistivity"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:research:ohm-R",
+        "physics:research:resistivity"
+      ],
+      "gap": "Single-resistor V–I and length-resistance research tasks do not supply measured dimensions and V–I curves for multiple wires.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p12-a-e02",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        17
+      ],
+      "sourceNumber": "A2",
+      "objective": "Determine resistance with a metre bridge.",
+      "components": [
+        "Wire or standard resistor",
+        "Null point",
+        "Bridge-length relation"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:protocol:3:1"
+      ],
+      "gap": "Wheatstone written protocol exists, but not the wire/jockey metre-bridge apparatus.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p12-a-e03",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        17
+      ],
+      "sourceNumber": "A3",
+      "objective": "Verify a resistance-combination law with a metre bridge.",
+      "components": [
+        "Series OR parallel arrangement",
+        "Compare measured equivalent resistance"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:protocol:3:1"
+      ],
+      "gap": "No metre bridge or explicit combination practical.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "choice": "One of series or parallel; the source presents OR, not two extra experiments."
+    },
+    {
+      "id": "p12-a-e04",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        17
+      ],
+      "sourceNumber": "A4",
+      "objective": "Determine galvanometer resistance and sensitivity.",
+      "components": [
+        "Half-deflection method",
+        "Galvanometer resistance",
+        "Figure of merit"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p12-a-e05",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        17
+      ],
+      "sourceNumber": "A5",
+      "objective": "Convert and verify a galvanometer-based meter.",
+      "components": [
+        "Voltmeter OR ammeter",
+        "Choose target range",
+        "Series/shunt resistance",
+        "Verify readings"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No galvanometer conversion instrument.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "choice": "Voltmeter OR ammeter; keep both supported variants but do not double-count the source item."
+    },
+    {
+      "id": "p12-a-e06",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        17
+      ],
+      "sourceNumber": "A6",
+      "objective": "Infer AC mains frequency with a sonometer.",
+      "components": [
+        "Sonometer resonance",
+        "Frequency inference"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No sonometer-frequency apparatus.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "safety": "Implement only a virtual safe source. Never direct students to connect a sonometer or exposed circuit to mains."
+    },
+    {
+      "id": "p12-b-a01",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "activity",
+      "sourceId": "p1112",
+      "pages": [
+        18
+      ],
+      "sourceNumber": "B1",
+      "objective": "Identify four electronic components in a mixed collection.",
+      "components": [
+        "Diode",
+        "LED",
+        "Resistor",
+        "Capacitor"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p12-b-a02",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "activity",
+      "sourceId": "p1112",
+      "pages": [
+        18
+      ],
+      "sourceNumber": "B2",
+      "objective": "Use a multimeter to test diode/LED behavior.",
+      "components": [
+        "Forward/reverse conduction",
+        "Check whether component works"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p12-b-a03",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "activity",
+      "sourceId": "p1112",
+      "pages": [
+        19
+      ],
+      "sourceNumber": "B3",
+      "objective": "Measure an LDR response as illumination changes.",
+      "components": [
+        "Vary light-source distance",
+        "Hold source conditions fixed"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p12-b-a04",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "activity",
+      "sourceId": "p1112",
+      "pages": [
+        19
+      ],
+      "sourceNumber": "B4",
+      "objective": "Observe slab refraction and lateral displacement.",
+      "components": [
+        "Oblique incident beam",
+        "Parallel slab faces",
+        "Displacement"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:sim:refraction",
+        "physics:research:refraction-n"
+      ],
+      "gap": "Single-boundary tools do not implement slab exit/displacement.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p12-b-a05",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "activity",
+      "sourceId": "p1112",
+      "pages": [
+        19
+      ],
+      "sourceNumber": "B5",
+      "objective": "Observe diffraction through a thin slit.",
+      "components": [
+        "Slit width/light/screen conditions",
+        "Diffraction pattern"
+      ],
+      "status": "existing-protocol",
+      "resources": [
+        "physics:protocol:2:3"
+      ],
+      "gap": "Written procedure exists; no matching controllable single-slit bench is verified.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p12-b-a06",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "activity",
+      "sourceId": "p1112",
+      "pages": [
+        19
+      ],
+      "sourceNumber": "B6",
+      "objective": "Compare image nature and size at different object positions.",
+      "components": [
+        "Convex lens OR concave mirror",
+        "Candle/object positions",
+        "Screen image and magnification"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:sim:lens",
+        "physics:protocol:2:1"
+      ],
+      "gap": "Lens diagram supports qualitative change; physical/simulated screen focusing and full mirror branch are absent.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "choice": "Convex lens OR concave mirror; one numbered source activity."
+    },
+    {
+      "id": "p12-b-a07",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "activity",
+      "sourceId": "p1112",
+      "pages": [
+        19
+      ],
+      "sourceNumber": "B7",
+      "objective": "Select two lenses for a target combined focal length.",
+      "components": [
+        "Available lens set",
+        "Required focal length",
+        "Check combined power"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:sim:lens"
+      ],
+      "gap": "Single-lens concept does not implement selectable lens combinations.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p12-b-e01",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        18
+      ],
+      "sourceNumber": "B1",
+      "objective": "Determine concave-mirror focal length from object and image distances.",
+      "components": [
+        "Several u/v pairs",
+        "Focal-length estimate"
+      ],
+      "status": "existing-protocol",
+      "resources": [
+        "physics:protocol:2:1"
+      ],
+      "gap": "Relevant written optical-bench protocol exists; no interactive focus/measurement apparatus.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p12-b-e02",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        18
+      ],
+      "sourceNumber": "B2",
+      "objective": "Determine a convex mirror’s focal length using a convex lens.",
+      "components": [
+        "Auxiliary convex lens",
+        "Convex mirror",
+        "Image-location measurement"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p12-b-e03",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        18
+      ],
+      "sourceNumber": "B3",
+      "objective": "Determine convex-lens focal length from a graph.",
+      "components": [
+        "u/v readings",
+        "u–v OR reciprocal-distance graph"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:sim:lens"
+      ],
+      "gap": "Object slider and rays exist; no calibrated optical-bench readings/table/fit workflow.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p12-b-e04",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        18
+      ],
+      "sourceNumber": "B4",
+      "objective": "Determine a concave lens’s focal length using a convex lens.",
+      "components": [
+        "Two-lens arrangement",
+        "Virtual-object/image distances"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p12-b-e05",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        18
+      ],
+      "sourceNumber": "B5",
+      "objective": "Determine a prism’s minimum deviation from a graph.",
+      "components": [
+        "Incidence-angle sweep",
+        "Deviation measurements",
+        "Locate minimum"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:sim:refraction"
+      ],
+      "gap": "Single-interface refraction support is not a prism sweep.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p12-b-e06",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        18
+      ],
+      "sourceNumber": "B6",
+      "objective": "Determine glass index with a travelling microscope.",
+      "components": [
+        "Real and apparent depth",
+        "Microscope focus readings",
+        "Index calculation"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p12-b-e07",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        18
+      ],
+      "sourceNumber": "B7",
+      "objective": "Determine liquid index with a convex lens and plane mirror.",
+      "components": [
+        "Convex lens",
+        "Plane mirror",
+        "Liquid-lens comparison"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p12-b-e08",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        18
+      ],
+      "sourceNumber": "B8",
+      "objective": "Determine liquid index with concave and plane mirrors.",
+      "components": [
+        "Concave mirror",
+        "Plane mirror",
+        "Liquid-depth/optical comparison"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p12-b-e09",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "experiment",
+      "sourceId": "p1112",
+      "pages": [
+        18
+      ],
+      "sourceNumber": "B9",
+      "objective": "Record a p–n diode’s current–voltage characteristic.",
+      "components": [
+        "Forward bias",
+        "Reverse bias",
+        "Polarity/ranges and graph"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "p12-project01",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "suggested-project",
+      "sourceId": "p1112",
+      "pages": [
+        19
+      ],
+      "sourceNumber": "1",
+      "objective": "Investigate factors affecting cell EMF/internal resistance.",
+      "components": [
+        "Change a proposed factor",
+        "Control others",
+        "Measure EMF/internal resistance"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:protocol:3:2"
+      ],
+      "gap": "Null-balance protocol is related but no controlled factor-investigation workflow.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "optionalSuggested": true
+    },
+    {
+      "id": "p12-project02",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "suggested-project",
+      "sourceId": "p1112",
+      "pages": [
+        19
+      ],
+      "sourceNumber": "2",
+      "objective": "Investigate LDR current under two illumination changes.",
+      "components": [
+        "Lamp power at fixed distance",
+        "Lamp distance at fixed power"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "optionalSuggested": true
+    },
+    {
+      "id": "p12-project03",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "suggested-project",
+      "sourceId": "p1112",
+      "pages": [
+        19
+      ],
+      "sourceNumber": "3",
+      "objective": "Compare water and oil refractive indices by lens-and-mirror method.",
+      "components": [
+        "Equiconvex lens of known glass index",
+        "Plane mirror",
+        "Adjustable object needle",
+        "Water",
+        "Transparent oil"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "optionalSuggested": true
+    },
+    {
+      "id": "p12-project04",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "suggested-project",
+      "sourceId": "p1112",
+      "pages": [
+        19
+      ],
+      "sourceNumber": "4",
+      "objective": "Investigate turns ratio and voltage ratio in a designed transformer.",
+      "components": [
+        "Primary/secondary turns",
+        "Input/output voltage",
+        "Compare ratios"
+      ],
+      "status": "existing-protocol",
+      "resources": [
+        "physics:protocol:3:9"
+      ],
+      "gap": "Written transformer method exists; coil-design and voltage measurement apparatus absent.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "optionalSuggested": true
+    },
+    {
+      "id": "p12-project05",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "suggested-project",
+      "sourceId": "p1112",
+      "pages": [
+        19
+      ],
+      "sourceNumber": "5",
+      "objective": "Compare prism deviation for different liquids.",
+      "components": [
+        "Hollow prism",
+        "Several transparent liquids",
+        "Incidence-deviation curves"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "optionalSuggested": true
+    },
+    {
+      "id": "p12-project06",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "suggested-project",
+      "sourceId": "p1112",
+      "pages": [
+        19
+      ],
+      "sourceNumber": "6",
+      "objective": "Estimate charge on two suspended light balls.",
+      "components": [
+        "Identical pith/Styrofoam balls",
+        "Equilibrium geometry",
+        "Coulomb-law estimate"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "optionalSuggested": true
+    },
+    {
+      "id": "p12-project07",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "suggested-project",
+      "sourceId": "p1112",
+      "pages": [
+        19
+      ],
+      "sourceNumber": "7",
+      "objective": "Investigate coil self-inductance factors.",
+      "components": [
+        "Coil changes",
+        "Series resistor/bulb",
+        "Adjustable-frequency AC source"
+      ],
+      "status": "partial",
+      "resources": [
+        "physics:protocol:3:4"
+      ],
+      "gap": "RL written transient method does not implement this AC design experiment.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "optionalSuggested": true
+    },
+    {
+      "id": "p12-project08",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "suggested-project",
+      "sourceId": "p1112",
+      "pages": [
+        19
+      ],
+      "sourceNumber": "8",
+      "objective": "Investigate Earth’s magnetic field.",
+      "components": [
+        "Compass and bar-magnet field mapping",
+        "Tangent galvanometer"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "Electric-field or generic charge simulations are not this magnetic-field instrument.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "optionalSuggested": true
+    },
+    {
+      "id": "p12-vi-e01",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "accessible-alternative",
+      "sourceId": "p1112",
+      "pages": [
+        21
+      ],
+      "sourceNumber": "1",
+      "objective": "Find resistance per unit wire length using V–I data.",
+      "components": [
+        "Wire length",
+        "V–I graph",
+        "Resistance per centimetre"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "Dedicated accessible apparatus adaptation has not been verified.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "p12-a-e01"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "p12-vi-e02",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "accessible-alternative",
+      "sourceId": "p1112",
+      "pages": [
+        21
+      ],
+      "sourceNumber": "2",
+      "objective": "Verify series/parallel resistance laws using Ohm’s law.",
+      "components": [
+        "Series/parallel arrangements",
+        "Ohmic measurements"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "Dedicated accessible apparatus adaptation has not been verified.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "s10-e05"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "p12-vi-e03",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "accessible-alternative",
+      "sourceId": "p1112",
+      "pages": [
+        21
+      ],
+      "sourceNumber": "3",
+      "objective": "Find resistance using a metre bridge.",
+      "components": [
+        "Wire or standard resistor"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "Dedicated accessible apparatus adaptation has not been verified.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "p12-a-e02"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "p12-vi-e04",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "accessible-alternative",
+      "sourceId": "p1112",
+      "pages": [
+        21
+      ],
+      "sourceNumber": "4",
+      "objective": "Find galvanometer resistance by half deflection.",
+      "components": [
+        "Half-deflection observations"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "Dedicated accessible apparatus adaptation has not been verified.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "p12-a-e04"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "p12-vi-e05",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "accessible-alternative",
+      "sourceId": "p1112",
+      "pages": [
+        21
+      ],
+      "sourceNumber": "5",
+      "objective": "Identify four types of electrical component.",
+      "components": [
+        "Resistor",
+        "Capacitor",
+        "Inductor",
+        "Diode"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "Dedicated accessible apparatus adaptation has not been verified.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "p12-b-a01"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "p12-vi-e06",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "accessible-alternative",
+      "sourceId": "p1112",
+      "pages": [
+        21
+      ],
+      "sourceNumber": "6",
+      "objective": "Distinguish optical components and compare lens powers.",
+      "components": [
+        "Convex versus concave lens",
+        "Convex versus concave mirror",
+        "Relative powers of lens pairs"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "Dedicated accessible apparatus adaptation has not been verified.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "p12-vi-e07",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "accessible-alternative",
+      "sourceId": "p1112",
+      "pages": [
+        21
+      ],
+      "sourceNumber": "7",
+      "objective": "Design a coil and investigate inductance changes.",
+      "components": [
+        "Number of turns",
+        "Ferromagnetic core"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "Dedicated accessible apparatus adaptation has not been verified.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "p12-project07"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "p12-vi-e08",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "accessible-alternative",
+      "sourceId": "p1112",
+      "pages": [
+        21
+      ],
+      "sourceNumber": "8",
+      "objective": "Design step-up and step-down transformers.",
+      "components": [
+        "Core and winding",
+        "Input/output voltage relation"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "Dedicated accessible apparatus adaptation has not been verified.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "p12-project04"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "b12-a-e01",
+      "classYear": 12,
+      "subject": "Biology",
+      "category": "experiment",
+      "sourceId": "b1112",
+      "pages": [
+        12
+      ],
+      "sourceNumber": "1",
+      "objective": "Prepare a temporary pollen-germination mount.",
+      "components": [
+        "Prepare germination medium/mount",
+        "Observe pollen tubes",
+        "Record observations"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b12-a-e02",
+      "classYear": 12,
+      "subject": "Biology",
+      "category": "experiment",
+      "sourceId": "b1112",
+      "pages": [
+        12
+      ],
+      "sourceNumber": "2",
+      "objective": "Estimate plant population density using quadrats.",
+      "components": [
+        "Place/sample quadrats",
+        "Count focal plants",
+        "Density calculation and sampling limits"
+      ],
+      "status": "partial",
+      "resources": [
+        "biology:lab:ecosystem-investigation"
+      ],
+      "gap": "Existing pond investigation is only a general evidence exercise; no quadrat/count/density apparatus.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b12-a-e03",
+      "classYear": 12,
+      "subject": "Biology",
+      "category": "experiment",
+      "sourceId": "b1112",
+      "pages": [
+        12
+      ],
+      "sourceNumber": "3",
+      "objective": "Estimate plant population frequency using quadrats.",
+      "components": [
+        "Record quadrat presence/absence",
+        "Calculate frequency",
+        "Distinguish frequency from density"
+      ],
+      "status": "partial",
+      "resources": [
+        "biology:lab:ecosystem-investigation"
+      ],
+      "gap": "No quadrat sampling or frequency calculation despite related ecology evidence UI.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b12-a-e04",
+      "classYear": 12,
+      "subject": "Biology",
+      "category": "experiment",
+      "sourceId": "b1112",
+      "pages": [
+        12
+      ],
+      "sourceNumber": "4",
+      "objective": "Prepare an onion-root temporary mount to study mitosis.",
+      "components": [
+        "Root-tip slide preparation",
+        "Recognise dividing-cell stages"
+      ],
+      "status": "partial",
+      "resources": [
+        "biology:lab:mitosis"
+      ],
+      "gap": "Cell-cycle model is available; onion squash/stain/specimen observations are not.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b12-a-e05",
+      "classYear": 12,
+      "subject": "Biology",
+      "category": "experiment",
+      "sourceId": "b1112",
+      "pages": [
+        12
+      ],
+      "sourceNumber": "5",
+      "objective": "Isolate DNA from plant material.",
+      "components": [
+        "Suitable plant source; examples include spinach, green pea, papaya or banana",
+        "Tissue preparation and separation",
+        "DNA precipitation and observation"
+      ],
+      "status": "partial",
+      "resources": [
+        "biology:lab:dna-extraction"
+      ],
+      "gap": "Plant-source reagent-state model exists (strawberry/onion), but starts after homogenisation and lacks mashing/filtration. Example species are not an exclusive syllabus list.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b12-b-s01",
+      "classYear": 12,
+      "subject": "Biology",
+      "category": "spotting",
+      "sourceId": "b1112",
+      "pages": [
+        12
+      ],
+      "sourceNumber": "1",
+      "objective": "Relate flower structure to pollination agents.",
+      "components": [
+        "Wind-pollinated flower",
+        "Insect-pollinated flower",
+        "Bird-pollinated flower"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b12-b-s02",
+      "classYear": 12,
+      "subject": "Biology",
+      "category": "spotting",
+      "sourceId": "b1112",
+      "pages": [
+        12
+      ],
+      "sourceNumber": "2",
+      "objective": "Observe pollen germination on a stigma.",
+      "components": [
+        "Permanent slide or scanning electron micrograph",
+        "Pollen tube and stigma interpretation"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b12-b-s03",
+      "classYear": 12,
+      "subject": "Biology",
+      "category": "spotting",
+      "sourceId": "b1112",
+      "pages": [
+        12
+      ],
+      "sourceNumber": "3",
+      "objective": "Recognise gamete-development stages.",
+      "components": [
+        "Testis transverse section",
+        "Ovary transverse section",
+        "Permanent grasshopper or mouse slides"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b12-b-s04",
+      "classYear": 12,
+      "subject": "Biology",
+      "category": "spotting",
+      "sourceId": "b1112",
+      "pages": [
+        12
+      ],
+      "sourceNumber": "4",
+      "objective": "Recognise meiotic stages on permanent slides.",
+      "components": [
+        "Onion bud cell or grasshopper testis",
+        "Chromosome-stage identification"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b12-b-s05",
+      "classYear": 12,
+      "subject": "Biology",
+      "category": "spotting",
+      "sourceId": "b1112",
+      "pages": [
+        12
+      ],
+      "sourceNumber": "5",
+      "objective": "Identify a mammalian blastula in section.",
+      "components": [
+        "Mammalian permanent slide",
+        "Cavity and cellular organisation"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b12-b-s06",
+      "classYear": 12,
+      "subject": "Biology",
+      "category": "spotting",
+      "sourceId": "b1112",
+      "pages": [
+        12
+      ],
+      "sourceNumber": "6",
+      "objective": "Investigate Mendelian seed-trait inheritance.",
+      "components": [
+        "Plant seed colour and/or size",
+        "Count phenotypes and compare expected patterns"
+      ],
+      "status": "partial",
+      "resources": [
+        "biology:lab:mendelian-genetics"
+      ],
+      "gap": "Virtual breeding supports ratios/probability, but no seed sorting/counting observation practical.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b12-b-s07",
+      "classYear": 12,
+      "subject": "Biology",
+      "category": "spotting",
+      "sourceId": "b1112",
+      "pages": [
+        12
+      ],
+      "sourceNumber": "7",
+      "objective": "Interpret a prepared pedigree for an appropriate genetic trait.",
+      "components": [
+        "Pedigree symbols and family relationships",
+        "State an explicit inheritance model",
+        "Use qualified colour-vision/ABO or fictional examples"
+      ],
+      "status": "partial",
+      "resources": [
+        "biology:lab:mendelian-genetics"
+      ],
+      "gap": "Cross probabilities exist; pedigree reading/construction and human-trait limitations are not implemented.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b12-b-s08",
+      "classYear": 12,
+      "subject": "Biology",
+      "category": "spotting",
+      "sourceId": "b1112",
+      "pages": [
+        12
+      ],
+      "sourceNumber": "8",
+      "objective": "Study controlled pollination steps.",
+      "components": [
+        "Emasculation",
+        "Tagging",
+        "Bagging"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b12-b-s09",
+      "classYear": 12,
+      "subject": "Biology",
+      "category": "spotting",
+      "sourceId": "b1112",
+      "pages": [
+        12
+      ],
+      "sourceNumber": "9",
+      "objective": "Identify disease-associated organisms and connect them to symptoms.",
+      "components": [
+        "Ascaris",
+        "Entamoeba",
+        "Plasmodium",
+        "A ringworm-causing fungus",
+        "Slides/models/virtual images/specimens",
+        "Educational symptoms; not diagnosis"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b12-b-s10",
+      "classYear": 12,
+      "subject": "Biology",
+      "category": "spotting",
+      "sourceId": "b1112",
+      "pages": [
+        13
+      ],
+      "sourceNumber": "10",
+      "objective": "Distinguish symbiosis from parasitism in examples.",
+      "components": [
+        "Lichen association",
+        "Legume root nodules",
+        "Cuscuta on a host"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b12-b-s11",
+      "classYear": 12,
+      "subject": "Biology",
+      "category": "spotting",
+      "sourceId": "b1112",
+      "pages": [
+        13
+      ],
+      "sourceNumber": "11",
+      "objective": "Compare homologous and analogous structures.",
+      "components": [
+        "Homologous examples",
+        "Analogous examples",
+        "Flash cards or models with evidence"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No matching practical workflow identified in the audited apps.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false
+    },
+    {
+      "id": "b12-vi-e01",
+      "classYear": 12,
+      "subject": "Biology",
+      "category": "accessible-alternative",
+      "sourceId": "b1112",
+      "pages": [
+        14
+      ],
+      "sourceNumber": "1",
+      "objective": "Recognise flower adaptations for wind and insect pollination.",
+      "components": [
+        "Wind",
+        "Insects"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No dedicated accessible spotting/practical adaptation verified.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "b12-b-s01"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "b12-vi-e02",
+      "classYear": 12,
+      "subject": "Biology",
+      "category": "accessible-alternative",
+      "sourceId": "b1112",
+      "pages": [
+        14
+      ],
+      "sourceNumber": "2",
+      "objective": "Identify frog morula or blastula models.",
+      "components": [
+        "Frog morula or blastula",
+        "Tactile/model organisation"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No dedicated accessible spotting/practical adaptation verified.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [],
+      "alternativeNotAdditional": true,
+      "scopeNote": "This alternative is frog development; the standard b12-b-s05 is mammalian. Do not conflate the specimens."
+    },
+    {
+      "id": "b12-vi-e03",
+      "classYear": 12,
+      "subject": "Biology",
+      "category": "accessible-alternative",
+      "sourceId": "b1112",
+      "pages": [
+        14
+      ],
+      "sourceNumber": "3",
+      "objective": "Investigate Mendelian inheritance using distinguishable beads or seeds.",
+      "components": [
+        "Size/texture-coded beads or seeds",
+        "Count outcomes"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No dedicated accessible spotting/practical adaptation verified.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "b12-b-s06"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "b12-vi-e04",
+      "classYear": 12,
+      "subject": "Biology",
+      "category": "accessible-alternative",
+      "sourceId": "b1112",
+      "pages": [
+        14
+      ],
+      "sourceNumber": "4",
+      "objective": "Construct a pedigree for an appropriate inheritance model.",
+      "components": [
+        "Use a qualified colour-vision or fictional trait",
+        "Identify relationships and assumptions"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No dedicated accessible spotting/practical adaptation verified.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "b12-b-s07"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "b12-vi-e05",
+      "classYear": 12,
+      "subject": "Biology",
+      "category": "accessible-alternative",
+      "sourceId": "b1112",
+      "pages": [
+        14
+      ],
+      "sourceNumber": "5",
+      "objective": "Practise the controlled-pollination sequence.",
+      "components": [
+        "Emasculation",
+        "Tagging",
+        "Bagging"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No dedicated accessible spotting/practical adaptation verified.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "b12-b-s08"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "b12-vi-e06",
+      "classYear": 12,
+      "subject": "Biology",
+      "category": "accessible-alternative",
+      "sourceId": "b1112",
+      "pages": [
+        14
+      ],
+      "sourceNumber": "6",
+      "objective": "Identify an Ascaris model and educational symptom associations.",
+      "components": [
+        "Ascaris",
+        "Common disease symptoms, not self-diagnosis"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No dedicated accessible spotting/practical adaptation verified.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [
+        "b12-b-s09"
+      ],
+      "alternativeNotAdditional": true
+    },
+    {
+      "id": "b12-vi-e07",
+      "classYear": 12,
+      "subject": "Biology",
+      "category": "accessible-alternative",
+      "sourceId": "b1112",
+      "pages": [
+        14
+      ],
+      "sourceNumber": "7",
+      "objective": "Explain xerophyte morphological adaptations.",
+      "components": [
+        "Cactus/Opuntia or suitable model",
+        "Relate visible structures to water conservation"
+      ],
+      "status": "missing",
+      "resources": [],
+      "gap": "No dedicated accessible spotting/practical adaptation verified.",
+      "implementationScope": "in-scope",
+      "schoolPracticalCompleted": false,
+      "equivalentTo": [],
+      "alternativeNotAdditional": true
+    }
+  ],
+  "apparatusFamiliarity": [
+    {
+      "id": "p11-vi-apparatus",
+      "classYear": 11,
+      "subject": "Physics",
+      "category": "apparatus-familiarity",
+      "sourceId": "p1112",
+      "pages": [
+        10
+      ],
+      "notExtraExperiment": true,
+      "status": "missing",
+      "gap": "No complete accessible identification/familiarity assessment for this prescribed collection is verified.",
+      "items": [
+        {
+          "id": "p11-vi-apparatus-01",
+          "name": "Spherical ball",
+          "status": "missing"
+        },
+        {
+          "id": "p11-vi-apparatus-02",
+          "name": "Cylindrical object",
+          "status": "missing"
+        },
+        {
+          "id": "p11-vi-apparatus-03",
+          "name": "Vernier calipers",
+          "status": "missing"
+        },
+        {
+          "id": "p11-vi-apparatus-04",
+          "name": "Beaker",
+          "status": "missing"
+        },
+        {
+          "id": "p11-vi-apparatus-05",
+          "name": "Calorimeter",
+          "status": "missing"
+        },
+        {
+          "id": "p11-vi-apparatus-06",
+          "name": "Screw gauge",
+          "status": "missing"
+        },
+        {
+          "id": "p11-vi-apparatus-07",
+          "name": "Wire",
+          "status": "missing"
+        },
+        {
+          "id": "p11-vi-apparatus-08",
+          "name": "Beam balance",
+          "status": "missing"
+        },
+        {
+          "id": "p11-vi-apparatus-09",
+          "name": "Spring balance",
+          "status": "missing"
+        },
+        {
+          "id": "p11-vi-apparatus-10",
+          "name": "Weight box",
+          "status": "missing"
+        },
+        {
+          "id": "p11-vi-apparatus-11",
+          "name": "Gram masses",
+          "status": "missing"
+        },
+        {
+          "id": "p11-vi-apparatus-12",
+          "name": "Milligram masses",
+          "status": "missing"
+        },
+        {
+          "id": "p11-vi-apparatus-13",
+          "name": "Forceps",
+          "status": "missing"
+        },
+        {
+          "id": "p11-vi-apparatus-14",
+          "name": "Parallelogram-of-forces apparatus",
+          "status": "missing"
+        },
+        {
+          "id": "p11-vi-apparatus-15",
+          "name": "Pulleys",
+          "status": "missing"
+        },
+        {
+          "id": "p11-vi-apparatus-16",
+          "name": "Pans",
+          "status": "missing"
+        },
+        {
+          "id": "p11-vi-apparatus-17",
+          "name": "Pendulum bob",
+          "status": "missing"
+        },
+        {
+          "id": "p11-vi-apparatus-18",
+          "name": "Pendulum string",
+          "status": "missing"
+        },
+        {
+          "id": "p11-vi-apparatus-19",
+          "name": "Metre scale",
+          "status": "missing"
+        },
+        {
+          "id": "p11-vi-apparatus-20",
+          "name": "Split cork",
+          "status": "missing"
+        },
+        {
+          "id": "p11-vi-apparatus-21",
+          "name": "Suspension arrangement",
+          "status": "missing"
+        },
+        {
+          "id": "p11-vi-apparatus-22",
+          "name": "Stop clock or stopwatch",
+          "status": "missing"
+        },
+        {
+          "id": "p11-vi-apparatus-23",
+          "name": "Helical spring",
+          "status": "missing"
+        },
+        {
+          "id": "p11-vi-apparatus-24",
+          "name": "Extension-measuring arrangement",
+          "status": "missing"
+        },
+        {
+          "id": "p11-vi-apparatus-25",
+          "name": "Sonometer",
+          "status": "missing"
+        },
+        {
+          "id": "p11-vi-apparatus-26",
+          "name": "Sonometer wedges",
+          "status": "missing"
+        },
+        {
+          "id": "p11-vi-apparatus-27",
+          "name": "Tuning fork",
+          "status": "missing"
+        },
+        {
+          "id": "p11-vi-apparatus-28",
+          "name": "Resonance tube",
+          "status": "missing"
+        },
+        {
+          "id": "p11-vi-apparatus-29",
+          "name": "Flask or beaker for adding water",
+          "status": "missing"
+        }
+      ]
+    },
+    {
+      "id": "p12-vi-apparatus",
+      "classYear": 12,
+      "subject": "Physics",
+      "category": "apparatus-familiarity",
+      "sourceId": "p1112",
+      "pages": [
+        21
+      ],
+      "notExtraExperiment": true,
+      "status": "missing",
+      "gap": "No complete accessible identification/familiarity assessment for this prescribed collection is verified.",
+      "items": [
+        {
+          "id": "p12-vi-apparatus-01",
+          "name": "Metre scale",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-02",
+          "name": "Voltmeter shape and terminals",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-03",
+          "name": "Ammeter shape and terminals",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-04",
+          "name": "Battery or power supply",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-05",
+          "name": "Connecting wires",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-06",
+          "name": "Standard resistances",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-07",
+          "name": "Metre bridge",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-08",
+          "name": "Screw gauge",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-09",
+          "name": "Jockey",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-10",
+          "name": "Galvanometer",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-11",
+          "name": "Resistance box",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-12",
+          "name": "Potentiometer",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-13",
+          "name": "Leclanche cell exterior",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-14",
+          "name": "Daniell cell exterior",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-15",
+          "name": "Rheostat",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-16",
+          "name": "Plug-in key",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-17",
+          "name": "Tapping key",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-18",
+          "name": "Diode",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-19",
+          "name": "Wire-wound or carbon resistor",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-20",
+          "name": "Capacitor types",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-21",
+          "name": "Inductor",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-22",
+          "name": "Simple electric/electronic bell",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-23",
+          "name": "Convex lens",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-24",
+          "name": "Concave lens",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-25",
+          "name": "Convex mirror",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-26",
+          "name": "Concave mirror",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-27",
+          "name": "Hollow wooden cylinder or former",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-28",
+          "name": "Insulated winding wire",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-29",
+          "name": "Ferromagnetic rod",
+          "status": "missing"
+        },
+        {
+          "id": "p12-vi-apparatus-30",
+          "name": "Transformer core",
+          "status": "missing"
+        }
+      ]
+    },
+    {
+      "id": "b11-vi-apparatus",
+      "classYear": 11,
+      "subject": "Biology",
+      "category": "apparatus-familiarity",
+      "sourceId": "b1112",
+      "pages": [
+        7
+      ],
+      "notExtraExperiment": true,
+      "status": "missing",
+      "gap": "No complete accessible identification/familiarity assessment for this prescribed collection is verified.",
+      "items": [
+        {
+          "id": "b11-vi-apparatus-01",
+          "name": "Compound microscope",
+          "status": "missing"
+        },
+        {
+          "id": "b11-vi-apparatus-02",
+          "name": "Test tube",
+          "status": "missing"
+        },
+        {
+          "id": "b11-vi-apparatus-03",
+          "name": "Petri dish",
+          "status": "missing"
+        },
+        {
+          "id": "b11-vi-apparatus-04",
+          "name": "Chromatography paper",
+          "status": "missing"
+        },
+        {
+          "id": "b11-vi-apparatus-05",
+          "name": "Chromatography chamber",
+          "status": "missing"
+        },
+        {
+          "id": "b11-vi-apparatus-06",
+          "name": "Beaker",
+          "status": "missing"
+        },
+        {
+          "id": "b11-vi-apparatus-07",
+          "name": "Scalpel",
+          "status": "missing"
+        },
+        {
+          "id": "b11-vi-apparatus-08",
+          "name": "Alcohol",
+          "status": "missing"
+        },
+        {
+          "id": "b11-vi-apparatus-09",
+          "name": "Human-skeleton model",
+          "status": "missing"
+        },
+        {
+          "id": "b11-vi-apparatus-10",
+          "name": "Ball-and-socket joints of girdles and limbs",
+          "status": "missing"
+        },
+        {
+          "id": "b11-vi-apparatus-11",
+          "name": "Rib-cage model",
+          "status": "missing"
+        },
+        {
+          "id": "b11-vi-apparatus-12",
+          "name": "Honeycomb",
+          "status": "missing"
+        },
+        {
+          "id": "b11-vi-apparatus-13",
+          "name": "Mollusc shell",
+          "status": "missing"
+        },
+        {
+          "id": "b11-vi-apparatus-14",
+          "name": "Pigeon model",
+          "status": "missing"
+        },
+        {
+          "id": "b11-vi-apparatus-15",
+          "name": "Starfish model",
+          "status": "missing"
+        },
+        {
+          "id": "b11-vi-apparatus-16",
+          "name": "Cockroach model",
+          "status": "missing"
+        },
+        {
+          "id": "b11-vi-apparatus-17",
+          "name": "Mushroom",
+          "status": "missing"
+        },
+        {
+          "id": "b11-vi-apparatus-18",
+          "name": "Aloe vera or Kalanchoe succulent",
+          "status": "missing"
+        },
+        {
+          "id": "b11-vi-apparatus-19",
+          "name": "Raisins",
+          "status": "missing"
+        },
+        {
+          "id": "b11-vi-apparatus-20",
+          "name": "Potato",
+          "status": "missing"
+        },
+        {
+          "id": "b11-vi-apparatus-21",
+          "name": "Maize or another monocot seed",
+          "status": "missing"
+        },
+        {
+          "id": "b11-vi-apparatus-22",
+          "name": "Gram or another dicot seed",
+          "status": "missing"
+        },
+        {
+          "id": "b11-vi-apparatus-23",
+          "name": "Solanaceae plant such as brinjal or petunia",
+          "status": "missing"
+        }
+      ]
+    },
+    {
+      "id": "b12-vi-apparatus",
+      "classYear": 12,
+      "subject": "Biology",
+      "category": "apparatus-familiarity",
+      "sourceId": "b1112",
+      "pages": [
+        14
+      ],
+      "notExtraExperiment": true,
+      "status": "missing",
+      "gap": "No complete accessible identification/familiarity assessment for this prescribed collection is verified.",
+      "items": [
+        {
+          "id": "b12-vi-apparatus-01",
+          "name": "Beaker",
+          "status": "missing"
+        },
+        {
+          "id": "b12-vi-apparatus-02",
+          "name": "Flask",
+          "status": "missing"
+        },
+        {
+          "id": "b12-vi-apparatus-03",
+          "name": "Petri plate",
+          "status": "missing"
+        },
+        {
+          "id": "b12-vi-apparatus-04",
+          "name": "Sandy soil",
+          "status": "missing"
+        },
+        {
+          "id": "b12-vi-apparatus-05",
+          "name": "Clayey soil",
+          "status": "missing"
+        },
+        {
+          "id": "b12-vi-apparatus-06",
+          "name": "Loamy soil",
+          "status": "missing"
+        },
+        {
+          "id": "b12-vi-apparatus-07",
+          "name": "Small potted plants",
+          "status": "missing"
+        },
+        {
+          "id": "b12-vi-apparatus-08",
+          "name": "Aluminium foil",
+          "status": "missing"
+        },
+        {
+          "id": "b12-vi-apparatus-09",
+          "name": "Paint brush",
+          "status": "missing"
+        },
+        {
+          "id": "b12-vi-apparatus-10",
+          "name": "Test tube",
+          "status": "missing"
+        },
+        {
+          "id": "b12-vi-apparatus-11",
+          "name": "Starch solution",
+          "status": "missing"
+        },
+        {
+          "id": "b12-vi-apparatus-12",
+          "name": "Iodine",
+          "status": "missing"
+        },
+        {
+          "id": "b12-vi-apparatus-13",
+          "name": "Ice cubes",
+          "status": "missing"
+        },
+        {
+          "id": "b12-vi-apparatus-14",
+          "name": "Bunsen burner or spirit lamp or water bath",
+          "status": "missing"
+        },
+        {
+          "id": "b12-vi-apparatus-15",
+          "name": "Large flowers",
+          "status": "missing"
+        },
+        {
+          "id": "b12-vi-apparatus-16",
+          "name": "Maize inflorescence",
+          "status": "missing"
+        },
+        {
+          "id": "b12-vi-apparatus-17",
+          "name": "Frog morula model",
+          "status": "missing"
+        },
+        {
+          "id": "b12-vi-apparatus-18",
+          "name": "Frog blastula model",
+          "status": "missing"
+        },
+        {
+          "id": "b12-vi-apparatus-19",
+          "name": "Beads/seeds with distinguishable shapes, sizes or textures",
+          "status": "missing"
+        },
+        {
+          "id": "b12-vi-apparatus-20",
+          "name": "Ascaris model",
+          "status": "missing"
+        },
+        {
+          "id": "b12-vi-apparatus-21",
+          "name": "Cactus/Opuntia model",
+          "status": "missing"
+        }
+      ]
+    }
+  ],
+  "recordRequirements": [
+    {
+      "classes": [
+        9,
+        10
+      ],
+      "subject": "Science",
+      "sourceIds": [
+        "s9",
+        "s10"
+      ],
+      "pagesBySource": {
+        "s9": [
+          19
+        ],
+        "s10": [
+          7,
+          8
+        ]
+      },
+      "requirement": "Practical work accompanies theory. These numbered lists do not turn all app entries into completed school records.",
+      "appStatus": "No automatic school-practical certification."
+    },
+    {
+      "classes": [
+        11,
+        12
+      ],
+      "subject": "Physics",
+      "sourceId": "p1112",
+      "pages": [
+        7,
+        17
+      ],
+      "requirement": "Maintain at least eight experiments, four from each section; six activities, three from each section; and an investigatory project report.",
+      "evaluation": {
+        "durationHours": 3,
+        "marks": 30,
+        "experiments": "7+7",
+        "practicalRecord": 5,
+        "activity": 3,
+        "project": 3,
+        "viva": 5
+      },
+      "appStatus": "Digital observations can support preparation, not teacher-signed completion."
+    },
+    {
+      "classes": [
+        11
+      ],
+      "subject": "Biology",
+      "sourceId": "b1112",
+      "pages": [
+        6,
+        7
+      ],
+      "requirement": "Major/minor experiments, slide preparation, spotting, practical record/viva and project record/viva are distinct assessment components.",
+      "evaluation": {
+        "durationHours": 3,
+        "marks": 30,
+        "major": {
+          "marks": 5,
+          "sourceNumbers": [
+            1,
+            3,
+            7,
+            8
+          ]
+        },
+        "minor": {
+          "marks": 4,
+          "sourceNumbers": [
+            6,
+            9,
+            10,
+            11,
+            12,
+            13
+          ]
+        },
+        "slidePreparation": {
+          "marks": 5,
+          "sourceNumbers": [
+            2,
+            4,
+            5
+          ]
+        },
+        "spotting": 7,
+        "recordAndViva": 4,
+        "projectAndViva": 5
+      },
+      "appStatus": "No school-assessed practical record or project is complete just because a virtual lesson was viewed."
+    },
+    {
+      "classes": [
+        12
+      ],
+      "subject": "Biology",
+      "sourceId": "b1112",
+      "pages": [
+        12
+      ],
+      "requirement": "Major experiment, minor experiment, slide preparation, spotting, practical record/viva and investigatory project are distinct.",
+      "evaluation": {
+        "durationHours": 3,
+        "marks": 30,
+        "major": {
+          "marks": 5,
+          "sourceNumbers": [
+            5
+          ]
+        },
+        "minor": {
+          "marks": 4,
+          "sourceNumbers": [
+            2,
+            3
+          ]
+        },
+        "slidePreparation": {
+          "marks": 5,
+          "sourceNumbers": [
+            1,
+            4
+          ]
+        },
+        "spotting": 7,
+        "recordAndViva": 4,
+        "projectAndViva": 5
+      },
+      "appStatus": "Virtual guides do not certify supervised sampling, slide preparation or project work."
+    },
+    {
+      "classes": [
+        11,
+        12
+      ],
+      "subjects": [
+        "Physics",
+        "Biology"
+      ],
+      "sourceIds": [
+        "p1112",
+        "b1112"
+      ],
+      "pagesBySource": {
+        "p1112": [
+          10,
+          20,
+          21
+        ],
+        "b1112": [
+          7,
+          8,
+          13,
+          14
+        ]
+      },
+      "requirement": "Accessible alternative examination: apparatus familiarity, written practical skills, practical record and viva. At least five listed experiments recorded with teacher checking/signature; the stated guidelines include 15 short questions of which 10 are answered.",
+      "evaluation": {
+        "durationHours": 2,
+        "marks": 30,
+        "familiarity": 5,
+        "written": 10,
+        "record": 5,
+        "viva": 10,
+        "writtenMinutes": 30
+      },
+      "appStatus": "A screen-reader-friendly app is helpful but cannot itself certify tactile work or examination accommodations."
+    }
+  ],
+  "acceptanceGates": [
+    {
+      "id": "measuring-instruments",
+      "appliesTo": [
+        "p11-a-e01",
+        "p11-a-e02",
+        "p11-a-e03",
+        "p11-a-e04"
+      ],
+      "required": [
+        "Authentic main/vernier or pitch/circular scale with declared least count",
+        "Positive, negative and zero zero-error cases",
+        "Correct signed zero correction",
+        "Object-dependent jaws/anvil/depth positioning",
+        "Multiple observations and mean with units/uncertainty",
+        "Deliberate wrong-reading feedback; do not simply display the answer",
+        "Keyboard/touch operation and text-readable scales",
+        "Reset, preserved student notebook, offline route and regression checks"
+      ]
+    },
+    {
+      "id": "every-practical",
+      "required": [
+        "Distinct aim, apparatus, scientific mechanism and authored method",
+        "Operational controls for claimed simulation, otherwise an explicit protocol-only label",
+        "Observation table and defensible analysis with units, error/limitations and viva prompts",
+        "Prescribed components/OR choices/specimens mapped individually",
+        "Official source and academic year visible",
+        "No progress credit for roadmap placeholders or unrelated diagrams",
+        "Class-specific discovery without destroying existing routes/notes"
+      ]
+    },
+    {
+      "id": "source-truth",
+      "required": [
+        "Verify current source IDs before linking",
+        "Never equate PeqBench.has with real controls",
+        "Do not map double pendulum to simple-pendulum practical",
+        "Do not label a generic fish Rohu without verified anatomical/species evidence",
+        "Keep standard mammal blastula and alternative frog development distinct",
+        "Do not model complex human traits as simple Mendelian certainties"
+      ]
+    },
+    {
+      "id": "safety-accessibility",
+      "required": [
+        "Synthetic data/sample banner where appropriate",
+        "No unsolicited camera request",
+        "No unsupervised mains, body-fluid collection, heating, corrosive or scalpel instruction in student workflows",
+        "No medical diagnosis from simulated urine/pathogen tests",
+        "Keyboard, touch, text alternatives, focus order, screen-reader/table labels and reduced motion",
+        "Accessible curriculum alternatives remain separately identified and teacher reviewed"
+      ]
+    },
+    {
+      "id": "release",
+      "required": [
+        "Source synchronization and single-file packaging",
+        "App-scoped regression checks and protected-boundary preservation",
+        "Fresh/returning/deep-link/offline workflow tests",
+        "Responsive practical controls and meaningful input-driven state assertions",
+        "Independent diff review, required CI, tested PR merge and live artifact parity",
+        "Do not claim all practicals implemented until every mapped requirement has evidence"
+      ]
+    }
+  ],
+  "auditState": "complete-source-inventory; implementation remains incomplete",
+  "summary": {
+    "standardNumberedItems": 124,
+    "standardBySubject": {
+      "Physics": 72,
+      "Biology": 44,
+      "Chemistry": 8
+    },
+    "standardByClass": {
+      "9": 13,
+      "10": 14,
+      "11": 53,
+      "12": 44
+    },
+    "accessibleAlternativeNumberedItems": 33,
+    "accessibleAlternativesBySubject": {
+      "Physics": 18,
+      "Biology": 15
+    },
+    "suggestedProjectOptions": 8,
+    "apparatusFamiliarityGroups": 4,
+    "apparatusFamiliarityItems": 103,
+    "standardStatusCounts": {
+      "partial": 47,
+      "missing": 69,
+      "existing-simulation": 2,
+      "existing-protocol": 6
+    },
+    "allRowsByStatus": {
+      "partial": 49,
+      "missing": 107,
+      "existing-simulation": 2,
+      "existing-protocol": 7
+    },
+    "doNotSumAsMandatory": "Accessible alternatives overlap standard tasks, and eight Physics projects are suggestions, not eight compulsory projects. Compound specimens are retained as components, not separate numbered experiments."
+  }
+}
