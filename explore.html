@@ -618,6 +618,37 @@ body main #tlDetail .tl-sig{font-size:11px;line-height:1.7}
 @media(max-width:420px){body main #sysList{gap:8px}body main #atlas .sys-btn{display:block;padding:0;overflow:hidden}#atlas .br-reference-thumb{width:100%;border:0;border-radius:0;border-bottom:1px solid var(--line)}body main #atlas .sys-btn .sn{display:block;padding:9px 10px;font-size:12px}body main #atlas .sys-btn .sn small{font-size:9px}}
 </style>
 <!-- BIO-PREVIEWS:css:END -->
+<!-- PROTEIN-ATLAS-CSS:START -->
+<style id="protein-atlas-css">
+/* Scoped to Explore's Protein Atlas. Shared Biology theme tokens remain canonical. */
+#proteins{scroll-margin-top:24px}#proteins [hidden]{display:none!important}
+#proteins .pa-layout{display:grid;grid-template-columns:minmax(0,1fr) 286px;gap:22px;align-items:start}
+#proteins .pa-main,#proteins .pa-aside{min-width:0}
+#proteins .pa-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+#proteins .pa-title{padding:20px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line)}
+#proteins .pa-title h3{margin:5px 0 0;font-size:24px}#proteins .pa-kicker{font:500 10px/1.7 var(--mono);letter-spacing:1.2px;text-transform:uppercase;color:var(--cy)}
+#proteins .pa-badge{border:1px solid var(--line);border-radius:20px;padding:5px 9px;font:11px/1.4 var(--sans);color:var(--dim);white-space:nowrap}
+#proteins .pa-stage{position:relative;height:430px;isolation:isolate;background:var(--bg-2)}
+#pa-host{position:absolute;inset:0;min-height:0;overflow:hidden}#pa-host .msp-plugin{position:absolute;inset:0}#pa-host .msp-layout-standard{border:none}
+#proteins .pa-cover{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:26px;background:var(--bg-2);z-index:2}
+#proteins .pa-cover-icon{font:400 54px/1.2 Georgia,serif;color:var(--em);letter-spacing:6px;opacity:.8}#proteins .pa-cover strong{font-size:19px;font-weight:500}#proteins .pa-cover p{max-width:36ch;font-size:14px;line-height:1.7;color:var(--dim);margin:0}
+#proteins .pa-cover[data-error=true]{border-inline-start:3px solid var(--amber)}#proteins .pa-cover[data-error=true] strong{color:var(--amber)}
+#proteins .pa-toolbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:13px 18px;border-top:1px solid var(--line)}
+#proteins .pa-segment{display:flex;flex-wrap:wrap;gap:4px}#proteins .pa-segment button,#proteins .pa-reset{padding:10px 11px;min-height:42px;font-size:12px;line-height:1.4;border-radius:5px;color:var(--dim);border:1px solid transparent;background:transparent}
+#proteins .pa-segment button[aria-pressed=true]{background:var(--raise);border-color:var(--line);color:var(--ink)}#proteins .pa-reset{border-color:var(--line)}
+#proteins button:disabled{opacity:.45;cursor:default}#proteins button:focus-visible,#proteins a:focus-visible{outline:2px solid var(--cy);outline-offset:4px}
+#proteins .pa-caption{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:12px 20px;background:var(--bg-2);font-size:11px;color:var(--dim);line-height:1.6}#pa-status{color:var(--cy)}
+#proteins .pa-reading{margin-top:20px;padding:18px 20px;border-left:2px solid var(--cy);background:var(--panel)}#proteins .pa-reading p{margin:7px 0 14px;font-size:14px;line-height:1.75;color:var(--dim)}
+#proteins .pa-key{display:flex;flex-wrap:wrap;gap:16px;font-size:11px;color:var(--dim)}#proteins .pa-key span{display:flex;gap:7px;align-items:center}#proteins .pa-key i{width:9px;height:9px;border-radius:50%;background:#ff0080}#proteins .pa-key .pa-sheet{background:#ffc800}#proteins .pa-key .pa-loop{background:#fff;border:1px solid #aaa}#proteins .pa-key .pa-turn{background:linear-gradient(90deg,#00b266,#66d8c9)}
+#proteins .pa-boundary{color:var(--faint);font-size:11px;line-height:1.8;margin:14px 0 0}
+#proteins .pa-choices{display:grid;gap:9px;margin:11px 0 24px}#proteins .pa-choices button{text-align:left;padding:15px 17px;border-radius:var(--r);border:1px solid var(--line);background:var(--panel);color:var(--ink);transition:border-color .15s ease}
+#proteins .pa-choices button[aria-pressed=true]{border-color:var(--em);background:var(--raise)}#proteins .pa-choices button:hover{border-color:var(--cy)}#proteins .pa-choices button>span{font:10px var(--mono);color:var(--cy);display:flex;justify-content:space-between;gap:8px}#proteins .pa-choices small{font:10px var(--sans);color:var(--dim)}#proteins .pa-choices strong{display:block;font-size:14px;font-weight:550;margin:10px 0 5px}#proteins .pa-choices em{font-size:12px;font-style:normal;color:var(--dim)}
+#proteins .pa-evidence{padding:19px;border:1px solid var(--line);border-radius:var(--r);background:var(--panel)}#proteins .pa-evidence>p{font-size:13px;line-height:1.75;color:var(--dim);margin:10px 0 18px}#proteins .pa-evidence dl{margin:0 0 16px}#proteins .pa-evidence dl>div{padding:10px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:15px;font-size:11px;line-height:1.6}#proteins .pa-evidence dt{color:var(--dim)}#proteins .pa-evidence dd{margin:0;text-align:right;color:var(--ink)}#proteins .pa-evidence a{display:block;color:var(--cy);font-size:12px;line-height:1.6;margin-top:15px;text-underline-offset:4px}#proteins .pa-evidence .pa-license{color:var(--faint);font-size:10px}#proteins #pa-ligand{width:100%;min-height:42px;font-size:12px}
+@media(max-width:1000px){#proteins .pa-layout{grid-template-columns:minmax(0,1fr) 246px}#proteins .pa-stage{height:380px}}
+@media(max-width:760px){#proteins .pa-layout{grid-template-columns:1fr}#proteins .pa-aside{display:grid;grid-template-columns:1fr;gap:0}#proteins .pa-stage{height:330px}#proteins .pa-title{padding:17px}#proteins .pa-toolbar{padding:10px}#proteins .pa-title h3{font-size:22px}#proteins .pa-badge{font-size:10px}#proteins .pa-caption{padding:12px 15px}#proteins .pa-choices{margin-bottom:18px}#proteins .pa-segment button{padding:10px 8px}}
+@media(prefers-reduced-motion:reduce){#proteins *{transition:none!important;animation:none!important}}
+</style>
+<!-- PROTEIN-ATLAS-CSS:END -->
 </head>
 <body data-page="explore">
 <div class="bg-veil" aria-hidden="true"></div>
@@ -658,6 +689,7 @@ body main #tlDetail .tl-sig{font-size:11px;line-height:1.7}
     <h1 class="h1 reveal d1">All of life, <span class="grad">on one map you can touch.</span></h1>
     <p class="lead reveal d2">A living reference for biology — the tree of life, a disease library, four billion years of evolution, the human body, and a knowledge graph that ties every strand together. Everything here is interactive and populated with real science.</p>
     <div class="cta reveal d3">
+      <a class="btn primary" href="#proteins">Open Protein Atlas <span class="arr">→</span></a>
       <a class="btn primary" href="./universe.html">Zoom the Universe <span class="arr">→</span></a>
       <a class="btn ghost" href="./lab.html">Open the Dissection Lab</a>
     </div>
@@ -669,6 +701,42 @@ body main #tlDetail .tl-sig{font-size:11px;line-height:1.7}
     </div>
   </section>
 
+<!-- PROTEIN-ATLAS-HTML:START -->
+<section class="band wrap" id="proteins" aria-labelledby="proteinTitle">
+  <div class="sec-head">
+    <div class="eyebrow">Protein Atlas · Experimental structures</div>
+    <h2 class="h2" id="proteinTitle">From a chain to a working shape.</h2>
+    <p class="lead">Explore deposited protein coordinates. Trace a fold, switch to atoms, and find the small molecules held inside a binding site.</p>
+  </div>
+  <div class="pa-layout">
+    <div class="pa-main">
+      <div class="pa-card">
+        <div class="pa-title"><div><span class="pa-kicker" id="pa-id">PDB 1CRN</span><h3 id="pa-name">Crambin</h3></div><span class="pa-badge" id="pa-origin">Included offline</span></div>
+        <div class="pa-stage" id="pa-stage" data-loaded="false">
+          <div id="pa-host" aria-label="Interactive protein model. Drag to rotate; scroll or pinch to zoom."></div>
+          <div class="pa-cover" id="pa-cover"><div class="pa-cover-icon" aria-hidden="true">α ↔ β</div><strong id="pa-cover-title">A whole fold, in 46 residues.</strong><p id="pa-cover-note">The 3D viewer loads when you open a structure. Crambin is included in Biology Entelloq.</p><button type="button" class="btn primary" id="pa-load">Open 3D structure <span aria-hidden="true">→</span></button></div>
+        </div>
+        <div class="pa-toolbar">
+          <div class="pa-segment" role="group" aria-label="Protein representation"><button type="button" data-pa-mode="polymer-and-ligand" aria-pressed="true" disabled>Fold + ligands</button><button type="button" data-pa-mode="atomic-detail" aria-pressed="false" disabled>Atoms</button><button type="button" data-pa-mode="molecular-surface" aria-pressed="false" disabled>Surface</button></div>
+          <button type="button" class="pa-reset" id="pa-reset" disabled>Reset view</button>
+        </div>
+        <div class="pa-caption"><span id="pa-status" role="status" aria-live="polite">Ready to explore · no structure loaded</span><span>Drag to rotate · scroll or pinch to zoom</span></div>
+      </div>
+      <div class="pa-reading"><span class="pa-kicker">READ THE MODEL</span><p id="pa-question">Compare the ribbon and atom views. The ribbon makes the backbone fold easier to follow; the atom view shows the recorded positions that the ribbon summarizes.</p><div class="pa-key" id="pa-key"><span><i class="pa-helix"></i>Alpha helices</span><span><i class="pa-sheet"></i>Sheets</span><span><i class="pa-loop"></i>Coils</span><span><i class="pa-turn"></i>Turns / bends</span></div></div>
+      <p class="pa-boundary">Experimental X-ray coordinates, first deposited model. Colours help distinguish structure; they are not the protein’s natural colour. This is a structural view, not a simulation of folding, movement or binding affinity.</p>
+    </div>
+    <aside class="pa-aside" aria-label="Protein structures and evidence">
+      <div class="pa-kicker">Choose a structure</div>
+      <div id="pa-choices" class="pa-choices">
+        <button type="button" data-pa-protein="1CRN" aria-pressed="true"><span>1CRN <small>Included offline</small></span><strong>Crambin</strong><em>A compact plant protein</em></button>
+        <button type="button" data-pa-protein="1STP" aria-pressed="false"><span>1STP <small>Internet required</small></span><strong>Streptavidin + biotin</strong><em>Explore a binding site</em></button>
+        <button type="button" data-pa-protein="1HHO" aria-pressed="false"><span>1HHO <small>Internet required</small></span><strong>Oxyhaemoglobin</strong><em>Find the heme groups</em></button>
+      </div>
+      <div class="pa-evidence"><span class="pa-kicker">Structure notes</span><p id="pa-notes">A compact 46-residue plant protein. Look for helices, a small sheet and the turns that connect them.</p><dl><div><dt>Method</dt><dd>X-ray diffraction</dd></div><div><dt>Resolution</dt><dd id="pa-resolution">1.50 Å</dd></div><div><dt>Organism</dt><dd id="pa-organism">Crambe hispanica</dd></div><div><dt>Source</dt><dd>RCSB PDB</dd></div></dl><button type="button" id="pa-ligand" class="btn primary" hidden disabled>Focus ligand</button><a id="pa-source" href="https://www.rcsb.org/structure/1CRN" target="_blank" rel="noopener noreferrer">Source and validation ↗</a><a class="pa-license" href="./assets/protein/vendor/MOLSTAR-LICENSE.txt" target="_blank" rel="noopener">Mol* 5.13.1 · MIT licence ↗</a></div>
+    </aside>
+  </div>
+</section>
+<!-- PROTEIN-ATLAS-HTML:END -->
   <!-- ===================== TREE OF LIFE ===================== -->
   <section class="band wrap" id="tree">
     <div class="sec-head reveal">
@@ -1354,6 +1422,146 @@ body main #tlDetail .tl-sig{font-size:11px;line-height:1.7}
   })();
 })();
 </script>
+<!-- PROTEIN-ATLAS-JS:START -->
+<script id="protein-atlas-js">
+/* Biology Explore: real, lazy Mol* rendering of a small allowlist of PDB entries. */
+(function () {
+  'use strict';
+  const section = document.getElementById('proteins');
+  if (!section) return;
+  const $ = id => document.getElementById('pa-' + id);
+  const structures = {
+    '1CRN': {name:'Crambin',resolution:'1.50 Å',organism:'Crambe hispanica',local:true,
+      notes:'A compact 46-residue plant protein. Look for helices, a small sheet and the turns that connect them.',
+      question:'Compare the ribbon and atom views. The ribbon makes the backbone fold easier to follow; the atom view shows the recorded positions that the ribbon summarizes.'},
+    '1STP': {name:'Streptavidin + biotin',resolution:'2.60 Å',organism:'Streptomyces avidinii',ligand:'BTN',
+      notes:'The deposited biotin ligand sits in a pocket of streptavidin. This view shows the first deposited model, not an automatically generated biological assembly.',
+      question:'Focus the BTN ligand, then switch to atoms. Which parts of the surrounding protein enclose it? A pocket suggests how a molecule fits; the image alone does not measure how tightly it binds.'},
+    '1HHO': {name:'Oxyhaemoglobin',resolution:'2.10 Å',organism:'Homo sapiens',ligand:'HEM',
+      notes:'An experimental human oxyhaemoglobin structure containing heme groups. The deposited model includes an alpha and a beta chain; a full biological tetramer is not generated here.',
+      question:'Focus HEM to inspect the heme groups. In the atom view, hover a position to read its identity. Distinguish the small heme cofactor from the much larger folded protein chain.'}
+  };
+  let selected = '1CRN', viewer = null, controller = null, serial = 0, engine = null;
+  let loaded = false, busy = false, currentMode = 'polymer-and-ligand';
+  const choices = [...section.querySelectorAll('[data-pa-protein]')];
+  const modes = [...section.querySelectorAll('[data-pa-mode]')];
+  function controls() {
+    modes.forEach(button => {button.disabled = busy || !loaded;button.setAttribute('aria-pressed',String(button.dataset.paMode === currentMode));});
+    $('reset').disabled = busy || !loaded;
+    $('ligand').disabled = busy || !loaded;
+    $('load').disabled = busy;
+    section.setAttribute('aria-busy', String(busy));
+  }
+  function status(text) {$('status').textContent = text;}
+  function remember() {try {parent.BioAppContext?.remember('explore','proteins');} catch (_) {}}
+  function cover(title,note,retry=false) {
+    $('cover').hidden = false;$('cover').dataset.error = String(retry);
+    $('cover-title').textContent = title;$('cover-note').textContent = note;
+    $('load').hidden = !retry;$('load').textContent = 'Retry this structure';
+  }
+  function loadEngine() {
+    if (engine) return engine;
+    engine = new Promise((resolve,reject) => {
+      if (window.molstar) {resolve(window.molstar);return;}
+      if (!document.querySelector('[data-protein-css]')) {
+        const css = document.createElement('link');css.rel='stylesheet';css.href='./assets/protein/vendor/molstar.css';css.dataset.proteinCss='true';document.head.append(css);
+      }
+      // Fetch through the package's existing deferred-asset boundary. A direct
+      // script URL would bypass the portable file while its payload is waiting.
+      const script = document.createElement('script');script.async=true;
+      const request = new AbortController();let scriptUrl=null,settled=false;
+      const timer = setTimeout(() => fail(),30000);
+      function cleanup() {clearTimeout(timer);if(scriptUrl)URL.revokeObjectURL(scriptUrl);}
+      function fail() {if(settled)return;settled=true;request.abort();cleanup();script.remove();engine=null;reject(new Error('The included 3D engine could not load. Retry, or reopen Biology Entelloq.'));}
+      script.onerror=fail;script.onload=() => {if(!window.molstar){fail();return;}settled=true;cleanup();resolve(window.molstar);};
+      fetch('./assets/protein/vendor/molstar.js',{signal:request.signal}).then(response=>{
+        if(!response.ok)throw new Error('Renderer unavailable');return response.blob();
+      }).then(blob=>{if(settled)return;scriptUrl=URL.createObjectURL(blob);script.src=scriptUrl;document.head.append(script);}).catch(fail);
+    });
+    return engine;
+  }
+  function stop() {serial++;controller?.abort();controller=null;viewer?.dispose();viewer=null;loaded=false;$('stage').dataset.loaded='false';}
+  function theme() {
+    const light = document.documentElement.dataset.theme === 'light';
+    viewer?.plugin.canvas3d?.setProps({renderer:{backgroundColor:light ? 0xebece3 : 0x0e1413}});
+  }
+  async function open(id) {
+    if (!Object.hasOwn(structures,id)) return;
+    stop();const run=serial;selected=id;busy=true;currentMode='polymer-and-ligand';
+    const data=structures[id];
+    $('id').textContent='PDB '+id;$('name').textContent=data.name;$('resolution').textContent=data.resolution;$('organism').textContent=data.organism;
+    $('notes').textContent=data.notes;$('question').textContent=data.question;$('origin').textContent=data.local?'Included offline':'From RCSB PDB';
+    $('source').href='https://www.rcsb.org/structure/'+id;$('ligand').hidden=!data.ligand;$('ligand').textContent='Focus '+(data.ligand||'')+' ligand';
+    $('key').hidden=false;choices.forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.paProtein===id)));
+    cover('Opening '+data.name+'…',data.local?'Reading coordinates included in Biology Entelloq.':'Fetching experimental coordinates from RCSB PDB.');
+    status('Loading the 3D viewer…');controls();remember();
+    try {
+      const molstar=await loadEngine();if(run!==serial)return;
+      const instance=await molstar.Viewer.create($('host'),{
+        layoutIsExpanded:false,layoutShowControls:false,layoutShowRemoteState:false,layoutShowSequence:false,layoutShowLog:false,layoutShowLeftPanel:false,
+        viewportShowExpand:false,viewportShowControls:false,viewportShowSettings:false,viewportShowSelectionMode:false,viewportShowAnimation:false,viewportShowScreenshotControls:false,
+        viewportBackgroundColor:document.documentElement.dataset.theme==='light'?'#ebece3':'#0e1413',volumeStreamingDisabled:true,extensions:[],
+        allowMajorPerformanceCaveat:true,pixelScale:1,illumination:false,
+      });
+      if(run!==serial){instance.dispose();return;}viewer=instance;
+      controller=new AbortController();const timer=setTimeout(()=>controller?.abort(),20000);
+      let pdb;
+      try {
+        const response=await fetch(data.local?'./assets/protein/1CRN.pdb.txt':'https://files.rcsb.org/download/'+id+'.pdb',{signal:controller.signal});
+        if(!response.ok)throw new Error('Coordinates could not load ('+response.status+').');
+        pdb=await response.text();
+      } finally {clearTimeout(timer);}
+      if(run!==serial)return;
+      if(pdb.length>5000000||!/^ATOM  /m.test(pdb))throw new Error('The coordinate file was empty or unsupported.');
+      const raw=await instance.plugin.builders.data.rawData({data:pdb,label:id+' · RCSB PDB'});
+      if(run!==serial)return;
+      const trajectory=await instance.plugin.builders.structure.parseTrajectory(raw,'pdb');
+      if(run!==serial)return;
+      await instance.plugin.builders.structure.hierarchy.applyPreset(trajectory,'default',{
+        structure:{name:'model',params:{}},showUnitcell:false,representationPreset:'polymer-and-ligand',representationPresetParams:{theme:{globalName:'secondary-structure'}},
+      });
+      if(run!==serial)return;
+      const count=instance.plugin.managers.structure.hierarchy.current.structures[0]?.cell.obj?.data.elementCount||0;
+      if(!count)throw new Error('No atoms were found in the experimental coordinates.');
+      instance.plugin.managers.camera.reset(undefined,0);loaded=true;busy=false;$('cover').hidden=true;
+      $('stage').dataset.loaded='true';$('stage').dataset.atoms=String(count);$('stage').dataset.protein=id;
+      status(id+' ready · '+count.toLocaleString()+' atoms loaded');controls();
+    } catch(error) {
+      if(run!==serial)return;
+      viewer?.dispose();viewer=null;busy=false;loaded=false;
+      cover('Structure unavailable',data.local?'This view needs WebGL. '+(error.message||'Retry the included structure.'):'Check your internet connection and retry, or choose Crambin to explore the included offline structure.',true);
+      status('No structure loaded · '+(data.local?'viewer error':'RCSB request failed'));controls();
+    }
+  }
+  async function representation(mode) {
+    if(!viewer||busy||!loaded||!modes.some(button=>button.dataset.paMode===mode))return;
+    const instance=viewer,run=serial;busy=true;controls();status('Updating representation…');
+    try {
+      const structure=instance.plugin.managers.structure.hierarchy.current.structures[0];
+      await instance.plugin.managers.structure.component.clear([structure]);if(run!==serial)return;
+      await instance.plugin.builders.structure.representation.applyPreset(structure.cell,mode,{theme:{globalName:mode==='atomic-detail'?'element-symbol':'secondary-structure'}});
+      if(run!==serial)return;
+      currentMode=mode;$('key').hidden=mode==='atomic-detail';$('stage').dataset.mode=mode;
+      status(selected+' · '+modes.find(button=>button.dataset.paMode===mode).textContent+' view');
+    }catch(error){if(run===serial)status('Representation unavailable. Reload the structure to retry.');}
+    finally{if(run===serial){busy=false;controls();}}
+  }
+  $('load').addEventListener('click',()=>open(selected));
+  choices.forEach(button=>button.addEventListener('click',()=>open(button.dataset.paProtein)));
+  modes.forEach(button=>button.addEventListener('click',()=>representation(button.dataset.paMode)));
+  $('reset').addEventListener('click',()=>{viewer?.plugin.managers.camera.reset(undefined,0);status(selected+' · view reset');});
+  $('ligand').addEventListener('click',()=>{
+    const ligand=structures[selected].ligand;if(!viewer||busy||!loaded||!ligand)return;
+    viewer.structureInteractivity({elements:{label_comp_id:ligand},action:['select','focus'],focusOptions:{durationMs:0}});
+    status(selected+' · '+ligand+' ligand selected and focused');
+  });
+  const themeObserver=new MutationObserver(theme);themeObserver.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+  function deepLink() {if(location.hash==='#proteins'&&!viewer&&!busy)open(selected);}
+  addEventListener('hashchange',deepLink);deepLink();
+  addEventListener('pagehide',()=>{stop();themeObserver.disconnect();},{once:true});
+})();
+</script>
+<!-- PROTEIN-ATLAS-JS:END -->
 <!-- __BIOQ_EMBED__ -->
 <style>body.embed .nav,body.embed .mobile-menu,body.embed footer,body.embed .skiplink{display:none!important}
 body.embed main{padding-top:20px!important}body.embed #launch{display:none!important}</style>
