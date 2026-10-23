@@ -1,0 +1,109 @@
+{
+  "checkedAt": "2026-10-23T21:07:32.628Z",
+  "host": "C:\\Users\\darsh\\.codex\\worktrees\\entelloq-learning-next\\wh\\work\\hosts\\biology",
+  "status": "passed",
+  "checks": [
+    "Portable Biology Labs opens the actual kinetics tool with its package bridge",
+    "No computation or companion request occurs before the explicit Run action",
+    "The tool performs a real local Tellurium connection handshake",
+    "Actual CVODE response contains 201 finite concentration samples, explicit units and conserved moieties",
+    "The visible plot and result summary use the actual response, and scientific exports become available",
+    "Downloaded CSV contains all 201 real response rows with unit-bearing column names",
+    "The run uses only the portable artifact and explicit loopback companion, with no source fallback or page errors"
+  ],
+  "pageErrors": [],
+  "expectedFontRequests": [
+    {
+      "url": "https://fonts.googleapis.com/css2",
+      "blocked": true
+    },
+    {
+      "url": "https://fonts.googleapis.com/css2",
+      "blocked": true
+    },
+    {
+      "url": "https://fonts.googleapis.com/css2",
+      "blocked": true
+    }
+  ],
+  "deniedRequests": [],
+  "serverRequests": [
+    "/dist/index.html"
+  ],
+  "companionRequests": [
+    {
+      "url": "http://127.0.0.1:8932/api/health",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:8932/api/simulate",
+      "method": "POST",
+      "parameters": {
+        "substrate": 6,
+        "enzyme": 1,
+        "kcat": 0.4,
+        "duration": 18
+      }
+    }
+  ],
+  "computation": {
+    "engine": "Tellurium / libRoadRunner CVODE",
+    "version": "2.2.13.1",
+    "parameters": {
+      "substrate": 6,
+      "enzyme": 1,
+      "kcat": 0.4,
+      "duration": 18
+    },
+    "units": {
+      "time": "s",
+      "concentration": "µM",
+      "kon": "µM⁻¹ s⁻¹",
+      "koff": "s⁻¹",
+      "kcat": "s⁻¹"
+    },
+    "fixedRates": {
+      "kon": 2,
+      "koff": 1
+    },
+    "columns": [
+      "time_s",
+      "substrate_uM",
+      "enzyme_uM",
+      "complex_uM",
+      "product_uM"
+    ],
+    "samples": 201,
+    "firstRow": [
+      0,
+      6,
+      1,
+      0,
+      0
+    ],
+    "finalRow": [
+      18,
+      0.41934961463816806,
+      0.6003807448413438,
+      0.3996192551586543,
+      5.181031130208331
+    ],
+    "conservation": {
+      "substrateMoietyMaxError_uM": 5.160316618457728e-12,
+      "enzymeMoietyMaxError_uM": 2.4424906541753444e-15,
+      "minimumConcentration_uM": 0
+    },
+    "recalculatedDrift_uM": {
+      "substrate": 5.160316618457728e-12,
+      "enzyme": 2.4424906541753444e-15
+    },
+    "csvSha256": "c539bd71541f58f5e0cd95d8059049dc44b899d99d5279d0a0cceb8cd13329d1",
+    "assumptions": [
+      "Well-mixed closed compartment of constant volume",
+      "Fixed temperature and rate constants",
+      "No diffusion, inhibition, synthesis or degradation",
+      "Generic educational mechanism; no organism-specific experimental calibration",
+      "Conserved moieties, not an elemental or atom-balanced chemical reaction"
+    ]
+  }
+}

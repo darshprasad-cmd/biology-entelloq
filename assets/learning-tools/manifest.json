@@ -1,0 +1,75 @@
+{
+  "schema": 1,
+  "subject": "biology",
+  "modules": {
+    "biology": [
+      {
+        "path": "assets/learning-tools/biology/index.html",
+        "bytes": 2101,
+        "sha256": "d550bacede1e6fcad2be6a124597bb5973a6a7a0e7d4b2f1ae595b25b715d84e"
+      },
+      {
+        "path": "assets/learning-tools/biology/dist/THIRD-PARTY.txt",
+        "bytes": 13744,
+        "sha256": "db31569c71184d77dedcc95fbc1813bff6ab43f9a7af440ef7423693d0b4ed0f"
+      },
+      {
+        "path": "assets/learning-tools/biology/dist/VTK-Copyright.txt",
+        "bytes": 1795,
+        "sha256": "c8c9044298891720f74be4998d9ac20f3bb9d2f1fe10a832403e4c5e3a5d0a6a"
+      },
+      {
+        "path": "assets/learning-tools/biology/dist/main.js",
+        "bytes": 21991,
+        "sha256": "ae91bf8726248b696a48e61dc7c6d506e2e27ce540b75752b0d0eefdc0d76fbc"
+      },
+      {
+        "path": "assets/learning-tools/biology/dist/volume.js",
+        "bytes": 1855384,
+        "sha256": "18fb2ed81553495e87b54e5fa956a1bbe55805797883909ef8227cfd71b9f8bf"
+      }
+    ],
+    "learning": [
+      {
+        "path": "assets/learning-tools/learning/index.html",
+        "bytes": 2144,
+        "sha256": "710a8f82ec8343e23742658ff0eec8f866ef893ffefde91d1a628e3e05342385"
+      },
+      {
+        "path": "assets/learning-tools/learning/styles.css",
+        "bytes": 4984,
+        "sha256": "6ac574570c4dcda419ce1638ac66366cafc3b68c10e26092991155298e0ba203"
+      },
+      {
+        "path": "assets/learning-tools/learning/main.js",
+        "bytes": 133008,
+        "sha256": "4decf5d04b11e33b0da391ab08cf595571db757f6ba71e54ac8a94c9b6643a02"
+      },
+      {
+        "path": "assets/learning-tools/learning/semantic-worker.js",
+        "bytes": 703248,
+        "sha256": "94b4c90d376bde00872ccfec38cc2d5a97bf95c49d78eebf7f75f821d8313e25"
+      },
+      {
+        "path": "assets/learning-tools/learning/runtime/ort-wasm-simd-threaded.jsep.mjs",
+        "bytes": 46851,
+        "sha256": "c2f80e915e9df63289788a99d434d8c4e00e64e9c1f030f4b80b022458dd2c99"
+      },
+      {
+        "path": "assets/learning-tools/learning/runtime/ort-wasm-simd-threaded.jsep.wasm",
+        "bytes": 28352885,
+        "sha256": "62ff86b2f2fa3a79eb87a7e4720e8ea9051942bf975f314181bf7dcef2feac06"
+      },
+      {
+        "path": "assets/learning-tools/learning/THIRD-PARTY-NOTICES.md",
+        "bytes": 28270,
+        "sha256": "655f787b56bb232ce21080a863b384bbb2d09221747c24c70be81a1f50cf2861"
+      },
+      {
+        "path": "assets/learning-tools/learning/asset-manifest.json",
+        "bytes": 1348,
+        "sha256": "19cb3e5d2ef2191faeb5ee852c5655f569d808e9950609ffd5746cbaf7d0d45c"
+      }
+    ]
+  }
+}

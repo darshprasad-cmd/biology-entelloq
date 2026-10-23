@@ -23,6 +23,12 @@ jobs:
           node-version: "22"
       - name: Learning workflow and original-lab boundary
         run: node scripts/check-learning.cjs
+      - name: Verify learning-tool source slots and assets
+        run: |
+          python scripts/build-learning-tools.py --check
+          python scripts/sync-learning-tools.py --check
+          npm ci --prefix learning-tools-source/learning --no-audit --no-fund
+          npm test --prefix learning-tools-source/learning
       - name: Build the single-file application
         run: |
           python scripts/build-single-file.py
@@ -39,6 +45,8 @@ jobs:
           node scripts/check-opening-browser.cjs
           node scripts/check-exam-answers-browser.cjs
           node tests/check-ai-answer-formatting.cjs
+          node scripts/check-learning-tools-browser.cjs
+          node scripts/check-learning-tools-browser.cjs --portable
           node scripts/check-protein-browser.cjs
       - name: Save single-file browser evidence
         if: always()
@@ -48,6 +56,7 @@ jobs:
           path: |
             docs/single-file/
             docs/protein/
+            docs/learning-tools/
           if-no-files-found: ignore
       - name: Preserve deploy invariants
         run: |

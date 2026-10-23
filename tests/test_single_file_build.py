@@ -71,6 +71,11 @@ class SingleFileBuild(unittest.TestCase):
         self.assertNotIn('src/protein-atlas/', explore)
 
     def test_all_local_script_and_stylesheet_dependencies_are_inlined(self):
+        # This one inert source is activated by the microscopy loader through
+        # the portable fetch bridge. Executable local scripts still must inline.
+        deferred_page = "assets/learning-tools/biology/index.html"
+        deferred_asset = "assets/learning-tools/biology/dist/volume.js"
+        deferred_count = 0
         for name, payload in self.manifest["pages"].items():
             document = unpack(payload).decode("utf-8")
             for block in BUILDER.BLOCKS.finditer(document):
@@ -78,9 +83,17 @@ class SingleFileBuild(unittest.TestCase):
                     continue
                 attrs = BUILDER.attributes(block["attrs"])
                 if "src" in attrs:
+                    if name == deferred_page and attrs.get("id") == "volume-library":
+                        self.assertIn(attrs.get("type"), ("text/plain", "application/x-entelloq-lazy"))
+                        self.assertEqual(attrs["src"], "/" + deferred_asset)
+                        self.assertIn(deferred_asset, self.manifest["assets"])
+                        self.assertEqual(self.manifest["assets"][deferred_asset]["type"], BUILDER.MIME[".js"])
+                        deferred_count += 1
+                        continue
                     self.assertRegex(attrs["src"], r"^(?:https?:)?//", name)
             for href in re.findall(r'<link\b[^>]*rel=["\']stylesheet["\'][^>]*href=["\']([^"\']+)', document, re.I):
                 self.assertRegex(href, r"^(?:https?:)?//", name)
+        self.assertEqual(deferred_count, 1, "Exactly one declared inert microscopy loader is allowed")
         app = unpack(self.manifest["pages"]["app.html"]).decode("utf-8")
         self.assertRegex(app, r'<script\b[^>]*data-app="biology"[^>]*>')
         self.assertRegex(app, r'<script\b[^>]*data-bioq-assistant="app"[^>]*>')
@@ -129,14 +142,31 @@ class SingleFileBuild(unittest.TestCase):
                 if block["attrs"] is not None and BUILDER.attributes(block["attrs"]).get("type", "") in (
                         "", "module", "text/javascript", "application/javascript"):
                     sources.append((name, block["body"]))
+        # The semantic runtime has a Worker realm, no page bridge, and its own
+        # native location. Its separate byte-preservation contract below must
+        # pass; every page and every other JS asset remains in this raw sweep.
+        worker = "assets/learning-tools/learning/semantic-worker.js"
         sources.extend((name, unpack(asset["data"]).decode("utf-8"))
-                       for name, asset in self.manifest["assets"].items() if name.endswith(".js"))
+                       for name, asset in self.manifest["assets"].items()
+                       if name.endswith(".js") and name != worker)
         remaining = [(name, source[max(0, match.start() - 30):match.end() + 40])
                      for name, source in sources for match in browser_api.finditer(source)]
         self.assertEqual(remaining, [])
         learn = unpack(self.manifest["pages"]["learn.html"]).decode("utf-8")
         self.assertIn('window.BioqLocation.hash = url(topic, id)', learn)
         self.assertIn("parts = window.BioqLocation.hash.slice(1).split('/')", learn)
+
+    def test_semantic_worker_keeps_native_realm_and_source_bytes(self):
+        name = "assets/learning-tools/learning/semantic-worker.js"
+        self.assertIn(name, self.manifest["assets"])
+        prepared = unpack(self.manifest["assets"][name]["data"])
+        expected = (ROOT / name).read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+        self.assertEqual(prepared, expected, "The Worker must not acquire the page's virtual browser APIs")
+        source = prepared.decode("utf-8")
+        self.assertNotIn("BioqLocation", source)
+        self.assertNotIn("BioqHistory", source)
+        self.assertRegex(source, r"(?<![\w$.])location\s*\.\s*origin\b")
+        self.assertRegex(source, r"(?<![\w$.])location\s*\.\s*href\b")
 
     def test_output_serialization_is_safe_and_deterministic(self):
         sample = b"Biology \xe2\x86\x92 one portable document\n" * 20

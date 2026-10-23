@@ -3,3 +3,6 @@ src/single-file/vendor/three-addons/** -whitespace linguist-vendored=true
 # Keep the documented upstream hashes and fixed-width PDB records unchanged.
 assets/protein/vendor/** -text -whitespace linguist-vendored=true
 assets/protein/1CRN.pdb.txt -text -whitespace
+# Keep pinned learning-engine bytes and their SHA manifests identical on every OS.
+learning-tools-source/** -text whitespace=cr-at-eol
+assets/learning-tools/** -text -whitespace linguist-generated=true

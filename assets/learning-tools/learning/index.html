@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><title>Entelloq learning tools</title><link rel="stylesheet" href="/assets/learning-tools/learning/styles.css"></head><body><main data-learning-entry></main><noscript>Enable JavaScript to use adaptive review, notebooks and concept search.</noscript><script>
+(function(){
+  var virtual=!!window.BioqPackage;
+  var base=(virtual?'https://biology.entelloq.com/__single__/':'/')+'assets/learning-tools/';
+  if("learning"==='learning'){
+    var paths={worker:base+'learning/semantic-worker.js',mjs:base+'learning/runtime/ort-wasm-simd-threaded.jsep.mjs',wasm:base+'learning/runtime/ort-wasm-simd-threaded.jsep.wasm'};
+    window.ENTELLOQ_LEARNING_ASSETS=paths;
+    if(virtual){
+      var urls=new Set();
+      window.ENTELLOQ_LEARNING_PREPARE_ASSETS=async function(signal){
+        var prepared={},types={worker:'text/javascript',mjs:'text/javascript',wasm:'application/wasm'};
+        function release(){for(var key of Object.keys(prepared)){URL.revokeObjectURL(prepared[key]);urls.delete(prepared[key]);}signal.removeEventListener('abort',release);}
+        signal.addEventListener('abort',release,{once:true});
+        try{for(var key of Object.keys(paths)){var response=await fetch(paths[key],{signal:signal});if(!response.ok)throw Error('A local runtime asset is unavailable.');var blob=new Blob([await response.arrayBuffer()],{type:types[key]});if(signal.aborted)throw new DOMException('Cancelled','AbortError');var url=URL.createObjectURL(blob);urls.add(url);prepared[key]=url;}return prepared;}
+        catch(error){release();throw error;}
+      };
+      addEventListener('pagehide',function(event){if(!event.persisted){urls.forEach(function(url){URL.revokeObjectURL(url);});urls.clear();}});
+    }
+  }else if("learning"==='biology'&&virtual){
+    var volume=document.getElementById('volume-library');if(volume)volume.setAttribute('src',base+'biology/dist/volume.js');
+  }
+})();
+</script><script src="/assets/learning-tools/learning/main.js"></script></body></html>

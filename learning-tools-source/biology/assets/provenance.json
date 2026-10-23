@@ -1,0 +1,46 @@
+{
+  "title": "Cells in a fluorescence stack",
+  "source": "https://gitlab.com/scikit-image/data/-/raw/2cdc5ce89b334d28f06a58c9f0ca21aa6992a5ba/cells3d.tif",
+  "sourceSha256": "afc7c7d80d38bfde09788b4064ac1e64ec14e88454ab785ebdc8dbba5ca3b222",
+  "provider": "Allen Institute for Cell Science / scikit-image sample data",
+  "license": "CC0-1.0",
+  "licenseSource": "https://gitlab.com/scikit-image/data/-/blob/master/README.md",
+  "spacingSource": "https://scikit-image.org/docs/stable/api/skimage.data.html#skimage.data.cells3d",
+  "originalShapeZCYX": [
+    60,
+    2,
+    256,
+    256
+  ],
+  "dimensionsXYZ": [
+    64,
+    64,
+    60
+  ],
+  "spacingXYZ_um": [
+    1.04,
+    1.04,
+    0.29
+  ],
+  "originXYZ_um": [
+    0.39,
+    0.39,
+    0
+  ],
+  "orientation": "Dataset XYZ axes; no anatomical orientation claimed",
+  "processing": "XY 4×4 block mean, Z unchanged; each channel display scaled 0 to its 99.7th percentile into uint8, high intensities clipped. Display intensities are not concentrations.",
+  "channels": [
+    {
+      "name": "Cell membrane stain",
+      "sourceChannel": 0,
+      "displayUpperOriginalIntensity": 12256.7041015625,
+      "sha256": "81dda1f15c91c6c3de9e4601e295e64811def7108e911f9a0cd55c5fba31ef91"
+    },
+    {
+      "name": "Nuclear stain",
+      "sourceChannel": 1,
+      "displayUpperOriginalIntensity": 27020.732421875,
+      "sha256": "3a390f9df6e7310e84589e310515b1defd857fa08d10df797914296a25080202"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "checkedAt": "2026-10-23T21:00:10.303Z",
+  "checks": [
+    "Review gating, actual FSRS schedule and reload persistence",
+    "Yjs same-origin tab synchronization, export/import idempotency",
+    "Subject storage isolation and literal note rendering",
+    "Keyword search has no model or external network requests",
+    "Model opt-in and cancellation restores keyword mode",
+    "Parent theme message updates dark Biology palette",
+    "Tablet/mobile layout has no horizontal overflow; keyboard focus enters controls",
+    "Portable asset loader is lazy, receives abort signal and ignores cancelled completion",
+    "Actual quantized MiniLM WASM inference includes circular motion in top three for a paraphrased question"
+  ],
+  "errors": [],
+  "inference": {
+    "attempted": true,
+    "passed": true,
+    "loadStatus": "Semantic search ready. 8 concepts indexed locally with 384-dimension MiniLM embeddings. Your query stays in this browser.",
+    "query": "My speed stays unchanged while I travel around a bend. How can my velocity be changing?",
+    "titles": [
+      "Work and energy",
+      "Circular motion",
+      "Force and motion",
+      "Wave relationships",
+      "Pendulum assumptions"
+    ],
+    "elapsedMs": 5815
+  }
+}

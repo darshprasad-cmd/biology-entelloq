@@ -1,0 +1,19 @@
+{
+  "version": "1.0.0",
+  "name": "entelloq-learning-tools",
+  "scripts": {
+    "test": "node --test tests/core.test.mjs",
+    "build": "node build.mjs",
+    "test:browser": "node tests/browser.mjs"
+  },
+  "private": true,
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  },
+  "type": "module",
+  "dependencies": {
+    "@huggingface/transformers": "4.3.1",
+    "ts-fsrs": "5.4.2",
+    "yjs": "13.6.33"
+  }
+}
