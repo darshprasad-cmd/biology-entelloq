@@ -1,6 +1,6 @@
 # CBSE entry release — Biology
 
-Status: locally verified; PR checks, merge and live deployment verification are separate gates. Consult the pull request for the final release SHA and live evidence.
+Status: released and live-verified through PR40, merged commitaa8cb045b2cae6d1786d547d2bd9675a7d6a7258. Required PR CI and Pages deployment passed. Downloaded Pages artifact12526356256 for deployment run40010533649 contains a27,213,581-byte index.html with SHA-25631728a69e77ca31b99de6bc28c8c8a0e2410739fdb284d6583a34b50def0becd; production HTTPS matched exactly. The local Windows package below differs in source line endings, so it was not used as deployment proof. Live first-screen/class-path/browser tests passed at320/390/768/1440, including saved preferences, skip/reset, explicit deep links, sibling class links and real lesson navigation. Evidence: docs/cbse/live-entry/.
 
 Generated artifact dist/index.html: 27,231,621 bytes; SHA-256 4883fd0c5fda7387050afa187d6b8238849b1e38af59ccec9bce3009e67e9a53.
 
