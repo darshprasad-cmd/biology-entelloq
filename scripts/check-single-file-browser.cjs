@@ -15,6 +15,7 @@ const { checkLibraryRoute } = require('../tests/library-route-browser.cjs');
 const { checkPracticeFocus } = require('../tests/practice-focus-browser.cjs');
 const { checkEvidenceTable } = require('../tests/evidence-tables-browser.cjs');
 const { checkPhylogeny } = require('../tests/phylogeny-browser.cjs');
+const { dismissCBSE } = require('../tests/cbse-browser-helper.cjs');
 const root = path.resolve(__dirname, '..');
 const modules = process.env.BIOLOGY_PLAYWRIGHT_MODULES || path.resolve(root, '../biology-entelloq/node_modules');
 const { chromium } = createRequire(path.join(modules, '__single_file_check__.cjs'))('playwright');
@@ -73,6 +74,7 @@ async function childFrame(parent, selector) {
   return frame;
 }
 async function workspace(page, ready = '#homeIn') {
+  await dismissCBSE(page);
   const frame = await childFrame(page, '#bioq-workspace');
   await frame.locator(ready).waitFor({ state: 'attached', timeout: 60000 });
   return frame;

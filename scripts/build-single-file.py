@@ -374,6 +374,8 @@ def render_output(root: Path = ROOT) -> str:
     root = Path(root)
     shell = (root / "src/single-file/shell.html").read_text(encoding="utf-8")
     host = (root / "src/single-file/host.js").read_text(encoding="utf-8")
+    cbse_style = (root / "src/cbse/entry.css").read_text(encoding="utf-8")
+    cbse_entry = "\n".join((root / "src/cbse" / name).read_text(encoding="utf-8") for name in ("curriculum.js", "entry.js"))
     manifest = build_manifest(root)
     # The two prepared scans account for most of the download. Keep them in
     # this same HTML, after the running workspace, so lessons do not wait for
@@ -388,10 +390,10 @@ def render_output(root: Path = ROOT) -> str:
         deferred.append('<script type="application/octet-stream" id="' + element_id + '">' + entry["data"] + '</script>\n'
                         '<script>window.BioqPackage.assetReady(' + json.dumps(name) + ');</script>')
     data = json.dumps(manifest, ensure_ascii=True, separators=(",", ":")).replace("<", "\\u003c")
-    for placeholder in ("__BIOQ_MANIFEST__", "__BIOQ_HOST__", "__BIOQ_DEFERRED_ASSETS__"):
+    for placeholder in ("__BIOQ_MANIFEST__", "__BIOQ_HOST__", "__BIOQ_DEFERRED_ASSETS__", "__BIOQ_CBSE_STYLE__", "__BIOQ_CBSE_ENTRY__"):
         if shell.count(placeholder) != 1:
             raise ValueError(f"Single-file shell requires exactly one {placeholder}")
-    return shell.replace("__BIOQ_MANIFEST__", data).replace("__BIOQ_HOST__", re.sub(r"</script", r"<\/script", host, flags=re.I)).replace("__BIOQ_DEFERRED_ASSETS__", "\n".join(deferred))
+    return shell.replace("__BIOQ_MANIFEST__", data).replace("__BIOQ_HOST__", re.sub(r"</script", r"<\/script", host, flags=re.I)).replace("__BIOQ_DEFERRED_ASSETS__", "\n".join(deferred)).replace("__BIOQ_CBSE_STYLE__", cbse_style).replace("__BIOQ_CBSE_ENTRY__", re.sub(r"</script", r"<\/script", cbse_entry, flags=re.I))
 
 
 def redirect_page() -> str:
