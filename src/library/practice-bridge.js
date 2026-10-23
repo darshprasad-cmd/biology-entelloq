@@ -73,9 +73,15 @@
   function footer(route) {
     return '<footer class="tp-footer"><a href="' + href('learn',route.topic.id,route.mode) + '">Revisit this concept ↗</a><a href="#">All ' + (section === 'reason' ? 'reasoning workouts' : 'Solve practice') + ' →</a></footer>';
   }
-  function focusCurrent(selector) {
+  function focusCurrent(selector, anchorSelector) {
     const target = $(selector);
-    if (target) target.focus({preventScroll:true});
+    // Explicit practice actions replace the view. Let native focus bring the
+    // destination back into view instead of leaving it above the old answer.
+    if (!target) return;
+    target.focus();
+    // A long feedback card can exceed the viewport. Keep its short verdict
+    // clear of the fixed header without moving focus off the status region.
+    if (anchorSelector) $(anchorSelector)?.scrollIntoView({block:'center', inline:'nearest', behavior:'instant'});
   }
   function mountDepth(route) {
     const footer = host.querySelector('.tp-footer');
@@ -106,7 +112,7 @@
     });
     $('.tp-answer-form').addEventListener('submit', e => {
       e.preventDefault(); if (!state.answers[index] || state.answers[index].checked) return;
-      state.answers[index].checked = true; save(); renderSolve(route); focusCurrent('.tp-feedback');
+      state.answers[index].checked = true; save(); renderSolve(route); focusCurrent('.tp-feedback', '.tp-feedback > strong');
     });
     $('.tp-retry')?.addEventListener('click', () => {state.answers[index] = null; save(); renderSolve(route,true);});
     $('.tp-next')?.addEventListener('click', () => {state.index++; save(); renderSolve(route,true);});
