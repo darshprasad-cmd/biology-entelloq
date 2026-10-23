@@ -374,8 +374,8 @@ def render_output(root: Path = ROOT) -> str:
     root = Path(root)
     shell = (root / "src/single-file/shell.html").read_text(encoding="utf-8")
     host = (root / "src/single-file/host.js").read_text(encoding="utf-8")
-    cbse_style = (root / "src/cbse/entry.css").read_text(encoding="utf-8")
-    cbse_entry = "\n".join((root / "src/cbse" / name).read_text(encoding="utf-8") for name in ("curriculum.js", "entry.js"))
+    cbse_style = "\n".join((root / "src/cbse" / name).read_text(encoding="utf-8") for name in ("entry.css", "practicals-ui.css"))
+    cbse_entry = "\n".join((root / "src/cbse" / name).read_text(encoding="utf-8") for name in ("curriculum.js", "practicals-data.js", "practicals-ui.js", "entry.js"))
     manifest = build_manifest(root)
     # Keep prepared scans and the optional protein renderer after the running
     # workspace, so lessons do not wait for engines or specimens they do not
