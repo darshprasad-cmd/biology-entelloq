@@ -1,0 +1,4 @@
+.venv/
+render-cache/
+__pycache__/
+qa-render.log

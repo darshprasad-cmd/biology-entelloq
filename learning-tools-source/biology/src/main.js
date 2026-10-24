@@ -28,7 +28,18 @@ function library(signal){
 function saveFile(name,data,type='application/json'){
   const url=URL.createObjectURL(new Blob([data],{type}));const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),2000);
 }
-function loadSettings(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&typeof s==='object')return s;}catch{}return {};}
+function loadSettings(){
+  function read(key){try{return JSON.parse(localStorage.getItem(key));}catch{return null;}}
+  const legacy=read(KEY),saved=legacy&&typeof legacy==='object'&&!Array.isArray(legacy)?legacy:{};
+  const parameters={...saved.parameters};
+  for(const [key,[min,max]] of Object.entries(FIELD)){
+    const value=read(`${KEY}.parameter.${key}`);
+    if(Number.isFinite(value)&&value>=min&&value<=max)parameters[key]=value;
+  }
+  const view=read(`${KEY}.volume`);
+  const volume=view&&typeof view==='object'&&!Array.isArray(view)?view:saved.volume;
+  return {...saved,parameters,volume};
+}
 export function mount(element,options={}) {
   if(!element)throw Error('A mount element is required');
   const saved=loadSettings();let disposed=false,request=null,volume=null,result=null,volumeLoading=false;
@@ -50,13 +61,18 @@ export function mount(element,options={}) {
   const q=s=>root.querySelector(s),all=s=>[...root.querySelectorAll(s)];
   const listen=(el,event,fn)=>el.addEventListener(event,fn,{signal:events.signal});
   function status(which,text,error=false){const el=q(`[data-status="${which}"]`);el.textContent=text;el.dataset.error=String(error);}
-  function persist(){try{localStorage.setItem(KEY,JSON.stringify({parameters:parameters(),volume:volume?.getState()}));}catch{}}
+  function persist(field,value,which){try{
+    // Independent records avoid a cross-tab read/modify/write race. Updating
+    // one parameter or the view cannot overwrite a peer's unrelated settings.
+    // The previous combined record remains untouched as a legacy fallback.
+    localStorage.setItem(`${KEY}.${field}`,JSON.stringify(value));return true;
+  }catch{status(which,'These settings could not be saved. They remain available until this tool closes.',true);return false;}}
   function parameters(){return Object.fromEntries(Object.keys(FIELD).map(k=>[k,Number(q(`[name="${k}"]`).value)]));}
   for(const [key,[min,max,step,value,label,unit]] of Object.entries(FIELD)){
     const input=q(`[name="${key}"]`),v=saved.parameters?.[key];
     if(Number.isFinite(v)&&v>=min&&v<=max)input.value=String(v);
-    const update=()=>{q(`[data-output="${key}"]`).textContent=`${input.value} ${unit}`;persist();if(result)q('[data-summary]').textContent='Parameters changed. The plotted record belongs to the previous run; run again to compare.';};
-    update();listen(input,'input',update);
+    const update=()=>{q(`[data-output="${key}"]`).textContent=`${input.value} ${unit}`;if(result)q('[data-summary]').textContent='Parameters changed. The plotted record belongs to the previous run; run again to compare.';};
+    update();listen(input,'input',()=>{update();persist(`parameter.${key}`,Number(input.value),'kinetics');});
   }
   function cancel(){if(!request)return;request.abort();request=null;q('[data-run]').disabled=false;q('[data-cancel]').disabled=true;status('kinetics','Request cancelled. A short calculation already started in the companion may finish; its result will not be displayed.');}
   async function run(){
@@ -97,8 +113,9 @@ export function mount(element,options={}) {
     try{const lib=await library(events.signal);if(disposed)return;
       q('[data-volume-cover]').hidden=true;
       volume=lib.create(q('[data-vtk]'));
-      if(saved.volume){const s=saved.volume;const valid={};if([0,1,2].includes(s.axis))valid.axis=s.axis;if([0,1].includes(s.channel))valid.channel=s.channel;if(['slice','volume'].includes(s.mode))valid.mode=s.mode;if(Number.isFinite(s.slice))valid.slice=s.slice;if(Number.isFinite(s.threshold))valid.threshold=s.threshold;volume.set(valid,true);}
-      updateVolume();q('[data-volume-export]').disabled=false;status('volume','Real cells3d fluorescence data · rendered locally with vtk.js.');
+      const previous=loadSettings().volume;
+      if(previous){const s=previous;const valid={};if([0,1,2].includes(s.axis))valid.axis=s.axis;if([0,1].includes(s.channel))valid.channel=s.channel;if(['slice','volume'].includes(s.mode))valid.mode=s.mode;if(Number.isFinite(s.slice))valid.slice=s.slice;if(Number.isFinite(s.threshold))valid.threshold=s.threshold;volume.set(valid,true);}
+      const savedView=updateVolume();q('[data-volume-export]').disabled=false;if(savedView!==false)status('volume','Real cells3d fluorescence data · rendered locally with vtk.js.');
     }catch(error){q('[data-volume-cover]').hidden=false;status('volume',error.message,true);}
     finally{volumeLoading=false;q('[data-open-volume]').disabled=false;}
   }
@@ -106,7 +123,7 @@ export function mount(element,options={}) {
     if(!volume)return;const s=volume.set(next);q('[data-axis]').value=s.axis;q('[data-channel]').value=s.channel;q('[data-slice]').max=s.dimensions[s.axis]-1;q('[data-slice]').value=s.slice;q('[data-slice-output]').textContent=`${s.slice} / ${s.dimensions[s.axis]-1}`;q('[data-threshold]').value=s.threshold;q('[data-threshold-output]').textContent=`${s.threshold} / 255`;
     q('[data-axis]').disabled=q('[data-slice]').disabled=s.mode==='volume';q('[data-threshold]').disabled=s.mode!=='volume';all('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===s.mode)));
     q('[data-location]').textContent=s.mode==='slice'?`${s.axisName} = ${s.location.toFixed(2)} µm · ${s.directions} · dataset axes`:'3D fluorescence volume · X/Y/Z extent 65.52 / 65.52 / 17.11 µm between voxel centres';
-    q('[data-vtk]').setAttribute('aria-label',`${q('[data-channel]').selectedOptions[0].textContent}; ${q('[data-location]').textContent}`);persist();
+    q('[data-vtk]').setAttribute('aria-label',`${q('[data-channel]').selectedOptions[0].textContent}; ${q('[data-location]').textContent}`);return persist('volume',volume.getState(),'volume');
   }
   listen(q('[data-open-volume]'),'click',openVolume);
   listen(q('[data-axis]'),'change',e=>updateVolume({axis:Number(e.target.value),slice:30}));

@@ -1,0 +1,18 @@
+{
+  "checks": [
+    "Real Excalidraw editor loads the original force diagram without external requests",
+    "A real drawn rectangle survives autosave, reload and editable scene export",
+    "Cancelling replacement preserves the current scene",
+    "Replacing a drawing keeps a recoverable previous scene",
+    "A validated actual .excalidraw scene imports with its original elements",
+    "Actual engine PNG and self-contained SVG exports succeed",
+    "Biology is a separate saved subject with mobile dark theme and a cell starter",
+    "A stale open tab preserves its draft without silently overwriting a newer saved scene",
+    "Host destroy flushes the final real edit synchronously and unmounts the editor",
+    "Malformed or remote-content imports preserve the current diagram",
+    "No page errors or external asset/network requests"
+  ],
+  "errors": [],
+  "external": [],
+  "engine": "@excalidraw/excalidraw@0.18.1"
+}

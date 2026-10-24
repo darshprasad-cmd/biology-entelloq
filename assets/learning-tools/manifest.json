@@ -20,8 +20,8 @@
       },
       {
         "path": "assets/learning-tools/biology/dist/main.js",
-        "bytes": 21991,
-        "sha256": "ae91bf8726248b696a48e61dc7c6d506e2e27ce540b75752b0d0eefdc0d76fbc"
+        "bytes": 22472,
+        "sha256": "1a6258ed21aecb6dcc1381018ba25cf5f9ea5d3c91952ffcaa946eb7369dd252"
       },
       {
         "path": "assets/learning-tools/biology/dist/volume.js",
@@ -42,8 +42,8 @@
       },
       {
         "path": "assets/learning-tools/learning/main.js",
-        "bytes": 133008,
-        "sha256": "4decf5d04b11e33b0da391ab08cf595571db757f6ba71e54ac8a94c9b6643a02"
+        "bytes": 134435,
+        "sha256": "aebab7170ac0ab765d6d589af1697990f799377791c1c9386e93f3f1c189e5ef"
       },
       {
         "path": "assets/learning-tools/learning/semantic-worker.js",
@@ -68,7 +68,136 @@
       {
         "path": "assets/learning-tools/learning/asset-manifest.json",
         "bytes": 1348,
-        "sha256": "19cb3e5d2ef2191faeb5ee852c5655f569d808e9950609ffd5746cbaf7d0d45c"
+        "sha256": "c1082acbac612fed2873eef761dfc6f8b4317d5d452792901b9c7fe0bc41be8f"
+      }
+    ],
+    "sketches": [
+      {
+        "path": "assets/learning-tools/sketches/index.html",
+        "bytes": 2165,
+        "sha256": "fd3e47e722a1680c9ff6e7a4ef2c2f9d06cf76b199fc7f4afa965639e5ec7ee9"
+      },
+      {
+        "path": "assets/learning-tools/sketches/styles.css",
+        "bytes": 3423,
+        "sha256": "3201c9c8293bd461e2dd68fd174fb36ebfa008f49c5a4f2e69a10060fe1eb03b"
+      },
+      {
+        "path": "assets/learning-tools/sketches/editor.css",
+        "bytes": 252820,
+        "sha256": "dab6bffe8be957e2525229b84f832e8bad6cda4c15633bd8f8c607c49fe0b826"
+      },
+      {
+        "path": "assets/learning-tools/sketches/main.js",
+        "bytes": 1735833,
+        "sha256": "69f0a7d71a058fdf24a00e3b663cced776ab5241783859cfce5de2bb17e1bd1f"
+      },
+      {
+        "path": "assets/learning-tools/sketches/THIRD-PARTY-NOTICES.md",
+        "bytes": 95928,
+        "sha256": "3ac5a6c901a7cbd0d5caca5a83ce10253fd2469b644560778b2e46542f6e80cd"
+      },
+      {
+        "path": "assets/learning-tools/sketches/asset-manifest.json",
+        "bytes": 1220,
+        "sha256": "598aa785409783c4c646aba38c474ffb1aea9e79107c1f147953b04f15679e56"
+      }
+    ],
+    "animations": [
+      {
+        "path": "assets/learning-tools/animations/index.html",
+        "bytes": 3860,
+        "sha256": "cab0a153450becb758506c47ddd3feda58c08607a74c8ea00d15daf83d7c64e9"
+      },
+      {
+        "path": "assets/learning-tools/animations/main.js",
+        "bytes": 8864,
+        "sha256": "469800c262aa5d2428b6f50bea673d5719872ed6f4f0b6c77da4f0b143e00992"
+      },
+      {
+        "path": "assets/learning-tools/animations/catalog.js",
+        "bytes": 4291,
+        "sha256": "db5ee281909090062d0ac42fb9a682cf2add552d1f12eda554560fe51c72bc8a"
+      },
+      {
+        "path": "assets/learning-tools/animations/styles.css",
+        "bytes": 4148,
+        "sha256": "11944f444e78fd1d9fd3e66c0807681bb991dedd9f53d775d284723625b59532"
+      },
+      {
+        "path": "assets/learning-tools/animations/media/biology-poster.png",
+        "bytes": 151576,
+        "sha256": "009a46739f3def5d9548d2b5385ef806615fdeea78f28342f7748dd06dbbf1f2"
+      },
+      {
+        "path": "assets/learning-tools/animations/media/biology-step-1.png",
+        "bytes": 141204,
+        "sha256": "713eab38c4c9e2b20b723479cd882ccd5bf11e692cf3a5ea3ab69e785da81ba5"
+      },
+      {
+        "path": "assets/learning-tools/animations/media/biology-step-2.png",
+        "bytes": 151015,
+        "sha256": "d4714572991d405eb0330832d9b09ad08d758f89504f31c301381db7e29f932e"
+      },
+      {
+        "path": "assets/learning-tools/animations/media/biology-step-3.png",
+        "bytes": 150503,
+        "sha256": "59c55d8d3c8de25c44c1810e6b669cd4e735630b0823f7e1e602d78de9fdf28a"
+      },
+      {
+        "path": "assets/learning-tools/animations/media/biology-step-4.png",
+        "bytes": 147472,
+        "sha256": "47043ce9e379cf8f018e79ac5bdf031ec38e64780245a09e8505120aac182814"
+      },
+      {
+        "path": "assets/learning-tools/animations/media/biology.mp4",
+        "bytes": 242903,
+        "sha256": "1f35d30e48cf907edc2b1ba39b96ef5c0916ffe5b3433fb10add7e7969767e30"
+      },
+      {
+        "path": "assets/learning-tools/animations/media/biology.vtt",
+        "bytes": 364,
+        "sha256": "43fddb021b2f65aed7f16c2a7e5c4508b0bf05b099312f8759fe65cecc134c79"
+      },
+      {
+        "path": "assets/learning-tools/animations/media/physics-poster.png",
+        "bytes": 166835,
+        "sha256": "6cb474ec1610344225ec4e391c5423f5f0d6f11919a5c96e4884e443b41d498f"
+      },
+      {
+        "path": "assets/learning-tools/animations/media/physics-step-1.png",
+        "bytes": 144821,
+        "sha256": "65f6dce4cdf61cc2e72152a93ab734290808ede5a1a794c64841f6777c20ac97"
+      },
+      {
+        "path": "assets/learning-tools/animations/media/physics-step-2.png",
+        "bytes": 133542,
+        "sha256": "cf1ef9e87cff780715b695b8501021ccce5eec315f5d1912a54801f7b747bd9e"
+      },
+      {
+        "path": "assets/learning-tools/animations/media/physics-step-3.png",
+        "bytes": 155330,
+        "sha256": "1b94c6ef54c95b160415b61dae3052bc5e61adce3f3e319b092db19b7cf94b14"
+      },
+      {
+        "path": "assets/learning-tools/animations/media/physics-step-4.png",
+        "bytes": 167841,
+        "sha256": "567272aed1c411030be8cba46ae65294de1120b9e2b55da3f0d38b450f492365"
+      },
+      {
+        "path": "assets/learning-tools/animations/media/physics.mp4",
+        "bytes": 277651,
+        "sha256": "abf570422904d5cfcd7eb5f927b5d9a14ca729cce996088b387c94f12c14a65f"
+      },
+      {
+        "path": "assets/learning-tools/animations/media/physics.vtt",
+        "bytes": 352,
+        "sha256": "91d2bf3cd9874e8eaeaebff4a44bf2df2f70e57ec400bc59a046bb2c6414132a"
+      },
+      {
+        "path": "assets/learning-tools/animations/asset-manifest.json",
+        "bytes": 3402,
+        "sha256": "ad41b3c928c0c31b769c8bb2b246baebd541b74fb3b00f3a2fb4b633efca8154"
       }
     ]
   }

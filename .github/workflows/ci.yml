@@ -29,6 +29,7 @@ jobs:
           python scripts/sync-learning-tools.py --check
           npm ci --prefix learning-tools-source/learning --no-audit --no-fund
           npm test --prefix learning-tools-source/learning
+          node --test learning-tools-source/sketches/tests/core.test.mjs
       - name: Build the single-file application
         run: |
           python scripts/build-single-file.py
@@ -47,6 +48,8 @@ jobs:
           node tests/check-ai-answer-formatting.cjs
           node scripts/check-learning-tools-browser.cjs
           node scripts/check-learning-tools-browser.cjs --portable
+          node scripts/check-visual-tools-browser.cjs
+          node scripts/check-visual-tools-browser.cjs --portable
           node scripts/check-protein-browser.cjs
       - name: Save single-file browser evidence
         if: always()
@@ -57,6 +60,7 @@ jobs:
             docs/single-file/
             docs/protein/
             docs/learning-tools/
+            docs/visual-tools/
           if-no-files-found: ignore
       - name: Preserve deploy invariants
         run: |

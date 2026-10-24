@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Animated explanations · Entelloq</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main id="animation-app">
+  <header class="intro"><p class="eyebrow">LEARN / ANIMATED EXPLANATIONS</p><h1 id="lesson-title">One idea, made visible.</h1><p id="lesson-summary"></p></header>
+  <section aria-label="Animated explanation" class="player-card">
+    <div class="video-stage">
+      <img id="lesson-poster" alt="" width="1280" height="720">
+      <video id="lesson-video" preload="none" playsinline controls aria-label="Silent explanation film" hidden></video>
+      <span class="film-badge">22 seconds · silent</span>
+    </div>
+    <div class="transport"><button id="play-button" type="button">Play explanation</button><button id="restart-button" type="button">Back to start</button><span id="time-display" aria-label="Playback time">0:00 / 0:22</span><label class="speed">Speed <select id="playback-speed"><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option></select></label></div>
+    <p id="player-status" role="status">Press Play to load this film. Nothing plays automatically.</p>
+    <p id="caption-text" class="caption"></p>
+    <nav id="chapters" aria-label="Explanation chapters"></nav>
+  </section>
+  <aside class="scope"><strong>How to read this</strong><p id="lesson-scope"></p></aside>
+  <details id="transcript"><summary>Read the complete transcript</summary><ol id="transcript-list"></ol></details>
+  <details id="still-alternative"><summary>Explore the four still frames</summary><p>All the ideas, without playback. Read the description beneath each frame.</p><div id="still-grid"></div></details>
+  <footer>Original Entelloq explanation, rendered with <a href="https://www.manim.community/" target="_blank" rel="noopener noreferrer">Manim Community</a>. Authored media; no live computation.</footer>
+</main>
+<script src="catalog.js"></script><script src="main.js"></script>
+</body></html>

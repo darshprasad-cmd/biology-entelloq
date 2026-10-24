@@ -1,0 +1,17 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:05.000
+A moves 3 m right. B moves 4 m up.
+
+2
+00:00:05.000 --> 00:00:10.000
+Slide B to the head of A without changing its direction.
+
+3
+00:00:10.000 --> 00:00:16.000
+R connects the original start to the endpoint: (3, 4) m.
+
+4
+00:00:16.000 --> 00:00:22.000
+Distance travelled: 7 m. Displacement: 5 m, at 53.1° above +x.

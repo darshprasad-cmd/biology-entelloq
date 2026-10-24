@@ -893,6 +893,8 @@ function go(k,{push=true,sub=null}={}){
   current=k; setActive(k); tintField(k);
   $("#routeLabel").textContent=BYKEY[k].label+(sub?" / "+(CMDS.find(c=>c.k===k&&c.sub===sub)?.label||sub.replace(/-/g," ")):"");
   if(k==="home"){
+    // Home retains this section iframe; pause media and pending playback intents.
+    try{frame.contentWindow.BiologyLearningTools?.pause?.();}catch(e){}
     home.classList.add("on"); frame.classList.remove("on");
     skel.classList.remove("on"); oops.classList.remove("on"); clearTimeout(loadTimer);
     buildHome();   // rebuild so the greeting + resume card reflect what you just did

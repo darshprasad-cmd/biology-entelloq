@@ -1,0 +1,33 @@
+[
+  {
+    "family": "Excalidraw",
+    "url": "https://raw.githubusercontent.com/excalidraw/excalidraw/v0.18.1/LICENSE"
+  },
+  {
+    "family": "Excalifont",
+    "url": "https://raw.githubusercontent.com/excalidraw/excalidraw/v0.18.1/packages/excalidraw/fonts/Excalifont/index.ts",
+    "note": "Upstream generated font source comment includes full OFL terms and authors."
+  },
+  {
+    "family": "Assistant",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/assistant/OFL.txt"
+  },
+  {
+    "family": "Nunito",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/nunito/OFL.txt"
+  },
+  {
+    "family": "Lilita",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/lilitaone/OFL.txt"
+  },
+  {
+    "family": "Comic Shanns",
+    "url": "https://github.com/excalidraw/excalidraw/tree/v0.18.1/packages/excalidraw/fonts/ComicShanns",
+    "note": "Full MIT notice extracted unmodified from WOFF2 name table copyright field."
+  },
+  {
+    "family": "All bundled fonts",
+    "url": "https://registry.npmjs.org/@excalidraw/excalidraw/-/excalidraw-0.18.1.tgz",
+    "note": "font-metadata.txt files are unmodified name-table copyright/license records extracted with fontTools. Exact WOFF2 hashes are in build-manifest.json."
+  }
+]

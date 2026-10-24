@@ -21,6 +21,7 @@ PAGES = ("index.html", "app.html", "learn.html", "lessons.html", "reason.html",
          "labs.html", "solve.html", "explore.html", "me.html", "about.html",
          "lab.html", "universe.html")
 PAGES += ("assets/learning-tools/biology/index.html", "assets/learning-tools/learning/index.html", "src/learning-tools/guide.html")
+PAGES += ("assets/learning-tools/sketches/index.html", "assets/learning-tools/animations/index.html")
 MODULES = ("src/lab/prepared-loader.js", "src/lab/specimen-assets.js",
            "src/lab/vendor/loaders/GLTFLoader.js",
            "src/lab/vendor/utils/BufferGeometryUtils.js")
@@ -34,6 +35,7 @@ MIME = {".js": "text/javascript", ".css": "text/css", ".png": "image/png",
         ".md": "text/plain", ".txt": "text/plain", ".json": "application/json",
         ".woff": "font/woff", ".woff2": "font/woff2", ".mp4": "video/mp4"}
 MIME.update({".mjs": "text/javascript", ".wasm": "application/wasm"})
+MIME.update({".vtt": "text/vtt"})
 BLOCKS = re.compile(r"<!--[\s\S]*?-->|<style\b[^>]*>[\s\S]*?</style\s*>|"
                     r"<script\b(?P<attrs>[^>]*)>(?P<body>[\s\S]*?)</script\s*>", re.I)
 ATTRS = re.compile(r"(?P<name>[-\w:]+)\s*=\s*(?P<q>['\"])(?P<value>[\s\S]*?)(?P=q)")
