@@ -1,0 +1,7 @@
+# Runtime manifests hash the exact delivered bytes on Windows and Linux.
+index.html -text
+main.js -text
+catalog.js -text
+styles.css -text
+asset-manifest.json -text
+media/** -text

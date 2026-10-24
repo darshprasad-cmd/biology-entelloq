@@ -1,0 +1,33 @@
+{
+  "manim": "0.22.0",
+  "checks": [
+    {
+      "subject": "physics",
+      "duration": 22.0,
+      "frames": 660,
+      "width": 1280,
+      "height": 720,
+      "fps": "30/1",
+      "codec": "h264",
+      "pixelFormat": "yuv420p",
+      "audioStreams": 0,
+      "bytes": 277651,
+      "sha256": "abf570422904d5cfcd7eb5f927b5d9a14ca729cce996088b387c94f12c14a65f",
+      "fullFFmpegDecode": "passed"
+    },
+    {
+      "subject": "biology",
+      "duration": 22.0,
+      "frames": 660,
+      "width": 1280,
+      "height": 720,
+      "fps": "30/1",
+      "codec": "h264",
+      "pixelFormat": "yuv420p",
+      "audioStreams": 0,
+      "bytes": 242903,
+      "sha256": "1f35d30e48cf907edc2b1ba39b96ef5c0916ffe5b3433fb10add7e7969767e30",
+      "fullFFmpegDecode": "passed"
+    }
+  ]
+}

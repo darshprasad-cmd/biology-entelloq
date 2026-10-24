@@ -1,0 +1,17 @@
+{
+  "checkedAt": "2026-10-24T05:23:41.153Z",
+  "live": null,
+  "portable": true,
+  "checks": [
+    "Real Excalidraw opens a Biology starter inside the existing Solve route",
+    "Drawing then immediately returning flushes pending edits; reopening restores the actual element",
+    "An edited scene survives full host reload and exports as editable Excalidraw data",
+    "Authored Biology explanation opens with transcript, still alternatives and no automatic video load",
+    "Real H.264 playback, paused chapter seeking and native VTT captions work through the host",
+    "Actual host light theme and colour tokens reach the explanation player",
+    "Mobile host and player fit the viewport with reduced motion",
+    "Keyboard Back pauses playback, releases both media Blob URLs and restores focus in Learn",
+    "Keyboard Play works and outer Home pauses the retained hidden lesson"
+  ],
+  "errors": []
+}

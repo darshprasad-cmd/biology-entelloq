@@ -1,0 +1,783 @@
+{
+  "schema": 1,
+  "packages": [
+    {
+      "name": "@babel/runtime",
+      "version": "7.29.10",
+      "license": "MIT"
+    },
+    {
+      "name": "@braintree/sanitize-url",
+      "version": "6.0.2",
+      "license": "MIT"
+    },
+    {
+      "name": "@excalidraw/excalidraw",
+      "version": "0.18.1",
+      "license": "MIT"
+    },
+    {
+      "name": "@excalidraw/laser-pointer",
+      "version": "1.3.1",
+      "license": "MIT"
+    },
+    {
+      "name": "@floating-ui/core",
+      "version": "1.8.0",
+      "license": "MIT"
+    },
+    {
+      "name": "@floating-ui/dom",
+      "version": "1.8.0",
+      "license": "MIT"
+    },
+    {
+      "name": "@floating-ui/react-dom",
+      "version": "2.1.9",
+      "license": "MIT"
+    },
+    {
+      "name": "@floating-ui/utils",
+      "version": "0.2.12",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/primitive",
+      "version": "1.1.1",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/primitive",
+      "version": "1.0.0",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/primitive",
+      "version": "1.0.0",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-arrow",
+      "version": "1.1.2",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-collection",
+      "version": "1.0.1",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-compose-refs",
+      "version": "1.1.1",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-compose-refs",
+      "version": "1.0.0",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-compose-refs",
+      "version": "1.0.0",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-compose-refs",
+      "version": "1.0.0",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-context",
+      "version": "1.1.1",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-context",
+      "version": "1.0.0",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-context",
+      "version": "1.0.0",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-context",
+      "version": "1.0.0",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-direction",
+      "version": "1.0.0",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-dismissable-layer",
+      "version": "1.1.5",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-focus-guards",
+      "version": "1.1.1",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-focus-scope",
+      "version": "1.1.2",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-id",
+      "version": "1.1.0",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-id",
+      "version": "1.0.0",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-id",
+      "version": "1.0.0",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-popover",
+      "version": "1.1.6",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-popper",
+      "version": "1.2.2",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-portal",
+      "version": "1.1.4",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-presence",
+      "version": "1.1.2",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-presence",
+      "version": "1.0.0",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-primitive",
+      "version": "2.0.2",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-primitive",
+      "version": "1.0.1",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-primitive",
+      "version": "1.0.1",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-roving-focus",
+      "version": "1.0.2",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-slot",
+      "version": "1.1.2",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-slot",
+      "version": "1.0.1",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-slot",
+      "version": "1.0.1",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-slot",
+      "version": "1.0.1",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-tabs",
+      "version": "1.0.2",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-use-callback-ref",
+      "version": "1.1.0",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-use-callback-ref",
+      "version": "1.0.0",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-use-callback-ref",
+      "version": "1.0.0",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-use-controllable-state",
+      "version": "1.1.0",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-use-controllable-state",
+      "version": "1.0.0",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-use-controllable-state",
+      "version": "1.0.0",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-use-escape-keydown",
+      "version": "1.1.0",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-use-layout-effect",
+      "version": "1.1.0",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-use-layout-effect",
+      "version": "1.0.0",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-use-layout-effect",
+      "version": "1.0.0",
+      "license": "MIT"
+    },
+    {
+      "name": "@radix-ui/react-use-size",
+      "version": "1.1.0",
+      "license": "MIT"
+    },
+    {
+      "name": "aria-hidden",
+      "version": "1.2.6",
+      "license": "MIT"
+    },
+    {
+      "name": "browser-fs-access",
+      "version": "0.29.1",
+      "license": "Apache-2.0"
+    },
+    {
+      "name": "canvas-roundrect-polyfill",
+      "version": "0.0.1",
+      "license": "MIT"
+    },
+    {
+      "name": "clsx",
+      "version": "1.1.1",
+      "license": "MIT"
+    },
+    {
+      "name": "crc-32",
+      "version": "0.3.0",
+      "license": "Apache-2.0"
+    },
+    {
+      "name": "detect-node-es",
+      "version": "1.1.0",
+      "license": "MIT"
+    },
+    {
+      "name": "es6-promise-pool",
+      "version": "2.5.0",
+      "license": "MIT"
+    },
+    {
+      "name": "fractional-indexing",
+      "version": "3.2.0",
+      "license": "CC0-1.0"
+    },
+    {
+      "name": "fuzzy",
+      "version": "0.1.3"
+    },
+    {
+      "name": "get-nonce",
+      "version": "1.0.1",
+      "license": "MIT"
+    },
+    {
+      "name": "hachure-fill",
+      "version": "0.5.2",
+      "license": "MIT"
+    },
+    {
+      "name": "image-blob-reduce",
+      "version": "3.0.1",
+      "license": "MIT"
+    },
+    {
+      "name": "jotai",
+      "version": "2.11.0",
+      "license": "MIT"
+    },
+    {
+      "name": "jotai-scope",
+      "version": "0.7.2",
+      "license": "MIT"
+    },
+    {
+      "name": "lodash.debounce",
+      "version": "4.0.8",
+      "license": "MIT"
+    },
+    {
+      "name": "lodash.throttle",
+      "version": "4.1.1",
+      "license": "MIT"
+    },
+    {
+      "name": "nanoid",
+      "version": "3.3.20",
+      "license": "MIT"
+    },
+    {
+      "name": "open-color",
+      "version": "1.9.1",
+      "license": "MIT"
+    },
+    {
+      "name": "pako",
+      "version": "2.0.3",
+      "license": "(MIT AND Zlib)"
+    },
+    {
+      "name": "path-data-parser",
+      "version": "0.1.0",
+      "license": "MIT"
+    },
+    {
+      "name": "perfect-freehand",
+      "version": "1.2.0",
+      "license": "MIT"
+    },
+    {
+      "name": "pica",
+      "version": "7.1.1",
+      "license": "MIT"
+    },
+    {
+      "name": "png-chunk-text",
+      "version": "1.0.0",
+      "license": "MIT"
+    },
+    {
+      "name": "png-chunks-encode",
+      "version": "1.0.0",
+      "license": "MIT"
+    },
+    {
+      "name": "png-chunks-extract",
+      "version": "1.0.0",
+      "license": "MIT"
+    },
+    {
+      "name": "points-on-curve",
+      "version": "0.2.0",
+      "license": "MIT"
+    },
+    {
+      "name": "points-on-curve",
+      "version": "0.2.0",
+      "license": "MIT"
+    },
+    {
+      "name": "points-on-curve",
+      "version": "1.0.1",
+      "license": "MIT"
+    },
+    {
+      "name": "points-on-path",
+      "version": "0.2.1",
+      "license": "MIT"
+    },
+    {
+      "name": "react",
+      "version": "18.3.1",
+      "license": "MIT"
+    },
+    {
+      "name": "react-dom",
+      "version": "18.3.1",
+      "license": "MIT"
+    },
+    {
+      "name": "react-remove-scroll",
+      "version": "2.7.2",
+      "license": "MIT"
+    },
+    {
+      "name": "react-remove-scroll-bar",
+      "version": "2.3.8",
+      "license": "MIT"
+    },
+    {
+      "name": "react-style-singleton",
+      "version": "2.2.3",
+      "license": "MIT"
+    },
+    {
+      "name": "roughjs",
+      "version": "4.6.4",
+      "license": "MIT"
+    },
+    {
+      "name": "scheduler",
+      "version": "0.23.2",
+      "license": "MIT"
+    },
+    {
+      "name": "sliced",
+      "version": "1.0.1",
+      "license": "MIT"
+    },
+    {
+      "name": "tslib",
+      "version": "2.8.1",
+      "license": "0BSD"
+    },
+    {
+      "name": "tunnel-rat",
+      "version": "0.1.2",
+      "license": "MIT"
+    },
+    {
+      "name": "use-callback-ref",
+      "version": "1.3.3",
+      "license": "MIT"
+    },
+    {
+      "name": "use-sidecar",
+      "version": "1.1.3",
+      "license": "MIT"
+    },
+    {
+      "name": "use-sync-external-store",
+      "version": "1.7.0",
+      "license": "MIT"
+    },
+    {
+      "name": "zustand",
+      "version": "4.5.7",
+      "license": "MIT"
+    }
+  ],
+  "fontSources": [
+    {
+      "path": "fonts/ComicShanns/ComicShanns-Regular-279a7b317d12eb88de06167bd672b4b4.woff2",
+      "bytes": 17488,
+      "sha256": "fa930fceb529a4b51ba3055d590302722c27704f6a6357495873950136b1e2ea"
+    },
+    {
+      "path": "fonts/ComicShanns/ComicShanns-Regular-6e066e8de2ac57ea9283adb9c24d7f0c.woff2",
+      "bytes": 1292,
+      "sha256": "782f24081b810b8de9f04da055007ce4f1445c18abbf096c831f8888d65935c1"
+    },
+    {
+      "path": "fonts/ComicShanns/ComicShanns-Regular-dc6a8806fa96795d7b3be5026f989a17.woff2",
+      "bytes": 2816,
+      "sha256": "61c376d32e1773588f6163599aed24fe0387b5a5cb622bd200455f20c2b36a87"
+    },
+    {
+      "path": "fonts/ComicShanns/ComicShanns-Regular-fcb0fc02dcbee4c9846b3e2508668039.woff2",
+      "bytes": 9856,
+      "sha256": "ee641c2e35730c3e6e3826855f1b6cc3b343a017c3e216e4e4a2e47010c53ad1"
+    },
+    {
+      "path": "fonts/Excalifont/Excalifont-Regular-349fac6ca4700ffec595a7150a0d1e1d.woff2",
+      "bytes": 2656,
+      "sha256": "a0637cff365c7344d2f7a15905a1f74dceaf56b5ac2ff913d150358bed6921f0"
+    },
+    {
+      "path": "fonts/Excalifont/Excalifont-Regular-3f2c5db56cc93c5a6873b1361d730c16.woff2",
+      "bytes": 2104,
+      "sha256": "18ea9be1dd6b5a67b057f44eba8e34cb290f88308c272bcf35c79c1a220d0d7b"
+    },
+    {
+      "path": "fonts/Excalifont/Excalifont-Regular-41b173a47b57366892116a575a43e2b6.woff2",
+      "bytes": 8712,
+      "sha256": "c96649a5f96e2faa9143ee94e5b590b5afb08092f8d67c67f09cef332d66e4a7"
+    },
+    {
+      "path": "fonts/Excalifont/Excalifont-Regular-623ccf21b21ef6b3a0d87738f77eb071.woff2",
+      "bytes": 824,
+      "sha256": "b004007be100261e58188cf8a0f7e850e997702f35d57110915995cd880e49f1"
+    },
+    {
+      "path": "fonts/Excalifont/Excalifont-Regular-a88b72a24fb54c9f94e3b5fdaa7481c9.woff2",
+      "bytes": 24956,
+      "sha256": "e4423b318e11432aff2e6e865e300b7ca270f92321a3f56632268fede01c1b48"
+    },
+    {
+      "path": "fonts/Excalifont/Excalifont-Regular-b9dcf9d2e50a1eaf42fc664b50a3fd0d.woff2",
+      "bytes": 13296,
+      "sha256": "b424d16da4398be3e9852857a54ff70e043c8e2ec5c4444dbf7f88d7469b9859"
+    },
+    {
+      "path": "fonts/Excalifont/Excalifont-Regular-be310b9bcd4f1a43f571c46df7809174.woff2",
+      "bytes": 12220,
+      "sha256": "4fb8ad69be9aeac5664d99e5aa3a68a27ea40c98943b80387f7cd55c034fcc93"
+    },
+    {
+      "path": "fonts/Lilita/Lilita-Regular-i7dPIFZ9Zz-WBtRtedDbYE98RXi4EwSsbg.woff2",
+      "bytes": 1416,
+      "sha256": "2b6568c7a0f16300bc6c8d292bd426c361fcdb40699c2cbfab2bd3e9e6993dea"
+    },
+    {
+      "path": "fonts/Lilita/Lilita-Regular-i7dPIFZ9Zz-WBtRtedDbYEF8RXi4EwQ.woff2",
+      "bytes": 10676,
+      "sha256": "8d6cd0f298738a92ca9bf6e13f54a9191afd06ce04ea00ebbf24499c017191b7"
+    },
+    {
+      "path": "fonts/Nunito/Nunito-Regular-XRXI3I6Li01BKofiOc5wtlZ2di8HDIkhdTA3j6zbXWjgevT5.woff2",
+      "bytes": 8392,
+      "sha256": "e512f2d7c9fe062b1acf8f6ea64d4bfd89a77d26728150977627e445c7b6e937"
+    },
+    {
+      "path": "fonts/Nunito/Nunito-Regular-XRXI3I6Li01BKofiOc5wtlZ2di8HDIkhdTk3j6zbXWjgevT5.woff2",
+      "bytes": 11104,
+      "sha256": "3e7f76fcc8798b8bba4d6bcc06bdb0d788f6e89706c1d6e64ac81d65ca683c14"
+    },
+    {
+      "path": "fonts/Nunito/Nunito-Regular-XRXI3I6Li01BKofiOc5wtlZ2di8HDIkhdTo3j6zbXWjgevT5.woff2",
+      "bytes": 15476,
+      "sha256": "7928f47b21192cb6fdb2f46b71a474a3bd2fd608945c5ad7d7ed6bde8b0ae24c"
+    },
+    {
+      "path": "fonts/Nunito/Nunito-Regular-XRXI3I6Li01BKofiOc5wtlZ2di8HDIkhdTQ3j6zbXWjgeg.woff2",
+      "bytes": 16476,
+      "sha256": "6d1626aac658786e37e78e0adce3ffffddbd75abc923d72e45a7168bd80053da"
+    },
+    {
+      "path": "fonts/Nunito/Nunito-Regular-XRXI3I6Li01BKofiOc5wtlZ2di8HDIkhdTs3j6zbXWjgevT5.woff2",
+      "bytes": 6116,
+      "sha256": "5117398298dd0dba3c95a406ff12fbeb88289fa4e913e3a5cf482cafe7f7071a"
+    },
+    {
+      "path": "fonts/Assistant/Assistant-Regular.woff2",
+      "bytes": 20232,
+      "sha256": "76945f09225aae65bdbd204cb4ac40d4caa4ff67150e5074bab1a04d1b778fc3"
+    },
+    {
+      "path": "fonts/Assistant/Assistant-Medium.woff2",
+      "bytes": 20320,
+      "sha256": "81a9f280ce6a790f20ca8cd521183caa430f1f7fdc0752c36ef1cc6dc828ac57"
+    },
+    {
+      "path": "fonts/Assistant/Assistant-SemiBold.woff2",
+      "bytes": 20212,
+      "sha256": "bba47a7d1b185a4a2e0d265ec82aeac5dbc2dc9cb0f482a2ff57cbdfe4e5045d"
+    },
+    {
+      "path": "fonts/Assistant/Assistant-Bold.woff2",
+      "bytes": 20380,
+      "sha256": "e0cdd332ce039770e93ec44336b6db65f931940f42b0342aad35a06e7f991d29"
+    }
+  ],
+  "excluded": [
+    "Mermaid conversion and related parsers",
+    "Non-English UI locales",
+    "Font-subsetting workers/WASM (SVG uses full local font CSS)",
+    "Xiaolai handwriting fallback (system CJK font fallback)"
+  ],
+  "bundledInputs": [
+    "excluded-feature:locale",
+    "excluded-feature:mermaid",
+    "excluded-feature:subset",
+    "font-css.json",
+    "node_modules/@babel/runtime/helpers/esm/extends.js",
+    "node_modules/@braintree/sanitize-url/dist/index.js",
+    "node_modules/@excalidraw/excalidraw/dist/dev/chunk-4FTI6OG3.js",
+    "node_modules/@excalidraw/excalidraw/dist/dev/chunk-AWQI2HM3.js",
+    "node_modules/@excalidraw/excalidraw/dist/dev/chunk-LMHBUWQS.js",
+    "node_modules/@excalidraw/excalidraw/dist/dev/chunk-MFAYKRVR.js",
+    "node_modules/@excalidraw/excalidraw/dist/dev/chunk-XDFCUUT6.js",
+    "node_modules/@excalidraw/excalidraw/dist/dev/data/image-YKVTEDFW.js",
+    "node_modules/@excalidraw/excalidraw/dist/dev/index.js",
+    "node_modules/@excalidraw/laser-pointer/dist/esm.js",
+    "node_modules/@floating-ui/core/dist/floating-ui.core.mjs",
+    "node_modules/@floating-ui/dom/dist/floating-ui.dom.mjs",
+    "node_modules/@floating-ui/react-dom/dist/floating-ui.react-dom.mjs",
+    "node_modules/@floating-ui/utils/dist/floating-ui.utils.dom.mjs",
+    "node_modules/@floating-ui/utils/dist/floating-ui.utils.mjs",
+    "node_modules/@radix-ui/primitive/dist/index.mjs",
+    "node_modules/@radix-ui/react-arrow/dist/index.mjs",
+    "node_modules/@radix-ui/react-collection/dist/index.module.js",
+    "node_modules/@radix-ui/react-collection/node_modules/@radix-ui/react-compose-refs/dist/index.module.js",
+    "node_modules/@radix-ui/react-collection/node_modules/@radix-ui/react-context/dist/index.module.js",
+    "node_modules/@radix-ui/react-collection/node_modules/@radix-ui/react-slot/dist/index.module.js",
+    "node_modules/@radix-ui/react-compose-refs/dist/index.mjs",
+    "node_modules/@radix-ui/react-context/dist/index.mjs",
+    "node_modules/@radix-ui/react-direction/dist/index.module.js",
+    "node_modules/@radix-ui/react-dismissable-layer/dist/index.mjs",
+    "node_modules/@radix-ui/react-focus-guards/dist/index.mjs",
+    "node_modules/@radix-ui/react-focus-scope/dist/index.mjs",
+    "node_modules/@radix-ui/react-id/dist/index.mjs",
+    "node_modules/@radix-ui/react-popover/dist/index.mjs",
+    "node_modules/@radix-ui/react-popper/dist/index.mjs",
+    "node_modules/@radix-ui/react-portal/dist/index.mjs",
+    "node_modules/@radix-ui/react-presence/dist/index.mjs",
+    "node_modules/@radix-ui/react-primitive/dist/index.mjs",
+    "node_modules/@radix-ui/react-roving-focus/dist/index.module.js",
+    "node_modules/@radix-ui/react-roving-focus/node_modules/@radix-ui/primitive/dist/index.module.js",
+    "node_modules/@radix-ui/react-roving-focus/node_modules/@radix-ui/react-compose-refs/dist/index.module.js",
+    "node_modules/@radix-ui/react-roving-focus/node_modules/@radix-ui/react-context/dist/index.module.js",
+    "node_modules/@radix-ui/react-roving-focus/node_modules/@radix-ui/react-id/dist/index.module.js",
+    "node_modules/@radix-ui/react-roving-focus/node_modules/@radix-ui/react-primitive/dist/index.module.js",
+    "node_modules/@radix-ui/react-roving-focus/node_modules/@radix-ui/react-slot/dist/index.module.js",
+    "node_modules/@radix-ui/react-roving-focus/node_modules/@radix-ui/react-use-callback-ref/dist/index.module.js",
+    "node_modules/@radix-ui/react-roving-focus/node_modules/@radix-ui/react-use-controllable-state/dist/index.module.js",
+    "node_modules/@radix-ui/react-roving-focus/node_modules/@radix-ui/react-use-layout-effect/dist/index.module.js",
+    "node_modules/@radix-ui/react-slot/dist/index.mjs",
+    "node_modules/@radix-ui/react-tabs/dist/index.module.js",
+    "node_modules/@radix-ui/react-tabs/node_modules/@radix-ui/primitive/dist/index.module.js",
+    "node_modules/@radix-ui/react-tabs/node_modules/@radix-ui/react-compose-refs/dist/index.module.js",
+    "node_modules/@radix-ui/react-tabs/node_modules/@radix-ui/react-context/dist/index.module.js",
+    "node_modules/@radix-ui/react-tabs/node_modules/@radix-ui/react-id/dist/index.module.js",
+    "node_modules/@radix-ui/react-tabs/node_modules/@radix-ui/react-presence/dist/index.module.js",
+    "node_modules/@radix-ui/react-tabs/node_modules/@radix-ui/react-primitive/dist/index.module.js",
+    "node_modules/@radix-ui/react-tabs/node_modules/@radix-ui/react-slot/dist/index.module.js",
+    "node_modules/@radix-ui/react-tabs/node_modules/@radix-ui/react-use-callback-ref/dist/index.module.js",
+    "node_modules/@radix-ui/react-tabs/node_modules/@radix-ui/react-use-controllable-state/dist/index.module.js",
+    "node_modules/@radix-ui/react-tabs/node_modules/@radix-ui/react-use-layout-effect/dist/index.module.js",
+    "node_modules/@radix-ui/react-use-callback-ref/dist/index.mjs",
+    "node_modules/@radix-ui/react-use-controllable-state/dist/index.mjs",
+    "node_modules/@radix-ui/react-use-escape-keydown/dist/index.mjs",
+    "node_modules/@radix-ui/react-use-layout-effect/dist/index.mjs",
+    "node_modules/@radix-ui/react-use-size/dist/index.mjs",
+    "node_modules/aria-hidden/dist/es2015/index.js",
+    "node_modules/browser-fs-access/dist/directory-open-01563666.js",
+    "node_modules/browser-fs-access/dist/directory-open-4ed118d0.js",
+    "node_modules/browser-fs-access/dist/file-open-002ab408.js",
+    "node_modules/browser-fs-access/dist/file-open-7c801643.js",
+    "node_modules/browser-fs-access/dist/file-save-3189631c.js",
+    "node_modules/browser-fs-access/dist/file-save-745eba88.js",
+    "node_modules/browser-fs-access/dist/index.mjs",
+    "node_modules/canvas-roundrect-polyfill/roundRect.js",
+    "node_modules/clsx/dist/clsx.m.js",
+    "node_modules/crc-32/crc32.js",
+    "node_modules/detect-node-es/esm/browser.js",
+    "node_modules/es6-promise-pool/es6-promise-pool.js",
+    "node_modules/fractional-indexing/src/index.js",
+    "node_modules/fuzzy/lib/fuzzy.js",
+    "node_modules/get-nonce/dist/es2015/index.js",
+    "node_modules/hachure-fill/bin/hachure.js",
+    "node_modules/image-blob-reduce/dist/image-blob-reduce.esm.mjs",
+    "node_modules/jotai-scope/dist/index.modern.js",
+    "node_modules/jotai/esm/index.mjs",
+    "node_modules/jotai/esm/react.mjs",
+    "node_modules/jotai/esm/react/utils.mjs",
+    "node_modules/jotai/esm/vanilla.mjs",
+    "node_modules/jotai/esm/vanilla/utils.mjs",
+    "node_modules/lodash.debounce/index.js",
+    "node_modules/lodash.throttle/index.js",
+    "node_modules/nanoid/index.browser.js",
+    "node_modules/nanoid/url-alphabet/index.js",
+    "node_modules/open-color/open-color.json",
+    "node_modules/pako/dist/pako.esm.mjs",
+    "node_modules/path-data-parser/lib/absolutize.js",
+    "node_modules/path-data-parser/lib/index.js",
+    "node_modules/path-data-parser/lib/normalize.js",
+    "node_modules/path-data-parser/lib/parser.js",
+    "node_modules/perfect-freehand/dist/esm/index.js",
+    "node_modules/pica/dist/pica.js",
+    "node_modules/png-chunk-text/decode.js",
+    "node_modules/png-chunk-text/encode.js",
+    "node_modules/png-chunk-text/index.js",
+    "node_modules/png-chunks-encode/index.js",
+    "node_modules/png-chunks-extract/index.js",
+    "node_modules/points-on-curve/lib/index.js",
+    "node_modules/points-on-path/lib/index.js",
+    "node_modules/points-on-path/node_modules/points-on-curve/lib/index.js",
+    "node_modules/react-dom/cjs/react-dom.production.min.js",
+    "node_modules/react-dom/client.js",
+    "node_modules/react-dom/index.js",
+    "node_modules/react-remove-scroll-bar/dist/es2015/component.js",
+    "node_modules/react-remove-scroll-bar/dist/es2015/constants.js",
+    "node_modules/react-remove-scroll-bar/dist/es2015/index.js",
+    "node_modules/react-remove-scroll-bar/dist/es2015/utils.js",
+    "node_modules/react-remove-scroll/dist/es2015/Combination.js",
+    "node_modules/react-remove-scroll/dist/es2015/SideEffect.js",
+    "node_modules/react-remove-scroll/dist/es2015/UI.js",
+    "node_modules/react-remove-scroll/dist/es2015/aggresiveCapture.js",
+    "node_modules/react-remove-scroll/dist/es2015/handleScroll.js",
+    "node_modules/react-remove-scroll/dist/es2015/index.js",
+    "node_modules/react-remove-scroll/dist/es2015/medium.js",
+    "node_modules/react-remove-scroll/dist/es2015/sidecar.js",
+    "node_modules/react-style-singleton/dist/es2015/component.js",
+    "node_modules/react-style-singleton/dist/es2015/hook.js",
+    "node_modules/react-style-singleton/dist/es2015/index.js",
+    "node_modules/react-style-singleton/dist/es2015/singleton.js",
+    "node_modules/react/cjs/react-jsx-runtime.production.min.js",
+    "node_modules/react/cjs/react.production.min.js",
+    "node_modules/react/index.js",
+    "node_modules/react/jsx-runtime.js",
+    "node_modules/roughjs/bin/canvas.js",
+    "node_modules/roughjs/bin/core.js",
+    "node_modules/roughjs/bin/fillers/dashed-filler.js",
+    "node_modules/roughjs/bin/fillers/dot-filler.js",
+    "node_modules/roughjs/bin/fillers/filler.js",
+    "node_modules/roughjs/bin/fillers/hachure-filler.js",
+    "node_modules/roughjs/bin/fillers/hatch-filler.js",
+    "node_modules/roughjs/bin/fillers/scan-line-hachure.js",
+    "node_modules/roughjs/bin/fillers/zigzag-filler.js",
+    "node_modules/roughjs/bin/fillers/zigzag-line-filler.js",
+    "node_modules/roughjs/bin/generator.js",
+    "node_modules/roughjs/bin/geometry.js",
+    "node_modules/roughjs/bin/math.js",
+    "node_modules/roughjs/bin/renderer.js",
+    "node_modules/roughjs/bin/rough.js",
+    "node_modules/roughjs/bin/svg.js",
+    "node_modules/roughjs/node_modules/points-on-curve/lib/curve-to-bezier.js",
+    "node_modules/roughjs/node_modules/points-on-curve/lib/index.js",
+    "node_modules/scheduler/cjs/scheduler.production.min.js",
+    "node_modules/scheduler/index.js",
+    "node_modules/sliced/index.js",
+    "node_modules/tslib/tslib.es6.mjs",
+    "node_modules/tunnel-rat/dist/index.js",
+    "node_modules/use-callback-ref/dist/es2015/assignRef.js",
+    "node_modules/use-callback-ref/dist/es2015/createRef.js",
+    "node_modules/use-callback-ref/dist/es2015/index.js",
+    "node_modules/use-callback-ref/dist/es2015/mergeRef.js",
+    "node_modules/use-callback-ref/dist/es2015/refToCallback.js",
+    "node_modules/use-callback-ref/dist/es2015/transformRef.js",
+    "node_modules/use-callback-ref/dist/es2015/useMergeRef.js",
+    "node_modules/use-callback-ref/dist/es2015/useRef.js",
+    "node_modules/use-callback-ref/dist/es2015/useTransformRef.js",
+    "node_modules/use-sidecar/dist/es2015/config.js",
+    "node_modules/use-sidecar/dist/es2015/env.js",
+    "node_modules/use-sidecar/dist/es2015/exports.js",
+    "node_modules/use-sidecar/dist/es2015/hoc.js",
+    "node_modules/use-sidecar/dist/es2015/hook.js",
+    "node_modules/use-sidecar/dist/es2015/index.js",
+    "node_modules/use-sidecar/dist/es2015/medium.js",
+    "node_modules/use-sidecar/dist/es2015/renderProp.js",
+    "node_modules/use-sync-external-store/cjs/use-sync-external-store-shim.production.js",
+    "node_modules/use-sync-external-store/cjs/use-sync-external-store-shim/with-selector.production.js",
+    "node_modules/use-sync-external-store/shim/index.js",
+    "node_modules/use-sync-external-store/shim/with-selector.js",
+    "node_modules/zustand/esm/index.mjs",
+    "node_modules/zustand/esm/vanilla.mjs",
+    "src/main.jsx",
+    "src/scene.js"
+  ]
+}

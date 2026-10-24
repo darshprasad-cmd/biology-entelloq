@@ -28,6 +28,14 @@ function mountReview(container,subject) {
   const session=new ReviewSession(subject,{storage:storage()});
   const count=el('span',{class:'learning-badge'}), stage=el('div',{class:'learning-review-stage'}), status=notice(session.warning);
   const history=el('p',{class:'learning-small'});
+  let saving=false;
+  async function save(action,message) {
+    if(saving)return;
+    saving=true;container.querySelectorAll('button,input[type=file]').forEach(control=>control.disabled=true);status.textContent='Saving this review change…';
+    try{const result=await action();status.textContent=session.warning||message(result);}
+    catch(error){status.textContent=error.message;}
+    finally{saving=false;refresh(true);container.querySelectorAll('button,input[type=file]').forEach(control=>control.disabled=false);}
+  }
   function refresh(focus=false) {
     const due=session.queue(); count.textContent=`${due.length} due · ${session.events.length} attempts`;
     history.textContent='Scheduling uses FSRS with a 90% target retention. These are self-reported retrieval attempts, not a mastery score.';
@@ -36,16 +44,16 @@ function mountReview(container,subject) {
     const answer=el('div',{class:'learning-answer',hidden:true},el('h4',{text:'Explanation'}),el('p',{text:item.answer}),el('a',{href:item.source,target:'_blank',rel:'noopener noreferrer',text:'Read the source textbook'}));
     const ratings=el('div',{class:'learning-ratings',hidden:true});
     const meanings=['Again — could not recall','Hard — recalled with effort','Good — recalled correctly','Easy — recalled readily'];
-    meanings.forEach((label,i)=>ratings.append(button(label,()=>{try{const next=session.rate(item.id,i+1);status.textContent=session.warning||`Attempt saved. ${item.title} is next due ${next.due.toLocaleString()}.`;refresh(true);}catch(e){status.textContent=e.message;}},{class:'learning-secondary'})));
+    meanings.forEach((label,i)=>ratings.append(button(label,()=>save(()=>session.rate(item.id,i+1),next=>`Attempt saved. ${item.title} is next due ${next.due.toLocaleString()}.`),{class:'learning-secondary'})));
     const reveal=button('Reveal explanation',()=>{try{session.reveal(item.id);answer.hidden=false;ratings.hidden=false;reveal.disabled=true;ratings.querySelector('button').focus();}catch(e){status.textContent=e.message;}});
     const heading=el('h3',{text:item.title,tabindex:'-1'});
     stage.append(heading,el('p',{class:'learning-question',text:item.question}),el('p',{class:'learning-small',text:'Explain your answer aloud or write it down before revealing.'}),reveal,answer,ratings);
     if(focus)heading.focus();
   }
-  const importer=filePicker(data=>{session.import(data);status.textContent=session.warning||'History merged. Existing attempts were retained; duplicate IDs were counted once.';refresh();},error=>{status.textContent=error;});
+  const importer=filePicker(data=>save(()=>session.import(data),()=>'History merged. Existing attempts were retained; duplicate IDs were counted once.'),error=>{status.textContent=error;});
   const details=el('details',{},el('summary',{text:'Keep or restore your history'}),el('div',{class:'learning-actions'},button('Export review history',()=>download(`${subject}-review-history.json`,session.snapshot()),{class:'learning-secondary'}),el('label',{class:'learning-file'},'Import and merge history',importer)),el('p',{class:'learning-small',text:'Imports are subject-specific and checked for valid dates. Keep your device clock correct. Files contain learning history; share only if intended.'}));
   container.append(el('div',{class:'learning-heading'},el('h2',{text:'Recall, then revisit'}),count),stage,status,history,details);refresh();
-  const timer=setInterval(()=>{if(!session.queue().length || !stage.querySelector('button')) refresh();},30000);
+  const timer=setInterval(()=>{if(!saving&&(!session.queue().length || !stage.querySelector('button'))) refresh();},30000);
   return ()=>clearInterval(timer);
 }
 function mountNotebook(container,subject) {

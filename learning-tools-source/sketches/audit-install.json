@@ -1,0 +1,144 @@
+{
+  "auditReportVersion": 2,
+  "vulnerabilities": {
+    "@excalidraw/excalidraw": {
+      "name": "@excalidraw/excalidraw",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "@excalidraw/mermaid-to-excalidraw"
+      ],
+      "effects": [],
+      "range": "0.5.0-a78d45417 || 0.17.1-08b13f9 - 0.17.1-test || >=0.18.0-699826",
+      "nodes": [
+        "node_modules/@excalidraw/excalidraw"
+      ],
+      "fixAvailable": {
+        "name": "@excalidraw/excalidraw",
+        "version": "0.17.6",
+        "isSemVerMajor": true
+      }
+    },
+    "@excalidraw/mermaid-to-excalidraw": {
+      "name": "@excalidraw/mermaid-to-excalidraw",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "nanoid"
+      ],
+      "effects": [
+        "@excalidraw/excalidraw"
+      ],
+      "range": "*",
+      "nodes": [
+        "node_modules/@excalidraw/mermaid-to-excalidraw"
+      ],
+      "fixAvailable": {
+        "name": "@excalidraw/excalidraw",
+        "version": "0.17.6",
+        "isSemVerMajor": true
+      }
+    },
+    "nanoid": {
+      "name": "nanoid",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1109564,
+          "name": "nanoid",
+          "dependency": "nanoid",
+          "title": "Predictable results in nanoid generation when given non-integer values",
+          "url": "https://github.com/advisories/GHSA-mwcw-c2x4-8c55",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-835"
+          ],
+          "cvss": {
+            "score": 4.3,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N"
+          },
+          "range": ">=4.0.0 <5.0.9"
+        },
+        {
+          "source": 1138810,
+          "name": "nanoid",
+          "dependency": "nanoid",
+          "title": "nanoid: non-secure generators can loop indefinitely with negative size",
+          "url": "https://github.com/advisories/GHSA-28wg-ghj8-5hjv",
+          "severity": "high",
+          "cwe": [
+            "CWE-835"
+          ],
+          "cvss": {
+            "score": 5.9,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=4.0.0 <5.1.16"
+        },
+        {
+          "source": 1139455,
+          "name": "nanoid",
+          "dependency": "nanoid",
+          "title": "nanoid: custom generators can loop indefinitely when size is zero",
+          "url": "https://github.com/advisories/GHSA-2v37-7h3g-55p8",
+          "severity": "high",
+          "cwe": [
+            "CWE-835"
+          ],
+          "cvss": {
+            "score": 5.9,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=4.0.0 <5.1.6"
+        },
+        {
+          "source": 1153188,
+          "name": "nanoid",
+          "dependency": "nanoid",
+          "title": "nanoid: Integer Overflow or Wraparound",
+          "url": "https://github.com/advisories/GHSA-xwg4-73v4-xw9w",
+          "severity": "high",
+          "cwe": [
+            "CWE-190"
+          ],
+          "cvss": {
+            "score": 7.4,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N"
+          },
+          "range": ">=4.0.0 <5.1.11"
+        }
+      ],
+      "effects": [
+        "@excalidraw/mermaid-to-excalidraw"
+      ],
+      "range": "4.0.0 - 5.1.15",
+      "nodes": [
+        "node_modules/@excalidraw/mermaid-to-excalidraw/node_modules/nanoid"
+      ],
+      "fixAvailable": {
+        "name": "@excalidraw/excalidraw",
+        "version": "0.17.6",
+        "isSemVerMajor": true
+      }
+    }
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 2,
+      "high": 1,
+      "critical": 0,
+      "total": 3
+    },
+    "dependencies": {
+      "prod": 260,
+      "dev": 27,
+      "optional": 28,
+      "peer": 0,
+      "peerOptional": 0,
+      "total": 288
+    }
+  }
+}

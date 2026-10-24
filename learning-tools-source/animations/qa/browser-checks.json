@@ -1,0 +1,74 @@
+{
+  "checks": [
+    {
+      "name": "physics: poster only before explicit play",
+      "status": "passed"
+    },
+    {
+      "name": "physics: real H.264 playback and keyboard play/pause",
+      "status": "passed"
+    },
+    {
+      "name": "physics: paused chapter seeks, synchronized caption, native VTT and playback speed",
+      "status": "passed"
+    },
+    {
+      "name": "physics: mobile without overflow, full transcript and four actual still alternatives",
+      "status": "passed"
+    },
+    {
+      "name": "physics: synchronous host teardown pauses and revokes every media Blob URL",
+      "status": "passed"
+    },
+    {
+      "name": "biology: poster only before explicit play",
+      "status": "passed"
+    },
+    {
+      "name": "biology: real H.264 playback and keyboard play/pause",
+      "status": "passed"
+    },
+    {
+      "name": "biology: paused chapter seeks, synchronized caption, native VTT and playback speed",
+      "status": "passed"
+    },
+    {
+      "name": "biology: mobile without overflow, full transcript and four actual still alternatives",
+      "status": "passed"
+    },
+    {
+      "name": "biology: synchronous host teardown pauses and revokes every media Blob URL",
+      "status": "passed"
+    },
+    {
+      "name": "reduced motion opens transcript and never autoplays; initial dark theme works",
+      "status": "passed"
+    },
+    {
+      "name": "host theme tokens accepted only from same-origin parent; forged origin/source rejected",
+      "status": "passed"
+    },
+    {
+      "name": "failed video fetch leaves readable transcript/stills and an enabled retry",
+      "status": "passed"
+    },
+    {
+      "name": "destroy during buffered .mp4 load prevents late Blob URLs and media attachment",
+      "status": "passed"
+    },
+    {
+      "name": "destroy during buffered .vtt load prevents late Blob URLs and media attachment",
+      "status": "passed"
+    },
+    {
+      "name": "host pause cancels pending Play without discarding media; explicit later Play resumes normally",
+      "status": "passed"
+    },
+    {
+      "name": "all runtime requests local; zero page errors",
+      "status": "passed"
+    }
+  ],
+  "errors": [],
+  "externalRequests": []
+}

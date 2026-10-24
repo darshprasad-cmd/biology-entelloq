@@ -21,8 +21,8 @@
     },
     {
       "path": "main.js",
-      "bytes": 133008,
-      "sha256": "4decf5d04b11e33b0da391ab08cf595571db757f6ba71e54ac8a94c9b6643a02"
+      "bytes": 134435,
+      "sha256": "aebab7170ac0ab765d6d589af1697990f799377791c1c9386e93f3f1c189e5ef"
     },
     {
       "path": "semantic-worker.js",

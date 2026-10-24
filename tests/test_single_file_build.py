@@ -105,6 +105,27 @@ class SingleFileBuild(unittest.TestCase):
         self.assertIn('+(sub?"#"+sub:"");', app)
         self.assertIn('window.BioqHistory.pushState({launch:k},"","#"+k+(sub?"/"+sub:""))', app)
 
+    def test_visual_tools_include_local_media_fonts_and_caption_types(self):
+        for module in ("sketches", "animations"):
+            prefix = "assets/learning-tools/" + module + "/"
+            source = json.loads((ROOT / "learning-tools-source" / module / "asset-manifest.json").read_text())
+            self.assertIn(prefix + "index.html", self.manifest["pages"])
+            for item in source["assets"]:
+                if item["path"] != "index.html":
+                    self.assertIn(prefix + item["path"], self.manifest["assets"])
+        media = {name: item for name, item in self.manifest["assets"].items()
+                 if name.startswith("assets/learning-tools/animations/") and name.endswith((".mp4", ".vtt"))}
+        self.assertEqual(sum(name.endswith(".mp4") for name in media), 2)
+        self.assertEqual(sum(name.endswith(".vtt") for name in media), 2)
+        for name, item in media.items():
+            self.assertEqual(item["type"], "text/vtt" if name.endswith(".vtt") else "video/mp4")
+            self.assertEqual(unpack(item["data"]), (ROOT / name).read_bytes())
+        page = unpack(self.manifest["pages"]["assets/learning-tools/animations/index.html"]).decode()
+        self.assertNotRegex(page, r'<(?:video|track)\b[^>]*\bsrc=')
+        editor = unpack(self.manifest["assets"]["assets/learning-tools/sketches/editor.css"]["data"]).decode()
+        self.assertIn("data:font/woff2;base64,", editor)
+        self.assertNotRegex(editor, r'url\([\"\']?https?://')
+
     def test_module_graph_uses_embedded_import_map_addresses(self):
         for name in BUILDER.MODULES:
             source = unpack(self.manifest["assets"][name]["data"]).decode("utf-8")

@@ -1,6 +1,6 @@
 # Entelloq shared learning tools
 
-These three panels belong inside the existing Physics and Biology applications. They add review scheduling to Practice, an experiment notebook to Research/Lab, and concept retrieval to Tutor/Learn. They do not replace the host shell or change existing learning records.
+These three panels are integrated into the existing Physics and Biology applications. Review scheduling opens from Physics Practice/Progress and Biology Solve/Me. Text notebooks open from Physics Research/Lab and Biology Reason/Labs. Concept retrieval opens from Learn in both apps. Each panel preserves the host shell and existing learning records.
 
 ## Entry and embedding contract
 
@@ -53,6 +53,8 @@ app.destroy();
 Eight Physics and eight Biology prompts ask for retrieval before revealing an explanation. A learner explicitly chooses Again/Hard/Good/Easy. This is the only action that schedules a review. The real FSRS algorithm uses 90% target retention, its packaged default parameters and disabled scheduling fuzz for deterministic replay. It is not calibrated to an individual student and does not establish mastery.
 
 History lives at `entelloq.next.review.v1.<subject>` as versioned retrieval events. Dates and subjects are validated on import, histories merge by event ID, and invalid imports do not mutate an existing session. Clock times are absolute ISO timestamps, displayed in the learner’s locale. Keep the device clock accurate. Existing unreadable data is preserved; the session offers export instead of overwriting it. Concurrent review sessions are not a multi-device history service; export before switching browsers/devices.
+
+Same-origin tabs serialize ratings and imports through Web Locks, reread saved events inside the lock, and reject a stale rating of the same card. Different-card attempts merge without losing a peer's saved work. When locks or storage are unavailable, new attempts remain exportable in the current session and existing saved history stays untouched. The panel explains this fallback. Rating and import operations are asynchronous, with duplicate actions disabled while saving.
 
 ### Notebook — Yjs 13.6.33 (MIT)
 

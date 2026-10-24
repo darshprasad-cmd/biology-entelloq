@@ -2,7 +2,7 @@
   "version": "1.0.0",
   "name": "entelloq-learning-tools",
   "scripts": {
-    "test": "node --test tests/core.test.mjs",
+    "test": "node --test tests/core.test.mjs tests/review-concurrency.test.mjs",
     "build": "node build.mjs",
     "test:browser": "node tests/browser.mjs"
   },

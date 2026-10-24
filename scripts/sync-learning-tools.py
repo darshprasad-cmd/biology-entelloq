@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def runtime_files(source, module):
     if module == "physics":
         return [source / name for name in ("index.html", "style.css", "tools.mjs", "core.mjs", "THIRD-PARTY-NOTICES.md")] + sorted((source / "vendor").rglob("*"), key=lambda path: path.as_posix())
-    if module == "learning":
+    if module in ("learning", "sketches", "animations"):
         manifest = json.loads((source / "asset-manifest.json").read_text(encoding="utf-8"))
         return [source / entry["path"] for entry in manifest["assets"]] + [source / "asset-manifest.json"]
     return [source / "index.html"] + sorted((source / "dist").rglob("*"), key=lambda path: path.as_posix()) + [p for p in sorted(source.glob("*NOTIC*"), key=lambda path: path.as_posix()) if p.is_file()]
@@ -63,7 +63,7 @@ def entry(data, module, biology):
 def render(root=ROOT):
     biology = (root / "app.html").is_file()
     manifest = {"schema": 1, "subject": "biology" if biology else "physics", "modules": {}}
-    for module in ("biology" if biology else "physics", "learning"):
+    for module in ("biology" if biology else "physics", "learning", "sketches", "animations"):
         source = root / "learning-tools-source" / module
         if not source.is_dir():
             continue

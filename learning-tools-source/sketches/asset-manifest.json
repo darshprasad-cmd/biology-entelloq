@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "entry": "index.html",
+  "scripts": "classic-iife",
+  "upstream": {
+    "name": "@excalidraw/excalidraw",
+    "version": "0.18.1",
+    "repository": "https://github.com/excalidraw/excalidraw",
+    "license": "MIT"
+  },
+  "fonts": "Embedded local WOFF2 data; system fallback for unsupported glyphs.",
+  "assets": [
+    {
+      "path": "index.html",
+      "bytes": 427,
+      "sha256": "98b5d5566287684347ccd578d4effab2650a7cbf97be479ee34af00172e742eb",
+      "mime": "text/html"
+    },
+    {
+      "path": "styles.css",
+      "bytes": 3423,
+      "sha256": "3201c9c8293bd461e2dd68fd174fb36ebfa008f49c5a4f2e69a10060fe1eb03b",
+      "mime": "text/css"
+    },
+    {
+      "path": "editor.css",
+      "bytes": 252820,
+      "sha256": "dab6bffe8be957e2525229b84f832e8bad6cda4c15633bd8f8c607c49fe0b826",
+      "mime": "text/css"
+    },
+    {
+      "path": "main.js",
+      "bytes": 1735833,
+      "sha256": "69f0a7d71a058fdf24a00e3b663cced776ab5241783859cfce5de2bb17e1bd1f",
+      "mime": "text/javascript"
+    },
+    {
+      "path": "THIRD-PARTY-NOTICES.md",
+      "bytes": 95928,
+      "sha256": "3ac5a6c901a7cbd0d5caca5a83ce10253fd2469b644560778b2e46542f6e80cd",
+      "mime": "text/markdown"
+    }
+  ]
+}
