@@ -5,11 +5,19 @@
       "status": "passed"
     },
     {
+      "name": "physics: keyboard transcript entry without loading video; recoverable question feedback with no saved records",
+      "status": "passed"
+    },
+    {
       "name": "physics: real H.264 playback and keyboard play/pause",
       "status": "passed"
     },
     {
       "name": "physics: paused chapter seeks, synchronized caption, native VTT and playback speed",
+      "status": "passed"
+    },
+    {
+      "name": "physics: native pause/end status and progress reflect real playback",
       "status": "passed"
     },
     {
@@ -25,6 +33,10 @@
       "status": "passed"
     },
     {
+      "name": "biology: keyboard transcript entry without loading video; recoverable question feedback with no saved records",
+      "status": "passed"
+    },
+    {
       "name": "biology: real H.264 playback and keyboard play/pause",
       "status": "passed"
     },
@@ -33,11 +45,35 @@
       "status": "passed"
     },
     {
+      "name": "biology: native pause/end status and progress reflect real playback",
+      "status": "passed"
+    },
+    {
       "name": "biology: mobile without overflow, full transcript and four actual still alternatives",
       "status": "passed"
     },
     {
       "name": "biology: synchronous host teardown pauses and revokes every media Blob URL",
+      "status": "passed"
+    },
+    {
+      "name": "light: 320px phone, 768px tablet and desktop fit with 44px controls and reduced motion",
+      "status": "passed"
+    },
+    {
+      "name": "dark: 320px phone, 768px tablet and desktop fit with 44px controls and reduced motion",
+      "status": "passed"
+    },
+    {
+      "name": "poster and all four stills decode via fetch and Blob URLs when direct image paths are blocked; disclosure gates stills, lifecycle revokes and restores images without video",
+      "status": "passed"
+    },
+    {
+      "name": "failed image fetch offers a real retry and preserves the video opt-in boundary",
+      "status": "passed"
+    },
+    {
+      "name": "destroy during buffered poster fetch prevents late image Blob creation and attachment",
       "status": "passed"
     },
     {

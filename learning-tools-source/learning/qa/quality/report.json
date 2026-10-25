@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-10-25T19:42:24.939Z",
+  "checks": [
+    "Keyboard reveal focuses the explanation without scheduling; explicit rating saves once and focuses the next prompt.",
+    "Experiment outline is explicit, empty-only and undoable; character count and undo/redo availability follow the actual Yjs state.",
+    "Active notebook identity remains accurate while editing a name; invalid names preserve notes, Enter opens a valid name, and original notes restore.",
+    "Maximum-length notebook names fit at tablet and mobile sizes without hiding the active notebook identity.",
+    "Subject-specific starters produce real keyword results; result summaries track the submitted query, and empty/no-match states are explicit.",
+    "Mobile review ratings and disclosure controls meet a 44px touch target; reduced motion removes button transitions.",
+    "Unreadable notebook records remain untouched, recovery warnings remain visible after edits, and session export stays available.",
+    "Desktop, tablet and mobile fit in both subject palettes; initial tools make no external requests."
+  ],
+  "errors": []
+}

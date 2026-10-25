@@ -18,8 +18,8 @@
     },
     {
       "path": "styles.css",
-      "bytes": 3423,
-      "sha256": "3201c9c8293bd461e2dd68fd174fb36ebfa008f49c5a4f2e69a10060fe1eb03b",
+      "bytes": 6967,
+      "sha256": "b599855e548cd726fd82f9d4e8b9c98ec8697e88a5a833f43cca420845150ef2",
       "mime": "text/css"
     },
     {
@@ -30,8 +30,8 @@
     },
     {
       "path": "main.js",
-      "bytes": 1735833,
-      "sha256": "69f0a7d71a058fdf24a00e3b663cced776ab5241783859cfce5de2bb17e1bd1f",
+      "bytes": 1737911,
+      "sha256": "31b5fc412005c6c5548770fb8bf45460eccf87abda2cca41831621fcc196f021",
       "mime": "text/javascript"
     },
     {

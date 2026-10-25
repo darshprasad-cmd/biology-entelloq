@@ -75,11 +75,14 @@ npm ci --ignore-scripts --no-audit --no-fund
 npm run build
 npm test
 npm run test:browser
+npm run test:quality
 $env:RUN_SEMANTIC = '1'
 npm run test:browser
 ```
 
 Browser tests use Playwright from `CODEX_NODE_MODULES` or the Codex bundled runtime path. They start an ephemeral loopback HTTP server, verify review scheduling/reload, Yjs tab sync and exports, subject isolation, safe literal notes, no model download before opt-in, cancellation, parent theme messages, mobile/tablet overflow and keyboard focus. `RUN_SEMANTIC=1` additionally requires actual model inference and checks a paraphrased Physics question. Evidence is written to `qa/browser-checks.json`; screenshot paths are local QA artefacts (ignored by Git).
+
+`PLAYWRIGHT_CHANNEL=chrome` uses installed Chrome when the bundled Chromium is unavailable. The separate quality suite checks keyboard reveal/rating focus, explicit notebook outlines, undo/redo availability, active notebook identity, character counts, long names, search starters and empty states, touch targets, reduced motion and preserved corrupt notebook records. Its evidence is in `qa/quality/`; the design review and scope are in `qa/QUALITY-REPORT.md`.
 
 The build writes SHA-256 hashes, asset sizes, pinned model revision, and exact bundled third-party notices. Dependencies are locked in `package-lock.json`. These module checks are not host integration, deployment or learning-outcome validation; those remain the host release owner’s responsibility.
 

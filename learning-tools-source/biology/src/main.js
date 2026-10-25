@@ -4,7 +4,7 @@ const KEY='entelloq.biology.mechanisms.v1';
 const FIELD={substrate:[0,20,.5,10,'Substrate','µM'],enzyme:[0,2,.05,.5,'Enzyme','µM'],kcat:[0,2,.05,.3,'Catalytic rate','s⁻¹'],duration:[1,120,1,30,'Observation time','s']};
 const currentScript=document.currentScript;
 const volumeURL=document.getElementById('volume-library')?.getAttribute('src') || new URL('volume.js',currentScript?.src||location.href).href;
-let libraryPromise;
+let libraryPromise,instance=0;
 function library(signal){
   if(window.EntelloqBiologyVolume)return Promise.resolve(window.EntelloqBiologyVolume);
   if(!libraryPromise)libraryPromise=(async()=>{
@@ -42,7 +42,7 @@ function loadSettings(){
 }
 export function mount(element,options={}) {
   if(!element)throw Error('A mount element is required');
-  const saved=loadSettings();let disposed=false,request=null,volume=null,result=null,volumeLoading=false;
+  const id=++instance,saved=loadSettings();let disposed=false,request=null,volume=null,result=null,volumeLoading=false;
   const events=new AbortController();
   const root=document.createElement('section');root.className='bn';root.dataset.theme=options.theme==='light'?'light':'dark';
   const style=document.createElement('style');style.textContent=css;
@@ -60,6 +60,9 @@ export function mount(element,options={}) {
   element.replaceChildren(style,root);
   const q=s=>root.querySelector(s),all=s=>[...root.querySelectorAll(s)];
   const listen=(el,event,fn)=>el.addEventListener(event,fn,{signal:events.signal});
+  all('h2').forEach(heading=>heading.tabIndex=-1);
+  all('[data-mode],[data-reset],[data-channel],[data-axis],[data-slice],[data-threshold]').forEach(control=>control.disabled=true);
+  const viewHint=document.createElement('p');viewHint.className='control-hint muted';viewHint.textContent='Open microscopy to enable these controls.';q('[data-view="volume"] aside h3').after(viewHint);
   function status(which,text,error=false){const el=q(`[data-status="${which}"]`);el.textContent=text;el.dataset.error=String(error);}
   function persist(field,value,which){try{
     // Independent records avoid a cross-tab read/modify/write race. Updating
@@ -71,26 +74,39 @@ export function mount(element,options={}) {
   for(const [key,[min,max,step,value,label,unit]] of Object.entries(FIELD)){
     const input=q(`[name="${key}"]`),v=saved.parameters?.[key];
     if(Number.isFinite(v)&&v>=min&&v<=max)input.value=String(v);
-    const update=()=>{q(`[data-output="${key}"]`).textContent=`${input.value} ${unit}`;if(result)q('[data-summary]').textContent='Parameters changed. The plotted record belongs to the previous run; run again to compare.';};
+    const number=document.createElement('input'),help=document.createElement('small'),error=document.createElement('p');
+    number.type='number';number.dataset.number=key;number.min=min;number.max=max;number.step=step;number.inputMode='decimal';number.setAttribute('aria-label',`${label} value (${unit})`);number.setAttribute('aria-invalid','false');
+    help.id=`bn-${id}-${key}-hint`;help.textContent=`${min}–${max} ${unit} · steps of ${step}`;
+    error.id=`bn-${id}-${key}-error`;error.className='field-error';error.dataset.error=key;error.setAttribute('role','status');error.hidden=true;
+    number.setAttribute('aria-describedby',`${help.id} ${error.id}`);
+    const labelElement=input.parentElement,parameter=document.createElement('div');parameter.className='parameter';labelElement.before(parameter);parameter.append(labelElement);input.id=`bn-${id}-${key}`;labelElement.htmlFor=input.id;
+    const controls=document.createElement('div');controls.className='parameter-controls';parameter.append(controls,help,error);controls.append(input,number);
+    const update=()=>{if(document.activeElement!==number)number.value=input.value;q(`[data-output="${key}"]`).textContent=`${input.value} ${unit}`;input.setAttribute('aria-valuetext',`${input.value} ${unit}`);number.setAttribute('aria-invalid','false');error.hidden=true;error.textContent='';controlsState();if(result)q('[data-summary]').textContent='Parameters changed. The plotted record belongs to the previous run; run again to compare.';};
     update();listen(input,'input',()=>{update();persist(`parameter.${key}`,Number(input.value),'kinetics');});
+    listen(number,'input',()=>{const v=number.valueAsNumber,valid=Number.isFinite(v)&&v>=min&&v<=max&&!number.validity.stepMismatch;
+      if(!valid){number.setAttribute('aria-invalid','true');error.hidden=false;error.textContent=`Enter ${min}–${max} ${unit}, in steps of ${step}.`;controlsState();return;}
+      input.value=String(v);update();persist(`parameter.${key}`,v,'kinetics');
+    });
   }
-  function cancel(){if(!request)return;request.abort();request=null;q('[data-run]').disabled=false;q('[data-cancel]').disabled=true;status('kinetics','Request cancelled. A short calculation already started in the companion may finish; its result will not be displayed.');}
+  function controlsState(){const busy=!!request;all('[name],[data-number]').forEach(input=>input.disabled=busy);q('[data-run]').disabled=busy||!!q('[data-number][aria-invalid="true"]');q('[data-cancel]').disabled=!busy;q('[data-run]').textContent=busy?'Running experiment…':'Run experiment';}
+  function cancel(){if(!request)return;request.abort();request=null;controlsState();status('kinetics','Request cancelled. A short calculation already started in the companion may finish; its result will not be displayed.');}
   async function run(){
-    cancel();const controller=new AbortController();request=controller;
-    q('[data-run]').disabled=true;q('[data-cancel]').disabled=false;status('kinetics','Connecting to the local Tellurium companion…');
+    if(q('[data-number][aria-invalid="true"]'))return;
+    const runParameters=parameters();cancel();const controller=new AbortController();request=controller;controlsState();
+    status('kinetics','Connecting to the local Tellurium companion…');
     const timeout=setTimeout(()=>controller.abort('timeout'),20000);
     try{
       const health=await fetch(`${SERVICE}/api/health`,{signal:controller.signal,cache:'no-store'});
       if(!health.ok)throw Error('Companion connection was refused.');const ready=await health.json();
       if(ready.engine!=='Tellurium'||typeof ready.token!=='string')throw Error('The local service is not the Biology companion.');
       status('kinetics','Computing the mass-action model and checking conservation…');
-      const response=await fetch(`${SERVICE}/api/simulate`,{method:'POST',headers:{'Content-Type':'application/json','X-Entelloq-Token':ready.token},body:JSON.stringify(parameters()),signal:controller.signal});
+      const response=await fetch(`${SERVICE}/api/simulate`,{method:'POST',headers:{'Content-Type':'application/json','X-Entelloq-Token':ready.token},body:JSON.stringify(runParameters),signal:controller.signal});
       const data=await response.json();if(!response.ok)throw Error(data.error||'Calculation failed.');
       if(!Array.isArray(data.rows)||data.rows.length!==201||!data.rows.every(r=>r.length===5&&r.every(Number.isFinite)))throw Error('The companion returned invalid numerical data.');
       if(disposed||request!==controller)return;
       result=data;draw(data);all('[data-export]').forEach(b=>b.disabled=false);status('kinetics',`Computed with ${data.engine} · ${data.rows.length} samples · conservation passed.`);
-    }catch(error){if(!disposed&&request===controller)status('kinetics',controller.signal.aborted?'The companion did not respond in time. Check it is running, then retry.':`${error.message} Start the local companion and allow this app’s local-network connection, then retry.`,true);}
-    finally{clearTimeout(timeout);if(request===controller){request=null;q('[data-run]').disabled=false;q('[data-cancel]').disabled=true;}}
+    }catch(error){if(!disposed&&request===controller)status('kinetics',controller.signal.aborted?'The companion did not respond in time. Check it is running, then retry.':`${error instanceof TypeError?'Could not reach the local companion.':error.message} Start the local companion and allow this app’s local-network connection, then retry.`,true);}
+    finally{clearTimeout(timeout);if(request===controller){request=null;controlsState();}}
   }
   function draw(data){
     const max=Math.max(.1,...data.rows.flatMap(r=>[r[1],r[3],r[4]])),t=data.parameters.duration;
@@ -109,15 +125,16 @@ export function mount(element,options={}) {
     else saveFile('enzyme-experiment.json',JSON.stringify(result,null,2));
   });
   async function openVolume(){
-    if(volume||volumeLoading)return;volumeLoading=true;q('[data-open-volume]').disabled=true;status('volume','Loading the local microscopy renderer and CC0 sample…');
+    if(volume||volumeLoading)return;volumeLoading=true;q('[data-open-volume]').disabled=true;q('[data-open-volume]').textContent='Opening microscopy…';status('volume','Loading the local microscopy renderer and CC0 sample…');
     try{const lib=await library(events.signal);if(disposed)return;
       q('[data-volume-cover]').hidden=true;
       volume=lib.create(q('[data-vtk]'));
       const previous=loadSettings().volume;
       if(previous){const s=previous;const valid={};if([0,1,2].includes(s.axis))valid.axis=s.axis;if([0,1].includes(s.channel))valid.channel=s.channel;if(['slice','volume'].includes(s.mode))valid.mode=s.mode;if(Number.isFinite(s.slice))valid.slice=s.slice;if(Number.isFinite(s.threshold))valid.threshold=s.threshold;volume.set(valid,true);}
-      const savedView=updateVolume();q('[data-volume-export]').disabled=false;if(savedView!==false)status('volume','Real cells3d fluorescence data · rendered locally with vtk.js.');
-    }catch(error){q('[data-volume-cover]').hidden=false;status('volume',error.message,true);}
-    finally{volumeLoading=false;q('[data-open-volume]').disabled=false;}
+      all('[data-mode],[data-reset],[data-channel]').forEach(control=>control.disabled=false);viewHint.textContent='Choose a channel, then explore a slice or the 3D view.';
+      const savedView=updateVolume();q('[data-volume-export]').disabled=false;q('[data-view="volume"] h2').focus({preventScroll:true});if(savedView!==false)status('volume','Real cells3d fluorescence data · rendered locally with vtk.js.');
+    }catch(error){if(disposed)return;q('[data-volume-cover]').hidden=false;status('volume',error instanceof TypeError?'The microscopy renderer could not load. Check the app package or connection, then try opening it again.':error.message,true);}
+    finally{volumeLoading=false;if(!disposed){q('[data-open-volume]').disabled=false;q('[data-open-volume]').textContent=volume?'Open microscopy':'Try opening microscopy';}}
   }
   function updateVolume(next={}){
     if(!volume)return;const s=volume.set(next);q('[data-axis]').value=s.axis;q('[data-channel]').value=s.channel;q('[data-slice]').max=s.dimensions[s.axis]-1;q('[data-slice]').value=s.slice;q('[data-slice-output]').textContent=`${s.slice} / ${s.dimensions[s.axis]-1}`;q('[data-threshold]').value=s.threshold;q('[data-threshold-output]').textContent=`${s.threshold} / 255`;
@@ -133,8 +150,8 @@ export function mount(element,options={}) {
   all('[data-mode]').forEach(b=>listen(b,'click',()=>updateVolume({mode:b.dataset.mode})));
   listen(q('[data-reset]'),'click',()=>volume?.reset());
   listen(q('[data-volume-export]'),'click',()=>{if(volume)saveFile('microscopy-observation.json',JSON.stringify({view:volume.getState(),provenance:window.EntelloqBiologyVolume.metadata,meaning:'View settings and source provenance; not a segmentation or clinical measurement'},null,2));});
-  function panel(name){if(!['kinetics','volume'].includes(name))return;all('[data-panel]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.panel===name)));all('[data-view]').forEach(v=>v.hidden=v.dataset.view!==name);if(name!=='kinetics')cancel();}
-  all('[data-panel]').forEach(b=>listen(b,'click',()=>panel(b.dataset.panel)));
+  function panel(name,focus=false){if(!['kinetics','volume'].includes(name))return;all('[data-panel]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.panel===name)));all('[data-view]').forEach(v=>v.hidden=v.dataset.view!==name);if(name!=='kinetics')cancel();if(focus)q(`[data-view="${name}"] h2`).focus({preventScroll:true});}
+  all('[data-panel]').forEach(b=>listen(b,'click',()=>panel(b.dataset.panel,true)));
   panel(options.panel||new URLSearchParams(location.search).get('panel')||'kinetics');
   function setTheme(theme){if(['light','dark'].includes(theme))root.dataset.theme=theme;}
   let parentOrigin;try{parentOrigin=document.referrer?new URL(document.referrer).origin:location.origin;}catch{parentOrigin=location.origin;}

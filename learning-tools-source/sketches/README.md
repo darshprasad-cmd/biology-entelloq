@@ -9,6 +9,7 @@ An actual Excalidraw 0.18.1 editor with original Physics and Biology starters, s
 - Parent themes: accepts `entelloq:theme`, `entelloq-learning:theme`, or `entelloq-sketch:theme`, with `theme` and optional `tokens` (`accent`, `surface`, `text`, `muted`, `border`, `background`). Only a message from this frame's parent with the same origin is accepted.
 - Ready: posts `{type:'entelloq-sketch:ready',subject}` to the same-origin parent after the wrapper mounts. Engine readiness is the enabled **Export scene** button plus the canvas.
 - **Before removing the iframe**, call `frame.contentWindow.EntelloqSketch?.destroy()`. It synchronously flushes pending valid edits, then unmounts React and releases owned listeners, timers and download object URLs. `flush()` is also available without unmounting. Full page departure flushes via `pagehide`/`beforeunload`; bfcache is preserved.
+- **Focus canvas** expands only within this document or hosting iframe. It retains the mounted editor and saved scene, and teardown restores the document's prior overflow. Parent Back handlers must ignore Escape when `event.defaultPrevented` is true or `.sketch-workspace.is-focused` is present. Focus mode handles a canvas menu first, allows text/shape/popup editing to finish, and consumes idle Escape before restoring focus to the view button.
 - Copy only the five `asset-manifest.json` assets for the runtime. CSS and classic IIFE JS contain all enabled local font data. No ESM loader, dynamic script, remote CDN, font URL rewrite, worker or companion service is needed. `index.html` loads the classic script at the end of the body for the Biology portable packager.
 - Runtime is approximately 2.09 MB before transport compression. It should be loaded only when the user opens the sketch tool.
 
@@ -31,11 +32,16 @@ npm ci --ignore-scripts
 npm run build
 npm test
 node tests/browser.cjs
+node tests/quality-browser.cjs
 ```
 
 The browser harness uses the bundled Playwright runtime, or `CODEX_NODE_MODULES`. It draws a real rectangle through native toolbar and pointer events, verifies reload/export/import identity, cancelled replacement and recovery, engine PNG/SVG output, a separate Biology scene, mobile/dark layout, and zero external requests/page errors. It closes its browser and ephemeral HTTP server. Evidence is in `qa/`.
 
 The source, exact npm lock, generated source/asset manifests, local fonts and redistribution notices are retained. `build-manifest.json` records actual bundled packages and font hashes. `asset-manifest.json` records runtime bytes, SHA-256 and MIME types.
+
+The quality harness adds real desktop/tablet/mobile/320px layouts, 44px wrapper targets, reduced motion, keyboard focus/return, menu and text-edit Escape priority, parent theme messages, conflict visibility, and teardown inside a same-origin iframe fixture. Both harnesses accept `PLAYWRIGHT_CHANNEL=chrome` when using an installed Chrome. These isolated module checks are separate from host release and deployment checks. See `qa/quality-report.md` for the inspected improvements and evidence.
+
+Use a real local `npm ci --ignore-scripts` installation for builds. A cross-worktree `node_modules` junction makes esbuild resolve different physical paths and bypasses the pinned font adapter; the zero-external-request browser check catches that invalid build.
 
 ## Upstream choices
 

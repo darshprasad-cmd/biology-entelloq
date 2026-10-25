@@ -20,8 +20,8 @@
       },
       {
         "path": "assets/learning-tools/biology/dist/main.js",
-        "bytes": 22472,
-        "sha256": "1a6258ed21aecb6dcc1381018ba25cf5f9ea5d3c91952ffcaa946eb7369dd252"
+        "bytes": 26477,
+        "sha256": "1233d8748471a19abfe25e3163ae8fe5fa2faea65059a593d14a7213bcddf65d"
       },
       {
         "path": "assets/learning-tools/biology/dist/volume.js",
@@ -37,13 +37,13 @@
       },
       {
         "path": "assets/learning-tools/learning/styles.css",
-        "bytes": 4984,
-        "sha256": "6ac574570c4dcda419ce1638ac66366cafc3b68c10e26092991155298e0ba203"
+        "bytes": 9331,
+        "sha256": "4d14fca720f9ce20948f36b7e6849929dbaa8aa58c7f7b1ca47828457cd14822"
       },
       {
         "path": "assets/learning-tools/learning/main.js",
-        "bytes": 134435,
-        "sha256": "aebab7170ac0ab765d6d589af1697990f799377791c1c9386e93f3f1c189e5ef"
+        "bytes": 137781,
+        "sha256": "6bc5935689924218a89cf617adfde77d6078486790a683c2faef371b151c02ec"
       },
       {
         "path": "assets/learning-tools/learning/semantic-worker.js",
@@ -68,7 +68,7 @@
       {
         "path": "assets/learning-tools/learning/asset-manifest.json",
         "bytes": 1348,
-        "sha256": "c1082acbac612fed2873eef761dfc6f8b4317d5d452792901b9c7fe0bc41be8f"
+        "sha256": "8dc6bdb365e4f13ad2223116fe59f03f356ece251dd344272ddcb618ff690024"
       }
     ],
     "sketches": [
@@ -79,8 +79,8 @@
       },
       {
         "path": "assets/learning-tools/sketches/styles.css",
-        "bytes": 3423,
-        "sha256": "3201c9c8293bd461e2dd68fd174fb36ebfa008f49c5a4f2e69a10060fe1eb03b"
+        "bytes": 6967,
+        "sha256": "b599855e548cd726fd82f9d4e8b9c98ec8697e88a5a833f43cca420845150ef2"
       },
       {
         "path": "assets/learning-tools/sketches/editor.css",
@@ -89,8 +89,8 @@
       },
       {
         "path": "assets/learning-tools/sketches/main.js",
-        "bytes": 1735833,
-        "sha256": "69f0a7d71a058fdf24a00e3b663cced776ab5241783859cfce5de2bb17e1bd1f"
+        "bytes": 1737911,
+        "sha256": "31b5fc412005c6c5548770fb8bf45460eccf87abda2cca41831621fcc196f021"
       },
       {
         "path": "assets/learning-tools/sketches/THIRD-PARTY-NOTICES.md",
@@ -100,29 +100,29 @@
       {
         "path": "assets/learning-tools/sketches/asset-manifest.json",
         "bytes": 1220,
-        "sha256": "598aa785409783c4c646aba38c474ffb1aea9e79107c1f147953b04f15679e56"
+        "sha256": "3d92842968d342530b20551a6276f01141240cea90d14d5eaf73789ba16c06df"
       }
     ],
     "animations": [
       {
         "path": "assets/learning-tools/animations/index.html",
-        "bytes": 3860,
-        "sha256": "cab0a153450becb758506c47ddd3feda58c08607a74c8ea00d15daf83d7c64e9"
+        "bytes": 4899,
+        "sha256": "3dc24c72fee41d511674f495673a9de0467a0f45d9a2733752cf1b1632f71807"
       },
       {
         "path": "assets/learning-tools/animations/main.js",
-        "bytes": 8864,
-        "sha256": "469800c262aa5d2428b6f50bea673d5719872ed6f4f0b6c77da4f0b143e00992"
+        "bytes": 13443,
+        "sha256": "27218d848aa004a4a3851da2f66c674dcf924a1df9b075ec21d25eadee684b0a"
       },
       {
         "path": "assets/learning-tools/animations/catalog.js",
-        "bytes": 4291,
-        "sha256": "db5ee281909090062d0ac42fb9a682cf2add552d1f12eda554560fe51c72bc8a"
+        "bytes": 5473,
+        "sha256": "87183d6dd5f7e6b84f60ba104a099aa7424e255551ac0eb443fa943be95caaa9"
       },
       {
         "path": "assets/learning-tools/animations/styles.css",
-        "bytes": 4148,
-        "sha256": "11944f444e78fd1d9fd3e66c0807681bb991dedd9f53d775d284723625b59532"
+        "bytes": 7869,
+        "sha256": "19aa50f9f295839b278732e11d33fd8ddec74c93b5339b05b0cfd035b2b00d0f"
       },
       {
         "path": "assets/learning-tools/animations/media/biology-poster.png",
@@ -196,8 +196,8 @@
       },
       {
         "path": "assets/learning-tools/animations/asset-manifest.json",
-        "bytes": 3402,
-        "sha256": "ad41b3c928c0c31b769c8bb2b246baebd541b74fb3b00f3a2fb4b633efca8154"
+        "bytes": 3403,
+        "sha256": "bee0c8224afac39795b4a4a367e568c78b61091866b68a790df8c2bf2113cd97"
       }
     ]
   }
