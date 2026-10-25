@@ -10,7 +10,7 @@
     "releaseEvidence": "RELEASE.md"
   },
   "practicalMilestone": {
-    "status": "verified-local",
+    "status": "released-live-verified",
     "inventory": "practicals.json",
     "releaseEvidence": "PRACTICAL-RELEASE.md",
     "standardBiologyGuides": 44,
@@ -18,7 +18,35 @@
     "newInteractiveInstruments": [],
     "fullInteractiveCoverage": false,
     "schoolPracticalCompletionClaim": false,
-    "nextAction": "Verify release and live parity, then add genuine missing practical interactions rather than relabelling existing partial lab models. Baseline inventory statuses precede this guide release. Apparatus familiarity remains an unverified physical/accessibility assessment, not another completed experiment."
+    "releaseCommit": "7c9c67783a3deba8c4d9571b8fb550d562c1c402",
+    "liveEvidence": "https://github.com/darshprasad-cmd/biology-entelloq/pull/41#issuecomment-6374201740",
+    "nextAction": "Use the release evidence and interactionMilestones below for effective coverage; practicals.json is the historical pre-release apparatus audit. Guides and opened simulations do not certify supervised school work."
+  },
+  "interactionMilestones": [
+    {
+      "id": "b11-a-e03",
+      "name": "Paired potato-osmometer rehearsal",
+      "status": "verified-local",
+      "route": "#cbse:11/practicals/b11-a-e03",
+      "capability": "illustrative-interactive-apparatus-with-practical-preparation",
+      "sourcePage": 6,
+      "source": "https://cbseacademic.nic.in/web_material/CurriculumMain27/SecPart2/Biology_SecP2_2026-27.pdf",
+      "releaseEvidence": "POTATO-OSMOSIS-RELEASE.md",
+      "productionEvidence": "https://github.com/darshprasad-cmd/biology-entelloq/pull/45",
+      "releaseStatusAuthority": "The PR conversation records required checks, merged commit, deployment and live parity after this source checkpoint; inspect it before selecting this objective again.",
+      "schoolPracticalCompleted": false,
+      "educatorReviewed": false,
+      "physicalCalibration": false
+    }
+  ],
+  "siblingPracticalBaseline": {
+    "subject": "Physics",
+    "standardGuides": 72,
+    "accessibleAlternatives": 18,
+    "projectOptions": 8,
+    "interactiveInstruments": ["vernier-calipers", "screw-gauge", "spherometer"],
+    "latestReleaseCommit": "11db02d2cc80fdb20280ca73cf44ed4fbae01eec",
+    "evidence": "https://github.com/darshprasad-cmd/PhysicsEntelloq/pull/36#issuecomment-6380335096"
   },
   "tracks": [
     {
