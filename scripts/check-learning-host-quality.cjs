@@ -11,7 +11,7 @@ let browser;
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));const base='http://127.0.0.1:'+server.address().port,entry=portable?'/dist/index.html':'/app.html';
  browser=await chromium.launch({headless:true});const context=await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce'});
  await context.route('**/*',route=>{const url=route.request().url().split('#')[0];return (portable?url===base+entry:url.startsWith(base+'/'))?route.continue():route.abort();});
- const page=await context.newPage(),checks=[],errors=[],measurements=[];page.setDefaultTimeout(30000);page.on('pageerror',error=>errors.push(error.message));
+ const page=await context.newPage(),checks=[],errors=[],measurements=[],fontChecks=[];page.setDefaultTimeout(30000);page.on('pageerror',error=>errors.push(error.message));
  async function host(name){for(let n=0;n<300;n++){for(const frame of page.frames()){if(await frame.evaluate(name=>Boolean(window.BiologyLearningTools)&&(window.BioqContext?.page||location.pathname).endsWith(name+'.html'),name).catch(()=>false))return frame;}await new Promise(resolve=>setTimeout(resolve,100));}throw Error('Missing host '+name);}
  async function start(name='learn') {await page.goto(base+entry+'#'+name,{waitUntil:'domcontentloaded'});const skip=page.getByRole('button',{name:'Skip for now',exact:true});if(await skip.isVisible())await skip.click();const section=await host(name);await section.locator('.bql-cards').waitFor();return section;}
  async function tool(section){await section.locator('[data-state="ready"]').waitFor({state:'attached'});return (await section.locator('.bql-frame').elementHandle()).contentFrame();}
@@ -49,6 +49,17 @@ let browser;
    if(viewport.width!==768)await page.screenshot({path:path.join(evidence,(portable?'portable-':'source-')+(viewport.width===390?'mobile':'desktop')+'.png'),fullPage:true});
   }
   passed('Desktop, tablet and mobile preserve tool space without horizontal overflow or a fixed 620px minimum');
+  const hostFont=await section.addStyleTag({content:'.bql-workspace,.bql-workspace button,.bql-toolbar h2{font-family:Arial,sans-serif!important}'});
+  const filmFont=await film.addStyleTag({content:':root{font-family:Arial,sans-serif!important}'});
+  await section.evaluate(()=>dispatchEvent(new Event('resize')));await page.waitForTimeout(100);
+  const fallbackFrame=await section.locator('.bql-frame').boundingBox(),fallbackPlay=await film.locator('#play-button').boundingBox();
+  const hint=await section.locator('[data-hint]').evaluate(el=>({height:el.getBoundingClientRect().height,lineHeight:parseFloat(getComputedStyle(el).lineHeight)}));
+  const clearance=fallbackFrame.y+fallbackFrame.height-fallbackPlay.y-fallbackPlay.height;
+  fontChecks.push({font:'Arial, sans-serif',frame:fallbackFrame,play:fallbackPlay,hint,clearance});
+  assert(hint.height<=hint.lineHeight+1,JSON.stringify(hint));assert(clearance>=1,JSON.stringify(fontChecks));
+  await hostFont.evaluate(el=>el.remove());await filmFont.evaluate(el=>el.remove());
+  await section.evaluate(()=>dispatchEvent(new Event('resize')));
+  passed('The mobile hint stays on one line and Play fits with fallback fonts');
   await film.locator('#still-alternative > summary').click();
   const stills=film.locator('#still-grid img');assert.equal(await stills.count(),4);
   for(let index=0;index<4;index++){
@@ -78,7 +89,7 @@ let browser;
    await page.unroute('**/assets/learning-tools/animations/index.html*',intercept);await section.locator('[data-reload]').click();film=await tool(section);await film.locator('#animation-app').waitFor();
    passed('A deliberately delayed/missing module exposes busy then error state and Reload recovers the real tool');
   }
-  assert.deepEqual(errors,[]);const report={portable,checks,measurements,errors};fs.writeFileSync(path.join(evidence,(portable?'portable':'source')+'-checks.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));
+  assert.deepEqual(errors,[]);const report={portable,checks,measurements,fontChecks,errors};fs.writeFileSync(path.join(evidence,(portable?'portable':'source')+'-checks.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));
  }catch(error){await page.screenshot({path:path.join(evidence,(portable?'portable':'source')+'-failure.png'),fullPage:true}).catch(()=>{});throw error;}
  finally{await context.close();}
 })().catch(error=>{console.error(error);process.exitCode=1;}).finally(async()=>{await browser?.close();if(server.listening)await new Promise(resolve=>server.close(resolve));});

@@ -4,6 +4,7 @@
     "Keyboard opens the real tool with a focused heading, clear boundary and no redundant ready banner",
     "Complete scientific context remains available and Sources returns focus to its trigger",
     "Desktop, tablet and mobile preserve tool space without horizontal overflow or a fixed 620px minimum",
+    "The mobile hint stays on one line and Play fits with fallback fonts",
     "The poster and all four still alternatives decode locally at the authored dimensions",
     "The real Appearance control updates host and tool colors; plain Escape stays local while Alt+Escape returns focus to the card",
     "The return shortcut works from host controls as well as inside the child",
@@ -28,7 +29,7 @@
         "width": 768,
         "height": 1024
       },
-      "top": 131.75,
+      "top": 131.796875,
       "height": 756,
       "width": 768,
       "viewport": 902,
@@ -46,6 +47,28 @@
       "viewport": 722,
       "scrollWidth": 390,
       "viewportWidth": 390
+    }
+  ],
+  "fontChecks": [
+    {
+      "font": "Arial, sans-serif",
+      "frame": {
+        "x": 0,
+        "y": 211.1875,
+        "width": 390,
+        "height": 498
+      },
+      "play": {
+        "x": 28,
+        "y": 661.421875,
+        "width": 116.703125,
+        "height": 44
+      },
+      "hint": {
+        "height": 19.1875,
+        "lineHeight": 19.2
+      },
+      "clearance": 3.765625
     }
   ],
   "errors": []
