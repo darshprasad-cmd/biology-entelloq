@@ -1,6 +1,6 @@
 # Potato osmometer — bounded interactive rehearsal
 
-Status: implementation, model and responsive apparatus verification passed locally. Required PR checks, merge, deployment and live verification remain separate release gates; the release PR conversation records their outcome.
+Status at source checkpoint: implementation, model and responsive apparatus verification passed locally. Required PR checks, merge, deployment and live verification remain separate release gates; [PR #45's release conversation](https://github.com/darshprasad-cmd/biology-entelloq/pull/45) records their subsequent outcome. This source checkpoint is not a live deployment-status feed; use that production evidence before choosing the next practical.
 
 ## Gap and scope
 

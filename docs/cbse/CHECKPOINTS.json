@@ -32,6 +32,8 @@
       "sourcePage": 6,
       "source": "https://cbseacademic.nic.in/web_material/CurriculumMain27/SecPart2/Biology_SecP2_2026-27.pdf",
       "releaseEvidence": "POTATO-OSMOSIS-RELEASE.md",
+      "productionEvidence": "https://github.com/darshprasad-cmd/biology-entelloq/pull/45",
+      "releaseStatusAuthority": "The PR conversation records required checks, merged commit, deployment and live parity after this source checkpoint; inspect it before selecting this objective again.",
       "schoolPracticalCompleted": false,
       "educatorReviewed": false,
       "physicalCalibration": false
