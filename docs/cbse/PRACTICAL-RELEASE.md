@@ -1,6 +1,6 @@
 # CBSE Biology practical preparation — release candidate
 
-Status: locally verified; PR, required CI, merge and production artifact/behavior verification are pending the release owner. No deployment is claimed here.
+Status: released and live-verified in PR #41, merge `7c9c67783a3deba8c4d9571b8fb550d562c1c402`. The original local report below is retained as historical evidence. The [production verification record](https://github.com/darshprasad-cmd/biology-entelloq/pull/41#issuecomment-6374201740) confirms required CI, Pages artifact parity and responsive live workflows. `CHECKPOINTS.json` overlays this released coverage on the historical apparatus audit; it does not convert guides into new simulations.
 
 ## What is included
 
@@ -76,7 +76,7 @@ Production runner: set `BIOLOGY_CBSE_URL=https://biology.entelloq.com/` before r
 
 ## Release boundaries and remaining gates
 
-The complete existing local suite and source/generated diff review have passed. Publish the PR, wait for green required CI, merge and verify live artifact parity and changed behavior; those remain separate gates. The PR conversation will record production evidence. This document does not claim deployment.
+The original local suite and source/generated diff review passed. Subsequent required CI run 40016433267 and deployment run 40018359739 passed. The deployed artifact and HTTPS index matched (27,323,127 bytes; SHA256 `0571329722cd613e91fa8b33bf13b7c4ba2eb9159e11f82d9f335110da4f1fb9`), and live questionnaire/practical workflows passed at 1440/768/390/320 px. This is historical PR #41 evidence, not a claim that later production commits retain that hash. The production record above contains the separate release gates and live-only navigation timeout allowance.
 
 Browser evidence is Chromium emulation, not physical touch hardware, screen-reader certification or a qualified educator's approval. No actual wet laboratory, biological specimen, camera, medical test or live AI operation was validated. The authored methods require school/teacher review before real apparatus use, and syllabus coverage does not imply CBSE endorsement.
 
