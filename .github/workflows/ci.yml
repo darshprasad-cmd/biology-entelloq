@@ -50,6 +50,8 @@ jobs:
           node scripts/check-learning-tools-browser.cjs --portable
           node scripts/check-visual-tools-browser.cjs
           node scripts/check-visual-tools-browser.cjs --portable
+          node scripts/check-learning-host-quality.cjs
+          node scripts/check-learning-host-quality.cjs --portable
           node scripts/check-protein-browser.cjs
       - name: Save single-file browser evidence
         if: always()
@@ -61,6 +63,7 @@ jobs:
             docs/protein/
             docs/learning-tools/
             docs/visual-tools/
+            docs/host-quality/
           if-no-files-found: ignore
       - name: Preserve deploy invariants
         run: |

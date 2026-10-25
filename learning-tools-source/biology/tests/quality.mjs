@@ -1,0 +1,42 @@
+import {createServer} from 'node:http';
+import {readFile,mkdir,writeFile} from 'node:fs/promises';
+import {resolve,extname,sep} from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {createRequire} from 'node:module';
+import assert from 'node:assert/strict';
+const {chromium}=createRequire(import.meta.url)(resolve(process.env.CODEX_NODE_MODULES||'C:/Users/darsh/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules','playwright'));
+const root=resolve(fileURLToPath(new URL('..',import.meta.url)));
+const mime={'.html':'text/html','.js':'application/javascript','.css':'text/css','.json':'application/json'};
+const server=createServer(async(req,res)=>{try{const path=resolve(root,'.'+new URL(req.url,'http://localhost').pathname.replace(/\/$/,'/index.html'));if(!path.startsWith(root+sep)){res.writeHead(403).end();return;}res.setHeader('Content-Type',mime[extname(path)]||'application/octet-stream');res.end(await readFile(path));}catch{res.writeHead(404).end();}}).listen(0,'127.0.0.1');
+await new Promise(r=>server.once('listening',r));
+const url=`http://127.0.0.1:${server.address().port}`;
+const browser=await chromium.launch({channel:process.env.CHECK_BROWSER||'chrome',headless:true,args:['--enable-webgl','--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader','--disable-gpu-sandbox']});
+const page=await browser.newPage({viewport:{width:1280,height:980}}),errors=[],checks=[],requests=[];
+page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>requests.push(r.url()));
+await mkdir(resolve(root,'qa/quality'),{recursive:true});
+try{
+ await page.goto(url);await page.locator('[data-number="substrate"]').waitFor();
+ const substrate=page.locator('[data-number="substrate"]');await substrate.fill('');await substrate.pressSequentially('12.5');assert.equal(await substrate.inputValue(),'12.5');assert.equal(await page.locator('[name="substrate"]').inputValue(),'12.5');await substrate.press('Home');await substrate.press('ArrowRight');await substrate.pressSequentially('0');assert.equal(await substrate.inputValue(),'102.5');await substrate.press('Backspace');assert.equal(await substrate.inputValue(),'12.5');assert.equal(await substrate.getAttribute('aria-invalid'),'false');checks.push('Sequential decimal typing and caret correction preserve the raw numeric draft');
+ assert.ok(requests.every(r=>r.startsWith(url)));assert.equal(await page.locator('[data-channel]').isDisabled(),true);assert.ok(!requests.some(r=>r.endsWith('/volume.js')));checks.push('No companion request or vtk load before explicit action; unopened microscopy controls are disabled');
+ await page.locator('[data-number="substrate"]').fill('12.5');assert.equal(await page.locator('[name="substrate"]').inputValue(),'12.5');assert.match(await page.locator('[data-output="substrate"]').textContent(),/12.5 µM/);
+ await page.locator('[data-number="substrate"]').fill('25');assert.equal(await page.locator('[data-run]').isDisabled(),true);assert.equal(await page.locator('[name="substrate"]').inputValue(),'12.5');assert.equal(await page.locator('[data-number="substrate"]').getAttribute('aria-invalid'),'true');
+ await page.locator('[data-number="enzyme"]').fill('0.7');assert.equal(await page.locator('[data-run]').isDisabled(),true);checks.push('Precise number entry matches the slider and invalid visible drafts block the run immediately');
+ await page.locator('[data-number="substrate"]').fill('10.25');assert.equal(await page.locator('[data-run]').isDisabled(),true);
+ await page.locator('[data-number="substrate"]').fill('12.5');assert.equal(await page.locator('[data-run]').isEnabled(),true);await page.reload();assert.equal(await page.locator('[data-number="substrate"]').inputValue(),'12.5');checks.push('Range and step validation preserves the last valid saved parameter and restores after reload');
+ await page.route('**/api/health',async route=>{await new Promise(r=>setTimeout(r,400));await route.abort().catch(()=>{});});
+ await page.locator('[data-run]').click();assert.equal(await page.locator('[data-number="substrate"]').isDisabled(),true);assert.equal(await page.locator('[name="substrate"]').isDisabled(),true);assert.equal(await page.locator('[data-run]').textContent(),'Running experiment…');await page.locator('[data-cancel]').click();assert.equal(await page.locator('[data-number="substrate"]').isEnabled(),true);checks.push('Pending run locks its parameter snapshot; cancellation restores usable controls');
+ await page.locator('[data-run]').click();await page.waitForFunction(()=>document.querySelector('[data-status="kinetics"]').dataset.error==='true');assert.equal(await page.locator('.chart').count(),0);assert.equal(await page.locator('[data-number="substrate"]').isEnabled(),true);checks.push('Unavailable companion stays an honest error with no fabricated curve and permits recovery');
+ await page.screenshot({path:resolve(root,'qa/quality/kinetics-desktop-dark.png'),fullPage:true});
+ for(const [width,height,theme] of [[390,844,'light'],[820,1180,'dark'],[1280,980,'light']]){
+  await page.setViewportSize({width,height});await page.evaluate(t=>window.biologyNext.setTheme(t),theme);assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+  await page.screenshot({path:resolve(root,`qa/quality/kinetics-${width}-${theme}.png`),fullPage:true});
+ }checks.push('Kinetics fits mobile, tablet and desktop with both palettes');
+ await page.locator('[data-panel="volume"]').focus();await page.keyboard.press('Enter');assert.equal(await page.locator('[data-view="volume"] h2').evaluate(e=>e===document.activeElement),true);
+ await page.route('**/dist/volume.js',route=>route.abort());await page.locator('[data-open-volume]').click();await page.waitForFunction(()=>document.querySelector('[data-status="volume"]').dataset.error==='true');assert.equal(await page.locator('[data-channel]').isDisabled(),true);assert.equal(await page.locator('[data-open-volume]').textContent(),'Try opening microscopy');await page.unroute('**/dist/volume.js');checks.push('Microscopy loader failure leaves disabled controls and a working retry');
+ await page.locator('[data-open-volume]').click();await page.waitForFunction(()=>document.querySelector('[data-status="volume"]').textContent.includes('rendered locally'),null,{timeout:60000});assert.equal(await page.locator('[data-vtk] canvas').count(),1);assert.equal(await page.locator('[data-channel]').isEnabled(),true);assert.equal(await page.locator('[data-threshold]').isDisabled(),true);
+ await page.locator('[data-mode="volume"]').click();assert.equal(await page.locator('[data-threshold]').isEnabled(),true);assert.equal(await page.locator('[data-axis]').isDisabled(),true);await page.locator('[data-mode="slice"]').click();await page.locator('[data-slice]').focus();const before=Number(await page.locator('[data-slice]').inputValue());await page.keyboard.press('ArrowRight');assert.equal(Number(await page.locator('[data-slice]').inputValue()),before+1);checks.push('Real vtk renderer enables only relevant view controls and slice keyboard navigation works');
+ await page.setViewportSize({width:390,height:844});await page.waitForTimeout(150);assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));await page.screenshot({path:resolve(root,'qa/quality/microscopy-mobile-light.png'),fullPage:true});
+ await page.emulateMedia({reducedMotion:'reduce'});assert.equal(await page.locator('[data-reset]').evaluate(e=>getComputedStyle(e).transitionDuration),'0s');checks.push('Microscopy mobile fit, keyboard focus, and reduced motion verified');
+ await page.evaluate(()=>window.biologyNext.unmount());assert.equal(await page.locator('[data-vtk] canvas').count(),0);assert.deepEqual(errors,[]);checks.push('Unmount releases the viewer with no page errors');
+ await writeFile(resolve(root,'qa/quality/checks.json'),JSON.stringify({checks,errors,rendering:'Chrome SwiftShader, actual local vtk renderer. Companion errors and pending states intercepted; native science is covered separately.'},null,2));console.log(JSON.stringify({checks,errors}));
+}finally{await browser.close();await new Promise(r=>server.close(r));}

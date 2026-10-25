@@ -4,7 +4,8 @@
   "scripts": {
     "test": "node --test tests/core.test.mjs tests/review-concurrency.test.mjs",
     "build": "node build.mjs",
-    "test:browser": "node tests/browser.mjs"
+    "test:browser": "node tests/browser.mjs",
+    "test:quality": "node tests/quality-browser.mjs"
   },
   "private": true,
   "devDependencies": {

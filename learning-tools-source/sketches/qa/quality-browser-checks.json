@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-10-25T19:50:01.283Z",
+  "checks": [
+    "Desktop, tablet, mobile and 320px layouts fit; wrapper controls have 44px targets and respect reduced motion",
+    "Keyboard focus mode uses the full viewport, keeps the same live canvas, restores focus on Escape and preserves stored scene bytes",
+    "Escape first closes the engine menu, finishes text, or returns a drawing tool to selection; idle Escape then leaves focus",
+    "A conflicting save remains visibly warned in focus mode; leaving focus exposes explicit recovery without replacing data",
+    "Inside an application iframe, focus stays contained, follows the parent Biology theme, consumes Escape before host Back and cleans up on teardown",
+    "No page errors or external requests in the quality flows"
+  ],
+  "errors": [],
+  "external": [],
+  "browser": "Chrome",
+  "boundary": "Real isolated browser, standalone module and same-origin iframe fixture; host deployment checks are separate"
+}

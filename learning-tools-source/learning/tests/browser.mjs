@@ -11,7 +11,7 @@ const mime={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript'
 const server=http.createServer(async(req,res)=>{try{const url=new URL(req.url,'http://localhost');if(url.pathname==='/host.html'){res.setHeader('Content-Type','text/html');res.end('<!doctype html><iframe title="learning" style="width:100%;height:900px;border:0" src="index.html?subject=biology&panel=notebook"></iframe>');return;}
  const file=path.resolve(root,`.${decodeURIComponent(url.pathname==='/'?'/index.html':url.pathname)}`);if(!file.startsWith(root+path.sep))throw Error();const bytes=await fs.readFile(file);res.setHeader('Content-Type',mime[path.extname(file)]||'application/octet-stream');res.end(bytes);}catch{res.writeHead(404);res.end('Not found');}});
 await new Promise(r=>server.listen(0,'127.0.0.1',r));const base=`http://127.0.0.1:${server.address().port}`;
-const browser=await chromium.launch({headless:true});const checks=[];const errors=[];
+const browser=await chromium.launch({headless:true,...(process.env.PLAYWRIGHT_CHANNEL?{channel:process.env.PLAYWRIGHT_CHANNEL}:{})});const checks=[];const errors=[];
 const context=await browser.newContext({viewport:{width:1280,height:1000},reducedMotion:'reduce'});const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
 const requests=[];page.on('request',r=>requests.push(r.url()));
 try{

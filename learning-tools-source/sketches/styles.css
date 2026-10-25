@@ -1,1 +1,110 @@
-:root{--sketch-accent:#2556dc;--sketch-background:#f7f9fc;--sketch-surface:#fff;--sketch-text:#182c46;--sketch-muted:#52627a;--sketch-border:#d8e1ed;color-scheme:light;font-family:Inter,ui-sans-serif,system-ui,sans-serif;color:var(--sketch-text);background:var(--sketch-background)}*{box-sizing:border-box}body{margin:0}html[data-theme=dark]{color-scheme:dark;--sketch-background:#101824;--sketch-surface:#172233;--sketch-text:#eef4ff;--sketch-muted:#b1bed1;--sketch-border:#344257}.sketch-shell{padding:22px;max-width:1600px;margin:auto}.sketch-header{display:flex;justify-content:space-between;gap:24px;align-items:center}.sketch-kicker{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--sketch-accent);font-weight:750;margin:0 0 7px}.sketch-header h1{margin:0;font-size:clamp(23px,3vw,34px);letter-spacing:-.04em;font-weight:650}.sketch-description{max-width:780px;color:var(--sketch-muted);font-size:14px;line-height:1.6;margin:10px 0 16px}.sketch-pill{border:1px solid var(--sketch-border);border-radius:30px;padding:8px 12px;font-size:12px;white-space:nowrap}.sketch-actions{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}.sketch-actions button,.sketch-dialog button{border:1px solid var(--sketch-border);background:var(--sketch-surface);color:var(--sketch-text);font:inherit;font-size:13px;border-radius:9px;padding:9px 13px;min-height:40px;cursor:pointer}.sketch-actions .primary{background:var(--sketch-accent);color:#fff;border-color:transparent}.sketch-actions button:hover{filter:brightness(.95)}button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--sketch-accent);outline-offset:3px}.sketch-actions button:disabled{opacity:.5;cursor:wait}.sketch-editor{height:min(74vh,820px);min-height:520px;border:1px solid var(--sketch-border);border-radius:14px;overflow:hidden;background:var(--sketch-surface);position:relative}.sketch-status{font-size:12px;line-height:1.5;color:var(--sketch-muted);min-height:20px;margin:9px 0}.sketch-help{font-size:13px;line-height:1.65;color:var(--sketch-muted)}.sketch-help summary{cursor:pointer;padding:8px 0}.sketch-help a{color:var(--sketch-accent)}.sketch-help p{max-width:900px}.sketch-file{display:none}.sketch-editor .excalidraw{--color-primary:var(--sketch-accent);--color-primary-darker:var(--sketch-accent);--color-primary-darkest:var(--sketch-accent)}.sketch-editor .library-button,.sketch-editor .default-sidebar-trigger,.sketch-editor .sidebar-trigger,.sketch-editor .App-toolbar__extra-tools-trigger{display:none!important}.sketch-editor .excalidraw .welcome-screen-center{display:none}.sketch-editor .excalidraw .App-menu_top .App-menu__left{max-height:calc(100% - 80px);overflow-y:auto}.sketch-footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--sketch-muted);margin-top:10px}.sketch-error{padding:32px;line-height:1.6}@media(max-width:650px){.sketch-shell{padding:12px}.sketch-header{gap:12px;align-items:start}.sketch-pill{font-size:10px;padding:7px 9px}.sketch-description{font-size:12px;margin-bottom:12px}.sketch-actions{gap:6px}.sketch-actions button{padding:8px 10px;font-size:12px}.sketch-editor{height:680px;min-height:580px;border-radius:10px}.sketch-kicker{font-size:10px}.sketch-footer{font-size:10px}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+:root {
+  --sketch-accent:#2556dc;
+  --sketch-background:#f7f9fc;
+  --sketch-surface:#fff;
+  --sketch-text:#182c46;
+  --sketch-muted:#52627a;
+  --sketch-border:#d8e1ed;
+  --sketch-accent-ink:#2556dc;
+  --sketch-accent-soft:#e7efff;
+  --sketch-warning:#845500;
+  color-scheme:light;
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+  color:var(--sketch-text);
+  background:var(--sketch-background);
+}
+* { box-sizing:border-box }
+body { margin:0 }
+html[data-subject=biology] { --sketch-accent-ink:#08734f;--sketch-accent-soft:#dff4ea }
+html[data-theme=dark] {
+  color-scheme:dark;
+  --sketch-background:#101824;
+  --sketch-surface:#172233;
+  --sketch-text:#eef4ff;
+  --sketch-muted:#b1bed1;
+  --sketch-border:#344257;
+  --sketch-accent-ink:#a9c6ff;
+  --sketch-accent-soft:#253a60;
+  --sketch-warning:#f4ce81;
+}
+html[data-theme=dark][data-subject=biology] { --sketch-accent-ink:#80dfbb;--sketch-accent-soft:#174534 }
+.sketch-shell { padding:22px;max-width:1600px;margin:auto }
+.sketch-header { display:flex;justify-content:space-between;gap:24px;align-items:center }
+.sketch-kicker { font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--sketch-accent-ink);font-weight:750;margin:0 0 7px }
+.sketch-header h1 { margin:0;font-size:clamp(23px,3vw,34px);letter-spacing:-.04em;font-weight:650 }
+.sketch-description { color:var(--sketch-muted);font-size:14px;line-height:1.6;margin:10px 0 20px }
+.sketch-pill { border:1px solid var(--sketch-border);border-radius:30px;padding:8px 12px;font-size:12px;white-space:nowrap;color:var(--sketch-muted) }
+.sketch-actions,.sketch-action-group,.sketch-view-actions { display:flex;flex-wrap:wrap;gap:8px }
+.sketch-actions { align-items:center;justify-content:space-between;margin-bottom:16px;gap:12px 24px }
+.sketch-actions button,.sketch-view-actions button {
+  border:1px solid var(--sketch-border);
+  background:var(--sketch-surface);
+  color:var(--sketch-text);
+  font:inherit;font-size:13px;font-weight:550;
+  border-radius:9px;padding:9px 13px;min-height:44px;
+  cursor:pointer;touch-action:manipulation;
+  transition:background-color 140ms ease,border-color 140ms ease;
+}
+.sketch-actions .primary { background:var(--sketch-accent);color:#fff;border-color:transparent }
+@media(hover:hover) {
+  .sketch-actions button:not(:disabled):hover,.sketch-view-actions button:not(:disabled):hover { border-color:var(--sketch-accent-ink);background:var(--sketch-accent-soft) }
+  .sketch-actions .primary:not(:disabled):hover { background:var(--sketch-accent);filter:brightness(.93) }
+}
+.sketch-actions button:not(:disabled):active,.sketch-view-actions button:not(:disabled):active { box-shadow:inset 0 0 0 1px var(--sketch-accent-ink) }
+button:focus-visible,a:focus-visible,summary:focus-visible { outline:3px solid var(--sketch-accent-ink);outline-offset:3px }
+.sketch-actions button:disabled,.sketch-view-actions button:disabled { opacity:.5;cursor:default }
+.sketch-workspace { border:1px solid var(--sketch-border);border-radius:16px;overflow:hidden;background:var(--sketch-surface) }
+.sketch-workspace-bar { display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;border-bottom:1px solid var(--sketch-border) }
+.sketch-workspace-label { font-size:13px;font-weight:650;white-space:nowrap }
+.sketch-workspace-label span { font-weight:400;color:var(--sketch-muted) }
+.sketch-view-actions button { border-color:transparent;font-size:12px;padding:6px 10px }
+.sketch-view-actions button[aria-pressed=true] { background:var(--sketch-accent-soft);color:var(--sketch-accent-ink) }
+.sketch-status { font-size:12px;line-height:1.5;color:var(--sketch-muted);margin:0;padding:8px 14px;min-height:34px;background:var(--sketch-background) }
+.sketch-status[data-kind=warning] { color:var(--sketch-warning);border-inline-start:3px solid currentColor;padding-inline-start:11px }
+.sketch-editor { height:clamp(420px,65vh,760px);position:relative;background:var(--sketch-surface) }
+.sketch-view-hint { display:flex;justify-content:space-between;gap:6px 16px;flex-wrap:wrap;font-size:11px;line-height:1.5;color:var(--sketch-muted);margin:0;padding:9px 14px;border-top:1px solid var(--sketch-border) }
+.sketch-help { font-size:13px;line-height:1.65;color:var(--sketch-muted) }
+.sketch-help summary { cursor:pointer;padding:12px 0;min-height:44px }
+.sketch-help a { color:var(--sketch-accent-ink) }
+.sketch-help p { max-width:900px }
+.sketch-file { display:none }
+.sketch-editor .excalidraw,.sketch-editor .excalidraw.theme--dark {
+  --color-primary:var(--sketch-accent);
+  --color-primary-darker:var(--sketch-accent);
+  --color-primary-darkest:var(--sketch-accent);
+  --color-surface-primary-container:var(--sketch-accent-soft);
+  --color-on-primary-container:var(--sketch-accent-ink);
+  --focus-highlight-color:var(--sketch-accent-ink);
+}
+.sketch-editor .library-button,.sketch-editor .default-sidebar-trigger,.sketch-editor .sidebar-trigger,.sketch-editor .App-toolbar__extra-tools-trigger { display:none!important }
+.sketch-editor .excalidraw .welcome-screen-center { display:none }
+.sketch-editor .excalidraw .App-menu_top .App-menu__left { max-height:calc(100% - 80px);overflow-y:auto }
+.sketch-footer { display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 10px;font-size:11px;line-height:1.5;color:var(--sketch-muted);margin-top:12px }
+.sketch-error { padding:32px;line-height:1.6 }
+.sketch-shell.has-focus > :not(.sketch-workspace) { display:none }
+.sketch-workspace.is-focused { position:fixed;inset:0;z-index:1000;border:0;border-radius:0;display:flex;flex-direction:column;height:100dvh }
+.sketch-workspace.is-focused .sketch-editor { flex:1;min-height:0;height:auto }
+.sketch-workspace.is-focused .sketch-workspace-bar,.sketch-workspace.is-focused .sketch-status,.sketch-workspace.is-focused .sketch-view-hint { flex:none }
+@media(max-width:650px) {
+  .sketch-shell { padding:12px }
+  .sketch-header { gap:12px;align-items:start }
+  .sketch-pill { font-size:10px;padding:7px 9px }
+  .sketch-description { font-size:13px;margin:9px 0 16px }
+  .sketch-actions { gap:10px;margin-bottom:14px }
+  .sketch-action-group { gap:6px }
+  .sketch-actions button { padding:8px 10px;font-size:12px }
+  .sketch-copy-actions { padding-top:10px;border-top:1px solid var(--sketch-border);width:100% }
+  .sketch-workspace { border-radius:12px }
+  .sketch-workspace-bar { gap:4px;padding:6px 8px }
+  .sketch-workspace-label { font-size:12px }
+  .sketch-workspace-label span { display:none }
+  .sketch-view-actions { gap:2px }
+  .sketch-view-actions button { padding:6px 8px }
+  .sketch-status { padding:8px 10px }
+  .sketch-status[data-kind=warning] { padding-inline-start:7px }
+  .sketch-editor { height:clamp(360px,62svh,560px) }
+  .sketch-kicker { font-size:10px }
+  .sketch-view-hint { padding:8px 10px }
+  .sketch-footer { font-size:10px }
+}
+@media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important;animation:none!important;transition:none!important } }

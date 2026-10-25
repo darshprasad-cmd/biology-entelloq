@@ -1,0 +1,17 @@
+{
+  "checks": [
+    "Sequential decimal typing and caret correction preserve the raw numeric draft",
+    "No companion request or vtk load before explicit action; unopened microscopy controls are disabled",
+    "Precise number entry matches the slider and invalid visible drafts block the run immediately",
+    "Range and step validation preserves the last valid saved parameter and restores after reload",
+    "Pending run locks its parameter snapshot; cancellation restores usable controls",
+    "Unavailable companion stays an honest error with no fabricated curve and permits recovery",
+    "Kinetics fits mobile, tablet and desktop with both palettes",
+    "Microscopy loader failure leaves disabled controls and a working retry",
+    "Real vtk renderer enables only relevant view controls and slice keyboard navigation works",
+    "Microscopy mobile fit, keyboard focus, and reduced motion verified",
+    "Unmount releases the viewer with no page errors"
+  ],
+  "errors": [],
+  "rendering": "Chrome SwiftShader, actual local vtk renderer. Companion errors and pending states intercepted; native science is covered separately."
+}

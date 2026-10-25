@@ -78,3 +78,7 @@ Browser evidence includes real vtk rendering (orthogonal slices and volume), laz
 - [Antimony unit syntax](https://tellurium.readthedocs.io/en/latest/antimony.html) defines exported model annotations; they do not change the numerical solver.
 
 This module preserves the Biology teal/emerald palette, supports light/dark host choice, native keyboard controls, labelled status regions, accessible tabular scientific data and reduced motion.
+
+Enzyme parameters have both sliders and precise number fields with visible units, ranges and step sizes. Invalid drafts immediately prevent a run without replacing the last valid saved value. A pending run owns a fixed parameter snapshot and temporarily disables parameter changes; cancellation, failure or completion restores the controls. Microscopy controls become available only after its renderer loads, with view-specific disabled states and a recoverable loading error.
+
+Run `node tests/quality.mjs` for the focused interaction checks; no companion is needed for this suite. It renders the real vtk sample and intercepts only companion unavailable/pending states. The existing `npm run test:browser` separately verifies the genuine local Tellurium engine. Both browser runners accept `CHECK_BROWSER=chrome` for an installed Chrome. See `qa/quality-report.md` and `qa/quality/` for evidence and limits.

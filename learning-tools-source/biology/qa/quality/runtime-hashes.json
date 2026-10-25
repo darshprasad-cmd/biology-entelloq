@@ -1,0 +1,8 @@
+{
+  "src/main.js": "a678326028fbee9626352fcda3adf458e095a3c6e47fba9dd668f28b9bce4edd",
+  "src/style.css": "d106d2187b346d8dab288d90f5a4c0b402ab23ed643014c07dec44ab0b79b958",
+  "dist/main.js": "22d2a99352fe25601d72d66147ae81a6dfdfe7fdf578b1059f4d5064a71800f7",
+  "dist/volume.js": "9eacead58d62879d517c22ccdd20dab1da0000360a88c43175eebed745418023",
+  "dist/THIRD-PARTY.txt": "2d7e99726877a9ea306511d7d6f339e4c0e6b9b0d09e2f54b0a788bfe80dfb85",
+  "dist/VTK-Copyright.txt": "a8efeb737fe2a8c7fd511d61a4303c9278a402266059e471d48b57a48d895b3e"
+}

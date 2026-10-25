@@ -7,17 +7,23 @@
 </head>
 <body>
 <main id="animation-app">
-  <header class="intro"><p class="eyebrow">LEARN / ANIMATED EXPLANATIONS</p><h1 id="lesson-title">One idea, made visible.</h1><p id="lesson-summary"></p></header>
+  <header class="intro"><p class="eyebrow">LEARN / ANIMATED EXPLANATIONS</p><h1 id="lesson-title">One idea, made visible.</h1><p id="lesson-summary"></p><div class="lesson-meta"><span>22 seconds</span><span>4 steps</span><a href="#transcript" id="read-link">Read without playback <span aria-hidden="true">↗</span></a></div></header>
   <section aria-label="Animated explanation" class="player-card">
     <div class="video-stage">
       <img id="lesson-poster" alt="" width="1280" height="720">
       <video id="lesson-video" preload="none" playsinline controls aria-label="Silent explanation film" hidden></video>
       <span class="film-badge">22 seconds · silent</span>
     </div>
+    <progress id="film-progress" max="22" value="0" aria-label="Film progress"></progress>
+    <div id="image-feedback" hidden><p id="image-status" role="status"></p><button id="retry-images" type="button">Reload images</button></div>
     <div class="transport"><button id="play-button" type="button">Play explanation</button><button id="restart-button" type="button">Back to start</button><span id="time-display" aria-label="Playback time">0:00 / 0:22</span><label class="speed">Speed <select id="playback-speed"><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option></select></label></div>
     <p id="player-status" role="status">Press Play to load this film. Nothing plays automatically.</p>
-    <p id="caption-text" class="caption"></p>
+    <div class="caption"><p id="chapter-label" class="eyebrow">Overview</p><p id="caption-text"></p></div>
     <nav id="chapters" aria-label="Explanation chapters"></nav>
+  </section>
+  <section class="checkpoint" aria-labelledby="checkpoint-title">
+    <div class="checkpoint-intro"><p class="eyebrow">PUT IT INTO WORDS</p><h2 id="checkpoint-title">Check your understanding</h2><p>Try one question. Your answer stays in this visit.</p></div>
+    <form id="checkpoint-form"><fieldset><legend id="checkpoint-question"></legend><div id="checkpoint-options"></div></fieldset><div class="check-action"><button id="check-answer" type="submit" disabled>Check answer</button><p id="check-feedback" role="status" aria-atomic="true"></p></div></form>
   </section>
   <aside class="scope"><strong>How to read this</strong><p id="lesson-scope"></p></aside>
   <details id="transcript"><summary>Read the complete transcript</summary><ol id="transcript-list"></ol></details>
