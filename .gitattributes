@@ -1,3 +1,7 @@
+# Generated HTML and source-slot guards compare bytes. Keep text checkouts
+# identical on Windows and Linux so CRLF conversion cannot create build drift.
+* text=auto eol=lf
+
 # Preserve exact upstream source formatting, including whitespace in GLSL strings.
 src/single-file/vendor/three-addons/** -whitespace linguist-vendored=true
 # Keep the documented upstream hashes and fixed-width PDB records unchanged.
