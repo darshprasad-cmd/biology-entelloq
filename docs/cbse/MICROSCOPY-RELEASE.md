@@ -1,6 +1,6 @@
 # Paired onion and cheek microscopy rehearsal
 
-Source checkpoint: implementation and local release checks passed. PR checks, merge and live deployment are separate gates. Subsequent production evidence is recorded in the release PR conversation. This is not a live status feed.
+Source checkpoint: implementation and local release checks passed. PR checks, merge and live deployment are separate gates. Subsequent production evidence is recorded in [PR #48's release conversation](https://github.com/darshprasad-cmd/biology-entelloq/pull/48). This is not a live status feed.
 
 ## Bounded gap
 

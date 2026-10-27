@@ -48,6 +48,7 @@
       "sourcePage": 19,
       "source": "https://cbseacademic.nic.in/web_material/CurriculumMain27/SecPart1/ScienceSt_SecP1_2026-27.pdf",
       "releaseEvidence": "MICROSCOPY-RELEASE.md",
+      "productionEvidence": "https://github.com/darshprasad-cmd/biology-entelloq/pull/48",
       "releaseStatusAuthority": "The release PR conversation records required checks, merged commit, deployment and live parity after this source checkpoint; inspect it before selecting this objective again.",
       "schoolPracticalCompleted": false,
       "educatorReviewed": false,
