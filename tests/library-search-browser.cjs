@@ -3,6 +3,7 @@
  * This exercises DOM/focus behavior, not assistive-technology speech output. */
 'use strict';
 const assert = require('node:assert/strict');
+const {readRoute}=require('./portable-route-browser-helper.cjs');
 
 async function checkLibrarySearch(page, world) {
   const search = world.locator('#bl-search');
@@ -32,7 +33,7 @@ async function checkLibrarySearch(page, world) {
     localStorage.setItem(key, value);
     return old;
   }, { key: markerKey, value: marker });
-  const hashes = [await page.evaluate(() => location.hash), await world.evaluate(() => location.hash)];
+  const hashes = [await readRoute(page), await readRoute(world)];
   const focused = async (selector, message) => {
     assert.equal(await world.locator(selector).evaluate(el => el === document.activeElement), true, message);
   };
@@ -41,7 +42,7 @@ async function checkLibrarySearch(page, world) {
       assert.equal(await retained[index].evaluate((el, id) => el.isConnected && el === document.getElementById(id), id), true,
         label + ': ' + id + ' retains its original DOM identity');
     }
-    assert.deepEqual([await page.evaluate(() => location.hash), await world.evaluate(() => location.hash)], hashes,
+    assert.deepEqual([await readRoute(page), await readRoute(world)], hashes,
       label + ': filtering does not navigate either document');
     assert.equal(await world.evaluate(key => localStorage.getItem(key), markerKey), marker,
       label + ': unrelated saved state is preserved');

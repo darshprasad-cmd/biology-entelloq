@@ -1,7 +1,7 @@
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');
 const root=path.resolve(__dirname,'..');
-function context(storage=new Map()){
- const value={localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v),removeItem:k=>storage.delete(k)}};
+function context(storage=new Map(),extra={}){
+ const value={URL,localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v),removeItem:k=>storage.delete(k)},...extra};
  for(const file of ['curriculum.js','entry.js'])vm.runInNewContext(fs.readFileSync(path.join(root,'src/cbse',file),'utf8'),value);
  return value;
 }
@@ -27,6 +27,25 @@ test('saving, resetting and corrupt or blocked storage never touch student data'
  assert.equal(c.BioCBSE.read().classYear,'9');assert.equal(store.get('bioq.notes'),'untouched');
  Object.defineProperty(c,'localStorage',{get(){throw Error('blocked');}});
  assert.equal(c.BioCBSE.read(),null);assert.equal(c.BioCBSE.save({version:1,classYear:'9',goal:'revision',minutes:20,focus:'cells'}),false);
+ assert.equal(c.BioCBSE.getSession().profile.goal,'revision');assert.equal(c.BioCBSE.getSession().saved,false);
+});
+test('first-paint route resolution understands links and restored clean history before the host exists',()=>{
+ const state={__bioqPortable:{version:1,route:'#courses/11/c11-cell-unit'}};
+ const setup=(href,extra={})=>context(new Map(),{location:new URL(href),history:{state},...extra}).BioCBSE.currentRoute();
+ assert.equal(setup('file:///Biology.html'),state.__bioqPortable.route);
+ assert.equal(setup('https://biology.entelloq.com/?route=courses%2F12'),'#courses/12');
+ assert.equal(setup('https://biology.entelloq.com/?route=learn%2Ftopic%2Fdna%2Fvisual#cbse:9'),'#cbse:9');
+ assert.equal(setup('https://biology.entelloq.com/?route='),'');
+ assert.equal(setup('https://biology.entelloq.com/?route=courses%2F12#home',{BioPortable:{getRoute:()=>'#labs/osmosis'}}),'#labs/osmosis');
+ assert.equal(setup('https://biology.entelloq.com/',{history:{state:{__bioqPortable:{version:2,route:'#courses/12'}}}}),'');
+});
+test('a failed preference edit keeps the selected class for this session and reset is narrow',()=>{
+ const old={version:1,classYear:'9',goal:'foundations',minutes:20,focus:'cells'},store=new Map([['bioq.cbse.profile.v1',JSON.stringify(old)],['bioq.cbse.skip.v1','1'],['bioq.notes','preserve']]);
+ const c=context(store);c.localStorage.setItem=()=>{throw Error('Quota');};
+ assert.equal(c.BioCBSE.save({...old,classYear:'12',focus:'genetics'}),false);
+ assert.equal(c.BioCBSE.read().classYear,'9');assert.equal(c.BioCBSE.getSession().profile.classYear,'12');
+ assert.equal(c.BioCBSE.reset(),true);assert.equal(c.BioCBSE.getSession().profile,null);assert.equal(c.BioCBSE.getSession().saved,null);
+ assert.equal(store.has('bioq.cbse.profile.v1'),false);assert.equal(store.has('bioq.cbse.skip.v1'),false);assert.equal(store.get('bioq.notes'),'preserve');
 });
 test('first-visit code precedes the manifest and specimen payload without changing launcher boundaries',()=>{
  const shell=fs.readFileSync(path.join(root,'src/single-file/shell.html'),'utf8');

@@ -45,6 +45,9 @@ jobs:
           node scripts/check-single-file-browser.cjs
           node scripts/check-opening-browser.cjs
           node scripts/check-exam-answers-browser.cjs
+          node scripts/check-courses-browser.cjs
+          node scripts/check-field-labs-browser.cjs
+          node scripts/check-field-labs-integration-browser.cjs
           node tests/check-ai-answer-formatting.cjs
           node scripts/check-learning-tools-browser.cjs
           node scripts/check-learning-tools-browser.cjs --portable
@@ -64,6 +67,7 @@ jobs:
             docs/learning-tools/
             docs/visual-tools/
             docs/host-quality/
+            docs/courses/
           if-no-files-found: ignore
       - name: Preserve deploy invariants
         run: |

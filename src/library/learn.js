@@ -296,6 +296,10 @@
     visualCleanup = null;
     let parts;
     try { parts = location.hash.slice(1).split('/').map(decodeURIComponent); } catch (_) { parts = []; }
+    // Keep one catalogue in the learning flow. Legacy cell and microscope links
+    // still open their original interactive sections rather than losing a tool.
+    document.body.classList.toggle('bl-focused', !parts[0] || ['topic','library','category'].includes(parts[0]) || parts[0].startsWith('learning-'));
+    document.body.classList.toggle('bl-legacy-focus', ['cell','microscope'].includes(parts[0]));
     if (parts[0] === 'topic' && byId.has(parts[1])) {
       renderTopic(byId.get(parts[1]), parts[2]);
       if (lastTopic !== parts[1]) {

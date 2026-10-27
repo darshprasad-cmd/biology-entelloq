@@ -7,6 +7,7 @@ const fs = require('node:fs'), path = require('node:path'), assert = require('no
 const crypto = require('node:crypto'), { createRequire } = require('node:module');
 const { checkPhylogeny } = require('../tests/phylogeny-browser.cjs');
 const { checkEvidenceTable } = require('../tests/evidence-tables-browser.cjs');
+const { waitForPortableRoute } = require('../tests/portable-route-browser-helper.cjs');
 // Captured from the accepted commit, not reconstructed from the revised lesson.
 const baseline = require('../tests/fixtures/phylogeny-evidence-e34914e.json');
 const root = path.resolve(__dirname, '..');
@@ -61,7 +62,8 @@ fs.mkdirSync(output, { recursive: true });
     }
     async function follow(world, section) {
       await world.locator('[data-practice="' + section + '"]').click();
-      await page.waitForURL(url => packaged ? url.hash === '#' + section + '/' + route(section) : url.pathname.endsWith('/' + section + '.html') && url.hash === '#' + route(section), { waitUntil: 'domcontentloaded' });
+      if (packaged) await waitForPortableRoute(page, '#' + section + '/' + route(section));
+      else await page.waitForURL(url => url.pathname.endsWith('/' + section + '.html') && url.hash === '#' + route(section), { waitUntil: 'domcontentloaded' });
       return mountedWorld('.tp-heading');
     }
     async function selectTheme(world, theme) {

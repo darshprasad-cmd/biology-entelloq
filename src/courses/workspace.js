@@ -1,0 +1,108 @@
+/* Curriculum workspace. Authored guides and device-local reflection, not mastery scores. */
+(function (root) {
+  'use strict';
+  const KEY = 'bioq.courses.v1', esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const data = () => root.BIO_COURSES || {classes:[]};
+  const classes = () => data().classes;
+  const chapters = () => classes().flatMap(c => c.units.flatMap(u => u.chapters.map(ch => ({...ch,year:c.id,unit:u.title}))));
+  const find = id => chapters().find(ch => ch.id === id);
+  function preferences() {try {let w=root;for(let i=0;i<4;i++){if(w.BioCBSE)return w.BioCBSE;if(w===w.parent)break;w=w.parent;}}catch(_){}return null;}
+  let memory = {version:1,classYear:'9',chapters:{}}, sessionOnly = false, persistenceLocked = false;
+  function clean(value) {
+    const out = {version:1,classYear:'9',chapters:{}};
+    if (!value || value.version !== 1 || typeof value !== 'object') return out;
+    if (['9','10','11','12'].includes(String(value.classYear))) out.classYear = String(value.classYear);
+    if (value.last && find(value.last)) out.last = value.last;
+    for (const [id,v] of Object.entries(value.chapters && typeof value.chapters === 'object' ? value.chapters : {})) {
+      if (!find(id) || !v || typeof v !== 'object') continue;
+      out.chapters[id] = {viewed:!!v.viewed,reflection:typeof v.reflection === 'string' ? v.reflection.slice(0,12000) : '',revisit:!!v.revisit,viewedAt:Number.isFinite(v.viewedAt)?Math.max(0,v.viewedAt):0};
+    }
+    return out;
+  }
+  function read() {
+    if(sessionOnly)return memory;
+    try {
+      const raw=root.localStorage.getItem(KEY);
+      if(raw){
+        let stored;try{stored=JSON.parse(raw);}catch(_){persistenceLocked=true;throw Error('Invalid chapter record');}
+        if(!stored||stored.version!==1||Array.isArray(stored)||typeof stored.chapters!=='object'){persistenceLocked=true;throw Error('Unsupported chapter record');}
+        memory=clean(stored);
+      }
+    }catch(_){sessionOnly=true;}
+    return memory;
+  }
+  function save(change) {
+    // Merge the latest record so separate chapter edits in other tabs survive.
+    const current = read(); change(current); memory=clean(current);
+    try {if(persistenceLocked)throw Error('Preserve unreadable record');root.localStorage.setItem(KEY,JSON.stringify(memory));sessionOnly=false;}catch(_){sessionOnly=true;}
+    return memory;
+  }
+  function selected() {
+    const stored = read();
+    try {const p=JSON.parse(root.localStorage.getItem('bioq.cbse.profile.v1')||'null');if(!root.localStorage.getItem(KEY)&&p?.classYear)return String(p.classYear);}catch(_){}
+    return stored.classYear;
+  }
+  const topic = id => root.BIO_LIBRARY?.topics.find(t=>t.id===id);
+  function link(k, sub, text, className='cw-link') {return `<a class="${className}" href="app.html#${esc(k)}${sub?'/'+esc(sub):''}" data-go="${esc(k)}"${sub?` data-sub="${esc(sub)}"`:''}>${text}</a>`;}
+  function title(ch) { return esc(ch.title); }
+  const counts = () => ({chapters:chapters().length,concepts:root.BIO_LIBRARY?.topics.length||0});
+  function leaf() {return '<svg class="cw-leaf" viewBox="0 0 420 300" role="img" aria-label="Illustrative leaf venation: branching veins join a central midrib"><defs><linearGradient id="cw-leaf-fill" x2="1" y2="1"><stop stop-color="currentColor" stop-opacity=".18"/><stop offset="1" stop-color="currentColor" stop-opacity=".02"/></linearGradient></defs><path d="M79 252C28 121 155 25 360 32C356 222 234 289 79 252Z" fill="url(#cw-leaf-fill)" stroke="currentColor" stroke-width="1.2"/><path d="M58 276L337 53M99 241L91 157M137 210L120 110M177 179L173 71M220 143L230 48M265 110L285 39M110 235L201 242M155 196L259 208M199 162L303 163M244 126L335 112" fill="none" stroke="currentColor" stroke-opacity=".7" stroke-width="1.2"/><circle cx="177" cy="179" r="5" fill="currentColor"/><path d="M183 183L258 276H361" fill="none" stroke="currentColor" stroke-dasharray="3 4" stroke-opacity=".6"/><text x="267" y="292" fill="currentColor" font-size="10" letter-spacing="2">STRUCTURE → FUNCTION</text></svg>';}
+  function tabs(year) {return `<nav class="cw-classes" aria-label="Biology class">${classes().map(c=>link('courses',c.id,`<span>CLASS</span><b>${esc(c.id)}</b>`, 'cw-class'+(year===c.id?' selected':'')).replace('<a ', '<a '+(year===c.id?'aria-current="page" ':''))).join('')}</nav>`;}
+  function courseRoute(sub) {const [year,id]=String(sub||selected()).split('/');const course=classes().find(c=>c.id===year)||classes()[0];return {course,chapter:id&&course?.units.flatMap(u=>u.chapters).find(ch=>ch.id===id)};}
+  function home(host,last) {
+    const state=read(), course=classes().find(c=>c.id===selected())||classes()[0];if(!course)return false;
+    const ch=find(state.last), first=course.units[0]?.chapters[0], target=last&&last.k!=='home'?last:{k:'courses',sub:ch?ch.year+'/'+ch.id:course.id+'/'+first.id};
+    const context=target.k==='courses'?find((target.sub||'').split('/')[1]):null;
+    const conceptId=/^(?:topic|learn)\/([a-z0-9-]+)\//.exec(target.sub||'')?.[1];
+    const labTitle=target.sub?target.sub.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase()):'Choose an investigation';
+    const labels={courses:context?.title||'Your chapter collection',learn:topic(conceptId)?.title||'Concept library',labs:labTitle,lab:'Dissection Lab',solve:topic(conceptId)?.title||'Practice',reason:topic(conceptId)?.title||'Biological reasoning',me:'Activity history',progress:'Your learning record',lessons:'Six-lens lesson',explore:'Living reference',universe:'Biology Universe'};
+    const n=counts();
+    host.innerHTML=`<div class="cw-home"><div class="cw-eyebrow">BIOLOGY ENTELLOQ / YOUR STUDY WORKSPACE</div><div class="cw-home-head"><h1>Understand life.<br><em>One connection at a time.</em></h1><p>From a cell to a living system. Learn the mechanism, test an idea, and make the evidence your own.</p></div><section class="cw-continue"><div><span class="cw-eyebrow">${last?'PICK UP WHERE YOU LEFT OFF':'A PLACE TO BEGIN'}</span><h2>${esc(labels[target.k]||'Explore your next chapter')}</h2><p>${esc(context?.summary||'A clear route from the idea to the experiment. Your notes and progress stay with you.')}</p>${link(target.k,target.sub,'Continue learning <span aria-hidden="true">↗</span>','cw-button primary')}</div><div class="cw-home-art">${leaf()}</div></section><div class="cw-section-heading"><div><span class="cw-eyebrow">CBSE · ${esc(data().year)}</span><h2>Start with your class.</h2></div>${link('learn','library','Explore all '+n.concepts+' concepts ↗')}</div>${tabs(course.id)}<div class="cw-home-route"><div><span class="cw-eyebrow">CLASS ${esc(course.id)} / ${course.units.length} UNITS</span><h3>${esc(course.title)}</h3><p>${esc(course.description||'A chapter-by-chapter route through biology, with connected concepts and experiments.')}</p></div>${link('courses',course.id,'Browse chapters →','cw-button')}</div><div class="cw-section-heading"><div><span class="cw-eyebrow">LEARN THROUGH EVIDENCE</span><h2>Take the idea to the bench.</h2></div>${link('labs',null,'All experiments ↗')}</div><div class="cw-investigations">${[['labs','osmosis','01 / MEMBRANE TRANSPORT','Follow the water.','Change the surroundings. Measure how a cell responds.'],['labs','quadrat-sampling','02 / FIELD ECOLOGY','Make a sample count.','Compare random sampling with a biased choice of field.'],['lab',null,'03 / THE DISSECTION THEATRE','Look beneath the surface.','Explore the structures and systems of five virtual specimens.']].map(([k,sub,eyebrow,t,copy])=>link(k,sub,`<small>${eyebrow}</small><h3>${t}</h3><p>${copy}</p><span aria-hidden="true">↗</span>`,'cw-investigation')).join('')}</div><p class="cw-footnote">${n.chapters} chapter guides · ${n.concepts} connected concepts · Your record reflects exploration and practice, not a claim of mastery.</p></div>`;
+    return true;
+  }
+  function index(host,course) {
+    const state=read(), total=course.units.reduce((n,u)=>n+u.chapters.length,0);
+    host.innerHTML=`<div class="cw-page"><div class="cw-eyebrow">THE LEARNING COLLECTION / CBSE ${esc(data().year)}</div><div class="cw-title-row"><div><h1 tabindex="-1">Biology, in order.</h1><p>Choose your chapter. Follow its mechanisms, explore the connected concepts, then put an idea to the test.</p></div><span class="cw-index-number">${String(course.id).padStart(2,'0')}</span></div>${tabs(course.id)}<div class="cw-course-bar"><div><h2>${esc(course.title)}</h2><p>${total} chapter guides · ${course.units.length} units</p></div><label class="cw-search"><span class="sr-only">Find a chapter in this class</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5"/></svg><input type="search" placeholder="Find a chapter…" aria-label="Find a chapter in this class"></label></div><div class="cw-catalog">${course.units.map((unit,i)=>`<section class="cw-unit" data-unit><div class="cw-unit-label"><span>${String(i+1).padStart(2,'0')}</span><h3>${esc(unit.title)}</h3></div><div>${unit.chapters.map((ch,j)=>`<article class="cw-chapter-row" data-search="${esc([ch.title,ch.summary,...ch.outcomes].join(' ').toLowerCase())}">${link('courses',course.id+'/'+ch.id,`<span class="cw-row-number">${String(j+1).padStart(2,'0')}</span><div><h4>${title(ch)}</h4><p>${esc(ch.summary)}</p><span class="cw-row-meta">${ch.concepts.length} connected concepts${ch.labs?.length?' · '+ch.labs.length+' investigation'+(ch.labs.length===1?'':'s'):''}${ch.scope==='formative'?' · Formative':ch.scope==='review'?' · Assessment scope under review':''}</span></div><span class="cw-row-state">${state.chapters[ch.id]?.viewed?'Viewed':'Open'} <span aria-hidden="true">↗</span></span>`,'cw-chapter-link')}</article>`).join('')}</div></section>`).join('')}</div><p class="cw-no-results" hidden role="status">No chapters match. Try a mechanism, organ or shorter term.</p><div class="cw-course-note"><strong>A guide to understanding.</strong><p>${esc(course.coverageNote||data().coverageNote||'These authored chapter guides connect the existing library and practical resources. They are not a complete, independently reviewed syllabus course. Your school’s assessment requirements remain the reference.')}</p>${link('learn','library','Open the complete concept library →')}</div></div>`;
+    const actions=root.document.createElement('div');actions.className='cw-actions';
+    const practical=root.document.createElement('button');practical.type='button';practical.className='cw-button';practical.textContent='Class '+course.id+' practical preparation';
+    practical.onclick=()=>{const route='#cbse:'+course.id+'/practicals';if(root.BioPortable)root.BioPortable.navigate(route);else root.location.hash=route;};actions.append(practical);
+    if(preferences()){const edit=root.document.createElement('button');edit.type='button';edit.className='cw-button';edit.textContent='Study preferences';edit.onclick=()=>preferences().openQuestionnaire();actions.append(edit);}
+    host.querySelector('.cw-course-note').append(actions);
+    host.querySelector('input[type=search]').addEventListener('input',e=>{
+      const words=e.target.value.toLowerCase().trim().split(/\s+/).filter(Boolean);let count=0;
+      host.querySelectorAll('[data-search]').forEach(row=>{row.hidden=!words.every(w=>row.dataset.search.includes(w));if(!row.hidden)count++;});
+      host.querySelectorAll('[data-unit]').forEach(unit=>unit.hidden=![...unit.querySelectorAll('[data-search]')].some(row=>!row.hidden));
+      host.querySelector('.cw-no-results').hidden=!!count;
+    });
+  }
+  function chapter(host,course,ch) {
+    save(s=>{s.classYear=course.id;s.last=ch.id;s.chapters[ch.id]={...s.chapters[ch.id],viewed:true,viewedAt:Date.now()};});
+    const entry=memory.chapters[ch.id], linked=ch.concepts.map(topic).filter(Boolean), source=typeof ch.source==='string'?{url:ch.source,title:'Curriculum source'}:ch.source;
+    const preview=linked[0]&&root.BioLibraryVisuals?.preview(linked[0],{topics:root.BIO_LIBRARY.topics,idPrefix:'cw-'+ch.id})||'';
+    host.innerHTML=`<div class="cw-page cw-chapter"><nav class="cw-breadcrumb" aria-label="Chapter breadcrumb">${link('courses',course.id,'Class '+course.id)}<span aria-hidden="true">/</span><span>${title(ch)}</span></nav><div class="cw-eyebrow">CHAPTER GUIDE${ch.scope==='formative'?' / FORMATIVE':ch.scope==='review'?' / ASSESSMENT SCOPE UNDER REVIEW':''}</div><div class="cw-title-row"><div><h1 tabindex="-1">${title(ch)}</h1><p>${esc(ch.summary)}</p></div></div><div class="cw-chapter-layout"><aside class="cw-chapter-outline"><span class="cw-eyebrow">IN THIS CHAPTER</span><nav aria-label="Chapter sections">${(ch.sections||[]).map((s,i)=>`<a href="#cw-section-${i}" data-scroll="cw-section-${i}">${String(i+1).padStart(2,'0')}<span>${esc(s.title)}</span></a>`).join('')}<a href="#cw-connections" data-scroll="cw-connections">↗<span>Explore the concepts</span></a><a href="#cw-reflection" data-scroll="cw-reflection">✎<span>Explain it yourself</span></a></nav><button class="cw-revisit" type="button" aria-pressed="${!!entry.revisit}">${entry.revisit?'Saved for review':'Save for review'}</button></aside><article class="cw-reading"><section class="cw-outcomes"><span class="cw-eyebrow">WHAT YOU WILL WORK TOWARDS</span><ul>${ch.outcomes.map(o=>`<li>${esc(o)}</li>`).join('')}</ul></section>${preview?`<figure class="cw-science-preview">${preview}<figcaption>Start with ${esc(linked[0].title.toLowerCase())}. Illustrative diagram; open the concept for its explanation and model limits.</figcaption></figure>`:''}${(ch.sections||[]).map((s,i)=>`<section class="cw-explanation" id="cw-section-${i}"><span class="cw-section-number">${String(i+1).padStart(2,'0')} / MECHANISM</span><h2>${esc(s.title)}</h2>${(Array.isArray(s.body)?s.body:String(s.body||'').split('\n\n')).map(p=>`<p>${esc(p)}</p>`).join('')}</section>`).join('')}<aside class="cw-misconception"><span class="cw-eyebrow">A DISTINCTION THAT MATTERS</span><h3>${esc(ch.misconception?.claim||'Look beyond the label.')}</h3><p>${esc(ch.misconception?.correction||'Connect each structure to its mechanism and the evidence that supports it.')}</p></aside><section id="cw-connections" class="cw-connections"><span class="cw-eyebrow">GO DEEPER</span><h2>Follow the mechanism.</h2><p>Each concept opens detailed explanations, visual perspectives and checks for understanding.</p><div>${linked.map(t=>link('learn','topic/'+t.id+'/scientific',`<span><strong>${esc(t.title)}</strong><small>${esc(t.summary)}</small></span><b aria-hidden="true">↗</b>`,'cw-concept')).join('')}</div></section>${ch.labs?.length?`<section class="cw-chapter-labs"><span class="cw-eyebrow">INVESTIGATE</span><h2>Give the idea a test.</h2><p>${esc(ch.investigation||'Make a prediction before changing a condition. Record what you changed, what you held constant and what the results allow you to conclude.')}</p>${ch.labs.map(id=>link(id==='dissection'?'lab':'labs',id==='dissection'?null:id,`${esc(id.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase()).replace(/\bDna\b/g,'DNA').replace(/\bPcr\b/g,'PCR'))} <span aria-hidden="true">↗</span>`,'cw-button')).join('')}</section>`:''}<section class="cw-self-check" id="cw-reflection"><span class="cw-eyebrow">EXPLAIN IT YOURSELF</span><h2>${esc(ch.question?.prompt||'What evidence would support your explanation?')}</h2><label for="cw-reflection-input">Your reasoning</label><textarea id="cw-reflection-input" maxlength="12000" rows="5" placeholder="Connect a mechanism to evidence. State any assumptions…">${esc(entry.reflection)}</textarea><p class="cw-save-state" role="status">${sessionOnly?'Browser storage is unavailable. Keep an exported copy.':'Saved locally as you write.'}</p><details class="cw-answer"><summary>Compare with a worked explanation</summary><div><p>${esc(ch.question?.answer||'Check that your explanation identifies the mechanism, uses relevant evidence and states a limitation.')}</p><p class="cw-footnote">Use this to refine your answer. Revealing it does not mark the outcome as mastered.</p></div></details><div class="cw-actions">${linked[0]?link('solve','learn/'+linked[0].id+'/scientific','Practise this concept →','cw-button primary'):''}<button class="cw-button" type="button" data-export>Export my chapter notes</button></div></section><footer class="cw-chapter-footer"><p>${esc(ch.coverageNote||'Authored chapter guide with linked deeper resources. Full outcome-by-outcome review is still required before claiming complete course coverage.')}</p>${source?.url?`<a href="${esc(source.url)}" target="_blank" rel="noopener">${esc(source.title||'Curriculum source')} ↗</a>`:''}${link('courses',course.id,'Back to Class '+course.id+' chapters →')}</footer></article></div></div>`;
+    host.querySelectorAll('[data-scroll]').forEach(a=>a.onclick=e=>{e.preventDefault();host.querySelector('#'+a.dataset.scroll)?.scrollIntoView({block:'start',behavior:'instant'});});
+    host.querySelector('.cw-revisit').onclick=e=>{save(s=>s.chapters[ch.id].revisit=!s.chapters[ch.id].revisit);const value=memory.chapters[ch.id].revisit;e.currentTarget.setAttribute('aria-pressed',String(value));e.currentTarget.textContent=value?'Saved for review':'Save for review';};
+    host.querySelector('textarea').addEventListener('input',e=>{save(s=>{s.chapters[ch.id]={...s.chapters[ch.id],reflection:e.target.value};});host.querySelector('.cw-save-state').textContent=sessionOnly?'Session draft only — export your notes to keep them.':'Saved on this device.';});
+    host.querySelector('[data-export]').onclick=()=>exportNotes(ch.id);
+  }
+  function exportNotes(id) {
+    const state=read(), records=Object.entries(state.chapters).filter(([key])=>!id||key===id).map(([key,value])=>({chapter:key,title:find(key)?.title,...value}));
+    const bytes=JSON.stringify({schema:'biology-chapter-notes',version:1,exportedAt:new Date().toISOString(),records},null,2),url=URL.createObjectURL(new Blob([bytes],{type:'application/json'}));
+    const a=document.createElement('a');a.href=url;a.download='biology-chapter-notes.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }
+  function progress(host) {
+    const state=read(), records=chapters().filter(ch=>state.chapters[ch.id]?.viewed).sort((a,b)=>state.chapters[a.id].viewedAt-state.chapters[b.id].viewedAt), reviews=records.filter(ch=>state.chapters[ch.id].revisit);
+    let library={};try{library=JSON.parse(root.localStorage.getItem('bio.entelloq.library.progress.v1')||'{}');}catch(_){}
+    const validTopics=library&&typeof library==='object'&&!Array.isArray(library)&&library.topics&&typeof library.topics==='object'&&!Array.isArray(library.topics)?library.topics:{};
+    const visited=Object.entries(validTopics).filter(([id,v])=>topic(id)&&Array.isArray(v?.modes)&&v.modes.some(mode=>['layman','intuition','visual','scientific','advanced','realWorld'].includes(mode))).length;
+    host.innerHTML=`<div class="cw-page"><div class="cw-eyebrow">YOUR LEARNING RECORD</div><div class="cw-title-row"><div><h1 tabindex="-1">Make the connections stick.</h1><p>Return to a question, revisit your reasoning, and decide what needs another look.</p></div></div><div class="cw-stat-row"><div><b>${records.length}</b><span>chapter guides viewed</span></div><div><b>${visited}</b><span>concepts explored</span></div><div><b>${records.filter(ch=>state.chapters[ch.id].reflection.trim()).length}</b><span>written reflections</span></div></div><p class="cw-footnote">Viewing and writing show activity, not mastery. Use practice feedback and your explanations to judge what you understand.</p><section class="cw-review-list"><h2>${reviews.length?'Your review list':'Choose what to revisit.'}</h2>${reviews.length?reviews.map(ch=>link('courses',ch.year+'/'+ch.id,`<span>CLASS ${esc(ch.year)}</span><strong>${title(ch)}</strong><span aria-hidden="true">↗</span>`,'cw-review-row')).join(''):'<p>Inside a chapter, choose “Save for review” to keep a question here. Nothing is scheduled or graded without your input.</p>'}</section><section class="cw-review-list"><h2>Recently explored chapters</h2>${records.length?records.slice().reverse().map(ch=>link('courses',ch.year+'/'+ch.id,`<span>CLASS ${esc(ch.year)}</span><strong>${title(ch)}</strong><span aria-hidden="true">↗</span>`,'cw-review-row')).join(''):link('courses',selected(),'Find your first chapter →','cw-button primary')}</section><div class="cw-actions"><button type="button" class="cw-button" data-export>Export chapter notes</button>${link('me',null,'Existing practice & activity history →','cw-button')}${link('solve','learning-review','Open the review queue →','cw-button')}</div><p class="cw-footnote">Earlier lessons, laboratory notebooks and practice history are preserved in their original workspaces.</p></div>`;
+    host.querySelector('[data-export]').onclick=()=>exportNotes();
+  }
+  function render(host,sub,mode) {
+    if(mode==='progress'){progress(host);}else{const {course,chapter:ch}=courseRoute(sub);if(!course)return;save(s=>s.classYear=course.id);ch?chapter(host,course,ch):index(host,course);}
+    const session=preferences()?.getSession?.();
+    if(session?.saved===false){const warning=root.document.createElement('p');warning.className='cw-footnote';warning.setAttribute('role','status');warning.textContent='Preferences could not be saved by this browser. Your current session still works.';host.querySelector('.cw-title-row')?.after(warning);}
+    host.scrollTop=0;
+  }
+  root.BioCourses={KEY,clean,chapters,find,counts,selected,home,render,exportNotes,currentChapter:()=>find(read().last)};
+})(typeof window==='undefined'?globalThis:window);

@@ -418,3 +418,6 @@ body.embed .bl-library{scroll-margin-top:20px}body.embed .bl-library .bl-modes{t
   .bl-library .bl-searchhint button{font-size:10px;min-height:44px;padding:0 2px}
   .bl-library .bl-curriculum-note{font-size:10px;margin:0 0 18px;line-height:1.7}
 }
+/* A single concept catalogue, with legacy interactive links still available. */
+body.bl-focused #page > :not(#bioLibrary):not(.bql-entry):not(.cw-back-context){display:none!important}
+body.bl-legacy-focus #bioLibrary{display:none!important}

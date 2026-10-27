@@ -492,7 +492,7 @@ LABS.register("enzyme-kinetics", {
     const cv = LB_canvas(view, 0.62);
 
     const ENZ = { pepsin: { n: "Pepsin", pH: 2, t: 37 }, amylase: { n: "Amylase", pH: 7, t: 37 }, trypsin: { n: "Trypsin", pH: 8, t: 37 } };
-    let enz = "amylase", temp = 37, pH = 7, sub = 50, enzymeConcentration = 1, inhibitor = "none", inhibitorConcentration = 20, denatured = false, raf;
+    let enz = "amylase", temp = 37, pH = 7, sub = 50, enzymeConcentration = 1, inhibitor = "none", inhibitorConcentration = 20, denatured = false, raf, disposed = false;
 
     const eg = LB_el("div", "bx-grp"); eg.innerHTML = "<label>Enzyme</label>";
     const ec = LB_el("div", "bx-chips");
@@ -531,6 +531,8 @@ LABS.register("enzyme-kinetics", {
       return tf * pf * (sub / (km + sub)) * vmax;
     }
     function draw() {
+      raf = null;
+      if (disposed || !LB_visible()) return;
       const { ctx, W, H } = cv; ctx.clearRect(0, 0, W, H);
       const pad = 34, gw = W - pad * 2, gh = H - pad * 2;
       ctx.strokeStyle = LB_css("--line");
@@ -574,9 +576,19 @@ LABS.register("enzyme-kinetics", {
           ? `Close to ${ENZ[enz].n}'s optimum (${e.t} °C, pH ${ENZ[enz].pH}). Raising substrate now gives diminishing returns — the active sites are saturating.`
           : `${ENZ[enz].n} has an illustrative optimum near ${e.t} °C and pH ${ENZ[enz].pH} in this model.`;
       note.textContent += " Assumptions: Michaelis–Menten response, Km = 18 mM, inhibitor Ki = 20 µM, fixed sample volume. Competitive inhibition raises apparent Km; pure noncompetitive inhibition lowers Vmax. These constants and curves are teaching approximations.";
-      raf = requestAnimationFrame(draw);
     }
-    draw();
-    return { dispose() { cancelAnimationFrame(raf); cv.off(); }, snapshot() { return {variables: {Enzyme:ENZ[enz].n, 'Temperature (°C)':temp, pH, 'Substrate (mM)':sub, 'Relative enzyme concentration':enzymeConcentration, Inhibition:inhibitor, 'Inhibitor (µM)':inhibitorConcentration}, measurements: {'Reaction rate (arbitrary units)':Number(rate().toFixed(3)), 'Active sample':denatured?'Denatured':'Active'}, stage:denatured?'Sample denatured':'Measuring reaction rate'}; } };
+    // This is a static response curve. Repaint after a meaningful change rather
+    // than redrawing the same canvas and text on every animation frame.
+    function requestDraw() { if (!disposed && !raf) raf = requestAnimationFrame(draw); }
+    side.addEventListener('input', requestDraw);
+    side.addEventListener('change', requestDraw);
+    side.addEventListener('click', requestDraw);
+    const resize = new ResizeObserver(() => { if (!disposed) { cv.size(); requestDraw(); } });
+    resize.observe(view);
+    const theme = new MutationObserver(requestDraw);
+    theme.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'class', 'style'] });
+    document.addEventListener('visibilitychange', requestDraw);
+    requestDraw();
+    return { dispose() { disposed = true; cancelAnimationFrame(raf); resize.disconnect(); theme.disconnect(); document.removeEventListener('visibilitychange', requestDraw); side.removeEventListener('input', requestDraw); side.removeEventListener('change', requestDraw); side.removeEventListener('click', requestDraw); cv.off(); }, snapshot() { return {variables: {Enzyme:ENZ[enz].n, 'Temperature (°C)':temp, pH, 'Substrate (mM)':sub, 'Relative enzyme concentration':enzymeConcentration, Inhibition:inhibitor, 'Inhibitor (µM)':inhibitorConcentration}, measurements: {'Reaction rate (arbitrary units)':Number(rate().toFixed(3)), 'Active sample':denatured?'Denatured':'Active'}, stage:denatured?'Sample denatured':'Measuring reaction rate'}; } };
   },
 });

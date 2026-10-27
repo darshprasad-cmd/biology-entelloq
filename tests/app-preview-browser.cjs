@@ -47,22 +47,23 @@ async function main(){
    if(ready)await frame.locator(ready).first().waitFor();
   }
   await open('home');
-  await decoded(page.locator('#homeIn .cc-world .bp-media img'),8,'Home directory');
-  await decoded(page.locator('#homeIn .cc-node .bp-media img'),8,'Biology map');
-  await page.locator('.side [data-go="learn"]').hover();
+  await page.locator('#homeIn .cw-home').waitFor();
+  assert.equal(await page.locator('#homeIn .cw-class').count(),4,'Home offers four class routes');
+  assert.equal(await page.locator('#homeIn .cw-investigation').count(),3,'Home offers three distinct investigation entry points');
+  assert.equal(await page.locator('#homeIn .cw-home-art svg[role=img]').count(),1,'Home uses a labelled scientific illustration');
+  await page.locator('.side [data-go="labs"]').hover();
   await page.locator('#bio-nav-preview:not([hidden])').waitFor();
   await decoded(page.locator('#bio-nav-preview img'),1,'Sidebar pointer preview');
-  assert.match(await page.locator('#bio-nav-preview strong').textContent(),/Learn/);
+  assert.match(await page.locator('#bio-nav-preview strong').textContent(),/Labs/);
   await page.mouse.move(700,80);
   assert.equal(await page.locator('#bio-nav-preview').isVisible(),false);
-  await page.locator('.side [data-go="learn"]').focus();
-  await page.keyboard.press('Tab');
+  await page.locator('.side [data-go="labs"]').focus();
   await page.locator('#bio-nav-preview:not([hidden])').waitFor();
   await page.keyboard.press('Escape');
   assert.equal(await page.locator('#bio-nav-preview').isVisible(),false);
   report.checks.push('Sidebar previews support pointer and keyboard focus, and close on Escape.');
   await page.evaluate(()=>document.activeElement?.blur());
-  await page.locator('#homeIn .cc-head').scrollIntoViewIfNeeded();
+  await page.locator('#homeIn .cw-home-head').scrollIntoViewIfNeeded();
   await page.screenshot({path:path.join(output,'app-preview-desktop.png'),fullPage:false});
   report.screenshots.push('app-preview-desktop.png');
   for(const width of [320,390,768,1440]){
@@ -70,7 +71,7 @@ async function main(){
   }
   const sections=[
    ['lessons','.les-card','.les-card .bp-media img',9],
-   ['labs','.lc-card','.lc-preview img',23],
+   ['labs','.lc-card','.lc-preview img',25],
    ['solve','#svConfigCard','.sv-opt[data-group="topic"] .bp-media img',9],
    ['me','#recSlot .card','#recSlot .card .bp-media img',null],
    ['explore','#sysList .sys-btn',null,null],
@@ -107,19 +108,21 @@ async function main(){
   const touchContext=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'reduce'});
   const touch=await touchContext.newPage();monitor(touch);
   await touch.goto(base+'/app.html#home');
-  await touch.locator('#homeIn .cc-world').first().waitFor();
+  await touch.locator('#homeIn .cw-investigation').first().waitFor();
   await touch.locator('#exploreBtn').tap();
   await touch.locator('#bq-explore[open]').waitFor();
-  assert.equal(await touch.locator('#learningPaths .tile:not([hidden])').count(),8);
+  assert.equal(await touch.locator('#learningPaths .tile:not([hidden])').count(),10);
+  assert.equal(await touch.locator('#learningPaths .tile[data-go=courses]').count(),1);
+  assert.equal(await touch.locator('#learningPaths .tile[data-go=progress]').count(),1);
   await decoded(touch.locator('#learningPaths .tile .bp-media img'),8,'Touch path chooser');
   const chooserOverflow=await touch.locator('#bq-explore').evaluate(element=>element.scrollWidth>element.clientWidth+1);
   assert.equal(chooserOverflow,false,'Touch chooser horizontal overflow');
   await touch.locator('#exploreClose').tap();
   assert.equal(await touch.locator('#bq-explore').isVisible(),false);
-  await touch.locator('#homeIn .cc-head').scrollIntoViewIfNeeded();
+  await touch.locator('#homeIn .cw-home-head').scrollIntoViewIfNeeded();
   await touch.screenshot({path:path.join(output,'app-preview-mobile.png'),fullPage:false});
   report.screenshots.push('app-preview-mobile.png');
-  await touch.locator('#homeIn .cc-world[data-go="lessons"]').tap();
+  await touch.locator('#exploreBtn').tap();await touch.locator('#learningPaths .tile[data-go="lessons"]').tap();
   const touchFrame=touch.frameLocator('#viewFrame');
   await decoded(touchFrame.locator('.les-card .bp-media img'),9,'Touch Lessons inside app');
   await touchFrame.locator('.les-listhead').scrollIntoViewIfNeeded();

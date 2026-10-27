@@ -14,23 +14,23 @@
     const sub=c.kind==='lab'?id:(c.kind==='learn'?'topic/':'learn/')+id+'/'+mode;
     window.BioAppContext?.remember(section,sub);
     if(location.hash!=='#'+section+'/'+sub)history.replaceState({k:section,sub},'','#'+section+'/'+sub);
-    const crumb=document.getElementById('routeLabel');if(crumb)crumb.textContent=({learn:'Learn',labs:'Lab',reason:'Reason',solve:'Solve'}[section])+' / '+(c.title||id)+(c.subtopic?' / '+c.subtopic:'');
+    const crumb=document.getElementById('routeLabel');if(crumb)crumb.textContent=({learn:'Learn',labs:'Labs',reason:'Practice',solve:'Practice'}[section])+' / '+(c.title||id)+(c.subtopic?' / '+c.subtopic:'');
   });
   window.BioAppContext?.refreshHome();
   // Add a curriculum entry without changing the existing launcher or routes.
   let cbseHost;
   try { if (window.top !== window) cbseHost = window.top.BioCBSE; } catch (_) { /* A foreign embedding origin cannot expose the local profile. */ }
   if (cbseHost) {
-    for (const [selector, className] of [['#nav','navi'],['.explore-worlds','btn']]) {
+    for (const [selector, className] of [['.explore-worlds','btn']]) {
       const target = document.querySelector(selector);
       if (!target) continue;
       const button = document.createElement('button');
       button.className = className;
-      button.textContent = 'CBSE study space';
+      button.textContent = 'Study preferences';
       button.dataset.cbseEntry = 'true';
       button.addEventListener('click', () => {
         document.getElementById('bq-explore')?.close();
-        cbseHost.openDashboard();
+        cbseHost.openQuestionnaire();
       });
       target.append(button);
     }

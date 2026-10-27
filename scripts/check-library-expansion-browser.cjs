@@ -1,5 +1,6 @@
 /* Real source / single-file / deployed learning UI; synthetic browser input, no camera. */
 'use strict';
+const {readRoute}=require('../tests/portable-route-browser-helper.cjs');
 const fs = require('node:fs'), path = require('node:path'), assert = require('node:assert/strict'), crypto = require('node:crypto');
 const { createRequire } = require('node:module');
 const root = path.resolve(__dirname, '..');
@@ -84,11 +85,11 @@ const ids = 'water carbohydrates lipids proteins gene-regulation sex-linked-inhe
     }
     report.checks.push('All 36 additions render six usable explanation modes, conceptual diagrams, mechanisms and both evidence tasks.');
     world = await open('learn', 'topic/nephron/advanced', '[data-depth-topic="nephron"]');
-    const beforeJump = await (packaged ? page : world).evaluate(() => location.hash);
+    const beforeJump = await readRoute(packaged ? page : world);
     for (const id of ['bl-visual', 'bd-title', 'bl-check-title', 'bl-terms-title']) {
       await world.locator('[data-lesson-section="' + id + '"]').click();
       assert.equal(await world.locator('#' + id).evaluate(el => el === document.activeElement), true, id + ' receives focus');
-      assert.equal(await (packaged ? page : world).evaluate(() => location.hash), beforeJump, 'section jump preserves the concept/mode route');
+      assert.equal(await readRoute(packaged ? page : world), beforeJump, 'section jump preserves the concept/mode route');
     }
     assert.equal(await world.locator('.bl-terms').evaluate(el => el.open), true);
     report.checks.push('Three suggested paths resolve to completed concepts; keyboard disclosure and all four lesson jumps preserve routing and focus.');

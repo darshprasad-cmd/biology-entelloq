@@ -1,0 +1,46 @@
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
+const {createRequire}=require('node:module');
+const {chromium}=createRequire(path.join(process.env.BIOLOGY_PLAYWRIGHT_MODULES||'C:/Users/darsh/biology-entelloq/node_modules','__integration__.cjs'))('playwright');
+const root=path.resolve(__dirname,'..'),out=process.env.BIOLOGY_FIELD_REPORT||path.join(require('node:os').tmpdir(),'biology-field-labs');fs.mkdirSync(out,{recursive:true});
+(async()=>{
+ const browser=await chromium.launch({headless:true}),page=await browser.newPage({viewport:{width:1440,height:1100},reducedMotion:'reduce'}),errors=[];
+ page.on('pageerror',e=>errors.push(e.message));
+ const base=fs.readFileSync(path.join(root,'src/_template.html'),'utf8').match(/<style[^>]*>([\s\S]*?)<\/style>/)[1];
+ const styles=['src/_labs.css','src/library/shared.css','src/library/lab-catalog.css','src/library/notebook.css','src/library/experiments.css','src/library/field-labs.css'].map(p=>fs.readFileSync(path.join(root,p),'utf8')).join('\n');
+ await page.route('https://biology-field.test/**',async route=>{
+  const url=new URL(route.request().url()),file=path.join(root,url.pathname);
+  if(url.pathname==='/labs.html')return route.fulfill({contentType:'text/html',body:`<html data-theme="dark"><head><style>${base}\n${styles}</style></head><body><main id="labsApp"></main></body></html>`});
+  if(url.pathname.startsWith('/assets/previews/')&&fs.existsSync(file))return route.fulfill({contentType:'image/webp',body:fs.readFileSync(file)});
+  return route.fulfill({status:404,body:'Unavailable in isolated fixture'});
+ });
+ await page.goto('https://biology-field.test/labs.html');
+ for(const name of ['src/library/labs.js','src/_lab_bench.js','src/_lab_ecology.js','src/_lab_molecular.js','src/_lab_physiology.js','src/library/notebook.js','src/library/lab-metadata.js','src/library/experiments.js','src/library/investigations.js','src/library/field-labs.js'])await page.addScriptTag({content:fs.readFileSync(path.join(root,name),'utf8')});
+ await page.evaluate(()=>window.dispatchEvent(new HashChangeEvent('hashchange')));
+ assert.equal(await page.locator('.lc-card').count(),25);
+ assert.equal(await page.locator('#lab-class').count(),0,'optional course data absent: existing catalog stays usable');
+ await page.addScriptTag({content:fs.readFileSync(path.join(root,'src/courses/data.js'),'utf8')});await page.evaluate(()=>window.dispatchEvent(new HashChangeEvent('hashchange')));
+ assert.equal(await page.locator('#lab-class').inputValue(),'');
+ await page.locator('#lab-class').selectOption('9');assert.equal(await page.locator('.lc-card[href="#osmosis"]').count(),1);await page.locator('#lab-search').fill('osmosis');assert.equal(await page.locator('.lc-card').count(),1);
+ await page.locator('#lab-search').fill('');await page.locator('#lab-class').selectOption('12');assert.equal(await page.locator('.lc-card[href="#quadrat-sampling"]').count(),1);
+ await page.locator('#lab-search').fill('no such experiment');await page.locator('#lab-clear').click();assert.equal(await page.locator('#lab-class').inputValue(),'');assert.equal(await page.locator('.lc-card').count(),25);
+ await page.locator('#lab-search').fill('transpiration');assert.equal(await page.locator('.lc-card').count(),1);
+ await page.locator('.lc-card').click();await page.getByRole('button',{name:'Start paired experiment',exact:true}).waitFor();
+ await page.getByRole('button',{name:'Start paired experiment',exact:true}).click();await page.getByRole('button',{name:'Advance both by 5 min'}).click();
+ await page.locator('#lab-hypothesis').fill('Lower humidity should increase loss at fixed opening and area.');await page.locator('#lab-record').click();
+ let note=await page.evaluate(()=>JSON.parse(localStorage.getItem('bioq.lab-notebook.v1.stomatal-transpiration')));
+ assert.equal(note.trials.length,1);assert.equal(note.trials[0].variables['Data kind'],'Illustrative simulation');assert.equal(note.trials[0].variables['Elapsed model time (min)'],5);assert.ok(note.trials[0].measurements['Test loss (mg)']>0);
+ const csvPromise=page.waitForEvent('download');await page.locator('#lab-csv').click();const csv=await csvPromise;await csv.saveAs(path.join(out,'stomata-notebook.csv'));assert.match(fs.readFileSync(path.join(out,'stomata-notebook.csv'),'utf8'),/field-labs-1/);
+ const pngPromise=page.waitForEvent('download');await page.locator('#lab-capture').click();const png=await pngPromise;await png.saveAs(path.join(out,'stomata-notebook-capture.png'));assert.equal(fs.readFileSync(path.join(out,'stomata-notebook-capture.png')).subarray(1,4).toString(),'PNG');
+ await page.evaluate(()=>location.hash='');await page.locator('#lab-search').waitFor();await page.locator('#lab-search').fill('quadrat');assert.equal(await page.locator('.lc-card').count(),1);
+ const preview=page.locator('.lc-preview img');await preview.evaluate(img=>img.decode());assert.ok(await preview.evaluate(img=>img.naturalWidth>0));await page.locator('.lc-card').click();
+ for(let i=0;i<3;i++){await page.getByRole('button',{name:'Locate a random quadrat'}).click();const count=await page.locator('.fl-quadrat-detail details strong').textContent();await page.getByRole('spinbutton',{name:'Focal plants in this quadrat'}).fill(count);await page.getByRole('button',{name:'Check count & record'}).click();}
+ await page.locator('#lab-record').click();note=await page.evaluate(()=>JSON.parse(localStorage.getItem('bioq.lab-notebook.v1.quadrat-sampling')));
+ assert.equal(note.trials[0].measurements['Quadrats recorded'],3);assert.equal(note.trials[0].variables['Data kind'],'Synthetic virtual field');assert.match(note.trials[0].variables['Observed counts'],/0/);assert.equal(note.trials[0].measurements['Frequency (%)'],66.667);
+ await page.getByRole('button',{name:'New survey · same field'}).click();assert.equal(await page.locator('#lab-trials tbody tr').count(),1);
+ await page.evaluate(()=>location.hash='stomatal-transpiration');await page.getByRole('button',{name:'Start paired experiment',exact:true}).waitFor();assert.equal(await page.locator('#lab-trials tbody tr').count(),1);assert.equal(await page.locator('#lab-hypothesis').inputValue(),'Lower humidity should increase loss at fixed opening and area.');
+ await page.evaluate(()=>location.hash='');await page.locator('#lab-search').waitFor();await page.locator('#lab-search').fill('');
+ const imageResult=await page.locator('.lc-preview img').evaluateAll(async images=>{await Promise.all(images.map(img=>img.decode().catch(()=>{})));return images.map(img=>({src:img.getAttribute('src'),ok:img.naturalWidth>0}));});assert.ok(imageResult.every(x=>x.ok),JSON.stringify(imageResult.filter(x=>!x.ok)));
+ await page.setViewportSize({width:390,height:844});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'class filters fit narrow screen');await page.screenshot({path:path.join(out,'catalog-class-filter-mobile.png'),fullPage:true});
+ assert.deepEqual(errors,[]);await browser.close();fs.writeFileSync(path.join(out,'integration-checks.json'),JSON.stringify({passed:true,catalogCount:25,checks:['source registry mounted','optional course data absent retains catalog','Class9 includes osmosis','Class12 includes quadrat','class and alias filters intersect','clear returns all25','class filters fit390px','aliases discover both entries','all25 preview images decode','snapshot fields saved by actual BioNotebook','CSV contains model version','PNG capture download decodes','new survey does not erase notebook','remount restores hypothesis and trial'],imageResult},null,2));
+ console.log('PASS: 25-entry catalog, all previews, both shared notebook records, CSV/PNG export and retained notes');
+})().catch(e=>{console.error(e);process.exit(1)});

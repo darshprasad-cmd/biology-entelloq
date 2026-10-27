@@ -1,5 +1,6 @@
 /* Packaged CBSE practical UI checks; no apparatus, camera or educator validation claimed. */
 'use strict';
+const {waitForPortableRoute}=require('../tests/portable-route-browser-helper.cjs');
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),http=require('node:http'),vm=require('node:vm');
 const {createRequire}=require('node:module'),{pathToFileURL}=require('node:url');
 const root=path.resolve(__dirname,'..'),modules=process.env.BIOLOGY_PLAYWRIGHT_MODULES||path.resolve(root,'../biology-entelloq/node_modules');
@@ -58,9 +59,11 @@ async function run(){
    await page.keyboard.press('Tab');assert.equal(await page.evaluate(()=>document.activeElement.getAttribute('data-section')),'method');
    for(let i=0;i<50&&await page.evaluate(()=>document.activeElement.getAttribute('data-action'))!=='close';i++){await page.keyboard.press('Tab');assert.equal(await page.evaluate(()=>document.getElementById('bio-cbse').contains(document.activeElement)),true);}
    assert.equal(await page.evaluate(()=>document.activeElement.getAttribute('data-action')),'close');
-   await page.keyboard.press('Enter');await page.getByRole('heading',{name:'Class 12 · Biology',exact:true}).waitFor();
-   await page.getByRole('button',{name:'Practical preparation',exact:true}).click();await page.getByRole('heading',{name:'Prepare for the practical.',exact:true}).waitFor();
-   await page.keyboard.press('Escape');await page.getByRole('heading',{name:'Class 12 · Biology',exact:true}).waitFor();
+   await page.keyboard.press('Enter');await waitForPortableRoute(page,'#courses/12');
+   const shell=page.frameLocator('#bioq-workspace');await shell.locator('#courseView .cw-class[data-sub="12"][aria-current=page]').waitFor();
+   assert.equal(await page.locator('#bio-cbse').evaluate(d=>d.open),false);
+   await shell.getByRole('button',{name:'Class 12 practical preparation',exact:true}).click();await page.getByRole('heading',{name:'Prepare for the practical.',exact:true}).waitFor();
+   await page.keyboard.press('Escape');await waitForPortableRoute(page,'#courses/12');assert.equal(await page.locator('#bio-cbse').evaluate(d=>d.open),false);
    assert.deepEqual(errors,[]);await context.close();report.cases.push({width,deepLinkSkip:true,notesPreserved:true,vivaFeedback:true,searchEmpty:true,allClasses:true,keyboardClose:true});
   }
   const context=await browser.newContext(),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
@@ -70,7 +73,7 @@ async function run(){
   await page.evaluate(()=>{location.hash='#cbse:9/practicals/b12-a-e01';});await page.getByRole('heading',{name:'Practical guide not found'}).waitFor();
   await page.getByRole('link',{name:'Browse Class 9 practicals'}).click();await page.getByRole('heading',{name:'Prepare for the practical.'}).waitFor();
   await page.getByRole('link',{name:'Plant and cheek cells: stained mounts'}).click();await page.getByRole('button',{name:'Open supporting microscope model ↗'}).click();
-  assert.equal(new URL(page.url()).hash,'#labs/microscope');await page.frameLocator('#bioq-workspace').frameLocator('#viewFrame').locator('#labStage').waitFor();
+  await waitForPortableRoute(page,'#labs/microscope');await page.frameLocator('#bioq-workspace').frameLocator('#viewFrame').locator('#labStage').waitFor();
   assert.deepEqual(errors,[]);await context.close();report.cases.push({all59GuidesRendered:true,firstSetupPreservesPractical:true,invalidCrossClassRoute:true,supportingBenchNavigation:true});
   const blocked=await browser.newContext(),bp=await blocked.newPage();await blocked.addInitScript(()=>Object.defineProperty(window,'localStorage',{get(){throw Error('Storage denied');}}));await blocked.route('**/*',r=>new URL(r.request().url()).origin===new URL(base).origin?r.continue():r.abort());
   await bp.goto(base+'#cbse:9/practicals/s9-e04',{waitUntil:'domcontentloaded'});await bp.getByRole('button',{name:'Skip for now'}).click();await bp.locator('#cbsep-note').fill('Session-only observation');await bp.getByRole('button',{name:'Save this note'}).click();assert.match(await bp.locator('.cbsep-note-status').innerText(),/session only/);await bp.getByRole('link',{name:'← All Class 9 practical guides'}).click();await bp.getByRole('link',{name:'Plant and cheek cells: stained mounts'}).click();assert.equal(await bp.locator('#cbsep-note').inputValue(),'Session-only observation');await blocked.close();report.cases.push({blockedStorageSessionFallback:true});

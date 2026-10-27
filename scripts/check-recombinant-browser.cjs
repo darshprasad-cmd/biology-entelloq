@@ -1,6 +1,7 @@
 /* Real educational evidence flow, not wet-lab, biosafety or screen-reader speech
  * validation. No application source, responses or authored answers are mocked. */
 'use strict';
+const { waitForPortableRoute } = require('../tests/portable-route-browser-helper.cjs');
 const fs = require('node:fs'), path = require('node:path'), assert = require('node:assert/strict');
 const crypto = require('node:crypto');
 const { createRequire } = require('node:module');
@@ -76,7 +77,8 @@ fs.mkdirSync(output, { recursive: true });
     }
     async function follow(world, section) {
       await world.locator('[data-practice="' + section + '"]').click();
-      await page.waitForURL(url => packaged ? url.hash === '#' + section + '/' + route(section) : url.pathname.endsWith('/' + section + '.html') && url.hash === '#' + route(section), { waitUntil: 'domcontentloaded', timeout: 360000 });
+      if (packaged) await waitForPortableRoute(page, '#' + section + '/' + route(section), {timeout:360000});
+      else await page.waitForURL(url => url.pathname.endsWith('/' + section + '.html') && url.hash === '#' + route(section), { waitUntil: 'domcontentloaded', timeout: 360000 });
       return mountedWorld('.tp-heading');
     }
     async function selectTheme(world, theme) {

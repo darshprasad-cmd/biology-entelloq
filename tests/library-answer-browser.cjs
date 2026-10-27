@@ -3,6 +3,7 @@
  * DOM/focus checks do not claim screen-reader speech or real touch-hardware QA. */
 'use strict';
 const assert = require('node:assert/strict');
+const {readRoute}=require('./portable-route-browser-helper.cjs');
 
 async function checkLibraryAnswer(page, world) {
   await world.locator('#bl-topic-title').waitFor({state:'visible'});
@@ -28,12 +29,12 @@ async function checkLibraryAnswer(page, world) {
     localStorage.setItem(key, value);
     return previous;
   }, {key:sentinelKey, value:sentinelValue});
-  const hashes = [await page.evaluate(() => location.hash), await world.evaluate(() => location.hash)];
+  const hashes = [await readRoute(page), await readRoute(world)];
   const savedChoice = () => world.evaluate(({key, id, index}) =>
     JSON.parse(localStorage.getItem(key))?.topics?.[id]?.checked?.[index],
   {key:storageKey, id:topic.id, index:questionIndex});
   const preserved = async label => {
-    assert.deepEqual([await page.evaluate(() => location.hash), await world.evaluate(() => location.hash)], hashes,
+    assert.deepEqual([await readRoute(page), await readRoute(world)], hashes,
       label + ': answering does not navigate either document');
     assert.equal(await world.evaluate(key => localStorage.getItem(key), sentinelKey), sentinelValue,
       label + ': unrelated storage survives');

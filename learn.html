@@ -1035,6 +1035,9 @@ body.embed .bl-library{scroll-margin-top:20px}body.embed .bl-library .bl-modes{t
   .bl-library .bl-searchhint button{font-size:10px;min-height:44px;padding:0 2px}
   .bl-library .bl-curriculum-note{font-size:10px;margin:0 0 18px;line-height:1.7}
 }
+/* A single concept catalogue, with legacy interactive links still available. */
+body.bl-focused #page > :not(#bioLibrary):not(.bql-entry):not(.cw-back-context){display:none!important}
+body.bl-legacy-focus #bioLibrary{display:none!important}
 /* Extend the current reading surfaces without changing the Biology shell. */
 .bd-study{margin:38px 0;color:var(--ink);min-width:0;line-height:1.7}
 .bd-study *{box-sizing:border-box}
@@ -6762,6 +6765,10 @@ if(/\.html/i.test(h)&&/^\.?\/?(index|app|learn|lessons|reason|labs|solve|explore
     visualCleanup = null;
     let parts;
     try { parts = location.hash.slice(1).split('/').map(decodeURIComponent); } catch (_) { parts = []; }
+    // Keep one catalogue in the learning flow. Legacy cell and microscope links
+    // still open their original interactive sections rather than losing a tool.
+    document.body.classList.toggle('bl-focused', !parts[0] || ['topic','library','category'].includes(parts[0]) || parts[0].startsWith('learning-'));
+    document.body.classList.toggle('bl-legacy-focus', ['cell','microscope'].includes(parts[0]));
     if (parts[0] === 'topic' && byId.has(parts[1])) {
       renderTopic(byId.get(parts[1]), parts[2]);
       if (lastTopic !== parts[1]) {

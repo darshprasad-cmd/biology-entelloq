@@ -18,8 +18,9 @@ const plain = value => value === undefined ? undefined : JSON.parse(JSON.stringi
 const scrollOptions = {block:'start', behavior:'instant'};
 
 function setup() {
-  const calls = [], body = {name:'BODY'}, outside = {name:'outside-library'};
-  const document = {activeElement:outside, getElementById:id => legacy.get(id) || null};
+  const classes=new Set();
+  const calls = [], body = {name:'BODY',classList:{toggle(name,value){if(value)classes.add(name);else classes.delete(name);},contains:name=>classes.has(name)}}, outside = {name:'outside-library'};
+  const document = {body,activeElement:outside, getElementById:id => legacy.get(id) || null};
   let elements = new Map(), context, generation = 0;
   function element(selector, markup = '') {
     const attributes = {};

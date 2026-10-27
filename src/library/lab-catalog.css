@@ -8,6 +8,7 @@
 .lc-library-note span:last-child{font-size:11px;color:var(--faint)}
 .lb-library .ln-filters{grid-template-columns:minmax(220px,1.8fr) repeat(4,minmax(0,1fr));gap:12px;margin:0;padding:18px 0;border-block:1px solid var(--line)}
 .lb-library .ln-filters label{font-size:10px;gap:7px}
+.lb-library .ln-filters.ln-course-filters{grid-template-columns:minmax(180px,1.6fr) repeat(5,minmax(0,1fr))}
 .lb-library .ln-filters input,.lb-library .ln-filters select{min-width:0;padding:9px 11px;font-size:12px;min-height:40px}
 .lb-library .ln-count{font-size:11px;margin:17px 0;color:var(--faint)}
 .lc-catalog{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:25px 22px}
@@ -56,3 +57,6 @@
 @media(max-width:480px){.lb-library.band,.lb-page.band{padding-top:25px}.lc-heading .h1{max-width:300px;font-size:29px}.lc-heading p{font-size:12px}.lc-library-note span:last-child{font-size:10px}.lb-library .ln-filters{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.lb-library .ln-filters input,.lb-library .ln-filters select{font-size:12px}.lc-catalog{gap:14px 10px}.lc-card{border-radius:10px}.lc-card-copy{padding:12px 10px;gap:7px}.lb-library .lc-card h2{font-size:14px;line-height:1.35}.lc-card .ln-card-meta{font-size:9px;gap:6px}.lc-card .ln-card-meta span+span:before{margin-right:6px}.lc-preview-type{font-size:7px;left:6px;bottom:6px;padding:3px 5px}.lc-open{right:6px;bottom:6px;width:21px;height:21px;font-size:13px}.lb-page .ln-breadcrumb{font-size:10px;gap:7px;margin-bottom:18px}.lb-page .lb-hd .lead{font-size:12px}.lb-page .lb-stage{padding:12px}.lb-page #lab-workflow .ln-question h2{font-size:15px}}
 @media(prefers-reduced-motion:reduce){.lc-card,.lc-preview img,.lc-open{transition:none}.lc-card:hover,.lc-card:hover .lc-preview img{transform:none}}
 
+
+@media(max-width:1000px){.lb-library .ln-filters.ln-course-filters{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:600px){.lb-library .ln-filters.ln-course-filters{grid-template-columns:repeat(2,minmax(0,1fr))}}

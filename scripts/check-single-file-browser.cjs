@@ -16,6 +16,7 @@ const { checkPracticeFocus } = require('../tests/practice-focus-browser.cjs');
 const { checkEvidenceTable } = require('../tests/evidence-tables-browser.cjs');
 const { checkPhylogeny } = require('../tests/phylogeny-browser.cjs');
 const { dismissCBSE } = require('../tests/cbse-browser-helper.cjs');
+const { waitForPortableRoute } = require('../tests/portable-route-browser-helper.cjs');
 const root = path.resolve(__dirname, '..');
 const modules = process.env.BIOLOGY_PLAYWRIGHT_MODULES || path.resolve(root, '../biology-entelloq/node_modules');
 const { chromium } = createRequire(path.join(modules, '__single_file_check__.cjs'))('playwright');
@@ -109,7 +110,7 @@ async function checkWorlds(page, url, run) {
   await page.goto(url + '#home', { waitUntil: 'domcontentloaded' });
   let shell = await workspace(page);
   await shell.locator('#nav [data-go="lab"]').click();
-  await page.waitForURL(/#lab$/);
+  await waitForPortableRoute(page,/#lab$/);
   await shell.locator('#launcher.on').waitFor();
   let world = await childFrame(shell, '#launchFrame');
   worldStep(run, 'Wait for the actual lab runtime');
@@ -154,7 +155,7 @@ async function checkWorlds(page, url, run) {
   worldStep(run, 'Exit the lab through the shell button');
   await shell.locator('#launchX').click();
   await shell.locator('#launcher.on').waitFor({ state: 'hidden' });
-  await page.waitForURL(/#home$/);
+  await waitForPortableRoute(page,/#home$/);
   worldStep(run, 'Reload after leaving the lab');
   await page.reload({ waitUntil: 'domcontentloaded' });
   shell = await workspace(page);
@@ -163,7 +164,7 @@ async function checkWorlds(page, url, run) {
 
   worldStep(run, 'Open Biology Universe through its navigation button');
   await shell.locator('#nav [data-go="universe"]').click();
-  await page.waitForURL(/#universe$/);
+  await waitForPortableRoute(page,/#universe$/);
   await shell.locator('#launcher.on').waitFor();
   world = await childFrame(shell, '#launchFrame');
   worldStep(run, 'Wait for all 13 Universe stages');
@@ -181,7 +182,7 @@ async function checkWorlds(page, url, run) {
   worldStep(run, 'Close Universe through the shell button');
   await shell.locator('#launchX').click();
   await shell.locator('#launcher.on').waitFor({ state: 'hidden' });
-  await page.waitForURL(/#home$/);
+  await waitForPortableRoute(page,/#home$/);
   run.checks.push('All 13 real Universe stages initialize offline, Cell inspection opens, and the Universe close control restores Home.');
 
   worldStep(run, 'Open and reload the Universe DNA deep link');
@@ -197,7 +198,7 @@ async function checkWorlds(page, url, run) {
   await shell.locator('#launchLoad').waitFor({ state: 'hidden' });
   worldStep(run, 'Follow the Universe brand link into the lab');
   await world.locator('.u-brand').click();
-  await page.waitForURL(/#lab$/);
+  await waitForPortableRoute(page,/#lab$/);
   world = await childFrame(shell, '#launchFrame');
   await world.waitForFunction(() => window.__LAB?.ok && window.__LAB.ready && window.__LAB.dissection, null, { timeout: 90000 });
   worldStep(run, 'Switch from the active lab to Learn');
@@ -267,12 +268,15 @@ async function runSuite(browser, mode, url) {
     shell = await workspace(page, '#bio-title');
     assert.equal(await shell.locator('#pe-worlds').count(), 1, 'Legacy landing fragments stay on the landing page');
     await shell.locator('.bio-watch').click();
-    await page.waitForURL(/#landing\/pe-experiment$/);
+    await waitForPortableRoute(page,/#landing\/pe-experiment$/);
     await shell.locator('.bio-explore-button').click();
-    await page.waitForURL(/#home$/);
+    await waitForPortableRoute(page,/#home$/);
     shell = await workspace(page);
-    await shell.locator('#homeIn .cc-world').first().waitFor();
-    assert.equal(await shell.locator('#homeIn .cc-world').count(), 8);
+    await shell.locator('#homeIn .cw-investigation').first().waitFor();
+    assert.equal(await shell.locator('#homeIn .cw-investigation').count(), 3);
+    assert.equal(await shell.locator('#homeIn .cw-class').count(), 4);
+    const homeCounts = await shell.evaluate(() => ({chapters:window.BioCourses.chapters().length,concepts:window.BIO_LIBRARY.topics.length}));
+    assert.match(await shell.locator('#homeIn .cw-footnote').innerText(),new RegExp(homeCounts.chapters+' chapter guides.*'+homeCounts.concepts+' connected concepts'));
     await screenshot(page, mode + '-home-desktop');
     run.checks.push('Landing and Start Exploring load the application from the one supplied HTML file.');
 
@@ -294,30 +298,30 @@ async function runSuite(browser, mode, url) {
       getWorld: async () => childFrame(await workspace(page), '#viewFrame')
     })));
     navigation = await section(page, url, 'learn', '#bl-search');
-    await navigation.shell.locator('#nav .navi[data-go="lessons"]:not(.quick-action)').click();
-    await page.waitForURL(/#lessons$/);
-    await (await childFrame(navigation.shell, '#viewFrame')).locator('#lesson-search').waitFor();
+    await navigation.shell.locator('#nav .navi[data-go="labs"]:not(.quick-action)').click();
+    await waitForPortableRoute(page,/#labs$/);
+    await (await childFrame(navigation.shell, '#viewFrame')).locator('#lab-search').waitFor();
     await page.goBack();
-    await page.waitForURL(/#learn$/);
+    await waitForPortableRoute(page,/#learn$/);
     navigation.shell = await workspace(page);
     await (await childFrame(navigation.shell, '#viewFrame')).locator('#bl-search').waitFor();
-    assert.equal(await navigation.shell.locator('#nav .navi[data-go="learn"]:not(.quick-action)').getAttribute('aria-current'), 'page');
+    assert.equal(await navigation.shell.locator('#nav .navi[data-go="courses"]:not(.quick-action)').getAttribute('aria-current'), 'page');
     run.checks.push('Browser Back between different section documents restores both the outer route and active navigation.');
 
     let opened = await section(page, url, 'learn/topic/cell-structure/visual', '#bl-mode-visual');
     assert.equal(await opened.frame.locator('#bl-mode-visual').getAttribute('aria-selected'), 'true');
     await opened.frame.locator('#bl-mode-layman').click();
-    await page.waitForURL(/#learn\/topic\/cell-structure\/layman$/);
+    await waitForPortableRoute(page,/#learn\/topic\/cell-structure\/layman$/);
     await page.goBack();
     opened = { shell: await workspace(page) };
     opened.frame = await childFrame(opened.shell, '#viewFrame');
     await opened.frame.locator('#bl-mode-visual[aria-selected="true"]').waitFor();
-    await page.waitForURL(/#learn\/topic\/cell-structure\/visual$/);
+    await waitForPortableRoute(page,/#learn\/topic\/cell-structure\/visual$/);
     await page.reload({ waitUntil: 'domcontentloaded' });
     shell = await workspace(page);
     let frame = await childFrame(shell, '#viewFrame');
     await frame.locator('#bl-mode-visual[aria-selected="true"]').waitFor();
-    run.checks.push('Cell Structure Visual deep link opens correctly; mode changes update the outer URL, browser Back restores Visual, and reload preserves it.');
+    run.checks.push('Cell Structure Visual deep link opens correctly; mode changes update the logical route while the address stays clean, browser Back restores Visual, and reload preserves it.');
 
     run.checks.push('Learn quick-check focus: ' + JSON.stringify(await checkLibraryAnswer(page, frame)));
 
@@ -369,12 +373,13 @@ async function runSuite(browser, mode, url) {
     await checkWorlds(page, url, run);
 
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto(url, { waitUntil: 'domcontentloaded' });
+    await page.evaluate(() => BioPortable.navigate(''));
+    await waitForPortableRoute(page,'');
     shell = await workspace(page, '#bio-title');
     await noOverflow(page, [['landing', shell]], 'landing mobile', run);
     await screenshot(page, mode + '-landing-mobile');
     await shell.locator('.bio-explore-button').click();
-    await page.waitForURL(/#home$/);
+    await waitForPortableRoute(page,/#home$/);
     shell = await workspace(page);
     await noOverflow(page, [['shell', shell]], 'home mobile', run);
     await screenshot(page, mode + '-home-mobile');

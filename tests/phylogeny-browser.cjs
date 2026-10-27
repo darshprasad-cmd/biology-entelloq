@@ -3,6 +3,7 @@
  * Frame and its owning Playwright Page; no CSS, lesson data or responses change. */
 'use strict';
 const assert = require('node:assert/strict');
+const {readRoute}=require('./portable-route-browser-helper.cjs');
 const expected = [
   { tree: 'T1', tips: ['A', 'B', 'C', 'D'], clades: ['A B', 'C D'], notation: '((A,B),(C,D))' },
   { tree: 'T2', tips: ['D', 'C', 'B', 'A'], clades: ['A B', 'C D'], notation: '((D,C),(B,A))' },
@@ -113,7 +114,7 @@ async function checkPhylogeny(page, world, options = {}) {
     try { return Object.fromEntries(Object.keys(localStorage).filter(key => key.startsWith('bioq.depth-study.v1.')).sort().map(key => [key, localStorage.getItem(key)])); }
     catch (_) { return null; }
   });
-  const before = await snapshot(), url = page.url();
+  const before = await snapshot(), url = page.url(), route = await readRoute(page);
   const next = world.getByRole('button', { name: 'Next annotation', exact: true });
   const back = world.getByRole('button', { name: 'Previous annotation', exact: true });
   const current = async () => Number(await diagram.locator('[data-phylogeny-view]').getAttribute('data-phylogeny-view'));
@@ -145,6 +146,7 @@ async function checkPhylogeny(page, world, options = {}) {
   assert.equal(await next.evaluate(el => el === document.activeElement), true);
   assert.deepEqual(await snapshot(), before, 'Inspecting trees does not alter private study drafts or review');
   assert.equal(page.url(), url, 'Diagram controls do not navigate away');
+  assert.equal(await readRoute(page), route, 'Diagram controls retain the logical section and mode');
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
   assert.ok(await world.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
   return { views, keyboardBoundaries: true, privateNotesUnchanged: true };

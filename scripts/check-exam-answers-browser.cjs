@@ -2,6 +2,7 @@
  * Canonical questions enter through the existing saved-mistake re-quiz; grading
  * and rendering run unchanged. No WebGL scene, account or live AI is started. */
 'use strict';
+const {waitForPortableRoute}=require('../tests/portable-route-browser-helper.cjs');
 const fs = require('node:fs'), path = require('node:path'), http = require('node:http');
 const assert = require('node:assert/strict'), vm = require('node:vm');
 const {createRequire} = require('node:module');
@@ -24,6 +25,7 @@ const server = http.createServer((req,res) => {
 async function frame(parent, selector) {return (await parent.locator(selector).elementHandle()).contentFrame();}
 async function navigate(page, route, selector) {
   await page.evaluate(value => {location.hash = value;}, '#' + route);
+  await waitForPortableRoute(page, '#' + route);
   const [section,...parts] = route.split('/'), sub = parts.length ? '#' + parts.join('/') : '';
   await page.waitForFunction(({section,sub}) => {
     const app = document.querySelector('#bioq-workspace')?.contentWindow;

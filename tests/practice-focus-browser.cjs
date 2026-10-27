@@ -2,6 +2,7 @@
  * the browser and initial Solve topic. This is not screen-reader/device QA. */
 'use strict';
 const assert = require('node:assert/strict');
+const {waitForPortableRoute}=require('./portable-route-browser-helper.cjs');
 
 async function checkPracticeFocus(page, initialWorld, options = {}) {
   let world = initialWorld;
@@ -81,7 +82,8 @@ async function checkPracticeFocus(page, initialWorld, options = {}) {
     const link = world.locator('.tp-path a[href="./' + section + '.html#learn/' + topic.id + '/' + mode + '"]');
     await link.focus();
     await page.keyboard.press('Enter');
-    await page.waitForURL(url => url.pathname.endsWith('/' + section + '.html') || url.hash === '#' + section + '/learn/' + topic.id + '/' + mode,
+    if (await page.evaluate(()=>!!window.BioPortable)) await waitForPortableRoute(page,'#'+section+'/learn/'+topic.id+'/'+mode);
+    else await page.waitForURL(url => url.pathname.endsWith('/' + section + '.html') || url.hash === '#' + section + '/learn/' + topic.id + '/' + mode,
       { waitUntil: 'domcontentloaded' });
     if (options.getWorld) world = await options.getWorld();
     await world.locator(section === 'reason' ? '#tpDraft' : '.tp-question').waitFor();
