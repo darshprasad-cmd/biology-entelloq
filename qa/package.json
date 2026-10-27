@@ -1,0 +1,9 @@
+{
+  "name": "biology-entelloq-browser-checks",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Pinned browser tooling for the existing static-site regression checks.",
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
+}
