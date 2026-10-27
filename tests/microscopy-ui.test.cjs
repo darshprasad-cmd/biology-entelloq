@@ -96,6 +96,7 @@ test('rendered notebook treats student markup as escaped text, with no network, 
  assert.doesNotMatch(rendered,/<img|<script|<iframe/);assert.equal(host.querySelector('[data-micro-count]').textContent,'(1)');
  assert.match(host.innerHTML,/not photomicrographs/);assert.match(host.innerHTML,/does not perform or certify the school practical/);
  assert.match(host.innerHTML,/does not grade the scientific accuracy/);assert.match(host.innerHTML,/normally lacks chloroplasts/);
+ assert.match(host.innerHTML,/latest 40 observations/);assert.match(host.innerHTML,/replaces the oldest/);assert.match(host.innerHTML,/Download your CSV before adding more/);
  assert.doesNotMatch(source,/localStorage\.clear|removeItem|getUserMedia|fetch\(|XMLHttpRequest|sendBeacon/);
 });
 
