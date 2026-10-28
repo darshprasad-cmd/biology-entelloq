@@ -3,6 +3,7 @@
 (function () {
   'use strict';
   const pkg = window.BioqPackage = top.BioqPackage;
+  window.BioPortable = top.BioPortable;
   const context = pkg.connect(window, window.__BIOQ_ROUTE__);
   const native = {
     setAttribute:Element.prototype.setAttribute,
@@ -44,7 +45,7 @@
   };
   window.BioqLocation = route;
   window.BioqHistory = {
-    get length() {return top.history.length;}, get state() {return top.history.state;},
+    get length() {return top.history.length;}, get state() {return pkg.getState();},
     back:() => top.history.back(), forward:() => top.history.forward(), go:delta => top.history.go(delta),
     pushState(state, unused, value) {pkg.commit(window, new URL(value || context.url.href, context.url.href), 'push', state);},
     replaceState(state, unused, value) {pkg.commit(window, new URL(value || context.url.href, context.url.href), 'replace', state);}

@@ -1,4 +1,4 @@
-/* A bounded regression for exact concept previews and resumed learning routes. */
+/* A bounded regression for useful Home context and exact resumed learning routes. */
 const assert=require('node:assert/strict');
 const path=require('node:path');
 const fs=require('node:fs');
@@ -13,20 +13,19 @@ async function checkResume(browser,url=base){
  const frame=page.frameLocator('#viewFrame');
  try{
   await page.goto(url+'/app.html#home',{waitUntil:'domcontentloaded'});
-  const fresh=page.locator('.cc-art .bp-media img');
-  await fresh.waitFor();
-  assert.match(await fresh.getAttribute('src'),/lesson-diffusion\.webp$/);
-  assert.equal(await page.locator('.cc-hero [data-go]').getAttribute('data-sub'),'diffusion');
+  await page.locator('.cw-continue').waitFor();
+  const first=await page.evaluate(()=>({id:BIO_COURSES.classes[0].units[0].chapters[0].id,title:BIO_COURSES.classes[0].units[0].chapters[0].title}));
+  assert.equal(await page.locator('.cw-continue h2').textContent(),first.title);
+  assert.equal(await page.locator('.cw-continue [data-go]').getAttribute('data-sub'),'9/'+first.id);
   for(const [id,mode,title]of[['enzymes','advanced','Enzymes'],['photosynthesis','visual','Photosynthesis']]){
    for(const section of['learn','reason','solve']){
     const sub=(section==='learn'?'topic/':'learn/')+id+'/'+mode;
     await page.goto(url+'/app.html#'+section+'/'+sub,{waitUntil:'domcontentloaded'});
     await frame.locator(section==='learn'?'#bl-topic-title':'#bioPractice h1').waitFor();
     await page.locator('.side .navi[data-go="home"]').click();
-    const hero=page.locator('.cc-hero'),svg=hero.locator('.cc-art .bp-media svg');
+    const hero=page.locator('.cw-continue'),svg=hero.locator('.cw-home-art svg');
     await svg.waitFor();
-    assert.equal(await hero.locator('.cc-art').getAttribute('data-preview-mounted'),'topic-'+id,section+' correct preview identity');
-    assert.match(await svg.getAttribute('aria-label'),new RegExp(title));
+    assert.match(await svg.getAttribute('aria-label'),/Illustrative leaf venation/);
     assert.equal(await hero.locator('h2').textContent(),title,'Home names the resumed concept');
     assert.equal(await hero.locator('[data-go]').getAttribute('data-go'),section);
     assert.equal(await hero.locator('[data-go]').getAttribute('data-sub'),sub);
@@ -44,12 +43,20 @@ async function checkResume(browser,url=base){
    }
   }
   // Changing a lens inside the iframe must update the resumed context as well.
-  await page.goto(url+'/app.html#learn/topic/enzymes/advanced',{waitUntil:'domcontentloaded'});
+  await page.goto(url+'/app.html#learn/topic/enzymes/visual',{waitUntil:'domcontentloaded'});
   await frame.locator('#bl-topic-title').waitFor();
-  await frame.locator('[role="tab"]').filter({hasText:'Visual'}).click();
-  await page.waitForURL('**/app.html#learn/topic/enzymes/visual');
+  await frame.locator('[role="tab"]').filter({hasText:'Advanced'}).click();
+  await page.waitForURL('**/app.html#learn/topic/enzymes/advanced');
+  // A child-owned lens change must also refresh the return route underneath an
+  // immersive launcher; it does not necessarily invoke the shell's go().
+  await page.locator('#nav .navi[data-go="lab"]').click();
+  await page.locator('#launcher.on').waitFor();
+  await page.locator('#launchX').click();
+  await page.waitForURL('**/app.html#learn/topic/enzymes/advanced');
+  await page.reload({waitUntil:'domcontentloaded'});
+  await frame.locator('#bl-mode-advanced[aria-selected=true]').waitFor();
   await page.locator('.side .navi[data-go="home"]').click();
-  assert.equal(await page.locator('.cc-hero [data-go]').getAttribute('data-sub'),'topic/enzymes/visual');
+  assert.equal(await page.locator('.cw-continue [data-go]').getAttribute('data-sub'),'topic/enzymes/advanced');
   await page.setViewportSize({width:390,height:844});
   for(const sub of['','/topic/enzymes/advanced','/topic/photosynthesis/visual']){
    await page.goto(url+'/app.html#learn'+sub,{waitUntil:'domcontentloaded'});
@@ -61,7 +68,7 @@ async function checkResume(browser,url=base){
   fs.mkdirSync(path.resolve(__dirname,'../docs/library'),{recursive:true});
   await page.screenshot({path:path.resolve(__dirname,'../docs/library/app-learn-entry-mobile.png'),fullPage:false});
   assert.deepEqual(errors,[]);
-  return 'Fresh Home and six exact Learn/Reason/Solve resumes show the correct concept, preserve modes through reload/navigation, use unique SVG IDs, and keep mobile Learn titles below the header.';
+  return 'Fresh Home offers its first class chapter; six exact Learn/Reason/Solve resumes name the correct concept and preserve modes through reload/navigation; an iframe lens change survives immersive exit and reload; illustrations have unique SVG IDs; mobile Learn titles stay below the header.';
  }finally{await context.close();}
 }
 module.exports={checkResume};

@@ -1,6 +1,7 @@
 /* Real Learn / Reason / Solve evidence flow. Synthetic input; never camera tracking,
  * clinical validation, significance testing, or a claim of educational efficacy. */
 'use strict';
+const { waitForPortableRoute } = require('../tests/portable-route-browser-helper.cjs');
 const fs = require('node:fs'), path = require('node:path'), assert = require('node:assert/strict');
 const crypto = require('node:crypto');
 const { createRequire } = require('node:module');
@@ -72,7 +73,8 @@ fs.mkdirSync(output, { recursive: true });
     async function follow(world, selector, section) {
       const route = (section === 'learn' ? 'topic/' : 'learn/') + id + '/advanced';
       await world.locator(selector).click();
-      await page.waitForURL(url => packaged ? url.hash === '#' + section + '/' + route : url.pathname.endsWith('/' + section + '.html') && url.hash === '#' + route,
+      if (packaged) await waitForPortableRoute(page, '#' + section + '/' + route, {timeout:360000});
+      else await page.waitForURL(url => url.pathname.endsWith('/' + section + '.html') && url.hash === '#' + route,
         { waitUntil: 'domcontentloaded', timeout: 360000 });
       return mountedWorld('.tp-heading');
     }

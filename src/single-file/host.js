@@ -8,9 +8,10 @@
   clearTimeout(window.__bioqOpeningTimer);
   document.getElementById('bioq-loading-message').textContent = 'Preparing your learning workspace…';
   const pages = new Map(), assets = new Map(), contexts = new WeakMap(), pendingFrames = new WeakMap();
+  let readyToRoute = false;
   const synthetic = 'https://biology.entelloq.com/__single__/';
   const base = new URL('./', location.href);
-  const sections = new Set(['home','learn','lessons','reason','labs','solve','explore','me','about','lab','universe']);
+  const sections = new Set(['home','courses','progress','learn','lessons','reason','labs','solve','explore','me','about','lab','universe']);
   const encode = value => JSON.stringify(value).replace(/</g, '\\u003c');
   const escapeRE = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   // WindowProxy identity survives frame navigation, while its document changes.
@@ -102,16 +103,57 @@
     if (pages.has(key)) return '#' + key.replace(/\.html$/, '') + (url.hash ? '/' + url.hash.slice(1) : '');
     return null;
   }
+  // The physical file keeps a clean address. Its history entries retain the
+  // logical route and the authored document's state separately, so Reload and
+  // Back/Forward restore the same view without exposing implementation hashes.
+  // Explicit share links use ?route=; old hash links are accepted on arrival.
+  function validRoute(value) {
+    if (typeof value !== 'string' || value.length > 2048) return null;
+    if (!value || value === '#') return '';
+    const route = value.replace(/^#/, '');
+    if (/^[a-z][a-z0-9+.-]*:/i.test(route) && !/^cbse:(9|10|11|12)(?:\/|$)/.test(route)) return null;
+    return /^[a-zA-Z0-9][a-zA-Z0-9._~:/%\-]*$/.test(route) ? '#' + route : null;
+  }
+  function storedRoute() {
+    const entry = history.state?.__bioqPortable;
+    return entry?.version === 1 ? validRoute(entry.route) : null;
+  }
+  function outerRoute() {
+    // A newly supplied URL wins over state copied by a native hash navigation.
+    if (location.hash) return validRoute(location.hash) ?? '';
+    const query = new URL(location.href).searchParams;
+    if (query.has('route')) return validRoute(query.get('route')) ?? '';
+    return storedRoute() ?? '';
+  }
+  function authoredState() {
+    const entry = history.state?.__bioqPortable;
+    return entry?.version === 1 && validRoute(entry.route) !== null ? entry.state ?? null : history.state;
+  }
+  function cleanURL() {
+    const url = new URL(location.href);
+    url.hash = '';
+    url.searchParams.delete('route');
+    return url;
+  }
+  function notifyRoute() {
+    window.dispatchEvent(new CustomEvent('bioq:routechange', {detail:{route:outerRoute()}}));
+  }
   function setOuter(hash, mode, state) {
-    const url = location.pathname + location.search + hash;
-    if (mode === 'replace' || location.hash === hash) history.replaceState(state, '', url);
-    else history.pushState(state, '', url);
+    const route = validRoute(hash);
+    if (route === null) return false;
+    const same = outerRoute() === route;
+    const entry = {__bioqPortable:{version:1,route,state:state ?? null}};
+    // Keep the exact physical path, including a renamed standalone file.
+    if (mode === 'replace' || same) history.replaceState(entry, '', cleanURL().href);
+    else history.pushState(entry, '', cleanURL().href);
+    notifyRoute();
+    return true;
   }
   function commit(win, url, mode = 'push', state = null) {
     const context = contextFor(win);
     if (!context) return;
     context.url = url;
-    if (context.restoring) return;
+    if (context.restoring || restoringRoute) return;
     const hash = routeFor(url);
     // Nested dissection views must not replace their owning notebook route.
     if (hash !== null && (context.frame === workspace || /\/(learn|lessons|reason|labs|solve|explore|me|about)\.html$/.test(url.pathname))) {
@@ -204,12 +246,13 @@
     showRoute(false, name === 'app.html' ? url.search : '');
     return true;
   }
+  let restoringRoute = false;
   function showRoute(fromHistory, search = '') {
-    const hash = location.hash;
+    const hash = outerRoute();
     const section = hash.slice(1).split('/')[0];
     const landing = !hash || hash.startsWith('#landing/') || !sections.has(section);
     const name = landing ? 'index.html' : 'app.html';
-    const route = new URL(name + (search || location.search), base);
+    const route = new URL(name + (search || cleanURL().search), base);
     route.hash = landing ? (hash.startsWith('#landing/') ? '#' + hash.slice(9) : hash) : hash;
     const current = contextFor(workspace.contentWindow);
     if (current?.page === name && current.ready && current.url.search === route.search) {
@@ -220,10 +263,11 @@
         // open. Close that owner before restoring a route, without letting its
         // cleanup replace the browser history entry being restored.
         current.restoring = true;
+        restoringRoute = true;
         try {
           if (name === 'app.html' && target.document.getElementById('launcher')?.classList.contains('on')) target.dispatchEvent(new target.KeyboardEvent('keydown', {key:'Escape'}));
           current.url = route;
-          target.dispatchEvent(fromHistory ? new target.PopStateEvent('popstate', {state:history.state}) : new target.HashChangeEvent('hashchange',{oldURL,newURL:route.href}));
+          target.dispatchEvent(fromHistory ? new target.PopStateEvent('popstate', {state:authoredState()}) : new target.HashChangeEvent('hashchange',{oldURL,newURL:route.href}));
           // Child-owned mode changes do not alter the authored shell's cached
           // loadedSrc. Back can therefore hit its no-op branch even though the
           // active child's hash differs. Reconcile only an already-ready view;
@@ -237,7 +281,7 @@
               view.contentWindow.dispatchEvent(new view.contentWindow.HashChangeEvent('hashchange',{oldURL:childOldURL,newURL:next.href}));
             }
           }
-        } finally {current.restoring = false;}
+        } finally {current.restoring = false; restoringRoute = false;}
         if (landing && route.hash) target.document.getElementById(route.hash.slice(1))?.scrollIntoView();
       }
       return;
@@ -245,7 +289,7 @@
     workspace.srcdoc = render(name, route.href);
   }
   window.BioqPackage = {
-    contexts, resource, rewriteMarkup, loadFrame, commit, navigate,
+    contexts, resource, rewriteMarkup, loadFrame, commit, navigate, getState:authoredState,
     assetReady(path) {
       const asset = assets.get(path);
       if (!asset?.elementId || !document.getElementById(asset.elementId)) return;
@@ -274,6 +318,36 @@
       return new win.Response(bytes, {headers:{'Content-Type':asset.type,'Content-Length':String(bytes.byteLength)}});
     }
   };
+  window.BioPortable = Object.freeze({
+    getRoute:outerRoute,
+    getShareURL(value = outerRoute()) {
+      const route = validRoute(value);
+      if (route === null) throw new TypeError('The section link is invalid.');
+      const url = cleanURL();
+      if (route) url.searchParams.set('route', route.slice(1));
+      return url.href;
+    },
+    navigate(value, options = {}) {
+      const route = validRoute(value);
+      if (route === null) return false;
+      setOuter(route, options.replace ? 'replace' : 'push', options.state);
+      if (readyToRoute) showRoute(false);
+      return true;
+    }
+  });
+  // Import a legacy hash or a share query once. The history state then survives
+  // reloads without needing a second persistent copy of the student's route.
+  setOuter(outerRoute(), 'replace', authoredState());
+  addEventListener('popstate', () => {
+    setOuter(outerRoute(), 'replace', authoredState());
+    if (readyToRoute) showRoute(true);
+  });
+  // Native legacy links may still write a fragment, including while the package
+  // is decoding. Import it into this entry without adding another Back stop.
+  addEventListener('hashchange', () => {
+    setOuter(outerRoute(), 'replace', authoredState());
+    if (readyToRoute) showRoute(false);
+  });
   try {
     if (!window.DecompressionStream) throw new Error('Please open this file in a current version of Chrome, Edge, Firefox or Safari.');
     await inBatches(Object.entries(manifest.assets).filter(([,entry]) => !entry.deferred), 8, async ([path, entry]) => {
@@ -283,9 +357,7 @@
     await inBatches(Object.entries(manifest.pages), 3, async ([name, data]) => pages.set(name, new TextDecoder().decode(await unpack(data))));
     document.getElementById('bioq-manifest').remove();
     delete manifest.assets; delete manifest.pages;
-    addEventListener('popstate', () => showRoute(true));
-    // Hash-only links from outside the app are restored without a new visit.
-    addEventListener('hashchange', () => showRoute(false));
+    readyToRoute = true;
     showRoute(false);
   } catch (error) {
     document.getElementById('bioq-loading-message').textContent = 'The workspace could not open. ' + error.message;

@@ -3,6 +3,7 @@
  * No WebGL worlds, camera, accounts or live AI are started by this check. */
 'use strict';
 const {dismissCBSE}=require('../tests/cbse-browser-helper.cjs');
+const {waitForPortableRoute}=require('../tests/portable-route-browser-helper.cjs');
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
 const {createRequire}=require('node:module'),{pathToFileURL}=require('node:url'),{createHash}=require('node:crypto');
 const {gunzipSync,gzipSync}=require('node:zlib');
@@ -106,9 +107,9 @@ async function readingReadyWithHeldImage(browser,base){
   await lesson.getByRole('button',{name:'Try this check again',exact:true}).click();assert.equal(await lesson.locator('.bl-quiz [data-check="0"]').first().isEnabled(),true);
   report.checks.push('Learn answers and retries remain usable beyond the unchanged 15-second deadline while a noncritical image deliberately withholds native iframe load.');
   await page.goto(base+'/truncated#home',{waitUntil:'domcontentloaded'});
-  const home=await frame(page,'#bioq-workspace');await home.locator('#homeIn .cc-world').first().waitFor();
+  const home=await frame(page,'#bioq-workspace');await home.locator('#homeIn .cw-investigation').first().waitFor();
   await page.evaluate(()=>{window.originalLoadFrame=BioqPackage.loadFrame;BioqPackage.loadFrame=(target,value,...rest)=>target.id==='viewFrame'?true:originalLoadFrame(target,value,...rest);});
-  await home.locator('#nav [data-go="learn"]:not(.quick-action)').click();await home.locator('#oops.on').waitFor({timeout:20000});
+  await home.locator('#exploreBtn').click();await home.locator('#learningPaths [data-go="learn"]').click();await home.locator('#oops.on').waitFor({timeout:20000});
   assert.match(await home.locator('#oopsMsg').textContent(),/took too long/,'A genuinely unmounted section still reaches the unchanged deadline');
   await page.evaluate(()=>{BioqPackage.loadFrame=originalLoadFrame;delete window.originalLoadFrame;});await home.locator('#oopsRetry').click();
   const retried=await frame(home,'#viewFrame');await retried.locator('#bl-search').waitFor();await home.locator('#skel.on').waitFor({state:'hidden'});assert.equal(await home.locator('#oops.on').count(),0,JSON.stringify(await retried.evaluate(()=>({ready:BioqContext.ready,state:document.readyState,page:BioqContext.page,src:frameElement.getAttribute('src'),url:BioqContext.url.href,body:document.body.children.length}))));
@@ -166,7 +167,7 @@ async function readingReadyWithHeldImage(browser,base){
    await problem.getByRole('button',{name:'Try again'}).waitFor();
    await opened.shell.locator('#launchLoad').waitFor({state:'hidden'});
    await opened.shell.locator('#launchX').click();
-   await opened.page.waitForURL(url=>url.hash==='#solve');
+   await waitForPortableRoute(opened.page,'#solve');
    await opened.solve.locator('#svConfigCard').waitFor();
    report.checks.push(mode+' model data rejects with an actionable error and retry; exiting the error returns to working Solve.');
    await opened.context.close();

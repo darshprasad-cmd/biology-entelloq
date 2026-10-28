@@ -37,7 +37,11 @@ def render(page):
     before = path.read_bytes()
     text = before.decode('utf-8').replace('\r\n', '\n')
     if page == 'app':
-        text = slot(text, 'app-script', '<script>\n' + source('topics.js') + extensions() + source('visuals.js') + source('app-library.js') + '</script>\n', '</body>')
+        courses = ROOT / 'src/courses'
+        course_script = source('topics.js') + extensions() + source('visuals.js') + (courses / 'data.js').read_text(encoding='utf-8') + '\n' + (courses / 'workspace.js').read_text(encoding='utf-8')
+        text = slot(text, 'course-style', '<style>\n' + (courses / 'workspace.css').read_text(encoding='utf-8') + '\n</style>\n', '</head>')
+        text = slot(text, 'course-script', '<script>\n' + course_script + '\n</script>\n', '</head>')
+        text = slot(text, 'app-script', '<script>\n' + source('app-library.js') + '</script>\n', '</body>')
         return path, before, text.encode('utf-8')
     styles = source('shared.css')
     scripts = source('context.js')
@@ -54,10 +58,10 @@ def render(page):
             text = text.replace('<main id="page">', '<main id="page">\n' + mount)
         # Preserve the original catalog/cell/microscope and their JS unchanged.
     elif page == 'labs':
-        styles += source('notebook.css') + source('experiments.css')
+        styles += source('notebook.css') + source('experiments.css') + source('field-labs.css')
         if (LIB / 'lab-catalog.css').exists():
             styles += source('lab-catalog.css')
-        scripts += source('notebook.js') + source('lab-metadata.js') + source('experiments.js') + source('investigations.js')
+        scripts += (ROOT / 'src/courses/data.js').read_text(encoding='utf-8') + '\n' + source('notebook.js') + source('lab-metadata.js') + source('experiments.js') + source('field-labs.js') + source('investigations.js')
         # Replace only the existing canonical bench and shell module bodies.
         for name in ('_labs.js', '_lab_bench.js', '_lab_ecology.js', '_lab_molecular.js', '_lab_physiology.js'):
             pattern = re.compile(r'(^/\* ===== ' + re.escape(name) + r' ===== \*/\n)[\s\S]*?(?=^/\* ===== [\w.-]+ ===== \*/|^</script>)', re.M)

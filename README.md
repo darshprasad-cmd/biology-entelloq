@@ -14,6 +14,11 @@ and prepared frog/cockroach models are embedded; no companion folder is needed.
 The workspace starts before the large specimen payloads finish downloading.
 Models remain inside the same file and are prepared when a specimen is opened.
 
+Ordinary navigation keeps the physical address clean. The active view lives in
+browser history, so Back, Forward and Reload restore it. Use the workspace's
+**Share** button for an explicit `?route=` link. Existing `#learn`, `#lessons`,
+practical and dissection links remain accepted and are cleaned after arrival.
+
 ```bash
 python scripts/build-single-file.py
 ```
@@ -45,6 +50,7 @@ python scripts/build-single-file.py --check
 node scripts/check-single-file-browser.cjs
 node scripts/check-opening-browser.cjs
 node scripts/check-exam-answers-browser.cjs
+node scripts/check-courses-browser.cjs
 node tests/check-ai-answer-formatting.cjs
 ```
 
@@ -68,13 +74,14 @@ real variables. Nothing here is a video of someone else doing the experiment.
 
 | | |
 |---|---|
-| **Learn** | Searchable biology concepts, six explanation modes, interactive models, prerequisites and quick checks |
+| **Learn** | Classes 9–12 chapter guides connected to 109 searchable concepts, six explanation modes, evidence tasks and saved reflections |
 | **Lessons** | Every concept through six lenses: story → prediction → picture → maths → frontier → the world |
 | **Reason** | Think like a biologist — guided reasoning workouts, seven steps at a time |
-| **Labs** | 23 investigations: simulations, microscopy, genetics, physiology, ecology and five dissections, with saved notebooks and trial graphs |
+| **Labs** | 25 investigations: simulations, microscopy, genetics, physiology, ecology and five dissections, with saved notebooks and trial graphs |
 | **Solve** | Practice — NEET · CBSE · AP Biology · Olympiad |
 | **Explore** | Atlases, the tree of life, diseases, discoveries |
 | **Me** | Your journey, quietly tracked — no points, no streaks, no leaderboards |
+| **Progress** | Viewed chapter guides, written reflections and a student-selected review list; activity is not labelled mastery |
 
 ### The two immersive worlds
 
@@ -99,6 +106,21 @@ the app and its eight reading sections as one shared backdrop, with the same
 persistent motion preference and a reduced-motion fallback.
 
 ### Learn and Lab authoring
+
+The primary workspace navigation is Home, Learn, Labs, Practice and Progress on
+desktop and mobile. Chapter content is authored in `src/courses/data.js`; the
+course renderer and scoped design tokens live beside it. `build-library.py`
+embeds these sources into the app before packaging. The broader concept library,
+legacy six-lens lessons, reasoning tools and activity history retain their routes.
+The two field investigations in `src/library/field-labs.js` use the existing lab
+registry and notebook lifecycle. They expose model variables, observations,
+assumptions and captures through the same interface as the other benches.
+
+Chapter reflections use the additive `bioq.courses.v1` storage namespace. No
+existing practice, concept, CBSE preference or lab-notebook records are migrated
+or deleted. Browser storage failure leaves a session draft and an export action.
+Guides describe their curriculum scope and link the official 2026–27 sources;
+they do not claim independently reviewed, exhaustive syllabus coverage.
 
 The expanded library lives in `src/library/`. Content is separate from rendering:
 `topics.js` owns canonical concepts; `lab-metadata.js` owns laboratory discovery;

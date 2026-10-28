@@ -38,6 +38,10 @@ EXTERNAL_ASSET_FILES = {
 # these exact approved routing changes back to their original bytes; every
 # unrelated launcher byte still uses the immutable original fingerprint.
 APPROVED_LAUNCHER_ROUTING = (
+    # October 27: the approved unified curriculum navigation must return from
+    # the unchanged dissection world to the exact chapter/concept it opened from.
+    ('try{history.replaceState({k:to,sub:currentSub||null},"","#"+to+(currentSub?"/"+currentSub:""));}catch(e){}',
+     'try{history.replaceState({k:to,sub:null},"","#"+to);}catch(e){}'),
     ('openLaunch(k,{push}); return; }  // immersive → overlay',
      'openLaunch(k); return; }  // immersive → overlay'),
     ('function openLaunch(k,{push=true}={}){', 'function openLaunch(k){'),

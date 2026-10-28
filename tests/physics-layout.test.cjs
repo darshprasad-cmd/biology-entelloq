@@ -74,13 +74,15 @@ function harness(initial = {}) {
     document, localStorage: store, $: element,
     $$: selector => selector === '#learningPaths .tile' ? tiles : selector === '[data-path-group]' ? filters : [],
     IC: new Proxy({}, { get: () => '<svg></svg>' }),
-    home: element('#home'), frame: element('#viewFrame'), skel: element('#skel'), oops: element('#oops'),
+    home: element('#home'), courseView:element('#courseView'), frame: element('#viewFrame'), skel: element('#skel'), oops: element('#oops'),
     current: null, loadTimer: null, clearTimeout() {},
     history: { pushState: (...args) => calls.push(['history', ...args]) },
     setActive: k => calls.push(['active', k]), tintField() {},
     loadSection: (...args) => calls.push(['loadSection', ...args]),
     openLaunch: k => calls.push(['openLaunch', k]), closeCmdk: () => calls.push(['closeCmdk']),
   });
+  context.window=context;
+  for(const file of ['src/library/topics.js','src/library/extended-core.js','src/library/extended-systems.js','src/courses/data.js','src/courses/workspace.js'])vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),context);
   vm.runInContext(declarations + activity + fields + commands + pathSource + homeSource + exploreSource + goSource +
     ';globalThis.api={BIO_FIELDS,VIEWS,LAUNCH,PATH_GROUPS,CMDS,ACT,readExploredLessons,exploredLessons,buildHome,openExplore,closeExplore,filterPaths,go};', context);
   return { api: context.api, context, records, store, calls, element, document, filters, tiles: () => tiles };
@@ -117,15 +119,22 @@ test('malformed journals, unsupported versions, collection shapes and record len
   assert.equal(api.exploredLessons().size, 0);
 });
 
-test('Home consumes real lesson-engine saves and the map directs the learner to an unexplored lesson', () => {
+test('Home derives concept totals from the library, offers four classes, and preserves legacy lesson journals', () => {
   const env = harness();
   const progress = createLessonProgress(LESSONS, LENSES, () => env.store);
   progress.setLens('diffusion', 'math');
   env.api.buildHome();
-  assert.equal(env.element('#mapCount').textContent, '1 / 9 lessons explored');
-  assert.equal(env.element('#mapPercent').textContent, '11%');
-  assert.match(env.element('#homeIn').innerHTML, /class="cc-node" data-go="lessons" data-sub="respiration"><b>Cell Biology/);
-  assert.match(env.element('#homeIn').innerHTML, /Exploration is a beginning/);
+  const total=env.context.BIO_LIBRARY.topics.length;
+  assert.equal(env.element('#mapCount').textContent, '0 / '+total+' concepts explored','An old lesson visit is not a fabricated concept visit');
+  env.records.set('bio.entelloq.library.progress.v1',JSON.stringify({topics:{'cell-structure':{modes:['visual']},unknown:{modes:['visual']}}}));
+  env.api.buildHome();
+  assert.equal(env.element('#mapCount').textContent, '1 / '+total+' concepts explored');
+  assert.equal(env.element('#mapPercent').textContent, Math.round(100/total)+'%');
+  const markup=env.element('#homeIn').innerHTML;
+  assert.equal((markup.match(/class="cw-class(?: selected)?"/g)||[]).length,4);
+  assert.equal((markup.match(/class="cw-investigation"/g)||[]).length,3);
+  assert.match(markup,new RegExp(env.context.BioCourses.chapters().length+' chapter guides'));
+  assert.match(markup,/not a claim of mastery/);
   const saved = env.store.getItem('bioq_lessons_v1');
   env.api.buildHome();
   assert.equal(env.store.getItem('bioq_lessons_v1'), saved, 'Viewing Home must not award or rewrite progress');
@@ -135,11 +144,12 @@ test('resume survives malformed activity and only emits safe local routes', () =
   const env = harness();
   for (const raw of ['{broken', 'null', '[]', '{"last":{"k":"__proto__"}}']) {
     env.records.set('bioq_activity', raw); env.api.buildHome();
-    assert.match(env.element('#homeIn').innerHTML, /data-go="lessons" data-sub="diffusion">Start exploring/);
+    const first=env.context.BIO_COURSES.classes[0].units[0].chapters[0];
+    assert.match(env.element('#homeIn').innerHTML,new RegExp('data-go="courses" data-sub="9/'+first.id+'"'));
   }
   env.records.set('bioq_activity', JSON.stringify({ last: { k: 'lessons', sub: 'replication' } }));
   env.api.buildHome();
-  assert.match(env.element('#homeIn').innerHTML, /data-go="lessons" data-sub="replication">Continue DNA Replication/);
+  assert.match(env.element('#homeIn').innerHTML, /data-go="lessons" data-sub="replication">Continue learning/);
   assert.deepEqual(env.element('#continueLearning').dataset, { go: 'lessons', sub: 'replication' });
   env.records.set('bioq_activity', JSON.stringify({ last: { k: 'lessons', sub: '" onfocus="alert(1)' } }));
   env.api.buildHome();
@@ -159,7 +169,7 @@ test('Explore reaches every pillar, filters accurately, and retains the chosen f
   env.api.closeExplore(); env.api.openExplore();
   assert.equal(env.tiles().filter(tile => !tile.hidden).length, 3);
   env.api.filterPaths('__proto__');
-  assert.equal(env.tiles().filter(tile => !tile.hidden).length, 8);
+  assert.equal(env.tiles().filter(tile => !tile.hidden).length, env.api.VIEWS.length-1);
 });
 
 test('normal navigation uses the section iframe and shows the exact route label', () => {
@@ -186,7 +196,7 @@ test('immersive navigation keeps its original launcher and never repurposes the 
   }
   assert.deepEqual(env.calls.filter(call => call[0] === 'openLaunch'), [['openLaunch', 'lab'], ['openLaunch', 'universe']]);
   assert.equal(env.calls.filter(call => call[0] === 'loadSection').length, 0);
-  assert.equal(env.element('#routeLabel').textContent, 'Learn', 'The underlying section stays available on immersive exit');
+  assert.equal(env.element('#routeLabel').textContent, 'Concept library', 'The underlying section stays available on immersive exit');
 });
 
 test('unknown and inherited route keys return Home without loading an undefined page', () => {

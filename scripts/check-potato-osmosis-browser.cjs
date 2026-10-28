@@ -1,5 +1,6 @@
 /* Actual packaged-browser rehearsal; not biological, physical-apparatus or webcam validation. */
 'use strict';
+const {waitForPortableRoute}=require('../tests/portable-route-browser-helper.cjs');
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),http=require('node:http');
 const {createRequire}=require('node:module'),{pathToFileURL}=require('node:url');
 const root=path.resolve(__dirname,'..');
@@ -18,7 +19,7 @@ async function open(page,base,action='Skip for now'){
  assert.equal(await page.locator('.poto').count(),0,'questionnaire must precede apparatus');
  assert.equal(await page.locator('input[name=classYear]:checked').inputValue(),'11');
  await page.getByRole('button',{name:action,exact:true}).click();
- await page.locator('.poto').waitFor();assert.equal(new URL(page.url()).hash,route);
+ await page.locator('.poto').waitFor();await waitForPortableRoute(page,route);
  await page.getByRole('button',{name:'Interactive potato bench',exact:true}).click();
  assert.equal(await page.evaluate(()=>document.activeElement.id),'cbsep-potato-bench');
 }

@@ -33,7 +33,10 @@
     });
     button.onclick=function(){open(id,true);};cards.appendChild(button);
   });
-  var workspace=document.createElement('section');workspace.className='bql-workspace';workspace.setAttribute('aria-labelledby','bql-workspace-title');workspace.hidden=true;entry.appendChild(workspace);original.prepend(entry);
+  var workspace=document.createElement('section');workspace.className='bql-workspace';workspace.setAttribute('aria-labelledby','bql-workspace-title');workspace.hidden=true;entry.appendChild(workspace);
+  // The catalogue is the entry point; additional tools follow it. Opening a
+  // tool still focuses and scrolls its workspace into view.
+  if(section==='learn'||section==='labs')original.append(entry);else original.prepend(entry);
   var active=null,child=null,timer=null,observer=null,sizeObserver=null,hidden=[],guide=null;
   function fitFrame(){
     if(!child||workspace.hidden)return;

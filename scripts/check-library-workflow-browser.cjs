@@ -9,11 +9,11 @@ const output=path.resolve(__dirname,'../docs/library');fs.mkdirSync(output,{recu
  const context=await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce'});
  const p=await context.newPage();const errors=[];p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error'&&m.text().startsWith('Lab failed:'))errors.push(m.text());});const report={checks:[],errors};
  try{
-  await p.goto(base+'/labs.html');await p.locator('#lab-search').waitFor();assert.equal(await p.locator('#lab-cards>a').count(),23);
+  await p.goto(base+'/labs.html');await p.locator('#lab-search').waitFor();assert.equal(await p.locator('#lab-cards>a').count(),25);
   await p.locator('#lab-search').fill('heart');assert.ok(await p.locator('#lab-cards>a').count()>=3);
   await p.locator('#lab-type').selectOption('dissection');assert.equal(await p.locator('#lab-cards>a').count(),3);assert.equal(await p.locator('#lab-cards>a[href="#heart-dissection"]').count(),1);
-  await p.locator('#lab-search').fill('<img src=x onerror=alert(1)>');assert.equal(await p.locator('#lab-cards img').count(),0);await p.locator('#lab-clear').click();assert.equal(await p.locator('#lab-cards>a').count(),23);
-  report.checks.push('23 working entries; aliases; intersecting category/type filters; safe, recoverable empty search.');
+  await p.locator('#lab-search').fill('<img src=x onerror=alert(1)>');assert.equal(await p.locator('#lab-cards img').count(),0);await p.locator('#lab-clear').click();assert.equal(await p.locator('#lab-cards>a').count(),25);
+  report.checks.push('25 working entries; aliases; intersecting category/type filters; safe, recoverable empty search.');
   await p.goto(base+'/labs.html#photosynthesis-rate');await p.locator('#lab-hypothesis').fill('If light rises, oxygen production will rise until a plateau.');
   await p.locator('#lab-record').click();const baseline=await p.evaluate(()=>JSON.parse(localStorage.getItem('bioq.lab-notebook.v1.photosynthesis-rate')).trials[0]);
   await p.getByRole('slider',{name:'Light (µmol photons/m²/s)',exact:true}).fill('1000');await p.locator('#lab-record').click();

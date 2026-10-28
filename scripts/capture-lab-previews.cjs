@@ -30,6 +30,8 @@ const captures=[
  ['pcr','#mlxpView canvas',async p=>{await p.locator('#mlxpRun').click();}],
  ['plant-investigation','.bx-view svg'],
  ['ecosystem-investigation','.bx-view svg'],
+ ['stomatal-transpiration','.fl-chambers',async p=>{await p.getByRole('combobox',{name:'Change only this factor'}).selectOption('seal');await p.getByRole('button',{name:'Start paired experiment',exact:true}).click();await p.getByRole('button',{name:'Advance both by 5 min'}).click({clickCount:6});}],
+ ['quadrat-sampling','.fl-field-wrap',async p=>{await p.getByRole('button',{name:'Locate a random quadrat'}).click();}],
  ...['heart','frog','fish','earthworm','cockroach'].map(specimen=>[specimen+'-dissection','iframe'])
 ];
 async function main(){
@@ -48,7 +50,7 @@ async function main(){
   await page.addStyleTag({content:'header.nav{visibility:hidden!important}'});
   await page.evaluate(()=>document.fonts.ready);
   const registered=await page.evaluate(()=>LABS.all().map(l=>l.id));
-  if(registered.length!==23||captures.some(([id])=>!registered.includes(id)))throw new Error('The preview list must match all 23 registered labs.');
+  if(registered.length!==captures.length||captures.some(([id])=>!registered.includes(id)))throw new Error('The preview list must match every registered lab.');
   for(const [id,selector,prepare] of captures.filter(([id])=>!only||only.includes(id))){
    try{
     await page.evaluate(id=>{location.hash=id;},id);
