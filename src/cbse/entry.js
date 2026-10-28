@@ -22,11 +22,12 @@
   let profile=read(), priorFocus=null, openMode='', viewedClass=requestedClass()||profile?.classYear||'9';
   const incoming=root.location.hash && root.location.hash!=='#home' && !isCBSE() ? root.location.hash : '';
   let pendingIncoming=incoming;
-  const choices=(name,values,current)=>'<div class="cbse-choices">'+values.map(([value,label])=>'<label class="cbse-choice"><input type="radio" name="'+name+'" value="'+value+'" '+(String(current)===String(value)?'checked':'')+' required><span>'+label+'</span></label>').join('')+'</div>';
+  const choiceDetails={classYear:{9:'Science · Biology',10:'Science · Biology',11:'Biology',12:'Biology'},goal:{foundations:'Connect the ideas',revision:'Refresh what you know',practice:'Recall, then check'}};
+  const choices=(name,values,current)=>'<div class="cbse-choices cbse-choices--'+name+'">'+values.map(([value,label])=>'<label class="cbse-choice"><input type="radio" name="'+name+'" value="'+value+'" '+(String(current)===String(value)?'checked':'')+' required><span><b>'+label+'</b>'+(choiceDetails[name]?.[value]?'<small>'+choiceDetails[name][value]+'</small>':'')+'<i class="cbse-choice-mark" aria-hidden="true"></i></span></label>').join('')+'</div>';
   const brand='<div class="cbse-brand"><strong>ENTELLOQ <span>BIOLOGY</span></strong><span>CBSE · 2026–27</span></div>';
   function show(html,mode) {
     if (!dialog.open) priorFocus=doc.activeElement;
-    openMode=mode;dialog.innerHTML='<div class="cbse-inner">'+brand+html+'</div>';
+    openMode=mode;dialog.dataset.view=mode;dialog.innerHTML='<div class="cbse-inner">'+brand+html+'</div>';
     if (!dialog.open) dialog.showModal();
     dialog.scrollTop=0;
     dialog.querySelector('h1').focus({preventScroll:true});
@@ -36,7 +37,29 @@
   function unitOptions(year,selected) {return DATA.courses[year].units.map(unit=>'<option value="'+unit.id+'" '+(unit.id===selected?'selected':'')+'>'+escape(unit.title)+'</option>').join('');}
   function questionnaire(editing=false) {
     const value=profile||{classYear:viewedClass,goal:'foundations',minutes:20,focus:DATA.courses[viewedClass].units[0].id};
-    show('<p class="cbse-kicker">Your biology, your starting point</p><h1 tabindex="-1">Let’s make this workspace yours.</h1><p class="cbse-muted">Four quick choices. We’ll suggest a class-specific study route, while keeping every other part of Entelloq open to you.</p><div class="cbse-layout"><form class="cbse-form" id="cbse-form"><fieldset><legend>1. Which class are you studying?</legend>'+choices('classYear',[['9','Class 9'],['10','Class 10'],['11','Class 11'],['12','Class 12']],value.classYear)+'</fieldset><fieldset><legend>2. What would help today?</legend>'+choices('goal',Object.entries(goals),value.goal)+'</fieldset><fieldset><legend>3. How long is this session?</legend>'+choices('minutes',[[10,'10 minutes'],[20,'20 minutes'],[30,'30 minutes']],value.minutes)+'</fieldset><fieldset><legend><label for="cbse-focus">4. Where would you like to start?</label></legend><select id="cbse-focus" name="focus">'+unitOptions(value.classYear,value.focus)+'</select></fieldset><div class="cbse-actions"><button class="cbse-primary" type="submit">'+(editing?'Save my preferences':'Build my study space')+'</button><button type="button" class="cbse-quiet" data-action="skip">'+(editing?'Cancel':'Skip for now')+'</button></div><p id="cbse-feedback" role="status"></p></form><aside class="cbse-aside"><strong>A starting point, not a score.</strong><p>Your choices guide recommendations. They don’t measure mastery or limit what you can explore.</p><strong>Private to this browser.</strong><p>No name, birthday, school or account required. These preferences stay on this device. You can change them later.</p><p>Physics has its own separate workspace and locally saved preferences.</p><a href="https://physics.entelloq.com/">Go to Physics Entelloq ↗</a></aside></div>','questionnaire');
+    show(`<div class="cbse-onboard">
+      <header class="cbse-intro">
+        <p class="cbse-kicker"><i aria-hidden="true"></i>Your biology, your starting point</p>
+        <h1 tabindex="-1">Let’s make this workspace <em>yours.</em></h1>
+        <p class="cbse-muted">Four quick choices. A study route that starts with you, and a whole world of biology to explore.</p>
+        <p class="cbse-device-note"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10V7a5 5 0 0 1 10 0v3M5 10h14v11H5zM12 14v3"/></svg>Saved on this device. Change it anytime.</p>
+        <div class="cbse-route-preview" aria-label="Your learning approach">
+          <p class="cbse-kicker">Room to understand. Space to explore.</p>
+          <ol><li><span aria-hidden="true">01</span><div><b>Connect the ideas</b><small>Explanations that build understanding.</small></div></li><li><span aria-hidden="true">02</span><div><b>Make it tangible</b><small>Explore models and practical preparation.</small></div></li><li><span aria-hidden="true">03</span><div><b>Test your thinking</b><small>Recall, check, and learn from mistakes.</small></div></li></ol>
+        </div>
+      </header>
+      <section class="cbse-form-panel" aria-label="Personalise your study route">
+        <div class="cbse-panel-heading"><span>YOUR STUDY SETUP</span><small>4 preferences · no account needed</small></div>
+        <form class="cbse-form" id="cbse-form">
+          <fieldset><legend><span class="cbse-question-number" aria-hidden="true">01</span>Which class are you studying?</legend>${choices('classYear',[['9','Class 9'],['10','Class 10'],['11','Class 11'],['12','Class 12']],value.classYear)}</fieldset>
+          <fieldset><legend><span class="cbse-question-number" aria-hidden="true">02</span>What would help today?</legend>${choices('goal',Object.entries(goals),value.goal)}</fieldset>
+          <fieldset><legend><span class="cbse-question-number" aria-hidden="true">03</span>How long is this session?</legend>${choices('minutes',[[10,'10 minutes'],[20,'20 minutes'],[30,'30 minutes']],value.minutes)}</fieldset>
+          <fieldset><legend><span class="cbse-question-number" aria-hidden="true">04</span><label for="cbse-focus">Where would you like to start?</label></legend><select id="cbse-focus" name="focus">${unitOptions(value.classYear,value.focus)}</select></fieldset>
+          <div class="cbse-form-footer"><div class="cbse-actions"><button class="cbse-primary" type="submit">${editing?'Save my preferences':'Build my study space'}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></button><button type="button" class="cbse-quiet" data-action="skip">${editing?'Cancel':'Skip for now'}</button></div><p class="cbse-form-note">A starting point, not a score. Every part of Entelloq stays open.</p><p id="cbse-feedback" role="status"></p></div>
+        </form>
+      </section>
+      <aside class="cbse-aside"><strong>Built around you. Kept with you.</strong><p>No name, birthday, school or account required. Preferences stay in this browser; they don’t measure mastery or limit what you can explore.</p><a href="https://physics.entelloq.com/">Go to Physics Entelloq <span aria-hidden="true">↗</span></a><small>Separate workspace. Separately saved preferences.</small></aside>
+    </div>`,'questionnaire');
     const sibling=dialog.querySelector('.cbse-aside a');
     sibling.href='https://physics.entelloq.com/#cbse:'+value.classYear;
     dialog.querySelectorAll('input[name=classYear]').forEach(input=>input.addEventListener('change',()=>{dialog.querySelector('#cbse-focus').innerHTML=unitOptions(input.value,'');sibling.href='https://physics.entelloq.com/#cbse:'+input.value;}));
