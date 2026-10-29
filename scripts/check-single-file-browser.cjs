@@ -303,6 +303,35 @@ async function runSuite(browser, mode, url) {
       getWorld: async () => childFrame(await workspace(page), '#viewFrame')
     })));
     navigation = await section(page, url, 'learn', '#bl-search');
+    const beforeStaleContext = await navigation.shell.evaluate(() => ({
+      route: (window.BioqLocation || location).hash,
+      activity: localStorage.getItem('bioq_activity'),
+      crumb: document.getElementById('routeLabel').textContent
+    }));
+    // Queue an old, otherwise valid topic report after the library is visible.
+    // The following sentinel shares the message queue: no timing-based sleep.
+    await navigation.shell.evaluate(() => {
+      window.__staleContextDelivered = new Promise(resolve => {
+        const child = document.getElementById('viewFrame').contentWindow;
+        const delivered = event => {
+          if (event.source !== child || event.data !== 'bioq-test-context-delivered') return;
+          removeEventListener('message', delivered); resolve();
+        };
+        addEventListener('message', delivered);
+      });
+    });
+    await navigation.frame.evaluate(() => {
+      parent.postMessage({bioqContext:{kind:'learn',topic:'photosynthesis',mode:'layman',title:'Photosynthesis'}}, '*');
+      parent.postMessage('bioq-test-context-delivered', '*');
+    });
+    await navigation.shell.evaluate(() => window.__staleContextDelivered);
+    assert.deepEqual(await navigation.shell.evaluate(() => ({
+      route: (window.BioqLocation || location).hash,
+      activity: localStorage.getItem('bioq_activity'),
+      crumb: document.getElementById('routeLabel').textContent
+    })), beforeStaleContext, 'A delayed topic message cannot replace library URL, resume state or breadcrumb');
+    assert.match(page.url(), /#learn$/);
+    run.checks.push('Stale lesson context is ignored after returning to the library.');
     await navigation.shell.locator('#nav .navi[data-go="lessons"]:not(.quick-action)').click();
     await page.waitForURL(/#lessons$/);
     await (await childFrame(navigation.shell, '#viewFrame')).locator('#lesson-search').waitFor();

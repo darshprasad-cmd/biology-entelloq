@@ -38,6 +38,9 @@ rendered screens from the packaged application, not design mockups.
   with `scripts/sync-physics-shell.py`.
 - `src/library/labs.js` / `lab-catalog.css`: catalogue navigation only;
   synchronize with `scripts/build-library.py`. No lab model changes.
+- `src/library/app-library.js`: accept nested context only when it matches the
+  currently displayed child route. A queued lesson message must not overwrite
+  the library URL, breadcrumb or saved resume state.
 - `me.html`: eight narrowly scoped responsive CSS lines.
 
 ## Local verification
@@ -64,6 +67,19 @@ any case completed. A second harness issue used native location inside a
 packaged srcdoc instead of the existing logical-route adapter. The harness was
 corrected to exercise that adapter; no product assertions were removed. Failure
 evidence and subsequent successful runs remain in the local QA directory.
+
+The first hosted run (40685393635) failed the existing exact Learn → Lessons →
+Back assertion: a lesson URL appeared instead of the library root. A controlled
+delayed-message reproduction demonstrated that the receiver accepted an old
+topic while the library was visible, corrupting its history entry. It does not
+establish the original CI event timing. A narrow logical-route/pending-load
+  guard now rejects these reports while retaining current-topic/subtopic/mode,
+Lab, Reason and Solve reports. Four VM regressions cover native and portable
+routes. The required real-browser suite queues a stale report and a FIFO
+delivery sentinel, then asserts unchanged URL, breadcrumb and resume data;
+the original exact Back assertion remains in place. Original hosted failure
+and controlled before/after evidence are retained locally under
+`ci-first-failure`, `back-diagnosis` and `back-diagnosis-fixed`.
 
 Reproduce with the existing free runtime (set `BIOLOGY_PLAYWRIGHT_MODULES` when
 needed):
