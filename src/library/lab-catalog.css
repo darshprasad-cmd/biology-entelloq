@@ -10,6 +10,13 @@
 .lb-library .ln-filters label{font-size:10px;gap:7px}
 .lb-library .ln-filters input,.lb-library .ln-filters select{min-width:0;padding:9px 11px;font-size:12px;min-height:40px}
 .lb-library .ln-count{font-size:11px;margin:17px 0;color:var(--faint)}
+.lb-library .lc-search-actions{display:flex;margin-top:12px}
+.lb-library .lc-search-actions .bx-btn{min-height:44px;padding:10px 14px;gap:10px}
+.lb-library .lc-results-heading{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:6px 16px;margin:19px 0 17px}
+.lb-library .lc-results-heading h2{font-size:16px;line-height:1.4;margin:0;scroll-margin-top:100px}
+.lb-library .lc-results-heading .ln-count{margin:0}
+.lb-library #lab-results-title:focus{outline:2px solid var(--em);outline-offset:5px;border-radius:2px}
+.lb-library .lc-card{scroll-margin-block:100px}
 .lc-catalog{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:25px 22px}
 .lc-card{display:flex;min-width:0;flex-direction:column;color:var(--ink);text-decoration:none;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--panel);transition:border-color .18s ease,transform .18s ease}
 .lc-card:hover{border-color:color-mix(in srgb,var(--lc) 55%,var(--line));transform:translateY(-3px)}

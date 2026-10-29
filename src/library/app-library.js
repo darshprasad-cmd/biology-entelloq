@@ -12,6 +12,17 @@
     if(!new URL(frame.src,location.href).pathname.endsWith('/'+section+'.html'))return;
     const mode=modes.includes(c.mode)?c.mode:'layman';
     const sub=c.kind==='lab'?id:(c.kind==='learn'?'topic/':'learn/')+id+'/'+mode;
+    // postMessage can arrive after the child has returned to its catalogue.
+    // A WindowProxy survives navigation, so source identity alone is not enough.
+    try {
+      const child=frame.contentWindow;
+      if(child.BioqContext?.ready===false)return;
+      const parts=(child.BioqLocation||child.location).hash.replace(/^#/,'').split('/').map(decodeURIComponent);
+      const current=c.kind==='lab'?parts[0]:parts[1];
+      const currentMode=modes.includes(parts[2])?parts[2]:'layman';
+      if(current!==id || (c.kind!=='lab' &&
+        (parts[0]!== (c.kind==='learn'?'topic':'learn') || currentMode!==mode)))return;
+    } catch (_) { return; } // A replaced or foreign child cannot report our route.
     window.BioAppContext?.remember(section,sub);
     if(location.hash!=='#'+section+'/'+sub)history.replaceState({k:section,sub},'','#'+section+'/'+sub);
     const crumb=document.getElementById('routeLabel');if(crumb)crumb.textContent=({learn:'Learn',labs:'Lab',reason:'Reason',solve:'Solve'}[section])+' / '+(c.title||id)+(c.subtopic?' / '+c.subtopic:'');

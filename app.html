@@ -410,6 +410,7 @@ button{cursor:pointer}
 .side .sec{padding-top:9px}.side-sep{margin-block:9px}
 .side-progress{padding:12px;margin:12px 0 45px}.side-progress-top{gap:8px}.side-progress-ring{width:34px;height:34px;font-size:10px}.side-progress b{font-size:12px}.side-progress>small{margin-top:7px}
 .topbar{gap:18px}.top-search{width:190px;padding:7px 10px}.explore-trigger{font-size:12px}
+.top-search{min-height:44px;flex-shrink:0}.top-search-label{white-space:nowrap}
 .home-in{max-width:1440px;padding-top:30px}.cc-head{margin-bottom:23px}.home .cc-head h1{font-size:36px;letter-spacing:-1.3px;margin-top:8px}
 .cc-head p{font-size:12px}.cc-hero{grid-template-columns:1fr 1.2fr;min-height:230px}.cc-hero-copy{padding:28px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center}
 .cc-hero h2{font-size:29px;margin:14px 0 21px;max-width:380px}.cc-hero small{font-size:9px}
@@ -430,6 +431,8 @@ body main .cc-world.bp-card small{min-height:0;padding:0;text-transform:uppercas
 @media(max-width:1100px){.cc-worlds{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:850px){
  :root{--bar:58px;--edge:20px}.topbar{padding-inline:20px;gap:12px}.explore-trigger{font-size:11px;min-height:40px}
+ .top-search{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;flex:none}
+ .top-search .top-search-label,.top-search kbd{display:none}.top-search svg{width:19px;height:19px}
  .home-in{padding:24px 20px 85px}.home .cc-head h1{font-size:30px}.cc-head{margin-bottom:19px}
  .cc-directory-head{margin-top:26px}.cc-directory-head h2{font-size:20px}.cc-directory-head>span{display:none}
  .cc-hero{min-height:210px}.cc-hero-copy{padding:22px}.cc-hero h2{font-size:26px;margin:12px 0 18px}
@@ -574,7 +577,7 @@ body.lab-modal-active :is(#eqx-fab,#eqx-panel,#bioq-ai,#bio-background-toggle){v
   <header class="topbar">
     <span class="crumb" id="routeLabel">Home</span>
     <button class="explore-trigger" id="exploreBtn" aria-haspopup="dialog" aria-controls="bq-explore"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 3h6v6H3zM15 3h6v6h-6zM3 15h6v6H3zM15 15h6v6h-6z"/></svg>Explore</button>
-    <button class="top-search" id="topSearch" aria-haspopup="dialog" aria-controls="cmdk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5"/></svg>Search topics…<kbd>Ctrl K</kbd></button>
+    <button class="top-search" id="topSearch" aria-label="Search Biology Entelloq" aria-haspopup="dialog" aria-controls="cmdk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5"/></svg><span class="top-search-label">Search topics…</span><kbd>Ctrl K</kbd></button>
   </header>
   <section class="home on" id="home"><div class="veil"></div><div class="home-in" id="homeIn"></div></section>
   <iframe id="viewFrame" title="Biology Entelloq section"></iframe>
@@ -621,7 +624,7 @@ body.lab-modal-active :is(#eqx-fab,#eqx-panel,#bioq-ai,#bio-background-toggle){v
   <div class="cmdk-box">
     <div class="cmdk-in"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20l-3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
       <input id="cmdkInput" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="cmdkList" placeholder="Try a topic, skill, or section…" autocomplete="off" spellcheck="false" aria-label="Search">
-      <button class="cmdk-close" id="cmdkClose" aria-label="Close search">Esc</button></div>
+      <button class="cmdk-close" id="cmdkClose" aria-label="Close search">Close</button></div>
     <div class="cmdk-list" id="cmdkList" role="listbox" aria-label="Search results"></div>
     <div class="cmdk-footer"><span id="cmdkCount" role="status" aria-live="polite"></span><span aria-hidden="true">↑ ↓ choose · Enter open</span></div>
   </div>
@@ -3538,6 +3541,17 @@ prefetchSections();
     if(!new URL(frame.src,location.href).pathname.endsWith('/'+section+'.html'))return;
     const mode=modes.includes(c.mode)?c.mode:'layman';
     const sub=c.kind==='lab'?id:(c.kind==='learn'?'topic/':'learn/')+id+'/'+mode;
+    // postMessage can arrive after the child has returned to its catalogue.
+    // A WindowProxy survives navigation, so source identity alone is not enough.
+    try {
+      const child=frame.contentWindow;
+      if(child.BioqContext?.ready===false)return;
+      const parts=(child.BioqLocation||child.location).hash.replace(/^#/,'').split('/').map(decodeURIComponent);
+      const current=c.kind==='lab'?parts[0]:parts[1];
+      const currentMode=modes.includes(parts[2])?parts[2]:'layman';
+      if(current!==id || (c.kind!=='lab' &&
+        (parts[0]!== (c.kind==='learn'?'topic':'learn') || currentMode!==mode)))return;
+    } catch (_) { return; } // A replaced or foreign child cannot report our route.
     window.BioAppContext?.remember(section,sub);
     if(location.hash!=='#'+section+'/'+sub)history.replaceState({k:section,sub},'','#'+section+'/'+sub);
     const crumb=document.getElementById('routeLabel');if(crumb)crumb.textContent=({learn:'Learn',labs:'Lab',reason:'Reason',solve:'Solve'}[section])+' / '+(c.title||id)+(c.subtopic?' / '+c.subtopic:'');

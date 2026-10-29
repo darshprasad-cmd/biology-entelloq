@@ -9,3 +9,93 @@
 @media(hover:hover) and (pointer:fine){#bio-cbse button:hover,#bio-cbse a.cbse-button:hover{border-color:#a2e6bc}.cbse-choice span:hover{border-color:#a2e6bc}}
 #bio-cbse h1:focus{outline:none}.cbse-form fieldset:nth-child(2) .cbse-choice{min-width:150px}
 @media(max-width:700px){.cbse-layout{grid-template-columns:1fr;gap:20px}.cbse-aside{border-left:0;border-top:1px solid #29463a;padding:20px 0}.cbse-grid{grid-template-columns:1fr}.cbse-brand{align-items:flex-start}.cbse-brand span{max-width:110px;text-align:right}.cbse-choice{min-width:105px}.cbse-actions>*{flex:1}#bio-cbse{padding:20px 18px 34px}.cbse-tabs button{flex:1}}
+
+/* First-visit study setup uses the app's charcoal, mint and warm-white palette.
+   Scoped to this view: existing curriculum/practical screens keep their layout. */
+#bio-cbse[data-view=questionnaire]{background:#080b0d;color:#f4f1e9;font-family:Inter,system-ui,sans-serif;padding:28px clamp(20px,5vw,72px) 40px}
+#bio-cbse[data-view=questionnaire] .cbse-inner{max-width:1160px}
+#bio-cbse[data-view=questionnaire] .cbse-brand{min-height:48px;margin:0 0 48px;padding:0 0 24px;border-bottom:1px solid rgba(154,219,189,.18)}
+#bio-cbse[data-view=questionnaire] .cbse-brand strong{font-size:14px;font-weight:600;letter-spacing:.2em}
+#bio-cbse[data-view=questionnaire] .cbse-brand strong span{margin-left:10px;color:#9adbbd;font-size:10px;letter-spacing:.19em}
+#bio-cbse[data-view=questionnaire] .cbse-brand>span{font:11px/1.5 ui-monospace,Consolas,monospace;color:#b6c3ba;letter-spacing:.06em}
+.cbse-onboard{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);grid-template-areas:'intro form' 'privacy form';align-items:start;column-gap:clamp(32px,5vw,76px);row-gap:30px}
+.cbse-intro{grid-area:intro;padding-top:22px}
+#bio-cbse[data-view=questionnaire] .cbse-kicker{font:10px/1.7 ui-monospace,Consolas,monospace;letter-spacing:.12em;color:#9adbbd;margin:0 0 24px}
+.cbse-intro>.cbse-kicker{display:flex;align-items:center;gap:10px}
+.cbse-intro>.cbse-kicker i{width:6px;height:6px;border-radius:50%;background:#9adbbd;flex:none}
+#bio-cbse[data-view=questionnaire] h1{font-size:clamp(36px,3.7vw,54px);line-height:1.1;font-weight:450;letter-spacing:-.045em;margin:0 0 24px;max-width:9.5em;text-wrap:balance}
+#bio-cbse[data-view=questionnaire] h1 em{color:#9adbbd;font-style:normal}
+#bio-cbse[data-view=questionnaire] .cbse-muted{font-size:15px;line-height:1.8;color:#b6c3ba;max-width:360px;margin:0 0 24px}
+#bio-cbse p.cbse-device-note{display:flex;align-items:center;gap:9px;font-size:12px;color:#b6c3ba;margin:0}
+.cbse-device-note svg{width:15px;height:15px;fill:none;stroke:#9adbbd;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.cbse-route-preview{border-top:1px solid rgba(154,219,189,.18);margin-top:38px;padding-top:28px}
+#bio-cbse .cbse-route-preview .cbse-kicker{font-size:9px;color:#a0b2a4;margin-bottom:20px}
+.cbse-route-preview ol{list-style:none;padding:0;margin:0;display:grid;gap:24px}
+.cbse-route-preview li{display:flex;gap:15px;align-items:flex-start;position:relative}
+.cbse-route-preview li>span{font:10px/28px ui-monospace,Consolas,monospace;border:1px solid rgba(154,219,189,.24);color:#9adbbd;border-radius:50%;width:30px;height:30px;text-align:center;flex:none;background:#0e1413}
+.cbse-route-preview li:not(:last-child)::after{content:'';position:absolute;width:1px;height:18px;background:rgba(154,219,189,.18);top:35px;left:15px}
+.cbse-route-preview b{display:block;font-size:13px;line-height:1.6;font-weight:500}.cbse-route-preview small{display:block;font-size:12px;line-height:1.7;color:#a0b2a4}
+.cbse-form-panel{grid-area:form;min-width:0;background:#0e1413;border:1px solid rgba(154,219,189,.18);border-radius:16px;box-shadow:0 18px 60px rgba(0,0,0,.15);overflow:hidden}
+.cbse-panel-heading{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 16px;padding:20px 28px;border-bottom:1px solid rgba(154,219,189,.14)}
+.cbse-panel-heading>span{font:10px/1.6 ui-monospace,Consolas,monospace;letter-spacing:.14em;color:#9adbbd}.cbse-panel-heading>small{font-size:11px;line-height:1.6;color:#a0b2a4}
+#bio-cbse[data-view=questionnaire] .cbse-form{padding:26px 28px 0;max-width:none}
+#bio-cbse[data-view=questionnaire] fieldset{margin:0 0 26px;min-width:0}
+#bio-cbse[data-view=questionnaire] legend{display:flex;align-items:baseline;gap:10px;font-size:13px;font-weight:500;line-height:1.6;margin-bottom:12px;padding:0;width:100%;color:#f4f1e9}
+.cbse-question-number{font:10px/1.6 ui-monospace,Consolas,monospace;color:#9adbbd;flex:none}
+#bio-cbse[data-view=questionnaire] .cbse-choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+#bio-cbse[data-view=questionnaire] .cbse-choices--classYear{grid-template-columns:repeat(4,minmax(0,1fr))}
+#bio-cbse[data-view=questionnaire] .cbse-choice{min-width:0;display:block}
+#bio-cbse[data-view=questionnaire] .cbse-choice>span{height:100%;position:relative;display:flex;flex-direction:column;justify-content:center;gap:5px;min-height:76px;padding:14px 12px;border-radius:8px;border:1px solid #34483f;background:#121a16;transition:border-color 150ms,background-color 150ms}
+#bio-cbse[data-view=questionnaire] .cbse-choice b{font-size:12px;font-weight:500;line-height:1.5;padding-right:12px}
+#bio-cbse[data-view=questionnaire] .cbse-choice small{font-size:10px;line-height:1.5;color:#b6c3ba}
+.cbse-choice-mark{position:absolute;top:12px;right:9px;width:6px;height:6px;border-radius:50%;background:transparent}
+#bio-cbse[data-view=questionnaire] .cbse-choice input:checked+span{background:#1b2b23;border-color:#9adbbd;box-shadow:inset 0 0 0 1px rgba(154,219,189,.12)}
+#bio-cbse[data-view=questionnaire] .cbse-choice input:checked+span .cbse-choice-mark{background:#9adbbd}
+#bio-cbse[data-view=questionnaire] .cbse-choice input:checked+span b{color:#c5f5db}
+#bio-cbse[data-view=questionnaire] .cbse-choices--minutes .cbse-choice>span{min-height:46px;padding:11px 12px}
+#bio-cbse[data-view=questionnaire] .cbse-choices--minutes .cbse-choice b{font-variant-numeric:tabular-nums;white-space:nowrap}
+#bio-cbse[data-view=questionnaire] .cbse-choices--minutes .cbse-choice-mark{top:19px}
+#bio-cbse[data-view=questionnaire] select{font-size:13px;line-height:1.6;padding:12px 14px;background:#121a16;border:1px solid #34483f;border-radius:8px;color:#f4f1e9;min-height:48px;max-width:100%}
+.cbse-form-footer{margin:4px -28px 0;padding:22px 28px 20px;border-top:1px solid rgba(154,219,189,.14);background:#101814}
+#bio-cbse[data-view=questionnaire] .cbse-actions{margin:0;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px}
+#bio-cbse[data-view=questionnaire] .cbse-actions button{border-radius:8px;min-height:48px;font-size:13px;line-height:1.5;padding:12px 16px;transition:background-color 150ms,border-color 150ms}
+#bio-cbse[data-view=questionnaire] .cbse-primary{background:#9adbbd;border-color:#9adbbd;color:#10251a;font-weight:600;gap:12px}
+#bio-cbse[data-view=questionnaire] .cbse-primary svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex:none}
+#bio-cbse[data-view=questionnaire] .cbse-quiet{border-color:transparent;color:#b6c3ba}
+#bio-cbse p.cbse-form-note{font-size:11px;line-height:1.6;color:#a0b2a4;margin:14px 0 0}
+#bio-cbse[data-view=questionnaire] #cbse-feedback:empty{margin:0;min-height:0}
+#bio-cbse[data-view=questionnaire] .cbse-aside{grid-area:privacy;border:0;padding:0;max-width:380px;color:#a0b2a4;font-size:12px;line-height:1.8}
+#bio-cbse[data-view=questionnaire] .cbse-aside strong{color:#b6c3ba;font-weight:500}
+#bio-cbse[data-view=questionnaire] .cbse-aside p{margin:7px 0 15px}
+#bio-cbse[data-view=questionnaire] .cbse-aside a{display:inline-flex;align-items:center;gap:16px;min-height:44px;color:#9adbbd;font-size:12px}
+#bio-cbse[data-view=questionnaire] .cbse-aside>small{display:block;font-size:10px;color:#a0b2a4}
+@media(hover:hover) and (pointer:fine){#bio-cbse[data-view=questionnaire] .cbse-choice>span:hover{background:#1b2821;border-color:#9adbbd}#bio-cbse[data-view=questionnaire] .cbse-primary:hover{background:#b1e9cd}#bio-cbse[data-view=questionnaire] .cbse-quiet:hover{background:#1b2821}}
+@media(max-width:1000px){.cbse-onboard{grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr);column-gap:30px}#bio-cbse[data-view=questionnaire] .cbse-choices--classYear{grid-template-columns:repeat(2,minmax(0,1fr))}#bio-cbse[data-view=questionnaire] .cbse-choices--goal{grid-template-columns:1fr}#bio-cbse[data-view=questionnaire] .cbse-choices--goal .cbse-choice>span{min-height:50px;flex-direction:row;align-items:center;justify-content:space-between;gap:8px;padding-right:24px}.cbse-choices--goal .cbse-choice-mark{top:22px}}
+@media(max-width:760px){
+ #bio-cbse[data-view=questionnaire]{padding:20px 20px 32px}
+ #bio-cbse[data-view=questionnaire] .cbse-brand{margin-bottom:26px;padding-bottom:20px;gap:8px;align-items:center}
+ #bio-cbse[data-view=questionnaire] .cbse-brand strong{font-size:12px}#bio-cbse[data-view=questionnaire] .cbse-brand strong span{display:block}
+ #bio-cbse[data-view=questionnaire] .cbse-brand strong span{margin:4px 0 0;font-size:9px;text-align:left}
+ #bio-cbse[data-view=questionnaire] .cbse-brand>span{font-size:10px;max-width:none}
+ .cbse-onboard{grid-template-columns:minmax(0,1fr);grid-template-areas:'intro' 'form' 'privacy';gap:26px}
+ .cbse-intro{padding:0}
+ #bio-cbse[data-view=questionnaire] .cbse-intro>.cbse-kicker{font-size:9px;margin-bottom:14px;gap:8px}
+ #bio-cbse[data-view=questionnaire] h1{font-size:36px;max-width:13em;margin-bottom:14px}
+ #bio-cbse[data-view=questionnaire] .cbse-muted{font-size:13px;line-height:1.7;margin-bottom:14px;max-width:480px}
+ #bio-cbse p.cbse-device-note{font-size:11px;line-height:1.6}
+ .cbse-route-preview{display:none}
+ .cbse-panel-heading{padding:17px 18px;gap:5px}.cbse-panel-heading>span{font-size:9px}.cbse-panel-heading>small{font-size:10px}
+ #bio-cbse[data-view=questionnaire] .cbse-form{padding:22px 18px 0}
+ #bio-cbse[data-view=questionnaire] fieldset{margin-bottom:23px}
+ #bio-cbse[data-view=questionnaire] .cbse-choice>span{min-height:66px}
+ #bio-cbse[data-view=questionnaire] .cbse-choices--goal .cbse-choice>span{min-height:54px;align-items:flex-start;flex-direction:column;gap:2px}
+ #bio-cbse[data-view=questionnaire] .cbse-choices--minutes{gap:6px}
+ #bio-cbse[data-view=questionnaire] .cbse-choices--minutes .cbse-choice>span{padding:10px 5px;align-items:center}
+ #bio-cbse[data-view=questionnaire] .cbse-choices--minutes b{font-size:11px;padding:0}
+ #bio-cbse[data-view=questionnaire] .cbse-choices--minutes .cbse-choice-mark{display:none}
+ .cbse-form-footer{margin:0 -18px;padding:20px 18px}
+ #bio-cbse[data-view=questionnaire] .cbse-actions{grid-template-columns:minmax(0,1fr)}
+ #bio-cbse[data-view=questionnaire] .cbse-actions button{min-height:48px}
+ #bio-cbse[data-view=questionnaire] .cbse-aside{border-top:1px solid rgba(154,219,189,.18);padding-top:22px;max-width:100%}
+}
+@media(prefers-reduced-motion:reduce){#bio-cbse[data-view=questionnaire] .cbse-choice>span,#bio-cbse[data-view=questionnaire] .cbse-actions button{transition:none}}

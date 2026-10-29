@@ -15,7 +15,11 @@ const { checkLibraryRoute } = require('../tests/library-route-browser.cjs');
 const { checkPracticeFocus } = require('../tests/practice-focus-browser.cjs');
 const { checkEvidenceTable } = require('../tests/evidence-tables-browser.cjs');
 const { checkPhylogeny } = require('../tests/phylogeny-browser.cjs');
+const { checkAppSearch } = require('../tests/app-search-browser.cjs');
+const { checkProgressCards } = require('../tests/progress-readability-browser.cjs');
+const { checkLabCatalogNavigation } = require('../tests/lab-catalog-navigation-browser.cjs');
 const { dismissCBSE } = require('../tests/cbse-browser-helper.cjs');
+const { checkQuestionnaireLayout } = require('../tests/cbse-questionnaire-browser.cjs');
 const root = path.resolve(__dirname, '..');
 const modules = process.env.BIOLOGY_PLAYWRIGHT_MODULES || path.resolve(root, '../biology-entelloq/node_modules');
 const { chromium } = createRequire(path.join(modules, '__single_file_check__.cjs'))('playwright');
@@ -259,6 +263,8 @@ async function runSuite(browser, mode, url) {
       return;
     }
     await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await page.locator('#cbse-form').waitFor();
+    run.checks.push('First-visit questionnaire: ' + JSON.stringify(await checkQuestionnaireLayout(page, 1440)));
     let shell = await workspace(page, '#bio-title');
     assert.match(await shell.locator('#bio-title').textContent(), /Where Biology/);
     await noOverflow(page, [['landing', shell]], 'landing desktop', run);
@@ -274,12 +280,15 @@ async function runSuite(browser, mode, url) {
     await shell.locator('#homeIn .cc-world').first().waitFor();
     assert.equal(await shell.locator('#homeIn .cc-world').count(), 8);
     await screenshot(page, mode + '-home-desktop');
+    run.checks.push('App search desktop: ' + JSON.stringify(await checkAppSearch(page, shell)));
     run.checks.push('Landing and Start Exploring load the application from the one supplied HTML file.');
 
     for (const [key, ready] of sections) {
       const opened = await section(page, url, key, ready);
       assert.ok((await opened.frame.locator('body').textContent()).trim().length > 100, key + ' contains real section content');
       await noOverflow(page, [['shell', opened.shell], [key, opened.frame]], key + ' desktop', run);
+      if (key === 'labs') run.checks.push('Labs discovery desktop: ' + await checkLabCatalogNavigation(page, opened.frame, { theme: await opened.shell.locator('html').getAttribute('data-theme') }));
+      if (key === 'me') run.checks.push('Progress reading desktop: ' + JSON.stringify(await checkProgressCards(page, opened.frame, { width:1440, theme:await opened.shell.locator('html').getAttribute('data-theme') })));
     }
     run.checks.push('All eight embedded sections open real content with no horizontal overflow on desktop.');
 
@@ -294,6 +303,35 @@ async function runSuite(browser, mode, url) {
       getWorld: async () => childFrame(await workspace(page), '#viewFrame')
     })));
     navigation = await section(page, url, 'learn', '#bl-search');
+    const beforeStaleContext = await navigation.shell.evaluate(() => ({
+      route: (window.BioqLocation || location).hash,
+      activity: localStorage.getItem('bioq_activity'),
+      crumb: document.getElementById('routeLabel').textContent
+    }));
+    // Queue an old, otherwise valid topic report after the library is visible.
+    // The following sentinel shares the message queue: no timing-based sleep.
+    await navigation.shell.evaluate(() => {
+      window.__staleContextDelivered = new Promise(resolve => {
+        const child = document.getElementById('viewFrame').contentWindow;
+        const delivered = event => {
+          if (event.source !== child || event.data !== 'bioq-test-context-delivered') return;
+          removeEventListener('message', delivered); resolve();
+        };
+        addEventListener('message', delivered);
+      });
+    });
+    await navigation.frame.evaluate(() => {
+      parent.postMessage({bioqContext:{kind:'learn',topic:'photosynthesis',mode:'layman',title:'Photosynthesis'}}, '*');
+      parent.postMessage('bioq-test-context-delivered', '*');
+    });
+    await navigation.shell.evaluate(() => window.__staleContextDelivered);
+    assert.deepEqual(await navigation.shell.evaluate(() => ({
+      route: (window.BioqLocation || location).hash,
+      activity: localStorage.getItem('bioq_activity'),
+      crumb: document.getElementById('routeLabel').textContent
+    })), beforeStaleContext, 'A delayed topic message cannot replace library URL, resume state or breadcrumb');
+    assert.match(page.url(), /#learn$/);
+    run.checks.push('Stale lesson context is ignored after returning to the library.');
     await navigation.shell.locator('#nav .navi[data-go="lessons"]:not(.quick-action)').click();
     await page.waitForURL(/#lessons$/);
     await (await childFrame(navigation.shell, '#viewFrame')).locator('#lesson-search').waitFor();
@@ -378,9 +416,12 @@ async function runSuite(browser, mode, url) {
     shell = await workspace(page);
     await noOverflow(page, [['shell', shell]], 'home mobile', run);
     await screenshot(page, mode + '-home-mobile');
+    run.checks.push('App search mobile: ' + JSON.stringify(await checkAppSearch(page, shell)));
     for (const [key, ready] of sections) {
       opened = await section(page, url, key, ready);
       await noOverflow(page, [['shell', opened.shell], [key, opened.frame]], key + ' mobile', run);
+      if (key === 'labs') run.checks.push('Labs discovery mobile: ' + await checkLabCatalogNavigation(page, opened.frame, { theme: await opened.shell.locator('html').getAttribute('data-theme') }));
+      if (key === 'me') run.checks.push('Progress reading mobile: ' + JSON.stringify(await checkProgressCards(page, opened.frame, { width:390, theme:await opened.shell.locator('html').getAttribute('data-theme') })));
       if (key === 'learn') {
         run.checks.push('Learn search mobile: ' + await checkLibrarySearch(page, opened.frame));
         run.checks.push('Learn route focus mobile: ' + JSON.stringify(await checkLibraryRoute(page, opened.frame, {
@@ -392,6 +433,13 @@ async function runSuite(browser, mode, url) {
     run.checks.push('Practice focus mobile: ' + JSON.stringify(await checkPracticeFocus(page, opened.frame, {
       getWorld: async () => childFrame(await workspace(page), '#viewFrame')
     })));
+    await page.setViewportSize({ width:320, height:844 });
+    opened = await section(page, url, 'labs', '#lab-search');
+    run.checks.push('App search narrow phone: ' + JSON.stringify(await checkAppSearch(page, opened.shell)));
+    run.checks.push('Labs discovery narrow phone: ' + await checkLabCatalogNavigation(page, opened.frame, { theme:await opened.shell.locator('html').getAttribute('data-theme') }));
+    opened = await section(page, url, 'me', '#masterySlot');
+    run.checks.push('Progress reading narrow phone: ' + JSON.stringify(await checkProgressCards(page, opened.frame, { width:320, theme:await opened.shell.locator('html').getAttribute('data-theme') })));
+    await noOverflow(page, [['shell',opened.shell],['me',opened.frame]], 'progress narrow phone', run);
     const evidenceChecks = [];
     for (const [width, topic] of [[320, 'recombinant-dna'], [320, 'plant-transport'], [390, 'active-transport']]) {
       await page.setViewportSize({ width, height: 844 });
