@@ -1,0 +1,595 @@
+{
+  "schemaVersion": 1,
+  "reviewedOn": "2026-10-29",
+  "scope": "Source-reviewed seed registry. Not exhaustive; each listed test scope is bounded.",
+  "sourceRoot": "../..",
+  "classificationDefinitions": {
+    "analytical": "Closed-form mathematical relationship or exact discrete calculation under stated assumptions.",
+    "numerical": "Finite-step or sampled numerical approximation with a solver/error boundary.",
+    "illustrative": "Authored schematic or teaching response with no claim of calibrated quantitative prediction."
+  },
+  "evidenceFile": "scientific-validation-evidence.json",
+  "models": [
+    {
+      "id": "physics-tools-projectile",
+      "subject": "physics",
+      "title": "Ideal projectile trajectory",
+      "classification": "analytical",
+      "source": "physics/learning-tools-source/physics/core.mjs",
+      "entryPoint": "trajectory",
+      "inputs": {
+        "vx": "m/s, normalized -20 to 20",
+        "vy": "m/s, normalized 0.1 to 20",
+        "g": "m/s², normalized 0.1 to 25"
+      },
+      "outputs": {
+        "time": "s",
+        "x": "m",
+        "y": "m",
+        "range": "m",
+        "peak": "m",
+        "speed": "m/s"
+      },
+      "assumptions": [
+        "Point particle",
+        "Constant downward g",
+        "No air resistance",
+        "Flight-time/range expressions assume launch and landing at equal height",
+        "Direct model function assumes already-valid finite input"
+      ],
+      "provenance": "Synthetic analytical trajectory",
+      "reference": {
+        "url": "https://openstax.org/books/university-physics-volume-1/pages/4-3-projectile-motion",
+        "role": "Equations/assumptions; inspected 2026-10-29"
+      },
+      "tests": [
+        "physics/learning-tools-source/physics/tests/core.test.mjs"
+      ],
+      "checksObserved": [
+        "Start, landing and apex",
+        "Negative/zero/positive vx",
+        "Invalid stored field normalization"
+      ],
+      "remaining": [
+        "Independent full parameter-domain reference fixtures",
+        "Any other legacy projectile adapters must be checked separately"
+      ],
+      "status": "source-reviewed-existing-checks-pass",
+      "sourceSha256": "04a07188cce58b85b86d565d8fc3ed6943ca312ceb0a832844ebcf1658f5c701"
+    },
+    {
+      "id": "physics-rk4-kernel",
+      "subject": "physics",
+      "title": "RK4 integrator",
+      "classification": "numerical",
+      "source": "physics/visualization-source/core.mjs",
+      "entryPoint": "rk4",
+      "inputs": {
+        "state": "Model-defined components",
+        "step": "Independent-variable increment; units supplied by caller",
+        "derivative": "Caller-defined state derivative"
+      },
+      "outputs": {
+        "state": "Same units as input state"
+      },
+      "assumptions": [
+        "Smooth derivative within tested interval",
+        "No general stiffness guarantee",
+        "No automatic dimensional analysis",
+        "Kernel alone does not establish a physical model's validity"
+      ],
+      "provenance": "Numerical state approximation",
+      "reference": {
+        "description": "Classical fourth-order Runge–Kutta formula inspected in source; analytical harmonic oscillator is the comparison fixture",
+        "role": "Independent cosine reference in existing test"
+      },
+      "tests": [
+        "physics/visualization-source/tests/core.test.mjs"
+      ],
+      "checksObserved": [
+        "Oscillator compared with cosine",
+        "Step refinement .1 to .05",
+        "Absolute error below 1e-9 for step .01 fixture"
+      ],
+      "remaining": [
+        "Per-engine appropriate stability, conservation and step-domain checks"
+      ],
+      "status": "source-reviewed-existing-checks-pass",
+      "sourceSha256": "22ea7e7fb00dd58ce1da8733d2b0d63fc783d7745887bfff5bb7f9a44283b844"
+    },
+    {
+      "id": "physics-field-streamlines",
+      "subject": "physics",
+      "title": "Vector-field direction streamlines",
+      "classification": "numerical",
+      "source": "physics/visualization-source/core.mjs",
+      "entryPoint": "streamline",
+      "inputs": {
+        "field": "Field components in common coordinate basis",
+        "seed": "Field coordinates",
+        "bounds": "Field-coordinate bounds",
+        "step": "Arc-length-like coordinate increment; not physical seconds"
+      },
+      "outputs": {
+        "points": "Field coordinates"
+      },
+      "assumptions": [
+        "Normalized field direction",
+        "RK4 with step-doubling comparison",
+        "Stops at null/invalid field or bounds",
+        "Streamlines are not particle trajectories"
+      ],
+      "provenance": "Numerically sampled direction curves",
+      "reference": {
+        "description": "Analytical constant and circular vector fields",
+        "role": "Exact geometric comparison fixtures"
+      },
+      "tests": [
+        "physics/visualization-source/tests/core.test.mjs"
+      ],
+      "checksObserved": [
+        "Constant field direction",
+        "Unit circle norm within 1e-6",
+        "Zero field and bound termination"
+      ],
+      "remaining": [
+        "Units/labels on each production adapter",
+        "Near-singularity behavior for each supplied field"
+      ],
+      "status": "source-reviewed-existing-checks-pass",
+      "sourceSha256": "22ea7e7fb00dd58ce1da8733d2b0d63fc783d7745887bfff5bb7f9a44283b844"
+    },
+    {
+      "id": "biology-osmosis",
+      "subject": "biology",
+      "title": "Membrane transport teaching model",
+      "classification": "illustrative",
+      "source": "biology/src/library/experiments.js",
+      "entryPoint": "BIO_MODELS.osmosis",
+      "components": [
+        {
+          "name": "Trapped-solute concentration",
+          "classification": "analytical"
+        },
+        {
+          "name": "Wall pressure and flow response",
+          "classification": "illustrative"
+        }
+      ],
+      "inputs": {
+        "volume": "Relative initial cell volume",
+        "external": "mOsm/L",
+        "plant": "Wall-response toggle"
+      },
+      "outputs": {
+        "internal": "mOsm/L",
+        "pressure": "Teaching pressure scale",
+        "flow": "Teaching flow response; not calibrated membrane permeability"
+      },
+      "assumptions": [
+        "Initial cell concentration 300 mOsm/L",
+        "Solute remains trapped",
+        "Infinite bath",
+        "Fixed 25 °C teaching relation",
+        "Chosen wall/permeability coefficients"
+      ],
+      "provenance": "Synthetic model response",
+      "reference": {
+        "url": "https://openstax.org/books/biology-2e/pages/5-2-passive-transport",
+        "role": "Source-authored mechanism reference, not coefficient calibration"
+      },
+      "tests": [
+        "biology/tests/library-models.test.cjs"
+      ],
+      "checksObserved": [
+        "Isotonic zero flow",
+        "Direction reversal",
+        "Trapped solute conservation in tested domain",
+        "Wall suppresses expansion"
+      ],
+      "remaining": [
+        "Numerical time-update convergence if relied on quantitatively",
+        "No empirical coefficient calibration"
+      ],
+      "status": "source-reviewed-existing-checks-pass",
+      "sourceSha256": "81fce6c53d9a41e78f2051d75cc66b6b0a24b75080fd9a2b488dfc65e1fbd2ac"
+    },
+    {
+      "id": "biology-photosynthesis",
+      "subject": "biology",
+      "title": "Photosynthesis response",
+      "classification": "illustrative",
+      "source": "biology/src/library/experiments.js",
+      "entryPoint": "BIO_MODELS.photosynthesis",
+      "inputs": {
+        "light": "UI-declared teaching light scale",
+        "co2": "UI-declared concentration scale",
+        "temp": "°C",
+        "color": "Qualitative spectral choice"
+      },
+      "outputs": {
+        "gross": "Synthetic teaching rate",
+        "respiration": "Synthetic teaching rate",
+        "net": "Synthetic teaching rate"
+      },
+      "assumptions": [
+        "Fictional fixed leaf sample",
+        "Saturating light/CO₂ functions",
+        "Chosen 27 °C optimum",
+        "Qualitative spectral multipliers",
+        "Respiration continues in darkness"
+      ],
+      "provenance": "Synthetic model output, not measured leaf data",
+      "reference": {
+        "url": "https://openstax.org/books/biology-2e/pages/8-2-the-light-dependent-reactions-of-photosynthesis",
+        "role": "Qualitative mechanism; inspected 2026-10-29; does not validate chosen constants"
+      },
+      "tests": [
+        "biology/tests/library-models.test.cjs"
+      ],
+      "checksObserved": [
+        "Zero light gives zero gross and negative net",
+        "Light saturation",
+        "Zero CO₂ gives zero gross",
+        "Finite slider extremes"
+      ],
+      "remaining": [
+        "No empirical prediction/fit validation"
+      ],
+      "status": "source-reviewed-existing-checks-pass",
+      "sourceSha256": "81fce6c53d9a41e78f2051d75cc66b6b0a24b75080fd9a2b488dfc65e1fbd2ac"
+    },
+    {
+      "id": "biology-respiration",
+      "subject": "biology",
+      "title": "Respiration and fermentation",
+      "classification": "illustrative",
+      "source": "biology/src/library/experiments.js",
+      "entryPoint": "BIO_MODELS.respiration",
+      "inputs": {
+        "glucose": "UI-declared teaching concentration",
+        "oxygen": "UI-declared teaching availability",
+        "temp": "°C",
+        "organism": "Fictional yeast or muscle scenario"
+      },
+      "outputs": {
+        "atp": "Teaching yield/rate",
+        "oxygen": "Teaching consumption",
+        "co2": "Teaching production",
+        "fermentation": "Teaching rate"
+      },
+      "assumptions": [
+        "Fixed biomass",
+        "Chosen oxygen/substrate response",
+        "Illustrative 30 ATP aerobic and 2 ATP fermentative yield",
+        "Actual aerobic yield varies"
+      ],
+      "provenance": "Synthetic teaching outputs",
+      "reference": {
+        "url": "https://openstax.org/books/biology-2e/pages/7-4-oxidative-phosphorylation",
+        "role": "Source-authored mechanism reference, not kinetic calibration"
+      },
+      "tests": [
+        "biology/tests/library-models.test.cjs"
+      ],
+      "checksObserved": [
+        "Two ATP per glucose at zero oxygen",
+        "Yeast/muscle fermentation distinction",
+        "Zero fuel output",
+        "Finite slider extremes"
+      ],
+      "remaining": [
+        "No organism-specific kinetic calibration"
+      ],
+      "status": "source-reviewed-existing-checks-pass",
+      "sourceSha256": "81fce6c53d9a41e78f2051d75cc66b6b0a24b75080fd9a2b488dfc65e1fbd2ac"
+    },
+    {
+      "id": "biology-cardiac-output",
+      "subject": "biology",
+      "title": "Cardiac output and vessel relation",
+      "classification": "analytical",
+      "source": "biology/src/library/experiments.js",
+      "entryPoint": "BIO_MODELS.heart",
+      "components": [
+        {
+          "name": "CO = heart rate × stroke volume",
+          "classification": "analytical"
+        },
+        {
+          "name": "Pressure and vessel response",
+          "classification": "illustrative"
+        }
+      ],
+      "inputs": {
+        "hr": "beats/min",
+        "sv": "mL/beat",
+        "diameter": "Percent of reference diameter",
+        "resistance": "Teaching resistance coefficient"
+      },
+      "outputs": {
+        "output": "L/min",
+        "resistance": "Relative teaching resistance",
+        "pressure": "Illustrative mmHg"
+      },
+      "assumptions": [
+        "Ideal fixed-output pump",
+        "Fixed viscosity/length for inverse-fourth-power relation",
+        "Chosen baseline pressure",
+        "Not a full circulatory model or clinical predictor"
+      ],
+      "provenance": "Synthetic teaching calculation",
+      "reference": {
+        "url": "https://www.ncbi.nlm.nih.gov/books/NBK470455/",
+        "role": "Source-authored physiology reference; no clinical calibration claim"
+      },
+      "tests": [
+        "biology/tests/library-models.test.cjs"
+      ],
+      "checksObserved": [
+        "72 × 70 / 1000 = 5.04 L/min",
+        "Diameter fourth-power scaling",
+        "Finite supported endpoints"
+      ],
+      "remaining": [
+        "Pressure coefficient calibration absent; output must stay illustrative"
+      ],
+      "status": "source-reviewed-existing-checks-pass",
+      "sourceSha256": "81fce6c53d9a41e78f2051d75cc66b6b0a24b75080fd9a2b488dfc65e1fbd2ac"
+    },
+    {
+      "id": "biology-gas-exchange",
+      "subject": "biology",
+      "title": "Gas exchange teaching model",
+      "classification": "illustrative",
+      "source": "biology/src/library/experiments.js",
+      "entryPoint": "BIO_MODELS.gasExchange",
+      "components": [
+        {
+          "name": "Alveolar ventilation and relative Fick scaling",
+          "classification": "analytical"
+        },
+        {
+          "name": "Absolute diffusion/supply cap",
+          "classification": "illustrative"
+        }
+      ],
+      "inputs": {
+        "breaths": "breaths/min",
+        "tidal": "L/breath",
+        "area": "m² reference scale",
+        "thickness": "µm reference scale",
+        "gradient": "Teaching pressure-gradient scale"
+      },
+      "outputs": {
+        "ventilation": "L/min",
+        "diffusion": "Teaching uptake scale",
+        "uptake": "Teaching uptake scale"
+      },
+      "assumptions": [
+        "Fixed 0.15 L dead space",
+        "Diffusion proportional to area × gradient / thickness",
+        "Chosen supply conversion and uptake cap",
+        "No clinical prediction"
+      ],
+      "provenance": "Synthetic teaching model",
+      "reference": {
+        "url": "https://www.ncbi.nlm.nih.gov/books/NBK54112/",
+        "role": "Source-authored mechanism reference, not calibration"
+      },
+      "tests": [
+        "biology/tests/library-models.test.cjs"
+      ],
+      "checksObserved": [
+        "Area/thickness scaling",
+        "Zero gradient",
+        "Ventilation-limited uptake",
+        "Finite supported endpoints"
+      ],
+      "remaining": [
+        "No validated absolute uptake predictions"
+      ],
+      "status": "source-reviewed-existing-checks-pass",
+      "sourceSha256": "81fce6c53d9a41e78f2051d75cc66b6b0a24b75080fd9a2b488dfc65e1fbd2ac"
+    },
+    {
+      "id": "biology-mitosis",
+      "subject": "biology",
+      "title": "Mitosis checkpoint model",
+      "classification": "illustrative",
+      "source": "biology/src/library/experiments.js",
+      "entryPoint": "BIO_MODELS.mitosisCanAdvance",
+      "inputs": {
+        "stage": "Discrete teaching stage",
+        "spindle": "Percent correct attachments",
+        "checkpoint": "Active/disabled"
+      },
+      "outputs": {
+        "canAdvance": "Boolean; staged fictional cell"
+      },
+      "assumptions": [
+        "Fictional 2n=4 cell",
+        "Replication precedes mitosis",
+        "Chromosome counting by centromeres",
+        "5:3 unequal segregation is one illustrated possibility"
+      ],
+      "provenance": "Authored rule-based animation",
+      "reference": {
+        "url": "https://openstax.org/books/biology-2e/pages/10-3-control-of-the-cell-cycle",
+        "role": "Source-authored biological mechanism"
+      },
+      "tests": [
+        "biology/tests/library-models.test.cjs"
+      ],
+      "checksObserved": [
+        "Active checkpoint blocks incomplete attachment at metaphase",
+        "Complete attachment permits advance"
+      ],
+      "remaining": [
+        "Educator review of every displayed stage/label"
+      ],
+      "status": "source-reviewed-existing-checks-pass",
+      "sourceSha256": "81fce6c53d9a41e78f2051d75cc66b6b0a24b75080fd9a2b488dfc65e1fbd2ac"
+    },
+    {
+      "id": "biology-mendelian-inheritance",
+      "subject": "biology",
+      "title": "Inheritance probabilities and synthetic offspring",
+      "classification": "analytical",
+      "source": "biology/src/library/experiments.js",
+      "entryPoint": "BIO_MODELS.cross",
+      "components": [
+        {
+          "name": "Exact genotype enumeration",
+          "classification": "analytical"
+        },
+        {
+          "name": "Pseudorandom breeding sample",
+          "classification": "numerical"
+        }
+      ],
+      "inputs": {
+        "parentA": "Supported fictional genotype",
+        "parentB": "Supported fictional genotype",
+        "seed": "Reproducible synthetic sampling state"
+      },
+      "outputs": {
+        "genotypeProbability": "Unitless probability",
+        "sampleCounts": "Synthetic offspring count"
+      },
+      "assumptions": [
+        "Equal gamete probability",
+        "Random fertilization",
+        "Independent dihybrid loci",
+        "No viability difference",
+        "Sample ratio is not guaranteed"
+      ],
+      "provenance": "Exact probability plus seeded synthetic sample",
+      "reference": {
+        "url": "https://openstax.org/books/biology-2e/pages/12-3-laws-of-inheritance",
+        "role": "Inheritance assumptions; inspected 2026-10-29"
+      },
+      "tests": [
+        "biology/tests/library-models.test.cjs"
+      ],
+      "checksObserved": [
+        "Aa×Aa 1:2:1 genotype probabilities",
+        "Dihybrid probability sum and 9/16 phenotype",
+        "X-linked cases"
+      ],
+      "remaining": [
+        "Sampling distribution/conservation tests distinct from exact-probability tests"
+      ],
+      "status": "source-reviewed-existing-checks-pass",
+      "sourceSha256": "81fce6c53d9a41e78f2051d75cc66b6b0a24b75080fd9a2b488dfc65e1fbd2ac"
+    },
+    {
+      "id": "biology-dna-protein",
+      "subject": "biology",
+      "title": "Standard-code sequence translation",
+      "classification": "analytical",
+      "source": "biology/src/library/experiments.js",
+      "entryPoint": "BIO_MODELS.translate",
+      "inputs": {
+        "dna": "Short fictional 5′→3′ coding strand"
+      },
+      "outputs": {
+        "rna": "5′→3′ mRNA",
+        "peptide": "N→C amino-acid sequence",
+        "codons": "Standard nuclear code lookup"
+      },
+      "assumptions": [
+        "Displayed reading frame only",
+        "AUG initiation assumption",
+        "No introns/alternative initiation",
+        "Not mitochondrial or taxon-specific alternative codes",
+        "No protein function/folding inference"
+      ],
+      "provenance": "Fictional sequence interpreted using standard codon table",
+      "reference": {
+        "url": "https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi",
+        "role": "Standard code table and alternative-code warning; inspected 2026-10-29"
+      },
+      "tests": [
+        "biology/tests/library-models.test.cjs"
+      ],
+      "checksObserved": [
+        "64 entries exist",
+        "Selected start/stop/Trp/Arg assignments",
+        "Known peptide and mutation examples"
+      ],
+      "remaining": [
+        "Independent all-64-codon comparison; count alone is not exhaustive correctness"
+      ],
+      "status": "source-reviewed-existing-checks-pass",
+      "sourceSha256": "81fce6c53d9a41e78f2051d75cc66b6b0a24b75080fd9a2b488dfc65e1fbd2ac"
+    },
+    {
+      "id": "biology-onion-cheek-microscopy",
+      "subject": "biology",
+      "title": "Onion and cheek microscopy rehearsal",
+      "classification": "illustrative",
+      "source": "biology/src/cbse/microscopy-model.js",
+      "entryPoint": "BioMicroscopyModel",
+      "components": [
+        {
+          "name": "Magnification and field diameter",
+          "classification": "analytical"
+        },
+        {
+          "name": "Cells, focus, stain and readiness",
+          "classification": "illustrative"
+        }
+      ],
+      "inputs": {
+        "objective": "4×, 10×, 40×",
+        "eyepiece": "Chosen 10×",
+        "fieldNumber": "Chosen 18 mm",
+        "focus": "Arbitrary dial units",
+        "stage": "Synthetic µm coordinates"
+      },
+      "outputs": {
+        "magnification": "Optical product",
+        "fieldDiameter": "µm from chosen specification",
+        "view": "Schematic slide"
+      },
+      "assumptions": [
+        "Original synthetic cell images",
+        "No measured cell geometry",
+        "No calibrated focus/optical resolution",
+        "More display zoom does not add optical resolution",
+        "No proof of practical competence"
+      ],
+      "provenance": "Illustrative virtual slides, not photographs or patient data",
+      "reference": {
+        "description": "NCERT/CBSE and optical references are recorded in source header",
+        "role": "Curriculum/mechanism references; no empirical image validation"
+      },
+      "tests": [
+        "biology/tests/microscopy-model.test.cjs"
+      ],
+      "checksObserved": [
+        "Independent magnification/field unit conversions",
+        "Focus tolerance boundaries",
+        "Stage direction reversal",
+        "Invalid-state rejection"
+      ],
+      "remaining": [
+        "Physical microscope comparison and educator/supervised-practical review"
+      ],
+      "status": "source-reviewed-existing-checks-pass",
+      "sourceSha256": "ba63e967a265f8a84edf61fc9196a4d3e4612149c4c8c23b6774db744fb6cfa6"
+    }
+  ],
+  "excludedFromCoverage": [
+    "Other legacy inline Physics engines",
+    "Full sandbox solver",
+    "Remote CircuitJS numerical solver",
+    "Full anatomical labels/assets/provenance",
+    "Clinical imaging/pathology claims",
+    "Every CBSE practical and curriculum mapping"
+  ],
+  "evidenceRefreshedOn": "2026-11-03",
+  "sourceHashesVerifiedAt": "2026-11-02T19:21:46.063Z",
+  "sourceRootNote": "Source paths are relative to the two-repository staging workspace; each subject checkout alone does not contain its sibling."
+}

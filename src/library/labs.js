@@ -30,9 +30,10 @@ const LABS = (function () {
     Object.entries(controls).forEach(([k,id]) => { const e=document.getElementById(id); e.value=filters[k]; e.addEventListener(k==='query'?'input':'change',()=>{filters[k]=e.value;paint();}); });
     function paint() {
       const query=filters.query.trim().toLowerCase();
+      const matches=window.EntelloqScience?.enabled()?new Set(window.EntelloqScience.search(all.map(l=>({...l,description:l.blurb,tags:[...(l.aliases||[]),...(l.relatedTopics||[])]})),query,100).map(l=>l.id)):null;
       const shown=all.filter(l=>{
         const searchable=[l.title,l.blurb,l.category,l.tag,...(l.aliases||[]),...(l.relatedTopics||[])].join(' ').toLowerCase();
-        return (!query || query.split(/\s+/).every(w=>searchable.includes(w))) && (!filters.category || (l.category||l.tag)===filters.category) && (!filters.difficulty || l.difficulty===filters.difficulty) && (!filters.duration || (l.minutes||15)<=Number(filters.duration)) && (!filters.type || (l.type||'simulation')===filters.type);
+        return (matches?matches.has(l.id):(!query || query.split(/\s+/).every(w=>searchable.includes(w)))) && (!filters.category || (l.category||l.tag)===filters.category) && (!filters.difficulty || l.difficulty===filters.difficulty) && (!filters.duration || (l.minutes||15)<=Number(filters.duration)) && (!filters.type || (l.type||'simulation')===filters.type);
       });
       document.getElementById('lab-count').textContent=shown.length+' of '+all.length+' investigations';
       document.getElementById('lab-cards').innerHTML=shown.length ? shown.map((l,i)=>`<a class="lc-card" href="#${esc(l.id)}" style="--lc:${l.color||'var(--em)'}"><div class="lc-preview${l.type==='dissection'?' lc-preview-specimen':''}"><img src="./assets/previews/lab-${esc(l.id)}.webp" alt="" width="960" height="600" loading="${i<6?'eager':'lazy'}" decoding="async"><span class="lc-preview-type">${esc(l.type||'simulation')}</span><span class="lc-open" aria-hidden="true">↗</span></div><div class="lc-card-copy"><span class="lb-tag">${esc(l.category||l.tag)}</span><h2>${esc(l.title)}</h2><div class="ln-card-meta"><span>${esc(l.difficulty||'school')}</span><span>${l.minutes||15} min</span></div></div></a>`).join('') : '<div class="ln-empty"><h2>No experiments match those filters.</h2><p>Try a broader term or another field.</p><button class="bx-btn" id="lab-clear">Show all experiments</button></div>';
@@ -46,6 +47,7 @@ const LABS = (function () {
     try {
       live=l.build(host)||{};
       notebook=window.BioNotebook?.mount(l,host,live,document.getElementById('lab-workflow'),document.getElementById('lab-notebook'));
+      window.BioProduct?.mountLab(l,host,live,notebook);
     } catch(e) {
       host.innerHTML='<div class="lb-err">This bench could not start. <button class="bx-btn" id="lab-retry">Try again</button><a href="#">Choose another lab</a></div>';
       document.getElementById('lab-retry').onclick=route;

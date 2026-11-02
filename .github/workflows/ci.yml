@@ -22,7 +22,9 @@ jobs:
         with:
           node-version: "22"
       - name: Learning workflow and original-lab boundary
-        run: node scripts/check-learning.cjs
+        run: |
+          node scripts/build-scientific-catalog.cjs --check
+          node scripts/check-learning.cjs
       - name: Verify learning-tool source slots and assets
         run: |
           python scripts/build-learning-tools.py --check
@@ -40,7 +42,7 @@ jobs:
         env:
           BIOLOGY_PLAYWRIGHT_MODULES: ${{ runner.temp }}/biology-browser/node_modules
         run: |
-          npm install --prefix "$RUNNER_TEMP/biology-browser" --no-save playwright@1.62.1
+          npm install --prefix "$RUNNER_TEMP/biology-browser" --no-save playwright@1.62.1 axe-core@4.12.1
           "$RUNNER_TEMP/biology-browser/node_modules/.bin/playwright" install --with-deps chromium
           node scripts/check-single-file-browser.cjs
           node scripts/check-opening-browser.cjs
@@ -53,6 +55,9 @@ jobs:
           node scripts/check-learning-host-quality.cjs
           node scripts/check-learning-host-quality.cjs --portable
           node scripts/check-protein-browser.cjs
+          node scripts/check-model-resume-browser.cjs
+          node scripts/check-product-excellence-browser.cjs --portable
+          node scripts/check-product-excellence-browser.cjs --file
       - name: Save single-file browser evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -64,6 +69,7 @@ jobs:
             docs/learning-tools/
             docs/visual-tools/
             docs/host-quality/
+            docs/product-excellence/
           if-no-files-found: ignore
       - name: Preserve deploy invariants
         run: |

@@ -13,6 +13,7 @@
     const v = plain(value) ? value : {};
     const note={version:1,mode:['guided','challenge','sandbox'].includes(v.mode)?v.mode:'guided',trials:[],question:typeof v.question==='string'?v.question.slice(0,2000):''};
     for(const key of Object.keys(fields)) note[key]=typeof v[key]==='string'?v[key].slice(0,12000):'';
+    if(plain(v.graphSettings))note.graphSettings={x:String(v.graphSettings.x||'Trial').slice(0,150),y:String(v.graphSettings.y||'').slice(0,150),type:['scatter','line','bar'].includes(v.graphSettings.type)?v.graphSettings.type:'scatter'};
     if(Array.isArray(v.trials)) note.trials=v.trials.slice(-80).filter(plain).map((t,i)=>({index:i+1,at:typeof t.at==='string'?t.at:'',variables:cleanMap(t.variables),measurements:cleanMap(t.measurements),stage:String(t.stage||'').slice(0,300),observation:String(t.observation||'').slice(0,2000)}));
     return note;
   }
@@ -52,9 +53,10 @@
     }catch(_){saveOk=false;}
     if(!note.question)note.question=lab.question||'How does changing one condition affect this biological system?';
     if(!hasDraft)savedView=JSON.stringify(note);
+    if(note.graphSettings){xKey=note.graphSettings.x;yKey=note.graphSettings.y;graphType=note.graphSettings.type;}
     workflow.className='ln-workspace';target.className='ln-workspace';
     workflow.innerHTML=`<div class="ln-question"><div><h2>${esc(note.question)}</h2><p>${esc((lab.learningObjectives||[]).join(' · '))}</p></div><div class="ln-modes" role="group" aria-label="Experiment mode">${['guided','challenge','sandbox'].map(m=>`<button class="bx-btn" data-lab-mode="${m}" aria-pressed="${m===note.mode}">${m[0].toUpperCase()+m.slice(1)}</button>`).join('')}</div></div><p class="ln-workflow-hint" id="lab-hint"></p><label>My hypothesis<input id="lab-hypothesis" maxlength="2000" placeholder="If I change… then… because…" value="${esc(note.hypothesis)}"></label>`;
-    target.innerHTML=`<div class="ln-notebook-top"><h2>Lab notebook</h2><div class="ln-theory"><span>Understand the theory</span>${(lab.relatedTopics||[]).map(id=>`<a href="./learn.html#topic/${esc(id)}/intuition">${esc(id.replace(/-/g,' '))} ↗</a>`).join('')}</div></div><p class="ln-save" id="lab-save-state" role="status"></p><div class="ln-actions"><button class="bx-btn pri" id="lab-record">Record trial</button><button class="bx-btn" id="lab-coach">Ask the learning guide</button><button class="bx-btn" id="lab-capture">Capture view</button><button class="bx-btn" id="lab-csv">Export data CSV</button><button class="bx-btn" id="lab-export">Export notebook</button></div><div class="ln-record-summary" id="lab-record-summary"></div><div id="lab-trials"></div><div class="ln-graph"><div class="ln-graph-controls"><label>Horizontal axis<select id="lab-x"></select></label><label>Vertical axis<select id="lab-y"></select></label><label>Graph type<select id="lab-graph-type"><option value="scatter">Scatter</option><option value="line">Line</option><option value="bar">Bar</option></select></label></div><div id="lab-plot"></div></div><div class="ln-fields"><label>Research question<input data-note="question" maxlength="2000" value="${esc(note.question)}"></label>${Object.entries(fields).filter(([k])=>k!=='hypothesis').map(([k,label])=>`<label>${label}<textarea data-note="${k}" maxlength="12000" rows="3" placeholder="${k==='conclusion'?'Use evidence from your recorded trials.':k==='limitations'?'Which assumptions might differ in a living system?':'Write your '+label.toLowerCase()+'.'}">${esc(note[k])}</textarea></label>`).join('')}</div>`;
+    target.innerHTML=`<div class="ln-notebook-top"><h2>Lab notebook</h2><div class="ln-theory"><span>Understand the theory</span>${(lab.relatedTopics||[]).map(id=>`<a href="./learn.html#topic/${esc(id)}/intuition">${esc(id.replace(/-/g,' '))} ↗</a>`).join('')}</div></div><p class="ln-save" id="lab-save-state" role="status"></p><div class="ln-actions"><button class="bx-btn pri" id="lab-record">Record trial</button><button class="bx-btn" id="lab-coach">Ask the learning guide</button><button class="bx-btn" id="lab-capture">Capture view</button><button class="bx-btn" id="lab-csv">Export data CSV</button><button class="bx-btn" id="lab-export">Export notebook</button></div><div class="ln-record-summary" id="lab-record-summary"></div><div id="lab-trials"></div><div class="ln-graph"><div class="ln-graph-controls"><label>Horizontal axis<select id="lab-x"></select></label><label>Vertical axis<select id="lab-y"></select></label><label>Graph type<select id="lab-graph-type"><option value="scatter">Scatter</option><option value="line">Line</option><option value="bar">Bar</option></select></label></div><div id="lab-plot" tabindex="0" role="region" aria-label="Recorded trial graph. Scroll horizontally for all axes; the trial table contains each value."></div></div><div class="ln-fields"><label>Research question<input data-note="question" maxlength="2000" value="${esc(note.question)}"></label>${Object.entries(fields).filter(([k])=>k!=='hypothesis').map(([k,label])=>`<label>${label}<textarea data-note="${k}" maxlength="12000" rows="3" placeholder="${k==='conclusion'?'Use evidence from your recorded trials.':k==='limitations'?'Which assumptions might differ in a living system?':'Write your '+label.toLowerCase()+'.'}">${esc(note[k])}</textarea></label>`).join('')}</div>`;
     const $=s=>target.querySelector(s);
     const resetPanel=document.createElement('div');
     resetPanel.className='ln-record-summary';resetPanel.id='lab-reset-panel';resetPanel.hidden=true;
@@ -74,7 +76,7 @@
         if(localStorage.getItem(key)!==baselineRaw){conflict=true;saveOk=false;status();return false;}
         localStorage.setItem(key,serialized);baselineRaw=serialized;savedView=serialized;conflict=false;saveOk=true;
       }catch(_){saveOk=false;}
-      status();return true;
+      status();return saveOk;
     }
     function save(){persist(note);remember();}
     function storageChanged(e){if((e.key===key||e.key===null)&&e.newValue!==baselineRaw){conflict=true;saveOk=false;status();remember();}}
@@ -107,7 +109,7 @@
       let series=graphType==='line'?`<polyline points="${sorted.map(p=>xp(p.x)+','+yp(p.y)).join(' ')}" fill="none" stroke="var(--em)" stroke-width="2"/>`:'';
       series+=points.map(p=>graphType==='bar'?`<rect x="${xp(p.x)-Math.min(15,230/points.length)}" y="${Math.min(yp(p.y),yp(0))}" width="${Math.min(30,460/points.length)}" height="${Math.max(1,Math.abs(yp(p.y)-yp(0)))}" fill="var(--em)"><title>Trial ${p.index}: ${esc(p.x)}, ${esc(p.y)}</title></rect>`:`<circle cx="${xp(p.x)}" cy="${yp(p.y)}" r="4" fill="var(--em)"><title>Trial ${p.index}: ${esc(p.x)}, ${esc(p.y)}</title></circle>`).join('');
       const ticks=Array.from({length:5},(_,i)=>{const y=ymin+(ymax-ymin)*i/4;return `<line x1="70" x2="650" y1="${yp(y)}" y2="${yp(y)}" stroke="var(--line)"/><text x="60" y="${yp(y)+4}" text-anchor="end">${Number(y.toPrecision(3))}</text>`;}).join('');
-      $('#lab-plot').innerHTML=`<svg viewBox="0 0 710 335" role="img" aria-label="${esc(yKey)} against ${esc(xKey)} from ${points.length} recorded trials"><g fill="var(--dim)" font-family="system-ui" font-size="11">${ticks}<text x="70" y="285">${Number(xmin.toPrecision(3))}</text><text x="650" y="285" text-anchor="end">${Number(xmax.toPrecision(3))}</text><text x="350" y="318" text-anchor="middle">${esc(xKey)}</text><text x="70" y="24">${esc(yKey)}</text></g><path d="M70 40V255H650" fill="none" stroke="var(--hair)"/>${series}</svg><p>${points.length} recorded observations. ${graphType==='line'?'Connecting points shows a trend; it does not establish causation.':graphType==='bar'?'Repeated horizontal values share a position; use Trial on the horizontal axis to compare every repeat.':'Hover a point for its recorded values.'}</p>`;
+      $('#lab-plot').innerHTML=`<svg viewBox="0 0 710 335" role="img" aria-label="${esc(yKey)} against ${esc(xKey)} from ${points.length} recorded trials"><g fill="var(--dim)" font-family="system-ui" font-size="11">${ticks}<text x="70" y="285">${Number(xmin.toPrecision(3))}</text><text x="650" y="285" text-anchor="end">${Number(xmax.toPrecision(3))}</text><text x="350" y="318" text-anchor="middle">${esc(xKey)}</text><text x="70" y="24">${esc(yKey)}</text></g><path d="M70 40V255H650" fill="none" stroke="var(--hair)"/>${series}</svg><p>${points.length} recorded observations. ${graphType==='line'?'Connecting points shows a trend; it does not establish causation.':graphType==='bar'?'Repeated horizontal values share a position; use Trial on the horizontal axis to compare every repeat.':'Recorded values are available in the trial table above. Scroll the graph horizontally to inspect both axes.'}</p>`;
     }
     function paint() {
       const kv=m=>Object.entries(m).map(([k,v])=>`<span>${esc(k)}: <strong>${esc(v)}</strong></span>`).join('');
@@ -121,14 +123,17 @@
     $('#lab-reset-cancel').onclick=closeReset;
     $('#lab-reset-confirm').onclick=()=>{
       const fresh=clean({question:lab.question||'How does changing one condition affect this biological system?'});
-      if(!persist(fresh,true)){$('#lab-reset-message').textContent=conflictMessage;remember();return;}
+      const saved=persist(fresh,true);
+      if(!saved&&conflict){$('#lab-reset-message').textContent=conflictMessage;remember();return;}
       note=fresh;actions.length=0;xKey='Trial';yKey='';graphType='scatter';remember();
       workflow.querySelector('#lab-hypothesis').value='';workflow.querySelector('h2').textContent=note.question;
       target.querySelectorAll('[data-note]').forEach(e=>{e.value=note[e.dataset.note]||'';});
       $('#lab-graph-type').value='scatter';mode();paint();closeReset();
     };
     $('#lab-coach').onclick=()=>{publish();window.BioContext?.ask('Help me reason from my experiment.');};
-    $('#lab-x').onchange=e=>{xKey=e.target.value;graph();};$('#lab-y').onchange=e=>{yKey=e.target.value;graph();};$('#lab-graph-type').onchange=e=>{graphType=e.target.value;graph();};
+    function saveGraph(){note.graphSettings={x:xKey,y:yKey,type:graphType};save();}
+    $('#lab-x').onchange=e=>{xKey=e.target.value;graph();saveGraph();};$('#lab-y').onchange=e=>{yKey=e.target.value;graph();saveGraph();};$('#lab-graph-type').onchange=e=>{graphType=e.target.value;graph();saveGraph();};
+    $('#lab-graph-type').value=graphType;
     $('#lab-csv').onclick=()=>download(csv(note.trials),'text/csv;charset=utf-8',lab.id+'-trials.csv');
     $('#lab-export').onclick=()=>{const text=['# '+lab.title,'', 'Question: '+note.question,'Mode: '+note.mode,...Object.entries(fields).flatMap(([k,label])=>['','## '+label,note[k]||'(not recorded)']),'','## Trial data',csv(note.trials)].join('\n');download(text,'text/markdown;charset=utf-8',lab.id+'-notebook.md');};
     $('#lab-capture').onclick=async()=>{
@@ -139,7 +144,7 @@
       else $('#lab-save-state').textContent='No capturable view is available. Your written observations can still be exported.';
     };
     mode();paint();publish();
-    return {dispose(){if(disposed)return;remember();disposed=true;window.removeEventListener('storage',storageChanged);host.removeEventListener('change',action);host.removeEventListener('click',action);}};
+    return {draft(){return clean({...note,graphSettings:{x:xKey,y:yKey,type:graphType}});},status(){return {saved:saveOk&&!conflict,conflict};},dispose(){if(disposed)return;remember();disposed=true;window.removeEventListener('storage',storageChanged);host.removeEventListener('change',action);host.removeEventListener('click',action);}};
   }
   window.BioNotebook={mount,clean,csv};
 })();

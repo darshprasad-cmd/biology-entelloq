@@ -1,0 +1,9 @@
+AssertionError [ERR_ASSERTION]: Guest changes an experiment within 30 seconds on test machine
+    at C:\Users\darsh\Documents\Codex\2026-10-29\entelloq-product-excellence\biology\scripts\check-product-excellence-browser.cjs:27:111 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}

@@ -93,5 +93,6 @@
   dialog.addEventListener('cancel',event=>{event.preventDefault();if(openMode==='questionnaire'){const skip=dialog.querySelector('[data-action=skip]');skip?.click();}else{dialog.querySelector('[data-action=close]')?.click();}});
   root.addEventListener('hashchange',()=>{if(isCBSE())openCBSE();});
   const skipped=storageGet(SKIP)==='1';
-  if(!profile&&!skipped)questionnaire();else if(isCBSE())openCBSE();else if(profile&&!root.location.hash)dashboard(profile.classYear);
+  const experimentFirst=!!root.EntelloqScience?.enabled?.();
+  if(!profile&&!skipped&&!experimentFirst)questionnaire();else if(isCBSE())openCBSE();else if(profile&&!root.location.hash&&!experimentFirst)dashboard(profile.classYear);
 })(typeof window === 'undefined' ? globalThis : window);

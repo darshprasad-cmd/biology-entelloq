@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-03",
+  "timezone": "Asia/Calcutta",
+  "scope": "Existing unit/model checks for inspected source subset only",
+  "snapshotStage": "Final frozen scientific source refresh after theme-render lifecycle refinement",
+  "finalIntegrationStatus": "Selected 43-test command independently rerun once on 2026-11-03 Asia/Calcutta: 43 passed, 0 failed, 0 skipped; no broad browser/device rerun",
+  "runtime": "Node.js v24.19.0",
+  "command": "node --test physics/visualization-source/tests/core.test.mjs physics/learning-tools-source/physics/tests/core.test.mjs biology/tests/library-models.test.cjs biology/tests/microscopy-model.test.cjs",
+  "result": {
+    "exitCode": 0,
+    "tests": 43,
+    "passed": 43,
+    "failed": 0,
+    "skipped": 0
+  },
+  "sources": [
+    {
+      "path": "physics/visualization-source/core.mjs",
+      "sha256": "22ea7e7fb00dd58ce1da8733d2b0d63fc783d7745887bfff5bb7f9a44283b844"
+    },
+    {
+      "path": "physics/learning-tools-source/physics/core.mjs",
+      "sha256": "04a07188cce58b85b86d565d8fc3ed6943ca312ceb0a832844ebcf1658f5c701"
+    },
+    {
+      "path": "biology/src/library/experiments.js",
+      "sha256": "81fce6c53d9a41e78f2051d75cc66b6b0a24b75080fd9a2b488dfc65e1fbd2ac"
+    },
+    {
+      "path": "biology/src/cbse/microscopy-model.js",
+      "sha256": "ba63e967a265f8a84edf61fc9196a4d3e4612149c4c8c23b6774db744fb6cfa6"
+    }
+  ],
+  "exclusions": [
+    "Not a full feature inventory or full test suite",
+    "No clinical or physical-laboratory validation",
+    "No real-student sessions",
+    "No camera hardware or native device tests",
+    "No deployment proof",
+    "Scientific/reference tests include some selected expectations rather than exhaustive reference validation",
+    "Registry covers only its 12 inspected source models; not every Physics/Biology experiment or a full DNA/PCR/anatomy inventory"
+  ],
+  "verifiedAt": "2026-11-02T19:21:46.063Z",
+  "auditedBaselineSources": [
+    {
+      "path": "physics/visualization-source/core.mjs",
+      "sha256": "22ea7e7fb00dd58ce1da8733d2b0d63fc783d7745887bfff5bb7f9a44283b844"
+    },
+    {
+      "path": "physics/learning-tools-source/physics/core.mjs",
+      "sha256": "04a07188cce58b85b86d565d8fc3ed6943ca312ceb0a832844ebcf1658f5c701"
+    },
+    {
+      "path": "biology/src/library/experiments.js",
+      "sha256": "36fe601936320c214edbb0746f51f62b6bd64ae8852452ebe2f824e255521069"
+    },
+    {
+      "path": "biology/src/cbse/microscopy-model.js",
+      "sha256": "ba63e967a265f8a84edf61fc9196a4d3e4612149c4c8c23b6774db744fb6cfa6"
+    }
+  ],
+  "auditStartedOn": "2026-10-29",
+  "priorSnapshots": [
+    {
+      "date": "2026-10-29",
+      "verifiedAt": "2026-10-29T08:05:39.897Z",
+      "snapshotStage": "Final integrated source snapshot after Biology experiment adapters were frozen",
+      "result": {
+        "exitCode": 0,
+        "tests": 43,
+        "passed": 43,
+        "failed": 0,
+        "skipped": 0
+      },
+      "sources": [
+        {
+          "path": "physics/visualization-source/core.mjs",
+          "sha256": "22ea7e7fb00dd58ce1da8733d2b0d63fc783d7745887bfff5bb7f9a44283b844"
+        },
+        {
+          "path": "physics/learning-tools-source/physics/core.mjs",
+          "sha256": "04a07188cce58b85b86d565d8fc3ed6943ca312ceb0a832844ebcf1658f5c701"
+        },
+        {
+          "path": "biology/src/library/experiments.js",
+          "sha256": "36fe601936320c214edbb0746f51f62b6bd64ae8852452ebe2f824e255521069"
+        },
+        {
+          "path": "biology/src/cbse/microscopy-model.js",
+          "sha256": "ba63e967a265f8a84edf61fc9196a4d3e4612149c4c8c23b6774db744fb6cfa6"
+        }
+      ]
+    }
+  ],
+  "outputFile": "docs/scientific-checks-2026-11-03.txt",
+  "outputSha256": "98393216366605a8cfcae6ff7ed27ae3551510ef7d6729b565c1a9edaf79e9f5",
+  "finalRefinement": {
+    "source": "biology/src/library/experiments.js",
+    "change": "Observe data-theme changes through existing b.render(), disconnect the observer during dispose; no scientific equation changes",
+    "inverseCheck": "Removing only the exact added themeObserver declaration and disconnect call reconstructs the audited baseline bytes",
+    "reconstructedBaselineSha256": "36fe601936320c214edbb0746f51f62b6bd64ae8852452ebe2f824e255521069"
+  }
+}

@@ -12,9 +12,17 @@
     if(!new URL(frame.src,location.href).pathname.endsWith('/'+section+'.html'))return;
     const mode=modes.includes(c.mode)?c.mode:'layman';
     const sub=c.kind==='lab'?id:(c.kind==='learn'?'topic/':'learn/')+id+'/'+mode;
+    // A queued event belongs to the document's previous route after Back or
+    // returning to the catalogue. Only the currently displayed route may win.
+    try {
+      if(frame.contentWindow.BioqContext?.ready===false)return;
+      const childURL = frame.contentWindow.BioqLocation || frame.contentWindow.location;
+      const expected = '#' + (c.kind==='lab'?id:(c.kind==='learn'?'topic/':'learn/')+id+'/'+mode);
+      if (childURL.hash !== expected && !(mode==='layman'&&c.kind!=='lab'&&childURL.hash===expected.replace(/\/layman$/,''))) return;
+    } catch (_) { return; }
     window.BioAppContext?.remember(section,sub);
     if(location.hash!=='#'+section+'/'+sub)history.replaceState({k:section,sub},'','#'+section+'/'+sub);
-    const crumb=document.getElementById('routeLabel');if(crumb)crumb.textContent=({learn:'Learn',labs:'Lab',reason:'Reason',solve:'Solve'}[section])+' / '+(c.title||id)+(c.subtopic?' / '+c.subtopic:'');
+    const crumb=document.getElementById('routeLabel');if(crumb)crumb.textContent=({learn:'Learn',labs:window.EntelloqScience?.enabled?.()?'Virtual Labs':'Lab',reason:'Reason',solve:'Solve'}[section])+' / '+(c.title||id)+(c.subtopic?' / '+c.subtopic:'');
   });
   window.BioAppContext?.refreshHome();
   // Add a curriculum entry without changing the existing launcher or routes.

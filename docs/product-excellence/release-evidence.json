@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "auditDate": "2026-10-29",
+  "finalReviewDate": "2026-11-03",
+  "timezone": "Asia/Calcutta",
+  "baseCommit": "a8c303ca7d9f6a43598275708a4b7155664750c6",
+  "branch": "codex/product-excellence-20261029",
+  "artifact": {
+    "path": "dist/index.html",
+    "bytes": 44939188,
+    "sha256": "6fb91ff747fb0ad0fccc298cce7b7618f1d1da921871d515ceca47eaa6d3a20e"
+  },
+  "checks": {
+    "singleFileBuildParity": "passed",
+    "biologyCatalogParity": { "passed": true, "entries": 221 },
+    "staticGroups": { "passed": 14, "failed": 0 },
+    "productVariants": ["authored-source", "served-portable", "copied-alone-file"],
+    "productViewportWidths": [320, 390, 768, 1440],
+    "allProductVariantsComplete": true,
+    "uncaughtProductPageErrors": 0,
+    "unsolicitedCameraRequests": 0,
+    "guestInteractionTargetMs": 30000,
+    "timingBoundary": "Automated local-machine navigation and manipulation; screenshot instrumentation recorded separately and excluded. Not real-student usability evidence.",
+    "preservation": { "http": 20, "copiedFile": 20, "failed": 0 },
+    "modelResumeRoundTrips": 6,
+    "invalidStatesRejectedAtomically": 36,
+    "pausedThemeRecolorAndDisposalModels": 6
+  },
+  "reports": ["after-source/report.json", "after-portable/report.json", "after-file/report.json", "after-preservation/browser-report.json", "final-static.txt", "model-resume.txt"],
+  "unresolvedExternalGates": ["recruited real-student study", "physical camera and mobile-device validation", "school privacy and permission review", "hosted required CI", "explicit production deployment approval"],
+  "productionDeployment": "not performed"
+}
