@@ -1,0 +1,77 @@
+{
+  "cases": [
+    {
+      "width": 390,
+      "state": "setup",
+      "axeViolations": 0
+    },
+    {
+      "width": 390,
+      "state": "two-specimen-notebook",
+      "axeViolations": 0
+    },
+    {
+      "width": 390,
+      "firstScreen": true,
+      "questionnaireAction": "skip",
+      "deepLinkPreserved": true,
+      "nativeKeyboardStage": true,
+      "focusAndContrast": true,
+      "magnifications": [
+        {
+          "objective": 4,
+          "total": 40,
+          "fov": 4500,
+          "readout": "40× total · 4500 µm field diameter · in focus"
+        },
+        {
+          "objective": 10,
+          "total": 100,
+          "fov": 1800,
+          "readout": "100× total · 1800 µm field diameter · in focus"
+        },
+        {
+          "objective": 40,
+          "total": 400,
+          "fov": 450,
+          "readout": "400× total · 450 µm field diameter · in focus"
+        }
+      ],
+      "invertedStageMovement": true,
+      "mountFaults": true,
+      "bubblesShareStageAndMagnification": true,
+      "illuminationReadiness": true,
+      "bothSpecimensSaved": true,
+      "dedup": true,
+      "retrievalAndApplicationFeedback": true,
+      "csvExact": true,
+      "reload": true,
+      "notesPreserved": true,
+      "resetPreservesNotebook": true,
+      "escapeAndFocus": true,
+      "noBenchNetworkRequests": true,
+      "cameraCalls": 0
+    },
+    {
+      "invalidNotebookIgnored": true,
+      "storedMarkupNotExecuted": true
+    },
+    {
+      "malformedNotebookIgnored": true
+    },
+    {
+      "validObservationMarkupEscaped": true,
+      "csvFormulaPrefixEscaped": true
+    },
+    {
+      "blockedStorageSessionRemount": true
+    },
+    {
+      "singleFileOfflineInteractive": true,
+      "cameraCalls": 0
+    }
+  ],
+  "limitations": "Chromium emulation and original schematic/model checks only. Not physical touch, screen-reader certification, captured microscopy, calibrated dimensions or optics, webcam tracking, educator review or supervised practical competence.",
+  "target": "http://127.0.0.1:54275/",
+  "status": "passed"
+}

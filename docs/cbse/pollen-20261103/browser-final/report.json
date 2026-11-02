@@ -1,0 +1,413 @@
+{
+  "cases": [
+    {
+      "width": 1440,
+      "state": "setup",
+      "axeViolations": 0
+    },
+    {
+      "width": 1440,
+      "state": "nine-field-snapshots",
+      "axeViolations": 0
+    },
+    {
+      "width": 1440,
+      "firstScreen": true,
+      "questionnaireAction": "complete",
+      "deepLinkPreserved": true,
+      "independentRenderedGeometry": true,
+      "equivalentDimensionsTable": true,
+      "inspectorEqualLengthBoundary": true,
+      "totalIncludesRecognizableRupturedGrains": true,
+      "results": [
+        {
+          "field": "A",
+          "time": 0,
+          "total": 9,
+          "germinated": 0,
+          "percent": 0
+        },
+        {
+          "field": "A",
+          "time": 10,
+          "total": 9,
+          "germinated": 3,
+          "percent": 33.3
+        },
+        {
+          "field": "A",
+          "time": 20,
+          "total": 9,
+          "germinated": 6,
+          "percent": 66.7
+        },
+        {
+          "field": "B",
+          "time": 0,
+          "total": 11,
+          "germinated": 0,
+          "percent": 0
+        },
+        {
+          "field": "B",
+          "time": 10,
+          "total": 11,
+          "germinated": 4,
+          "percent": 36.4
+        },
+        {
+          "field": "B",
+          "time": 20,
+          "total": 11,
+          "germinated": 7,
+          "percent": 63.6
+        },
+        {
+          "field": "C",
+          "time": 0,
+          "total": 14,
+          "germinated": 0,
+          "percent": 0
+        },
+        {
+          "field": "C",
+          "time": 10,
+          "total": 14,
+          "germinated": 5,
+          "percent": 35.7
+        },
+        {
+          "field": "C",
+          "time": 20,
+          "total": 14,
+          "germinated": 8,
+          "percent": 57.1
+        }
+      ],
+      "incorrectCountsAndPercentageRejected": true,
+      "preparationFaults": true,
+      "dedup": true,
+      "rawCountPoolingByTime": true,
+      "retrievalAndApplicationFeedback": true,
+      "csvExact": true,
+      "reload": true,
+      "notesPreserved": true,
+      "resetPreservesNotebook": true,
+      "keyboardAndEscapeFocus": true,
+      "noBenchNetworkRequests": true,
+      "cameraCalls": 0
+    },
+    {
+      "width": 768,
+      "state": "setup",
+      "axeViolations": 0
+    },
+    {
+      "width": 768,
+      "state": "nine-field-snapshots",
+      "axeViolations": 0
+    },
+    {
+      "width": 768,
+      "firstScreen": true,
+      "questionnaireAction": "skip",
+      "deepLinkPreserved": true,
+      "independentRenderedGeometry": true,
+      "equivalentDimensionsTable": true,
+      "inspectorEqualLengthBoundary": true,
+      "totalIncludesRecognizableRupturedGrains": true,
+      "results": [
+        {
+          "field": "A",
+          "time": 0,
+          "total": 9,
+          "germinated": 0,
+          "percent": 0
+        },
+        {
+          "field": "A",
+          "time": 10,
+          "total": 9,
+          "germinated": 3,
+          "percent": 33.3
+        },
+        {
+          "field": "A",
+          "time": 20,
+          "total": 9,
+          "germinated": 6,
+          "percent": 66.7
+        },
+        {
+          "field": "B",
+          "time": 0,
+          "total": 11,
+          "germinated": 0,
+          "percent": 0
+        },
+        {
+          "field": "B",
+          "time": 10,
+          "total": 11,
+          "germinated": 4,
+          "percent": 36.4
+        },
+        {
+          "field": "B",
+          "time": 20,
+          "total": 11,
+          "germinated": 7,
+          "percent": 63.6
+        },
+        {
+          "field": "C",
+          "time": 0,
+          "total": 14,
+          "germinated": 0,
+          "percent": 0
+        },
+        {
+          "field": "C",
+          "time": 10,
+          "total": 14,
+          "germinated": 5,
+          "percent": 35.7
+        },
+        {
+          "field": "C",
+          "time": 20,
+          "total": 14,
+          "germinated": 8,
+          "percent": 57.1
+        }
+      ],
+      "incorrectCountsAndPercentageRejected": true,
+      "preparationFaults": true,
+      "dedup": true,
+      "rawCountPoolingByTime": true,
+      "retrievalAndApplicationFeedback": true,
+      "csvExact": true,
+      "reload": true,
+      "notesPreserved": true,
+      "resetPreservesNotebook": true,
+      "keyboardAndEscapeFocus": true,
+      "noBenchNetworkRequests": true,
+      "cameraCalls": 0
+    },
+    {
+      "width": 390,
+      "state": "setup",
+      "axeViolations": 0
+    },
+    {
+      "width": 390,
+      "state": "nine-field-snapshots",
+      "axeViolations": 0
+    },
+    {
+      "width": 390,
+      "firstScreen": true,
+      "questionnaireAction": "skip",
+      "deepLinkPreserved": true,
+      "independentRenderedGeometry": true,
+      "equivalentDimensionsTable": true,
+      "inspectorEqualLengthBoundary": true,
+      "totalIncludesRecognizableRupturedGrains": true,
+      "results": [
+        {
+          "field": "A",
+          "time": 0,
+          "total": 9,
+          "germinated": 0,
+          "percent": 0
+        },
+        {
+          "field": "A",
+          "time": 10,
+          "total": 9,
+          "germinated": 3,
+          "percent": 33.3
+        },
+        {
+          "field": "A",
+          "time": 20,
+          "total": 9,
+          "germinated": 6,
+          "percent": 66.7
+        },
+        {
+          "field": "B",
+          "time": 0,
+          "total": 11,
+          "germinated": 0,
+          "percent": 0
+        },
+        {
+          "field": "B",
+          "time": 10,
+          "total": 11,
+          "germinated": 4,
+          "percent": 36.4
+        },
+        {
+          "field": "B",
+          "time": 20,
+          "total": 11,
+          "germinated": 7,
+          "percent": 63.6
+        },
+        {
+          "field": "C",
+          "time": 0,
+          "total": 14,
+          "germinated": 0,
+          "percent": 0
+        },
+        {
+          "field": "C",
+          "time": 10,
+          "total": 14,
+          "germinated": 5,
+          "percent": 35.7
+        },
+        {
+          "field": "C",
+          "time": 20,
+          "total": 14,
+          "germinated": 8,
+          "percent": 57.1
+        }
+      ],
+      "incorrectCountsAndPercentageRejected": true,
+      "preparationFaults": true,
+      "dedup": true,
+      "rawCountPoolingByTime": true,
+      "retrievalAndApplicationFeedback": true,
+      "csvExact": true,
+      "reload": true,
+      "notesPreserved": true,
+      "resetPreservesNotebook": true,
+      "keyboardAndEscapeFocus": true,
+      "noBenchNetworkRequests": true,
+      "cameraCalls": 0
+    },
+    {
+      "width": 320,
+      "state": "setup",
+      "axeViolations": 0
+    },
+    {
+      "width": 320,
+      "state": "nine-field-snapshots",
+      "axeViolations": 0
+    },
+    {
+      "width": 320,
+      "firstScreen": true,
+      "questionnaireAction": "skip",
+      "deepLinkPreserved": true,
+      "independentRenderedGeometry": true,
+      "equivalentDimensionsTable": true,
+      "inspectorEqualLengthBoundary": true,
+      "totalIncludesRecognizableRupturedGrains": true,
+      "results": [
+        {
+          "field": "A",
+          "time": 0,
+          "total": 9,
+          "germinated": 0,
+          "percent": 0
+        },
+        {
+          "field": "A",
+          "time": 10,
+          "total": 9,
+          "germinated": 3,
+          "percent": 33.3
+        },
+        {
+          "field": "A",
+          "time": 20,
+          "total": 9,
+          "germinated": 6,
+          "percent": 66.7
+        },
+        {
+          "field": "B",
+          "time": 0,
+          "total": 11,
+          "germinated": 0,
+          "percent": 0
+        },
+        {
+          "field": "B",
+          "time": 10,
+          "total": 11,
+          "germinated": 4,
+          "percent": 36.4
+        },
+        {
+          "field": "B",
+          "time": 20,
+          "total": 11,
+          "germinated": 7,
+          "percent": 63.6
+        },
+        {
+          "field": "C",
+          "time": 0,
+          "total": 14,
+          "germinated": 0,
+          "percent": 0
+        },
+        {
+          "field": "C",
+          "time": 10,
+          "total": 14,
+          "germinated": 5,
+          "percent": 35.7
+        },
+        {
+          "field": "C",
+          "time": 20,
+          "total": 14,
+          "germinated": 8,
+          "percent": 57.1
+        }
+      ],
+      "incorrectCountsAndPercentageRejected": true,
+      "preparationFaults": true,
+      "dedup": true,
+      "rawCountPoolingByTime": true,
+      "retrievalAndApplicationFeedback": true,
+      "csvExact": true,
+      "reload": true,
+      "notesPreserved": true,
+      "resetPreservesNotebook": true,
+      "keyboardAndEscapeFocus": true,
+      "noBenchNetworkRequests": true,
+      "cameraCalls": 0
+    },
+    {
+      "invalidAndForgedNotebookIgnored": true,
+      "storedMarkupNotExecuted": true
+    },
+    {
+      "malformedNotebookIgnored": true
+    },
+    {
+      "blockedStorageSessionRemount": true
+    },
+    {
+      "singleFileOfflineInteractive": true,
+      "cameraCalls": 0
+    }
+  ],
+  "limitations": "Chromium emulation and original schematic/counting checks only. Not real pollen, germination-rate calibration, viability diagnosis, physical touch, screen-reader certification, webcam tracking, educator review or supervised practical competence.",
+  "localArtifact": {
+    "bytes": 44717230,
+    "sha256": "03ec93be4667c84b123d9b56a9d0e058a271dc948611226e64a777275afda589"
+  },
+  "target": "http://127.0.0.1:61002/",
+  "status": "passed"
+}
