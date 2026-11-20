@@ -1,7 +1,7 @@
 /* Real served source/portable interaction evidence; no camera or external AI. */
 'use strict';
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict'),{createRequire}=require('node:module');
-const fileMode=process.argv.includes('--file');const root=path.resolve(__dirname,'..'),portable=fileMode||process.argv.includes('--portable'),out=path.join(root,'docs/product-excellence/after-'+(fileMode?'file':portable?'portable':'source'));let copiedDirectory;
+const fileMode=process.argv.includes('--file');const root=path.resolve(__dirname,'..'),portable=fileMode||process.argv.includes('--portable'),out=path.resolve(process.env.BIOLOGY_PRODUCT_OUTPUT||path.join(root,'docs/product-excellence/after-'+(fileMode?'file':portable?'portable':'source')));let copiedDirectory;
 const runtime=createRequire(path.join(process.env.BIOLOGY_PLAYWRIGHT_MODULES||'C:/Users/darsh/biology-entelloq/node_modules','_bpe.cjs'));const {chromium}=runtime('playwright');let axeSource;try{axeSource=fs.readFileSync(runtime.resolve('axe-core/axe.min.js'),'utf8');}catch(_){}
 fs.mkdirSync(out,{recursive:true});const report={complete:false,portable,checks:[],errors:[],cameraRequests:0};let browser,server;
 const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.webp':'image/webp','.png':'image/png','.svg':'image/svg+xml'};

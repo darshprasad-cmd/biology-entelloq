@@ -1,0 +1,85 @@
+{
+  "cases": [
+    {
+      "width": 1440,
+      "firstScreen": true,
+      "allClasses": true,
+      "profileEditReset": true,
+      "questionnaireDesign": true,
+      "classRows": 1,
+      "timeRows": 1,
+      "equalChoiceTargets": true,
+      "balancedActions": true,
+      "privacyVisible": true,
+      "nativeKeyboardFocus": true,
+      "unchangedQuestionsAndDefaults": true
+    },
+    {
+      "width": 768,
+      "firstScreen": true,
+      "allClasses": true,
+      "profileEditReset": true,
+      "questionnaireDesign": true,
+      "classRows": 2,
+      "timeRows": 1,
+      "equalChoiceTargets": true,
+      "balancedActions": true,
+      "privacyVisible": true,
+      "nativeKeyboardFocus": true,
+      "unchangedQuestionsAndDefaults": true
+    },
+    {
+      "width": 390,
+      "firstScreen": true,
+      "allClasses": true,
+      "profileEditReset": true,
+      "questionnaireDesign": true,
+      "classRows": 2,
+      "timeRows": 1,
+      "equalChoiceTargets": true,
+      "balancedActions": true,
+      "privacyVisible": true,
+      "nativeKeyboardFocus": true,
+      "unchangedQuestionsAndDefaults": true
+    },
+    {
+      "width": 320,
+      "firstScreen": true,
+      "allClasses": true,
+      "profileEditReset": true,
+      "questionnaireDesign": true,
+      "classRows": 2,
+      "timeRows": 1,
+      "equalChoiceTargets": true,
+      "balancedActions": true,
+      "privacyVisible": true,
+      "nativeKeyboardFocus": true,
+      "unchangedQuestionsAndDefaults": true
+    },
+    {
+      "deepLinkPreserved": true,
+      "skipPersists": true,
+      "savedDeepLink": true
+    },
+    {
+      "allClassDeepLinks": true,
+      "siblingClassLink": true,
+      "realLessonNavigation": true,
+      "appReentry": true
+    },
+    {
+      "blockedStorage": true
+    },
+    {
+      "failedWriteRetainsNewSessionPreferences": true
+    },
+    {
+      "questionnaireBeforeManifest": true
+    },
+    {
+      "offlineFileQuestionnaire": true
+    }
+  ],
+  "limitations": "Chromium emulation, not physical touch hardware or educator validation; no camera or live AI tested.",
+  "pass": true
+}

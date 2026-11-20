@@ -292,6 +292,14 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);margin-top:4
 [data-page="me"] .ring-wrap .pct.na{font-size:15px;color:var(--faint)}
 [data-page="me"] .notyet{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
   color:var(--faint);border:1px solid var(--line);border-radius:999px;padding:4px 10px;white-space:nowrap}
+/* Give topic names the reading column on narrow screens; progress stays below,
+   rather than squeezing the description between an icon and a fixed badge. */
+@media (max-width:850px){
+  [data-page="me"] #masterySlot .topic{display:grid;grid-template-columns:40px minmax(0,1fr);gap:12px 18px;align-items:start}
+  [data-page="me"] #masterySlot .meta{overflow-wrap:anywhere}
+  [data-page="me"] #masterySlot :is(.notyet,.ring-wrap){grid-column:2;justify-self:start;max-width:100%}
+  [data-page="me"] #masterySlot .notyet{white-space:normal}
+}
 
 /* recommended next / continue */
 [data-page="me"] .rec{display:flex;align-items:center;gap:18px}

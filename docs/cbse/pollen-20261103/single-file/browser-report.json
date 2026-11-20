@@ -1,0 +1,2913 @@
+{
+  "scope": "full application",
+  "artifact": "dist\\index.html",
+  "bytes": 44717230,
+  "sha256": "03ec93be4667c84b123d9b56a9d0e058a271dc948611226e64a777275afda589",
+  "embeddedSpecimens": [
+    {
+      "id": "frog",
+      "deferred": true,
+      "bytes": 6142084,
+      "sha256": "64ccc2056475153d70b5f68a2b3b94ff075f0491c63c76a65b7157e7f7c349bc"
+    },
+    {
+      "id": "cockroach",
+      "deferred": true,
+      "bytes": 8988648,
+      "sha256": "03faef8793c04108c27a33cd581b11affa522e4565fc62558c09e54671444410"
+    }
+  ],
+  "timestamp": "2026-11-02T19:28:51.886Z",
+  "complete": true,
+  "runs": [
+    {
+      "mode": "http",
+      "checks": [
+        "First-visit questionnaire: {\"questionnaireDesign\":true,\"classRows\":1,\"timeRows\":1,\"equalChoiceTargets\":true,\"balancedActions\":true,\"privacyVisible\":true,\"nativeKeyboardFocus\":true,\"unchangedQuestionsAndDefaults\":true}",
+        "App search desktop: {\"dimensions\":{\"width\":190,\"height\":44,\"x\":1202.484375,\"right\":1392.484375,\"y\":9.5,\"bottom\":53.5,\"viewport\":1440,\"bar\":{\"y\":0,\"bottom\":64},\"explore\":{\"x\":1117.453125,\"right\":1184.484375}},\"checks\":\"Visible44px search; accessible close; escaped empty recovery; native input and arrows; forward/reverse focus trap; Escape/Ctrl K; exact trigger and unchanged route/history/notebook.\"}",
+        "Landing and Start Exploring load the application from the one supplied HTML file.",
+        "Labs discovery desktop: Native/explicit submit; persistent result nodes; focus-safe filters; complete empty reset; card return/fallback; invalid-route recovery; route/storage preservation; visible touch target; no horizontal overflow.",
+        "Progress reading desktop: {\"width\":1440,\"theme\":\"dark\",\"viewport\":1228,\"geometry\":[{\"title\":\"Cell Biology\",\"display\":\"flex\",\"topic\":{\"x\":88.109375,\"right\":582,\"width\":493.890625},\"meta\":{\"x\":146.109375,\"right\":447.515625,\"y\":1494.140625,\"bottom\":1545.28125,\"width\":301.40625,\"scroll\":301,\"client\":301},\"status\":{\"x\":465.515625,\"right\":582,\"y\":1506.453125,\"bottom\":1532.953125,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Genetics & DNA\",\"display\":\"flex\",\"topic\":{\"x\":646,\"right\":1139.890625,\"width\":493.890625},\"meta\":{\"x\":704,\"right\":1005.40625,\"y\":1494.140625,\"bottom\":1545.28125,\"width\":301.40625,\"scroll\":301,\"client\":301},\"status\":{\"x\":1023.40625,\"right\":1139.890625,\"y\":1506.453125,\"bottom\":1532.953125,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Evolution\",\"display\":\"flex\",\"topic\":{\"x\":88.109375,\"right\":582,\"width\":493.890625},\"meta\":{\"x\":146.109375,\"right\":447.515625,\"y\":1609.28125,\"bottom\":1660.421875,\"width\":301.40625,\"scroll\":301,\"client\":301},\"status\":{\"x\":465.515625,\"right\":582,\"y\":1621.59375,\"bottom\":1648.09375,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Human Physiology\",\"display\":\"flex\",\"topic\":{\"x\":646,\"right\":1139.890625,\"width\":493.890625},\"meta\":{\"x\":704,\"right\":1005.40625,\"y\":1609.28125,\"bottom\":1660.421875,\"width\":301.40625,\"scroll\":301,\"client\":301},\"status\":{\"x\":1023.40625,\"right\":1139.890625,\"y\":1621.59375,\"bottom\":1648.09375,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Ecology\",\"display\":\"flex\",\"topic\":{\"x\":88.109375,\"right\":582,\"width\":493.890625},\"meta\":{\"x\":146.109375,\"right\":447.515625,\"y\":1724.421875,\"bottom\":1775.5625,\"width\":301.40625,\"scroll\":301,\"client\":301},\"status\":{\"x\":465.515625,\"right\":582,\"y\":1736.734375,\"bottom\":1763.234375,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Molecular Biology\",\"display\":\"flex\",\"topic\":{\"x\":646,\"right\":1139.890625,\"width\":493.890625},\"meta\":{\"x\":704,\"right\":1005.40625,\"y\":1724.421875,\"bottom\":1775.5625,\"width\":301.40625,\"scroll\":301,\"client\":301},\"status\":{\"x\":1023.40625,\"right\":1139.890625,\"y\":1736.734375,\"bottom\":1763.234375,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Neuroscience\",\"display\":\"flex\",\"topic\":{\"x\":88.109375,\"right\":582,\"width\":493.890625},\"meta\":{\"x\":146.109375,\"right\":447.515625,\"y\":1839.5625,\"bottom\":1890.703125,\"width\":301.40625,\"scroll\":301,\"client\":301},\"status\":{\"x\":465.515625,\"right\":582,\"y\":1851.875,\"bottom\":1878.375,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Microbiology\",\"display\":\"flex\",\"topic\":{\"x\":646,\"right\":1139.890625,\"width\":493.890625},\"meta\":{\"x\":704,\"right\":1005.40625,\"y\":1839.5625,\"bottom\":1890.703125,\"width\":301.40625,\"scroll\":301,\"client\":301},\"status\":{\"x\":1023.40625,\"right\":1139.890625,\"y\":1851.875,\"bottom\":1878.375,\"width\":116.484375,\"scroll\":114,\"client\":114}}]}",
+        "All eight embedded sections open real content with no horizontal overflow on desktop.",
+        "Practice focus desktop: {\"topicId\":\"photosynthesis\",\"mode\":\"visual\",\"actions\":[{\"action\":\"Solve check incorrect answer\",\"scrollBefore\":571,\"top\":456.828125,\"bottom\":478.828125,\"height\":22,\"viewport\":936,\"scrollY\":630,\"unobscured\":true},{\"action\":\"Solve retry question\",\"scrollBefore\":1373,\"top\":450.46875,\"bottom\":486.46875,\"height\":36,\"viewport\":936,\"scrollY\":294,\"unobscured\":true},{\"action\":\"Solve check correct answer\",\"scrollBefore\":294,\"top\":457.234375,\"bottom\":479.234375,\"height\":22,\"viewport\":936,\"scrollY\":609,\"unobscured\":true},{\"action\":\"Solve next question\",\"scrollBefore\":1353,\"top\":432.46875,\"bottom\":504.46875,\"height\":72,\"viewport\":936,\"scrollY\":312,\"unobscured\":true},{\"action\":\"Solve check second question\",\"scrollBefore\":312,\"top\":457.234375,\"bottom\":479.234375,\"height\":22,\"viewport\":936,\"scrollY\":645,\"unobscured\":true},{\"action\":\"Solve question selector\",\"scrollBefore\":609,\"top\":135.46875,\"bottom\":171.46875,\"height\":36,\"viewport\":936,\"scrollY\":609,\"unobscured\":true},{\"action\":\"Reason reveal step 1\",\"scrollBefore\":697,\"top\":265.15625,\"bottom\":283.296875,\"height\":18.140625,\"viewport\":936,\"scrollY\":697,\"unobscured\":true},{\"action\":\"Reason reveal step 2\",\"scrollBefore\":697,\"top\":308.90625,\"bottom\":327.046875,\"height\":18.140625,\"viewport\":936,\"scrollY\":697,\"unobscured\":true},{\"action\":\"Reason reveal step 3\",\"scrollBefore\":697,\"top\":352.65625,\"bottom\":370.796875,\"height\":18.140625,\"viewport\":936,\"scrollY\":697,\"unobscured\":true},{\"action\":\"Reason hide worked answer\",\"scrollBefore\":1238,\"top\":441.15625,\"bottom\":618.15625,\"height\":177,\"viewport\":936,\"scrollY\":472,\"unobscured\":true}],\"answersPreserved\":true,\"draftsPreserved\":true,\"gradedRadiosDisabled\":true,\"reasonDraft\":\"Light reactions supply ATP and NADPH; carbon fixation depends on those inputs.\",\"reflection\":\"Distinguish the immediate products from the downstream biological outcome.\"}",
+        "Learn search desktop: Persistent result-status semantics, keyboard/results jumps, focus-safe filters, both reset paths, unchanged routes and unrelated storage verified.",
+        "Learn route focus desktop: [\"Search result Enter\",\"Existing explanation tab focus\",\"Subtopic Enter\",\"Connected concept Enter\",\"Browser Back between concepts\",\"Browser Forward between concepts\",\"Category result Enter\",\"Category breadcrumb results\",\"Library breadcrumb heading\"]",
+        "Stale lesson context is ignored after returning to the library.",
+        "Browser Back between different section documents restores both the outer route and active navigation.",
+        "Cell Structure Visual deep link opens correctly; mode changes update the outer URL, browser Back restores Visual, and reload preserves it.",
+        "Learn quick-check focus: {\"topicId\":\"cell-structure\",\"questionIndex\":0,\"correctIndex\":1,\"explanation\":\"Plants respire as well as photosynthesize, so their cells also use mitochondria.\",\"savedChoice\":1,\"checks\":[\"Keyboard incorrect/correct explanations receive visible focus\",\"Next Tab reaches retry; retry clears state and focuses the first option\",\"Pointer answers and retries preserve feedback and grading\",\"Route and unrelated storage remain unchanged\"]}",
+        "Embedded study references are visible and keyboard activation downloads actual private notes with external network blocked.",
+        "Theme changes reach the embedded section and persist after reload.",
+        "A real experimental notebook preserves its hypothesis, two measured trials and conclusion after reload.",
+        "Prepared frog and cockroach assets load offline with finite geometry; child dialogs own the Exit corner; lab exit returns to Home and survives reload.",
+        "All 13 real Universe stages initialize offline, Cell inspection opens, and the Universe close control restores Home.",
+        "A direct Universe DNA deep link survives reload, warm navigation selects Atom, its Biology Lab link opens the real lab, and switching to Learn closes the immersive launcher.",
+        "App search mobile: {\"dimensions\":{\"width\":44,\"height\":44,\"x\":326,\"right\":370,\"y\":6.5,\"bottom\":50.5,\"viewport\":390,\"bar\":{\"y\":0,\"bottom\":58},\"explore\":{\"x\":250.21875,\"right\":314}},\"checks\":\"Visible44px search; accessible close; escaped empty recovery; native input and arrows; forward/reverse focus trap; Escape/Ctrl K; exact trigger and unchanged route/history/notebook.\"}",
+        "Learn search mobile: Persistent result-status semantics, keyboard/results jumps, focus-safe filters, both reset paths, unchanged routes and unrelated storage verified.",
+        "Learn route focus mobile: [\"Search result Enter\",\"Existing explanation tab focus\",\"Subtopic Enter\",\"Connected concept Enter\",\"Browser Back between concepts\",\"Browser Forward between concepts\",\"Category result Enter\",\"Category breadcrumb results\",\"Library breadcrumb heading\"]",
+        "Labs discovery mobile: Native/explicit submit; persistent result nodes; focus-safe filters; complete empty reset; card return/fallback; invalid-route recovery; route/storage preservation; visible touch target; no horizontal overflow.",
+        "Progress reading mobile: {\"width\":390,\"theme\":\"light\",\"viewport\":390,\"geometry\":[{\"title\":\"Cell Biology\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":345,\"width\":300},\"meta\":{\"x\":103,\"right\":345,\"y\":1325.390625,\"bottom\":1376.53125,\"width\":242,\"scroll\":242,\"client\":242},\"status\":{\"x\":103,\"right\":219.484375,\"y\":1388.53125,\"bottom\":1415.03125,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Genetics & DNA\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":345,\"width\":300},\"meta\":{\"x\":103,\"right\":345,\"y\":1475.03125,\"bottom\":1526.171875,\"width\":242,\"scroll\":242,\"client\":242},\"status\":{\"x\":103,\"right\":219.484375,\"y\":1538.171875,\"bottom\":1564.671875,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Evolution\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":345,\"width\":300},\"meta\":{\"x\":103,\"right\":345,\"y\":1624.671875,\"bottom\":1675.8125,\"width\":242,\"scroll\":242,\"client\":242},\"status\":{\"x\":103,\"right\":219.484375,\"y\":1687.8125,\"bottom\":1714.3125,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Human Physiology\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":345,\"width\":300},\"meta\":{\"x\":103,\"right\":345,\"y\":1774.3125,\"bottom\":1825.453125,\"width\":242,\"scroll\":242,\"client\":242},\"status\":{\"x\":103,\"right\":219.484375,\"y\":1837.453125,\"bottom\":1863.953125,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Ecology\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":345,\"width\":300},\"meta\":{\"x\":103,\"right\":345,\"y\":1923.953125,\"bottom\":1975.09375,\"width\":242,\"scroll\":242,\"client\":242},\"status\":{\"x\":103,\"right\":219.484375,\"y\":1987.09375,\"bottom\":2013.59375,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Molecular Biology\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":345,\"width\":300},\"meta\":{\"x\":103,\"right\":345,\"y\":2073.59375,\"bottom\":2124.734375,\"width\":242,\"scroll\":242,\"client\":242},\"status\":{\"x\":103,\"right\":219.484375,\"y\":2136.734375,\"bottom\":2163.234375,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Neuroscience\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":345,\"width\":300},\"meta\":{\"x\":103,\"right\":345,\"y\":2223.234375,\"bottom\":2274.375,\"width\":242,\"scroll\":242,\"client\":242},\"status\":{\"x\":103,\"right\":219.484375,\"y\":2286.375,\"bottom\":2312.875,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Microbiology\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":345,\"width\":300},\"meta\":{\"x\":103,\"right\":345,\"y\":2372.875,\"bottom\":2424.015625,\"width\":242,\"scroll\":242,\"client\":242},\"status\":{\"x\":103,\"right\":219.484375,\"y\":2436.015625,\"bottom\":2462.515625,\"width\":116.484375,\"scroll\":114,\"client\":114}}]}",
+        "Practice focus mobile: {\"topicId\":\"photosynthesis\",\"mode\":\"visual\",\"actions\":[{\"action\":\"Solve check incorrect answer\",\"scrollBefore\":589,\"top\":350.3125,\"bottom\":372.3125,\"height\":22,\"viewport\":722,\"scrollY\":937,\"unobscured\":true},{\"action\":\"Solve retry question\",\"scrollBefore\":1844,\"top\":312.359375,\"bottom\":409.53125,\"height\":97.171875,\"viewport\":722,\"scrollY\":589,\"unobscured\":true},{\"action\":\"Solve check correct answer\",\"scrollBefore\":589,\"top\":349.921875,\"bottom\":371.921875,\"height\":22,\"viewport\":722,\"scrollY\":922,\"unobscured\":true},{\"action\":\"Solve next question\",\"scrollBefore\":1886,\"top\":280.359375,\"bottom\":442.3125,\"height\":161.953125,\"viewport\":722,\"scrollY\":621,\"unobscured\":true},{\"action\":\"Solve check second question\",\"scrollBefore\":621,\"top\":349.703125,\"bottom\":371.703125,\"height\":22,\"viewport\":722,\"scrollY\":987,\"unobscured\":true},{\"action\":\"Solve question selector\",\"scrollBefore\":439,\"top\":462.359375,\"bottom\":559.53125,\"height\":97.171875,\"viewport\":722,\"scrollY\":439,\"unobscured\":true},{\"action\":\"Reason reveal step 1\",\"scrollBefore\":848,\"top\":703.453125,\"bottom\":721.59375,\"height\":18.140625,\"viewport\":722,\"scrollY\":865,\"unobscured\":true},{\"action\":\"Reason reveal step 2\",\"scrollBefore\":1263,\"top\":371.234375,\"bottom\":389.375,\"height\":18.140625,\"viewport\":722,\"scrollY\":1263,\"unobscured\":true},{\"action\":\"Reason reveal step 3\",\"scrollBefore\":1263,\"top\":437.015625,\"bottom\":455.15625,\"height\":18.140625,\"viewport\":722,\"scrollY\":1263,\"unobscured\":true},{\"action\":\"Reason hide worked answer\",\"scrollBefore\":1914,\"top\":332.796875,\"bottom\":530.796875,\"height\":198,\"viewport\":722,\"scrollY\":833,\"unobscured\":true}],\"answersPreserved\":true,\"draftsPreserved\":true,\"gradedRadiosDisabled\":true,\"reasonDraft\":\"Light reactions supply ATP and NADPH; carbon fixation depends on those inputs.\",\"reflection\":\"Distinguish the immediate products from the downstream biological outcome.\"}",
+        "App search narrow phone: {\"dimensions\":{\"width\":44,\"height\":44,\"x\":256,\"right\":300,\"y\":6.5,\"bottom\":50.5,\"viewport\":320,\"bar\":{\"y\":0,\"bottom\":58},\"explore\":{\"x\":180.21875,\"right\":244}},\"checks\":\"Visible44px search; accessible close; escaped empty recovery; native input and arrows; forward/reverse focus trap; Escape/Ctrl K; exact trigger and unchanged route/history/notebook.\"}",
+        "Labs discovery narrow phone: Native/explicit submit; persistent result nodes; focus-safe filters; complete empty reset; card return/fallback; invalid-route recovery; route/storage preservation; visible touch target; no horizontal overflow.",
+        "Progress reading narrow phone: {\"width\":320,\"theme\":\"light\",\"viewport\":320,\"geometry\":[{\"title\":\"Cell Biology\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":275,\"width\":230},\"meta\":{\"x\":103,\"right\":275,\"y\":1424,\"bottom\":1501.53125,\"width\":172,\"scroll\":172,\"client\":172},\"status\":{\"x\":103,\"right\":219.484375,\"y\":1513.53125,\"bottom\":1540.03125,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Genetics & DNA\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":275,\"width\":230},\"meta\":{\"x\":103,\"right\":275,\"y\":1600.03125,\"bottom\":1677.5625,\"width\":172,\"scroll\":172,\"client\":172},\"status\":{\"x\":103,\"right\":219.484375,\"y\":1689.5625,\"bottom\":1716.0625,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Evolution\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":275,\"width\":230},\"meta\":{\"x\":103,\"right\":275,\"y\":1776.0625,\"bottom\":1853.59375,\"width\":172,\"scroll\":172,\"client\":172},\"status\":{\"x\":103,\"right\":219.484375,\"y\":1865.59375,\"bottom\":1892.09375,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Human Physiology\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":275,\"width\":230},\"meta\":{\"x\":103,\"right\":275,\"y\":1952.09375,\"bottom\":2003.234375,\"width\":172,\"scroll\":172,\"client\":172},\"status\":{\"x\":103,\"right\":219.484375,\"y\":2015.234375,\"bottom\":2041.734375,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Ecology\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":275,\"width\":230},\"meta\":{\"x\":103,\"right\":275,\"y\":2101.734375,\"bottom\":2152.875,\"width\":172,\"scroll\":172,\"client\":172},\"status\":{\"x\":103,\"right\":219.484375,\"y\":2164.875,\"bottom\":2191.375,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Molecular Biology\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":275,\"width\":230},\"meta\":{\"x\":103,\"right\":275,\"y\":2251.375,\"bottom\":2302.515625,\"width\":172,\"scroll\":172,\"client\":172},\"status\":{\"x\":103,\"right\":219.484375,\"y\":2314.515625,\"bottom\":2341.015625,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Neuroscience\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":275,\"width\":230},\"meta\":{\"x\":103,\"right\":275,\"y\":2401.015625,\"bottom\":2452.15625,\"width\":172,\"scroll\":172,\"client\":172},\"status\":{\"x\":103,\"right\":219.484375,\"y\":2464.15625,\"bottom\":2490.65625,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Microbiology\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":275,\"width\":230},\"meta\":{\"x\":103,\"right\":275,\"y\":2550.65625,\"bottom\":2601.796875,\"width\":172,\"scroll\":172,\"client\":172},\"status\":{\"x\":103,\"right\":219.484375,\"y\":2613.796875,\"bottom\":2640.296875,\"width\":116.484375,\"scroll\":114,\"client\":114}}]}",
+        "Phone evidence tables keep row labels and every selected result column readable together in both themes, with native keyboard scrolling and unchanged authored table content.",
+        "Three phylogeny drawings have independently verified branch connections and legible phone labels, with native keyboard annotation controls and unchanged private study records.",
+        "Landing, Home, every section and the saved notebook fit a 390-pixel mobile viewport."
+      ],
+      "layouts": [
+        {
+          "label": "landing desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "landing desktop",
+          "name": "landing",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "learn desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "learn desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "learn desktop",
+          "name": "learn",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "lessons desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "lessons desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "lessons desktop",
+          "name": "lessons",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "reason desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "reason desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "reason desktop",
+          "name": "reason",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "labs desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "labs desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "labs desktop",
+          "name": "labs",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "solve desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "solve desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "solve desktop",
+          "name": "solve",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "explore desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "explore desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "explore desktop",
+          "name": "explore",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "me desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "me desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "me desktop",
+          "name": "me",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "about desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "about desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "about desktop",
+          "name": "about",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "landing mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "landing mobile",
+          "name": "landing",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "home mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "home mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "learn mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "learn mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "learn mobile",
+          "name": "learn",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "lessons mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "lessons mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "lessons mobile",
+          "name": "lessons",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "reason mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "reason mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "reason mobile",
+          "name": "reason",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "labs mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "labs mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "labs mobile",
+          "name": "labs",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "solve mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "solve mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "solve mobile",
+          "name": "solve",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "explore mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "explore mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "explore mobile",
+          "name": "explore",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "me mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "me mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "me mobile",
+          "name": "me",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "about mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "about mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "about mobile",
+          "name": "about",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "progress narrow phone",
+          "name": "wrapper",
+          "width": 320,
+          "scroll": 320
+        },
+        {
+          "label": "progress narrow phone",
+          "name": "shell",
+          "width": 320,
+          "scroll": 320
+        },
+        {
+          "label": "progress narrow phone",
+          "name": "me",
+          "width": 320,
+          "scroll": 320
+        },
+        {
+          "label": "notebook mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "notebook mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "notebook mobile",
+          "name": "notebook",
+          "width": 390,
+          "scroll": 390
+        }
+      ],
+      "errors": [],
+      "requests": [
+        {
+          "url": "http://bioentelloq.single-file.test/index.html",
+          "action": "single HTML fulfilled"
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@300;350;400;450;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "http://bioentelloq.single-file.test/index.html",
+          "action": "single HTML fulfilled"
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "http://bioentelloq.single-file.test/index.html",
+          "action": "single HTML fulfilled"
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "http://bioentelloq.single-file.test/index.html",
+          "action": "single HTML fulfilled"
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "http://bioentelloq.single-file.test/index.html",
+          "action": "single HTML fulfilled"
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "http://bioentelloq.single-file.test/index.html",
+          "action": "single HTML fulfilled"
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "http://bioentelloq.single-file.test/index.html",
+          "action": "single HTML fulfilled"
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@300;350;400;450;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        }
+      ],
+      "forbiddenDependencies": [],
+      "cameraRequests": 0,
+      "complete": true,
+      "worldProgress": [
+        {
+          "step": "Open Home and enter the Dissection Lab",
+          "timestamp": "2026-11-02T19:29:33.245Z"
+        },
+        {
+          "step": "Wait for the actual lab runtime",
+          "timestamp": "2026-11-02T19:29:34.659Z"
+        },
+        {
+          "step": "Load and verify prepared frog",
+          "timestamp": "2026-11-02T19:29:35.958Z"
+        },
+        {
+          "step": "Capture prepared frog",
+          "timestamp": "2026-11-02T19:29:36.179Z"
+        },
+        {
+          "step": "Load and verify prepared cockroach",
+          "timestamp": "2026-11-02T19:29:39.226Z"
+        },
+        {
+          "step": "Capture prepared cockroach",
+          "timestamp": "2026-11-02T19:29:40.273Z"
+        },
+        {
+          "step": "Open the controls dialog through its button",
+          "timestamp": "2026-11-02T19:29:44.710Z"
+        },
+        {
+          "step": "Capture dialog ownership of the Exit corner",
+          "timestamp": "2026-11-02T19:29:45.944Z"
+        },
+        {
+          "step": "Close the controls dialog through its button",
+          "timestamp": "2026-11-02T19:29:50.388Z"
+        },
+        {
+          "step": "Exit the lab through the shell button",
+          "timestamp": "2026-11-02T19:29:51.578Z"
+        },
+        {
+          "step": "Reload after leaving the lab",
+          "timestamp": "2026-11-02T19:29:52.214Z"
+        },
+        {
+          "step": "Open Biology Universe through its navigation button",
+          "timestamp": "2026-11-02T19:30:14.706Z"
+        },
+        {
+          "step": "Wait for all 13 Universe stages",
+          "timestamp": "2026-11-02T19:30:17.587Z"
+        },
+        {
+          "step": "Inspect the Cell stage",
+          "timestamp": "2026-11-02T19:30:17.612Z"
+        },
+        {
+          "step": "Close Universe through the shell button",
+          "timestamp": "2026-11-02T19:30:23.560Z"
+        },
+        {
+          "step": "Open and reload the Universe DNA deep link",
+          "timestamp": "2026-11-02T19:30:24.600Z"
+        },
+        {
+          "step": "Navigate the warm Universe from DNA to Atom",
+          "timestamp": "2026-11-02T19:30:33.864Z"
+        },
+        {
+          "step": "Follow the Universe brand link into the lab",
+          "timestamp": "2026-11-02T19:30:33.889Z"
+        },
+        {
+          "step": "Switch from the active lab to Learn",
+          "timestamp": "2026-11-02T19:30:38.032Z"
+        }
+      ],
+      "specimens": [
+        {
+          "id": "frog",
+          "prepared": true,
+          "parts": 29,
+          "meshes": 100,
+          "triangles": 111636,
+          "finite": true
+        },
+        {
+          "id": "cockroach",
+          "prepared": true,
+          "parts": 27,
+          "meshes": 48,
+          "triangles": 78480,
+          "finite": true
+        }
+      ],
+      "universe": {
+        "count": 13,
+        "stages": [
+          "universe",
+          "earth",
+          "biome",
+          "ecosystem",
+          "organism",
+          "organ",
+          "tissue",
+          "cell",
+          "organelle",
+          "protein",
+          "dna",
+          "nucleotide",
+          "atom"
+        ]
+      },
+      "evidenceTables": [
+        {
+          "width": 320,
+          "topic": "recombinant-dna",
+          "theme": "dark",
+          "result": {
+            "id": "recombinant-dna",
+            "columns": [
+              {
+                "index": 1,
+                "completeLabelsAndValuesVisible": true,
+                "hitTestedCells": true
+              },
+              {
+                "index": 2,
+                "completeLabelsAndValuesVisible": true,
+                "hitTestedCells": true
+              }
+            ],
+            "tableWidth": 238,
+            "tableScrollWidth": 340,
+            "labelsAndValuesVisible": true,
+            "stickyBackgrounds": [
+              {
+                "text": "Construct",
+                "background": "rgb(14, 20, 19)",
+                "alpha": 255
+              },
+              {
+                "text": "Design prediction (not a measurement)",
+                "background": "rgb(18, 26, 22)",
+                "alpha": 255
+              },
+              {
+                "text": "Candidate A (synthetic)",
+                "background": "color(srgb 0.0865882 0.124667 0.105922)",
+                "alpha": 255
+              },
+              {
+                "text": "Candidate B (synthetic)",
+                "background": "rgb(18, 26, 22)",
+                "alpha": 255
+              }
+            ],
+            "nativeKeyboardFocus": true
+          }
+        },
+        {
+          "width": 320,
+          "topic": "recombinant-dna",
+          "theme": "light",
+          "result": {
+            "id": "recombinant-dna",
+            "columns": [
+              {
+                "index": 1,
+                "completeLabelsAndValuesVisible": true,
+                "hitTestedCells": true
+              },
+              {
+                "index": 2,
+                "completeLabelsAndValuesVisible": true,
+                "hitTestedCells": true
+              }
+            ],
+            "tableWidth": 238,
+            "tableScrollWidth": 340,
+            "labelsAndValuesVisible": true,
+            "stickyBackgrounds": [
+              {
+                "text": "Construct",
+                "background": "rgb(235, 236, 227)",
+                "alpha": 255
+              },
+              {
+                "text": "Design prediction (not a measurement)",
+                "background": "rgb(255, 254, 248)",
+                "alpha": 255
+              },
+              {
+                "text": "Candidate A (synthetic)",
+                "background": "color(srgb 0.975882 0.978431 0.950784)",
+                "alpha": 255
+              },
+              {
+                "text": "Candidate B (synthetic)",
+                "background": "rgb(255, 254, 248)",
+                "alpha": 255
+              }
+            ],
+            "nativeKeyboardFocus": true
+          }
+        },
+        {
+          "width": 320,
+          "topic": "plant-transport",
+          "theme": "dark",
+          "result": {
+            "id": "plant-transport",
+            "columns": [
+              {
+                "index": 1,
+                "completeLabelsAndValuesVisible": true,
+                "hitTestedCells": true
+              },
+              {
+                "index": 2,
+                "completeLabelsAndValuesVisible": true,
+                "hitTestedCells": true
+              },
+              {
+                "index": 3,
+                "completeLabelsAndValuesVisible": true,
+                "hitTestedCells": true
+              }
+            ],
+            "tableWidth": 238,
+            "tableScrollWidth": 460,
+            "labelsAndValuesVisible": true,
+            "stickyBackgrounds": [
+              {
+                "text": "Plant state",
+                "background": "rgb(14, 20, 19)",
+                "alpha": 255
+              },
+              {
+                "text": "Rapid shoot growth",
+                "background": "rgb(18, 26, 22)",
+                "alpha": 255
+              },
+              {
+                "text": "Storage phase",
+                "background": "color(srgb 0.0865882 0.124667 0.105922)",
+                "alpha": 255
+              },
+              {
+                "text": "Source leaf shaded after labeling",
+                "background": "rgb(18, 26, 22)",
+                "alpha": 255
+              }
+            ],
+            "nativeKeyboardFocus": true
+          }
+        },
+        {
+          "width": 320,
+          "topic": "plant-transport",
+          "theme": "light",
+          "result": {
+            "id": "plant-transport",
+            "columns": [
+              {
+                "index": 1,
+                "completeLabelsAndValuesVisible": true,
+                "hitTestedCells": true
+              },
+              {
+                "index": 2,
+                "completeLabelsAndValuesVisible": true,
+                "hitTestedCells": true
+              },
+              {
+                "index": 3,
+                "completeLabelsAndValuesVisible": true,
+                "hitTestedCells": true
+              }
+            ],
+            "tableWidth": 238,
+            "tableScrollWidth": 460,
+            "labelsAndValuesVisible": true,
+            "stickyBackgrounds": [
+              {
+                "text": "Plant state",
+                "background": "rgb(235, 236, 227)",
+                "alpha": 255
+              },
+              {
+                "text": "Rapid shoot growth",
+                "background": "rgb(255, 254, 248)",
+                "alpha": 255
+              },
+              {
+                "text": "Storage phase",
+                "background": "color(srgb 0.975882 0.978431 0.950784)",
+                "alpha": 255
+              },
+              {
+                "text": "Source leaf shaded after labeling",
+                "background": "rgb(255, 254, 248)",
+                "alpha": 255
+              }
+            ],
+            "nativeKeyboardFocus": true
+          }
+        },
+        {
+          "width": 390,
+          "topic": "active-transport",
+          "theme": "dark",
+          "result": {
+            "id": "active-transport",
+            "columns": [
+              {
+                "index": 1,
+                "completeLabelsAndValuesVisible": true,
+                "hitTestedCells": true
+              },
+              {
+                "index": 2,
+                "completeLabelsAndValuesVisible": true,
+                "hitTestedCells": true
+              }
+            ],
+            "tableWidth": 308,
+            "tableScrollWidth": 340,
+            "labelsAndValuesVisible": true,
+            "stickyBackgrounds": [
+              {
+                "text": "Condition",
+                "background": "rgb(14, 20, 19)",
+                "alpha": 255
+              },
+              {
+                "text": "ATP and sodium gradient maintained",
+                "background": "rgb(18, 26, 22)",
+                "alpha": 255
+              },
+              {
+                "text": "Pump ATP supply removed, gradient initially present",
+                "background": "color(srgb 0.0865882 0.124667 0.105922)",
+                "alpha": 255
+              },
+              {
+                "text": "Sodium gradient absent",
+                "background": "rgb(18, 26, 22)",
+                "alpha": 255
+              }
+            ],
+            "nativeKeyboardFocus": true
+          }
+        },
+        {
+          "width": 390,
+          "topic": "active-transport",
+          "theme": "light",
+          "result": {
+            "id": "active-transport",
+            "columns": [
+              {
+                "index": 1,
+                "completeLabelsAndValuesVisible": true,
+                "hitTestedCells": true
+              },
+              {
+                "index": 2,
+                "completeLabelsAndValuesVisible": true,
+                "hitTestedCells": true
+              }
+            ],
+            "tableWidth": 308,
+            "tableScrollWidth": 340,
+            "labelsAndValuesVisible": true,
+            "stickyBackgrounds": [
+              {
+                "text": "Condition",
+                "background": "rgb(235, 236, 227)",
+                "alpha": 255
+              },
+              {
+                "text": "ATP and sodium gradient maintained",
+                "background": "rgb(255, 254, 248)",
+                "alpha": 255
+              },
+              {
+                "text": "Pump ATP supply removed, gradient initially present",
+                "background": "color(srgb 0.975882 0.978431 0.950784)",
+                "alpha": 255
+              },
+              {
+                "text": "Sodium gradient absent",
+                "background": "rgb(255, 254, 248)",
+                "alpha": 255
+              }
+            ],
+            "nativeKeyboardFocus": true
+          }
+        }
+      ],
+      "phylogeny": [
+        {
+          "width": 320,
+          "theme": "dark",
+          "result": {
+            "views": [
+              {
+                "view": 0,
+                "treeId": "T1",
+                "clades": [
+                  "A B",
+                  "C D"
+                ],
+                "tips": [
+                  "A",
+                  "B",
+                  "C",
+                  "D"
+                ],
+                "smallestRenderedFont": 10.959090909090909,
+                "svgWidth": 274,
+                "graphVerifiedFromEndpoints": true
+              },
+              {
+                "view": 1,
+                "treeId": "T2",
+                "clades": [
+                  "A B",
+                  "C D"
+                ],
+                "tips": [
+                  "D",
+                  "C",
+                  "B",
+                  "A"
+                ],
+                "smallestRenderedFont": 10.959090909090909,
+                "svgWidth": 274,
+                "graphVerifiedFromEndpoints": true
+              },
+              {
+                "view": 2,
+                "treeId": "T3",
+                "clades": [
+                  "A C",
+                  "B D"
+                ],
+                "tips": [
+                  "A",
+                  "C",
+                  "B",
+                  "D"
+                ],
+                "smallestRenderedFont": 10.959090909090909,
+                "svgWidth": 274,
+                "graphVerifiedFromEndpoints": true
+              }
+            ],
+            "keyboardBoundaries": true,
+            "privateNotesUnchanged": true
+          }
+        },
+        {
+          "width": 320,
+          "theme": "light",
+          "result": {
+            "views": [
+              {
+                "view": 0,
+                "treeId": "T1",
+                "clades": [
+                  "A B",
+                  "C D"
+                ],
+                "tips": [
+                  "A",
+                  "B",
+                  "C",
+                  "D"
+                ],
+                "smallestRenderedFont": 10.959090909090909,
+                "svgWidth": 274,
+                "graphVerifiedFromEndpoints": true
+              },
+              {
+                "view": 1,
+                "treeId": "T2",
+                "clades": [
+                  "A B",
+                  "C D"
+                ],
+                "tips": [
+                  "D",
+                  "C",
+                  "B",
+                  "A"
+                ],
+                "smallestRenderedFont": 10.959090909090909,
+                "svgWidth": 274,
+                "graphVerifiedFromEndpoints": true
+              },
+              {
+                "view": 2,
+                "treeId": "T3",
+                "clades": [
+                  "A C",
+                  "B D"
+                ],
+                "tips": [
+                  "A",
+                  "C",
+                  "B",
+                  "D"
+                ],
+                "smallestRenderedFont": 10.959090909090909,
+                "svgWidth": 274,
+                "graphVerifiedFromEndpoints": true
+              }
+            ],
+            "keyboardBoundaries": true,
+            "privateNotesUnchanged": true
+          }
+        },
+        {
+          "width": 390,
+          "theme": "dark",
+          "result": {
+            "views": [
+              {
+                "view": 0,
+                "treeId": "T1",
+                "clades": [
+                  "A B",
+                  "C D"
+                ],
+                "tips": [
+                  "A",
+                  "B",
+                  "C",
+                  "D"
+                ],
+                "smallestRenderedFont": 13.759090909090908,
+                "svgWidth": 344,
+                "graphVerifiedFromEndpoints": true
+              },
+              {
+                "view": 1,
+                "treeId": "T2",
+                "clades": [
+                  "A B",
+                  "C D"
+                ],
+                "tips": [
+                  "D",
+                  "C",
+                  "B",
+                  "A"
+                ],
+                "smallestRenderedFont": 13.759090909090908,
+                "svgWidth": 344,
+                "graphVerifiedFromEndpoints": true
+              },
+              {
+                "view": 2,
+                "treeId": "T3",
+                "clades": [
+                  "A C",
+                  "B D"
+                ],
+                "tips": [
+                  "A",
+                  "C",
+                  "B",
+                  "D"
+                ],
+                "smallestRenderedFont": 13.759090909090908,
+                "svgWidth": 344,
+                "graphVerifiedFromEndpoints": true
+              }
+            ],
+            "keyboardBoundaries": true,
+            "privateNotesUnchanged": true
+          }
+        },
+        {
+          "width": 390,
+          "theme": "light",
+          "result": {
+            "views": [
+              {
+                "view": 0,
+                "treeId": "T1",
+                "clades": [
+                  "A B",
+                  "C D"
+                ],
+                "tips": [
+                  "A",
+                  "B",
+                  "C",
+                  "D"
+                ],
+                "smallestRenderedFont": 13.759090909090908,
+                "svgWidth": 344,
+                "graphVerifiedFromEndpoints": true
+              },
+              {
+                "view": 1,
+                "treeId": "T2",
+                "clades": [
+                  "A B",
+                  "C D"
+                ],
+                "tips": [
+                  "D",
+                  "C",
+                  "B",
+                  "A"
+                ],
+                "smallestRenderedFont": 13.759090909090908,
+                "svgWidth": 344,
+                "graphVerifiedFromEndpoints": true
+              },
+              {
+                "view": 2,
+                "treeId": "T3",
+                "clades": [
+                  "A C",
+                  "B D"
+                ],
+                "tips": [
+                  "A",
+                  "C",
+                  "B",
+                  "D"
+                ],
+                "smallestRenderedFont": 13.759090909090908,
+                "svgWidth": 344,
+                "graphVerifiedFromEndpoints": true
+              }
+            ],
+            "keyboardBoundaries": true,
+            "privateNotesUnchanged": true
+          }
+        }
+      ]
+    },
+    {
+      "mode": "file",
+      "checks": [
+        "First-visit questionnaire: {\"questionnaireDesign\":true,\"classRows\":1,\"timeRows\":1,\"equalChoiceTargets\":true,\"balancedActions\":true,\"privacyVisible\":true,\"nativeKeyboardFocus\":true,\"unchangedQuestionsAndDefaults\":true}",
+        "App search desktop: {\"dimensions\":{\"width\":190,\"height\":44,\"x\":1202.484375,\"right\":1392.484375,\"y\":9.5,\"bottom\":53.5,\"viewport\":1440,\"bar\":{\"y\":0,\"bottom\":64},\"explore\":{\"x\":1117.453125,\"right\":1184.484375}},\"checks\":\"Visible44px search; accessible close; escaped empty recovery; native input and arrows; forward/reverse focus trap; Escape/Ctrl K; exact trigger and unchanged route/history/notebook.\"}",
+        "Landing and Start Exploring load the application from the one supplied HTML file.",
+        "Labs discovery desktop: Native/explicit submit; persistent result nodes; focus-safe filters; complete empty reset; card return/fallback; invalid-route recovery; route/storage preservation; visible touch target; no horizontal overflow.",
+        "Progress reading desktop: {\"width\":1440,\"theme\":\"dark\",\"viewport\":1228,\"geometry\":[{\"title\":\"Cell Biology\",\"display\":\"flex\",\"topic\":{\"x\":88.109375,\"right\":582,\"width\":493.890625},\"meta\":{\"x\":146.109375,\"right\":447.515625,\"y\":1494.140625,\"bottom\":1545.28125,\"width\":301.40625,\"scroll\":301,\"client\":301},\"status\":{\"x\":465.515625,\"right\":582,\"y\":1506.453125,\"bottom\":1532.953125,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Genetics & DNA\",\"display\":\"flex\",\"topic\":{\"x\":646,\"right\":1139.890625,\"width\":493.890625},\"meta\":{\"x\":704,\"right\":1005.40625,\"y\":1494.140625,\"bottom\":1545.28125,\"width\":301.40625,\"scroll\":301,\"client\":301},\"status\":{\"x\":1023.40625,\"right\":1139.890625,\"y\":1506.453125,\"bottom\":1532.953125,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Evolution\",\"display\":\"flex\",\"topic\":{\"x\":88.109375,\"right\":582,\"width\":493.890625},\"meta\":{\"x\":146.109375,\"right\":447.515625,\"y\":1609.28125,\"bottom\":1660.421875,\"width\":301.40625,\"scroll\":301,\"client\":301},\"status\":{\"x\":465.515625,\"right\":582,\"y\":1621.59375,\"bottom\":1648.09375,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Human Physiology\",\"display\":\"flex\",\"topic\":{\"x\":646,\"right\":1139.890625,\"width\":493.890625},\"meta\":{\"x\":704,\"right\":1005.40625,\"y\":1609.28125,\"bottom\":1660.421875,\"width\":301.40625,\"scroll\":301,\"client\":301},\"status\":{\"x\":1023.40625,\"right\":1139.890625,\"y\":1621.59375,\"bottom\":1648.09375,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Ecology\",\"display\":\"flex\",\"topic\":{\"x\":88.109375,\"right\":582,\"width\":493.890625},\"meta\":{\"x\":146.109375,\"right\":447.515625,\"y\":1724.421875,\"bottom\":1775.5625,\"width\":301.40625,\"scroll\":301,\"client\":301},\"status\":{\"x\":465.515625,\"right\":582,\"y\":1736.734375,\"bottom\":1763.234375,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Molecular Biology\",\"display\":\"flex\",\"topic\":{\"x\":646,\"right\":1139.890625,\"width\":493.890625},\"meta\":{\"x\":704,\"right\":1005.40625,\"y\":1724.421875,\"bottom\":1775.5625,\"width\":301.40625,\"scroll\":301,\"client\":301},\"status\":{\"x\":1023.40625,\"right\":1139.890625,\"y\":1736.734375,\"bottom\":1763.234375,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Neuroscience\",\"display\":\"flex\",\"topic\":{\"x\":88.109375,\"right\":582,\"width\":493.890625},\"meta\":{\"x\":146.109375,\"right\":447.515625,\"y\":1839.5625,\"bottom\":1890.703125,\"width\":301.40625,\"scroll\":301,\"client\":301},\"status\":{\"x\":465.515625,\"right\":582,\"y\":1851.875,\"bottom\":1878.375,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Microbiology\",\"display\":\"flex\",\"topic\":{\"x\":646,\"right\":1139.890625,\"width\":493.890625},\"meta\":{\"x\":704,\"right\":1005.40625,\"y\":1839.5625,\"bottom\":1890.703125,\"width\":301.40625,\"scroll\":301,\"client\":301},\"status\":{\"x\":1023.40625,\"right\":1139.890625,\"y\":1851.875,\"bottom\":1878.375,\"width\":116.484375,\"scroll\":114,\"client\":114}}]}",
+        "All eight embedded sections open real content with no horizontal overflow on desktop.",
+        "Practice focus desktop: {\"topicId\":\"photosynthesis\",\"mode\":\"visual\",\"actions\":[{\"action\":\"Solve check incorrect answer\",\"scrollBefore\":571,\"top\":456.828125,\"bottom\":478.828125,\"height\":22,\"viewport\":936,\"scrollY\":630,\"unobscured\":true},{\"action\":\"Solve retry question\",\"scrollBefore\":1373,\"top\":450.46875,\"bottom\":486.46875,\"height\":36,\"viewport\":936,\"scrollY\":294,\"unobscured\":true},{\"action\":\"Solve check correct answer\",\"scrollBefore\":294,\"top\":457.234375,\"bottom\":479.234375,\"height\":22,\"viewport\":936,\"scrollY\":609,\"unobscured\":true},{\"action\":\"Solve next question\",\"scrollBefore\":1353,\"top\":432.46875,\"bottom\":504.46875,\"height\":72,\"viewport\":936,\"scrollY\":312,\"unobscured\":true},{\"action\":\"Solve check second question\",\"scrollBefore\":312,\"top\":457.234375,\"bottom\":479.234375,\"height\":22,\"viewport\":936,\"scrollY\":645,\"unobscured\":true},{\"action\":\"Solve question selector\",\"scrollBefore\":609,\"top\":135.46875,\"bottom\":171.46875,\"height\":36,\"viewport\":936,\"scrollY\":609,\"unobscured\":true},{\"action\":\"Reason reveal step 1\",\"scrollBefore\":697,\"top\":265.15625,\"bottom\":283.296875,\"height\":18.140625,\"viewport\":936,\"scrollY\":697,\"unobscured\":true},{\"action\":\"Reason reveal step 2\",\"scrollBefore\":697,\"top\":308.90625,\"bottom\":327.046875,\"height\":18.140625,\"viewport\":936,\"scrollY\":697,\"unobscured\":true},{\"action\":\"Reason reveal step 3\",\"scrollBefore\":697,\"top\":352.65625,\"bottom\":370.796875,\"height\":18.140625,\"viewport\":936,\"scrollY\":697,\"unobscured\":true},{\"action\":\"Reason hide worked answer\",\"scrollBefore\":1238,\"top\":441.15625,\"bottom\":618.15625,\"height\":177,\"viewport\":936,\"scrollY\":472,\"unobscured\":true}],\"answersPreserved\":true,\"draftsPreserved\":true,\"gradedRadiosDisabled\":true,\"reasonDraft\":\"Light reactions supply ATP and NADPH; carbon fixation depends on those inputs.\",\"reflection\":\"Distinguish the immediate products from the downstream biological outcome.\"}",
+        "Learn search desktop: Persistent result-status semantics, keyboard/results jumps, focus-safe filters, both reset paths, unchanged routes and unrelated storage verified.",
+        "Learn route focus desktop: [\"Search result Enter\",\"Existing explanation tab focus\",\"Subtopic Enter\",\"Connected concept Enter\",\"Browser Back between concepts\",\"Browser Forward between concepts\",\"Category result Enter\",\"Category breadcrumb results\",\"Library breadcrumb heading\"]",
+        "Stale lesson context is ignored after returning to the library.",
+        "Browser Back between different section documents restores both the outer route and active navigation.",
+        "Cell Structure Visual deep link opens correctly; mode changes update the outer URL, browser Back restores Visual, and reload preserves it.",
+        "Learn quick-check focus: {\"topicId\":\"cell-structure\",\"questionIndex\":0,\"correctIndex\":1,\"explanation\":\"Plants respire as well as photosynthesize, so their cells also use mitochondria.\",\"savedChoice\":1,\"checks\":[\"Keyboard incorrect/correct explanations receive visible focus\",\"Next Tab reaches retry; retry clears state and focuses the first option\",\"Pointer answers and retries preserve feedback and grading\",\"Route and unrelated storage remain unchanged\"]}",
+        "Embedded study references are visible and keyboard activation downloads actual private notes with external network blocked.",
+        "Theme changes reach the embedded section and persist after reload.",
+        "A real experimental notebook preserves its hypothesis, two measured trials and conclusion after reload.",
+        "Prepared frog and cockroach assets load offline with finite geometry; child dialogs own the Exit corner; lab exit returns to Home and survives reload.",
+        "All 13 real Universe stages initialize offline, Cell inspection opens, and the Universe close control restores Home.",
+        "A direct Universe DNA deep link survives reload, warm navigation selects Atom, its Biology Lab link opens the real lab, and switching to Learn closes the immersive launcher.",
+        "App search mobile: {\"dimensions\":{\"width\":44,\"height\":44,\"x\":326,\"right\":370,\"y\":6.5,\"bottom\":50.5,\"viewport\":390,\"bar\":{\"y\":0,\"bottom\":58},\"explore\":{\"x\":250.21875,\"right\":314}},\"checks\":\"Visible44px search; accessible close; escaped empty recovery; native input and arrows; forward/reverse focus trap; Escape/Ctrl K; exact trigger and unchanged route/history/notebook.\"}",
+        "Learn search mobile: Persistent result-status semantics, keyboard/results jumps, focus-safe filters, both reset paths, unchanged routes and unrelated storage verified.",
+        "Learn route focus mobile: [\"Search result Enter\",\"Existing explanation tab focus\",\"Subtopic Enter\",\"Connected concept Enter\",\"Browser Back between concepts\",\"Browser Forward between concepts\",\"Category result Enter\",\"Category breadcrumb results\",\"Library breadcrumb heading\"]",
+        "Labs discovery mobile: Native/explicit submit; persistent result nodes; focus-safe filters; complete empty reset; card return/fallback; invalid-route recovery; route/storage preservation; visible touch target; no horizontal overflow.",
+        "Progress reading mobile: {\"width\":390,\"theme\":\"light\",\"viewport\":390,\"geometry\":[{\"title\":\"Cell Biology\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":345,\"width\":300},\"meta\":{\"x\":103,\"right\":345,\"y\":1325.390625,\"bottom\":1376.53125,\"width\":242,\"scroll\":242,\"client\":242},\"status\":{\"x\":103,\"right\":219.484375,\"y\":1388.53125,\"bottom\":1415.03125,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Genetics & DNA\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":345,\"width\":300},\"meta\":{\"x\":103,\"right\":345,\"y\":1475.03125,\"bottom\":1526.171875,\"width\":242,\"scroll\":242,\"client\":242},\"status\":{\"x\":103,\"right\":219.484375,\"y\":1538.171875,\"bottom\":1564.671875,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Evolution\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":345,\"width\":300},\"meta\":{\"x\":103,\"right\":345,\"y\":1624.671875,\"bottom\":1675.8125,\"width\":242,\"scroll\":242,\"client\":242},\"status\":{\"x\":103,\"right\":219.484375,\"y\":1687.8125,\"bottom\":1714.3125,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Human Physiology\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":345,\"width\":300},\"meta\":{\"x\":103,\"right\":345,\"y\":1774.3125,\"bottom\":1825.453125,\"width\":242,\"scroll\":242,\"client\":242},\"status\":{\"x\":103,\"right\":219.484375,\"y\":1837.453125,\"bottom\":1863.953125,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Ecology\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":345,\"width\":300},\"meta\":{\"x\":103,\"right\":345,\"y\":1923.953125,\"bottom\":1975.09375,\"width\":242,\"scroll\":242,\"client\":242},\"status\":{\"x\":103,\"right\":219.484375,\"y\":1987.09375,\"bottom\":2013.59375,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Molecular Biology\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":345,\"width\":300},\"meta\":{\"x\":103,\"right\":345,\"y\":2073.59375,\"bottom\":2124.734375,\"width\":242,\"scroll\":242,\"client\":242},\"status\":{\"x\":103,\"right\":219.484375,\"y\":2136.734375,\"bottom\":2163.234375,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Neuroscience\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":345,\"width\":300},\"meta\":{\"x\":103,\"right\":345,\"y\":2223.234375,\"bottom\":2274.375,\"width\":242,\"scroll\":242,\"client\":242},\"status\":{\"x\":103,\"right\":219.484375,\"y\":2286.375,\"bottom\":2312.875,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Microbiology\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":345,\"width\":300},\"meta\":{\"x\":103,\"right\":345,\"y\":2372.875,\"bottom\":2424.015625,\"width\":242,\"scroll\":242,\"client\":242},\"status\":{\"x\":103,\"right\":219.484375,\"y\":2436.015625,\"bottom\":2462.515625,\"width\":116.484375,\"scroll\":114,\"client\":114}}]}",
+        "Practice focus mobile: {\"topicId\":\"photosynthesis\",\"mode\":\"visual\",\"actions\":[{\"action\":\"Solve check incorrect answer\",\"scrollBefore\":589,\"top\":350.3125,\"bottom\":372.3125,\"height\":22,\"viewport\":722,\"scrollY\":937,\"unobscured\":true},{\"action\":\"Solve retry question\",\"scrollBefore\":1844,\"top\":312.359375,\"bottom\":409.53125,\"height\":97.171875,\"viewport\":722,\"scrollY\":589,\"unobscured\":true},{\"action\":\"Solve check correct answer\",\"scrollBefore\":589,\"top\":349.921875,\"bottom\":371.921875,\"height\":22,\"viewport\":722,\"scrollY\":922,\"unobscured\":true},{\"action\":\"Solve next question\",\"scrollBefore\":1886,\"top\":280.359375,\"bottom\":442.3125,\"height\":161.953125,\"viewport\":722,\"scrollY\":621,\"unobscured\":true},{\"action\":\"Solve check second question\",\"scrollBefore\":621,\"top\":349.703125,\"bottom\":371.703125,\"height\":22,\"viewport\":722,\"scrollY\":987,\"unobscured\":true},{\"action\":\"Solve question selector\",\"scrollBefore\":439,\"top\":462.359375,\"bottom\":559.53125,\"height\":97.171875,\"viewport\":722,\"scrollY\":439,\"unobscured\":true},{\"action\":\"Reason reveal step 1\",\"scrollBefore\":848,\"top\":703.453125,\"bottom\":721.59375,\"height\":18.140625,\"viewport\":722,\"scrollY\":865,\"unobscured\":true},{\"action\":\"Reason reveal step 2\",\"scrollBefore\":1263,\"top\":371.234375,\"bottom\":389.375,\"height\":18.140625,\"viewport\":722,\"scrollY\":1263,\"unobscured\":true},{\"action\":\"Reason reveal step 3\",\"scrollBefore\":1263,\"top\":437.015625,\"bottom\":455.15625,\"height\":18.140625,\"viewport\":722,\"scrollY\":1263,\"unobscured\":true},{\"action\":\"Reason hide worked answer\",\"scrollBefore\":1914,\"top\":332.796875,\"bottom\":530.796875,\"height\":198,\"viewport\":722,\"scrollY\":833,\"unobscured\":true}],\"answersPreserved\":true,\"draftsPreserved\":true,\"gradedRadiosDisabled\":true,\"reasonDraft\":\"Light reactions supply ATP and NADPH; carbon fixation depends on those inputs.\",\"reflection\":\"Distinguish the immediate products from the downstream biological outcome.\"}",
+        "App search narrow phone: {\"dimensions\":{\"width\":44,\"height\":44,\"x\":256,\"right\":300,\"y\":6.5,\"bottom\":50.5,\"viewport\":320,\"bar\":{\"y\":0,\"bottom\":58},\"explore\":{\"x\":180.21875,\"right\":244}},\"checks\":\"Visible44px search; accessible close; escaped empty recovery; native input and arrows; forward/reverse focus trap; Escape/Ctrl K; exact trigger and unchanged route/history/notebook.\"}",
+        "Labs discovery narrow phone: Native/explicit submit; persistent result nodes; focus-safe filters; complete empty reset; card return/fallback; invalid-route recovery; route/storage preservation; visible touch target; no horizontal overflow.",
+        "Progress reading narrow phone: {\"width\":320,\"theme\":\"light\",\"viewport\":320,\"geometry\":[{\"title\":\"Cell Biology\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":275,\"width\":230},\"meta\":{\"x\":103,\"right\":275,\"y\":1424,\"bottom\":1501.53125,\"width\":172,\"scroll\":172,\"client\":172},\"status\":{\"x\":103,\"right\":219.484375,\"y\":1513.53125,\"bottom\":1540.03125,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Genetics & DNA\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":275,\"width\":230},\"meta\":{\"x\":103,\"right\":275,\"y\":1600.03125,\"bottom\":1677.5625,\"width\":172,\"scroll\":172,\"client\":172},\"status\":{\"x\":103,\"right\":219.484375,\"y\":1689.5625,\"bottom\":1716.0625,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Evolution\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":275,\"width\":230},\"meta\":{\"x\":103,\"right\":275,\"y\":1776.0625,\"bottom\":1853.59375,\"width\":172,\"scroll\":172,\"client\":172},\"status\":{\"x\":103,\"right\":219.484375,\"y\":1865.59375,\"bottom\":1892.09375,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Human Physiology\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":275,\"width\":230},\"meta\":{\"x\":103,\"right\":275,\"y\":1952.09375,\"bottom\":2003.234375,\"width\":172,\"scroll\":172,\"client\":172},\"status\":{\"x\":103,\"right\":219.484375,\"y\":2015.234375,\"bottom\":2041.734375,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Ecology\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":275,\"width\":230},\"meta\":{\"x\":103,\"right\":275,\"y\":2101.734375,\"bottom\":2152.875,\"width\":172,\"scroll\":172,\"client\":172},\"status\":{\"x\":103,\"right\":219.484375,\"y\":2164.875,\"bottom\":2191.375,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Molecular Biology\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":275,\"width\":230},\"meta\":{\"x\":103,\"right\":275,\"y\":2251.375,\"bottom\":2302.515625,\"width\":172,\"scroll\":172,\"client\":172},\"status\":{\"x\":103,\"right\":219.484375,\"y\":2314.515625,\"bottom\":2341.015625,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Neuroscience\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":275,\"width\":230},\"meta\":{\"x\":103,\"right\":275,\"y\":2401.015625,\"bottom\":2452.15625,\"width\":172,\"scroll\":172,\"client\":172},\"status\":{\"x\":103,\"right\":219.484375,\"y\":2464.15625,\"bottom\":2490.65625,\"width\":116.484375,\"scroll\":114,\"client\":114}},{\"title\":\"Microbiology\",\"display\":\"grid\",\"topic\":{\"x\":45,\"right\":275,\"width\":230},\"meta\":{\"x\":103,\"right\":275,\"y\":2550.65625,\"bottom\":2601.796875,\"width\":172,\"scroll\":172,\"client\":172},\"status\":{\"x\":103,\"right\":219.484375,\"y\":2613.796875,\"bottom\":2640.296875,\"width\":116.484375,\"scroll\":114,\"client\":114}}]}",
+        "Phone evidence tables keep row labels and every selected result column readable together in both themes, with native keyboard scrolling and unchanged authored table content.",
+        "Three phylogeny drawings have independently verified branch connections and legible phone labels, with native keyboard annotation controls and unchanged private study records.",
+        "Landing, Home, every section and the saved notebook fit a 390-pixel mobile viewport."
+      ],
+      "layouts": [
+        {
+          "label": "landing desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "landing desktop",
+          "name": "landing",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "learn desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "learn desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "learn desktop",
+          "name": "learn",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "lessons desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "lessons desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "lessons desktop",
+          "name": "lessons",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "reason desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "reason desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "reason desktop",
+          "name": "reason",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "labs desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "labs desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "labs desktop",
+          "name": "labs",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "solve desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "solve desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "solve desktop",
+          "name": "solve",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "explore desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "explore desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "explore desktop",
+          "name": "explore",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "me desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "me desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "me desktop",
+          "name": "me",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "about desktop",
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "about desktop",
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "label": "about desktop",
+          "name": "about",
+          "width": 1228,
+          "scroll": 1228
+        },
+        {
+          "label": "landing mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "landing mobile",
+          "name": "landing",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "home mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "home mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "learn mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "learn mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "learn mobile",
+          "name": "learn",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "lessons mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "lessons mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "lessons mobile",
+          "name": "lessons",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "reason mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "reason mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "reason mobile",
+          "name": "reason",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "labs mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "labs mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "labs mobile",
+          "name": "labs",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "solve mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "solve mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "solve mobile",
+          "name": "solve",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "explore mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "explore mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "explore mobile",
+          "name": "explore",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "me mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "me mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "me mobile",
+          "name": "me",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "about mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "about mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "about mobile",
+          "name": "about",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "progress narrow phone",
+          "name": "wrapper",
+          "width": 320,
+          "scroll": 320
+        },
+        {
+          "label": "progress narrow phone",
+          "name": "shell",
+          "width": 320,
+          "scroll": 320
+        },
+        {
+          "label": "progress narrow phone",
+          "name": "me",
+          "width": 320,
+          "scroll": 320
+        },
+        {
+          "label": "notebook mobile",
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "notebook mobile",
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "label": "notebook mobile",
+          "name": "notebook",
+          "width": 390,
+          "scroll": 390
+        }
+      ],
+      "errors": [],
+      "requests": [
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@300;350;400;450;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@300;350;400;450;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "denied",
+          "applicationDependency": false
+        }
+      ],
+      "forbiddenDependencies": [],
+      "cameraRequests": 0,
+      "complete": true,
+      "worldProgress": [
+        {
+          "step": "Open Home and enter the Dissection Lab",
+          "timestamp": "2026-11-02T19:31:40.961Z"
+        },
+        {
+          "step": "Wait for the actual lab runtime",
+          "timestamp": "2026-11-02T19:31:42.397Z"
+        },
+        {
+          "step": "Load and verify prepared frog",
+          "timestamp": "2026-11-02T19:31:43.549Z"
+        },
+        {
+          "step": "Capture prepared frog",
+          "timestamp": "2026-11-02T19:31:43.705Z"
+        },
+        {
+          "step": "Load and verify prepared cockroach",
+          "timestamp": "2026-11-02T19:31:45.711Z"
+        },
+        {
+          "step": "Capture prepared cockroach",
+          "timestamp": "2026-11-02T19:31:46.712Z"
+        },
+        {
+          "step": "Open the controls dialog through its button",
+          "timestamp": "2026-11-02T19:31:50.288Z"
+        },
+        {
+          "step": "Capture dialog ownership of the Exit corner",
+          "timestamp": "2026-11-02T19:31:51.643Z"
+        },
+        {
+          "step": "Close the controls dialog through its button",
+          "timestamp": "2026-11-02T19:31:55.533Z"
+        },
+        {
+          "step": "Exit the lab through the shell button",
+          "timestamp": "2026-11-02T19:31:56.518Z"
+        },
+        {
+          "step": "Reload after leaving the lab",
+          "timestamp": "2026-11-02T19:31:56.993Z"
+        },
+        {
+          "step": "Open Biology Universe through its navigation button",
+          "timestamp": "2026-11-02T19:31:59.996Z"
+        },
+        {
+          "step": "Wait for all 13 Universe stages",
+          "timestamp": "2026-11-02T19:32:01.377Z"
+        },
+        {
+          "step": "Inspect the Cell stage",
+          "timestamp": "2026-11-02T19:32:01.395Z"
+        },
+        {
+          "step": "Close Universe through the shell button",
+          "timestamp": "2026-11-02T19:32:04.874Z"
+        },
+        {
+          "step": "Open and reload the Universe DNA deep link",
+          "timestamp": "2026-11-02T19:32:05.127Z"
+        },
+        {
+          "step": "Navigate the warm Universe from DNA to Atom",
+          "timestamp": "2026-11-02T19:32:09.851Z"
+        },
+        {
+          "step": "Follow the Universe brand link into the lab",
+          "timestamp": "2026-11-02T19:32:09.858Z"
+        },
+        {
+          "step": "Switch from the active lab to Learn",
+          "timestamp": "2026-11-02T19:32:13.108Z"
+        }
+      ],
+      "specimens": [
+        {
+          "id": "frog",
+          "prepared": true,
+          "parts": 29,
+          "meshes": 100,
+          "triangles": 111636,
+          "finite": true
+        },
+        {
+          "id": "cockroach",
+          "prepared": true,
+          "parts": 27,
+          "meshes": 48,
+          "triangles": 78480,
+          "finite": true
+        }
+      ],
+      "universe": {
+        "count": 13,
+        "stages": [
+          "universe",
+          "earth",
+          "biome",
+          "ecosystem",
+          "organism",
+          "organ",
+          "tissue",
+          "cell",
+          "organelle",
+          "protein",
+          "dna",
+          "nucleotide",
+          "atom"
+        ]
+      },
+      "evidenceTables": [
+        {
+          "width": 320,
+          "topic": "recombinant-dna",
+          "theme": "dark",
+          "result": {
+            "id": "recombinant-dna",
+            "columns": [
+              {
+                "index": 1,
+                "completeLabelsAndValuesVisible": true,
+                "hitTestedCells": true
+              },
+              {
+                "index": 2,
+                "completeLabelsAndValuesVisible": true,
+                "hitTestedCells": true
+              }
+            ],
+            "tableWidth": 238,
+            "tableScrollWidth": 340,
+            "labelsAndValuesVisible": true,
+            "stickyBackgrounds": [
+              {
+                "text": "Construct",
+                "background": "rgb(14, 20, 19)",
+                "alpha": 255
+              },
+              {
+                "text": "Design prediction (not a measurement)",
+                "background": "rgb(18, 26, 22)",
+                "alpha": 255
+              },
+              {
+                "text": "Candidate A (synthetic)",
+                "background": "color(srgb 0.0865882 0.124667 0.105922)",
+                "alpha": 255
+              },
+              {
+                "text": "Candidate B (synthetic)",
+                "background": "rgb(18, 26, 22)",
+                "alpha": 255
+              }
+            ],
+            "nativeKeyboardFocus": true
+          }
+        },
+        {
+          "width": 320,
+          "topic": "recombinant-dna",
+          "theme": "light",
+          "result": {
+            "id": "recombinant-dna",
+            "columns": [
+              {
+                "index": 1,
+                "completeLabelsAndValuesVisible": true,
+                "hitTestedCells": true
+              },
+              {
+                "index": 2,
+                "completeLabelsAndValuesVisible": true,
+                "hitTestedCells": true
+              }
+            ],
+            "tableWidth": 238,
+            "tableScrollWidth": 340,
+            "labelsAndValuesVisible": true,
+            "stickyBackgrounds": [
+              {
+                "text": "Construct",
+                "background": "rgb(235, 236, 227)",
+                "alpha": 255
+              },
+              {
+                "text": "Design prediction (not a measurement)",
+                "background": "rgb(255, 254, 248)",
+                "alpha": 255
+              },
+              {
+                "text": "Candidate A (synthetic)",
+                "background": "color(srgb 0.975882 0.978431 0.950784)",
+                "alpha": 255
+              },
+              {
+                "text": "Candidate B (synthetic)",
+                "background": "rgb(255, 254, 248)",
+                "alpha": 255
+              }
+            ],
+            "nativeKeyboardFocus": true
+          }
+        },
+        {
+          "width": 320,
+          "topic": "plant-transport",
+          "theme": "dark",
+          "result": {
+            "id": "plant-transport",
+            "columns": [
+              {
+                "index": 1,
+                "completeLabelsAndValuesVisible": true,
+                "hitTestedCells": true
+              },
+              {
+                "index": 2,
+                "completeLabelsAndValuesVisible": true,
+                "hitTestedCells": true
+              },
+              {
+                "index": 3,
+                "completeLabelsAndValuesVisible": true,
+                "hitTestedCells": true
+              }
+            ],
+            "tableWidth": 238,
+            "tableScrollWidth": 460,
+            "labelsAndValuesVisible": true,
+            "stickyBackgrounds": [
+              {
+                "text": "Plant state",
+                "background": "rgb(14, 20, 19)",
+                "alpha": 255
+              },
+              {
+                "text": "Rapid shoot growth",
+                "background": "rgb(18, 26, 22)",
+                "alpha": 255
+              },
+              {
+                "text": "Storage phase",
+                "background": "color(srgb 0.0865882 0.124667 0.105922)",
+                "alpha": 255
+              },
+              {
+                "text": "Source leaf shaded after labeling",
+                "background": "rgb(18, 26, 22)",
+                "alpha": 255
+              }
+            ],
+            "nativeKeyboardFocus": true
+          }
+        },
+        {
+          "width": 320,
+          "topic": "plant-transport",
+          "theme": "light",
+          "result": {
+            "id": "plant-transport",
+            "columns": [
+              {
+                "index": 1,
+                "completeLabelsAndValuesVisible": true,
+                "hitTestedCells": true
+              },
+              {
+                "index": 2,
+                "completeLabelsAndValuesVisible": true,
+                "hitTestedCells": true
+              },
+              {
+                "index": 3,
+                "completeLabelsAndValuesVisible": true,
+                "hitTestedCells": true
+              }
+            ],
+            "tableWidth": 238,
+            "tableScrollWidth": 460,
+            "labelsAndValuesVisible": true,
+            "stickyBackgrounds": [
+              {
+                "text": "Plant state",
+                "background": "rgb(235, 236, 227)",
+                "alpha": 255
+              },
+              {
+                "text": "Rapid shoot growth",
+                "background": "rgb(255, 254, 248)",
+                "alpha": 255
+              },
+              {
+                "text": "Storage phase",
+                "background": "color(srgb 0.975882 0.978431 0.950784)",
+                "alpha": 255
+              },
+              {
+                "text": "Source leaf shaded after labeling",
+                "background": "rgb(255, 254, 248)",
+                "alpha": 255
+              }
+            ],
+            "nativeKeyboardFocus": true
+          }
+        },
+        {
+          "width": 390,
+          "topic": "active-transport",
+          "theme": "dark",
+          "result": {
+            "id": "active-transport",
+            "columns": [
+              {
+                "index": 1,
+                "completeLabelsAndValuesVisible": true,
+                "hitTestedCells": true
+              },
+              {
+                "index": 2,
+                "completeLabelsAndValuesVisible": true,
+                "hitTestedCells": true
+              }
+            ],
+            "tableWidth": 308,
+            "tableScrollWidth": 340,
+            "labelsAndValuesVisible": true,
+            "stickyBackgrounds": [
+              {
+                "text": "Condition",
+                "background": "rgb(14, 20, 19)",
+                "alpha": 255
+              },
+              {
+                "text": "ATP and sodium gradient maintained",
+                "background": "rgb(18, 26, 22)",
+                "alpha": 255
+              },
+              {
+                "text": "Pump ATP supply removed, gradient initially present",
+                "background": "color(srgb 0.0865882 0.124667 0.105922)",
+                "alpha": 255
+              },
+              {
+                "text": "Sodium gradient absent",
+                "background": "rgb(18, 26, 22)",
+                "alpha": 255
+              }
+            ],
+            "nativeKeyboardFocus": true
+          }
+        },
+        {
+          "width": 390,
+          "topic": "active-transport",
+          "theme": "light",
+          "result": {
+            "id": "active-transport",
+            "columns": [
+              {
+                "index": 1,
+                "completeLabelsAndValuesVisible": true,
+                "hitTestedCells": true
+              },
+              {
+                "index": 2,
+                "completeLabelsAndValuesVisible": true,
+                "hitTestedCells": true
+              }
+            ],
+            "tableWidth": 308,
+            "tableScrollWidth": 340,
+            "labelsAndValuesVisible": true,
+            "stickyBackgrounds": [
+              {
+                "text": "Condition",
+                "background": "rgb(235, 236, 227)",
+                "alpha": 255
+              },
+              {
+                "text": "ATP and sodium gradient maintained",
+                "background": "rgb(255, 254, 248)",
+                "alpha": 255
+              },
+              {
+                "text": "Pump ATP supply removed, gradient initially present",
+                "background": "color(srgb 0.975882 0.978431 0.950784)",
+                "alpha": 255
+              },
+              {
+                "text": "Sodium gradient absent",
+                "background": "rgb(255, 254, 248)",
+                "alpha": 255
+              }
+            ],
+            "nativeKeyboardFocus": true
+          }
+        }
+      ],
+      "phylogeny": [
+        {
+          "width": 320,
+          "theme": "dark",
+          "result": {
+            "views": [
+              {
+                "view": 0,
+                "treeId": "T1",
+                "clades": [
+                  "A B",
+                  "C D"
+                ],
+                "tips": [
+                  "A",
+                  "B",
+                  "C",
+                  "D"
+                ],
+                "smallestRenderedFont": 10.959090909090909,
+                "svgWidth": 274,
+                "graphVerifiedFromEndpoints": true
+              },
+              {
+                "view": 1,
+                "treeId": "T2",
+                "clades": [
+                  "A B",
+                  "C D"
+                ],
+                "tips": [
+                  "D",
+                  "C",
+                  "B",
+                  "A"
+                ],
+                "smallestRenderedFont": 10.959090909090909,
+                "svgWidth": 274,
+                "graphVerifiedFromEndpoints": true
+              },
+              {
+                "view": 2,
+                "treeId": "T3",
+                "clades": [
+                  "A C",
+                  "B D"
+                ],
+                "tips": [
+                  "A",
+                  "C",
+                  "B",
+                  "D"
+                ],
+                "smallestRenderedFont": 10.959090909090909,
+                "svgWidth": 274,
+                "graphVerifiedFromEndpoints": true
+              }
+            ],
+            "keyboardBoundaries": true,
+            "privateNotesUnchanged": true
+          }
+        },
+        {
+          "width": 320,
+          "theme": "light",
+          "result": {
+            "views": [
+              {
+                "view": 0,
+                "treeId": "T1",
+                "clades": [
+                  "A B",
+                  "C D"
+                ],
+                "tips": [
+                  "A",
+                  "B",
+                  "C",
+                  "D"
+                ],
+                "smallestRenderedFont": 10.959090909090909,
+                "svgWidth": 274,
+                "graphVerifiedFromEndpoints": true
+              },
+              {
+                "view": 1,
+                "treeId": "T2",
+                "clades": [
+                  "A B",
+                  "C D"
+                ],
+                "tips": [
+                  "D",
+                  "C",
+                  "B",
+                  "A"
+                ],
+                "smallestRenderedFont": 10.959090909090909,
+                "svgWidth": 274,
+                "graphVerifiedFromEndpoints": true
+              },
+              {
+                "view": 2,
+                "treeId": "T3",
+                "clades": [
+                  "A C",
+                  "B D"
+                ],
+                "tips": [
+                  "A",
+                  "C",
+                  "B",
+                  "D"
+                ],
+                "smallestRenderedFont": 10.959090909090909,
+                "svgWidth": 274,
+                "graphVerifiedFromEndpoints": true
+              }
+            ],
+            "keyboardBoundaries": true,
+            "privateNotesUnchanged": true
+          }
+        },
+        {
+          "width": 390,
+          "theme": "dark",
+          "result": {
+            "views": [
+              {
+                "view": 0,
+                "treeId": "T1",
+                "clades": [
+                  "A B",
+                  "C D"
+                ],
+                "tips": [
+                  "A",
+                  "B",
+                  "C",
+                  "D"
+                ],
+                "smallestRenderedFont": 13.759090909090908,
+                "svgWidth": 344,
+                "graphVerifiedFromEndpoints": true
+              },
+              {
+                "view": 1,
+                "treeId": "T2",
+                "clades": [
+                  "A B",
+                  "C D"
+                ],
+                "tips": [
+                  "D",
+                  "C",
+                  "B",
+                  "A"
+                ],
+                "smallestRenderedFont": 13.759090909090908,
+                "svgWidth": 344,
+                "graphVerifiedFromEndpoints": true
+              },
+              {
+                "view": 2,
+                "treeId": "T3",
+                "clades": [
+                  "A C",
+                  "B D"
+                ],
+                "tips": [
+                  "A",
+                  "C",
+                  "B",
+                  "D"
+                ],
+                "smallestRenderedFont": 13.759090909090908,
+                "svgWidth": 344,
+                "graphVerifiedFromEndpoints": true
+              }
+            ],
+            "keyboardBoundaries": true,
+            "privateNotesUnchanged": true
+          }
+        },
+        {
+          "width": 390,
+          "theme": "light",
+          "result": {
+            "views": [
+              {
+                "view": 0,
+                "treeId": "T1",
+                "clades": [
+                  "A B",
+                  "C D"
+                ],
+                "tips": [
+                  "A",
+                  "B",
+                  "C",
+                  "D"
+                ],
+                "smallestRenderedFont": 13.759090909090908,
+                "svgWidth": 344,
+                "graphVerifiedFromEndpoints": true
+              },
+              {
+                "view": 1,
+                "treeId": "T2",
+                "clades": [
+                  "A B",
+                  "C D"
+                ],
+                "tips": [
+                  "D",
+                  "C",
+                  "B",
+                  "A"
+                ],
+                "smallestRenderedFont": 13.759090909090908,
+                "svgWidth": 344,
+                "graphVerifiedFromEndpoints": true
+              },
+              {
+                "view": 2,
+                "treeId": "T3",
+                "clades": [
+                  "A C",
+                  "B D"
+                ],
+                "tips": [
+                  "A",
+                  "C",
+                  "B",
+                  "D"
+                ],
+                "smallestRenderedFont": 13.759090909090908,
+                "svgWidth": 344,
+                "graphVerifiedFromEndpoints": true
+              }
+            ],
+            "keyboardBoundaries": true,
+            "privateNotesUnchanged": true
+          }
+        }
+      ]
+    }
+  ],
+  "rendering": {
+    "backend": "SwiftShader software WebGL",
+    "deviceScaleFactor": 0.5,
+    "desktopCSSViewport": "1440x1000",
+    "mobileCSSViewport": "390x844"
+  },
+  "limitations": "Isolated Chromium with SwiftShader software WebGL at half device scale (one quarter of physical render pixels); CSS layout viewports remain unchanged. No live AI, Google sign-in, billing, real camera or touch hardware was exercised."
+}

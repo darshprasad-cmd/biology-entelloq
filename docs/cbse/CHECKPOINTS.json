@@ -42,17 +42,33 @@
     {
       "id": "s9-e04",
       "name": "Paired onion and cheek microscopy rehearsal",
-      "status": "verified-local",
+      "status": "released-live-verified",
       "route": "#cbse:9/practicals/s9-e04",
       "capability": "illustrative-interactive-apparatus-with-practical-preparation",
       "sourcePage": 19,
       "source": "https://cbseacademic.nic.in/web_material/CurriculumMain27/SecPart1/ScienceSt_SecP1_2026-27.pdf",
       "releaseEvidence": "MICROSCOPY-RELEASE.md",
-      "productionEvidence": "https://github.com/darshprasad-cmd/biology-entelloq/pull/48",
+      "productionEvidence": "https://github.com/darshprasad-cmd/biology-entelloq/pull/48#issuecomment-6460832954",
+      "releaseCommit": "a8c303ca7d9f6a43598275708a4b7155664750c6",
       "releaseStatusAuthority": "The release PR conversation records required checks, merged commit, deployment and live parity after this source checkpoint; inspect it before selecting this objective again.",
       "schoolPracticalCompleted": false,
       "educatorReviewed": false,
       "physicalCalibration": false
+    },
+    {
+      "id": "b12-a-e01",
+      "name": "Synthetic pollen field-counting rehearsal",
+      "status": "verified-local",
+      "route": "#cbse:12/practicals/b12-a-e01",
+      "capability": "synthetic-interactive-observation-with-practical-preparation",
+      "sourcePage": 12,
+      "source": "https://cbseacademic.nic.in/web_material/CurriculumMain27/SecPart2/Biology_SecP2_2026-27.pdf",
+      "releaseEvidence": "POLLEN-RELEASE.md",
+      "releaseStatusAuthority": "Check the linked release evidence and subsequent PR conversation for CI, merge and exact live-artifact parity. Implementation is not a production-release claim.",
+      "schoolPracticalCompleted": false,
+      "educatorReviewed": false,
+      "physicalCalibration": false,
+      "speciesMorphologyValidated": false
     }
   ],
   "siblingPracticalBaseline": {
@@ -60,9 +76,9 @@
     "standardGuides": 72,
     "accessibleAlternatives": 18,
     "projectOptions": 8,
-    "interactiveInstruments": ["vernier-calipers", "screw-gauge", "spherometer", "irregular-lamina-volume"],
-    "latestReleaseCommit": "4e8a9b18f776824bd72fb3d64645232fccd53c54",
-    "evidence": "https://github.com/darshprasad-cmd/PhysicsEntelloq/pull/40#issuecomment-6436512807"
+    "interactiveInstruments": ["vernier-calipers", "screw-gauge", "spherometer", "irregular-lamina-volume", "transverse-string-pulse-speed"],
+    "latestReleaseCommit": "61427fbcdf37d7b6f6bbeabd9fea482862e3df2d",
+    "evidence": "https://github.com/darshprasad-cmd/PhysicsEntelloq/pull/45#issuecomment-6461195962"
   },
   "tracks": [
     {

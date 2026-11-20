@@ -2,6 +2,7 @@
 'use strict';
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),http=require('node:http');
 const {createRequire}=require('node:module'),{pathToFileURL}=require('node:url');
+const {checkQuestionnaireLayout}=require('../tests/cbse-questionnaire-browser.cjs');
 const root=path.resolve(__dirname,'..'),modules=process.env.BIOLOGY_PLAYWRIGHT_MODULES||path.resolve(root,'../biology-entelloq/node_modules');
 const {chromium}=createRequire(path.join(modules,'__cbse_check.cjs'))('playwright');
 const bytes=fs.readFileSync(path.join(root,'dist/index.html')),out=path.resolve(process.env.BIOLOGY_CBSE_OUTPUT||path.join(root,'docs/cbse/browser'));
@@ -10,7 +11,7 @@ const report={cases:[],limitations:'Chromium emulation, not physical touch hardw
 async function run(){
  fs.mkdirSync(out,{recursive:true});
  let base=external;
- if(!base){server=http.createServer((req,res)=>{res.setHeader('Content-Type','text/html; charset=utf-8');if(req.url.startsWith('/held')){const cut=bytes.indexOf('<script id="bioq-manifest"');res.write(bytes.subarray(0,cut));setTimeout(()=>res.end(bytes.subarray(cut)),2500);}else res.end(bytes);});await new Promise(r=>server.listen(0,'127.0.0.1',r));base='http://127.0.0.1:'+server.address().port+'/';}
+ if(!base){server=http.createServer((req,res)=>{res.setHeader('Content-Type','text/html; charset=utf-8');if(req.url.startsWith('/held')){const cut=bytes.indexOf('<script id="bioq-manifest"');res.write(bytes.subarray(0,cut));setTimeout(()=>res.end(bytes.subarray(cut)),2500);}else res.end(bytes);});await new Promise(r=>server.listen(0,'127.0.0.1',r));base='http://127.0.0.1:'+server.address().port+'/?excellence=0';}
  const browser=await chromium.launch({headless:true});
  try{
   for(const width of [1440,768,390,320]){
@@ -22,6 +23,7 @@ async function run(){
    assert.equal(await page.locator('#bio-cbse').evaluate(d=>d.matches(':modal')),true);
    assert.equal(await page.locator('#bio-cbse').evaluate(d=>d.scrollWidth<=d.clientWidth+1),true);
    await page.screenshot({path:path.join(out,'questionnaire-'+width+'.png')});
+   const design=await checkQuestionnaireLayout(page,width,{capture:name=>page.screenshot({path:path.join(out,name+'.png')})});
    for(let i=0;i<20;i++){await page.keyboard.press('Tab');assert.equal(await page.evaluate(()=>document.getElementById('bio-cbse').contains(document.activeElement)),true);}
    await page.locator('label').filter({has:page.locator('input[name=classYear][value="12"]')}).click();
    await page.locator('input[name=goal][value=practice]').check({force:true});
@@ -51,7 +53,7 @@ async function run(){
    assert.equal(await page.evaluate(()=>localStorage.getItem('bioq-test-notes')),'preserve');
    assert.equal(await page.evaluate(()=>localStorage.getItem(BioCBSE.KEY)),null);
    await page.getByRole('button',{name:'Cancel',exact:true}).click();
-   await context.close();assert.deepEqual(errors,[]);report.cases.push({width,firstScreen:true,allClasses:true,profileEditReset:true});
+   await context.close();assert.deepEqual(errors,[]);report.cases.push({width,firstScreen:true,allClasses:true,profileEditReset:true,...design});
   }
   const context=await browser.newContext(),page=await context.newPage();
   await context.route('**/*',route=>new URL(route.request().url()).origin===new URL(base).origin?route.continue():route.abort());
@@ -96,7 +98,7 @@ async function run(){
   assert.equal(await wp.evaluate(()=>JSON.parse(localStorage.getItem(BioCBSE.KEY)).classYear),'9');
   await writeBlocked.close();report.cases.push({failedWriteRetainsNewSessionPreferences:true});
   if(!external){
-   const first=await browser.newContext(),fp=await first.newPage();await fp.goto(base+'held',{waitUntil:'commit'});await fp.getByRole('heading',{name:'Let’s make this workspace yours.'}).waitFor();assert.equal(await fp.evaluate(()=>!!window.BioqPackage),false);assert.equal(await fp.locator('#bioq-workspace').count(),1);await first.close();report.cases.push({questionnaireBeforeManifest:true});
+   const first=await browser.newContext(),fp=await first.newPage();await fp.goto(new URL('held?excellence=0',base).href,{waitUntil:'commit'});await fp.getByRole('heading',{name:'Let’s make this workspace yours.'}).waitFor();assert.equal(await fp.evaluate(()=>!!window.BioqPackage),false);assert.equal(await fp.locator('#bioq-workspace').count(),1);await first.close();report.cases.push({questionnaireBeforeManifest:true});
    const portable=await browser.newContext(),pp=await portable.newPage();await portable.route('**/*',r=>r.request().url().startsWith('file:')?r.continue():r.abort());await pp.goto(pathToFileURL(path.join(root,'dist/index.html')).href,{waitUntil:'domcontentloaded'});await pp.getByRole('button',{name:'Build my study space'}).click();await pp.getByRole('heading',{name:'Class 9 · Science: Biology',exact:true}).waitFor();await portable.close();report.cases.push({offlineFileQuestionnaire:true});
   }
   report.pass=true;

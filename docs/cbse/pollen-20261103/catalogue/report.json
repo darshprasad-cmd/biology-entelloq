@@ -1,0 +1,114 @@
+{
+  "cases": [
+    {
+      "width": 1440,
+      "accessibilityState": "guide-with-safety-viva-and-notebook",
+      "axeViolations": 0
+    },
+    {
+      "width": 1440,
+      "accessibilityState": "saved-notebook",
+      "axeViolations": 0
+    },
+    {
+      "width": 1440,
+      "accessibilityState": "catalogue",
+      "axeViolations": 0
+    },
+    {
+      "width": 1440,
+      "deepLinkSkip": true,
+      "notesPreserved": true,
+      "vivaFeedback": true,
+      "searchEmpty": true,
+      "allClasses": true,
+      "keyboardClose": true
+    },
+    {
+      "width": 768,
+      "accessibilityState": "guide-with-safety-viva-and-notebook",
+      "axeViolations": 0
+    },
+    {
+      "width": 768,
+      "accessibilityState": "saved-notebook",
+      "axeViolations": 0
+    },
+    {
+      "width": 768,
+      "accessibilityState": "catalogue",
+      "axeViolations": 0
+    },
+    {
+      "width": 768,
+      "deepLinkSkip": true,
+      "notesPreserved": true,
+      "vivaFeedback": true,
+      "searchEmpty": true,
+      "allClasses": true,
+      "keyboardClose": true
+    },
+    {
+      "width": 390,
+      "accessibilityState": "guide-with-safety-viva-and-notebook",
+      "axeViolations": 0
+    },
+    {
+      "width": 390,
+      "accessibilityState": "saved-notebook",
+      "axeViolations": 0
+    },
+    {
+      "width": 390,
+      "accessibilityState": "catalogue",
+      "axeViolations": 0
+    },
+    {
+      "width": 390,
+      "deepLinkSkip": true,
+      "notesPreserved": true,
+      "vivaFeedback": true,
+      "searchEmpty": true,
+      "allClasses": true,
+      "keyboardClose": true
+    },
+    {
+      "width": 320,
+      "accessibilityState": "guide-with-safety-viva-and-notebook",
+      "axeViolations": 0
+    },
+    {
+      "width": 320,
+      "accessibilityState": "saved-notebook",
+      "axeViolations": 0
+    },
+    {
+      "width": 320,
+      "accessibilityState": "catalogue",
+      "axeViolations": 0
+    },
+    {
+      "width": 320,
+      "deepLinkSkip": true,
+      "notesPreserved": true,
+      "vivaFeedback": true,
+      "searchEmpty": true,
+      "allClasses": true,
+      "keyboardClose": true
+    },
+    {
+      "all59GuidesRendered": true,
+      "firstSetupPreservesPractical": true,
+      "invalidCrossClassRoute": true,
+      "supportingBenchNavigation": true
+    },
+    {
+      "blockedStorageSessionFallback": true
+    },
+    {
+      "offlinePackagedGuide": true
+    }
+  ],
+  "limitations": "Chromium emulation, not physical touch, screen-reader certification, apparatus validation or educator approval.",
+  "status": "passed"
+}
