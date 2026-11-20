@@ -2,7 +2,7 @@
 
 The existing static app, isolated scientific documents and single-file delivery remain the architecture. The product change is opt-in with `?excellence=1`, defaults on for localhost staging and is explicitly disabled by `?excellence=0`. The classroom file exchange additionally requires `classroom=1`.
 
-The current integration runtime is `87df88b0117c1b54fa2c0c8667343c1e3bd1f435` (2026-11-20). It includes released questionnaire, pollen and chromatography work alongside the product workspace and reviewed navigation ownership/recovery fixes. The chromatography merge retains its released model, UI and persistence rules; only the builder conflict and explicit preservation-test baselines needed integration. Exact artifact, catalogue and test evidence is indexed in [the chromatography integration report](product-excellence/chromatography-integration-20261120/README.md).
+The current runtime is `e94c65fdf0011b852ce2de04bf9f6b9c954389d4` (2026-11-20). It includes released questionnaire, pollen and chromatography work alongside the product workspace and reviewed navigation ownership/recovery fixes. The chromatography merge retains its released model, UI and persistence rules; only the builder conflict and explicit preservation-test baselines needed integration. [The chromatography integration report](product-excellence/chromatography-integration-20261120/README.md) records those checks. A subsequent [reference-diagram correction](product-excellence/reference-svg-20261120/README.md) inserts seven missing SVG coordinate separators; it changes conceptual illustrations only and records the current artifact hash and affected checks.
 
 ## Ownership and integration
 

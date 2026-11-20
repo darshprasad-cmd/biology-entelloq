@@ -1,0 +1,750 @@
+[
+  {
+    "portable": false,
+    "width": 1440,
+    "cases": [
+      {
+        "type": "atlas",
+        "index": 4,
+        "paths": [
+          {
+            "d": "M282 59L287 79H313L319 58M300 82V194M251 105H349M251 105L228 172L208 218M349 105L372 172L392 218M269 191L283 216L270 270M331 191L317 216L330 270M269 191Q300 175 331 191Q319 214 300 213Q281 214 269 191",
+            "length": 834.2611694335938
+          },
+          {
+            "d": "M298 107Q237 93257 120M302 107Q363 93343 120",
+            "length": 0
+          },
+          {
+            "d": "M298 120Q237 109257 131M302 120Q363 109343 131",
+            "length": 0
+          },
+          {
+            "d": "M298 133Q237 125257 142M302 133Q363 125343 142",
+            "length": 0
+          },
+          {
+            "d": "M298 146Q237 141257 153M302 146Q363 141343 153",
+            "length": 0
+          },
+          {
+            "d": "M298 159Q237 157257 164M302 159Q363 157343 164",
+            "length": 0
+          }
+        ]
+      },
+      {
+        "type": "timeline",
+        "index": 0,
+        "paths": [
+          {
+            "d": "M69 223Q170 198290 228T530 223",
+            "length": 0
+          },
+          {
+            "d": "M69 236Q170 211290 241T530 236",
+            "length": 0
+          },
+          {
+            "d": "M69 249Q170 224290 254T530 249",
+            "length": 0
+          }
+        ]
+      },
+      {
+        "type": "timeline",
+        "index": 1,
+        "paths": [
+          {
+            "d": "M113 249Q147 157225 215Q275 138337 207Q405 151486 249",
+            "length": 0
+          },
+          {
+            "d": "M113 229Q147 140225 195Q275 122337 189Q405 139486 229",
+            "length": 0
+          },
+          {
+            "d": "M113 209Q147 123225 175Q275 106337 171Q405 127486 209",
+            "length": 0
+          },
+          {
+            "d": "M113 189Q147 106225 155Q275 90337 153Q405 115486 189",
+            "length": 0
+          },
+          {
+            "d": "M113 169Q147 89225 135Q275 74337 135Q405 103486 169",
+            "length": 0
+          },
+          {
+            "d": "M113 149Q147 72225 115Q275 58337 117Q405 91486 149",
+            "length": 0
+          },
+          {
+            "d": "M420 92L383 130",
+            "length": 53.037723541259766
+          },
+          {
+            "d": "M385.4184948569192 121.33103912645493L383 130L391.60139739144677 127.35123369954756",
+            "length": 18.000009536743164
+          }
+        ]
+      },
+      {
+        "type": "timeline",
+        "index": 5,
+        "paths": [
+          {
+            "d": "M116 103Q163 91211 103",
+            "length": 0
+          },
+          {
+            "d": "M116 124Q163 112211 124",
+            "length": 0
+          },
+          {
+            "d": "M116 145Q163 133211 145",
+            "length": 0
+          },
+          {
+            "d": "M116 166Q163 154211 166",
+            "length": 0
+          },
+          {
+            "d": "M116 187Q163 175211 187",
+            "length": 0
+          },
+          {
+            "d": "M116 208Q163 196211 208",
+            "length": 0
+          },
+          {
+            "d": "M163 70L163 243",
+            "length": 173
+          },
+          {
+            "d": "M-72 0Q-15-65 66-4Q26 52-72 0L-109-31V31ZM-18-23L-11-48L13-28M-11 21L-2 48L25 20",
+            "length": 591.00634765625
+          },
+          {
+            "d": "M456 238V149Q452 122 443 99M456 151L473 115",
+            "length": 180.5846405029297
+          },
+          {
+            "d": "M486 238V166Q482 139 473 116M486 168L503 132",
+            "length": 163.5846405029297
+          },
+          {
+            "d": "M516 238V183Q512 156 503 133M516 185L533 149",
+            "length": 146.5846405029297
+          }
+        ]
+      }
+    ],
+    "errors": [
+      "Error: <path> attribute d: Expected number, \"…07Q237 93257 120M302 107Q363 933…\".",
+      "Error: <path> attribute d: Expected number, \"…0Q237 109257 131M302 120Q363 109…\".",
+      "Error: <path> attribute d: Expected number, \"…3Q237 125257 142M302 133Q363 125…\".",
+      "Error: <path> attribute d: Expected number, \"…6Q237 141257 153M302 146Q363 141…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q237 157257 164M302 159Q363 157…\".",
+      "Error: <path> attribute d: Expected number, \"…3Q170 198290 228T530 223\".",
+      "Error: <path> attribute d: Expected number, \"…6Q170 211290 241T530 236\".",
+      "Error: <path> attribute d: Expected number, \"…9Q170 224290 254T530 249\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 157225 215Q275 138337 207Q…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 140225 195Q275 122337 189Q…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 123225 175Q275 106337 171Q…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 106225 155Q275 90337 153Q4…\".",
+      "Error: <path> attribute d: Expected number, \"…69Q147 89225 135Q275 74337 135Q4…\".",
+      "Error: <path> attribute d: Expected number, \"…49Q147 72225 115Q275 58337 117Q4…\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…03Q163 91211 103\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…4Q163 112211 124\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…5Q163 133211 145\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…6Q163 154211 166\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…7Q163 175211 187\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…8Q163 196211 208\".",
+      "Error: <path> attribute d: Expected number, \"…3Q170 198290 228T530 223\".",
+      "Error: <path> attribute d: Expected number, \"…6Q170 211290 241T530 236\".",
+      "Error: <path> attribute d: Expected number, \"…9Q170 224290 254T530 249\".",
+      "Error: <path> attribute d: Expected number, \"…07Q237 93257 120M302 107Q363 933…\".",
+      "Error: <path> attribute d: Expected number, \"…0Q237 109257 131M302 120Q363 109…\".",
+      "Error: <path> attribute d: Expected number, \"…3Q237 125257 142M302 133Q363 125…\".",
+      "Error: <path> attribute d: Expected number, \"…6Q237 141257 153M302 146Q363 141…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q237 157257 164M302 159Q363 157…\".",
+      "Error: <path> attribute d: Expected number, \"…3Q170 198290 228T530 223\".",
+      "Error: <path> attribute d: Expected number, \"…6Q170 211290 241T530 236\".",
+      "Error: <path> attribute d: Expected number, \"…9Q170 224290 254T530 249\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 157225 215Q275 138337 207Q…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 140225 195Q275 122337 189Q…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 123225 175Q275 106337 171Q…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 106225 155Q275 90337 153Q4…\".",
+      "Error: <path> attribute d: Expected number, \"…69Q147 89225 135Q275 74337 135Q4…\".",
+      "Error: <path> attribute d: Expected number, \"…49Q147 72225 115Q275 58337 117Q4…\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…03Q163 91211 103\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…4Q163 112211 124\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…5Q163 133211 145\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…6Q163 154211 166\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…7Q163 175211 187\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…8Q163 196211 208\"."
+    ]
+  },
+  {
+    "portable": false,
+    "width": 390,
+    "cases": [
+      {
+        "type": "atlas",
+        "index": 4,
+        "paths": [
+          {
+            "d": "M282 59L287 79H313L319 58M300 82V194M251 105H349M251 105L228 172L208 218M349 105L372 172L392 218M269 191L283 216L270 270M331 191L317 216L330 270M269 191Q300 175 331 191Q319 214 300 213Q281 214 269 191",
+            "length": 834.2611694335938
+          },
+          {
+            "d": "M298 107Q237 93257 120M302 107Q363 93343 120",
+            "length": 0
+          },
+          {
+            "d": "M298 120Q237 109257 131M302 120Q363 109343 131",
+            "length": 0
+          },
+          {
+            "d": "M298 133Q237 125257 142M302 133Q363 125343 142",
+            "length": 0
+          },
+          {
+            "d": "M298 146Q237 141257 153M302 146Q363 141343 153",
+            "length": 0
+          },
+          {
+            "d": "M298 159Q237 157257 164M302 159Q363 157343 164",
+            "length": 0
+          }
+        ]
+      },
+      {
+        "type": "timeline",
+        "index": 0,
+        "paths": [
+          {
+            "d": "M69 223Q170 198290 228T530 223",
+            "length": 0
+          },
+          {
+            "d": "M69 236Q170 211290 241T530 236",
+            "length": 0
+          },
+          {
+            "d": "M69 249Q170 224290 254T530 249",
+            "length": 0
+          }
+        ]
+      },
+      {
+        "type": "timeline",
+        "index": 1,
+        "paths": [
+          {
+            "d": "M113 249Q147 157225 215Q275 138337 207Q405 151486 249",
+            "length": 0
+          },
+          {
+            "d": "M113 229Q147 140225 195Q275 122337 189Q405 139486 229",
+            "length": 0
+          },
+          {
+            "d": "M113 209Q147 123225 175Q275 106337 171Q405 127486 209",
+            "length": 0
+          },
+          {
+            "d": "M113 189Q147 106225 155Q275 90337 153Q405 115486 189",
+            "length": 0
+          },
+          {
+            "d": "M113 169Q147 89225 135Q275 74337 135Q405 103486 169",
+            "length": 0
+          },
+          {
+            "d": "M113 149Q147 72225 115Q275 58337 117Q405 91486 149",
+            "length": 0
+          },
+          {
+            "d": "M420 92L383 130",
+            "length": 53.037723541259766
+          },
+          {
+            "d": "M385.4184948569192 121.33103912645493L383 130L391.60139739144677 127.35123369954756",
+            "length": 18.000009536743164
+          }
+        ]
+      },
+      {
+        "type": "timeline",
+        "index": 5,
+        "paths": [
+          {
+            "d": "M116 103Q163 91211 103",
+            "length": 0
+          },
+          {
+            "d": "M116 124Q163 112211 124",
+            "length": 0
+          },
+          {
+            "d": "M116 145Q163 133211 145",
+            "length": 0
+          },
+          {
+            "d": "M116 166Q163 154211 166",
+            "length": 0
+          },
+          {
+            "d": "M116 187Q163 175211 187",
+            "length": 0
+          },
+          {
+            "d": "M116 208Q163 196211 208",
+            "length": 0
+          },
+          {
+            "d": "M163 70L163 243",
+            "length": 173
+          },
+          {
+            "d": "M-72 0Q-15-65 66-4Q26 52-72 0L-109-31V31ZM-18-23L-11-48L13-28M-11 21L-2 48L25 20",
+            "length": 591.00634765625
+          },
+          {
+            "d": "M456 238V149Q452 122 443 99M456 151L473 115",
+            "length": 180.5846405029297
+          },
+          {
+            "d": "M486 238V166Q482 139 473 116M486 168L503 132",
+            "length": 163.5846405029297
+          },
+          {
+            "d": "M516 238V183Q512 156 503 133M516 185L533 149",
+            "length": 146.5846405029297
+          }
+        ]
+      }
+    ],
+    "errors": [
+      "Error: <path> attribute d: Expected number, \"…07Q237 93257 120M302 107Q363 933…\".",
+      "Error: <path> attribute d: Expected number, \"…0Q237 109257 131M302 120Q363 109…\".",
+      "Error: <path> attribute d: Expected number, \"…3Q237 125257 142M302 133Q363 125…\".",
+      "Error: <path> attribute d: Expected number, \"…6Q237 141257 153M302 146Q363 141…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q237 157257 164M302 159Q363 157…\".",
+      "Error: <path> attribute d: Expected number, \"…3Q170 198290 228T530 223\".",
+      "Error: <path> attribute d: Expected number, \"…6Q170 211290 241T530 236\".",
+      "Error: <path> attribute d: Expected number, \"…9Q170 224290 254T530 249\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 157225 215Q275 138337 207Q…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 140225 195Q275 122337 189Q…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 123225 175Q275 106337 171Q…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 106225 155Q275 90337 153Q4…\".",
+      "Error: <path> attribute d: Expected number, \"…69Q147 89225 135Q275 74337 135Q4…\".",
+      "Error: <path> attribute d: Expected number, \"…49Q147 72225 115Q275 58337 117Q4…\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…03Q163 91211 103\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…4Q163 112211 124\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…5Q163 133211 145\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…6Q163 154211 166\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…7Q163 175211 187\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…8Q163 196211 208\".",
+      "Error: <path> attribute d: Expected number, \"…3Q170 198290 228T530 223\".",
+      "Error: <path> attribute d: Expected number, \"…6Q170 211290 241T530 236\".",
+      "Error: <path> attribute d: Expected number, \"…9Q170 224290 254T530 249\".",
+      "Error: <path> attribute d: Expected number, \"…07Q237 93257 120M302 107Q363 933…\".",
+      "Error: <path> attribute d: Expected number, \"…0Q237 109257 131M302 120Q363 109…\".",
+      "Error: <path> attribute d: Expected number, \"…3Q237 125257 142M302 133Q363 125…\".",
+      "Error: <path> attribute d: Expected number, \"…6Q237 141257 153M302 146Q363 141…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q237 157257 164M302 159Q363 157…\".",
+      "Error: <path> attribute d: Expected number, \"…3Q170 198290 228T530 223\".",
+      "Error: <path> attribute d: Expected number, \"…6Q170 211290 241T530 236\".",
+      "Error: <path> attribute d: Expected number, \"…9Q170 224290 254T530 249\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 157225 215Q275 138337 207Q…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 140225 195Q275 122337 189Q…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 123225 175Q275 106337 171Q…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 106225 155Q275 90337 153Q4…\".",
+      "Error: <path> attribute d: Expected number, \"…69Q147 89225 135Q275 74337 135Q4…\".",
+      "Error: <path> attribute d: Expected number, \"…49Q147 72225 115Q275 58337 117Q4…\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…03Q163 91211 103\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…4Q163 112211 124\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…5Q163 133211 145\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…6Q163 154211 166\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…7Q163 175211 187\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…8Q163 196211 208\"."
+    ]
+  },
+  {
+    "portable": true,
+    "width": 1440,
+    "cases": [
+      {
+        "type": "atlas",
+        "index": 4,
+        "paths": [
+          {
+            "d": "M282 59L287 79H313L319 58M300 82V194M251 105H349M251 105L228 172L208 218M349 105L372 172L392 218M269 191L283 216L270 270M331 191L317 216L330 270M269 191Q300 175 331 191Q319 214 300 213Q281 214 269 191",
+            "length": 834.2611694335938
+          },
+          {
+            "d": "M298 107Q237 93257 120M302 107Q363 93343 120",
+            "length": 0
+          },
+          {
+            "d": "M298 120Q237 109257 131M302 120Q363 109343 131",
+            "length": 0
+          },
+          {
+            "d": "M298 133Q237 125257 142M302 133Q363 125343 142",
+            "length": 0
+          },
+          {
+            "d": "M298 146Q237 141257 153M302 146Q363 141343 153",
+            "length": 0
+          },
+          {
+            "d": "M298 159Q237 157257 164M302 159Q363 157343 164",
+            "length": 0
+          }
+        ]
+      },
+      {
+        "type": "timeline",
+        "index": 0,
+        "paths": [
+          {
+            "d": "M69 223Q170 198290 228T530 223",
+            "length": 0
+          },
+          {
+            "d": "M69 236Q170 211290 241T530 236",
+            "length": 0
+          },
+          {
+            "d": "M69 249Q170 224290 254T530 249",
+            "length": 0
+          }
+        ]
+      },
+      {
+        "type": "timeline",
+        "index": 1,
+        "paths": [
+          {
+            "d": "M113 249Q147 157225 215Q275 138337 207Q405 151486 249",
+            "length": 0
+          },
+          {
+            "d": "M113 229Q147 140225 195Q275 122337 189Q405 139486 229",
+            "length": 0
+          },
+          {
+            "d": "M113 209Q147 123225 175Q275 106337 171Q405 127486 209",
+            "length": 0
+          },
+          {
+            "d": "M113 189Q147 106225 155Q275 90337 153Q405 115486 189",
+            "length": 0
+          },
+          {
+            "d": "M113 169Q147 89225 135Q275 74337 135Q405 103486 169",
+            "length": 0
+          },
+          {
+            "d": "M113 149Q147 72225 115Q275 58337 117Q405 91486 149",
+            "length": 0
+          },
+          {
+            "d": "M420 92L383 130",
+            "length": 53.037723541259766
+          },
+          {
+            "d": "M385.4184948569192 121.33103912645493L383 130L391.60139739144677 127.35123369954756",
+            "length": 18.000009536743164
+          }
+        ]
+      },
+      {
+        "type": "timeline",
+        "index": 5,
+        "paths": [
+          {
+            "d": "M116 103Q163 91211 103",
+            "length": 0
+          },
+          {
+            "d": "M116 124Q163 112211 124",
+            "length": 0
+          },
+          {
+            "d": "M116 145Q163 133211 145",
+            "length": 0
+          },
+          {
+            "d": "M116 166Q163 154211 166",
+            "length": 0
+          },
+          {
+            "d": "M116 187Q163 175211 187",
+            "length": 0
+          },
+          {
+            "d": "M116 208Q163 196211 208",
+            "length": 0
+          },
+          {
+            "d": "M163 70L163 243",
+            "length": 173
+          },
+          {
+            "d": "M-72 0Q-15-65 66-4Q26 52-72 0L-109-31V31ZM-18-23L-11-48L13-28M-11 21L-2 48L25 20",
+            "length": 591.00634765625
+          },
+          {
+            "d": "M456 238V149Q452 122 443 99M456 151L473 115",
+            "length": 180.5846405029297
+          },
+          {
+            "d": "M486 238V166Q482 139 473 116M486 168L503 132",
+            "length": 163.5846405029297
+          },
+          {
+            "d": "M516 238V183Q512 156 503 133M516 185L533 149",
+            "length": 146.5846405029297
+          }
+        ]
+      }
+    ],
+    "errors": [
+      "Error: <path> attribute d: Expected number, \"…07Q237 93257 120M302 107Q363 933…\".",
+      "Error: <path> attribute d: Expected number, \"…0Q237 109257 131M302 120Q363 109…\".",
+      "Error: <path> attribute d: Expected number, \"…3Q237 125257 142M302 133Q363 125…\".",
+      "Error: <path> attribute d: Expected number, \"…6Q237 141257 153M302 146Q363 141…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q237 157257 164M302 159Q363 157…\".",
+      "Error: <path> attribute d: Expected number, \"…3Q170 198290 228T530 223\".",
+      "Error: <path> attribute d: Expected number, \"…6Q170 211290 241T530 236\".",
+      "Error: <path> attribute d: Expected number, \"…9Q170 224290 254T530 249\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 157225 215Q275 138337 207Q…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 140225 195Q275 122337 189Q…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 123225 175Q275 106337 171Q…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 106225 155Q275 90337 153Q4…\".",
+      "Error: <path> attribute d: Expected number, \"…69Q147 89225 135Q275 74337 135Q4…\".",
+      "Error: <path> attribute d: Expected number, \"…49Q147 72225 115Q275 58337 117Q4…\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…03Q163 91211 103\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…4Q163 112211 124\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…5Q163 133211 145\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…6Q163 154211 166\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…7Q163 175211 187\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…8Q163 196211 208\".",
+      "Error: <path> attribute d: Expected number, \"…3Q170 198290 228T530 223\".",
+      "Error: <path> attribute d: Expected number, \"…6Q170 211290 241T530 236\".",
+      "Error: <path> attribute d: Expected number, \"…9Q170 224290 254T530 249\".",
+      "Error: <path> attribute d: Expected number, \"…07Q237 93257 120M302 107Q363 933…\".",
+      "Error: <path> attribute d: Expected number, \"…0Q237 109257 131M302 120Q363 109…\".",
+      "Error: <path> attribute d: Expected number, \"…3Q237 125257 142M302 133Q363 125…\".",
+      "Error: <path> attribute d: Expected number, \"…6Q237 141257 153M302 146Q363 141…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q237 157257 164M302 159Q363 157…\".",
+      "Error: <path> attribute d: Expected number, \"…3Q170 198290 228T530 223\".",
+      "Error: <path> attribute d: Expected number, \"…6Q170 211290 241T530 236\".",
+      "Error: <path> attribute d: Expected number, \"…9Q170 224290 254T530 249\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 157225 215Q275 138337 207Q…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 140225 195Q275 122337 189Q…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 123225 175Q275 106337 171Q…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 106225 155Q275 90337 153Q4…\".",
+      "Error: <path> attribute d: Expected number, \"…69Q147 89225 135Q275 74337 135Q4…\".",
+      "Error: <path> attribute d: Expected number, \"…49Q147 72225 115Q275 58337 117Q4…\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…03Q163 91211 103\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…4Q163 112211 124\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…5Q163 133211 145\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…6Q163 154211 166\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…7Q163 175211 187\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…8Q163 196211 208\"."
+    ]
+  },
+  {
+    "portable": true,
+    "width": 390,
+    "cases": [
+      {
+        "type": "atlas",
+        "index": 4,
+        "paths": [
+          {
+            "d": "M282 59L287 79H313L319 58M300 82V194M251 105H349M251 105L228 172L208 218M349 105L372 172L392 218M269 191L283 216L270 270M331 191L317 216L330 270M269 191Q300 175 331 191Q319 214 300 213Q281 214 269 191",
+            "length": 834.2611694335938
+          },
+          {
+            "d": "M298 107Q237 93257 120M302 107Q363 93343 120",
+            "length": 0
+          },
+          {
+            "d": "M298 120Q237 109257 131M302 120Q363 109343 131",
+            "length": 0
+          },
+          {
+            "d": "M298 133Q237 125257 142M302 133Q363 125343 142",
+            "length": 0
+          },
+          {
+            "d": "M298 146Q237 141257 153M302 146Q363 141343 153",
+            "length": 0
+          },
+          {
+            "d": "M298 159Q237 157257 164M302 159Q363 157343 164",
+            "length": 0
+          }
+        ]
+      },
+      {
+        "type": "timeline",
+        "index": 0,
+        "paths": [
+          {
+            "d": "M69 223Q170 198290 228T530 223",
+            "length": 0
+          },
+          {
+            "d": "M69 236Q170 211290 241T530 236",
+            "length": 0
+          },
+          {
+            "d": "M69 249Q170 224290 254T530 249",
+            "length": 0
+          }
+        ]
+      },
+      {
+        "type": "timeline",
+        "index": 1,
+        "paths": [
+          {
+            "d": "M113 249Q147 157225 215Q275 138337 207Q405 151486 249",
+            "length": 0
+          },
+          {
+            "d": "M113 229Q147 140225 195Q275 122337 189Q405 139486 229",
+            "length": 0
+          },
+          {
+            "d": "M113 209Q147 123225 175Q275 106337 171Q405 127486 209",
+            "length": 0
+          },
+          {
+            "d": "M113 189Q147 106225 155Q275 90337 153Q405 115486 189",
+            "length": 0
+          },
+          {
+            "d": "M113 169Q147 89225 135Q275 74337 135Q405 103486 169",
+            "length": 0
+          },
+          {
+            "d": "M113 149Q147 72225 115Q275 58337 117Q405 91486 149",
+            "length": 0
+          },
+          {
+            "d": "M420 92L383 130",
+            "length": 53.037723541259766
+          },
+          {
+            "d": "M385.4184948569192 121.33103912645493L383 130L391.60139739144677 127.35123369954756",
+            "length": 18.000009536743164
+          }
+        ]
+      },
+      {
+        "type": "timeline",
+        "index": 5,
+        "paths": [
+          {
+            "d": "M116 103Q163 91211 103",
+            "length": 0
+          },
+          {
+            "d": "M116 124Q163 112211 124",
+            "length": 0
+          },
+          {
+            "d": "M116 145Q163 133211 145",
+            "length": 0
+          },
+          {
+            "d": "M116 166Q163 154211 166",
+            "length": 0
+          },
+          {
+            "d": "M116 187Q163 175211 187",
+            "length": 0
+          },
+          {
+            "d": "M116 208Q163 196211 208",
+            "length": 0
+          },
+          {
+            "d": "M163 70L163 243",
+            "length": 173
+          },
+          {
+            "d": "M-72 0Q-15-65 66-4Q26 52-72 0L-109-31V31ZM-18-23L-11-48L13-28M-11 21L-2 48L25 20",
+            "length": 591.00634765625
+          },
+          {
+            "d": "M456 238V149Q452 122 443 99M456 151L473 115",
+            "length": 180.5846405029297
+          },
+          {
+            "d": "M486 238V166Q482 139 473 116M486 168L503 132",
+            "length": 163.5846405029297
+          },
+          {
+            "d": "M516 238V183Q512 156 503 133M516 185L533 149",
+            "length": 146.5846405029297
+          }
+        ]
+      }
+    ],
+    "errors": [
+      "Error: <path> attribute d: Expected number, \"…07Q237 93257 120M302 107Q363 933…\".",
+      "Error: <path> attribute d: Expected number, \"…0Q237 109257 131M302 120Q363 109…\".",
+      "Error: <path> attribute d: Expected number, \"…3Q237 125257 142M302 133Q363 125…\".",
+      "Error: <path> attribute d: Expected number, \"…6Q237 141257 153M302 146Q363 141…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q237 157257 164M302 159Q363 157…\".",
+      "Error: <path> attribute d: Expected number, \"…3Q170 198290 228T530 223\".",
+      "Error: <path> attribute d: Expected number, \"…6Q170 211290 241T530 236\".",
+      "Error: <path> attribute d: Expected number, \"…9Q170 224290 254T530 249\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 157225 215Q275 138337 207Q…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 140225 195Q275 122337 189Q…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 123225 175Q275 106337 171Q…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 106225 155Q275 90337 153Q4…\".",
+      "Error: <path> attribute d: Expected number, \"…69Q147 89225 135Q275 74337 135Q4…\".",
+      "Error: <path> attribute d: Expected number, \"…49Q147 72225 115Q275 58337 117Q4…\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…03Q163 91211 103\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…4Q163 112211 124\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…5Q163 133211 145\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…6Q163 154211 166\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…7Q163 175211 187\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…8Q163 196211 208\".",
+      "Error: <path> attribute d: Expected number, \"…3Q170 198290 228T530 223\".",
+      "Error: <path> attribute d: Expected number, \"…6Q170 211290 241T530 236\".",
+      "Error: <path> attribute d: Expected number, \"…9Q170 224290 254T530 249\".",
+      "Error: <path> attribute d: Expected number, \"…07Q237 93257 120M302 107Q363 933…\".",
+      "Error: <path> attribute d: Expected number, \"…0Q237 109257 131M302 120Q363 109…\".",
+      "Error: <path> attribute d: Expected number, \"…3Q237 125257 142M302 133Q363 125…\".",
+      "Error: <path> attribute d: Expected number, \"…6Q237 141257 153M302 146Q363 141…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q237 157257 164M302 159Q363 157…\".",
+      "Error: <path> attribute d: Expected number, \"…3Q170 198290 228T530 223\".",
+      "Error: <path> attribute d: Expected number, \"…6Q170 211290 241T530 236\".",
+      "Error: <path> attribute d: Expected number, \"…9Q170 224290 254T530 249\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 157225 215Q275 138337 207Q…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 140225 195Q275 122337 189Q…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 123225 175Q275 106337 171Q…\".",
+      "Error: <path> attribute d: Expected number, \"…9Q147 106225 155Q275 90337 153Q4…\".",
+      "Error: <path> attribute d: Expected number, \"…69Q147 89225 135Q275 74337 135Q4…\".",
+      "Error: <path> attribute d: Expected number, \"…49Q147 72225 115Q275 58337 117Q4…\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…03Q163 91211 103\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…4Q163 112211 124\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…5Q163 133211 145\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…6Q163 154211 166\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…7Q163 175211 187\".",
+      "Error: <path> attribute d: Unexpected end of attribute. Expected number, \"…8Q163 196211 208\"."
+    ]
+  }
+]

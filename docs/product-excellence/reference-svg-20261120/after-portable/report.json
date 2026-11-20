@@ -1,0 +1,1098 @@
+{
+  "complete": true,
+  "portable": true,
+  "cases": [
+    {
+      "width": 1440,
+      "diagrams": [
+        {
+          "type": "atlas",
+          "index": 0,
+          "paths": 6,
+          "minimumLength": 47.490882873535156,
+          "affected": []
+        },
+        {
+          "type": "atlas",
+          "index": 1,
+          "paths": 13,
+          "minimumLength": 19,
+          "affected": []
+        },
+        {
+          "type": "atlas",
+          "index": 2,
+          "paths": 8,
+          "minimumLength": 17.999984741210938,
+          "affected": []
+        },
+        {
+          "type": "atlas",
+          "index": 3,
+          "paths": 6,
+          "minimumLength": 23,
+          "affected": []
+        },
+        {
+          "type": "atlas",
+          "index": 4,
+          "paths": 6,
+          "minimumLength": 104.8740463256836,
+          "affected": [
+            {
+              "d": "M298 107Q237 93 257 120M302 107Q363 93 343 120",
+              "length": 123.69490814208984,
+              "end": {
+                "x": 343,
+                "y": 120
+              },
+              "stroke": "rgb(182, 195, 186)",
+              "width": 2
+            },
+            {
+              "d": "M298 120Q237 109 257 131M302 120Q363 109 343 131",
+              "length": 118.26412200927734,
+              "end": {
+                "x": 343,
+                "y": 131
+              },
+              "stroke": "rgb(182, 195, 186)",
+              "width": 2
+            },
+            {
+              "d": "M298 133Q237 125 257 142M302 133Q363 125 343 142",
+              "length": 113.20001220703125,
+              "end": {
+                "x": 343,
+                "y": 142
+              },
+              "stroke": "rgb(182, 195, 186)",
+              "width": 2
+            },
+            {
+              "d": "M298 146Q237 141 257 153M302 146Q363 141 343 153",
+              "length": 108.65023803710938,
+              "end": {
+                "x": 343,
+                "y": 153
+              },
+              "stroke": "rgb(182, 195, 186)",
+              "width": 2
+            },
+            {
+              "d": "M298 159Q237 157 257 164M302 159Q363 157 343 164",
+              "length": 104.8740463256836,
+              "end": {
+                "x": 343,
+                "y": 164
+              },
+              "stroke": "rgb(182, 195, 186)",
+              "width": 2
+            }
+          ]
+        },
+        {
+          "type": "atlas",
+          "index": 5,
+          "paths": 7,
+          "minimumLength": 18.000003814697266,
+          "affected": []
+        },
+        {
+          "type": "atlas",
+          "index": 6,
+          "paths": 4,
+          "minimumLength": 18.000017166137695,
+          "affected": []
+        },
+        {
+          "type": "atlas",
+          "index": 7,
+          "paths": 5,
+          "minimumLength": 45.20294189453125,
+          "affected": []
+        },
+        {
+          "type": "atlas",
+          "index": 8,
+          "paths": 8,
+          "minimumLength": 36.013885498046875,
+          "affected": []
+        },
+        {
+          "type": "atlas",
+          "index": 9,
+          "paths": 3,
+          "minimumLength": 18.000024795532227,
+          "affected": []
+        },
+        {
+          "type": "timeline",
+          "index": 0,
+          "paths": 3,
+          "minimumLength": 466.244140625,
+          "affected": [
+            {
+              "d": "M69 223Q170 198 290 228T530 223",
+              "length": 466.244140625,
+              "end": {
+                "x": 530,
+                "y": 223
+              },
+              "stroke": "rgb(154, 219, 189)",
+              "width": 1.5
+            },
+            {
+              "d": "M69 236Q170 211 290 241T530 236",
+              "length": 466.24420166015625,
+              "end": {
+                "x": 530,
+                "y": 236
+              },
+              "stroke": "rgb(154, 219, 189)",
+              "width": 1.5
+            },
+            {
+              "d": "M69 249Q170 224 290 254T530 249",
+              "length": 466.2441711425781,
+              "end": {
+                "x": 530,
+                "y": 249
+              },
+              "stroke": "rgb(154, 219, 189)",
+              "width": 1.5
+            }
+          ]
+        },
+        {
+          "type": "timeline",
+          "index": 1,
+          "paths": 8,
+          "minimumLength": 18.000009536743164,
+          "affected": [
+            {
+              "d": "M113 249Q147 157 225 215Q275 138 337 207Q405 151 486 249",
+              "length": 460.557373046875,
+              "end": {
+                "x": 486,
+                "y": 249
+              },
+              "stroke": "rgb(154, 219, 189)",
+              "width": 4
+            },
+            {
+              "d": "M113 229Q147 140 225 195Q275 122 337 189Q405 139 486 229",
+              "length": 452.9254455566406,
+              "end": {
+                "x": 486,
+                "y": 229
+              },
+              "stroke": "rgb(182, 195, 186)",
+              "width": 4
+            },
+            {
+              "d": "M113 209Q147 123 225 175Q275 106 337 171Q405 127 486 209",
+              "length": 445.63458251953125,
+              "end": {
+                "x": 486,
+                "y": 209
+              },
+              "stroke": "rgb(154, 219, 189)",
+              "width": 4
+            },
+            {
+              "d": "M113 189Q147 106 225 155Q275 90 337 153Q405 115 486 189",
+              "length": 438.71221923828125,
+              "end": {
+                "x": 486,
+                "y": 189
+              },
+              "stroke": "rgb(182, 195, 186)",
+              "width": 4
+            },
+            {
+              "d": "M113 169Q147 89 225 135Q275 74 337 135Q405 103 486 169",
+              "length": 432.18780517578125,
+              "end": {
+                "x": 486,
+                "y": 169
+              },
+              "stroke": "rgb(154, 219, 189)",
+              "width": 4
+            },
+            {
+              "d": "M113 149Q147 72 225 115Q275 58 337 117Q405 91 486 149",
+              "length": 426.0929870605469,
+              "end": {
+                "x": 486,
+                "y": 149
+              },
+              "stroke": "rgb(182, 195, 186)",
+              "width": 4
+            }
+          ]
+        },
+        {
+          "type": "timeline",
+          "index": 2,
+          "paths": 5,
+          "minimumLength": 18,
+          "affected": []
+        },
+        {
+          "type": "timeline",
+          "index": 3,
+          "paths": 2,
+          "minimumLength": 69.31810760498047,
+          "affected": []
+        },
+        {
+          "type": "timeline",
+          "index": 4,
+          "paths": 6,
+          "minimumLength": 17.999984741210938,
+          "affected": []
+        },
+        {
+          "type": "timeline",
+          "index": 5,
+          "paths": 11,
+          "minimumLength": 96.00119018554688,
+          "affected": [
+            {
+              "d": "M116 103Q163 91 211 103",
+              "length": 96.00119018554688,
+              "end": {
+                "x": 211,
+                "y": 103
+              },
+              "stroke": "rgb(232, 188, 134)",
+              "width": 2
+            },
+            {
+              "d": "M116 124Q163 112 211 124",
+              "length": 96.00119018554688,
+              "end": {
+                "x": 211,
+                "y": 124
+              },
+              "stroke": "rgb(232, 188, 134)",
+              "width": 2
+            },
+            {
+              "d": "M116 145Q163 133 211 145",
+              "length": 96.00119018554688,
+              "end": {
+                "x": 211,
+                "y": 145
+              },
+              "stroke": "rgb(232, 188, 134)",
+              "width": 2
+            },
+            {
+              "d": "M116 166Q163 154 211 166",
+              "length": 96.00119018554688,
+              "end": {
+                "x": 211,
+                "y": 166
+              },
+              "stroke": "rgb(232, 188, 134)",
+              "width": 2
+            },
+            {
+              "d": "M116 187Q163 175 211 187",
+              "length": 96.00119018554688,
+              "end": {
+                "x": 211,
+                "y": 187
+              },
+              "stroke": "rgb(232, 188, 134)",
+              "width": 2
+            },
+            {
+              "d": "M116 208Q163 196 211 208",
+              "length": 96.00119018554688,
+              "end": {
+                "x": 211,
+                "y": 208
+              },
+              "stroke": "rgb(232, 188, 134)",
+              "width": 2
+            }
+          ]
+        },
+        {
+          "type": "timeline",
+          "index": 6,
+          "paths": 6,
+          "minimumLength": 67.10641479492188,
+          "affected": []
+        },
+        {
+          "type": "timeline",
+          "index": 7,
+          "paths": 4,
+          "minimumLength": 18.000024795532227,
+          "affected": []
+        },
+        {
+          "type": "timeline",
+          "index": 8,
+          "paths": 2,
+          "minimumLength": 53.734256744384766,
+          "affected": []
+        },
+        {
+          "type": "timeline",
+          "index": 9,
+          "paths": 5,
+          "minimumLength": 17.999990463256836,
+          "affected": []
+        },
+        {
+          "type": "timeline",
+          "index": 10,
+          "paths": 1,
+          "minimumLength": 602.8385009765625,
+          "affected": []
+        },
+        {
+          "type": "timeline",
+          "index": 11,
+          "paths": 5,
+          "minimumLength": 82,
+          "affected": []
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "diagrams": [
+        {
+          "type": "atlas",
+          "index": 0,
+          "paths": 6,
+          "minimumLength": 47.490882873535156,
+          "affected": []
+        },
+        {
+          "type": "atlas",
+          "index": 1,
+          "paths": 13,
+          "minimumLength": 19,
+          "affected": []
+        },
+        {
+          "type": "atlas",
+          "index": 2,
+          "paths": 8,
+          "minimumLength": 17.999984741210938,
+          "affected": []
+        },
+        {
+          "type": "atlas",
+          "index": 3,
+          "paths": 6,
+          "minimumLength": 23,
+          "affected": []
+        },
+        {
+          "type": "atlas",
+          "index": 4,
+          "paths": 6,
+          "minimumLength": 104.8740463256836,
+          "affected": [
+            {
+              "d": "M298 107Q237 93 257 120M302 107Q363 93 343 120",
+              "length": 123.69490814208984,
+              "end": {
+                "x": 343,
+                "y": 120
+              },
+              "stroke": "rgb(182, 195, 186)",
+              "width": 2
+            },
+            {
+              "d": "M298 120Q237 109 257 131M302 120Q363 109 343 131",
+              "length": 118.26412200927734,
+              "end": {
+                "x": 343,
+                "y": 131
+              },
+              "stroke": "rgb(182, 195, 186)",
+              "width": 2
+            },
+            {
+              "d": "M298 133Q237 125 257 142M302 133Q363 125 343 142",
+              "length": 113.20001220703125,
+              "end": {
+                "x": 343,
+                "y": 142
+              },
+              "stroke": "rgb(182, 195, 186)",
+              "width": 2
+            },
+            {
+              "d": "M298 146Q237 141 257 153M302 146Q363 141 343 153",
+              "length": 108.65023803710938,
+              "end": {
+                "x": 343,
+                "y": 153
+              },
+              "stroke": "rgb(182, 195, 186)",
+              "width": 2
+            },
+            {
+              "d": "M298 159Q237 157 257 164M302 159Q363 157 343 164",
+              "length": 104.8740463256836,
+              "end": {
+                "x": 343,
+                "y": 164
+              },
+              "stroke": "rgb(182, 195, 186)",
+              "width": 2
+            }
+          ]
+        },
+        {
+          "type": "atlas",
+          "index": 5,
+          "paths": 7,
+          "minimumLength": 18.000003814697266,
+          "affected": []
+        },
+        {
+          "type": "atlas",
+          "index": 6,
+          "paths": 4,
+          "minimumLength": 18.000017166137695,
+          "affected": []
+        },
+        {
+          "type": "atlas",
+          "index": 7,
+          "paths": 5,
+          "minimumLength": 45.20294189453125,
+          "affected": []
+        },
+        {
+          "type": "atlas",
+          "index": 8,
+          "paths": 8,
+          "minimumLength": 36.013885498046875,
+          "affected": []
+        },
+        {
+          "type": "atlas",
+          "index": 9,
+          "paths": 3,
+          "minimumLength": 18.000024795532227,
+          "affected": []
+        },
+        {
+          "type": "timeline",
+          "index": 0,
+          "paths": 3,
+          "minimumLength": 466.244140625,
+          "affected": [
+            {
+              "d": "M69 223Q170 198 290 228T530 223",
+              "length": 466.244140625,
+              "end": {
+                "x": 530,
+                "y": 223
+              },
+              "stroke": "rgb(154, 219, 189)",
+              "width": 1.5
+            },
+            {
+              "d": "M69 236Q170 211 290 241T530 236",
+              "length": 466.24420166015625,
+              "end": {
+                "x": 530,
+                "y": 236
+              },
+              "stroke": "rgb(154, 219, 189)",
+              "width": 1.5
+            },
+            {
+              "d": "M69 249Q170 224 290 254T530 249",
+              "length": 466.2441711425781,
+              "end": {
+                "x": 530,
+                "y": 249
+              },
+              "stroke": "rgb(154, 219, 189)",
+              "width": 1.5
+            }
+          ]
+        },
+        {
+          "type": "timeline",
+          "index": 1,
+          "paths": 8,
+          "minimumLength": 18.000009536743164,
+          "affected": [
+            {
+              "d": "M113 249Q147 157 225 215Q275 138 337 207Q405 151 486 249",
+              "length": 460.557373046875,
+              "end": {
+                "x": 486,
+                "y": 249
+              },
+              "stroke": "rgb(154, 219, 189)",
+              "width": 4
+            },
+            {
+              "d": "M113 229Q147 140 225 195Q275 122 337 189Q405 139 486 229",
+              "length": 452.9254455566406,
+              "end": {
+                "x": 486,
+                "y": 229
+              },
+              "stroke": "rgb(182, 195, 186)",
+              "width": 4
+            },
+            {
+              "d": "M113 209Q147 123 225 175Q275 106 337 171Q405 127 486 209",
+              "length": 445.63458251953125,
+              "end": {
+                "x": 486,
+                "y": 209
+              },
+              "stroke": "rgb(154, 219, 189)",
+              "width": 4
+            },
+            {
+              "d": "M113 189Q147 106 225 155Q275 90 337 153Q405 115 486 189",
+              "length": 438.71221923828125,
+              "end": {
+                "x": 486,
+                "y": 189
+              },
+              "stroke": "rgb(182, 195, 186)",
+              "width": 4
+            },
+            {
+              "d": "M113 169Q147 89 225 135Q275 74 337 135Q405 103 486 169",
+              "length": 432.18780517578125,
+              "end": {
+                "x": 486,
+                "y": 169
+              },
+              "stroke": "rgb(154, 219, 189)",
+              "width": 4
+            },
+            {
+              "d": "M113 149Q147 72 225 115Q275 58 337 117Q405 91 486 149",
+              "length": 426.0929870605469,
+              "end": {
+                "x": 486,
+                "y": 149
+              },
+              "stroke": "rgb(182, 195, 186)",
+              "width": 4
+            }
+          ]
+        },
+        {
+          "type": "timeline",
+          "index": 2,
+          "paths": 5,
+          "minimumLength": 18,
+          "affected": []
+        },
+        {
+          "type": "timeline",
+          "index": 3,
+          "paths": 2,
+          "minimumLength": 69.31810760498047,
+          "affected": []
+        },
+        {
+          "type": "timeline",
+          "index": 4,
+          "paths": 6,
+          "minimumLength": 17.999984741210938,
+          "affected": []
+        },
+        {
+          "type": "timeline",
+          "index": 5,
+          "paths": 11,
+          "minimumLength": 96.00119018554688,
+          "affected": [
+            {
+              "d": "M116 103Q163 91 211 103",
+              "length": 96.00119018554688,
+              "end": {
+                "x": 211,
+                "y": 103
+              },
+              "stroke": "rgb(232, 188, 134)",
+              "width": 2
+            },
+            {
+              "d": "M116 124Q163 112 211 124",
+              "length": 96.00119018554688,
+              "end": {
+                "x": 211,
+                "y": 124
+              },
+              "stroke": "rgb(232, 188, 134)",
+              "width": 2
+            },
+            {
+              "d": "M116 145Q163 133 211 145",
+              "length": 96.00119018554688,
+              "end": {
+                "x": 211,
+                "y": 145
+              },
+              "stroke": "rgb(232, 188, 134)",
+              "width": 2
+            },
+            {
+              "d": "M116 166Q163 154 211 166",
+              "length": 96.00119018554688,
+              "end": {
+                "x": 211,
+                "y": 166
+              },
+              "stroke": "rgb(232, 188, 134)",
+              "width": 2
+            },
+            {
+              "d": "M116 187Q163 175 211 187",
+              "length": 96.00119018554688,
+              "end": {
+                "x": 211,
+                "y": 187
+              },
+              "stroke": "rgb(232, 188, 134)",
+              "width": 2
+            },
+            {
+              "d": "M116 208Q163 196 211 208",
+              "length": 96.00119018554688,
+              "end": {
+                "x": 211,
+                "y": 208
+              },
+              "stroke": "rgb(232, 188, 134)",
+              "width": 2
+            }
+          ]
+        },
+        {
+          "type": "timeline",
+          "index": 6,
+          "paths": 6,
+          "minimumLength": 67.10641479492188,
+          "affected": []
+        },
+        {
+          "type": "timeline",
+          "index": 7,
+          "paths": 4,
+          "minimumLength": 18.000024795532227,
+          "affected": []
+        },
+        {
+          "type": "timeline",
+          "index": 8,
+          "paths": 2,
+          "minimumLength": 53.734256744384766,
+          "affected": []
+        },
+        {
+          "type": "timeline",
+          "index": 9,
+          "paths": 5,
+          "minimumLength": 17.999990463256836,
+          "affected": []
+        },
+        {
+          "type": "timeline",
+          "index": 10,
+          "paths": 1,
+          "minimumLength": 602.8385009765625,
+          "affected": []
+        },
+        {
+          "type": "timeline",
+          "index": 11,
+          "paths": 5,
+          "minimumLength": 82,
+          "affected": []
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "diagrams": [
+        {
+          "type": "atlas",
+          "index": 0,
+          "paths": 6,
+          "minimumLength": 47.490882873535156,
+          "affected": []
+        },
+        {
+          "type": "atlas",
+          "index": 1,
+          "paths": 13,
+          "minimumLength": 19,
+          "affected": []
+        },
+        {
+          "type": "atlas",
+          "index": 2,
+          "paths": 8,
+          "minimumLength": 17.999984741210938,
+          "affected": []
+        },
+        {
+          "type": "atlas",
+          "index": 3,
+          "paths": 6,
+          "minimumLength": 23,
+          "affected": []
+        },
+        {
+          "type": "atlas",
+          "index": 4,
+          "paths": 6,
+          "minimumLength": 104.8740463256836,
+          "affected": [
+            {
+              "d": "M298 107Q237 93 257 120M302 107Q363 93 343 120",
+              "length": 123.69490814208984,
+              "end": {
+                "x": 343,
+                "y": 120
+              },
+              "stroke": "rgb(182, 195, 186)",
+              "width": 2
+            },
+            {
+              "d": "M298 120Q237 109 257 131M302 120Q363 109 343 131",
+              "length": 118.26412200927734,
+              "end": {
+                "x": 343,
+                "y": 131
+              },
+              "stroke": "rgb(182, 195, 186)",
+              "width": 2
+            },
+            {
+              "d": "M298 133Q237 125 257 142M302 133Q363 125 343 142",
+              "length": 113.20001220703125,
+              "end": {
+                "x": 343,
+                "y": 142
+              },
+              "stroke": "rgb(182, 195, 186)",
+              "width": 2
+            },
+            {
+              "d": "M298 146Q237 141 257 153M302 146Q363 141 343 153",
+              "length": 108.65023803710938,
+              "end": {
+                "x": 343,
+                "y": 153
+              },
+              "stroke": "rgb(182, 195, 186)",
+              "width": 2
+            },
+            {
+              "d": "M298 159Q237 157 257 164M302 159Q363 157 343 164",
+              "length": 104.8740463256836,
+              "end": {
+                "x": 343,
+                "y": 164
+              },
+              "stroke": "rgb(182, 195, 186)",
+              "width": 2
+            }
+          ]
+        },
+        {
+          "type": "atlas",
+          "index": 5,
+          "paths": 7,
+          "minimumLength": 18.000003814697266,
+          "affected": []
+        },
+        {
+          "type": "atlas",
+          "index": 6,
+          "paths": 4,
+          "minimumLength": 18.000017166137695,
+          "affected": []
+        },
+        {
+          "type": "atlas",
+          "index": 7,
+          "paths": 5,
+          "minimumLength": 45.20294189453125,
+          "affected": []
+        },
+        {
+          "type": "atlas",
+          "index": 8,
+          "paths": 8,
+          "minimumLength": 36.013885498046875,
+          "affected": []
+        },
+        {
+          "type": "atlas",
+          "index": 9,
+          "paths": 3,
+          "minimumLength": 18.000024795532227,
+          "affected": []
+        },
+        {
+          "type": "timeline",
+          "index": 0,
+          "paths": 3,
+          "minimumLength": 466.244140625,
+          "affected": [
+            {
+              "d": "M69 223Q170 198 290 228T530 223",
+              "length": 466.244140625,
+              "end": {
+                "x": 530,
+                "y": 223
+              },
+              "stroke": "rgb(154, 219, 189)",
+              "width": 1.5
+            },
+            {
+              "d": "M69 236Q170 211 290 241T530 236",
+              "length": 466.24420166015625,
+              "end": {
+                "x": 530,
+                "y": 236
+              },
+              "stroke": "rgb(154, 219, 189)",
+              "width": 1.5
+            },
+            {
+              "d": "M69 249Q170 224 290 254T530 249",
+              "length": 466.2441711425781,
+              "end": {
+                "x": 530,
+                "y": 249
+              },
+              "stroke": "rgb(154, 219, 189)",
+              "width": 1.5
+            }
+          ]
+        },
+        {
+          "type": "timeline",
+          "index": 1,
+          "paths": 8,
+          "minimumLength": 18.000009536743164,
+          "affected": [
+            {
+              "d": "M113 249Q147 157 225 215Q275 138 337 207Q405 151 486 249",
+              "length": 460.557373046875,
+              "end": {
+                "x": 486,
+                "y": 249
+              },
+              "stroke": "rgb(154, 219, 189)",
+              "width": 4
+            },
+            {
+              "d": "M113 229Q147 140 225 195Q275 122 337 189Q405 139 486 229",
+              "length": 452.9254455566406,
+              "end": {
+                "x": 486,
+                "y": 229
+              },
+              "stroke": "rgb(182, 195, 186)",
+              "width": 4
+            },
+            {
+              "d": "M113 209Q147 123 225 175Q275 106 337 171Q405 127 486 209",
+              "length": 445.63458251953125,
+              "end": {
+                "x": 486,
+                "y": 209
+              },
+              "stroke": "rgb(154, 219, 189)",
+              "width": 4
+            },
+            {
+              "d": "M113 189Q147 106 225 155Q275 90 337 153Q405 115 486 189",
+              "length": 438.71221923828125,
+              "end": {
+                "x": 486,
+                "y": 189
+              },
+              "stroke": "rgb(182, 195, 186)",
+              "width": 4
+            },
+            {
+              "d": "M113 169Q147 89 225 135Q275 74 337 135Q405 103 486 169",
+              "length": 432.18780517578125,
+              "end": {
+                "x": 486,
+                "y": 169
+              },
+              "stroke": "rgb(154, 219, 189)",
+              "width": 4
+            },
+            {
+              "d": "M113 149Q147 72 225 115Q275 58 337 117Q405 91 486 149",
+              "length": 426.0929870605469,
+              "end": {
+                "x": 486,
+                "y": 149
+              },
+              "stroke": "rgb(182, 195, 186)",
+              "width": 4
+            }
+          ]
+        },
+        {
+          "type": "timeline",
+          "index": 2,
+          "paths": 5,
+          "minimumLength": 18,
+          "affected": []
+        },
+        {
+          "type": "timeline",
+          "index": 3,
+          "paths": 2,
+          "minimumLength": 69.31810760498047,
+          "affected": []
+        },
+        {
+          "type": "timeline",
+          "index": 4,
+          "paths": 6,
+          "minimumLength": 17.999984741210938,
+          "affected": []
+        },
+        {
+          "type": "timeline",
+          "index": 5,
+          "paths": 11,
+          "minimumLength": 96.00119018554688,
+          "affected": [
+            {
+              "d": "M116 103Q163 91 211 103",
+              "length": 96.00119018554688,
+              "end": {
+                "x": 211,
+                "y": 103
+              },
+              "stroke": "rgb(232, 188, 134)",
+              "width": 2
+            },
+            {
+              "d": "M116 124Q163 112 211 124",
+              "length": 96.00119018554688,
+              "end": {
+                "x": 211,
+                "y": 124
+              },
+              "stroke": "rgb(232, 188, 134)",
+              "width": 2
+            },
+            {
+              "d": "M116 145Q163 133 211 145",
+              "length": 96.00119018554688,
+              "end": {
+                "x": 211,
+                "y": 145
+              },
+              "stroke": "rgb(232, 188, 134)",
+              "width": 2
+            },
+            {
+              "d": "M116 166Q163 154 211 166",
+              "length": 96.00119018554688,
+              "end": {
+                "x": 211,
+                "y": 166
+              },
+              "stroke": "rgb(232, 188, 134)",
+              "width": 2
+            },
+            {
+              "d": "M116 187Q163 175 211 187",
+              "length": 96.00119018554688,
+              "end": {
+                "x": 211,
+                "y": 187
+              },
+              "stroke": "rgb(232, 188, 134)",
+              "width": 2
+            },
+            {
+              "d": "M116 208Q163 196 211 208",
+              "length": 96.00119018554688,
+              "end": {
+                "x": 211,
+                "y": 208
+              },
+              "stroke": "rgb(232, 188, 134)",
+              "width": 2
+            }
+          ]
+        },
+        {
+          "type": "timeline",
+          "index": 6,
+          "paths": 6,
+          "minimumLength": 67.10641479492188,
+          "affected": []
+        },
+        {
+          "type": "timeline",
+          "index": 7,
+          "paths": 4,
+          "minimumLength": 18.000024795532227,
+          "affected": []
+        },
+        {
+          "type": "timeline",
+          "index": 8,
+          "paths": 2,
+          "minimumLength": 53.734256744384766,
+          "affected": []
+        },
+        {
+          "type": "timeline",
+          "index": 9,
+          "paths": 5,
+          "minimumLength": 17.999990463256836,
+          "affected": []
+        },
+        {
+          "type": "timeline",
+          "index": 10,
+          "paths": 1,
+          "minimumLength": 602.8385009765625,
+          "affected": []
+        },
+        {
+          "type": "timeline",
+          "index": 11,
+          "paths": 5,
+          "minimumLength": 82,
+          "affected": []
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "svgErrors": [],
+  "cameraCalls": 0
+}

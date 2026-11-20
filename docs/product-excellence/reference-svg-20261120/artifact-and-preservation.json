@@ -1,0 +1,87 @@
+{
+  "runtimeSourceCommit": "e94c65fdf0011b852ce2de04bf9f6b9c954389d4",
+  "previousEvidenceCommit": "f365b98b0a51d948ec603f223ae6c1fb0fd13ca9",
+  "originCommit": "6e36fb9922f62cf66347f026232a7d0db85d7517",
+  "originalSourceBlob": "c5ec4b20be8c3ade15a3e9893681cc5603651b42",
+  "changedRuntimePaths": [
+    "src/previews/reference.js",
+    "explore.html"
+  ],
+  "change": "Seven literal coordinate separators, generated source slot only",
+  "artifact": {
+    "path": "dist/index.html",
+    "bytes": 45027873,
+    "sha256": "cfd1e4968045417e2b4d00e8db205146212c5d0119e4cf0aa30473bbcc943364",
+    "python": "3.14.5",
+    "zlib": "1.3.1.zlib-ng"
+  },
+  "catalogs": [
+    {
+      "subject": "biology",
+      "sha256": "ec4b29416152058f5ce9191a725c0b9a5c61b60e9bb3c83943b9c675c99bcd5d",
+      "entries": 221
+    },
+    {
+      "subject": "physics",
+      "entries": 343,
+      "sha256": "bb7f7f89342441e65de2fdfd6a8ea0bd691d7103db74db27274368c566d39bb9"
+    }
+  ],
+  "protectedObjects": [
+    {
+      "path": "lab.html",
+      "before": "91e84e8429db457f6238fd70087556dd51239de3",
+      "after": "91e84e8429db457f6238fd70087556dd51239de3"
+    },
+    {
+      "path": "src/lab",
+      "before": "c4cb1e9d6a41ea7555c634c24a36b2102f26ad6e",
+      "after": "c4cb1e9d6a41ea7555c634c24a36b2102f26ad6e"
+    },
+    {
+      "path": "assets/specimens",
+      "before": "c6d07e6be19e703080628cb17fc3a24f3d0851a7",
+      "after": "c6d07e6be19e703080628cb17fc3a24f3d0851a7"
+    },
+    {
+      "path": "src/library/experiments.js",
+      "before": "64470e40702f76a594ddfd4168d7b05fa36e9503",
+      "after": "64470e40702f76a594ddfd4168d7b05fa36e9503"
+    },
+    {
+      "path": "src/library/notebook.js",
+      "before": "06cd6fd9597e83ae88a502e0633c911b96442255",
+      "after": "06cd6fd9597e83ae88a502e0633c911b96442255"
+    },
+    {
+      "path": "src/cbse/chromatography-model.js",
+      "before": "274640b9117fa2b3f39401ef63f36ffc01ed440c",
+      "after": "274640b9117fa2b3f39401ef63f36ffc01ed440c"
+    },
+    {
+      "path": "src/cbse/chromatography-ui.js",
+      "before": "01a28ebab4fcf41e1906e2b963562bf8a0fe2b8c",
+      "after": "01a28ebab4fcf41e1906e2b963562bf8a0fe2b8c"
+    },
+    {
+      "path": "src/single-file/host.js",
+      "before": "719a62497dd34704c60e86e2b4bdc8b38db4bae0",
+      "after": "719a62497dd34704c60e86e2b4bdc8b38db4bae0"
+    },
+    {
+      "path": "app.html",
+      "before": "2de6b53cf971c5754d8d3f38efa7d226c10fff78",
+      "after": "2de6b53cf971c5754d8d3f38efa7d226c10fff78"
+    },
+    {
+      "path": "assets/entelloq-science.js",
+      "before": "97e7d516ebd9a088e379b4cc5a05e65874c0be49",
+      "after": "97e7d516ebd9a088e379b4cc5a05e65874c0be49"
+    },
+    {
+      "path": "assets/entelloq-classroom.js",
+      "before": "fe49b4c110479d68e7a5050bdeae0ea0a7f2d6ef",
+      "after": "fe49b4c110479d68e7a5050bdeae0ea0a7f2d6ef"
+    }
+  ]
+}

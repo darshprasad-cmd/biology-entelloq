@@ -1,0 +1,37 @@
+[
+  {
+    "exitCode": 0,
+    "command": "node scripts/check-learning.cjs",
+    "name": "static",
+    "durationSeconds": 24.83,
+    "startedAt": "2026-11-20T16:11:08.9694954+05:30"
+  },
+  {
+    "exitCode": 0,
+    "command": "node scripts/check-single-file-browser.cjs",
+    "name": "single-file",
+    "durationSeconds": 198.01,
+    "startedAt": "2026-11-20T16:11:33.8178866+05:30"
+  },
+  {
+    "exitCode": 0,
+    "command": "node scripts/check-product-excellence-browser.cjs",
+    "name": "product-source",
+    "durationSeconds": 31.21,
+    "startedAt": "2026-11-20T16:14:51.8307936+05:30"
+  },
+  {
+    "exitCode": 0,
+    "command": "node scripts/check-product-excellence-browser.cjs --portable",
+    "name": "product-portable",
+    "durationSeconds": 40.52,
+    "startedAt": "2026-11-20T16:15:23.0485710+05:30"
+  },
+  {
+    "exitCode": 0,
+    "command": "node scripts/check-product-excellence-browser.cjs --file",
+    "name": "product-file",
+    "durationSeconds": 36.26,
+    "startedAt": "2026-11-20T16:16:03.5685219+05:30"
+  }
+]

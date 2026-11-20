@@ -2,9 +2,15 @@
 
 Audit began 2026-10-29; the original redesign review continued through 2026-11-03 (Asia/Calcutta). Original base: `a8c303c`. Branch: `codex/product-excellence-20261029`. Integration validation continued on 2026-11-20. Local results below do not claim hosted CI success or production merge/deployment.
 
-## Current integrated candidate — 2026-11-20
+## Current SVG correction — 2026-11-20
 
-Runtime `87df88b0117c1b54fa2c0c8667343c1e3bd1f435` combines released chromatography main `131a9a43` with the product branch, questionnaire/pollen content and navigation recovery/ownership fixes. Current Windows `dist/index.html`: **45,027,873 bytes**, SHA-256 `88e2ad8c082d75176220878e5d0c00ae6d9af85a79da3961c5fa9932a1ea64fe` (CPython 3.14.5/zlib 1.3.1.zlib-ng). Catalogue counts remain 221 Biology and 343 Physics. Compressed artifact hashes can differ across runtimes; exact source and preservation evidence is retained.
+Runtime `e94c65fdf0011b852ce2de04bf9f6b9c954389d4` corrects seven missing coordinate separators in existing Explore reference illustrations. The current Windows artifact remains **45,027,873 bytes**, now SHA-256 `cfd1e4968045417e2b4d00e8db205146212c5d0119e4cf0aa30473bbcc943364`. [Before/after screenshots and geometry evidence](product-excellence/reference-svg-20261120/README.md) show the restored ribs, waves, stromatolite layers and segment lines. All 22 atlas/timeline selections and thumbnails pass actual path-length, curve-count and endpoint checks on source and portable at 1440, 390 and 320px, with zero SVG parse errors. The geometry check also runs in the existing full single-file suite. Scientific engines and protected surfaces are unchanged; exact affected-check results are in that report's `checks.json`.
+
+The affected checks passed: build/preview parity, 14/14 static groups, 33 HTTP plus 33 copied-file preservation checks, and all three queued product modes at four widths. Earlier unaffected suites were not repeated; their completed chromatography-integration evidence remains below. Hosted CI for this exact runtime is a separate gate.
+
+## Chromatography integration — 2026-11-20
+
+Runtime `87df88b0117c1b54fa2c0c8667343c1e3bd1f435` combines released chromatography main `131a9a43` with the product branch, questionnaire/pollen content and navigation recovery/ownership fixes. Its Windows `dist/index.html`: **45,027,873 bytes**, SHA-256 `88e2ad8c082d75176220878e5d0c00ae6d9af85a79da3961c5fa9932a1ea64fe` (CPython 3.14.5/zlib 1.3.1.zlib-ng). Catalogue counts remain 221 Biology and 343 Physics. Compressed artifact hashes can differ across runtimes; exact source and preservation evidence is retained.
 
 All 22 sequential validation commands passed: 14 static groups including 19 chromatography unit/integration tests; 20 chromatography browser cases; product flows on source, served portable and copied-alone file at 320, 390, 768 and 1440px; 31 HTTP plus 31 copied-file preservation checks; opening recovery/ownership; exam feedback; AI formatting; source/portable learning, visual and host-quality checks; Protein Atlas; and six-model resume, invalid-state and paused-theme checks. Build and catalogue parity also passed. [The current integration report](product-excellence/chromatography-integration-20261120/README.md) indexes exact commands, logs, screenshots, artifact hashes and the reviewed preservation-test baseline updates. Hosted CI for this exact integration remains a separate gate.
 
