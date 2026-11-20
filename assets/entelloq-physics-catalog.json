@@ -5566,6 +5566,40 @@
     "target": "pulse"
   },
   {
+    "id": "physics:bench:lever",
+    "title": "Lever measurement bench",
+    "subject": "physics",
+    "kind": "Interactive practical",
+    "description": "Ideal first-class lever: vary load and effort about a fulcrum, compare moments (torque), and measure mechanical advantage with zero-corrected simulated force readings.",
+    "tags": [
+      "CBSE",
+      "Class 9",
+      "lever",
+      "first class",
+      "fulcrum",
+      "mechanical advantage",
+      "moment",
+      "torque",
+      "load",
+      "effort"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:bench:lever",
+    "route": "#science:bench:lever",
+    "type": "bench",
+    "target": "lever",
+    "model": {
+      "classification": "analytical",
+      "assumptions": [
+        "Held-horizontal, weightless first-class lever with a frictionless fulcrum and perpendicular downward forces.",
+        "Balance follows effort × effort arm = load × load arm; moment calculations use metres and newtons."
+      ],
+      "limitations": [
+        "Ideal apparatus rehearsal, not a calibrated instrument or a dynamics simulation.",
+        "Effort is rounded to 0.01 N; the residual moment is disclosed. Simulated observations do not replace supervised school measurements."
+      ]
+    }
+  },
+  {
     "id": "physics:view:home",
     "title": "Explore",
     "subject": "physics",
