@@ -1,0 +1,159 @@
+{
+  "complete": true,
+  "portable": true,
+  "checks": [
+    {
+      "width": 1440,
+      "firstMeaningfulInteractionMs": 1012,
+      "screenshotInstrumentationMs": 1072
+    },
+    {
+      "width": 1440,
+      "scopedAxeViolations": 0
+    },
+    {
+      "width": 1440,
+      "contextualTools": true,
+      "recordSaveHitTest": true
+    },
+    "Actual printable report rendered to PDF with measurements, state and model limits.",
+    {
+      "width": 1440,
+      "passed": [
+        "guest launch",
+        "manipulate",
+        "record",
+        "save",
+        "reset",
+        "resume",
+        "reload",
+        "CSV download",
+        "natural query",
+        "keyboard search",
+        "classroom assignment export",
+        "submission import",
+        "teacher review",
+        "mobile width",
+        "contextual tools restore"
+      ]
+    },
+    {
+      "width": 768,
+      "firstMeaningfulInteractionMs": 1042,
+      "screenshotInstrumentationMs": 256
+    },
+    {
+      "width": 768,
+      "scopedAxeViolations": 0
+    },
+    {
+      "width": 768,
+      "contextualTools": true,
+      "recordSaveHitTest": true
+    },
+    {
+      "width": 768,
+      "passed": [
+        "guest launch",
+        "manipulate",
+        "record",
+        "save",
+        "reset",
+        "resume",
+        "reload",
+        "CSV download",
+        "natural query",
+        "keyboard search",
+        "classroom assignment export",
+        "submission import",
+        "teacher review",
+        "mobile width",
+        "contextual tools restore"
+      ]
+    },
+    {
+      "width": 390,
+      "firstMeaningfulInteractionMs": 944,
+      "screenshotInstrumentationMs": 150
+    },
+    {
+      "width": 390,
+      "scopedAxeViolations": 0
+    },
+    {
+      "width": 390,
+      "modelGraphKeyboardScroll": true,
+      "modelGraphLabelPx": 14
+    },
+    {
+      "width": 390,
+      "contextualTools": true,
+      "recordSaveHitTest": true
+    },
+    {
+      "width": 390,
+      "passed": [
+        "guest launch",
+        "manipulate",
+        "record",
+        "save",
+        "reset",
+        "resume",
+        "reload",
+        "CSV download",
+        "natural query",
+        "keyboard search",
+        "classroom assignment export",
+        "submission import",
+        "teacher review",
+        "mobile width",
+        "contextual tools restore"
+      ]
+    },
+    {
+      "width": 320,
+      "firstMeaningfulInteractionMs": 947,
+      "screenshotInstrumentationMs": 70
+    },
+    {
+      "width": 320,
+      "scopedAxeViolations": 0
+    },
+    {
+      "width": 320,
+      "modelGraphKeyboardScroll": true,
+      "modelGraphLabelPx": 14
+    },
+    {
+      "width": 320,
+      "contextualTools": true,
+      "recordSaveHitTest": true
+    },
+    {
+      "width": 320,
+      "passed": [
+        "guest launch",
+        "manipulate",
+        "record",
+        "save",
+        "reset",
+        "resume",
+        "reload",
+        "CSV download",
+        "natural query",
+        "keyboard search",
+        "classroom assignment export",
+        "submission import",
+        "teacher review",
+        "mobile width",
+        "contextual tools restore"
+      ]
+    },
+    "Same Photosynthesis route/top/light-theme/390x844 CSS viewport as baseline, captured at full and baseline half device scale.",
+    "Blocked persistent storage never reports saved.",
+    "Legacy-only quota failure: shared save contains current immutable notebook draft, trial, graph selection and method; old legacy record unchanged; warning and rescue export truthful.",
+    "Feature flag off retains original entry and navigation."
+  ],
+  "errors": [],
+  "cameraRequests": 0
+}

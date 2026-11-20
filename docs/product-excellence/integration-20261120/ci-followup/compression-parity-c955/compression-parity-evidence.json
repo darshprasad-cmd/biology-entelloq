@@ -1,0 +1,2564 @@
+{
+  "auditDate": "2026-11-20",
+  "commit": "c95528f0d0abb125b3656a8e25aa81f685dc4c0c",
+  "scope": "Read-only Git archive exported outside source; no source/branch/index mutation. Three builds write only temporary outputs. Hosted dist was not downloaded; local reconstruction matches its recorded full-file SHA256 exactly.",
+  "runtimes": {
+    "CI": "CPython3.15.2 observed in GitHub run44702952067 job136175507786; zlib backend not printed",
+    "standardZlibReconstruction": "CPython3.12.14, zlib build/runtime1.3.2",
+    "localReconstruction": "CPython3.14.5, zlib build/runtime1.3.1.zlib-ng"
+  },
+  "decodedPayloadsEqual": true,
+  "changedDecodedPayloads": [],
+  "normalizedContainerEqual": true,
+  "compressedPayloadsChanged": 122,
+  "gzipHeaderFixed": true,
+  "artifacts": [
+    {
+      "path": "C:\\Users\\darsh\\AppData\\Local\\Temp\\entelloq-biology-package-audit-c955-af0b9cc2d2644e0e9d7f977a30701859\\git-python312\\index.html",
+      "bytes": 44920068,
+      "sha256": "86876591375ba9110bbe4ed4f18aba13a8a833c2eaf6d86ab299c78571f78ee5",
+      "pageCount": 17,
+      "assetCount": 140,
+      "deferredCount": 37,
+      "decodedBytes": 72234768,
+      "gzipHeaders": [
+        "1f8b08000000000002ff"
+      ],
+      "normalizedContainerSha256": "b892608025288536d24c3acfd77062973fa5ef758dd153544b1afe56739a7b5d",
+      "decoded": {
+        "page:index.html": {
+          "bytes": 150731,
+          "sha256": "b8e8b4c6135d749af846768f918241a24ad74b4731bb53f33033e687c9f9f381"
+        },
+        "page:app.html": {
+          "bytes": 1032153,
+          "sha256": "d313f735dd91e9a61b29c8840af2d3acb9e32aa05026e15d293c96ccf7b17f01"
+        },
+        "page:learn.html": {
+          "bytes": 1191542,
+          "sha256": "8bcdd0d1360e3a2d63e6684db834b3520583df8a28d26e95c59b411cb01b38fa"
+        },
+        "page:lessons.html": {
+          "bytes": 194992,
+          "sha256": "6dbe086d3d213512dcd03f930a0b96a47ae81436f0045916526e0d4c743fed38"
+        },
+        "page:reason.html": {
+          "bytes": 1414903,
+          "sha256": "ac86ce83f41aa318cd8b66be0cbffee031e1e3d334cc001095c83dd00001dda3"
+        },
+        "page:labs.html": {
+          "bytes": 803040,
+          "sha256": "f3618ca29453c5456002122eb5bdcf09786e373b1b387a09a42c6b524d3d0787"
+        },
+        "page:solve.html": {
+          "bytes": 1505191,
+          "sha256": "27e9c0960f372171e089e6ae3188f8a070c3350fdc3f3284be6f8f22df1cb4d9"
+        },
+        "page:explore.html": {
+          "bytes": 502372,
+          "sha256": "bf34ea3bb6fa22cc30906cb5febc2113c5673bcd7271f08532f6201ed117f992"
+        },
+        "page:me.html": {
+          "bytes": 460519,
+          "sha256": "2eb76c5912ffc45ec85a9801be6a560deeee4be1d92a9e376d74e2be2148b084"
+        },
+        "page:about.html": {
+          "bytes": 288847,
+          "sha256": "344becc5bef114d0a20c8110dda34331836996db27eee15255032d0f6bd38b67"
+        },
+        "page:lab.html": {
+          "bytes": 2770949,
+          "sha256": "b46ce7ccd5cd82256cdfa22a9594bc12385dea22f60e2cdbe9c2fad166ca57b1"
+        },
+        "page:universe.html": {
+          "bytes": 1565749,
+          "sha256": "2b5e311edbf6e4dad6fafc9adbf6d4140def1fd5f9c6b9734964bc801939be29"
+        },
+        "page:assets/learning-tools/biology/index.html": {
+          "bytes": 28552,
+          "sha256": "4cf6f4c9b92342f5fc5b18fbf3a425ff89878765c3ae2b8c85b927ab3f6eaabd"
+        },
+        "page:assets/learning-tools/learning/index.html": {
+          "bytes": 149304,
+          "sha256": "23ac40337dc7e803869927bb43ed510bb98db30d790b574cad339ef2226ad5ff"
+        },
+        "page:src/learning-tools/guide.html": {
+          "bytes": 3312,
+          "sha256": "418d7180c01b8440c5e2c6fabd09188430d89e53bce3701510c060c6c763a96c"
+        },
+        "page:assets/learning-tools/sketches/index.html": {
+          "bytes": 1999971,
+          "sha256": "e41d12ae68ce8b594f50c73815e1638ef99b19e16e0d07be845642e0948dcded"
+        },
+        "page:assets/learning-tools/animations/index.html": {
+          "bytes": 31610,
+          "sha256": "0ee82ce1642a82efc19bdb2943de078b4727502fde5dbcfed30d0aeb3ca81988"
+        },
+        "asset:assets/biology-cells.webp": {
+          "bytes": 129296,
+          "sha256": "495dd9b00a0bc384db3dd0443cf60a200753f3e47e266106bb40f724720eec7e"
+        },
+        "asset:assets/biology-dna-hero.webp": {
+          "bytes": 107712,
+          "sha256": "442796918c267dbe55e8830ab19cbfb4338d6d77583f6c4d29e90e65cdc71c00"
+        },
+        "asset:assets/biology-leaf.webp": {
+          "bytes": 104192,
+          "sha256": "39cd92edba3eb203991244fcd3aaf8cc71094f407260afd799db3c12fe44c5ed"
+        },
+        "asset:assets/biology-neurons.webp": {
+          "bytes": 82902,
+          "sha256": "91b5465e03682b5a773b2b0353fd55caeed4701e5c8cd0adebd0009d32e811d2"
+        },
+        "asset:assets/biology-wing.webp": {
+          "bytes": 357768,
+          "sha256": "a962fa97640c71ffdb6f7fb384c625347997471ff0d070f9fa7a520257cf2566"
+        },
+        "asset:assets/entelloq-classroom.js": {
+          "bytes": 12849,
+          "sha256": "1ef072462b46561d9513e8186f28e75517d83046e42ec6e30e42c4bd6414a903"
+        },
+        "asset:assets/entelloq-science.css": {
+          "bytes": 2022,
+          "sha256": "b59a1281cd93a8033132524d6ff96ae46f7f0d44d08a7965190ac9a96063b80b"
+        },
+        "asset:assets/entelloq-science.js": {
+          "bytes": 15415,
+          "sha256": "dffdf2baaaa7fd2500b9e0a9bb9305bccf508f19a7d882a1ab6e1bd7cccf48cd"
+        },
+        "asset:assets/feature-tutorials.css": {
+          "bytes": 2484,
+          "sha256": "bfc94a1fac120eb908100ed999688e5b35ed5e036308dab9affdd4bcca26541a"
+        },
+        "asset:assets/feature-tutorials.js": {
+          "bytes": 12521,
+          "sha256": "410bff52489d6fec6a46a799680754c5af734fc7556662f8bed676971b945274"
+        },
+        "asset:assets/launch/biology-cell.webp": {
+          "bytes": 144972,
+          "sha256": "a8433ccefc63ecb1f31887d131d4f717afa1d028cd808c444b00a0cc4a17b1d3"
+        },
+        "asset:assets/learning-tools/animations/asset-manifest.json": {
+          "bytes": 3403,
+          "sha256": "bee0c8224afac39795b4a4a367e568c78b61091866b68a790df8c2bf2113cd97"
+        },
+        "asset:assets/learning-tools/animations/catalog.js": {
+          "bytes": 5473,
+          "sha256": "87183d6dd5f7e6b84f60ba104a099aa7424e255551ac0eb443fa943be95caaa9"
+        },
+        "asset:assets/learning-tools/animations/main.js": {
+          "bytes": 13465,
+          "sha256": "99d86c6f90c4d41f787c14eed2a12e119f3ceffc46c184e822960c425af0115e"
+        },
+        "asset:assets/learning-tools/animations/media/biology-poster.png": {
+          "bytes": 151576,
+          "sha256": "009a46739f3def5d9548d2b5385ef806615fdeea78f28342f7748dd06dbbf1f2"
+        },
+        "asset:assets/learning-tools/animations/media/biology-step-1.png": {
+          "bytes": 141204,
+          "sha256": "713eab38c4c9e2b20b723479cd882ccd5bf11e692cf3a5ea3ab69e785da81ba5"
+        },
+        "asset:assets/learning-tools/animations/media/biology-step-2.png": {
+          "bytes": 151015,
+          "sha256": "d4714572991d405eb0330832d9b09ad08d758f89504f31c301381db7e29f932e"
+        },
+        "asset:assets/learning-tools/animations/media/biology-step-3.png": {
+          "bytes": 150503,
+          "sha256": "59c55d8d3c8de25c44c1810e6b669cd4e735630b0823f7e1e602d78de9fdf28a"
+        },
+        "asset:assets/learning-tools/animations/media/biology-step-4.png": {
+          "bytes": 147472,
+          "sha256": "47043ce9e379cf8f018e79ac5bdf031ec38e64780245a09e8505120aac182814"
+        },
+        "asset:assets/learning-tools/animations/media/biology.mp4": {
+          "bytes": 242903,
+          "sha256": "1f35d30e48cf907edc2b1ba39b96ef5c0916ffe5b3433fb10add7e7969767e30"
+        },
+        "asset:assets/learning-tools/animations/media/biology.vtt": {
+          "bytes": 364,
+          "sha256": "43fddb021b2f65aed7f16c2a7e5c4508b0bf05b099312f8759fe65cecc134c79"
+        },
+        "asset:assets/learning-tools/animations/media/physics-poster.png": {
+          "bytes": 166835,
+          "sha256": "6cb474ec1610344225ec4e391c5423f5f0d6f11919a5c96e4884e443b41d498f"
+        },
+        "asset:assets/learning-tools/animations/media/physics-step-1.png": {
+          "bytes": 144821,
+          "sha256": "65f6dce4cdf61cc2e72152a93ab734290808ede5a1a794c64841f6777c20ac97"
+        },
+        "asset:assets/learning-tools/animations/media/physics-step-2.png": {
+          "bytes": 133542,
+          "sha256": "cf1ef9e87cff780715b695b8501021ccce5eec315f5d1912a54801f7b747bd9e"
+        },
+        "asset:assets/learning-tools/animations/media/physics-step-3.png": {
+          "bytes": 155330,
+          "sha256": "1b94c6ef54c95b160415b61dae3052bc5e61adce3f3e319b092db19b7cf94b14"
+        },
+        "asset:assets/learning-tools/animations/media/physics-step-4.png": {
+          "bytes": 167841,
+          "sha256": "567272aed1c411030be8cba46ae65294de1120b9e2b55da3f0d38b450f492365"
+        },
+        "asset:assets/learning-tools/animations/media/physics.mp4": {
+          "bytes": 277651,
+          "sha256": "abf570422904d5cfcd7eb5f927b5d9a14ca729cce996088b387c94f12c14a65f"
+        },
+        "asset:assets/learning-tools/animations/media/physics.vtt": {
+          "bytes": 352,
+          "sha256": "91d2bf3cd9874e8eaeaebff4a44bf2df2f70e57ec400bc59a046bb2c6414132a"
+        },
+        "asset:assets/learning-tools/animations/styles.css": {
+          "bytes": 7869,
+          "sha256": "19aa50f9f295839b278732e11d33fd8ddec74c93b5339b05b0cfd035b2b00d0f"
+        },
+        "asset:assets/learning-tools/biology/dist/THIRD-PARTY.txt": {
+          "bytes": 13438,
+          "sha256": "2d7e99726877a9ea306511d7d6f339e4c0e6b9b0d09e2f54b0a788bfe80dfb85"
+        },
+        "asset:assets/learning-tools/biology/dist/VTK-Copyright.txt": {
+          "bytes": 1761,
+          "sha256": "a8efeb737fe2a8c7fd511d61a4303c9278a402266059e471d48b57a48d895b3e"
+        },
+        "asset:assets/learning-tools/biology/dist/main.js": {
+          "bytes": 26504,
+          "sha256": "7c1769440a5119fd2c29fd94fc4028ecaf72d9ba19acbfc2016116d808ad0e8c"
+        },
+        "asset:assets/learning-tools/biology/dist/volume.js": {
+          "bytes": 1849626,
+          "sha256": "5b7a5a03d50bf25e3639b32e8c3dceccae8e798cef76c8836bb1d3ceff6afb59"
+        },
+        "asset:assets/learning-tools/learning/THIRD-PARTY-NOTICES.md": {
+          "bytes": 28270,
+          "sha256": "655f787b56bb232ce21080a863b384bbb2d09221747c24c70be81a1f50cf2861"
+        },
+        "asset:assets/learning-tools/learning/asset-manifest.json": {
+          "bytes": 1348,
+          "sha256": "8dc6bdb365e4f13ad2223116fe59f03f356ece251dd344272ddcb618ff690024"
+        },
+        "asset:assets/learning-tools/learning/main.js": {
+          "bytes": 137872,
+          "sha256": "a16992e3612f89f768c935b110e120785e58d7d098192318201ed5f33108f042"
+        },
+        "asset:assets/learning-tools/learning/runtime/ort-wasm-simd-threaded.jsep.mjs": {
+          "bytes": 46851,
+          "sha256": "c2f80e915e9df63289788a99d434d8c4e00e64e9c1f030f4b80b022458dd2c99"
+        },
+        "asset:assets/learning-tools/learning/runtime/ort-wasm-simd-threaded.jsep.wasm": {
+          "bytes": 28352885,
+          "sha256": "62ff86b2f2fa3a79eb87a7e4720e8ea9051942bf975f314181bf7dcef2feac06"
+        },
+        "asset:assets/learning-tools/learning/semantic-worker.js": {
+          "bytes": 703248,
+          "sha256": "94b4c90d376bde00872ccfec38cc2d5a97bf95c49d78eebf7f75f821d8313e25"
+        },
+        "asset:assets/learning-tools/learning/styles.css": {
+          "bytes": 9331,
+          "sha256": "4d14fca720f9ce20948f36b7e6849929dbaa8aa58c7f7b1ca47828457cd14822"
+        },
+        "asset:assets/learning-tools/sketches/THIRD-PARTY-NOTICES.md": {
+          "bytes": 95883,
+          "sha256": "a90aee2e206822a7f62d405b89829b94ad6fb5ba0e1ab33ce4257b12ca273329"
+        },
+        "asset:assets/learning-tools/sketches/asset-manifest.json": {
+          "bytes": 1220,
+          "sha256": "3d92842968d342530b20551a6276f01141240cea90d14d5eaf73789ba16c06df"
+        },
+        "asset:assets/learning-tools/sketches/editor.css": {
+          "bytes": 252820,
+          "sha256": "dab6bffe8be957e2525229b84f832e8bad6cda4c15633bd8f8c607c49fe0b826"
+        },
+        "asset:assets/learning-tools/sketches/main.js": {
+          "bytes": 1738059,
+          "sha256": "775c728585ff341b728fca9fc003e8ebc84034690a660e880a74925feeaba545"
+        },
+        "asset:assets/learning-tools/sketches/styles.css": {
+          "bytes": 6967,
+          "sha256": "b599855e548cd726fd82f9d4e8b9c98ec8697e88a5a833f43cca420845150ef2"
+        },
+        "asset:assets/previews/explore-atlas.webp": {
+          "bytes": 10916,
+          "sha256": "34776a898f00bc160a0125617e15f42f1b2a50dee01bc1811393e2c340e109be"
+        },
+        "asset:assets/previews/explore-diseases.webp": {
+          "bytes": 10710,
+          "sha256": "d97de51a08a88a99ebca9294829f26f8a21079c4b0dc8ff62bea4b5a2ead3fe7"
+        },
+        "asset:assets/previews/explore-graph.webp": {
+          "bytes": 7064,
+          "sha256": "1a6242aac6d6ec06da172d5129ec841126ca543daf83f4114fe6088a0d158411"
+        },
+        "asset:assets/previews/explore-timeline.webp": {
+          "bytes": 5430,
+          "sha256": "43901ff7eae760c19717cb5b8cedc0aa9ef95dafc9fb29f8267cb04d2a426029"
+        },
+        "asset:assets/previews/explore-tree.webp": {
+          "bytes": 21442,
+          "sha256": "c069cfe39dd47538d63435d40a54afad0932e3ef5350d50c80b6a6b3384faba9"
+        },
+        "asset:assets/previews/lab-cellular-respiration.webp": {
+          "bytes": 17806,
+          "sha256": "83bcf5a30b95b8422e68ba532824498153f6cad7f00c75631dc9ae8cec0e7f3c"
+        },
+        "asset:assets/previews/lab-cockroach-dissection.webp": {
+          "bytes": 14364,
+          "sha256": "639c258548a05278ba3b0e135db5207eaec69cc3875d6cf7cc4c92698fec2e21"
+        },
+        "asset:assets/previews/lab-dna-extraction.webp": {
+          "bytes": 11194,
+          "sha256": "b233eb7b10aa711993fc3fe4629489cd5c52f9ae704c5e9f0ffa28ed0fe30d65"
+        },
+        "asset:assets/previews/lab-dna-protein.webp": {
+          "bytes": 19688,
+          "sha256": "1f27ced3798f1b624ab5dd8293918f512a8b2133b29e7e95429c1a4b6c3ca425"
+        },
+        "asset:assets/previews/lab-earthworm-dissection.webp": {
+          "bytes": 9870,
+          "sha256": "89703e310269080c9d35e698afa1073311b624c72de678c67e0aa8465000ade4"
+        },
+        "asset:assets/previews/lab-ecosystem-investigation.webp": {
+          "bytes": 9194,
+          "sha256": "b48016b64902d8f9192573d342a958cc3f771204a7f3c3c8165e8e9b3218e35c"
+        },
+        "asset:assets/previews/lab-enzyme-kinetics.webp": {
+          "bytes": 8266,
+          "sha256": "4121fd04194398d3fa4cb4e7aeacc95415ed107eda9fc56e696e82d94b7cbedc"
+        },
+        "asset:assets/previews/lab-fish-dissection.webp": {
+          "bytes": 15054,
+          "sha256": "3f6f19ccebb8e44f68321f435ffad1300f42f8c6efb8312b9918b7f6a14c6c3e"
+        },
+        "asset:assets/previews/lab-frog-dissection.webp": {
+          "bytes": 20250,
+          "sha256": "918dfc970750eddc5b8df440a136d79b81d3582391c91b96682fe594e9cf79bc"
+        },
+        "asset:assets/previews/lab-gas-exchange.webp": {
+          "bytes": 14174,
+          "sha256": "c1729db42e1a870d7d942b9fb803683151801c37352a52e5f4ba6d214c50e3fa"
+        },
+        "asset:assets/previews/lab-gel-electrophoresis.webp": {
+          "bytes": 7302,
+          "sha256": "2435d45af7b9c55d24b15a52cc5f975558ced22ddf5a61f4b7dabbab241eda90"
+        },
+        "asset:assets/previews/lab-heart-dissection.webp": {
+          "bytes": 15754,
+          "sha256": "f37a0f7c76263a979ae64b1af5d52b4471a9adc5a019b882cdea64ede06e53d4"
+        },
+        "asset:assets/previews/lab-heart-physiology.webp": {
+          "bytes": 11880,
+          "sha256": "c76a56bcf5fc34bdb19db6adb82346d8e93cdad35b4a9c18d6040ba44b642323"
+        },
+        "asset:assets/previews/lab-heart-rate.webp": {
+          "bytes": 10422,
+          "sha256": "49a71ad20fd9f6521d3b4f8f5d0925fa18f0cc8a6c9282230d9adf78ff213ed4"
+        },
+        "asset:assets/previews/lab-mendelian-genetics.webp": {
+          "bytes": 16328,
+          "sha256": "17b7a3953f3c41c0f42feeb4ad4a26b9018777171a692eab8bc15dcd63d0c086"
+        },
+        "asset:assets/previews/lab-microscope.webp": {
+          "bytes": 10422,
+          "sha256": "c58606a1bb32c0d83d4b9eda51b8b7b426c0d046e69ad4496cdb97bba7c5d2d0"
+        },
+        "asset:assets/previews/lab-mitosis.webp": {
+          "bytes": 19096,
+          "sha256": "4068302ef3c39aac2c6ec4686414e6f812f58b501996aaba726e6ebd027a8c6e"
+        },
+        "asset:assets/previews/lab-natural-selection.webp": {
+          "bytes": 24686,
+          "sha256": "5a832c4fc867b372ec427de93e6b01c321b15d0e9275223f5e417210b8e04105"
+        },
+        "asset:assets/previews/lab-osmosis.webp": {
+          "bytes": 9820,
+          "sha256": "39778756623705ccd1c85251e1460fcf81bf64672111c76a79c6a6485d639f65"
+        },
+        "asset:assets/previews/lab-pcr.webp": {
+          "bytes": 23004,
+          "sha256": "777b7bd2315c73f0c2cc1e4c121f3b0390325fc02d1fc33b105aaa525da55cff"
+        },
+        "asset:assets/previews/lab-photosynthesis-rate.webp": {
+          "bytes": 14740,
+          "sha256": "729b4175dbbd44dd1545e97e31f5ece5ce5101c46b4d71243943996d2288845a"
+        },
+        "asset:assets/previews/lab-plant-investigation.webp": {
+          "bytes": 9534,
+          "sha256": "f6cbe4f0878b0a191ee40c9428a17d09a9d91098a41e0634a77c103388133194"
+        },
+        "asset:assets/previews/lab-predator-prey.webp": {
+          "bytes": 10962,
+          "sha256": "8475bae6641cacd7778e22236adf2d6c8be543c7629f6b3c81542856d321579f"
+        },
+        "asset:assets/previews/legacy-cell.webp": {
+          "bytes": 17560,
+          "sha256": "5c521bdf800b77335cd89c32f56d03e89e02025c7b2b4aa58d9ec14d804ce1e9"
+        },
+        "asset:assets/previews/legacy-microscope.webp": {
+          "bytes": 12172,
+          "sha256": "c83e9b57ff95a7e8d22d4457b91e90467e645d0ff297e8053e2c3a2b899ee041"
+        },
+        "asset:assets/previews/lesson-actionpotential.webp": {
+          "bytes": 9380,
+          "sha256": "bbaa58a7f97c480e15c90cb0dcf59b7277e7a47f6e960f71296f62bb6ff391fd"
+        },
+        "asset:assets/previews/lesson-cardiac.webp": {
+          "bytes": 13910,
+          "sha256": "4291cc1c1a0a8648452f74e812b605f2364f311c57598fdf8bc89bbbb59ed690"
+        },
+        "asset:assets/previews/lesson-diffusion.webp": {
+          "bytes": 18456,
+          "sha256": "60fae56e358fbbd9834674903a0f855530aad9799b9ecc9cda886879bea2dc77"
+        },
+        "asset:assets/previews/lesson-enzyme.webp": {
+          "bytes": 3628,
+          "sha256": "3bb25258cf3f95580c1435e1d6af3b3a7588406ab1ae1414bfab9f5539839920"
+        },
+        "asset:assets/previews/lesson-photosynthesis.webp": {
+          "bytes": 6326,
+          "sha256": "6a052d27bbf1ed0c1e5e17d98bff1f43f95d9cde1461e9f9c91d748652bf3b68"
+        },
+        "asset:assets/previews/lesson-population.webp": {
+          "bytes": 7198,
+          "sha256": "096b8864a11fca7ac15458363012e5fe0d2b46b1b573849c53d533d33e1cbab6"
+        },
+        "asset:assets/previews/lesson-replication.webp": {
+          "bytes": 14970,
+          "sha256": "f7a0aa97c6fd66b4b041bbc89401b8c41268e24968d24d8103a9b24011ffedd0"
+        },
+        "asset:assets/previews/lesson-respiration.webp": {
+          "bytes": 11750,
+          "sha256": "d9a7c79468c6c838be1738ef8502ce9ab99243feafc34e60e290e4150f9af8b5"
+        },
+        "asset:assets/previews/lesson-selection.webp": {
+          "bytes": 9058,
+          "sha256": "a07b6d7f26ff61b11094f4c6b8e8871b0633c229544793720cdcc8ddd18bbfe2"
+        },
+        "asset:assets/previews/reason-altitude.webp": {
+          "bytes": 8282,
+          "sha256": "3f946a6df918623686728c0f39ded3217916f41bfbba621edf7e01dc1f840940"
+        },
+        "asset:assets/previews/reason-glucose.webp": {
+          "bytes": 7040,
+          "sha256": "1af9664eb60d1aefcd764e9991f46f75320e383d8a8e4d260e071c2000af6e59"
+        },
+        "asset:assets/previews/reason-resistance.webp": {
+          "bytes": 9230,
+          "sha256": "f93076bb0d729c2c7175840b289e273214cf8492e4bedc14e8a09bb48ab34176"
+        },
+        "asset:assets/previews/section-about.webp": {
+          "bytes": 10846,
+          "sha256": "b404a4bfe5d9fe4c5f92ca708a328203d63af853fe94ce6196f2a732b0d75654"
+        },
+        "asset:assets/previews/section-explore.webp": {
+          "bytes": 18316,
+          "sha256": "9483c147287307db4895c378699272999e67229ac7879ece11be57d8135af498"
+        },
+        "asset:assets/previews/section-home.webp": {
+          "bytes": 40260,
+          "sha256": "f8116b48cd9fa973a9685f29bd9614e1e1ea6cf84b120c728d7a0536c74879f3"
+        },
+        "asset:assets/previews/section-lab.webp": {
+          "bytes": 20250,
+          "sha256": "918dfc970750eddc5b8df440a136d79b81d3582391c91b96682fe594e9cf79bc"
+        },
+        "asset:assets/previews/section-labs.webp": {
+          "bytes": 10422,
+          "sha256": "c58606a1bb32c0d83d4b9eda51b8b7b426c0d046e69ad4496cdb97bba7c5d2d0"
+        },
+        "asset:assets/previews/section-learn.webp": {
+          "bytes": 7134,
+          "sha256": "a133f074b7b60900c97aa18b0d3ae0a5a3cefd937c907253f56c038196212923"
+        },
+        "asset:assets/previews/section-lessons.webp": {
+          "bytes": 18456,
+          "sha256": "60fae56e358fbbd9834674903a0f855530aad9799b9ecc9cda886879bea2dc77"
+        },
+        "asset:assets/previews/section-me.webp": {
+          "bytes": 24680,
+          "sha256": "76aeb61d033e137b29bc2f48e0efca14505910037161972337c5192b74cc77cc"
+        },
+        "asset:assets/previews/section-reason.webp": {
+          "bytes": 7040,
+          "sha256": "1af9664eb60d1aefcd764e9991f46f75320e383d8a8e4d260e071c2000af6e59"
+        },
+        "asset:assets/previews/section-solve.webp": {
+          "bytes": 25702,
+          "sha256": "a1a580054a7c3e23ebf7ac66218fb213e594b869cf1057882a442cf95693c1cd"
+        },
+        "asset:assets/previews/section-universe.webp": {
+          "bytes": 31236,
+          "sha256": "20253724ef0a30bd0ea9aabd47b915540d6cc4354d7e03ef640c7c26a5075b7a"
+        },
+        "asset:assets/previews/solve-adaptive.webp": {
+          "bytes": 29380,
+          "sha256": "8cce5d6d74435b141e755fa49bc5b516e4e3466a832b4d071dbe46697d6096d6"
+        },
+        "asset:assets/previews/solve-practice.webp": {
+          "bytes": 29008,
+          "sha256": "ed7ca9423687d8a0e2e62b8831145d10ff01a233305ae113643f3380cefb842c"
+        },
+        "asset:assets/previews/solve-review.webp": {
+          "bytes": 25702,
+          "sha256": "a1a580054a7c3e23ebf7ac66218fb213e594b869cf1057882a442cf95693c1cd"
+        },
+        "asset:assets/previews/solve-timed.webp": {
+          "bytes": 28970,
+          "sha256": "ae56b857eb925328149f9f1e4292e38a90206c6bb4622d27c9881e99ab6aaad7"
+        },
+        "asset:assets/protein/1CRN.pdb.txt": {
+          "bytes": 49491,
+          "sha256": "42199a30a0701864a2a5cc76cd7f35cc544cd0e65fbcf63e03c166543249b811"
+        },
+        "asset:assets/protein/vendor/MOLSTAR-LICENSE.txt": {
+          "bytes": 1088,
+          "sha256": "aa42900c6ea7bfcf22d25a4c369025e01a526c66501fd9193f9a8aecee7a0753"
+        },
+        "asset:assets/protein/vendor/molstar.css": {
+          "bytes": 72904,
+          "sha256": "22fbf73b75c11ef57687d08437c95dbfe8430ea895264f6da2b9b01e28bacc49"
+        },
+        "asset:assets/protein/vendor/molstar.js": {
+          "bytes": 5268712,
+          "sha256": "037a63ab0ae2a433cd03d59a6bc03d75f5e55f0b8de20da15d5b00464ea01ecd"
+        },
+        "asset:assets/specimens/COCKROACH-ATTRIBUTION.md": {
+          "bytes": 1411,
+          "sha256": "776a06fc24d5bc8c065b154f4d33ba6b601cd06ad6d85700abb2b15be129775c"
+        },
+        "asset:assets/specimens/FROG-ATTRIBUTION.md": {
+          "bytes": 1290,
+          "sha256": "5e0bc792423fd5b0fd19d96de404bbae88c3d098950f62f64b0bf670407e0522"
+        },
+        "asset:assets/specimens/cockroach.glb": {
+          "bytes": 8988648,
+          "sha256": "03faef8793c04108c27a33cd581b11affa522e4565fc62558c09e54671444410"
+        },
+        "asset:assets/specimens/frog.glb": {
+          "bytes": 6142084,
+          "sha256": "64ccc2056475153d70b5f68a2b3b94ff075f0491c63c76a65b7157e7f7c349bc"
+        },
+        "asset:bioq-og.jpg": {
+          "bytes": 68278,
+          "sha256": "f42d700824ce3b9f8c5ff8ac58f02978c15e650f79131976ba067dee4b5c77e2"
+        },
+        "asset:favicon.png": {
+          "bytes": 57860,
+          "sha256": "d1aba2563d0722e2c1d10178e2a10346d086a9647b13f77af2b4cc25d624b5e5"
+        },
+        "asset:src/ai/biology-ai.js": {
+          "bytes": 28140,
+          "sha256": "a8a36859e6a50adf775a753b5ea8c219c938acaf9dff2e8e07b7bcf5af63fcae"
+        },
+        "asset:src/lab/prepared-loader.js": {
+          "bytes": 14128,
+          "sha256": "217a0a9952a54d6283a6e4de8f879e0bca89a70b2c7b29a4fd454ecbfcb62c37"
+        },
+        "asset:src/lab/specimen-assets.js": {
+          "bytes": 15249,
+          "sha256": "da22af3fd1cd53dd8cf78068cb443c8fee6e9ffd9fdbd5662e0dd599942f78fc"
+        },
+        "asset:src/lab/vendor/THREE-LICENSE.txt": {
+          "bytes": 1081,
+          "sha256": "852e0e8699169bf9f6fdc6bda3e682d078dcbc738b5d33e74df594721bff271d"
+        },
+        "asset:src/lab/vendor/loaders/GLTFLoader.js": {
+          "bytes": 108574,
+          "sha256": "8e7e2a439fd03b193aef047d153e9a8d6bf6112cdc1983db903dc95e8208db28"
+        },
+        "asset:src/lab/vendor/utils/BufferGeometryUtils.js": {
+          "bytes": 31906,
+          "sha256": "9be041e96308775d00e2695cc607645b9a9b64fd7c0e759dd8f7c00a8d92becb"
+        },
+        "asset:src/launch/restored-motion.js": {
+          "bytes": 3118,
+          "sha256": "b8ae6e8b46d336d974fb321ef48478418501612afa9492bbd60f351e4109feaa"
+        },
+        "asset:src/launch/restored-realism.css": {
+          "bytes": 2975,
+          "sha256": "47d49043697bd22be53a9460aeeb449364ca26a85fb64790d25e4edfd6b14db7"
+        },
+        "asset:src/learning-tools/host.css": {
+          "bytes": 4529,
+          "sha256": "e2905823eafdeb96e7850ffcb6969ed03ec689d811c615a7753a6f397fd4a3d5"
+        },
+        "asset:src/learning-tools/host.js": {
+          "bytes": 14454,
+          "sha256": "74e8dfc8077f72abfd70f4f607bf11b447d33cb698621a959f24a7aef85dbe29"
+        },
+        "asset:src/single-file/vendor/three-addons/math/SimplexNoise.js": {
+          "bytes": 14351,
+          "sha256": "9b8d541b77b0ddc79afaa6a1de8941452c191b8b9006f04e7b8fc422e2b263f7"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/BokehPass.js": {
+          "bytes": 3556,
+          "sha256": "58548f0a3c1a04345bbe9451b58eb9249bc69cdf1be30589ad3abe3741bbca1c"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/EffectComposer.js": {
+          "bytes": 4991,
+          "sha256": "7cf450876c378b94fefb4c4c0b441ae53830e56e3ce424412ba54e4b826379bf"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/GTAOPass.js": {
+          "bytes": 16847,
+          "sha256": "9ee9d131ca7127d2ff619411ff65d71b93d8d5046eae376584cdfd1ba207514b"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/MaskPass.js": {
+          "bytes": 2320,
+          "sha256": "020d8f02b54af2dc7404f7a350860f200ec3c2cd22b4f769a1d2a9f71c964455"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/OutputPass.js": {
+          "bytes": 2560,
+          "sha256": "ac163a91c83cda60f142aa24b3563bb29cf6d28c3e404ffa367078987770fd21"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/Pass.js": {
+          "bytes": 1706,
+          "sha256": "b3c6128340eaa37e40a6a2f1b738e894c855239417d50959759b34a2b5e89f92"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/RenderPass.js": {
+          "bytes": 2004,
+          "sha256": "a75f1a1bec450e4bea766c7ae38cbc32c6dd22a27e56d21db165603ac3398a86"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/SSAOPass.js": {
+          "bytes": 11875,
+          "sha256": "8400995ca135f6bd155cb9c3040cf93b6a8d3bf93c1f3bc5e5166e9d7a87909b"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/ShaderPass.js": {
+          "bytes": 1665,
+          "sha256": "19575695d3c5f1da0824b745df9666feb00b497ab4dcc2e752adfed640276b1b"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/UnrealBloomPass.js": {
+          "bytes": 12641,
+          "sha256": "108fc8c42c9cef0d4414b75878de57f72f7f28ed1a843e11076dff756c94ad54"
+        },
+        "asset:src/single-file/vendor/three-addons/shaders/BokehShader.js": {
+          "bytes": 5769,
+          "sha256": "a6558cc4baf2c372c192828e9fffcf088d22f80291ac72a13a5be6d3b7a18ddc"
+        },
+        "asset:src/single-file/vendor/three-addons/shaders/CopyShader.js": {
+          "bytes": 571,
+          "sha256": "4e3346db194db56a596cd074e9bdb39fb5eb52040c333e0d29dc4eb1324d3b1d"
+        },
+        "asset:src/single-file/vendor/three-addons/shaders/GTAOShader.js": {
+          "bytes": 13009,
+          "sha256": "94edb1040c7b5e859b17c2817782c8e895118a2d824ed162cab187aa32cc5a15"
+        },
+        "asset:src/single-file/vendor/three-addons/shaders/LuminosityHighPassShader.js": {
+          "bytes": 1192,
+          "sha256": "3d841cc594a0c1767d1b0185720b32761a0133c5f1b70b56658e28f2fb9b7900"
+        },
+        "asset:src/single-file/vendor/three-addons/shaders/OutputShader.js": {
+          "bytes": 1393,
+          "sha256": "53a52e430c27bc36ceaab8ae90a2b4af7b02672d7ee4b29d6ba3c28e09c92c2a"
+        },
+        "asset:src/single-file/vendor/three-addons/shaders/PoissonDenoiseShader.js": {
+          "bytes": 6614,
+          "sha256": "3dab419b23529f8fd59e2713458502f9f51d2dd3af3e1285dc671fcc451d49fb"
+        },
+        "asset:src/single-file/vendor/three-addons/shaders/SSAOShader.js": {
+          "bytes": 6478,
+          "sha256": "bd5cda34d6b52941c1121b77947664848af10dc68febd453dfdc56c59e58ba06"
+        }
+      },
+      "compressed": {
+        "page:index.html": {
+          "bytes": 53196,
+          "sha256": "462be78f4a4fd2833f8c5df634eb38b48daa90598d6c1aa32c0b585544b71363"
+        },
+        "page:app.html": {
+          "bytes": 302031,
+          "sha256": "bfe71015f205511e568c24514a69c508e43f5505e92e04b8ce5b7728e45a63ce"
+        },
+        "page:learn.html": {
+          "bytes": 375982,
+          "sha256": "80a8859c5cec1299acf05187fd9ce2f27d4113d70cbe6c023467ef75883b3283"
+        },
+        "page:lessons.html": {
+          "bytes": 71134,
+          "sha256": "c47744a8559efb04fea0b5d730daee0a6ee91f2d3005f2a554983dd135d77f86"
+        },
+        "page:reason.html": {
+          "bytes": 455640,
+          "sha256": "cd7708c9e1e72bc9c464dc7ffd4f8ec373779e36e7e5cf6518d78b4974603622"
+        },
+        "page:labs.html": {
+          "bytes": 214899,
+          "sha256": "b619c14119a43eb91c8be292be5969fe15da90e94798c4b1a905d1c585cefd6f"
+        },
+        "page:solve.html": {
+          "bytes": 476242,
+          "sha256": "980ce5963d75b351a2ab29ca9b57fce212c2836dc2e3d6a1b2cf1926b720d59a"
+        },
+        "page:explore.html": {
+          "bytes": 175512,
+          "sha256": "a4c296b4fc9af9d09aa6e2fca26d9807bf143ac651a17a2b18d442036af0bec5"
+        },
+        "page:me.html": {
+          "bytes": 114221,
+          "sha256": "1ae8da9cd68b33dc311e8e2662159f0799e37dcd864d985fc59d1fffb6195bd0"
+        },
+        "page:about.html": {
+          "bytes": 127468,
+          "sha256": "1407ec403c6708d8a8d42bbe2d369482b35d6f351eb341a1ab6c0a1dc441a286"
+        },
+        "page:lab.html": {
+          "bytes": 863489,
+          "sha256": "e524c74d48fdcd24aab8e5ccaa2bcf683c0f9c5d84189abbea20aa18040c268a"
+        },
+        "page:universe.html": {
+          "bytes": 666977,
+          "sha256": "ccd82c81f84af5ac00b61ed67ef29d12360465ccbe41c3f6634bd824aedf5bfc"
+        },
+        "page:assets/learning-tools/biology/index.html": {
+          "bytes": 10682,
+          "sha256": "ff251cdca4e85fccae12601b934f0c164620826fe465e3bd5c557d5fb68a6647"
+        },
+        "page:assets/learning-tools/learning/index.html": {
+          "bytes": 47472,
+          "sha256": "383a59aaf8e518e383e675de31a4c49c9c97169d276d382d3714c55e2dcd202d"
+        },
+        "page:src/learning-tools/guide.html": {
+          "bytes": 1582,
+          "sha256": "cf163bf1a1e88adb72f596e30c11bbafebc18d457b84fd17947bb399b23e9365"
+        },
+        "page:assets/learning-tools/sketches/index.html": {
+          "bytes": 862639,
+          "sha256": "f306168c4d1e7b7ee56b52f292f274db2b0c1d189aaab2d1ac4b96e6cc2aec14"
+        },
+        "page:assets/learning-tools/animations/index.html": {
+          "bytes": 10151,
+          "sha256": "5b3c83ef796f8be02682b3a997e73418b5cf4af2cb42da57f1062f8aaa2ed0a7"
+        },
+        "asset:assets/biology-cells.webp": {
+          "bytes": 129354,
+          "sha256": "21a68bda34de378c87fcb77ab1de0171c93a5e760a33c0c85130da55f1975168"
+        },
+        "asset:assets/biology-dna-hero.webp": {
+          "bytes": 107765,
+          "sha256": "07a2881268d5063001f55a00c252129eb124e3c5c32592a0b2e9e24e58bf0590"
+        },
+        "asset:assets/biology-leaf.webp": {
+          "bytes": 104245,
+          "sha256": "fb5a0e4645b934fc0edf83e4b6872c57c5a33c125b9b2f2a61c6f54315f92896"
+        },
+        "asset:assets/biology-neurons.webp": {
+          "bytes": 82950,
+          "sha256": "5350e5a0fbd193f29b567b9cad75f74d67d98ba9d8707fe7b58c6d4abac1dde0"
+        },
+        "asset:assets/biology-wing.webp": {
+          "bytes": 357896,
+          "sha256": "71fe87c40261c70205fd84e83025a4374e9989f1a727455ca1b7ada69f5f6530"
+        },
+        "asset:assets/entelloq-classroom.js": {
+          "bytes": 4277,
+          "sha256": "8edc0ae0ca53260516f85a1fcc48aa06a62f5508382ae74e7372960000c41465"
+        },
+        "asset:assets/entelloq-science.css": {
+          "bytes": 844,
+          "sha256": "7b285cefd69e09f62b486e9501fb54e47670ce3c4877903bb962672183423d85"
+        },
+        "asset:assets/entelloq-science.js": {
+          "bytes": 5537,
+          "sha256": "22e49dfa3137eb2c53662403e561cd69438eb8f881a43d2ad47c49ad4ec2d708"
+        },
+        "asset:assets/feature-tutorials.css": {
+          "bytes": 989,
+          "sha256": "7b43ac7119a0872223bfc0bc98843587477a19f2a3342d14df55f4595b89fe80"
+        },
+        "asset:assets/feature-tutorials.js": {
+          "bytes": 4699,
+          "sha256": "33089c7c857ce264ee152160cdb369940dc5f812205b04b9cbfb444de7e570f8"
+        },
+        "asset:assets/launch/biology-cell.webp": {
+          "bytes": 145035,
+          "sha256": "3facabfe3d9c126f1793db062e20bc33531ad260dc8085543fddae8eeea57d04"
+        },
+        "asset:assets/learning-tools/animations/asset-manifest.json": {
+          "bytes": 1148,
+          "sha256": "e296f9dfa7eb79def0d63a2b50074d9376e30572153a665b0d15a13f564d0e19"
+        },
+        "asset:assets/learning-tools/animations/catalog.js": {
+          "bytes": 2203,
+          "sha256": "9ee512ea9ef9ac9b79851ea0fdca6d2cdca48fd934860ebf4ae34e8ff5f52966"
+        },
+        "asset:assets/learning-tools/animations/main.js": {
+          "bytes": 4212,
+          "sha256": "c474315c2eb914a10c4d18c40c3f7b76d58d2201324935b0ac8466c68a48e966"
+        },
+        "asset:assets/learning-tools/animations/media/biology-poster.png": {
+          "bytes": 145430,
+          "sha256": "c66d1ddae302393641cd66f797345af4c464c3a6efc236d0f9af817ed1850a66"
+        },
+        "asset:assets/learning-tools/animations/media/biology-step-1.png": {
+          "bytes": 137087,
+          "sha256": "eda0daf1829fa5a91b206ede68efbf1e3612b45121e5d48550987e9c761dd41f"
+        },
+        "asset:assets/learning-tools/animations/media/biology-step-2.png": {
+          "bytes": 146536,
+          "sha256": "5cfe939f4bae56a93f7a16d385a78078f24b0ae1da931e2cc16516a7ee02d76d"
+        },
+        "asset:assets/learning-tools/animations/media/biology-step-3.png": {
+          "bytes": 146677,
+          "sha256": "254f07b84e197328abad0fb36d517684ddd8e043d05229ad8ec33ee0d43fb8f0"
+        },
+        "asset:assets/learning-tools/animations/media/biology-step-4.png": {
+          "bytes": 143430,
+          "sha256": "3adc5e29620be76bffea66f89e1ca41d57ccb7ec29ff00b6bdbe21a82ec80e5b"
+        },
+        "asset:assets/learning-tools/animations/media/biology.mp4": {
+          "bytes": 212804,
+          "sha256": "3533d47b857b5ca6f34fbc42ccbdbc071f267107ef0f5e25f8ed7323a6acc718"
+        },
+        "asset:assets/learning-tools/animations/media/biology.vtt": {
+          "bytes": 240,
+          "sha256": "a47ca8b2d9e77775dc5693c7eedca184ddee4810f5d45d697d6391a4df3a2aa9"
+        },
+        "asset:assets/learning-tools/animations/media/physics-poster.png": {
+          "bytes": 160958,
+          "sha256": "bd822c978705adbc70d80e39deaf77e8d895b2cdf4ec455a2a57ed3e5dd0bbcd"
+        },
+        "asset:assets/learning-tools/animations/media/physics-step-1.png": {
+          "bytes": 140171,
+          "sha256": "bfea80069b6322e97f1589b6b3f5d5eb9a88e7a3fdf9d3f561dd4fdfcb257e7d"
+        },
+        "asset:assets/learning-tools/animations/media/physics-step-2.png": {
+          "bytes": 128445,
+          "sha256": "0b5f6d4393b089341e116de129b20d44bc301de33e09c6b1eedd41c547f0a276"
+        },
+        "asset:assets/learning-tools/animations/media/physics-step-3.png": {
+          "bytes": 151399,
+          "sha256": "944320f09431995e71d3de20a20cc498bac666d21e382c7478bd1eed8bde2cf4"
+        },
+        "asset:assets/learning-tools/animations/media/physics-step-4.png": {
+          "bytes": 163790,
+          "sha256": "91ff69c05a85c1e95d2fe5506b4fd9dd321393c457ee584eef5653acbfaef711"
+        },
+        "asset:assets/learning-tools/animations/media/physics.mp4": {
+          "bytes": 247059,
+          "sha256": "17614cf172ecad903f0b998179da0924bda427ccf391d3042cc64bd3d82ccb6d"
+        },
+        "asset:assets/learning-tools/animations/media/physics.vtt": {
+          "bytes": 238,
+          "sha256": "0f2179dfd898bb8cd8f04af21b7e52305d53dbe21c5c4b8a76b7526dc1c809a7"
+        },
+        "asset:assets/learning-tools/animations/styles.css": {
+          "bytes": 2255,
+          "sha256": "1c68080c56aa86fc27f1765efe68b71608f78a88ee99c58f19eb6805e3dbd7dc"
+        },
+        "asset:assets/learning-tools/biology/dist/THIRD-PARTY.txt": {
+          "bytes": 2288,
+          "sha256": "37ee7e9762498b73d7ca1ad43d526bddf80ff4f2626229a8da0f3a9fd57e4111"
+        },
+        "asset:assets/learning-tools/biology/dist/VTK-Copyright.txt": {
+          "bytes": 877,
+          "sha256": "9508c911c4c729da64130577fb5975ee81bd2bcb91e41487725f310d27efa9ee"
+        },
+        "asset:assets/learning-tools/biology/dist/main.js": {
+          "bytes": 9882,
+          "sha256": "3c7387a8263618dac675489e15192352bf55ab5d5443c6e8162ccf4ced4aa07d"
+        },
+        "asset:assets/learning-tools/biology/dist/volume.js": {
+          "bytes": 720424,
+          "sha256": "fb32ea1509dd0d7a39cfaf47d7e1aaef974ac316e6733fc080f082fc18d01caf"
+        },
+        "asset:assets/learning-tools/learning/THIRD-PARTY-NOTICES.md": {
+          "bytes": 5250,
+          "sha256": "8b6257dea24ec85960b62bc80a9db0b881e0a60c08667ba1b0fd4a17aabb10e8"
+        },
+        "asset:assets/learning-tools/learning/asset-manifest.json": {
+          "bytes": 654,
+          "sha256": "9e3f805b29953194f5a43389fdc5b90b20a8d2b210408163828b80d6293805c8"
+        },
+        "asset:assets/learning-tools/learning/main.js": {
+          "bytes": 44247,
+          "sha256": "17c9985b491ead54809b67e86e603ed2ed8a4c3c867d4e78e3471ea879fdbb7c"
+        },
+        "asset:assets/learning-tools/learning/runtime/ort-wasm-simd-threaded.jsep.mjs": {
+          "bytes": 15665,
+          "sha256": "4f379c00d72d171cabf80d82ff293d18c16b487c535401b5d09d43645becb8c3"
+        },
+        "asset:assets/learning-tools/learning/runtime/ort-wasm-simd-threaded.jsep.wasm": {
+          "bytes": 6632332,
+          "sha256": "de96f94174dfa3e586c506a56cbec791589582bcf79b81b436387a32454f5015"
+        },
+        "asset:assets/learning-tools/learning/semantic-worker.js": {
+          "bytes": 150660,
+          "sha256": "ee6cc5448bd9e3c339029a5feb235fcb11f8667077d6700ef3f735c77b654fce"
+        },
+        "asset:assets/learning-tools/learning/styles.css": {
+          "bytes": 2351,
+          "sha256": "57a1b0c5bea90e5dfcd9014201bacc5cfc636c0668b2310baeec9a63bd676c4b"
+        },
+        "asset:assets/learning-tools/sketches/THIRD-PARTY-NOTICES.md": {
+          "bytes": 12568,
+          "sha256": "e86843afbaa30d1a310695c31d7c2c6c9d4f1fe40843a09bdc8c82ce1472cb41"
+        },
+        "asset:assets/learning-tools/sketches/asset-manifest.json": {
+          "bytes": 600,
+          "sha256": "777a16344c04a388f5b4d17506a5734e63505cc712da3f6997aedf3562720dca"
+        },
+        "asset:assets/learning-tools/sketches/editor.css": {
+          "bytes": 105966,
+          "sha256": "dc1a7717fca346a5bca6f3e8f99aa06458b7d99b56c3f3f6577c5e04b9175088"
+        },
+        "asset:assets/learning-tools/sketches/main.js": {
+          "bytes": 752592,
+          "sha256": "b872b8f17a2a71dd1bf6debb419a26ea78f117e58b5108c64310947984c7e435"
+        },
+        "asset:assets/learning-tools/sketches/styles.css": {
+          "bytes": 1960,
+          "sha256": "386c91ddef3efe0e8e604bbb586a4c0600bf2e1eac66f63e706c27840d7a2b2a"
+        },
+        "asset:assets/previews/explore-atlas.webp": {
+          "bytes": 10818,
+          "sha256": "caa0bdbffc4baf5bb34d5e29e54b351c2191a8b007b09c1a67bc90eb301a67af"
+        },
+        "asset:assets/previews/explore-diseases.webp": {
+          "bytes": 10733,
+          "sha256": "f4e53d8df064fb0b26903f6b228fd7a7ea45d98bc487f36808e52a1aa0401edb"
+        },
+        "asset:assets/previews/explore-graph.webp": {
+          "bytes": 7054,
+          "sha256": "10edaa9b349ba7fd38189e06146ff4c207db3e22d931d6532f76454e28d9704f"
+        },
+        "asset:assets/previews/explore-timeline.webp": {
+          "bytes": 5453,
+          "sha256": "cab2ebd59a69c8a3039ce21a6725c017c7e3398e40948aa92f10563faf1403d2"
+        },
+        "asset:assets/previews/explore-tree.webp": {
+          "bytes": 21470,
+          "sha256": "c646498cce6a718b4d0de6114747a2c81aa7d08bd97b108a5747e484f3d17bf3"
+        },
+        "asset:assets/previews/lab-cellular-respiration.webp": {
+          "bytes": 17618,
+          "sha256": "d7023fcb3a14abff5bde35f21e5766fa9b5928f686ccd62ab8d6cb0f9aefa0a5"
+        },
+        "asset:assets/previews/lab-cockroach-dissection.webp": {
+          "bytes": 14256,
+          "sha256": "f02ee08ac3ce5b33031b0bceb565206c37a53921756df90a475cd0bcfc333a2b"
+        },
+        "asset:assets/previews/lab-dna-extraction.webp": {
+          "bytes": 11004,
+          "sha256": "77f74daa2a379c448396e51ae991008610738420c9687a438a781d1a076b2788"
+        },
+        "asset:assets/previews/lab-dna-protein.webp": {
+          "bytes": 19511,
+          "sha256": "1be1814659c0b9e81ca01bb9b0bee43f2ab1d2a5b2272f0a18f51431e81320e9"
+        },
+        "asset:assets/previews/lab-earthworm-dissection.webp": {
+          "bytes": 9893,
+          "sha256": "b173174235ec2ca06a1337699b773fb073b73d336efa6e8a45dc62c178609e36"
+        },
+        "asset:assets/previews/lab-ecosystem-investigation.webp": {
+          "bytes": 8989,
+          "sha256": "d4b82bb3f41e9a790e6c5eb1771d7aa4ea34917b43c61946412cd64046de8407"
+        },
+        "asset:assets/previews/lab-enzyme-kinetics.webp": {
+          "bytes": 7956,
+          "sha256": "4296e3a63063b1a50ad19446428a05d9d31beb07d43f83903874c1cb8a487b90"
+        },
+        "asset:assets/previews/lab-fish-dissection.webp": {
+          "bytes": 15077,
+          "sha256": "ecd58f4cbf6ee7e8b1f499d7bcba3097a12bbe0abd5962bcade7fb494cb603b9"
+        },
+        "asset:assets/previews/lab-frog-dissection.webp": {
+          "bytes": 20260,
+          "sha256": "0fe3cc195723836ba8e6961ddf52fdda8f2da7c1e9d6a4cfcda52ac7fd86935d"
+        },
+        "asset:assets/previews/lab-gas-exchange.webp": {
+          "bytes": 13859,
+          "sha256": "5dc4d2ee26535270f854c3daaafed2bae6c28148c3a0451b7f290e7a6f62171c"
+        },
+        "asset:assets/previews/lab-gel-electrophoresis.webp": {
+          "bytes": 6760,
+          "sha256": "76c2f8b87b7a03673f93745bc106a42366d94c6bcdb5831e7a744e3c7cd8d222"
+        },
+        "asset:assets/previews/lab-heart-dissection.webp": {
+          "bytes": 15777,
+          "sha256": "2512b0b882a6beb1966a1e0a4c2975facc746293cc9c42055ba3008c55efb1ea"
+        },
+        "asset:assets/previews/lab-heart-physiology.webp": {
+          "bytes": 11531,
+          "sha256": "d89ec3911e58b47d1c495f92beb28f66197e94bb4ce412f3b93efa9079c11f8a"
+        },
+        "asset:assets/previews/lab-heart-rate.webp": {
+          "bytes": 10445,
+          "sha256": "3a2c79e754f45a02863f859a67a100474a21c5c1cd07427b9b1fefdda1770fe8"
+        },
+        "asset:assets/previews/lab-mendelian-genetics.webp": {
+          "bytes": 16193,
+          "sha256": "a113fceb0a7674aeafd8e3f0ac46264128001bb3caca90c6fca2f6abd6bf4a49"
+        },
+        "asset:assets/previews/lab-microscope.webp": {
+          "bytes": 10363,
+          "sha256": "6310963f4e84074b4c666ea133007e125ec8842600864aad6d68885b53f79594"
+        },
+        "asset:assets/previews/lab-mitosis.webp": {
+          "bytes": 19014,
+          "sha256": "743e31ce9e8ff0a324019a052673b621ce2a8e313b2713cdda58fc6b1b29929c"
+        },
+        "asset:assets/previews/lab-natural-selection.webp": {
+          "bytes": 24714,
+          "sha256": "65fc3c9bbfbb7dc9de92c3ef6d3ea9f6301bc23253eb2798cc82c68323655327"
+        },
+        "asset:assets/previews/lab-osmosis.webp": {
+          "bytes": 9551,
+          "sha256": "f291f5cf4b74dad057cb8e41c74dc51ecc618b57e36ce946fabff2f05629bb1c"
+        },
+        "asset:assets/previews/lab-pcr.webp": {
+          "bytes": 22969,
+          "sha256": "f40a7b04db1d3e91c1b66ac22ce38c8ebce9863ebde2e97000d18a4fe1957c0b"
+        },
+        "asset:assets/previews/lab-photosynthesis-rate.webp": {
+          "bytes": 14566,
+          "sha256": "04e5f6b1cfe204e05eafed35db05b60050db5b4e88ffa8a7368e8608b0099c33"
+        },
+        "asset:assets/previews/lab-plant-investigation.webp": {
+          "bytes": 9353,
+          "sha256": "a97f1a18af9f664101150c78ee657420fcf22a452709f5e03edb5ba796fc2a20"
+        },
+        "asset:assets/previews/lab-predator-prey.webp": {
+          "bytes": 10586,
+          "sha256": "3503c40e503cb21909be778bc74750cbc4a4ff3e2c90af7400e6f62fa6f72d18"
+        },
+        "asset:assets/previews/legacy-cell.webp": {
+          "bytes": 17588,
+          "sha256": "b72673ab14805d49cfc5b7006b7535e58f828ca2657fa9e5b829c3ca6f8077ae"
+        },
+        "asset:assets/previews/legacy-microscope.webp": {
+          "bytes": 12195,
+          "sha256": "e72c7798fb3c258669a78305a6546e353d837618bda1cdd3e5233748f84cc986"
+        },
+        "asset:assets/previews/lesson-actionpotential.webp": {
+          "bytes": 9026,
+          "sha256": "3da9f5fbbd0e0586090e2d3e3fe06f43ebd9b27f7d2b9dffd5456025150ac9a6"
+        },
+        "asset:assets/previews/lesson-cardiac.webp": {
+          "bytes": 13630,
+          "sha256": "566c64717c401abc1f102a05fc9c12908003349e288e5efbbc7a17c2b839f0b1"
+        },
+        "asset:assets/previews/lesson-diffusion.webp": {
+          "bytes": 18369,
+          "sha256": "527af7400cf66774749898e26ed7a954d14cf2e8a9f92c86595a7953895df6fe"
+        },
+        "asset:assets/previews/lesson-enzyme.webp": {
+          "bytes": 3011,
+          "sha256": "2f72953d48afc946be412433724493a4f5c243b417d9561c35ad6d5ca137c9b6"
+        },
+        "asset:assets/previews/lesson-photosynthesis.webp": {
+          "bytes": 6070,
+          "sha256": "d3d2dd376c3ee3502b7effecdd5c35ffb9e647e6edb5a8993a893ad7d514addf"
+        },
+        "asset:assets/previews/lesson-population.webp": {
+          "bytes": 6878,
+          "sha256": "58fb5a16f6d645bd3f673765e073002f4c117c958ecfd8bcd3934333c9944b2c"
+        },
+        "asset:assets/previews/lesson-replication.webp": {
+          "bytes": 14541,
+          "sha256": "131053d64245c7140101dd35fdbe4850cf9b35ca943b5d9d751e720dd5f320fb"
+        },
+        "asset:assets/previews/lesson-respiration.webp": {
+          "bytes": 11646,
+          "sha256": "9bfd80ecf13cc2a88936961361732d8663c34090e0f6b4fab370fe42d986d070"
+        },
+        "asset:assets/previews/lesson-selection.webp": {
+          "bytes": 8775,
+          "sha256": "e191c8a03cb1756263969c8435589ce65f464774038715b74f0a31ada016e509"
+        },
+        "asset:assets/previews/reason-altitude.webp": {
+          "bytes": 8247,
+          "sha256": "f9515681ef1b28306006a0401d29be2ed53b02c57fb81fd04773818ab99fb362"
+        },
+        "asset:assets/previews/reason-glucose.webp": {
+          "bytes": 7036,
+          "sha256": "d87c787019aaa1d26d774abd937da9d61f7dccb45c850ac6b1e234a31b0f2939"
+        },
+        "asset:assets/previews/reason-resistance.webp": {
+          "bytes": 9180,
+          "sha256": "b96696740ac95e8424cd8d79fa0cb6b50cbf0ef1d3e671fc5f602e5f4cf6db54"
+        },
+        "asset:assets/previews/section-about.webp": {
+          "bytes": 10869,
+          "sha256": "695328d10461ada520a37380feaccb9d1da1f5d8024ea18ed848dc3a898f09d6"
+        },
+        "asset:assets/previews/section-explore.webp": {
+          "bytes": 18344,
+          "sha256": "733f0ed37db1f66e538cabc38734ab7099cec63d5be89aab743b8df2ae4da35a"
+        },
+        "asset:assets/previews/section-home.webp": {
+          "bytes": 40293,
+          "sha256": "ce76428f6f7d9d331f60a9007e928b8419623bf1fb65de146e59f65c9f321d55"
+        },
+        "asset:assets/previews/section-lab.webp": {
+          "bytes": 20260,
+          "sha256": "0fe3cc195723836ba8e6961ddf52fdda8f2da7c1e9d6a4cfcda52ac7fd86935d"
+        },
+        "asset:assets/previews/section-labs.webp": {
+          "bytes": 10363,
+          "sha256": "6310963f4e84074b4c666ea133007e125ec8842600864aad6d68885b53f79594"
+        },
+        "asset:assets/previews/section-learn.webp": {
+          "bytes": 7138,
+          "sha256": "86799a56433aceb02706cedb21f66a94b748872c3ea32812de9219ce40f31c39"
+        },
+        "asset:assets/previews/section-lessons.webp": {
+          "bytes": 18369,
+          "sha256": "527af7400cf66774749898e26ed7a954d14cf2e8a9f92c86595a7953895df6fe"
+        },
+        "asset:assets/previews/section-me.webp": {
+          "bytes": 24605,
+          "sha256": "f181cb702106d1f1e72545bbfe0cd0da1e3172ebbe62188c38d1cd6056d5f1e0"
+        },
+        "asset:assets/previews/section-reason.webp": {
+          "bytes": 7036,
+          "sha256": "d87c787019aaa1d26d774abd937da9d61f7dccb45c850ac6b1e234a31b0f2939"
+        },
+        "asset:assets/previews/section-solve.webp": {
+          "bytes": 25632,
+          "sha256": "978da268a343b2bad37d2da46354b2c8ddcc799bf99a4a4b95211f4c49fced13"
+        },
+        "asset:assets/previews/section-universe.webp": {
+          "bytes": 31264,
+          "sha256": "bc1dc58c52e64d2a2ac73fb5958ef96f23b72534db7bcf7f213fb17c401165f3"
+        },
+        "asset:assets/previews/solve-adaptive.webp": {
+          "bytes": 29257,
+          "sha256": "63528eb424203c12da0aa2a535e13506c07632b2b6e45deb8dc17e2bfa19e3ec"
+        },
+        "asset:assets/previews/solve-practice.webp": {
+          "bytes": 28868,
+          "sha256": "68ac0ee9543976a29b6641fb459ffb606fe7fcf49492095858f62ffedf13338c"
+        },
+        "asset:assets/previews/solve-review.webp": {
+          "bytes": 25632,
+          "sha256": "978da268a343b2bad37d2da46354b2c8ddcc799bf99a4a4b95211f4c49fced13"
+        },
+        "asset:assets/previews/solve-timed.webp": {
+          "bytes": 28802,
+          "sha256": "01e620593ec90678ba19f29847f8610a0d73ac8c637fe09bc43c5f47f8bc24d2"
+        },
+        "asset:assets/protein/1CRN.pdb.txt": {
+          "bytes": 10607,
+          "sha256": "69b42cc6d162011c9f3cea8a6c07c2fb40124ae46062c81c7efa4d5f0e5efc13"
+        },
+        "asset:assets/protein/vendor/MOLSTAR-LICENSE.txt": {
+          "bytes": 660,
+          "sha256": "c85bc0f3211c86fef03c63928dd5de2e89622c21ef0a77ed7faeb741264a855c"
+        },
+        "asset:assets/protein/vendor/molstar.css": {
+          "bytes": 16399,
+          "sha256": "31041ad879d6188097ad25c092c97343ae69c529fcb9217ee64fc71f16f8191a"
+        },
+        "asset:assets/protein/vendor/molstar.js": {
+          "bytes": 1504333,
+          "sha256": "2ca71a258a13d3b49dbe855aed5e021898122be7180b18f43ed37419d2043563"
+        },
+        "asset:assets/specimens/COCKROACH-ATTRIBUTION.md": {
+          "bytes": 838,
+          "sha256": "81c6faf5c7e8170529b6bc36683dd2c66e10e5a325e498d3328f81788fa5aa05"
+        },
+        "asset:assets/specimens/FROG-ATTRIBUTION.md": {
+          "bytes": 783,
+          "sha256": "2457372c95f1155c56774b0902466d15f231705df84a6455be4c0b709c95ffce"
+        },
+        "asset:assets/specimens/cockroach.glb": {
+          "bytes": 8785302,
+          "sha256": "4a59ced4650cc9359b15ddaf0945afb8e348b658b040d76dfe4afa475ca6fb9a"
+        },
+        "asset:assets/specimens/frog.glb": {
+          "bytes": 5915995,
+          "sha256": "d4869124410d8e08cb118a06535bd506b9f3f927a00d877accfe73261240b1e7"
+        },
+        "asset:bioq-og.jpg": {
+          "bytes": 65969,
+          "sha256": "a0674c8cdb5b004e0f0b72d52b756d99bd70808fffc536f27f6866156769eda2"
+        },
+        "asset:favicon.png": {
+          "bytes": 57898,
+          "sha256": "319a594cc9c88a648ed3d59ee7997b416f312b34d6b08599b748c73839e506a8"
+        },
+        "asset:src/ai/biology-ai.js": {
+          "bytes": 10048,
+          "sha256": "0b4306766da11c334e4e9c3f8436ec854ad440737f91fe8eb6e051d7fc3ac854"
+        },
+        "asset:src/lab/prepared-loader.js": {
+          "bytes": 4927,
+          "sha256": "68ac83174257b2778e3014393f5849c5253fcd808f1942bfc47570d0a51d0796"
+        },
+        "asset:src/lab/specimen-assets.js": {
+          "bytes": 5074,
+          "sha256": "f8fad289a62e5debf5576a735b2b767ae4e3909ffaaaf54c51ca19e275d4df81"
+        },
+        "asset:src/lab/vendor/THREE-LICENSE.txt": {
+          "bytes": 661,
+          "sha256": "3ea041e7dc3908cfc92115acc094ec76df461e1b86b8df45d3bb4fca4f1576e1"
+        },
+        "asset:src/lab/vendor/loaders/GLTFLoader.js": {
+          "bytes": 23383,
+          "sha256": "8f320544e26fca592108c8d90dd6c343f87886a3496d1252c863d4cc4c98cb97"
+        },
+        "asset:src/lab/vendor/utils/BufferGeometryUtils.js": {
+          "bytes": 6871,
+          "sha256": "0c20e5f8b0a31a01747f9aea09feb825bbec0a6158ed3ae45fdfd923133d1e8c"
+        },
+        "asset:src/launch/restored-motion.js": {
+          "bytes": 1182,
+          "sha256": "586c2c9734bdfc75bcef5a7fc33a391dcbdaa6385d3255edc240dc6bf4ee903f"
+        },
+        "asset:src/launch/restored-realism.css": {
+          "bytes": 1270,
+          "sha256": "21f521a41f242e42211e469dcdc92a83cb4515e60ff9a7f9ffe23d26dd143e17"
+        },
+        "asset:src/learning-tools/host.css": {
+          "bytes": 1457,
+          "sha256": "1d81cc05baaa02c7192a4770f818f768a09686a226d1615653737a920aa9c0b6"
+        },
+        "asset:src/learning-tools/host.js": {
+          "bytes": 5139,
+          "sha256": "276fb89c0f799def2ff8b1e2c8203379d5c2eea976f2fcdd70eaa130c9b5e568"
+        },
+        "asset:src/single-file/vendor/three-addons/math/SimplexNoise.js": {
+          "bytes": 3679,
+          "sha256": "981ecc07dc35f0b1b4b9044aaa2cb025ed34fd5ed62635ce95889b934780fc28"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/BokehPass.js": {
+          "bytes": 1141,
+          "sha256": "e379979c490d8511f82a9ffd555af334cfb352740ae26de784f9865f81de75b0"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/EffectComposer.js": {
+          "bytes": 1258,
+          "sha256": "3d2488b8481fcd1cd6e99b52ba8e58de6ccc0c1709e21e00a1e24ef2000a662d"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/GTAOPass.js": {
+          "bytes": 3284,
+          "sha256": "c250cc01a71ccf6fa187086bb5d50eec34c7c8c645686df22c259cdb5b84f0f9"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/MaskPass.js": {
+          "bytes": 733,
+          "sha256": "1f94a3d97b53befd53c4cf3ebb927ffcdf2c1ea7fed56724210589eada5345c9"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/OutputPass.js": {
+          "bytes": 870,
+          "sha256": "ee66fb32c0c3c075c65f93f2233f18ab8d0000d7f2e64f0522683da7a7a3820b"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/Pass.js": {
+          "bytes": 751,
+          "sha256": "8534c9eeba095541801e3da35c26fa70f0670a75b4e369af65533920785c6212"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/RenderPass.js": {
+          "bytes": 670,
+          "sha256": "b5f671db251a6c13696011ce2bd662f4fe7ee0cd1da0bc669bf67b33f4710aaf"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/SSAOPass.js": {
+          "bytes": 2616,
+          "sha256": "df715ce38733d0806fb9d9de901f9ab7f41b3f4f01e77945e9ad564a79ae2388"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/ShaderPass.js": {
+          "bytes": 704,
+          "sha256": "e8a443c6e1d39a01f0f42e6cb469003a40fe82233d18f7d1e600654bec4fcc6e"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/UnrealBloomPass.js": {
+          "bytes": 2972,
+          "sha256": "66b8f06b81776e50046f7d9c6e1cf0d2f7ed5d4c95dcaed978761598229c1974"
+        },
+        "asset:src/single-file/vendor/three-addons/shaders/BokehShader.js": {
+          "bytes": 1098,
+          "sha256": "7651c29e991359c68520fcb5b545c7c5f7c692e2f57b1e9576a69123689090c6"
+        },
+        "asset:src/single-file/vendor/three-addons/shaders/CopyShader.js": {
+          "bytes": 330,
+          "sha256": "cbe39eaffeecad69b37228b5a30c39fd660af5fdeeaaccae255f776ffd6f66d3"
+        },
+        "asset:src/single-file/vendor/three-addons/shaders/GTAOShader.js": {
+          "bytes": 3992,
+          "sha256": "163db4e9fb14229d4c796078d656fbdeb717cfd29c914916e2234ea926674352"
+        },
+        "asset:src/single-file/vendor/three-addons/shaders/LuminosityHighPassShader.js": {
+          "bytes": 537,
+          "sha256": "0e65a0d1938c5c600b21d4e1895d6a906b5c193093bce9b51cc99ca2f6fab285"
+        },
+        "asset:src/single-file/vendor/three-addons/shaders/OutputShader.js": {
+          "bytes": 555,
+          "sha256": "eddf6700ed122792926de4ca07b47d40c9bec28277d672a306e530ecb815c210"
+        },
+        "asset:src/single-file/vendor/three-addons/shaders/PoissonDenoiseShader.js": {
+          "bytes": 2196,
+          "sha256": "12e367e9924bd51e95acbf709f32adea2c79213cd191e12a5978583b7eb3544c"
+        },
+        "asset:src/single-file/vendor/three-addons/shaders/SSAOShader.js": {
+          "bytes": 1847,
+          "sha256": "c4527a64842818ca85bf07300c37fae5324a2da46f825f873c76443e6fec4a9b"
+        }
+      }
+    },
+    {
+      "path": "C:\\Users\\darsh\\AppData\\Local\\Temp\\entelloq-biology-package-audit-c955-af0b9cc2d2644e0e9d7f977a30701859\\git-python314\\index.html",
+      "bytes": 44988000,
+      "sha256": "e8bf0a8e9da95eaef7459de726f544daa26a41d1a938319d19b096a9a72e644e",
+      "pageCount": 17,
+      "assetCount": 140,
+      "deferredCount": 37,
+      "decodedBytes": 72234768,
+      "gzipHeaders": [
+        "1f8b08000000000002ff"
+      ],
+      "normalizedContainerSha256": "b892608025288536d24c3acfd77062973fa5ef758dd153544b1afe56739a7b5d",
+      "decoded": {
+        "page:index.html": {
+          "bytes": 150731,
+          "sha256": "b8e8b4c6135d749af846768f918241a24ad74b4731bb53f33033e687c9f9f381"
+        },
+        "page:app.html": {
+          "bytes": 1032153,
+          "sha256": "d313f735dd91e9a61b29c8840af2d3acb9e32aa05026e15d293c96ccf7b17f01"
+        },
+        "page:learn.html": {
+          "bytes": 1191542,
+          "sha256": "8bcdd0d1360e3a2d63e6684db834b3520583df8a28d26e95c59b411cb01b38fa"
+        },
+        "page:lessons.html": {
+          "bytes": 194992,
+          "sha256": "6dbe086d3d213512dcd03f930a0b96a47ae81436f0045916526e0d4c743fed38"
+        },
+        "page:reason.html": {
+          "bytes": 1414903,
+          "sha256": "ac86ce83f41aa318cd8b66be0cbffee031e1e3d334cc001095c83dd00001dda3"
+        },
+        "page:labs.html": {
+          "bytes": 803040,
+          "sha256": "f3618ca29453c5456002122eb5bdcf09786e373b1b387a09a42c6b524d3d0787"
+        },
+        "page:solve.html": {
+          "bytes": 1505191,
+          "sha256": "27e9c0960f372171e089e6ae3188f8a070c3350fdc3f3284be6f8f22df1cb4d9"
+        },
+        "page:explore.html": {
+          "bytes": 502372,
+          "sha256": "bf34ea3bb6fa22cc30906cb5febc2113c5673bcd7271f08532f6201ed117f992"
+        },
+        "page:me.html": {
+          "bytes": 460519,
+          "sha256": "2eb76c5912ffc45ec85a9801be6a560deeee4be1d92a9e376d74e2be2148b084"
+        },
+        "page:about.html": {
+          "bytes": 288847,
+          "sha256": "344becc5bef114d0a20c8110dda34331836996db27eee15255032d0f6bd38b67"
+        },
+        "page:lab.html": {
+          "bytes": 2770949,
+          "sha256": "b46ce7ccd5cd82256cdfa22a9594bc12385dea22f60e2cdbe9c2fad166ca57b1"
+        },
+        "page:universe.html": {
+          "bytes": 1565749,
+          "sha256": "2b5e311edbf6e4dad6fafc9adbf6d4140def1fd5f9c6b9734964bc801939be29"
+        },
+        "page:assets/learning-tools/biology/index.html": {
+          "bytes": 28552,
+          "sha256": "4cf6f4c9b92342f5fc5b18fbf3a425ff89878765c3ae2b8c85b927ab3f6eaabd"
+        },
+        "page:assets/learning-tools/learning/index.html": {
+          "bytes": 149304,
+          "sha256": "23ac40337dc7e803869927bb43ed510bb98db30d790b574cad339ef2226ad5ff"
+        },
+        "page:src/learning-tools/guide.html": {
+          "bytes": 3312,
+          "sha256": "418d7180c01b8440c5e2c6fabd09188430d89e53bce3701510c060c6c763a96c"
+        },
+        "page:assets/learning-tools/sketches/index.html": {
+          "bytes": 1999971,
+          "sha256": "e41d12ae68ce8b594f50c73815e1638ef99b19e16e0d07be845642e0948dcded"
+        },
+        "page:assets/learning-tools/animations/index.html": {
+          "bytes": 31610,
+          "sha256": "0ee82ce1642a82efc19bdb2943de078b4727502fde5dbcfed30d0aeb3ca81988"
+        },
+        "asset:assets/biology-cells.webp": {
+          "bytes": 129296,
+          "sha256": "495dd9b00a0bc384db3dd0443cf60a200753f3e47e266106bb40f724720eec7e"
+        },
+        "asset:assets/biology-dna-hero.webp": {
+          "bytes": 107712,
+          "sha256": "442796918c267dbe55e8830ab19cbfb4338d6d77583f6c4d29e90e65cdc71c00"
+        },
+        "asset:assets/biology-leaf.webp": {
+          "bytes": 104192,
+          "sha256": "39cd92edba3eb203991244fcd3aaf8cc71094f407260afd799db3c12fe44c5ed"
+        },
+        "asset:assets/biology-neurons.webp": {
+          "bytes": 82902,
+          "sha256": "91b5465e03682b5a773b2b0353fd55caeed4701e5c8cd0adebd0009d32e811d2"
+        },
+        "asset:assets/biology-wing.webp": {
+          "bytes": 357768,
+          "sha256": "a962fa97640c71ffdb6f7fb384c625347997471ff0d070f9fa7a520257cf2566"
+        },
+        "asset:assets/entelloq-classroom.js": {
+          "bytes": 12849,
+          "sha256": "1ef072462b46561d9513e8186f28e75517d83046e42ec6e30e42c4bd6414a903"
+        },
+        "asset:assets/entelloq-science.css": {
+          "bytes": 2022,
+          "sha256": "b59a1281cd93a8033132524d6ff96ae46f7f0d44d08a7965190ac9a96063b80b"
+        },
+        "asset:assets/entelloq-science.js": {
+          "bytes": 15415,
+          "sha256": "dffdf2baaaa7fd2500b9e0a9bb9305bccf508f19a7d882a1ab6e1bd7cccf48cd"
+        },
+        "asset:assets/feature-tutorials.css": {
+          "bytes": 2484,
+          "sha256": "bfc94a1fac120eb908100ed999688e5b35ed5e036308dab9affdd4bcca26541a"
+        },
+        "asset:assets/feature-tutorials.js": {
+          "bytes": 12521,
+          "sha256": "410bff52489d6fec6a46a799680754c5af734fc7556662f8bed676971b945274"
+        },
+        "asset:assets/launch/biology-cell.webp": {
+          "bytes": 144972,
+          "sha256": "a8433ccefc63ecb1f31887d131d4f717afa1d028cd808c444b00a0cc4a17b1d3"
+        },
+        "asset:assets/learning-tools/animations/asset-manifest.json": {
+          "bytes": 3403,
+          "sha256": "bee0c8224afac39795b4a4a367e568c78b61091866b68a790df8c2bf2113cd97"
+        },
+        "asset:assets/learning-tools/animations/catalog.js": {
+          "bytes": 5473,
+          "sha256": "87183d6dd5f7e6b84f60ba104a099aa7424e255551ac0eb443fa943be95caaa9"
+        },
+        "asset:assets/learning-tools/animations/main.js": {
+          "bytes": 13465,
+          "sha256": "99d86c6f90c4d41f787c14eed2a12e119f3ceffc46c184e822960c425af0115e"
+        },
+        "asset:assets/learning-tools/animations/media/biology-poster.png": {
+          "bytes": 151576,
+          "sha256": "009a46739f3def5d9548d2b5385ef806615fdeea78f28342f7748dd06dbbf1f2"
+        },
+        "asset:assets/learning-tools/animations/media/biology-step-1.png": {
+          "bytes": 141204,
+          "sha256": "713eab38c4c9e2b20b723479cd882ccd5bf11e692cf3a5ea3ab69e785da81ba5"
+        },
+        "asset:assets/learning-tools/animations/media/biology-step-2.png": {
+          "bytes": 151015,
+          "sha256": "d4714572991d405eb0330832d9b09ad08d758f89504f31c301381db7e29f932e"
+        },
+        "asset:assets/learning-tools/animations/media/biology-step-3.png": {
+          "bytes": 150503,
+          "sha256": "59c55d8d3c8de25c44c1810e6b669cd4e735630b0823f7e1e602d78de9fdf28a"
+        },
+        "asset:assets/learning-tools/animations/media/biology-step-4.png": {
+          "bytes": 147472,
+          "sha256": "47043ce9e379cf8f018e79ac5bdf031ec38e64780245a09e8505120aac182814"
+        },
+        "asset:assets/learning-tools/animations/media/biology.mp4": {
+          "bytes": 242903,
+          "sha256": "1f35d30e48cf907edc2b1ba39b96ef5c0916ffe5b3433fb10add7e7969767e30"
+        },
+        "asset:assets/learning-tools/animations/media/biology.vtt": {
+          "bytes": 364,
+          "sha256": "43fddb021b2f65aed7f16c2a7e5c4508b0bf05b099312f8759fe65cecc134c79"
+        },
+        "asset:assets/learning-tools/animations/media/physics-poster.png": {
+          "bytes": 166835,
+          "sha256": "6cb474ec1610344225ec4e391c5423f5f0d6f11919a5c96e4884e443b41d498f"
+        },
+        "asset:assets/learning-tools/animations/media/physics-step-1.png": {
+          "bytes": 144821,
+          "sha256": "65f6dce4cdf61cc2e72152a93ab734290808ede5a1a794c64841f6777c20ac97"
+        },
+        "asset:assets/learning-tools/animations/media/physics-step-2.png": {
+          "bytes": 133542,
+          "sha256": "cf1ef9e87cff780715b695b8501021ccce5eec315f5d1912a54801f7b747bd9e"
+        },
+        "asset:assets/learning-tools/animations/media/physics-step-3.png": {
+          "bytes": 155330,
+          "sha256": "1b94c6ef54c95b160415b61dae3052bc5e61adce3f3e319b092db19b7cf94b14"
+        },
+        "asset:assets/learning-tools/animations/media/physics-step-4.png": {
+          "bytes": 167841,
+          "sha256": "567272aed1c411030be8cba46ae65294de1120b9e2b55da3f0d38b450f492365"
+        },
+        "asset:assets/learning-tools/animations/media/physics.mp4": {
+          "bytes": 277651,
+          "sha256": "abf570422904d5cfcd7eb5f927b5d9a14ca729cce996088b387c94f12c14a65f"
+        },
+        "asset:assets/learning-tools/animations/media/physics.vtt": {
+          "bytes": 352,
+          "sha256": "91d2bf3cd9874e8eaeaebff4a44bf2df2f70e57ec400bc59a046bb2c6414132a"
+        },
+        "asset:assets/learning-tools/animations/styles.css": {
+          "bytes": 7869,
+          "sha256": "19aa50f9f295839b278732e11d33fd8ddec74c93b5339b05b0cfd035b2b00d0f"
+        },
+        "asset:assets/learning-tools/biology/dist/THIRD-PARTY.txt": {
+          "bytes": 13438,
+          "sha256": "2d7e99726877a9ea306511d7d6f339e4c0e6b9b0d09e2f54b0a788bfe80dfb85"
+        },
+        "asset:assets/learning-tools/biology/dist/VTK-Copyright.txt": {
+          "bytes": 1761,
+          "sha256": "a8efeb737fe2a8c7fd511d61a4303c9278a402266059e471d48b57a48d895b3e"
+        },
+        "asset:assets/learning-tools/biology/dist/main.js": {
+          "bytes": 26504,
+          "sha256": "7c1769440a5119fd2c29fd94fc4028ecaf72d9ba19acbfc2016116d808ad0e8c"
+        },
+        "asset:assets/learning-tools/biology/dist/volume.js": {
+          "bytes": 1849626,
+          "sha256": "5b7a5a03d50bf25e3639b32e8c3dceccae8e798cef76c8836bb1d3ceff6afb59"
+        },
+        "asset:assets/learning-tools/learning/THIRD-PARTY-NOTICES.md": {
+          "bytes": 28270,
+          "sha256": "655f787b56bb232ce21080a863b384bbb2d09221747c24c70be81a1f50cf2861"
+        },
+        "asset:assets/learning-tools/learning/asset-manifest.json": {
+          "bytes": 1348,
+          "sha256": "8dc6bdb365e4f13ad2223116fe59f03f356ece251dd344272ddcb618ff690024"
+        },
+        "asset:assets/learning-tools/learning/main.js": {
+          "bytes": 137872,
+          "sha256": "a16992e3612f89f768c935b110e120785e58d7d098192318201ed5f33108f042"
+        },
+        "asset:assets/learning-tools/learning/runtime/ort-wasm-simd-threaded.jsep.mjs": {
+          "bytes": 46851,
+          "sha256": "c2f80e915e9df63289788a99d434d8c4e00e64e9c1f030f4b80b022458dd2c99"
+        },
+        "asset:assets/learning-tools/learning/runtime/ort-wasm-simd-threaded.jsep.wasm": {
+          "bytes": 28352885,
+          "sha256": "62ff86b2f2fa3a79eb87a7e4720e8ea9051942bf975f314181bf7dcef2feac06"
+        },
+        "asset:assets/learning-tools/learning/semantic-worker.js": {
+          "bytes": 703248,
+          "sha256": "94b4c90d376bde00872ccfec38cc2d5a97bf95c49d78eebf7f75f821d8313e25"
+        },
+        "asset:assets/learning-tools/learning/styles.css": {
+          "bytes": 9331,
+          "sha256": "4d14fca720f9ce20948f36b7e6849929dbaa8aa58c7f7b1ca47828457cd14822"
+        },
+        "asset:assets/learning-tools/sketches/THIRD-PARTY-NOTICES.md": {
+          "bytes": 95883,
+          "sha256": "a90aee2e206822a7f62d405b89829b94ad6fb5ba0e1ab33ce4257b12ca273329"
+        },
+        "asset:assets/learning-tools/sketches/asset-manifest.json": {
+          "bytes": 1220,
+          "sha256": "3d92842968d342530b20551a6276f01141240cea90d14d5eaf73789ba16c06df"
+        },
+        "asset:assets/learning-tools/sketches/editor.css": {
+          "bytes": 252820,
+          "sha256": "dab6bffe8be957e2525229b84f832e8bad6cda4c15633bd8f8c607c49fe0b826"
+        },
+        "asset:assets/learning-tools/sketches/main.js": {
+          "bytes": 1738059,
+          "sha256": "775c728585ff341b728fca9fc003e8ebc84034690a660e880a74925feeaba545"
+        },
+        "asset:assets/learning-tools/sketches/styles.css": {
+          "bytes": 6967,
+          "sha256": "b599855e548cd726fd82f9d4e8b9c98ec8697e88a5a833f43cca420845150ef2"
+        },
+        "asset:assets/previews/explore-atlas.webp": {
+          "bytes": 10916,
+          "sha256": "34776a898f00bc160a0125617e15f42f1b2a50dee01bc1811393e2c340e109be"
+        },
+        "asset:assets/previews/explore-diseases.webp": {
+          "bytes": 10710,
+          "sha256": "d97de51a08a88a99ebca9294829f26f8a21079c4b0dc8ff62bea4b5a2ead3fe7"
+        },
+        "asset:assets/previews/explore-graph.webp": {
+          "bytes": 7064,
+          "sha256": "1a6242aac6d6ec06da172d5129ec841126ca543daf83f4114fe6088a0d158411"
+        },
+        "asset:assets/previews/explore-timeline.webp": {
+          "bytes": 5430,
+          "sha256": "43901ff7eae760c19717cb5b8cedc0aa9ef95dafc9fb29f8267cb04d2a426029"
+        },
+        "asset:assets/previews/explore-tree.webp": {
+          "bytes": 21442,
+          "sha256": "c069cfe39dd47538d63435d40a54afad0932e3ef5350d50c80b6a6b3384faba9"
+        },
+        "asset:assets/previews/lab-cellular-respiration.webp": {
+          "bytes": 17806,
+          "sha256": "83bcf5a30b95b8422e68ba532824498153f6cad7f00c75631dc9ae8cec0e7f3c"
+        },
+        "asset:assets/previews/lab-cockroach-dissection.webp": {
+          "bytes": 14364,
+          "sha256": "639c258548a05278ba3b0e135db5207eaec69cc3875d6cf7cc4c92698fec2e21"
+        },
+        "asset:assets/previews/lab-dna-extraction.webp": {
+          "bytes": 11194,
+          "sha256": "b233eb7b10aa711993fc3fe4629489cd5c52f9ae704c5e9f0ffa28ed0fe30d65"
+        },
+        "asset:assets/previews/lab-dna-protein.webp": {
+          "bytes": 19688,
+          "sha256": "1f27ced3798f1b624ab5dd8293918f512a8b2133b29e7e95429c1a4b6c3ca425"
+        },
+        "asset:assets/previews/lab-earthworm-dissection.webp": {
+          "bytes": 9870,
+          "sha256": "89703e310269080c9d35e698afa1073311b624c72de678c67e0aa8465000ade4"
+        },
+        "asset:assets/previews/lab-ecosystem-investigation.webp": {
+          "bytes": 9194,
+          "sha256": "b48016b64902d8f9192573d342a958cc3f771204a7f3c3c8165e8e9b3218e35c"
+        },
+        "asset:assets/previews/lab-enzyme-kinetics.webp": {
+          "bytes": 8266,
+          "sha256": "4121fd04194398d3fa4cb4e7aeacc95415ed107eda9fc56e696e82d94b7cbedc"
+        },
+        "asset:assets/previews/lab-fish-dissection.webp": {
+          "bytes": 15054,
+          "sha256": "3f6f19ccebb8e44f68321f435ffad1300f42f8c6efb8312b9918b7f6a14c6c3e"
+        },
+        "asset:assets/previews/lab-frog-dissection.webp": {
+          "bytes": 20250,
+          "sha256": "918dfc970750eddc5b8df440a136d79b81d3582391c91b96682fe594e9cf79bc"
+        },
+        "asset:assets/previews/lab-gas-exchange.webp": {
+          "bytes": 14174,
+          "sha256": "c1729db42e1a870d7d942b9fb803683151801c37352a52e5f4ba6d214c50e3fa"
+        },
+        "asset:assets/previews/lab-gel-electrophoresis.webp": {
+          "bytes": 7302,
+          "sha256": "2435d45af7b9c55d24b15a52cc5f975558ced22ddf5a61f4b7dabbab241eda90"
+        },
+        "asset:assets/previews/lab-heart-dissection.webp": {
+          "bytes": 15754,
+          "sha256": "f37a0f7c76263a979ae64b1af5d52b4471a9adc5a019b882cdea64ede06e53d4"
+        },
+        "asset:assets/previews/lab-heart-physiology.webp": {
+          "bytes": 11880,
+          "sha256": "c76a56bcf5fc34bdb19db6adb82346d8e93cdad35b4a9c18d6040ba44b642323"
+        },
+        "asset:assets/previews/lab-heart-rate.webp": {
+          "bytes": 10422,
+          "sha256": "49a71ad20fd9f6521d3b4f8f5d0925fa18f0cc8a6c9282230d9adf78ff213ed4"
+        },
+        "asset:assets/previews/lab-mendelian-genetics.webp": {
+          "bytes": 16328,
+          "sha256": "17b7a3953f3c41c0f42feeb4ad4a26b9018777171a692eab8bc15dcd63d0c086"
+        },
+        "asset:assets/previews/lab-microscope.webp": {
+          "bytes": 10422,
+          "sha256": "c58606a1bb32c0d83d4b9eda51b8b7b426c0d046e69ad4496cdb97bba7c5d2d0"
+        },
+        "asset:assets/previews/lab-mitosis.webp": {
+          "bytes": 19096,
+          "sha256": "4068302ef3c39aac2c6ec4686414e6f812f58b501996aaba726e6ebd027a8c6e"
+        },
+        "asset:assets/previews/lab-natural-selection.webp": {
+          "bytes": 24686,
+          "sha256": "5a832c4fc867b372ec427de93e6b01c321b15d0e9275223f5e417210b8e04105"
+        },
+        "asset:assets/previews/lab-osmosis.webp": {
+          "bytes": 9820,
+          "sha256": "39778756623705ccd1c85251e1460fcf81bf64672111c76a79c6a6485d639f65"
+        },
+        "asset:assets/previews/lab-pcr.webp": {
+          "bytes": 23004,
+          "sha256": "777b7bd2315c73f0c2cc1e4c121f3b0390325fc02d1fc33b105aaa525da55cff"
+        },
+        "asset:assets/previews/lab-photosynthesis-rate.webp": {
+          "bytes": 14740,
+          "sha256": "729b4175dbbd44dd1545e97e31f5ece5ce5101c46b4d71243943996d2288845a"
+        },
+        "asset:assets/previews/lab-plant-investigation.webp": {
+          "bytes": 9534,
+          "sha256": "f6cbe4f0878b0a191ee40c9428a17d09a9d91098a41e0634a77c103388133194"
+        },
+        "asset:assets/previews/lab-predator-prey.webp": {
+          "bytes": 10962,
+          "sha256": "8475bae6641cacd7778e22236adf2d6c8be543c7629f6b3c81542856d321579f"
+        },
+        "asset:assets/previews/legacy-cell.webp": {
+          "bytes": 17560,
+          "sha256": "5c521bdf800b77335cd89c32f56d03e89e02025c7b2b4aa58d9ec14d804ce1e9"
+        },
+        "asset:assets/previews/legacy-microscope.webp": {
+          "bytes": 12172,
+          "sha256": "c83e9b57ff95a7e8d22d4457b91e90467e645d0ff297e8053e2c3a2b899ee041"
+        },
+        "asset:assets/previews/lesson-actionpotential.webp": {
+          "bytes": 9380,
+          "sha256": "bbaa58a7f97c480e15c90cb0dcf59b7277e7a47f6e960f71296f62bb6ff391fd"
+        },
+        "asset:assets/previews/lesson-cardiac.webp": {
+          "bytes": 13910,
+          "sha256": "4291cc1c1a0a8648452f74e812b605f2364f311c57598fdf8bc89bbbb59ed690"
+        },
+        "asset:assets/previews/lesson-diffusion.webp": {
+          "bytes": 18456,
+          "sha256": "60fae56e358fbbd9834674903a0f855530aad9799b9ecc9cda886879bea2dc77"
+        },
+        "asset:assets/previews/lesson-enzyme.webp": {
+          "bytes": 3628,
+          "sha256": "3bb25258cf3f95580c1435e1d6af3b3a7588406ab1ae1414bfab9f5539839920"
+        },
+        "asset:assets/previews/lesson-photosynthesis.webp": {
+          "bytes": 6326,
+          "sha256": "6a052d27bbf1ed0c1e5e17d98bff1f43f95d9cde1461e9f9c91d748652bf3b68"
+        },
+        "asset:assets/previews/lesson-population.webp": {
+          "bytes": 7198,
+          "sha256": "096b8864a11fca7ac15458363012e5fe0d2b46b1b573849c53d533d33e1cbab6"
+        },
+        "asset:assets/previews/lesson-replication.webp": {
+          "bytes": 14970,
+          "sha256": "f7a0aa97c6fd66b4b041bbc89401b8c41268e24968d24d8103a9b24011ffedd0"
+        },
+        "asset:assets/previews/lesson-respiration.webp": {
+          "bytes": 11750,
+          "sha256": "d9a7c79468c6c838be1738ef8502ce9ab99243feafc34e60e290e4150f9af8b5"
+        },
+        "asset:assets/previews/lesson-selection.webp": {
+          "bytes": 9058,
+          "sha256": "a07b6d7f26ff61b11094f4c6b8e8871b0633c229544793720cdcc8ddd18bbfe2"
+        },
+        "asset:assets/previews/reason-altitude.webp": {
+          "bytes": 8282,
+          "sha256": "3f946a6df918623686728c0f39ded3217916f41bfbba621edf7e01dc1f840940"
+        },
+        "asset:assets/previews/reason-glucose.webp": {
+          "bytes": 7040,
+          "sha256": "1af9664eb60d1aefcd764e9991f46f75320e383d8a8e4d260e071c2000af6e59"
+        },
+        "asset:assets/previews/reason-resistance.webp": {
+          "bytes": 9230,
+          "sha256": "f93076bb0d729c2c7175840b289e273214cf8492e4bedc14e8a09bb48ab34176"
+        },
+        "asset:assets/previews/section-about.webp": {
+          "bytes": 10846,
+          "sha256": "b404a4bfe5d9fe4c5f92ca708a328203d63af853fe94ce6196f2a732b0d75654"
+        },
+        "asset:assets/previews/section-explore.webp": {
+          "bytes": 18316,
+          "sha256": "9483c147287307db4895c378699272999e67229ac7879ece11be57d8135af498"
+        },
+        "asset:assets/previews/section-home.webp": {
+          "bytes": 40260,
+          "sha256": "f8116b48cd9fa973a9685f29bd9614e1e1ea6cf84b120c728d7a0536c74879f3"
+        },
+        "asset:assets/previews/section-lab.webp": {
+          "bytes": 20250,
+          "sha256": "918dfc970750eddc5b8df440a136d79b81d3582391c91b96682fe594e9cf79bc"
+        },
+        "asset:assets/previews/section-labs.webp": {
+          "bytes": 10422,
+          "sha256": "c58606a1bb32c0d83d4b9eda51b8b7b426c0d046e69ad4496cdb97bba7c5d2d0"
+        },
+        "asset:assets/previews/section-learn.webp": {
+          "bytes": 7134,
+          "sha256": "a133f074b7b60900c97aa18b0d3ae0a5a3cefd937c907253f56c038196212923"
+        },
+        "asset:assets/previews/section-lessons.webp": {
+          "bytes": 18456,
+          "sha256": "60fae56e358fbbd9834674903a0f855530aad9799b9ecc9cda886879bea2dc77"
+        },
+        "asset:assets/previews/section-me.webp": {
+          "bytes": 24680,
+          "sha256": "76aeb61d033e137b29bc2f48e0efca14505910037161972337c5192b74cc77cc"
+        },
+        "asset:assets/previews/section-reason.webp": {
+          "bytes": 7040,
+          "sha256": "1af9664eb60d1aefcd764e9991f46f75320e383d8a8e4d260e071c2000af6e59"
+        },
+        "asset:assets/previews/section-solve.webp": {
+          "bytes": 25702,
+          "sha256": "a1a580054a7c3e23ebf7ac66218fb213e594b869cf1057882a442cf95693c1cd"
+        },
+        "asset:assets/previews/section-universe.webp": {
+          "bytes": 31236,
+          "sha256": "20253724ef0a30bd0ea9aabd47b915540d6cc4354d7e03ef640c7c26a5075b7a"
+        },
+        "asset:assets/previews/solve-adaptive.webp": {
+          "bytes": 29380,
+          "sha256": "8cce5d6d74435b141e755fa49bc5b516e4e3466a832b4d071dbe46697d6096d6"
+        },
+        "asset:assets/previews/solve-practice.webp": {
+          "bytes": 29008,
+          "sha256": "ed7ca9423687d8a0e2e62b8831145d10ff01a233305ae113643f3380cefb842c"
+        },
+        "asset:assets/previews/solve-review.webp": {
+          "bytes": 25702,
+          "sha256": "a1a580054a7c3e23ebf7ac66218fb213e594b869cf1057882a442cf95693c1cd"
+        },
+        "asset:assets/previews/solve-timed.webp": {
+          "bytes": 28970,
+          "sha256": "ae56b857eb925328149f9f1e4292e38a90206c6bb4622d27c9881e99ab6aaad7"
+        },
+        "asset:assets/protein/1CRN.pdb.txt": {
+          "bytes": 49491,
+          "sha256": "42199a30a0701864a2a5cc76cd7f35cc544cd0e65fbcf63e03c166543249b811"
+        },
+        "asset:assets/protein/vendor/MOLSTAR-LICENSE.txt": {
+          "bytes": 1088,
+          "sha256": "aa42900c6ea7bfcf22d25a4c369025e01a526c66501fd9193f9a8aecee7a0753"
+        },
+        "asset:assets/protein/vendor/molstar.css": {
+          "bytes": 72904,
+          "sha256": "22fbf73b75c11ef57687d08437c95dbfe8430ea895264f6da2b9b01e28bacc49"
+        },
+        "asset:assets/protein/vendor/molstar.js": {
+          "bytes": 5268712,
+          "sha256": "037a63ab0ae2a433cd03d59a6bc03d75f5e55f0b8de20da15d5b00464ea01ecd"
+        },
+        "asset:assets/specimens/COCKROACH-ATTRIBUTION.md": {
+          "bytes": 1411,
+          "sha256": "776a06fc24d5bc8c065b154f4d33ba6b601cd06ad6d85700abb2b15be129775c"
+        },
+        "asset:assets/specimens/FROG-ATTRIBUTION.md": {
+          "bytes": 1290,
+          "sha256": "5e0bc792423fd5b0fd19d96de404bbae88c3d098950f62f64b0bf670407e0522"
+        },
+        "asset:assets/specimens/cockroach.glb": {
+          "bytes": 8988648,
+          "sha256": "03faef8793c04108c27a33cd581b11affa522e4565fc62558c09e54671444410"
+        },
+        "asset:assets/specimens/frog.glb": {
+          "bytes": 6142084,
+          "sha256": "64ccc2056475153d70b5f68a2b3b94ff075f0491c63c76a65b7157e7f7c349bc"
+        },
+        "asset:bioq-og.jpg": {
+          "bytes": 68278,
+          "sha256": "f42d700824ce3b9f8c5ff8ac58f02978c15e650f79131976ba067dee4b5c77e2"
+        },
+        "asset:favicon.png": {
+          "bytes": 57860,
+          "sha256": "d1aba2563d0722e2c1d10178e2a10346d086a9647b13f77af2b4cc25d624b5e5"
+        },
+        "asset:src/ai/biology-ai.js": {
+          "bytes": 28140,
+          "sha256": "a8a36859e6a50adf775a753b5ea8c219c938acaf9dff2e8e07b7bcf5af63fcae"
+        },
+        "asset:src/lab/prepared-loader.js": {
+          "bytes": 14128,
+          "sha256": "217a0a9952a54d6283a6e4de8f879e0bca89a70b2c7b29a4fd454ecbfcb62c37"
+        },
+        "asset:src/lab/specimen-assets.js": {
+          "bytes": 15249,
+          "sha256": "da22af3fd1cd53dd8cf78068cb443c8fee6e9ffd9fdbd5662e0dd599942f78fc"
+        },
+        "asset:src/lab/vendor/THREE-LICENSE.txt": {
+          "bytes": 1081,
+          "sha256": "852e0e8699169bf9f6fdc6bda3e682d078dcbc738b5d33e74df594721bff271d"
+        },
+        "asset:src/lab/vendor/loaders/GLTFLoader.js": {
+          "bytes": 108574,
+          "sha256": "8e7e2a439fd03b193aef047d153e9a8d6bf6112cdc1983db903dc95e8208db28"
+        },
+        "asset:src/lab/vendor/utils/BufferGeometryUtils.js": {
+          "bytes": 31906,
+          "sha256": "9be041e96308775d00e2695cc607645b9a9b64fd7c0e759dd8f7c00a8d92becb"
+        },
+        "asset:src/launch/restored-motion.js": {
+          "bytes": 3118,
+          "sha256": "b8ae6e8b46d336d974fb321ef48478418501612afa9492bbd60f351e4109feaa"
+        },
+        "asset:src/launch/restored-realism.css": {
+          "bytes": 2975,
+          "sha256": "47d49043697bd22be53a9460aeeb449364ca26a85fb64790d25e4edfd6b14db7"
+        },
+        "asset:src/learning-tools/host.css": {
+          "bytes": 4529,
+          "sha256": "e2905823eafdeb96e7850ffcb6969ed03ec689d811c615a7753a6f397fd4a3d5"
+        },
+        "asset:src/learning-tools/host.js": {
+          "bytes": 14454,
+          "sha256": "74e8dfc8077f72abfd70f4f607bf11b447d33cb698621a959f24a7aef85dbe29"
+        },
+        "asset:src/single-file/vendor/three-addons/math/SimplexNoise.js": {
+          "bytes": 14351,
+          "sha256": "9b8d541b77b0ddc79afaa6a1de8941452c191b8b9006f04e7b8fc422e2b263f7"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/BokehPass.js": {
+          "bytes": 3556,
+          "sha256": "58548f0a3c1a04345bbe9451b58eb9249bc69cdf1be30589ad3abe3741bbca1c"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/EffectComposer.js": {
+          "bytes": 4991,
+          "sha256": "7cf450876c378b94fefb4c4c0b441ae53830e56e3ce424412ba54e4b826379bf"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/GTAOPass.js": {
+          "bytes": 16847,
+          "sha256": "9ee9d131ca7127d2ff619411ff65d71b93d8d5046eae376584cdfd1ba207514b"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/MaskPass.js": {
+          "bytes": 2320,
+          "sha256": "020d8f02b54af2dc7404f7a350860f200ec3c2cd22b4f769a1d2a9f71c964455"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/OutputPass.js": {
+          "bytes": 2560,
+          "sha256": "ac163a91c83cda60f142aa24b3563bb29cf6d28c3e404ffa367078987770fd21"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/Pass.js": {
+          "bytes": 1706,
+          "sha256": "b3c6128340eaa37e40a6a2f1b738e894c855239417d50959759b34a2b5e89f92"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/RenderPass.js": {
+          "bytes": 2004,
+          "sha256": "a75f1a1bec450e4bea766c7ae38cbc32c6dd22a27e56d21db165603ac3398a86"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/SSAOPass.js": {
+          "bytes": 11875,
+          "sha256": "8400995ca135f6bd155cb9c3040cf93b6a8d3bf93c1f3bc5e5166e9d7a87909b"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/ShaderPass.js": {
+          "bytes": 1665,
+          "sha256": "19575695d3c5f1da0824b745df9666feb00b497ab4dcc2e752adfed640276b1b"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/UnrealBloomPass.js": {
+          "bytes": 12641,
+          "sha256": "108fc8c42c9cef0d4414b75878de57f72f7f28ed1a843e11076dff756c94ad54"
+        },
+        "asset:src/single-file/vendor/three-addons/shaders/BokehShader.js": {
+          "bytes": 5769,
+          "sha256": "a6558cc4baf2c372c192828e9fffcf088d22f80291ac72a13a5be6d3b7a18ddc"
+        },
+        "asset:src/single-file/vendor/three-addons/shaders/CopyShader.js": {
+          "bytes": 571,
+          "sha256": "4e3346db194db56a596cd074e9bdb39fb5eb52040c333e0d29dc4eb1324d3b1d"
+        },
+        "asset:src/single-file/vendor/three-addons/shaders/GTAOShader.js": {
+          "bytes": 13009,
+          "sha256": "94edb1040c7b5e859b17c2817782c8e895118a2d824ed162cab187aa32cc5a15"
+        },
+        "asset:src/single-file/vendor/three-addons/shaders/LuminosityHighPassShader.js": {
+          "bytes": 1192,
+          "sha256": "3d841cc594a0c1767d1b0185720b32761a0133c5f1b70b56658e28f2fb9b7900"
+        },
+        "asset:src/single-file/vendor/three-addons/shaders/OutputShader.js": {
+          "bytes": 1393,
+          "sha256": "53a52e430c27bc36ceaab8ae90a2b4af7b02672d7ee4b29d6ba3c28e09c92c2a"
+        },
+        "asset:src/single-file/vendor/three-addons/shaders/PoissonDenoiseShader.js": {
+          "bytes": 6614,
+          "sha256": "3dab419b23529f8fd59e2713458502f9f51d2dd3af3e1285dc671fcc451d49fb"
+        },
+        "asset:src/single-file/vendor/three-addons/shaders/SSAOShader.js": {
+          "bytes": 6478,
+          "sha256": "bd5cda34d6b52941c1121b77947664848af10dc68febd453dfdc56c59e58ba06"
+        }
+      },
+      "compressed": {
+        "page:index.html": {
+          "bytes": 53568,
+          "sha256": "7e653aa7c371489221661fbe7e2ebea513f45d5f2b64c4589d3640504471d836"
+        },
+        "page:app.html": {
+          "bytes": 302448,
+          "sha256": "847ee9236f3172e3b177d49aa059aceda886fe889900f2e058ef73395649f0c7"
+        },
+        "page:learn.html": {
+          "bytes": 375981,
+          "sha256": "539e11d66bd67692b7505d3a89cd5988bf4a4b7d64a485604c1dae29767db8d2"
+        },
+        "page:lessons.html": {
+          "bytes": 71212,
+          "sha256": "d99bd766400833a39494dbb7c524316539c984dcaa61e4ea5daa69677a6dd576"
+        },
+        "page:reason.html": {
+          "bytes": 456482,
+          "sha256": "b56573a509b8f3691ae5ab5f2fe87b0f69dfbe803e31c6061a95a72953b6f65f"
+        },
+        "page:labs.html": {
+          "bytes": 215506,
+          "sha256": "460f4ea465035901d35862fa28cd51a52d0cb3ac9ad915b8afa042d16bfdb039"
+        },
+        "page:solve.html": {
+          "bytes": 477659,
+          "sha256": "34d5410f9736141ab25c1895461264dfa3149c8bb71e08d111b96a71b8968bbc"
+        },
+        "page:explore.html": {
+          "bytes": 175834,
+          "sha256": "ca95292f99c56cd65de5538aa2e988036bdc2d7694b5bf2ddfb7ddab1a0e6819"
+        },
+        "page:me.html": {
+          "bytes": 114861,
+          "sha256": "cf2381112c95164638d92f39319c0210f5ebc5b4a44a5985ef3fd41e3ae75699"
+        },
+        "page:about.html": {
+          "bytes": 127713,
+          "sha256": "5004db11f07d2e7fb492d491626e8b8d1158f9061d1dbd647f052f6dff55d9fd"
+        },
+        "page:lab.html": {
+          "bytes": 863826,
+          "sha256": "07e51dfce8251981eeb18cee484139fb72d6cd509c1707866740dd3062a88922"
+        },
+        "page:universe.html": {
+          "bytes": 673611,
+          "sha256": "96764624a8d3aad5f9075909a167e9cdb787f420fac41eb67c88d1c8a40a5130"
+        },
+        "page:assets/learning-tools/biology/index.html": {
+          "bytes": 10702,
+          "sha256": "e544433507bae220c222c4e7bf78d6c3e9d443e2de4cff8ecf2a8b1aaea91766"
+        },
+        "page:assets/learning-tools/learning/index.html": {
+          "bytes": 47675,
+          "sha256": "70128adbf4ff9b9f2b7758d544aa450cf2eee1460d3e2c0e1a1d3b4ea9c45c83"
+        },
+        "page:src/learning-tools/guide.html": {
+          "bytes": 1582,
+          "sha256": "cf163bf1a1e88adb72f596e30c11bbafebc18d457b84fd17947bb399b23e9365"
+        },
+        "page:assets/learning-tools/sketches/index.html": {
+          "bytes": 872762,
+          "sha256": "d76bb3ac7ef1509f4650c00bae7ed58bbfb55e1a1c724f6351649ce2fc4fb43b"
+        },
+        "page:assets/learning-tools/animations/index.html": {
+          "bytes": 10175,
+          "sha256": "d7f643c75330acf3cfad1792947d551551190484c7cef7cb5633a3f1521ab944"
+        },
+        "asset:assets/biology-cells.webp": {
+          "bytes": 129354,
+          "sha256": "7c1a09a81ed1f70d427394f3b8ae4dd2b7d619ea03af8439d4821a231f43aa2a"
+        },
+        "asset:assets/biology-dna-hero.webp": {
+          "bytes": 107765,
+          "sha256": "8ceec0bf39c09d578ab513a02dc3507193362eed67277609eaddb028d5e61492"
+        },
+        "asset:assets/biology-leaf.webp": {
+          "bytes": 104245,
+          "sha256": "34f81e591274f58e61faa9887970ff115d0acb8fc4da5f1917b4244028d7d155"
+        },
+        "asset:assets/biology-neurons.webp": {
+          "bytes": 82950,
+          "sha256": "ea2c964ed0b3625d98aefb4a2e16a38a63857bd7185b6eaef9c84c6dfdabfcad"
+        },
+        "asset:assets/biology-wing.webp": {
+          "bytes": 357896,
+          "sha256": "5ea5f993e4678ceb98204300f16fede57f56371249b0420c9b8b8dc6d15ba944"
+        },
+        "asset:assets/entelloq-classroom.js": {
+          "bytes": 4284,
+          "sha256": "9d5ebf079e06fd92bc47635ec190cff8c1a3d3d49c8f2584779216fd0d75faa8"
+        },
+        "asset:assets/entelloq-science.css": {
+          "bytes": 846,
+          "sha256": "baa4d967ab4f243183343a9a03ce4b00d10de39c3b3baa234d242226e9589db8"
+        },
+        "asset:assets/entelloq-science.js": {
+          "bytes": 5547,
+          "sha256": "9ed74abbe5f211693bf27454550731b43c8ab6f8ee5bbedb3bad946b170033e5"
+        },
+        "asset:assets/feature-tutorials.css": {
+          "bytes": 989,
+          "sha256": "7b43ac7119a0872223bfc0bc98843587477a19f2a3342d14df55f4595b89fe80"
+        },
+        "asset:assets/feature-tutorials.js": {
+          "bytes": 4709,
+          "sha256": "bcb77b74abc9a198753f2ef94e436902128e0df059bcfdc5cba754b1bb646517"
+        },
+        "asset:assets/launch/biology-cell.webp": {
+          "bytes": 145035,
+          "sha256": "4902ae03ef686f8df98635a96191eb10d6ff45616a9daf2f068418c89751dabc"
+        },
+        "asset:assets/learning-tools/animations/asset-manifest.json": {
+          "bytes": 1148,
+          "sha256": "e296f9dfa7eb79def0d63a2b50074d9376e30572153a665b0d15a13f564d0e19"
+        },
+        "asset:assets/learning-tools/animations/catalog.js": {
+          "bytes": 2203,
+          "sha256": "adff1eaabbed963d804418b7f883e54d7b45b1f813d0bbe507b22d95de4963bb"
+        },
+        "asset:assets/learning-tools/animations/main.js": {
+          "bytes": 4215,
+          "sha256": "12dda6bd821302a8be4a09837424b85b63088c367d546b6436d0acbcdd193d49"
+        },
+        "asset:assets/learning-tools/animations/media/biology-poster.png": {
+          "bytes": 142760,
+          "sha256": "7594454acd5984d0cd9b4ddf4a7a77eb35160bf253bb3af94ac06ac3dacc8a3b"
+        },
+        "asset:assets/learning-tools/animations/media/biology-step-1.png": {
+          "bytes": 137015,
+          "sha256": "24e4c8cb12b8e05167b363943d3e12ca669fd5e1fdd30ae336d43567776e0f57"
+        },
+        "asset:assets/learning-tools/animations/media/biology-step-2.png": {
+          "bytes": 146387,
+          "sha256": "a36ce27d0968e2029c38265cdbb8b27e1ca40efa41410abe0c8a2afd52141db0"
+        },
+        "asset:assets/learning-tools/animations/media/biology-step-3.png": {
+          "bytes": 146545,
+          "sha256": "16f43bed05d79c6a6469f2c9a23f28ac4f5a037e7a781f30eb40604ae6af8770"
+        },
+        "asset:assets/learning-tools/animations/media/biology-step-4.png": {
+          "bytes": 143287,
+          "sha256": "cd64a4975bef1e19a214bfb9cfe4f227e01b6dc2b07291b7b315d2f199a3d139"
+        },
+        "asset:assets/learning-tools/animations/media/biology.mp4": {
+          "bytes": 212859,
+          "sha256": "a957e578100edba10f087874c6588be0b0efbebae4b23cc18106884ee7c23f55"
+        },
+        "asset:assets/learning-tools/animations/media/biology.vtt": {
+          "bytes": 240,
+          "sha256": "633d2c049a961407ecd40fc5ee4c48ab7b7646b426c9ed4b47e62ca6758948e9"
+        },
+        "asset:assets/learning-tools/animations/media/physics-poster.png": {
+          "bytes": 158119,
+          "sha256": "8459152d71cad4766cc72cfb600a290f71ba61704ee01b27635fde1b9003fe81"
+        },
+        "asset:assets/learning-tools/animations/media/physics-step-1.png": {
+          "bytes": 140068,
+          "sha256": "233591a5e7b46d566f75ec56ac12df61ac853e82a5d8707b6afa8f867672b4f7"
+        },
+        "asset:assets/learning-tools/animations/media/physics-step-2.png": {
+          "bytes": 128305,
+          "sha256": "aca09766a7f16465dcd84f91154aa3f2f04792d55cf7afd7fe97d8e4178826d3"
+        },
+        "asset:assets/learning-tools/animations/media/physics-step-3.png": {
+          "bytes": 151268,
+          "sha256": "f23a9f4bcd496755258dec69a84b620ec284215c48a94b1d6601028a0e06aff8"
+        },
+        "asset:assets/learning-tools/animations/media/physics-step-4.png": {
+          "bytes": 163657,
+          "sha256": "59ed07a6d240167fe7ca4412b31c05ae82763ca9836e5ea1eac911b79be0d609"
+        },
+        "asset:assets/learning-tools/animations/media/physics.mp4": {
+          "bytes": 247166,
+          "sha256": "789169ea8be9e231a9949455934ce50af922c2ece085fe064734b195494de12a"
+        },
+        "asset:assets/learning-tools/animations/media/physics.vtt": {
+          "bytes": 238,
+          "sha256": "0f2179dfd898bb8cd8f04af21b7e52305d53dbe21c5c4b8a76b7526dc1c809a7"
+        },
+        "asset:assets/learning-tools/animations/styles.css": {
+          "bytes": 2257,
+          "sha256": "e2669f567d056c9b8e8f7039d5487ff0bef7d3374ee92dbf85968b0618548c13"
+        },
+        "asset:assets/learning-tools/biology/dist/THIRD-PARTY.txt": {
+          "bytes": 2298,
+          "sha256": "f4270f9d9acdaaad8e15f89f10f3303976b15d046ed051a5dc547b4820b27047"
+        },
+        "asset:assets/learning-tools/biology/dist/VTK-Copyright.txt": {
+          "bytes": 877,
+          "sha256": "9508c911c4c729da64130577fb5975ee81bd2bcb91e41487725f310d27efa9ee"
+        },
+        "asset:assets/learning-tools/biology/dist/main.js": {
+          "bytes": 9895,
+          "sha256": "3be80f662156e7fc19f5a75cd7fd9c7901f458a24ed7a4ee767465834e5b307b"
+        },
+        "asset:assets/learning-tools/biology/dist/volume.js": {
+          "bytes": 720973,
+          "sha256": "3b49b23cbf810a734bef5bf433bcfb699864e977a0b364ae33e8bc7ff102bff9"
+        },
+        "asset:assets/learning-tools/learning/THIRD-PARTY-NOTICES.md": {
+          "bytes": 5263,
+          "sha256": "a9ff05d7a2af151af7a52aa5f25a39ff170d3a108fb26d1c192b24872dfc0f76"
+        },
+        "asset:assets/learning-tools/learning/asset-manifest.json": {
+          "bytes": 654,
+          "sha256": "9e3f805b29953194f5a43389fdc5b90b20a8d2b210408163828b80d6293805c8"
+        },
+        "asset:assets/learning-tools/learning/main.js": {
+          "bytes": 44421,
+          "sha256": "7e1bcd1c78b4b62c53d20530dc51ae3d1acf052fad2e90f124e32e1d74f68088"
+        },
+        "asset:assets/learning-tools/learning/runtime/ort-wasm-simd-threaded.jsep.mjs": {
+          "bytes": 15765,
+          "sha256": "16402b8c4055e14e01ff86dc4cda38c45438dc773d7622dca6b8662980351c77"
+        },
+        "asset:assets/learning-tools/learning/runtime/ort-wasm-simd-threaded.jsep.wasm": {
+          "bytes": 6645828,
+          "sha256": "fe8cabae55d3709e22a268bd01b908a89b1d756ad14293935ee0f29e4a5e300a"
+        },
+        "asset:assets/learning-tools/learning/semantic-worker.js": {
+          "bytes": 151019,
+          "sha256": "957531156356f31f622f9329c13c42ee7025769d82f3860ce0d5077568ed45f0"
+        },
+        "asset:assets/learning-tools/learning/styles.css": {
+          "bytes": 2357,
+          "sha256": "d5282770ffd5fc8112ad14dc80637f7faa670d708f5fa55c9fbeaf12e3f47033"
+        },
+        "asset:assets/learning-tools/sketches/THIRD-PARTY-NOTICES.md": {
+          "bytes": 12628,
+          "sha256": "e054a16eee5785b1768a3a5d33a2d2884a345ca77b248c7ff80c68638b86cca9"
+        },
+        "asset:assets/learning-tools/sketches/asset-manifest.json": {
+          "bytes": 600,
+          "sha256": "777a16344c04a388f5b4d17506a5734e63505cc712da3f6997aedf3562720dca"
+        },
+        "asset:assets/learning-tools/sketches/editor.css": {
+          "bytes": 107820,
+          "sha256": "f7821c2b4a85769aa3188fe0659cf932fc387d779cfcf6b566514094c9884f81"
+        },
+        "asset:assets/learning-tools/sketches/main.js": {
+          "bytes": 762193,
+          "sha256": "fd943aa23ccbb6e39d4add7001958a09601e26ead38e230028b434d529403521"
+        },
+        "asset:assets/learning-tools/sketches/styles.css": {
+          "bytes": 1962,
+          "sha256": "1d21a7bd3343e7dd05b11c09e0cfe80b5318913de5215a40fe16c3f2000ba66d"
+        },
+        "asset:assets/previews/explore-atlas.webp": {
+          "bytes": 10823,
+          "sha256": "7328f81784e5a867541bd284fa8582640cee67dc5c85278ec0615227c850def5"
+        },
+        "asset:assets/previews/explore-diseases.webp": {
+          "bytes": 10733,
+          "sha256": "f4e53d8df064fb0b26903f6b228fd7a7ea45d98bc487f36808e52a1aa0401edb"
+        },
+        "asset:assets/previews/explore-graph.webp": {
+          "bytes": 7054,
+          "sha256": "10edaa9b349ba7fd38189e06146ff4c207db3e22d931d6532f76454e28d9704f"
+        },
+        "asset:assets/previews/explore-timeline.webp": {
+          "bytes": 5453,
+          "sha256": "cab2ebd59a69c8a3039ce21a6725c017c7e3398e40948aa92f10563faf1403d2"
+        },
+        "asset:assets/previews/explore-tree.webp": {
+          "bytes": 21470,
+          "sha256": "5056eb7cd26bf0771714896df31dc215bad76a14d650a324714a50efe7718fcc"
+        },
+        "asset:assets/previews/lab-cellular-respiration.webp": {
+          "bytes": 17625,
+          "sha256": "5438e324caf4cbd03936521f110d616ad8335c04348734a50abb677c476a0860"
+        },
+        "asset:assets/previews/lab-cockroach-dissection.webp": {
+          "bytes": 14261,
+          "sha256": "b9b6f66a7983fadefddcb17a2ac9c8c66a59af915d1d282a359af23136687798"
+        },
+        "asset:assets/previews/lab-dna-extraction.webp": {
+          "bytes": 11010,
+          "sha256": "f0a60b6c8beb2073754dd6e169068f4ae72427b516345815a778bd6c8dbf358d"
+        },
+        "asset:assets/previews/lab-dna-protein.webp": {
+          "bytes": 19514,
+          "sha256": "fd14b66554d3b936ddcaffc0dfd249bac6c36a05203f0265687440edd60dcc72"
+        },
+        "asset:assets/previews/lab-earthworm-dissection.webp": {
+          "bytes": 9893,
+          "sha256": "b173174235ec2ca06a1337699b773fb073b73d336efa6e8a45dc62c178609e36"
+        },
+        "asset:assets/previews/lab-ecosystem-investigation.webp": {
+          "bytes": 8989,
+          "sha256": "5d648d6b72994881e19817d031ef4c328790ca7bc5167409672e8c99554ba6e4"
+        },
+        "asset:assets/previews/lab-enzyme-kinetics.webp": {
+          "bytes": 7958,
+          "sha256": "35188697a268b542dd5dbfff568ddd07c7c8affe99a89549ae2c7de8c6475ae4"
+        },
+        "asset:assets/previews/lab-fish-dissection.webp": {
+          "bytes": 15077,
+          "sha256": "ecd58f4cbf6ee7e8b1f499d7bcba3097a12bbe0abd5962bcade7fb494cb603b9"
+        },
+        "asset:assets/previews/lab-frog-dissection.webp": {
+          "bytes": 20263,
+          "sha256": "75ed78c3e13a19e8bd37d9c780591bcea1096bdd4c60b183540a1fd3eefb9fe4"
+        },
+        "asset:assets/previews/lab-gas-exchange.webp": {
+          "bytes": 13861,
+          "sha256": "aadad7905ffadc23affa5b38be22e518c18d2593bec9e48eca51249de1e0ef51"
+        },
+        "asset:assets/previews/lab-gel-electrophoresis.webp": {
+          "bytes": 6760,
+          "sha256": "ac1a948a654f64b75c0fac567923117a7479766a7ba1842042ae5d1e88da681b"
+        },
+        "asset:assets/previews/lab-heart-dissection.webp": {
+          "bytes": 15777,
+          "sha256": "2512b0b882a6beb1966a1e0a4c2975facc746293cc9c42055ba3008c55efb1ea"
+        },
+        "asset:assets/previews/lab-heart-physiology.webp": {
+          "bytes": 11532,
+          "sha256": "d0d4e79074a244126c9afd796c5436863cda109aa134f88e7915bb33a805fe21"
+        },
+        "asset:assets/previews/lab-heart-rate.webp": {
+          "bytes": 10445,
+          "sha256": "3a2c79e754f45a02863f859a67a100474a21c5c1cd07427b9b1fefdda1770fe8"
+        },
+        "asset:assets/previews/lab-mendelian-genetics.webp": {
+          "bytes": 16197,
+          "sha256": "776fbc7a1f8395cf1f67aea80b4a7c822912f44a78bb36cabb60de193186ea17"
+        },
+        "asset:assets/previews/lab-microscope.webp": {
+          "bytes": 10365,
+          "sha256": "a33663a66f64c62890c660668697eba6d418b230ef7d6f463505518956263f4f"
+        },
+        "asset:assets/previews/lab-mitosis.webp": {
+          "bytes": 19018,
+          "sha256": "42fe3c12109872ec2aa17314061bb02d3c62f625363ae93b0acd69be9614e6be"
+        },
+        "asset:assets/previews/lab-natural-selection.webp": {
+          "bytes": 24714,
+          "sha256": "0e108d326b3866fa38cc52336847ebd07609bab9a5f8ae6c982619d3f1205ae8"
+        },
+        "asset:assets/previews/lab-osmosis.webp": {
+          "bytes": 9551,
+          "sha256": "f291f5cf4b74dad057cb8e41c74dc51ecc618b57e36ce946fabff2f05629bb1c"
+        },
+        "asset:assets/previews/lab-pcr.webp": {
+          "bytes": 22972,
+          "sha256": "83e9edd64da653a8224aab5953b78e42f15c2ec2e628abaf22b6391a0989ea2d"
+        },
+        "asset:assets/previews/lab-photosynthesis-rate.webp": {
+          "bytes": 14572,
+          "sha256": "a0a12dc63227125d27688a427c744feaaaba1975a1ba6678950ff476b12f03e8"
+        },
+        "asset:assets/previews/lab-plant-investigation.webp": {
+          "bytes": 9356,
+          "sha256": "6e1280132cc4fc4aaa7dcf81a7b1760c51cfaa114650147b0f93cf574e1d0ad9"
+        },
+        "asset:assets/previews/lab-predator-prey.webp": {
+          "bytes": 10586,
+          "sha256": "3503c40e503cb21909be778bc74750cbc4a4ff3e2c90af7400e6f62fa6f72d18"
+        },
+        "asset:assets/previews/legacy-cell.webp": {
+          "bytes": 17588,
+          "sha256": "4a47fa8266d2ef3af6c97ecf6d1899220160275d8ce8268b55aca4e5f2ef91c4"
+        },
+        "asset:assets/previews/legacy-microscope.webp": {
+          "bytes": 12195,
+          "sha256": "e72c7798fb3c258669a78305a6546e353d837618bda1cdd3e5233748f84cc986"
+        },
+        "asset:assets/previews/lesson-actionpotential.webp": {
+          "bytes": 9029,
+          "sha256": "3d10a558a9fcd15dd26faf476c1f5ab44c3e9650a4d6f30507326025a1aa4867"
+        },
+        "asset:assets/previews/lesson-cardiac.webp": {
+          "bytes": 13634,
+          "sha256": "ce865de33718a1ec9bd7b217e4987f789ec1bd0636d44f9a8fc8608bd481ae72"
+        },
+        "asset:assets/previews/lesson-diffusion.webp": {
+          "bytes": 18372,
+          "sha256": "29d442af65ef83055d9b7b0d4bcc9800b523dda83fc3939797ea9fc3f5d0b8f3"
+        },
+        "asset:assets/previews/lesson-enzyme.webp": {
+          "bytes": 3011,
+          "sha256": "2f72953d48afc946be412433724493a4f5c243b417d9561c35ad6d5ca137c9b6"
+        },
+        "asset:assets/previews/lesson-photosynthesis.webp": {
+          "bytes": 6070,
+          "sha256": "d3d2dd376c3ee3502b7effecdd5c35ffb9e647e6edb5a8993a893ad7d514addf"
+        },
+        "asset:assets/previews/lesson-population.webp": {
+          "bytes": 6878,
+          "sha256": "b27dd8a59e5b8751cdcac24f1996e71e90c228f87b3286deafaeab561a6eca50"
+        },
+        "asset:assets/previews/lesson-replication.webp": {
+          "bytes": 14542,
+          "sha256": "8026a582ef8bed04ee6087bce9301cb8ab52e26006ddb3a82f7bd292c9513475"
+        },
+        "asset:assets/previews/lesson-respiration.webp": {
+          "bytes": 11647,
+          "sha256": "369657b9f038e90973895099a52544bc7b1ab2af89f2286895d482c4f2abb5ed"
+        },
+        "asset:assets/previews/lesson-selection.webp": {
+          "bytes": 8774,
+          "sha256": "b6fdc8e481f8f599941dcf4d9054af780445bc5cdc91aad8776a153a163656f5"
+        },
+        "asset:assets/previews/reason-altitude.webp": {
+          "bytes": 8247,
+          "sha256": "1d5786322503c9912f65ef5c63ef23568ef83475c3a0e7a3d633873fb3d106db"
+        },
+        "asset:assets/previews/reason-glucose.webp": {
+          "bytes": 7036,
+          "sha256": "d87c787019aaa1d26d774abd937da9d61f7dccb45c850ac6b1e234a31b0f2939"
+        },
+        "asset:assets/previews/reason-resistance.webp": {
+          "bytes": 9180,
+          "sha256": "b96696740ac95e8424cd8d79fa0cb6b50cbf0ef1d3e671fc5f602e5f4cf6db54"
+        },
+        "asset:assets/previews/section-about.webp": {
+          "bytes": 10869,
+          "sha256": "695328d10461ada520a37380feaccb9d1da1f5d8024ea18ed848dc3a898f09d6"
+        },
+        "asset:assets/previews/section-explore.webp": {
+          "bytes": 18344,
+          "sha256": "1639a8ca17e63b773dac100bbbedb0f5ac6cd8eabf58ebe695b97215457d0c91"
+        },
+        "asset:assets/previews/section-home.webp": {
+          "bytes": 40293,
+          "sha256": "344b488b632ad6b5cd9b156b048b303e71d3da48684d4f4f5510f92dba910206"
+        },
+        "asset:assets/previews/section-lab.webp": {
+          "bytes": 20263,
+          "sha256": "75ed78c3e13a19e8bd37d9c780591bcea1096bdd4c60b183540a1fd3eefb9fe4"
+        },
+        "asset:assets/previews/section-labs.webp": {
+          "bytes": 10365,
+          "sha256": "a33663a66f64c62890c660668697eba6d418b230ef7d6f463505518956263f4f"
+        },
+        "asset:assets/previews/section-learn.webp": {
+          "bytes": 7136,
+          "sha256": "568d9c19d2025de4fbaddbd3eba5ba182ffac8e7fa07eb292bfabe4731000754"
+        },
+        "asset:assets/previews/section-lessons.webp": {
+          "bytes": 18372,
+          "sha256": "29d442af65ef83055d9b7b0d4bcc9800b523dda83fc3939797ea9fc3f5d0b8f3"
+        },
+        "asset:assets/previews/section-me.webp": {
+          "bytes": 24612,
+          "sha256": "1dda417a52731519ffdc0733c73a676d1ef03ef9d98bec5f21e07533f3d1741d"
+        },
+        "asset:assets/previews/section-reason.webp": {
+          "bytes": 7036,
+          "sha256": "d87c787019aaa1d26d774abd937da9d61f7dccb45c850ac6b1e234a31b0f2939"
+        },
+        "asset:assets/previews/section-solve.webp": {
+          "bytes": 25633,
+          "sha256": "5b98d791b2a3a8d86d2cfb64892525ffb344d25ae14a9e9b1414816af968dd3e"
+        },
+        "asset:assets/previews/section-universe.webp": {
+          "bytes": 31264,
+          "sha256": "226268a572bcec619cdac653830991363a4caf57e3617e5ccc8faca06d379468"
+        },
+        "asset:assets/previews/solve-adaptive.webp": {
+          "bytes": 29262,
+          "sha256": "2042f47d4973c76e213e32560821206abc1371d6e42bc922ef7fc68be2cfd0bc"
+        },
+        "asset:assets/previews/solve-practice.webp": {
+          "bytes": 28871,
+          "sha256": "b4022d41c21a3369ea7803d2ed25984d2500ec62e7244c59985ec4b61bf255ca"
+        },
+        "asset:assets/previews/solve-review.webp": {
+          "bytes": 25633,
+          "sha256": "5b98d791b2a3a8d86d2cfb64892525ffb344d25ae14a9e9b1414816af968dd3e"
+        },
+        "asset:assets/previews/solve-timed.webp": {
+          "bytes": 28803,
+          "sha256": "8beca5403421c9ae1b30df86ec348024ef7fb2a937face6b59e81f00da8a3cb9"
+        },
+        "asset:assets/protein/1CRN.pdb.txt": {
+          "bytes": 10635,
+          "sha256": "7bdbe34708a570608580e8e836021995fdf5c40524461603ec122341fc0fa817"
+        },
+        "asset:assets/protein/vendor/MOLSTAR-LICENSE.txt": {
+          "bytes": 660,
+          "sha256": "c85bc0f3211c86fef03c63928dd5de2e89622c21ef0a77ed7faeb741264a855c"
+        },
+        "asset:assets/protein/vendor/molstar.css": {
+          "bytes": 16451,
+          "sha256": "4f57b68c8f8da71d89bd209c41b0854767842771a3860749df27984f24ee3686"
+        },
+        "asset:assets/protein/vendor/molstar.js": {
+          "bytes": 1510780,
+          "sha256": "fbd2c98b96ba5a83a4cc6131052d8d4712dadb330cdd20cbff588e117cd99763"
+        },
+        "asset:assets/specimens/COCKROACH-ATTRIBUTION.md": {
+          "bytes": 838,
+          "sha256": "81c6faf5c7e8170529b6bc36683dd2c66e10e5a325e498d3328f81788fa5aa05"
+        },
+        "asset:assets/specimens/FROG-ATTRIBUTION.md": {
+          "bytes": 783,
+          "sha256": "2457372c95f1155c56774b0902466d15f231705df84a6455be4c0b709c95ffce"
+        },
+        "asset:assets/specimens/cockroach.glb": {
+          "bytes": 8785191,
+          "sha256": "b1e6fdbaaae36448c52d4898932ca06327af3ec7a09138f3e00ce2d68011e2c4"
+        },
+        "asset:assets/specimens/frog.glb": {
+          "bytes": 5918031,
+          "sha256": "befe38bd57e5aebc53b7658638b51635b9db54cc164bd4670ce06cd8d3b579d7"
+        },
+        "asset:bioq-og.jpg": {
+          "bytes": 65979,
+          "sha256": "7c4702c8b626d668d88cfc43caaa92929d0e7848b60152d23357478ee4088a98"
+        },
+        "asset:favicon.png": {
+          "bytes": 57898,
+          "sha256": "6d35c000f3ff57f3805193ee560abfde6ff2025ca04a8543dd05f5a1867b94b4"
+        },
+        "asset:src/ai/biology-ai.js": {
+          "bytes": 10070,
+          "sha256": "39aa9df5305a365989fb5bd0a353fd48dcc323161e14a04bebc33a6d9c9d2098"
+        },
+        "asset:src/lab/prepared-loader.js": {
+          "bytes": 4941,
+          "sha256": "3aac8b1a6bb5e66cb89b23a74a46d924481f8598d0f73e80876d609aa2739768"
+        },
+        "asset:src/lab/specimen-assets.js": {
+          "bytes": 5088,
+          "sha256": "dd5b29a3770509bdda682cd942aaeb92376735ffd80f45839e0db7dde8eed234"
+        },
+        "asset:src/lab/vendor/THREE-LICENSE.txt": {
+          "bytes": 661,
+          "sha256": "3ea041e7dc3908cfc92115acc094ec76df461e1b86b8df45d3bb4fca4f1576e1"
+        },
+        "asset:src/lab/vendor/loaders/GLTFLoader.js": {
+          "bytes": 23438,
+          "sha256": "efb407e476e24ddae6825f99e7dc177fb5d9478dd128023dd7cb7843ca2346ff"
+        },
+        "asset:src/lab/vendor/utils/BufferGeometryUtils.js": {
+          "bytes": 6895,
+          "sha256": "df065566652124f7eee45181cee167e84d1d8e7a67bf6c4e31f74e3699bbaf81"
+        },
+        "asset:src/launch/restored-motion.js": {
+          "bytes": 1182,
+          "sha256": "586c2c9734bdfc75bcef5a7fc33a391dcbdaa6385d3255edc240dc6bf4ee903f"
+        },
+        "asset:src/launch/restored-realism.css": {
+          "bytes": 1271,
+          "sha256": "c82e3c970089e737cee1d65e72152b02e35158f31923267b46fbfaeb1e4d3ead"
+        },
+        "asset:src/learning-tools/host.css": {
+          "bytes": 1457,
+          "sha256": "1d81cc05baaa02c7192a4770f818f768a09686a226d1615653737a920aa9c0b6"
+        },
+        "asset:src/learning-tools/host.js": {
+          "bytes": 5152,
+          "sha256": "bc6a84f545cf72dc383f26b3a6233c3d659e3642d3558d8e2068ad378f649a0e"
+        },
+        "asset:src/single-file/vendor/three-addons/math/SimplexNoise.js": {
+          "bytes": 3690,
+          "sha256": "e4d9e04a25c5c4346da4ab3965f5bd2b6c850e2697f584473227bd790b5f0287"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/BokehPass.js": {
+          "bytes": 1141,
+          "sha256": "e379979c490d8511f82a9ffd555af334cfb352740ae26de784f9865f81de75b0"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/EffectComposer.js": {
+          "bytes": 1258,
+          "sha256": "3d2488b8481fcd1cd6e99b52ba8e58de6ccc0c1709e21e00a1e24ef2000a662d"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/GTAOPass.js": {
+          "bytes": 3293,
+          "sha256": "8db60d50c98fc6999cd935949502647b925eabe9b06599b43e1a8ca01f44c6ac"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/MaskPass.js": {
+          "bytes": 733,
+          "sha256": "1f94a3d97b53befd53c4cf3ebb927ffcdf2c1ea7fed56724210589eada5345c9"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/OutputPass.js": {
+          "bytes": 870,
+          "sha256": "f083bbd3a38e414f7ecc2fa0462b8b383806b83941172654f56387cafe06a7cf"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/Pass.js": {
+          "bytes": 751,
+          "sha256": "8534c9eeba095541801e3da35c26fa70f0670a75b4e369af65533920785c6212"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/RenderPass.js": {
+          "bytes": 670,
+          "sha256": "b5f671db251a6c13696011ce2bd662f4fe7ee0cd1da0bc669bf67b33f4710aaf"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/SSAOPass.js": {
+          "bytes": 2624,
+          "sha256": "b9d2d9cfa8a84a785787e35e0aa8c165202f1e85e83748fdc44b5c881a872699"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/ShaderPass.js": {
+          "bytes": 704,
+          "sha256": "e8a443c6e1d39a01f0f42e6cb469003a40fe82233d18f7d1e600654bec4fcc6e"
+        },
+        "asset:src/single-file/vendor/three-addons/postprocessing/UnrealBloomPass.js": {
+          "bytes": 2982,
+          "sha256": "20ee764165200e9f98aa6517647ed35b33e5e2149a0c2a88f688fadaf062ce20"
+        },
+        "asset:src/single-file/vendor/three-addons/shaders/BokehShader.js": {
+          "bytes": 1101,
+          "sha256": "b1c05e3b54a2fa3482acc959580b686d5ee525381695781f30a6bed660cc9f37"
+        },
+        "asset:src/single-file/vendor/three-addons/shaders/CopyShader.js": {
+          "bytes": 331,
+          "sha256": "288788e45539f4fa3b81ef2c48f0e2b9e259891d721ba7b593d84ff75356d96f"
+        },
+        "asset:src/single-file/vendor/three-addons/shaders/GTAOShader.js": {
+          "bytes": 4001,
+          "sha256": "a7d61e9735fe1b47c3d13a6f04d8f2b3877336b48532a43b076aa8b66e725173"
+        },
+        "asset:src/single-file/vendor/three-addons/shaders/LuminosityHighPassShader.js": {
+          "bytes": 538,
+          "sha256": "5b2dfe28899fbb8183d63a1dfe70829730176fe590c5cf6ce1ae9f7083e99899"
+        },
+        "asset:src/single-file/vendor/three-addons/shaders/OutputShader.js": {
+          "bytes": 556,
+          "sha256": "1afbebfedce1ec42d0ae2ca0dc3737e0c192d25c18be7f86410befaf26fe9ee5"
+        },
+        "asset:src/single-file/vendor/three-addons/shaders/PoissonDenoiseShader.js": {
+          "bytes": 2198,
+          "sha256": "548979d9093f2ff26554fc02dd1a135f1fe525402bdde58c418b248848de9efd"
+        },
+        "asset:src/single-file/vendor/three-addons/shaders/SSAOShader.js": {
+          "bytes": 1848,
+          "sha256": "06308643dd28801356e1069bc3ccf4c7292164a7133d90ad101f2bd6c1877c56"
+        }
+      }
+    }
+  ],
+  "workingTreeStandardZlibSha256": "86876591375ba9110bbe4ed4f18aba13a8a833c2eaf6d86ab299c78571f78ee5"
+}

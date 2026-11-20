@@ -1,0 +1,49 @@
+{
+  "complete": false,
+  "portable": true,
+  "checks": [
+    {
+      "width": 1440,
+      "firstMeaningfulInteractionMs": 2260,
+      "screenshotInstrumentationMs": 2004
+    },
+    {
+      "width": 1440,
+      "scopedAxeViolations": 0
+    },
+    {
+      "width": 1440,
+      "contextualTools": true,
+      "recordSaveHitTest": true
+    },
+    "Actual printable report rendered to PDF with measurements, state and model limits.",
+    {
+      "width": 1440,
+      "passed": [
+        "guest launch",
+        "manipulate",
+        "record",
+        "save",
+        "reset",
+        "resume",
+        "reload",
+        "CSV download",
+        "natural query",
+        "keyboard search",
+        "classroom assignment export",
+        "submission import",
+        "teacher review",
+        "mobile width",
+        "contextual tools restore"
+      ]
+    },
+    {
+      "width": 768,
+      "firstMeaningfulInteractionMs": 1987,
+      "screenshotInstrumentationMs": 534
+    }
+  ],
+  "errors": [],
+  "cameraRequests": 0,
+  "failure": "page.reload: net::ERR_NETWORK_IO_SUSPENDED\nCall log:\n\u001b[2m  - waiting for navigation until \"domcontentloaded\"\u001b[22m\n\n    at C:\\Users\\darsh\\Documents\\Codex\\2026-10-29\\entelloq-product-excellence\\biology\\scripts\\check-product-excellence-browser.cjs:31:14"
+}

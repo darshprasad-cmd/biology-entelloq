@@ -1,0 +1,40 @@
+{
+  "complete": true,
+  "artifactSha256": "69a5bbefe8d12eeff7e535385b3248504f9ea0995324487fb7846a98895f3a6f",
+  "physicsCatalogueSha256": "bb7f7f89342441e65de2fdfd6a8ea0bd691d7103db74db27274368c566d39bb9",
+  "checks": [
+    {
+      "page": "app.html",
+      "physicsEntries": 343,
+      "terms": [
+        "mechanical advantage",
+        "fulcrum",
+        "first class lever",
+        "torque",
+        "lever"
+      ]
+    },
+    {
+      "page": "labs.html",
+      "physicsEntries": 343,
+      "terms": [
+        "mechanical advantage",
+        "fulcrum",
+        "first class lever",
+        "torque",
+        "lever"
+      ]
+    },
+    {
+      "page": "me.html",
+      "physicsEntries": 343,
+      "terms": [
+        "mechanical advantage",
+        "fulcrum",
+        "first class lever",
+        "torque",
+        "lever"
+      ]
+    }
+  ]
+}

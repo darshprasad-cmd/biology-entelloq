@@ -1,0 +1,86 @@
+[
+  {
+    "durationSeconds": 68.06,
+    "name": "opening",
+    "exitCode": 0,
+    "startedAt": "2026-11-20T14:25:06.6142158+05:30",
+    "command": "node scripts/check-opening-browser.cjs"
+  },
+  {
+    "durationSeconds": 151.11,
+    "name": "exam-answers",
+    "exitCode": 0,
+    "startedAt": "2026-11-20T14:26:14.7203753+05:30",
+    "command": "node scripts/check-exam-answers-browser.cjs"
+  },
+  {
+    "durationSeconds": 1.43,
+    "name": "ai-formatting",
+    "exitCode": 0,
+    "startedAt": "2026-11-20T14:28:45.8392544+05:30",
+    "command": "node tests/check-ai-answer-formatting.cjs"
+  },
+  {
+    "durationSeconds": 13.34,
+    "name": "learning-source",
+    "exitCode": 0,
+    "startedAt": "2026-11-20T14:28:47.2717832+05:30",
+    "command": "node scripts/check-learning-tools-browser.cjs"
+  },
+  {
+    "durationSeconds": 10.35,
+    "name": "learning-portable",
+    "exitCode": 0,
+    "startedAt": "2026-11-20T14:29:00.6116930+05:30",
+    "command": "node scripts/check-learning-tools-browser.cjs --portable"
+  },
+  {
+    "durationSeconds": 10.45,
+    "name": "visual-source",
+    "exitCode": 0,
+    "startedAt": "2026-11-20T14:29:10.9676325+05:30",
+    "command": "node scripts/check-visual-tools-browser.cjs"
+  },
+  {
+    "durationSeconds": 15.99,
+    "name": "visual-portable",
+    "exitCode": 0,
+    "startedAt": "2026-11-20T14:29:21.4396306+05:30",
+    "command": "node scripts/check-visual-tools-browser.cjs --portable"
+  },
+  {
+    "durationSeconds": 7.23,
+    "name": "host-source",
+    "exitCode": 0,
+    "startedAt": "2026-11-20T14:29:37.4310999+05:30",
+    "command": "node scripts/check-learning-host-quality.cjs"
+  },
+  {
+    "durationSeconds": 9.83,
+    "name": "host-portable",
+    "exitCode": 0,
+    "startedAt": "2026-11-20T14:29:44.6654413+05:30",
+    "command": "node scripts/check-learning-host-quality.cjs --portable"
+  },
+  {
+    "durationSeconds": 26.2,
+    "name": "protein",
+    "exitCode": 0,
+    "startedAt": "2026-11-20T14:29:54.4959518+05:30",
+    "command": "node scripts/check-protein-browser.cjs"
+  },
+  {
+    "durationSeconds": 1.75,
+    "name": "model-resume",
+    "exitCode": 0,
+    "startedAt": "2026-11-20T14:30:20.7041921+05:30",
+    "command": "node scripts/check-model-resume-browser.cjs"
+  },
+  {
+    "durationSeconds": 22.12,
+    "name": "product-portable",
+    "exitCode": 1,
+    "startedAt": "2026-11-20T14:30:22.4613760+05:30",
+    "command": "node scripts/check-product-excellence-browser.cjs --portable"
+  }
+]

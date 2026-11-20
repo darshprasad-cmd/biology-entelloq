@@ -36,3 +36,7 @@ Machine-readable reports and actual screenshots are stored in the corresponding 
 ## Boundaries
 
 Chromium emulation does not establish real-student usability, physical touch behavior, screen-reader speech or physical webcam tracking. No accounts, cloud sync, live AI or production services were exercised. Pollen fields remain clearly synthetic and illustrative. Existing release flags and rollback instructions remain applicable; production deployment still requires explicit approval. Unchanged legacy suites can run in hosted CI before any merge.
+
+## Subsequent CI follow-up
+
+The later [CI and navigation follow-up](ci-followup/README.md) documents the hosted opening failure, the shell recovery and stale-document navigation fixes, the newly released Physics lever catalogue entry, final runtime pin `8a765df`, and the completed sequential browser checks. It also preserves the historical compression-backend audit, which explains differing compressed artifact hashes without claiming identical bytes across runtimes. The artifact and catalogue information above describes the original `c95528f` integration stage; the follow-up records the final runtime.
