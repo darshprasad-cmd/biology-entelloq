@@ -81,6 +81,7 @@
       "sourcePage": 7,
       "source": "https://cbseacademic.nic.in/web_material/CurriculumMain27/SecPart2/Biology_SecP2_2026-27.pdf",
       "releaseEvidence": "CHROMATOGRAPHY-RELEASE.md",
+      "releasePR": "https://github.com/darshprasad-cmd/biology-entelloq/pull/53",
       "releaseStatusAuthority": "The subsequent PR conversation records required checks, merge, deployment and actual public artifact parity; local implementation alone is not a released capability.",
       "schoolPracticalCompleted": false,
       "educatorReviewed": false,
