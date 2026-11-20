@@ -1,0 +1,19 @@
+PASS no separate local resource needed
+PASS viewer stays lazy on Explore
+PASS actual bundled crambin parsed into 327 atoms
+PASS real WebGL canvas exists
+PASS crambin requires no remote coordinate request
+PASS desktop fits viewport
+PASS shared Biology light theme reaches the loaded viewer
+PASS actual atom representation completes
+PASS actual molecular surface completes
+PASS keyboard reset works
+PASS actual remote streptavidin parses
+PASS actual ligand select/focus completes
+PASS actual remote oxyhaemoglobin parses
+PASS network failure gives recovery and no false loaded state
+PASS offline structure recovers from remote failure
+PASS mobile fits viewport
+PASS existing Learn deep route remains available
+PASS direct Protein Atlas route reloads in Biology shell
+PASS zero uncaught errors or unexpected network

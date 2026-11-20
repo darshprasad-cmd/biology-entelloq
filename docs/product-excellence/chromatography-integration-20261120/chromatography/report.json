@@ -1,0 +1,178 @@
+{
+  "cases": [
+    {
+      "width": 1440,
+      "state": "dark-setup",
+      "axeViolations": 0
+    },
+    {
+      "width": 1440,
+      "state": "light-notebook",
+      "axeViolations": 0
+    },
+    {
+      "width": 1440,
+      "firstQuestionnaire": true,
+      "explicitDeepLink": true,
+      "keyboard": true,
+      "reducedMotion": true,
+      "independentSVGMeasurement": true,
+      "unpreparedUnmarkedLostAndFaultedBlocked": true,
+      "wrongOriginAndRatioRejected": true,
+      "numericDraftPreserved": true,
+      "threeFrontComparison": true,
+      "dedup": true,
+      "CSVIndependent": true,
+      "reload": true,
+      "notesPreserved": true,
+      "resetAndClearIsolation": true,
+      "noBenchNetworkRequests": true,
+      "cameraCalls": 0
+    },
+    {
+      "width": 768,
+      "state": "dark-setup",
+      "axeViolations": 0
+    },
+    {
+      "width": 768,
+      "state": "light-notebook",
+      "axeViolations": 0
+    },
+    {
+      "width": 768,
+      "firstQuestionnaire": true,
+      "explicitDeepLink": true,
+      "keyboard": true,
+      "reducedMotion": true,
+      "independentSVGMeasurement": true,
+      "unpreparedUnmarkedLostAndFaultedBlocked": true,
+      "wrongOriginAndRatioRejected": true,
+      "numericDraftPreserved": true,
+      "threeFrontComparison": true,
+      "dedup": true,
+      "CSVIndependent": true,
+      "reload": true,
+      "notesPreserved": true,
+      "resetAndClearIsolation": true,
+      "noBenchNetworkRequests": true,
+      "cameraCalls": 0
+    },
+    {
+      "width": 390,
+      "state": "dark-setup",
+      "axeViolations": 0
+    },
+    {
+      "width": 390,
+      "state": "light-notebook",
+      "axeViolations": 0
+    },
+    {
+      "width": 390,
+      "firstQuestionnaire": true,
+      "explicitDeepLink": true,
+      "keyboard": true,
+      "reducedMotion": true,
+      "independentSVGMeasurement": true,
+      "unpreparedUnmarkedLostAndFaultedBlocked": true,
+      "wrongOriginAndRatioRejected": true,
+      "numericDraftPreserved": true,
+      "threeFrontComparison": true,
+      "dedup": true,
+      "CSVIndependent": true,
+      "reload": true,
+      "notesPreserved": true,
+      "resetAndClearIsolation": true,
+      "noBenchNetworkRequests": true,
+      "cameraCalls": 0
+    },
+    {
+      "width": 320,
+      "state": "dark-setup",
+      "axeViolations": 0
+    },
+    {
+      "width": 320,
+      "state": "light-notebook",
+      "axeViolations": 0
+    },
+    {
+      "width": 320,
+      "firstQuestionnaire": true,
+      "explicitDeepLink": true,
+      "keyboard": true,
+      "reducedMotion": true,
+      "independentSVGMeasurement": true,
+      "unpreparedUnmarkedLostAndFaultedBlocked": true,
+      "wrongOriginAndRatioRejected": true,
+      "numericDraftPreserved": true,
+      "threeFrontComparison": true,
+      "dedup": true,
+      "CSVIndependent": true,
+      "reload": true,
+      "notesPreserved": true,
+      "resetAndClearIsolation": true,
+      "noBenchNetworkRequests": true,
+      "cameraCalls": 0
+    },
+    {
+      "all24Conditions": true,
+      "independentRenderedDistancesAndRatios": true,
+      "allBandsDistinct": true,
+      "CSVIndependent": true
+    },
+    {
+      "storage": "corrupt",
+      "passed": true
+    },
+    {
+      "storage": "forged",
+      "passed": true
+    },
+    {
+      "storage": "blocked",
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "guestEntry": true,
+      "protocol": "http:",
+      "independentSVGMeasurement": true,
+      "checkedSaveAndReload": true,
+      "cameraCalls": 0,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "guestEntry": true,
+      "protocol": "http:",
+      "independentSVGMeasurement": true,
+      "checkedSaveAndReload": true,
+      "cameraCalls": 0,
+      "errors": []
+    },
+    {
+      "copiedSingleFileOffline": true,
+      "cameraCalls": 0
+    },
+    {
+      "width": 390,
+      "guestEntry": true,
+      "protocol": "file:",
+      "independentSVGMeasurement": true,
+      "checkedSaveAndReload": true,
+      "cameraCalls": 0,
+      "errors": []
+    }
+  ],
+  "started": "2026-11-20T10:23:31.997Z",
+  "limitations": "Original synthetic chromatograms and Chromium viewport checks. Not real plant assays, predictive separation, physical phones, screen-reader certification, webcam tracking, educator review or supervised practical completion.",
+  "localArtifact": {
+    "bytes": 45027873,
+    "sha256": "88e2ad8c082d75176220878e5d0c00ae6d9af85a79da3961c5fa9932a1ea64fe"
+  },
+  "target": "http://127.0.0.1:63315/?excellence=0",
+  "status": "passed",
+  "finished": "2026-11-20T10:24:00.836Z"
+}

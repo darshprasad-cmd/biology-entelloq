@@ -1,0 +1,57 @@
+[http] Open Home and enter the Dissection Lab
+[http] Wait for the actual lab runtime
+[http] Load and verify prepared frog
+[http] Capture prepared frog
+[http] Load and verify prepared cockroach
+[http] Capture prepared cockroach
+[http] Open the controls dialog through its button
+[http] Capture dialog ownership of the Exit corner
+[http] Close the controls dialog through its button
+[http] Exit the lab through the shell button
+[http] Reload after leaving the lab
+[http] Open Biology Universe through its navigation button
+[http] Wait for all 13 Universe stages
+[http] Inspect the Cell stage
+[http] Close Universe through the shell button
+[http] Open and reload the Universe DNA deep link
+[http] Navigate the warm Universe from DNA to Atom
+[http] Follow the Universe brand link into the lab
+[http] Switch from the active lab to Learn
+http: 31 checks passed
+[file] Open Home and enter the Dissection Lab
+[file] Wait for the actual lab runtime
+[file] Load and verify prepared frog
+[file] Capture prepared frog
+[file] Load and verify prepared cockroach
+[file] Capture prepared cockroach
+[file] Open the controls dialog through its button
+[file] Capture dialog ownership of the Exit corner
+[file] Close the controls dialog through its button
+[file] Exit the lab through the shell button
+[file] Reload after leaving the lab
+[file] Open Biology Universe through its navigation button
+[file] Wait for all 13 Universe stages
+[file] Inspect the Cell stage
+[file] Close Universe through the shell button
+[file] Open and reload the Universe DNA deep link
+[file] Navigate the warm Universe from DNA to Atom
+[file] Follow the Universe brand link into the lab
+[file] Switch from the active lab to Learn
+file: 31 checks passed
+{
+  "complete": true,
+  "bytes": 45027873,
+  "sha256": "88e2ad8c082d75176220878e5d0c00ae6d9af85a79da3961c5fa9932a1ea64fe",
+  "runs": [
+    {
+      "mode": "http",
+      "complete": true,
+      "checks": 31
+    },
+    {
+      "mode": "file",
+      "complete": true,
+      "checks": 31
+    }
+  ]
+}

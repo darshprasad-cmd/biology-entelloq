@@ -2,6 +2,8 @@
 
 The existing static app, isolated scientific documents and single-file delivery remain the architecture. The product change is opt-in with `?excellence=1`, defaults on for localhost staging and is explicitly disabled by `?excellence=0`. The classroom file exchange additionally requires `classroom=1`.
 
+The current integration runtime is `87df88b0117c1b54fa2c0c8667343c1e3bd1f435` (2026-11-20). It includes released questionnaire, pollen and chromatography work alongside the product workspace and reviewed navigation ownership/recovery fixes. The chromatography merge retains its released model, UI and persistence rules; only the builder conflict and explicit preservation-test baselines needed integration. Exact artifact, catalogue and test evidence is indexed in [the chromatography integration report](product-excellence/chromatography-integration-20261120/README.md).
+
 ## Ownership and integration
 
 - `app.html` owns the original shell and a small `BioShell` adapter exposing navigation, route labels, search hooks and existing activity. The original immersive launcher regions remain fingerprint protected.
@@ -13,6 +15,7 @@ The existing static app, isolated scientific documents and single-file delivery 
 - `assets/entelloq-classroom.js` is the separately flagged local assignment/submission/review exchange. Canonical catalogue IDs bind submissions to the assigned experiment. No student account, cloud inbox, network upload or automatic feedback delivery is implied.
 - `scripts/build-scientific-catalog.cjs` exports 221 current Biology entries from real registries to `assets/entelloq-biology-catalog.json`. Concepts, working labs, lessons, practical preparation guides and tools have distinct kinds.
 - `scripts/build-library.py` embeds product source slots and both subject catalogues. `build-single-file.py` includes shared feature gating before first-run code and packages local scripts and styles. No new production dependency or renderer was introduced. The existing Axe accessibility tool is pinned alongside Playwright for the CI browser checks.
+- `src/cbse/chromatography-model.js`, `chromatography-ui.js` and `chromatography-ui.css` mount through the existing Class 11 practical route `#cbse:11/practicals/b11-a-e08`. Synthetic observations remain in their existing local practical notebook; they do not claim experimental plant measurements or school completion. The catalogue remains 221 Biology entries and the copied Physics catalogue contains 343 entries.
 
 ## Persistence and model capabilities
 
@@ -51,6 +54,7 @@ node scripts/build-scientific-catalog.cjs --check
 python scripts/build-single-file.py --check
 node scripts/check-learning.cjs
 node scripts/check-model-resume-browser.cjs
+node scripts/check-chromatography-browser.cjs
 node scripts/check-product-excellence-browser.cjs
 node scripts/check-product-excellence-browser.cjs --portable
 node scripts/check-product-excellence-browser.cjs --file
@@ -62,4 +66,4 @@ Set `BIOLOGY_PLAYWRIGHT_MODULES` to the existing Playwright/Axe runtime if it is
 
 Run `python -m http.server 3029 --bind 127.0.0.1` from the checkout. Open `/dist/index.html?excellence=1#home`; append `&classroom=1` to the query for the classroom pilot. Loopback cross-subject mappings are validated by the shared resolver; ordinary production destinations remain canonical HTTPS URLs.
 
-For immediate staging rollback use `excellence=0`. Existing keys and engines remain usable. To discard this release candidate, switch to its recorded base `a8c303c` in a clean separate checkout and rebuild `dist/index.html`; do not reset a checkout containing user work. A future production rollback would revert the approved release commit through the protected PR/check/deploy process. No merge or deployment has occurred here, and explicit user approval is required before production deployment.
+For immediate staging rollback of the product surface use `excellence=0`. Existing keys and engines remain usable. To inspect the original audit baseline, use `a8c303c` in a clean separate checkout; it predates subsequently released questionnaire, pollen and chromatography work and is not a full-content rollback target. To reproduce the candidate before the chromatography integration, use `6296dbe` in a clean separate checkout and rebuild `dist/index.html`. Do not reset a checkout containing user work. A future production rollback would revert the approved release commit through the protected PR/check/deploy process. Upstream work has been merged into this development branch; this candidate has not been merged into production or deployed. Explicit user approval is required before production deployment.

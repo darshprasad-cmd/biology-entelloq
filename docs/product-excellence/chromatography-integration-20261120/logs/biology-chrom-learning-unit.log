@@ -1,0 +1,26 @@
+
+> entelloq-learning-tools@1.0.0 test
+> node --test tests/core.test.mjs tests/review-concurrency.test.mjs
+
+✔ review attempts require reveal, schedule into the future, and survive reload without cross-subject contamination (3.4784ms)
+✔ export/import merges idempotently, rejects corruption/future clocks and never overwrites history on failure (1.0911ms)
+✔ invalid persisted state is preserved and a blocked store remains usable with an export warning (0.3868ms)
+✔ Yjs concurrent edits merge in both directions, duplicate imports are idempotent, undo is local (8.0757ms)
+✔ notebook restore and namespace boundaries preserve text, reject bad imports before mutation (0.8348ms)
+✔ keyword search is transparent, subject scoped, and does not invent unmatched results (0.2957ms)
+✔ pre-opened sessions concurrently preserve different cards for both subjects (12.1532ms)
+✔ same-card concurrency saves once and rejects the stale second rating without loss (0.5906ms)
+✔ stale-session import preserves newly saved attempts and duplicate imports remain idempotent (1.2711ms)
+✔ unavailable locks or SecurityError preserve valid stored history and retain new attempts for export (0.7251ms)
+✔ corruption occurring after the session opens is preserved rather than overwritten (0.2494ms)
+✔ a failed write keeps valid stored history and an exportable in-memory attempt (0.3045ms)
+✔ double clicks cannot queue two ratings from one session (0.2606ms)
+✔ clock, duplicate, conflicting and over-cap inputs remain rejected without persistence mutation (78.0904ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 181.8481

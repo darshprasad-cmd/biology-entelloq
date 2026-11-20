@@ -2,6 +2,8 @@
 
 The release candidate makes the existing experiments easier to find, manipulate and keep. It retains the original learning documents, engines, portable HTML delivery and all legacy destinations.
 
+Current runtime: `87df88b0117c1b54fa2c0c8667343c1e3bd1f435`, integrated 2026-11-20. The candidate includes released questionnaire/mobile improvements, the synthetic pollen bench and the released Class 11 chromatography bench at its existing practical route. Chromatography retains the released setup checks, distance/Rf readings, local persistence and CSV export; its datasets are explicitly synthetic. The product guest route and original questionnaire route are both validated. [Current integration evidence](product-excellence/chromatography-integration-20261120/README.md) records the artifact and complete local check results.
+
 - Shared five-destination navigation, accessible mobile search and a direct Physics subject link.
 - Guest osmosis entry before optional study preferences; registration remains optional.
 - Deterministic search across the exported Physics/Biology catalogues and locally saved experiments, with synonyms, direct destinations and keyboard navigation.
@@ -10,6 +12,7 @@ The release candidate makes the existing experiments easier to find, manipulate 
 - Model classification, existing assumptions and limitations alongside experiment evidence.
 - Separate classroom pilot with assignment worksheets, canonical experiment matching, submission files and local teacher review; no cloud inbox or automatic transmission.
 - Fixed stale child-context events overwriting the active catalogue/reading route.
+- Preserved pending reading-load recovery during label refresh and rejected delayed navigation from replaced or hidden child documents, while retaining legitimate startup routing.
 
 The original dissection artifact, specimens, hand-tracking code and immutable preservation fixture are unchanged. No new production framework or rendering dependency was introduced. Shared code and catalogue contracts remain usable by the separately owned native shell.
 
