@@ -15,6 +15,20 @@ function setup(unpack, delay = value => value) {
 }
 const tick = () => new Promise(resolve=>setImmediate(resolve));
 
+test('cosmetic shell refresh preserves a pending route and its recovery deadline',()=>{
+  const app=fs.readFileSync(path.join(__dirname,'../app.html'),'utf8');
+  const refresh=app.slice(app.indexOf('function refreshShellNavigation('),app.indexOf('window.BioShell='));
+  assert.match(app,/refresh:refreshShellNavigation/);
+  const label={textContent:'Lab / Osmosis Lab'},active=[],pending={src:'./labs.html?embed=1#osmosis'};
+  const sandbox=vm.createContext({current:'labs',BYKEY:{labs:{label:'Virtual Labs'},home:{label:'Explore'}},
+    $:selector=>{assert.equal(selector,'#routeLabel');return label;},setActive:key=>active.push(key),pending,loadTimer:123,
+    routeFromHash(){assert.fail('Relabeling must not navigate');},clearTimeout(){assert.fail('Relabeling must not cancel recovery');}});
+  vm.runInContext(refresh+';globalThis.refresh=refreshShellNavigation;',sandbox);
+  sandbox.refresh();assert.deepEqual(active,['labs']);assert.equal(label.textContent,'Virtual Labs / Osmosis Lab');
+  assert.equal(sandbox.pending,pending);assert.equal(sandbox.loadTimer,123);
+  sandbox.current=null;label.textContent='Home';sandbox.refresh();assert.equal(label.textContent,'Explore');
+});
+
 test('reading readiness releases only the current authored document after its DOM handlers',()=>{
   const tasks=[],events=[];
   const context={page:'learn.html',ready:true};
@@ -47,7 +61,22 @@ test('same-URL document replacement invalidates readiness before the new DOM com
     logical:(value,base)=>new URL(value,base),localPath:value=>new URL(value).pathname.slice(1),render:()=>{assert.equal(old.ready,false,'Invalidate before mounting, while the previous WindowProxy/document still exists');return '<body>Reading</body>';}});
   vm.runInContext(source.slice(source.indexOf('  function loadFrame('),source.indexOf('  function navigate('))+';globalThis.load=loadFrame;',sandbox);
   assert.equal(sandbox.load(frame,old.url.href,{setAttribute(name,value){writes.push([name,value]);}}),true);
-  assert.equal(old.ready,false);assert.deepEqual(writes.map(item=>item[0]),['srcdoc','src']);
+  assert.equal(old.ready,false);assert.equal(old.superseded,true);assert.deepEqual(writes.map(item=>item[0]),['srcdoc','src']);
+});
+
+test('superseded children cannot commit or navigate, while active parsing documents can',()=>{
+  const writes=[],workspace={contentWindow:{}},context={page:'about.html',url:new URL('https://biology.entelloq.com/about.html'),ready:false};
+  const win={BioqContext:context},sandbox=vm.createContext({URL,workspace,contextFor:target=>target.BioqContext,
+    routeFor:url=>'#about/'+url.hash.slice(1),setOuter:(...args)=>writes.push(args),
+    logical(){assert.fail('A superseded callback must not resolve or navigate a destination');}});
+  vm.runInContext(source.slice(source.indexOf('  function ownsNavigation('),source.indexOf('  function render('))+
+    source.slice(source.indexOf('  function navigate('),source.indexOf('  function showRoute('))+
+    ';globalThis.api={commit,navigate};',sandbox);
+  const initial=new URL('https://biology.entelloq.com/about.html#/home');sandbox.api.commit(win,initial,'replace');
+  assert.equal(context.url,initial,'The active document may normalize its route before readiness');assert.equal(writes.length,1);
+  context.superseded=true;const stale=new URL('https://biology.entelloq.com/about.html#/late');sandbox.api.commit(win,stale);
+  assert.equal(context.url,initial,'Do not mutate the outgoing context');assert.equal(writes.length,1,'Do not overwrite the new outer route');
+  assert.equal(sandbox.api.navigate(win,'labs.html#learning-kinetics'),true,'Stale navigation is consumed rather than falling through to the native frame');
 });
 test('shell completion recovers a late current document while retaining invalid-document errors',()=>{
   const app=fs.readFileSync(path.join(__dirname,'../app.html'),'utf8');
@@ -67,6 +96,18 @@ test('shell completion recovers a late current document while retaining invalid-
     if(scenario==='replaced')sandbox.loadedSrc='./solve.html?embed=1';
     frame.onload();assert.equal(oops.classList.contains('on'),scenario!=='current',scenario+' completion handles recovery safely');
   }
+});
+
+test('retained reading frames lose route ownership on Home/immersive visits and regain it when selected',()=>{
+  const workspace={},app={page:'app.html',url:new URL('https://biology.entelloq.com/app.html#about'),frame:workspace};
+  const owner={BioqContext:app},frame={id:'viewFrame',isConnected:true,ownerDocument:{defaultView:owner}};
+  const context={page:'about.html',frame,ready:false},sandbox=vm.createContext({workspace,contextFor:win=>win.BioqContext});
+  vm.runInContext(source.slice(source.indexOf('  function ownsNavigation('),source.indexOf('  function commit('))+';globalThis.owns=ownsNavigation;',sandbox);
+  assert.equal(sandbox.owns(context),true,'The selected parsing document owns its initial route');
+  for(const hash of ['#home','#lab','#universe','#labs/learning-kinetics']){app.url.hash=hash;assert.equal(sandbox.owns(context),false,hash+' owns the outer route instead');}
+  app.url.hash='#about';assert.equal(sandbox.owns(context),true,'A retained section can be selected again');
+  app.superseded=true;assert.equal(sandbox.owns(context),false,'Children of a replaced workspace are stale too');
+  app.superseded=false;frame.isConnected=false;assert.equal(sandbox.owns(context),false,'Removed frames cannot navigate');
 });
 
 test('cancellation between arrival and continuation prevents specimen decoding',async()=>{

@@ -1162,7 +1162,13 @@ addEventListener("keydown",e=>{
 });
 
 // ── go ──────────────────────────────────────────────────────────────────────
-window.BioShell={navigate:go,activity:()=>ACT.get(),icon:key=>IC[key]||IC.explore,refresh:routeFromHash,closeSearch:closeCmdk,run:command=>run(command),setRunner:fn=>{run=fn;},setSearch:fn=>{matchCommands=fn;},setLabels:labels=>{for(const [key,label]of Object.entries(labels))if(BYKEY[key])BYKEY[key].label=label;}};
+function refreshShellNavigation(){
+  // Relabeling must not restart a pending route or cancel its recovery deadline.
+  const key=current||"home",label=$("#routeLabel"),divider=label.textContent.indexOf(" / ");
+  setActive(key);
+  label.textContent=BYKEY[key].label+(divider<0?"":label.textContent.slice(divider));
+}
+window.BioShell={navigate:go,activity:()=>ACT.get(),icon:key=>IC[key]||IC.explore,refresh:refreshShellNavigation,closeSearch:closeCmdk,run:command=>run(command),setRunner:fn=>{run=fn;},setSearch:fn=>{matchCommands=fn;},setLabels:labels=>{for(const [key,label]of Object.entries(labels))if(BYKEY[key])BYKEY[key].label=label;}};
 buildHome();
 routeFromHash();
 prefetchLab();

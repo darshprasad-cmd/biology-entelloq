@@ -107,9 +107,21 @@
     if (mode === 'replace' || location.hash === hash) history.replaceState(state, '', url);
     else history.pushState(state, '', url);
   }
+  function ownsNavigation(context) {
+    if (!context || context.superseded) return false;
+    const frame = context.frame;
+    if (frame?.isConnected === false) return false;
+    if (!frame || frame === workspace) return true;
+    const owner = contextFor(frame.ownerDocument.defaultView);
+    if (owner && !ownsNavigation(owner)) return false;
+    // Home and immersive routes retain the reading frame. Its queued callbacks
+    // may finish, but only the selected section may change the package route.
+    return frame.id !== 'viewFrame' || owner?.page !== 'app.html' ||
+      owner.url.hash.slice(1).split('/')[0] === context.page.replace(/\.html$/, '');
+  }
   function commit(win, url, mode = 'push', state = null) {
     const context = contextFor(win);
-    if (!context) return;
+    if (!ownsNavigation(context)) return;
     context.url = url;
     if (context.restoring) return;
     const hash = routeFor(url);
@@ -171,7 +183,7 @@
       return true;
     }
     // Invalidate a queued ready signal even when a forced reload uses the same URL.
-    if (old) old.ready = false;
+    if (old) {old.ready = false; old.superseded = true;}
     // srcdoc takes precedence over src. Keep src as a logical identity for the
     // existing validated frame bridges and MutationObservers, without a fetch.
     const mount = () => {
@@ -196,7 +208,11 @@
     return true;
   }
   function navigate(win, value, mode = 'push') {
-    const context = contextFor(win), url = logical(value, context?.url.href);
+    const context = contextFor(win);
+    // Consume outgoing-document callbacks; falling through would navigate the
+    // native iframe after its replacement has already become the route owner.
+    if (context && !ownsNavigation(context)) return true;
+    const url = logical(value, context?.url.href);
     const name = url && localPath(url.href);
     if (!pages.has(name)) return false;
     const route = routeFor(url);
@@ -242,6 +258,7 @@
       }
       return;
     }
+    if (current) {current.ready = false; current.superseded = true;}
     workspace.srcdoc = render(name, route.href);
   }
   window.BioqPackage = {
@@ -256,6 +273,7 @@
       const context = {url, page, frame:win.frameElement, ready:false}; contexts.set(win, context);
       win.BioqContext = context;
       win.addEventListener('DOMContentLoaded', () => {
+        if (context.superseded) return;
         context.ready = true;
         readingReady(win, context);
         if (context.frame === workspace) { document.title = win.document.title || 'Biology Entelloq'; loading.hidden = true; }

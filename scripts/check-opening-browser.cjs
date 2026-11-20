@@ -73,7 +73,13 @@ async function readingReadyAfterTimeout(browser,base){
   await page.goto(base+'/late-reading#learn/topic/cell-structure/visual',{waitUntil:'domcontentloaded'});
   await dismissCBSE(page);
   const shell=await frame(page,'#bioq-workspace');await shell.locator('#viewFrame.on').waitFor();const lesson=await frame(shell,'#viewFrame');
-  await shell.locator('#oops.on').waitFor({timeout:20000});assert.match(await shell.locator('#oopsMsg').textContent(),/took too long/);
+  await shell.locator('#oops.on').waitFor({timeout:20000}).catch(async error=>{
+   report.lateReadingFailure={heldScript:!!heldScript,shell:await shell.evaluate(()=>{
+    const node=document.getElementById('oops'),style=getComputedStyle(node),box=node.getBoundingClientRect();
+    return {ready:BioqContext.ready,route:BioqContext.url.href,classes:node.className,display:style.display,visibility:style.visibility,box:{width:box.width,height:box.height},frame:frameElement?.getBoundingClientRect().toJSON()};
+   }),lesson:await lesson.evaluate(()=>({ready:BioqContext.ready,state:document.readyState,route:BioqContext.url.href}))};
+   throw error;
+  });assert.match(await shell.locator('#oopsMsg').textContent(),/took too long/);
   assert.equal(await lesson.evaluate(()=>BioqContext.ready),false,'The real timeout precedes authored readiness');
   assert.ok(heldScript,'The test holds the same reading document before completion');await heldScript.fulfill({contentType:'text/javascript',body:''});heldScript=null;
   await lesson.waitForFunction(()=>BioqContext.ready);await shell.locator('#oops.on').waitFor({state:'hidden'});await shell.locator('#skel.on').waitFor({state:'hidden'});
@@ -115,6 +121,38 @@ async function readingReadyWithHeldImage(browser,base){
   report.checks.push('A withheld reading document still shows the 15-second recovery screen; restoring its loader and choosing Retry opens the real Learn page.');
  }finally{await heldImage?.abort().catch(()=>{});await context.close();}
 }
+async function supersededChildCannotReplaceRoute(browser,base){
+ const opened=await open(browser,base+'/truncated#about',url=>url.origin===base&&url.pathname==='/truncated',{skipReady:true});
+ try{
+  await dismissCBSE(opened.page);
+  const shell=await frame(opened.page,'#bioq-workspace');await shell.locator('#viewFrame.on').waitFor();
+  let about=await frame(shell,'#viewFrame');await about.waitForFunction(()=>BioqContext.ready);
+  const home=await shell.evaluate(()=>{
+   const outgoing=document.getElementById('viewFrame').contentWindow,context=outgoing.BioqContext;
+   const lateCommit=outgoing.BioqHistory.replaceState.bind(outgoing.BioqHistory),oldURL=context.url.href;
+   BioShell.navigate('home');lateCommit({},'', '#/home');
+   return {hash:top.location.hash,retained:!context.superseded,oldURLPreserved:context.url.href===oldURL};
+  });
+  assert.deepEqual(home,{hash:'#home',retained:true,oldURLPreserved:true});
+  await opened.page.waitForTimeout(600);assert.equal(new URL(opened.page.url()).hash,'#home','The real queued About initialization also cannot steal Home');
+  await shell.evaluate(()=>BioShell.navigate('about'));about=await frame(shell,'#viewFrame');await about.waitForFunction(()=>BioqContext.ready);
+  const result=await shell.evaluate(()=>{
+   const outgoing=document.getElementById('viewFrame').contentWindow,context=outgoing.BioqContext;
+   const lateCommit=outgoing.BioqHistory.replaceState.bind(outgoing.BioqHistory),oldURL=context.url.href;
+   BioShell.navigate('labs',{sub:'learning-kinetics'});
+   // Reproduce a queued callback from the outgoing document in the interval
+   // after replacement starts but before the new srcdoc finishes parsing.
+   const expected=top.location.hash;lateCommit({},'', '#/home');
+   const afterCommit=top.location.hash;
+   const consumed=BioqPackage.navigate(outgoing,'about.html#/home');
+   return {expected,afterCommit,afterNavigate:top.location.hash,superseded:context.superseded,oldURLPreserved:context.url.href===oldURL,consumed};
+  });
+  assert.deepEqual(result,{expected:'#labs/learning-kinetics',afterCommit:'#labs/learning-kinetics',afterNavigate:'#labs/learning-kinetics',superseded:true,oldURLPreserved:true,consumed:true});
+  const labs=await frame(shell,'#viewFrame');await labs.waitForFunction(()=>BioqContext.ready&&BioqContext.page==='labs.html'&&BioqLocation.hash==='#learning-kinetics');
+  await shell.locator('#skel.on').waitFor({state:'hidden'});assert.equal(new URL(opened.page.url()).hash,'#labs/learning-kinetics');
+  report.checks.push('A retained About frame cannot rewrite Home; selecting About again works. Its queued history/navigation callback after replacement cannot rewrite the Labs kinetics route or revive the outgoing document; the current Labs document completes normally.');
+ }finally{await opened.context.close();}
+}
 (async()=>{
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
  const base='http://127.0.0.1:'+server.address().port;
@@ -123,6 +161,7 @@ async function readingReadyWithHeldImage(browser,base){
  try{
   await readingReadyAfterTimeout(browser,base);
   await readingReadyWithHeldImage(browser,base);
+  await supersededChildCannotReplaceRoute(browser,base);
   const begin=Date.now();
   const held=await open(browser,base+'/held#solve',url=>url.origin===base&&url.pathname==='/held');
   report.solveReadyMs=Date.now()-begin;
