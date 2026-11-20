@@ -15,6 +15,7 @@ const { checkLibraryRoute } = require('../tests/library-route-browser.cjs');
 const { checkPracticeFocus } = require('../tests/practice-focus-browser.cjs');
 const { checkEvidenceTable } = require('../tests/evidence-tables-browser.cjs');
 const { checkPhylogeny } = require('../tests/phylogeny-browser.cjs');
+const { checkReferenceGeometry } = require('../tests/reference-geometry-browser.cjs');
 const { checkAppSearch } = require('../tests/app-search-browser.cjs');
 const { checkProgressCards } = require('../tests/progress-readability-browser.cjs');
 const { checkLabCatalogNavigation } = require('../tests/lab-catalog-navigation-browser.cjs');
@@ -252,7 +253,7 @@ async function runSuite(browser, mode, url) {
       run.forbiddenDependencies.push(target.href);
   });
   page.on('pageerror', error => run.errors.push(error.message));
-  page.on('console', message => { if (/^(Lab failed:|.*stage failed:)/.test(message.text())) run.errors.push(message.text()); });
+  page.on('console', message => { if (/^(Lab failed:|.*stage failed:)|<path> attribute d:/.test(message.text())) run.errors.push(message.text()); });
   try {
     if (worldsOnly) {
       await checkWorlds(page, url, run);
@@ -288,6 +289,7 @@ async function runSuite(browser, mode, url) {
       assert.ok((await opened.frame.locator('body').textContent()).trim().length > 100, key + ' contains real section content');
       await noOverflow(page, [['shell', opened.shell], [key, opened.frame]], key + ' desktop', run);
       if (key === 'labs') run.checks.push('Labs discovery desktop: ' + await checkLabCatalogNavigation(page, opened.frame, { theme: await opened.shell.locator('html').getAttribute('data-theme') }));
+      if (key === 'explore') run.checks.push('Explore SVG geometry desktop: ' + JSON.stringify(await checkReferenceGeometry(page, opened.frame)));
       if (key === 'me') run.checks.push('Progress reading desktop: ' + JSON.stringify(await checkProgressCards(page, opened.frame, { width:1440, theme:await opened.shell.locator('html').getAttribute('data-theme') })));
     }
     run.checks.push('All eight embedded sections open real content with no horizontal overflow on desktop.');
@@ -421,6 +423,7 @@ async function runSuite(browser, mode, url) {
       opened = await section(page, url, key, ready);
       await noOverflow(page, [['shell', opened.shell], [key, opened.frame]], key + ' mobile', run);
       if (key === 'labs') run.checks.push('Labs discovery mobile: ' + await checkLabCatalogNavigation(page, opened.frame, { theme: await opened.shell.locator('html').getAttribute('data-theme') }));
+      if (key === 'explore') run.checks.push('Explore SVG geometry mobile: ' + JSON.stringify(await checkReferenceGeometry(page, opened.frame)));
       if (key === 'me') run.checks.push('Progress reading mobile: ' + JSON.stringify(await checkProgressCards(page, opened.frame, { width:390, theme:await opened.shell.locator('html').getAttribute('data-theme') })));
       if (key === 'learn') {
         run.checks.push('Learn search mobile: ' + await checkLibrarySearch(page, opened.frame));
