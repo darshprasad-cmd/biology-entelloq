@@ -1,0 +1,3287 @@
+{
+  "version": 1,
+  "subject": "biology",
+  "source": "Authored Biology Entelloq registries",
+  "items": [
+    {
+      "id": "biology-concept-cell-structure",
+      "title": "Cell Structure",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "One living unit, many cooperating structures. Explore an animal or plant cell from its boundary to its organelles.",
+      "tags": [
+        "parts of a cell",
+        "animal cell",
+        "plant cell",
+        "cell organelles",
+        "eukaryotic cell"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/cell-structure/intuition",
+      "route": "#learn/topic/cell-structure/intuition"
+    },
+    {
+      "id": "biology-concept-membrane-transport",
+      "title": "Cell Membrane & Transport",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Predict what crosses a membrane, in which direction, and whether the cell must supply energy.",
+      "tags": [
+        "diffusion and osmosis",
+        "selective permeability",
+        "fluid mosaic model",
+        "facilitated diffusion"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/membrane-transport/intuition",
+      "route": "#learn/topic/membrane-transport/intuition"
+    },
+    {
+      "id": "biology-concept-biomolecules",
+      "title": "Biomolecules",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Connect molecular structure to the work of carbohydrates, lipids, proteins and nucleic acids.",
+      "tags": [
+        "biological molecules",
+        "macromolecules",
+        "carbohydrates",
+        "lipids",
+        "proteins",
+        "amino acids",
+        "nucleic acids"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/biomolecules/intuition",
+      "route": "#learn/topic/biomolecules/intuition"
+    },
+    {
+      "id": "biology-concept-enzymes",
+      "title": "Enzymes",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "See how catalysts accelerate reactions, and why rate changes with conditions and regulation.",
+      "tags": [
+        "biological catalysts",
+        "active site",
+        "substrate specificity",
+        "activation energy",
+        "enzyme temperature",
+        "enzyme pH",
+        "enzyme concentration"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/enzymes/intuition",
+      "route": "#learn/topic/enzymes/intuition"
+    },
+    {
+      "id": "biology-concept-photosynthesis",
+      "title": "Photosynthesis",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Follow sunlight into electron transfer, ATP and NADPH, then into carbon-containing molecules.",
+      "tags": [
+        "plant food",
+        "how plants make food",
+        "light energy",
+        "photosynthetic carbon fixation"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/photosynthesis/intuition",
+      "route": "#learn/topic/photosynthesis/intuition"
+    },
+    {
+      "id": "biology-concept-cellular-respiration",
+      "title": "Cellular Respiration",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Trace carbon and electrons separately as cells obtain usable energy from fuel.",
+      "tags": [
+        "aerobic respiration",
+        "mitochondrial respiration",
+        "glucose breakdown",
+        "mitochondria energy",
+        "electron transport chain",
+        "chemiosmosis"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/cellular-respiration/intuition",
+      "route": "#learn/topic/cellular-respiration/intuition"
+    },
+    {
+      "id": "biology-concept-mitosis",
+      "title": "Mitosis",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Watch replicated chromosomes separate into two nuclei while chromosome number is maintained.",
+      "tags": [
+        "prophase",
+        "metaphase",
+        "anaphase",
+        "telophase",
+        "somatic cell division"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/mitosis/intuition",
+      "route": "#learn/topic/mitosis/intuition"
+    },
+    {
+      "id": "biology-concept-meiosis",
+      "title": "Meiosis",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "One round of DNA copying, two divisions, and new combinations of inherited information.",
+      "tags": [
+        "gamete formation",
+        "reduction division",
+        "crossing over",
+        "independent assortment"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/meiosis/intuition",
+      "route": "#learn/topic/meiosis/intuition"
+    },
+    {
+      "id": "biology-concept-dna",
+      "title": "DNA",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Read the molecular structure that stores information and provides a template for copying.",
+      "tags": [
+        "DNA structure",
+        "double helix",
+        "deoxyribonucleic acid",
+        "genes",
+        "genome",
+        "base pairing"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/dna/intuition",
+      "route": "#learn/topic/dna/intuition"
+    },
+    {
+      "id": "biology-concept-protein-synthesis",
+      "title": "Protein Synthesis",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Follow information from DNA into RNA and then into an amino-acid sequence.",
+      "tags": [
+        "central dogma",
+        "DNA RNA protein",
+        "gene expression",
+        "translation",
+        "transcription"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/protein-synthesis/intuition",
+      "route": "#learn/topic/protein-synthesis/intuition"
+    },
+    {
+      "id": "biology-concept-mendelian-genetics",
+      "title": "Mendelian Genetics",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Use segregation and probability to predict inheritance without confusing expectation with certainty.",
+      "tags": [
+        "Punnett square",
+        "monohybrid cross",
+        "dihybrid cross",
+        "dominance",
+        "segregation",
+        "genotype",
+        "phenotype",
+        "alleles"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/mendelian-genetics/intuition",
+      "route": "#learn/topic/mendelian-genetics/intuition"
+    },
+    {
+      "id": "biology-concept-heart-circulation",
+      "title": "Human Heart & Circulation",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Trace two linked circuits and discover how pressure, valves and vessels move blood.",
+      "tags": [
+        "heart chambers",
+        "cardiac cycle",
+        "blood vessels",
+        "circulatory system",
+        "blood pressure",
+        "pulmonary circulation",
+        "systemic circulation"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/heart-circulation/intuition",
+      "route": "#learn/topic/heart-circulation/intuition"
+    },
+    {
+      "id": "biology-concept-gas-exchange",
+      "title": "Respiration & Gas Exchange",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Separate ventilation, diffusion and cellular respiration, then connect them through blood transport.",
+      "tags": [
+        "lungs",
+        "alveoli",
+        "breathing",
+        "oxygen transport",
+        "respiratory system"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/gas-exchange/intuition",
+      "route": "#learn/topic/gas-exchange/intuition"
+    },
+    {
+      "id": "biology-concept-nervous-system",
+      "title": "Nervous System",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Connect sensory input, electrical signaling, synapses and coordinated responses.",
+      "tags": [
+        "neurons",
+        "brain",
+        "CNS",
+        "PNS",
+        "reflex",
+        "nerve impulse",
+        "action potential",
+        "synapse"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/nervous-system/intuition",
+      "route": "#learn/topic/nervous-system/intuition"
+    },
+    {
+      "id": "biology-concept-immunity",
+      "title": "Immunity",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "See how barriers, innate recognition and adaptive memory cooperate to defend the body.",
+      "tags": [
+        "immune system",
+        "innate immunity",
+        "adaptive immunity",
+        "antibodies",
+        "B cells",
+        "T cells",
+        "vaccination"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/immunity/intuition",
+      "route": "#learn/topic/immunity/intuition"
+    },
+    {
+      "id": "biology-concept-plant-transport",
+      "title": "Plant Transport",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Compare water movement in xylem with source-to-sink transport in phloem.",
+      "tags": [
+        "xylem",
+        "phloem",
+        "transpiration",
+        "translocation",
+        "water transport in plants"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/plant-transport/intuition",
+      "route": "#learn/topic/plant-transport/intuition"
+    },
+    {
+      "id": "biology-concept-natural-selection",
+      "title": "Natural Selection",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Explain adaptation through heritable variation and differences in reproductive success.",
+      "tags": [
+        "adaptation",
+        "fitness",
+        "selection pressure",
+        "survival of the fittest",
+        "Darwin"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/natural-selection/intuition",
+      "route": "#learn/topic/natural-selection/intuition"
+    },
+    {
+      "id": "biology-concept-ecology",
+      "title": "Ecology",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Explore organisms as parts of connected populations, communities and ecosystems.",
+      "tags": [
+        "ecosystems",
+        "food web",
+        "food chain",
+        "trophic levels",
+        "energy flow",
+        "biodiversity",
+        "carrying capacity"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/ecology/intuition",
+      "route": "#learn/topic/ecology/intuition"
+    },
+    {
+      "id": "biology-concept-nucleus",
+      "title": "Nucleus",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Explore the compartment that organizes most eukaryotic DNA and regulates access to it.",
+      "tags": [
+        "cell control center",
+        "nuclear envelope",
+        "nuclear pores"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/nucleus/intuition",
+      "route": "#learn/topic/nucleus/intuition"
+    },
+    {
+      "id": "biology-concept-nucleolus",
+      "title": "Nucleolus",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Discover how a membrane-free nuclear region helps assemble ribosomal subunits.",
+      "tags": [
+        "ribosome assembly",
+        "rRNA"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/nucleolus/intuition",
+      "route": "#learn/topic/nucleolus/intuition"
+    },
+    {
+      "id": "biology-concept-mitochondria",
+      "title": "Mitochondria",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Zoom into membranes that couple fuel-derived electron transfer to ATP production.",
+      "tags": [
+        "mitochondrion",
+        "cell powerhouse",
+        "powerhouse of cell",
+        "endosymbiotic theory"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/mitochondria/intuition",
+      "route": "#learn/topic/mitochondria/intuition"
+    },
+    {
+      "id": "biology-concept-ribosomes",
+      "title": "Ribosomes",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Meet the RNA-protein machinery that reads mRNA and assembles amino-acid chains.",
+      "tags": [
+        "ribosome",
+        "protein factory",
+        "protein factories"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/ribosomes/intuition",
+      "route": "#learn/topic/ribosomes/intuition"
+    },
+    {
+      "id": "biology-concept-rough-er",
+      "title": "Rough Endoplasmic Reticulum",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Follow newly made secreted and membrane proteins into the ER processing pathway.",
+      "tags": [
+        "rough ER",
+        "RER",
+        "endoplasmic reticulum"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/rough-er/intuition",
+      "route": "#learn/topic/rough-er/intuition"
+    },
+    {
+      "id": "biology-concept-smooth-er",
+      "title": "Smooth Endoplasmic Reticulum",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Explore lipid synthesis, chemical processing and regulated calcium storage.",
+      "tags": [
+        "smooth ER",
+        "SER",
+        "sarcoplasmic reticulum"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/smooth-er/intuition",
+      "route": "#learn/topic/smooth-er/intuition"
+    },
+    {
+      "id": "biology-concept-golgi-apparatus",
+      "title": "Golgi Apparatus",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Discover how cellular cargo is modified and sorted for different destinations.",
+      "tags": [
+        "Golgi body",
+        "Golgi complex",
+        "cell post office"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/golgi-apparatus/intuition",
+      "route": "#learn/topic/golgi-apparatus/intuition"
+    },
+    {
+      "id": "biology-concept-lysosomes",
+      "title": "Lysosomes",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "See controlled digestion and recycling inside an acidic compartment.",
+      "tags": [
+        "lysosome",
+        "cell recycling",
+        "autophagy"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/lysosomes/intuition",
+      "route": "#learn/topic/lysosomes/intuition"
+    },
+    {
+      "id": "biology-concept-peroxisomes",
+      "title": "Peroxisomes",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Explore oxidation reactions and the controlled handling of hydrogen peroxide.",
+      "tags": [
+        "peroxisome",
+        "catalase compartment"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/peroxisomes/intuition",
+      "route": "#learn/topic/peroxisomes/intuition"
+    },
+    {
+      "id": "biology-concept-vacuoles",
+      "title": "Vacuoles",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Connect a plant cell’s large storage compartment with turgor, growth and recycling.",
+      "tags": [
+        "vacuole",
+        "central vacuole",
+        "tonoplast",
+        "turgor"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/vacuoles/intuition",
+      "route": "#learn/topic/vacuoles/intuition"
+    },
+    {
+      "id": "biology-concept-chloroplasts",
+      "title": "Chloroplasts",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Zoom from the organelle envelope to thylakoids and the carbon-fixing stroma.",
+      "tags": [
+        "chloroplast",
+        "chloroplast structure",
+        "thylakoid",
+        "grana",
+        "stroma"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/chloroplasts/intuition",
+      "route": "#learn/topic/chloroplasts/intuition"
+    },
+    {
+      "id": "biology-concept-centrosomes",
+      "title": "Centrosomes",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Understand a major animal-cell microtubule-organizing center without treating it as universal.",
+      "tags": [
+        "centrosome",
+        "centriole",
+        "centrioles",
+        "microtubule organizing center"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/centrosomes/intuition",
+      "route": "#learn/topic/centrosomes/intuition"
+    },
+    {
+      "id": "biology-concept-cytoskeleton",
+      "title": "Cytoskeleton",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Explore a changing network that supports shape, transport, movement and chromosome separation.",
+      "tags": [
+        "microtubules",
+        "actin",
+        "microfilaments",
+        "intermediate filaments"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/cytoskeleton/intuition",
+      "route": "#learn/topic/cytoskeleton/intuition"
+    },
+    {
+      "id": "biology-concept-cell-membrane",
+      "title": "Cell Membrane",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Explore a dynamic lipid bilayer with embedded transport, recognition and signaling machinery.",
+      "tags": [
+        "plasma membrane",
+        "phospholipid bilayer",
+        "fluid mosaic model"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/cell-membrane/intuition",
+      "route": "#learn/topic/cell-membrane/intuition"
+    },
+    {
+      "id": "biology-concept-cell-wall",
+      "title": "Cell Wall",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Compare external support with the selective membrane and understand how plant cells resist swelling.",
+      "tags": [
+        "cellulose",
+        "plant cell wall",
+        "primary cell wall"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/cell-wall/intuition",
+      "route": "#learn/topic/cell-wall/intuition"
+    },
+    {
+      "id": "biology-concept-osmosis",
+      "title": "Osmosis",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Predict water movement using permeability, solutes and pressure.",
+      "tags": [
+        "water diffusion",
+        "hypotonic",
+        "hypertonic",
+        "isotonic",
+        "plasmolysis"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/osmosis/intuition",
+      "route": "#learn/topic/osmosis/intuition"
+    },
+    {
+      "id": "biology-concept-active-transport",
+      "title": "Active Transport",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "See how cells couple an uphill movement to an energy-releasing process.",
+      "tags": [
+        "sodium potassium pump",
+        "sodium-potassium pump",
+        "symport",
+        "antiport",
+        "primary active transport",
+        "secondary active transport"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/active-transport/intuition",
+      "route": "#learn/topic/active-transport/intuition"
+    },
+    {
+      "id": "biology-concept-atp",
+      "title": "ATP & Energy Transfer",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Understand energetic coupling without the misleading idea that breaking a bond alone releases energy.",
+      "tags": [
+        "adenosine triphosphate",
+        "energy currency",
+        "mitochondria ATP"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/atp/intuition",
+      "route": "#learn/topic/atp/intuition"
+    },
+    {
+      "id": "biology-concept-enzyme-inhibition",
+      "title": "Enzyme Inhibition",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Distinguish competitive inhibition, other kinetic patterns and allosteric regulation.",
+      "tags": [
+        "competitive inhibitor",
+        "noncompetitive inhibition",
+        "allosteric regulation",
+        "feedback inhibition"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/enzyme-inhibition/intuition",
+      "route": "#learn/topic/enzyme-inhibition/intuition"
+    },
+    {
+      "id": "biology-concept-light-reactions",
+      "title": "Light-Dependent Reactions",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Trace light-driven electron movement from water to NADPH and the proton gradient that supports ATP synthesis.",
+      "tags": [
+        "photosystem II",
+        "photosystem I",
+        "photolysis",
+        "chlorophyll",
+        "pigments",
+        "ATP NADPH formation"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/light-reactions/intuition",
+      "route": "#learn/topic/light-reactions/intuition"
+    },
+    {
+      "id": "biology-concept-calvin-cycle",
+      "title": "Calvin Cycle",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Account for carbon as fixation, reduction and regeneration produce a net triose phosphate.",
+      "tags": [
+        "carbon fixation",
+        "RuBisCO",
+        "RuBP",
+        "light independent reactions",
+        "dark reactions"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/calvin-cycle/intuition",
+      "route": "#learn/topic/calvin-cycle/intuition"
+    },
+    {
+      "id": "biology-concept-glycolysis",
+      "title": "Glycolysis",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Follow a six-carbon sugar into two three-carbon products and account for the ATP investment.",
+      "tags": [
+        "glucose splitting",
+        "cytosolic respiration"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/glycolysis/intuition",
+      "route": "#learn/topic/glycolysis/intuition"
+    },
+    {
+      "id": "biology-concept-citric-acid-cycle",
+      "title": "Citric Acid Cycle",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Follow acetyl-CoA through a regenerating pathway that supplies electron carriers and biosynthetic intermediates.",
+      "tags": [
+        "Krebs cycle",
+        "TCA cycle",
+        "tricarboxylic acid cycle",
+        "pyruvate oxidation"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/citric-acid-cycle/intuition",
+      "route": "#learn/topic/citric-acid-cycle/intuition"
+    },
+    {
+      "id": "biology-concept-electron-transport-chain",
+      "title": "Electron Transport Chain",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Connect redox transfers with proton pumping across the inner mitochondrial membrane.",
+      "tags": [
+        "ETC",
+        "respiratory chain",
+        "mitochondria electron carriers",
+        "oxidative phosphorylation"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/electron-transport-chain/intuition",
+      "route": "#learn/topic/electron-transport-chain/intuition"
+    },
+    {
+      "id": "biology-concept-chemiosmosis",
+      "title": "Chemiosmosis & ATP Synthase",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Understand how a membrane ion gradient can power a molecular rotary catalyst.",
+      "tags": [
+        "proton gradient",
+        "ATP synthase",
+        "mitochondria proton motive force"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/chemiosmosis/intuition",
+      "route": "#learn/topic/chemiosmosis/intuition"
+    },
+    {
+      "id": "biology-concept-fermentation",
+      "title": "Fermentation",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "See how NAD⁺ recycling allows glycolysis to continue without a respiratory electron-transfer chain.",
+      "tags": [
+        "lactic acid fermentation",
+        "lactate",
+        "alcoholic fermentation",
+        "anaerobic metabolism"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/fermentation/intuition",
+      "route": "#learn/topic/fermentation/intuition"
+    },
+    {
+      "id": "biology-concept-cell-cycle",
+      "title": "Cell Cycle",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Connect growth, DNA replication and division through regulated transitions.",
+      "tags": [
+        "interphase",
+        "G1",
+        "S phase",
+        "G2",
+        "checkpoints",
+        "cytokinesis"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/cell-cycle/intuition",
+      "route": "#learn/topic/cell-cycle/intuition"
+    },
+    {
+      "id": "biology-concept-dna-replication",
+      "title": "DNA Replication",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Follow complementary copying and understand why one new strand is made in fragments.",
+      "tags": [
+        "semiconservative replication",
+        "helicase",
+        "DNA polymerase",
+        "Okazaki fragments",
+        "leading strand",
+        "lagging strand"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/dna-replication/intuition",
+      "route": "#learn/topic/dna-replication/intuition"
+    },
+    {
+      "id": "biology-concept-crossing-over",
+      "title": "Crossing Over",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Follow reciprocal recombination between nonsister chromatids of homologous chromosomes.",
+      "tags": [
+        "recombination",
+        "chiasma",
+        "chiasmata",
+        "genetic variation"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/crossing-over/intuition",
+      "route": "#learn/topic/crossing-over/intuition"
+    },
+    {
+      "id": "biology-concept-transcription",
+      "title": "Transcription",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Follow the synthesis of RNA from a selected DNA template.",
+      "tags": [
+        "RNA polymerase",
+        "messenger RNA",
+        "mRNA",
+        "promoter",
+        "RNA processing"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/transcription/intuition",
+      "route": "#learn/topic/transcription/intuition"
+    },
+    {
+      "id": "biology-concept-translation",
+      "title": "Translation",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Connect codons, tRNA selection and peptide-bond formation.",
+      "tags": [
+        "codons",
+        "anticodons",
+        "start codon",
+        "stop codon",
+        "aminoacyl tRNA"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/translation/intuition",
+      "route": "#learn/topic/translation/intuition"
+    },
+    {
+      "id": "biology-concept-mutations",
+      "title": "Mutations",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Separate a DNA sequence change from its context-dependent effect on function and inheritance.",
+      "tags": [
+        "point mutation",
+        "substitution",
+        "insertion",
+        "deletion",
+        "frameshift",
+        "silent mutation"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/mutations/intuition",
+      "route": "#learn/topic/mutations/intuition"
+    },
+    {
+      "id": "biology-concept-non-mendelian-inheritance",
+      "title": "Beyond Simple Dominance",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Explore incomplete dominance, codominance, multiple alleles and traits shaped by many genes.",
+      "tags": [
+        "incomplete dominance",
+        "codominance",
+        "multiple alleles",
+        "polygenic inheritance",
+        "sex linked inheritance",
+        "epistasis"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/non-mendelian-inheritance/intuition",
+      "route": "#learn/topic/non-mendelian-inheritance/intuition"
+    },
+    {
+      "id": "biology-concept-blood",
+      "title": "Blood & Oxygen Transport",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Compare plasma, red cells, white cells and platelets, then follow oxygen binding.",
+      "tags": [
+        "RBC",
+        "WBC",
+        "red blood cells",
+        "white blood cells",
+        "platelets",
+        "plasma",
+        "haemoglobin",
+        "hemoglobin",
+        "clotting"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/blood/intuition",
+      "route": "#learn/topic/blood/intuition"
+    },
+    {
+      "id": "biology-concept-cardiac-cycle",
+      "title": "Cardiac Cycle",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Explain a heartbeat through pressure changes, filling, contraction and valve movement.",
+      "tags": [
+        "systole",
+        "diastole",
+        "heart valves",
+        "SA node",
+        "pacemaker"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/cardiac-cycle/intuition",
+      "route": "#learn/topic/cardiac-cycle/intuition"
+    },
+    {
+      "id": "biology-concept-homeostasis",
+      "title": "Homeostasis & Feedback",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "See how sensing and feedback keep internal conditions within functional ranges.",
+      "tags": [
+        "negative feedback",
+        "positive feedback",
+        "thermoregulation",
+        "blood glucose",
+        "insulin",
+        "glucagon",
+        "water balance"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/homeostasis/intuition",
+      "route": "#learn/topic/homeostasis/intuition"
+    },
+    {
+      "id": "biology-concept-action-potential",
+      "title": "Action Potential",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Follow a regenerative voltage change and distinguish ion channels from the pumps maintaining gradients.",
+      "tags": [
+        "nerve impulse",
+        "depolarization",
+        "repolarization",
+        "refractory period",
+        "myelin"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/action-potential/intuition",
+      "route": "#learn/topic/action-potential/intuition"
+    },
+    {
+      "id": "biology-concept-synapses",
+      "title": "Chemical Synapses",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Connect calcium-triggered transmitter release with receptor-dependent effects on the next cell.",
+      "tags": [
+        "synapse",
+        "neurotransmitter",
+        "synaptic cleft",
+        "synaptic transmission"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/synapses/intuition",
+      "route": "#learn/topic/synapses/intuition"
+    },
+    {
+      "id": "biology-concept-immune-memory",
+      "title": "Immune Memory & Vaccination",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Follow a first adaptive response into lasting populations that can respond differently on re-exposure.",
+      "tags": [
+        "memory B cells",
+        "memory T cells",
+        "vaccines",
+        "secondary immune response"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/immune-memory/intuition",
+      "route": "#learn/topic/immune-memory/intuition"
+    },
+    {
+      "id": "biology-concept-xylem",
+      "title": "Xylem & Transpiration",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Follow water through a conducting network under tension.",
+      "tags": [
+        "cohesion tension",
+        "transpiration stream",
+        "vessel elements",
+        "tracheids"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/xylem/intuition",
+      "route": "#learn/topic/xylem/intuition"
+    },
+    {
+      "id": "biology-concept-phloem",
+      "title": "Phloem & Translocation",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Move sugars from sources toward sinks through pressure-driven bulk flow.",
+      "tags": [
+        "sieve tube",
+        "companion cell",
+        "source sink",
+        "sugar transport"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/phloem/intuition",
+      "route": "#learn/topic/phloem/intuition"
+    },
+    {
+      "id": "biology-concept-stomata",
+      "title": "Stomata",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Explore the guard-cell tradeoff between carbon dioxide entry and water loss.",
+      "tags": [
+        "guard cells",
+        "stomatal aperture",
+        "abscisic acid",
+        "ABA"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/stomata/intuition",
+      "route": "#learn/topic/stomata/intuition"
+    },
+    {
+      "id": "biology-concept-genetic-drift",
+      "title": "Genetic Drift",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "See allele frequencies change through sampling chance, even without a selective advantage.",
+      "tags": [
+        "founder effect",
+        "bottleneck",
+        "random allele frequency"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/genetic-drift/intuition",
+      "route": "#learn/topic/genetic-drift/intuition"
+    },
+    {
+      "id": "biology-concept-food-webs",
+      "title": "Food Webs & Energy Flow",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Trace connected feeding pathways while separating energy transfer from nutrient recycling.",
+      "tags": [
+        "food chains",
+        "trophic levels",
+        "ecological pyramids",
+        "producers",
+        "decomposers"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/food-webs/intuition",
+      "route": "#learn/topic/food-webs/intuition"
+    },
+    {
+      "id": "biology-concept-population-growth",
+      "title": "Population Growth",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Compare exponential and logistic models and identify what their assumptions leave out.",
+      "tags": [
+        "carrying capacity",
+        "logistic growth",
+        "exponential growth",
+        "predator prey",
+        "population dynamics"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/population-growth/intuition",
+      "route": "#learn/topic/population-growth/intuition"
+    },
+    {
+      "id": "biology-concept-carbon-cycle",
+      "title": "Carbon Cycle",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Follow carbon atoms among atmosphere, living material, water, soils and geological stores.",
+      "tags": [
+        "CO2 cycle",
+        "carbon sequestration",
+        "climate change",
+        "carbon fixation"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/carbon-cycle/intuition",
+      "route": "#learn/topic/carbon-cycle/intuition"
+    },
+    {
+      "id": "biology-concept-nitrogen-cycle",
+      "title": "Nitrogen Cycle",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Track chemical forms of nitrogen and the microbial transformations connecting them.",
+      "tags": [
+        "nitrogen fixation",
+        "nitrification",
+        "denitrification",
+        "ammonification",
+        "nitrogen assimilation"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/nitrogen-cycle/intuition",
+      "route": "#learn/topic/nitrogen-cycle/intuition"
+    },
+    {
+      "id": "biology-concept-bacteria",
+      "title": "Bacteria",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Explore prokaryotic cells, metabolic diversity and the difference between microbes and pathogens.",
+      "tags": [
+        "prokaryotes",
+        "binary fission",
+        "bacterial cell",
+        "microbiome"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/bacteria/intuition",
+      "route": "#learn/topic/bacteria/intuition"
+    },
+    {
+      "id": "biology-concept-viruses",
+      "title": "Viruses",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Distinguish a virus from a cell and follow its dependence on a host.",
+      "tags": [
+        "viral infection",
+        "capsid",
+        "viral genome",
+        "bacteriophage"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/viruses/intuition",
+      "route": "#learn/topic/viruses/intuition"
+    },
+    {
+      "id": "biology-concept-antibiotic-resistance",
+      "title": "Antibiotic Resistance",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Connect selection and horizontal gene transfer with changing bacterial populations.",
+      "tags": [
+        "antimicrobial resistance",
+        "resistant bacteria",
+        "antibiotics"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/antibiotic-resistance/intuition",
+      "route": "#learn/topic/antibiotic-resistance/intuition"
+    },
+    {
+      "id": "biology-concept-cell-differentiation",
+      "title": "Cell Differentiation",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Discover how cells with much of the same DNA establish different identities.",
+      "tags": [
+        "cell specialization",
+        "gene expression during development",
+        "development",
+        "embryonic development"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/cell-differentiation/intuition",
+      "route": "#learn/topic/cell-differentiation/intuition"
+    },
+    {
+      "id": "biology-concept-stem-cells",
+      "title": "Stem Cells",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Distinguish self-renewal from differentiation potential and explore their role in tissue maintenance.",
+      "tags": [
+        "self renewal",
+        "pluripotent",
+        "multipotent",
+        "induced pluripotent stem cells",
+        "iPSC"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/stem-cells/intuition",
+      "route": "#learn/topic/stem-cells/intuition"
+    },
+    {
+      "id": "biology-concept-pcr",
+      "title": "PCR",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Understand how repeated template copying selectively amplifies a DNA region.",
+      "tags": [
+        "polymerase chain reaction",
+        "DNA amplification",
+        "thermal cycling"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/pcr/intuition",
+      "route": "#learn/topic/pcr/intuition"
+    },
+    {
+      "id": "biology-concept-gel-electrophoresis",
+      "title": "Gel Electrophoresis",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Separate DNA fragments by migration and read bands without confusing size with identity.",
+      "tags": [
+        "DNA gel",
+        "agarose gel",
+        "DNA ladder",
+        "gel bands"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/gel-electrophoresis/intuition",
+      "route": "#learn/topic/gel-electrophoresis/intuition"
+    },
+    {
+      "id": "biology-concept-crispr",
+      "title": "CRISPR Genome Editing",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Separate sequence targeting from the cellular repair that determines an edit’s outcome.",
+      "tags": [
+        "CRISPR Cas9",
+        "gene editing",
+        "guide RNA",
+        "genetic engineering"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/crispr/intuition",
+      "route": "#learn/topic/crispr/intuition"
+    },
+    {
+      "id": "biology-concept-water",
+      "title": "Water & Life",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Connect molecular polarity with temperature control, transport and the chemistry of living cells.",
+      "tags": [
+        "hydrogen bonding",
+        "cohesion",
+        "adhesion",
+        "specific heat"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/water/intuition",
+      "route": "#learn/topic/water/intuition"
+    },
+    {
+      "id": "biology-concept-carbohydrates",
+      "title": "Carbohydrates",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Explain how sugar identity, linkage and branching produce fuel stores, cell walls and recognition signals.",
+      "tags": [
+        "starch",
+        "glycogen",
+        "cellulose",
+        "glycosidic bonds"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/carbohydrates/intuition",
+      "route": "#learn/topic/carbohydrates/intuition"
+    },
+    {
+      "id": "biology-concept-lipids",
+      "title": "Lipids",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Distinguish energy-storing fats, membrane-forming phospholipids and signaling steroids.",
+      "tags": [
+        "triglycerides",
+        "phospholipids",
+        "saturated fatty acids",
+        "unsaturated fatty acids"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/lipids/intuition",
+      "route": "#learn/topic/lipids/intuition"
+    },
+    {
+      "id": "biology-concept-proteins",
+      "title": "Proteins: Sequence to Function",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Trace amino-acid sequence through folding, interactions and regulation to biological function.",
+      "tags": [
+        "peptide bonds",
+        "protein folding",
+        "primary structure",
+        "denaturation"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/proteins/intuition",
+      "route": "#learn/topic/proteins/intuition"
+    },
+    {
+      "id": "biology-concept-gene-regulation",
+      "title": "Gene Regulation",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Explain how cells adjust expression through regulatory DNA, proteins and changing conditions.",
+      "tags": [
+        "lac operon",
+        "operons",
+        "transcription factors",
+        "gene switches"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/gene-regulation/intuition",
+      "route": "#learn/topic/gene-regulation/intuition"
+    },
+    {
+      "id": "biology-concept-sex-linked-inheritance",
+      "title": "Sex-Linked Inheritance",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Use chromosome transmission to solve X-linked crosses without confusing probability and certainty.",
+      "tags": [
+        "X-linked recessive",
+        "X-linked dominant",
+        "hemizygous"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/sex-linked-inheritance/intuition",
+      "route": "#learn/topic/sex-linked-inheritance/intuition"
+    },
+    {
+      "id": "biology-concept-pedigrees",
+      "title": "Pedigrees & Inheritance Evidence",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Use family relationships and explicit assumptions to compare possible inheritance models.",
+      "tags": [
+        "family tree genetics",
+        "carrier probability",
+        "pedigree analysis"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/pedigrees/intuition",
+      "route": "#learn/topic/pedigrees/intuition"
+    },
+    {
+      "id": "biology-concept-hardy-weinberg",
+      "title": "Hardy–Weinberg Principle",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Use a null model to connect allele frequencies, genotype expectations and evolutionary questions.",
+      "tags": [
+        "Hardy Weinberg equilibrium",
+        "p squared 2pq q squared",
+        "allele frequencies"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/hardy-weinberg/intuition",
+      "route": "#learn/topic/hardy-weinberg/intuition"
+    },
+    {
+      "id": "biology-concept-speciation",
+      "title": "Speciation",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Explain how reduced gene flow and reproductive barriers can divide lineages over generations.",
+      "tags": [
+        "allopatric speciation",
+        "sympatric speciation",
+        "reproductive isolation"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/speciation/intuition",
+      "route": "#learn/topic/speciation/intuition"
+    },
+    {
+      "id": "biology-concept-phylogenetic-trees",
+      "title": "Phylogenetic Trees",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Read evolutionary relationships by common ancestry rather than by the order of names on a page.",
+      "tags": [
+        "cladograms",
+        "clades",
+        "sister taxa",
+        "common ancestry"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/phylogenetic-trees/intuition",
+      "route": "#learn/topic/phylogenetic-trees/intuition"
+    },
+    {
+      "id": "biology-concept-biodiversity",
+      "title": "Biodiversity",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Compare genetic, species and ecosystem diversity while accounting for sampling and abundance.",
+      "tags": [
+        "species richness",
+        "species evenness",
+        "genetic diversity",
+        "diversity indices"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/biodiversity/intuition",
+      "route": "#learn/topic/biodiversity/intuition"
+    },
+    {
+      "id": "biology-concept-conservation",
+      "title": "Conservation Biology",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Connect threats, interventions and measured outcomes to the protection of populations and ecosystems.",
+      "tags": [
+        "in situ conservation",
+        "ex situ conservation",
+        "habitat corridors",
+        "restoration ecology"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/conservation/intuition",
+      "route": "#learn/topic/conservation/intuition"
+    },
+    {
+      "id": "biology-concept-fungi",
+      "title": "Fungi",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Explore absorptive nutrition, hyphal organization and the diverse ecological roles of fungi.",
+      "tags": [
+        "hyphae",
+        "mycelium",
+        "yeast",
+        "mycorrhiza"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/fungi/intuition",
+      "route": "#learn/topic/fungi/intuition"
+    },
+    {
+      "id": "biology-concept-microbiome",
+      "title": "Microbiomes",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Study microbial communities as interacting ecosystems and separate association from causal evidence.",
+      "tags": [
+        "microbiota",
+        "gut microbiome",
+        "metagenomics",
+        "microbial community"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/microbiome/intuition",
+      "route": "#learn/topic/microbiome/intuition"
+    },
+    {
+      "id": "biology-concept-recombinant-dna",
+      "title": "Recombinant DNA",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Understand how DNA fragments are joined, maintained and checked in a cloning workflow.",
+      "tags": [
+        "gene cloning",
+        "plasmid vector",
+        "restriction enzymes",
+        "DNA ligase"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/recombinant-dna/intuition",
+      "route": "#learn/topic/recombinant-dna/intuition"
+    },
+    {
+      "id": "biology-concept-dna-sequencing",
+      "title": "DNA Sequencing",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Follow DNA reads into assembled or aligned sequence evidence while keeping uncertainty visible.",
+      "tags": [
+        "Sanger sequencing",
+        "sequence reads",
+        "genome coverage",
+        "base calling"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/dna-sequencing/intuition",
+      "route": "#learn/topic/dna-sequencing/intuition"
+    },
+    {
+      "id": "biology-concept-bioinformatics",
+      "title": "Bioinformatics",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Turn biological data into reproducible comparisons without confusing a computational match with proof.",
+      "tags": [
+        "sequence alignment",
+        "BLAST",
+        "biological databases",
+        "computational biology"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/bioinformatics/intuition",
+      "route": "#learn/topic/bioinformatics/intuition"
+    },
+    {
+      "id": "biology-concept-surface-area-volume",
+      "title": "Surface Area & Volume",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Use geometry and diffusion distance to explain exchange surfaces, cell size and biological shape.",
+      "tags": [
+        "SA:V ratio",
+        "surface area to volume ratio",
+        "cell size",
+        "diffusion distance"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/surface-area-volume/intuition",
+      "route": "#learn/topic/surface-area-volume/intuition"
+    },
+    {
+      "id": "biology-concept-digestive-system",
+      "title": "Digestive System",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Connect movement, secretion and hydrolysis along the human digestive tract.",
+      "tags": [
+        "alimentary canal",
+        "gut",
+        "digestion"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/digestive-system/intuition",
+      "route": "#learn/topic/digestive-system/intuition"
+    },
+    {
+      "id": "biology-concept-nutrient-absorption",
+      "title": "Nutrient Absorption",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Follow nutrients through a polarized intestinal cell into blood or lymph.",
+      "tags": [
+        "villi",
+        "microvilli",
+        "intestinal absorption",
+        "lacteal"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/nutrient-absorption/intuition",
+      "route": "#learn/topic/nutrient-absorption/intuition"
+    },
+    {
+      "id": "biology-concept-endocrine-system",
+      "title": "Endocrine System",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Explain hormone specificity, signal amplification and feedback between organs.",
+      "tags": [
+        "endocrine glands",
+        "hormone signaling",
+        "pituitary",
+        "thyroid"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/endocrine-system/intuition",
+      "route": "#learn/topic/endocrine-system/intuition"
+    },
+    {
+      "id": "biology-concept-insulin-glucagon",
+      "title": "Insulin & Glucagon",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Connect pancreatic sensing, liver glucose output and tissue uptake across fed and fasting states.",
+      "tags": [
+        "blood glucose regulation",
+        "pancreatic islets",
+        "glycogen"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/insulin-glucagon/intuition",
+      "route": "#learn/topic/insulin-glucagon/intuition"
+    },
+    {
+      "id": "biology-concept-kidney",
+      "title": "Kidney",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Connect renal anatomy to selective excretion, blood supply and internal balance.",
+      "tags": [
+        "renal cortex",
+        "renal medulla",
+        "urinary system"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/kidney/intuition",
+      "route": "#learn/topic/kidney/intuition"
+    },
+    {
+      "id": "biology-concept-nephron",
+      "title": "Nephron",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Follow filtration, selective transport and regulated water recovery through a nephron.",
+      "tags": [
+        "glomerulus",
+        "Bowman capsule",
+        "loop of Henle",
+        "renal tubule"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/nephron/intuition",
+      "route": "#learn/topic/nephron/intuition"
+    },
+    {
+      "id": "biology-concept-osmoregulation",
+      "title": "Osmoregulation",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Separate water balance, solute amount and the hormonal control of fluid concentration.",
+      "tags": [
+        "ADH",
+        "vasopressin",
+        "water balance",
+        "osmolality"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/osmoregulation/intuition",
+      "route": "#learn/topic/osmoregulation/intuition"
+    },
+    {
+      "id": "biology-concept-muscle-contraction",
+      "title": "Muscle Contraction",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Link excitation, calcium regulation and ATP-driven sliding in skeletal muscle.",
+      "tags": [
+        "sliding filament",
+        "sarcomere",
+        "actin myosin",
+        "cross bridge"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/muscle-contraction/intuition",
+      "route": "#learn/topic/muscle-contraction/intuition"
+    },
+    {
+      "id": "biology-concept-reproductive-anatomy",
+      "title": "Reproductive Anatomy",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Connect gonads, ducts and support tissues without confusing production, transport and development.",
+      "tags": [
+        "testis",
+        "ovary",
+        "uterus",
+        "oviduct",
+        "epididymis"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/reproductive-anatomy/intuition",
+      "route": "#learn/topic/reproductive-anatomy/intuition"
+    },
+    {
+      "id": "biology-concept-gametogenesis",
+      "title": "Gametogenesis",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Compare chromosome reduction and cellular specialization during sperm and oocyte development.",
+      "tags": [
+        "spermatogenesis",
+        "oogenesis",
+        "spermatid",
+        "polar body"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/gametogenesis/intuition",
+      "route": "#learn/topic/gametogenesis/intuition"
+    },
+    {
+      "id": "biology-concept-fertilization",
+      "title": "Fertilization",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Connect gamete fusion, egg activation and chromosome-set restoration in a mammalian example.",
+      "tags": [
+        "zygote",
+        "egg activation",
+        "polyspermy",
+        "cortical reaction"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/fertilization/intuition",
+      "route": "#learn/topic/fertilization/intuition"
+    },
+    {
+      "id": "biology-concept-innate-immunity",
+      "title": "Innate Immunity",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Connect barriers, pattern recognition and inflammation to early defense and adaptive activation.",
+      "tags": [
+        "phagocytosis",
+        "inflammation",
+        "pattern recognition",
+        "complement"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/innate-immunity/intuition",
+      "route": "#learn/topic/innate-immunity/intuition"
+    },
+    {
+      "id": "biology-concept-plant-tissues",
+      "title": "Plant Tissues",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Connect meristems, tissue systems and cell-wall specialization to plant function.",
+      "tags": [
+        "meristem",
+        "parenchyma",
+        "collenchyma",
+        "sclerenchyma",
+        "vascular tissue"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/plant-tissues/intuition",
+      "route": "#learn/topic/plant-tissues/intuition"
+    },
+    {
+      "id": "biology-concept-plant-hormones",
+      "title": "Plant Hormones",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Explain context-dependent growth and stress responses through interacting plant signals.",
+      "tags": [
+        "auxin",
+        "cytokinin",
+        "gibberellin",
+        "abscisic acid",
+        "ethylene"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/plant-hormones/intuition",
+      "route": "#learn/topic/plant-hormones/intuition"
+    },
+    {
+      "id": "biology-concept-tropisms",
+      "title": "Tropisms",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Connect directional stimuli, asymmetric growth and organ-specific responses.",
+      "tags": [
+        "phototropism",
+        "gravitropism",
+        "geotropism",
+        "thigmotropism"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/tropisms/intuition",
+      "route": "#learn/topic/tropisms/intuition"
+    },
+    {
+      "id": "biology-concept-plant-reproduction",
+      "title": "Plant Reproduction",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Trace alternating generations and distinguish spores, gametes, seeds and vegetative offspring.",
+      "tags": [
+        "alternation of generations",
+        "sporophyte",
+        "gametophyte",
+        "double fertilization"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/plant-reproduction/intuition",
+      "route": "#learn/topic/plant-reproduction/intuition"
+    },
+    {
+      "id": "biology-concept-pollination",
+      "title": "Pollination",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Separate pollen transfer, compatibility, pollen-tube growth and double fertilization.",
+      "tags": [
+        "pollen",
+        "stigma",
+        "pollen tube",
+        "self pollination",
+        "cross pollination"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/pollination/intuition",
+      "route": "#learn/topic/pollination/intuition"
+    },
+    {
+      "id": "biology-concept-seed-germination",
+      "title": "Seed Germination",
+      "subject": "biology",
+      "kind": "concept",
+      "description": "Connect hydration, dormancy, reserve mobilization and seedling establishment.",
+      "tags": [
+        "imbibition",
+        "radicle",
+        "dormancy",
+        "seedling"
+      ],
+      "url": "https://biology.entelloq.com/#learn/topic/seed-germination/intuition",
+      "route": "#learn/topic/seed-germination/intuition"
+    },
+    {
+      "id": "biology-lab-microscope",
+      "title": "Virtual Microscope",
+      "subject": "biology",
+      "kind": "lab",
+      "description": "How does magnification change field of view and visible detail?",
+      "tags": [
+        "onion",
+        "blood",
+        "stomata",
+        "slide",
+        "cell",
+        "protein factory",
+        "cell-structure"
+      ],
+      "url": "https://biology.entelloq.com/#labs/microscope",
+      "route": "#labs/microscope"
+    },
+    {
+      "id": "biology-lab-gel-electrophoresis",
+      "title": "Gel Electrophoresis",
+      "subject": "biology",
+      "kind": "lab",
+      "description": "Which fictional DNA sample matches the observed band pattern?",
+      "tags": [
+        "DNA bands",
+        "forensic",
+        "gel",
+        "fragments",
+        "ladder",
+        "dna"
+      ],
+      "url": "https://biology.entelloq.com/#labs/gel-electrophoresis",
+      "route": "#labs/gel-electrophoresis"
+    },
+    {
+      "id": "biology-lab-predator-prey",
+      "title": "Predator & Prey",
+      "subject": "biology",
+      "kind": "lab",
+      "description": "Why can a predator population peak after its prey population?",
+      "tags": [
+        "food web",
+        "population",
+        "predator",
+        "prey",
+        "oscillation",
+        "ecology"
+      ],
+      "url": "https://biology.entelloq.com/#labs/predator-prey",
+      "route": "#labs/predator-prey"
+    },
+    {
+      "id": "biology-lab-enzyme-kinetics",
+      "title": "Enzyme Kinetics",
+      "subject": "biology",
+      "kind": "lab",
+      "description": "Which conditions limit the activity of this model enzyme?",
+      "tags": [
+        "enzymes",
+        "temperature",
+        "pH",
+        "inhibition",
+        "substrate",
+        "enzymes"
+      ],
+      "url": "https://biology.entelloq.com/#labs/enzyme-kinetics",
+      "route": "#labs/enzyme-kinetics"
+    },
+    {
+      "id": "biology-lab-dna-extraction",
+      "title": "DNA extraction, reagent by reagent",
+      "subject": "biology",
+      "kind": "lab",
+      "description": "Which cell structures must be separated to reveal DNA?",
+      "tags": [
+        "DNA",
+        "cell",
+        "membrane",
+        "extraction",
+        "dna"
+      ],
+      "url": "https://biology.entelloq.com/#labs/dna-extraction",
+      "route": "#labs/dna-extraction"
+    },
+    {
+      "id": "biology-lab-pcr",
+      "title": "PCR — the thermocycler",
+      "subject": "biology",
+      "kind": "lab",
+      "description": "How does repeated copying change the amount of a target DNA segment?",
+      "tags": [
+        "amplification",
+        "DNA copies",
+        "polymerase",
+        "dna"
+      ],
+      "url": "https://biology.entelloq.com/#labs/pcr",
+      "route": "#labs/pcr"
+    },
+    {
+      "id": "biology-lab-heart-rate",
+      "title": "The cardiac output bench",
+      "subject": "biology",
+      "kind": "lab",
+      "description": "How does pacing change the model cardiac cycle?",
+      "tags": [
+        "heart",
+        "ECG",
+        "electrocardiogram",
+        "P wave",
+        "QRS",
+        "T wave",
+        "heart-circulation"
+      ],
+      "url": "https://biology.entelloq.com/#labs/heart-rate",
+      "route": "#labs/heart-rate"
+    },
+    {
+      "id": "biology-lab-natural-selection",
+      "title": "Natural Selection",
+      "subject": "biology",
+      "kind": "lab",
+      "description": "How does a changing environment shift an inherited trait over generations?",
+      "tags": [
+        "beetle",
+        "adaptation",
+        "allele",
+        "evolution",
+        "natural-selection"
+      ],
+      "url": "https://biology.entelloq.com/#labs/natural-selection",
+      "route": "#labs/natural-selection"
+    },
+    {
+      "id": "biology-lab-osmosis",
+      "title": "Osmosis Lab",
+      "subject": "biology",
+      "kind": "lab",
+      "description": "How does the surrounding solution change a cell’s volume?",
+      "tags": [
+        "water",
+        "turgor",
+        "hypotonic",
+        "hypertonic",
+        "cell swelling",
+        "membrane-transport"
+      ],
+      "url": "https://biology.entelloq.com/#labs/osmosis",
+      "route": "#labs/osmosis"
+    },
+    {
+      "id": "biology-lab-photosynthesis-rate",
+      "title": "Photosynthesis Rate Lab",
+      "subject": "biology",
+      "kind": "lab",
+      "description": "When does adding more light stop increasing photosynthesis?",
+      "tags": [
+        "plant food",
+        "light",
+        "oxygen",
+        "chloroplast",
+        "photosynthesis"
+      ],
+      "url": "https://biology.entelloq.com/#labs/photosynthesis-rate",
+      "route": "#labs/photosynthesis-rate"
+    },
+    {
+      "id": "biology-lab-cellular-respiration",
+      "title": "Cellular Respiration Lab",
+      "subject": "biology",
+      "kind": "lab",
+      "description": "How do oxygen and glucose availability change the energy yield?",
+      "tags": [
+        "ATP",
+        "mitochondria",
+        "energy",
+        "fermentation",
+        "cellular-respiration"
+      ],
+      "url": "https://biology.entelloq.com/#labs/cellular-respiration",
+      "route": "#labs/cellular-respiration"
+    },
+    {
+      "id": "biology-lab-heart-physiology",
+      "title": "Heart Physiology Lab",
+      "subject": "biology",
+      "kind": "lab",
+      "description": "How are heart rate, stroke volume, resistance and pressure connected?",
+      "tags": [
+        "heart",
+        "blood flow",
+        "cardiac output",
+        "resistance",
+        "vessel diameter",
+        "heart-circulation"
+      ],
+      "url": "https://biology.entelloq.com/#labs/heart-physiology",
+      "route": "#labs/heart-physiology"
+    },
+    {
+      "id": "biology-lab-gas-exchange",
+      "title": "Lung Gas Exchange Lab",
+      "subject": "biology",
+      "kind": "lab",
+      "description": "What limits diffusion across an alveolar membrane?",
+      "tags": [
+        "lung",
+        "alveolus",
+        "alveoli",
+        "breathing",
+        "oxygen",
+        "gas-exchange"
+      ],
+      "url": "https://biology.entelloq.com/#labs/gas-exchange",
+      "route": "#labs/gas-exchange"
+    },
+    {
+      "id": "biology-lab-mitosis",
+      "title": "Mitosis & the Spindle Checkpoint",
+      "subject": "biology",
+      "kind": "lab",
+      "description": "Why must the spindle checkpoint be satisfied before sister chromatids separate?",
+      "tags": [
+        "chromosomes",
+        "division",
+        "spindle",
+        "cell cycle",
+        "mitosis",
+        "meiosis"
+      ],
+      "url": "https://biology.entelloq.com/#labs/mitosis",
+      "route": "#labs/mitosis"
+    },
+    {
+      "id": "biology-lab-mendelian-genetics",
+      "title": "Inheritance & Virtual Breeding",
+      "subject": "biology",
+      "kind": "lab",
+      "description": "Do small families always match the predicted inheritance ratio?",
+      "tags": [
+        "Punnett",
+        "offspring",
+        "alleles",
+        "inheritance",
+        "cross",
+        "mendelian-genetics"
+      ],
+      "url": "https://biology.entelloq.com/#labs/mendelian-genetics",
+      "route": "#labs/mendelian-genetics"
+    },
+    {
+      "id": "biology-lab-dna-protein",
+      "title": "DNA → Protein Lab",
+      "subject": "biology",
+      "kind": "lab",
+      "description": "How can a DNA change alter a protein, or leave it unchanged?",
+      "tags": [
+        "mutation",
+        "transcription",
+        "translation",
+        "codons",
+        "ribosome",
+        "dna",
+        "protein-synthesis"
+      ],
+      "url": "https://biology.entelloq.com/#labs/dna-protein",
+      "route": "#labs/dna-protein"
+    },
+    {
+      "id": "biology-lab-plant-investigation",
+      "title": "The Greenhouse Mystery",
+      "subject": "biology",
+      "kind": "lab",
+      "description": "Why have the plants in this virtual greenhouse stopped growing?",
+      "tags": [
+        "yellow leaves",
+        "growth",
+        "minerals",
+        "plant food",
+        "plant-transport",
+        "photosynthesis"
+      ],
+      "url": "https://biology.entelloq.com/#labs/plant-investigation",
+      "route": "#labs/plant-investigation"
+    },
+    {
+      "id": "biology-lab-ecosystem-investigation",
+      "title": "The Silent Pond",
+      "subject": "biology",
+      "kind": "lab",
+      "description": "What best explains a sudden loss of biodiversity in a virtual pond?",
+      "tags": [
+        "biodiversity",
+        "river",
+        "food web",
+        "ecosystem",
+        "ecology",
+        "natural-selection"
+      ],
+      "url": "https://biology.entelloq.com/#labs/ecosystem-investigation",
+      "route": "#labs/ecosystem-investigation"
+    },
+    {
+      "id": "biology-lab-heart-dissection",
+      "title": "Mammalian Heart Dissection",
+      "subject": "biology",
+      "kind": "lab",
+      "description": "How do the structures of the mammalian heart support their functions?",
+      "tags": [
+        "heart",
+        "Mammalian Heart",
+        "anatomy",
+        "auto dissection",
+        "organs",
+        "Human Physiology",
+        "heart-circulation"
+      ],
+      "url": "https://biology.entelloq.com/#labs/heart-dissection",
+      "route": "#labs/heart-dissection"
+    },
+    {
+      "id": "biology-lab-frog-dissection",
+      "title": "Frog Dissection",
+      "subject": "biology",
+      "kind": "lab",
+      "description": "How do the structures of the frog support their functions?",
+      "tags": [
+        "frog",
+        "Frog",
+        "anatomy",
+        "auto dissection",
+        "organs",
+        "Dissection",
+        "heart-circulation",
+        "gas-exchange"
+      ],
+      "url": "https://biology.entelloq.com/#labs/frog-dissection",
+      "route": "#labs/frog-dissection"
+    },
+    {
+      "id": "biology-lab-fish-dissection",
+      "title": "Bony Fish Dissection",
+      "subject": "biology",
+      "kind": "lab",
+      "description": "How do the structures of the bony fish support their functions?",
+      "tags": [
+        "fish",
+        "Bony Fish",
+        "anatomy",
+        "auto dissection",
+        "organs",
+        "Dissection",
+        "gas-exchange",
+        "heart-circulation"
+      ],
+      "url": "https://biology.entelloq.com/#labs/fish-dissection",
+      "route": "#labs/fish-dissection"
+    },
+    {
+      "id": "biology-lab-earthworm-dissection",
+      "title": "Earthworm Dissection",
+      "subject": "biology",
+      "kind": "lab",
+      "description": "How do the structures of the earthworm support their functions?",
+      "tags": [
+        "earthworm",
+        "Earthworm",
+        "anatomy",
+        "auto dissection",
+        "organs",
+        "Dissection",
+        "gas-exchange",
+        "ecology"
+      ],
+      "url": "https://biology.entelloq.com/#labs/earthworm-dissection",
+      "route": "#labs/earthworm-dissection"
+    },
+    {
+      "id": "biology-lab-cockroach-dissection",
+      "title": "Cockroach Dissection",
+      "subject": "biology",
+      "kind": "lab",
+      "description": "How do the structures of the cockroach support their functions?",
+      "tags": [
+        "cockroach",
+        "Cockroach",
+        "anatomy",
+        "auto dissection",
+        "organs",
+        "Dissection",
+        "gas-exchange",
+        "nervous-system"
+      ],
+      "url": "https://biology.entelloq.com/#labs/cockroach-dissection",
+      "route": "#labs/cockroach-dissection"
+    },
+    {
+      "id": "biology-lesson-diffusion",
+      "title": "Diffusion & Osmosis",
+      "subject": "biology",
+      "kind": "lesson",
+      "description": "Interactive lesson through six perspectives",
+      "tags": [
+        "lesson",
+        "diffusion"
+      ],
+      "url": "https://biology.entelloq.com/#lessons/diffusion",
+      "route": "#lessons/diffusion"
+    },
+    {
+      "id": "biology-lesson-enzyme",
+      "title": "Enzyme Action",
+      "subject": "biology",
+      "kind": "lesson",
+      "description": "Interactive lesson through six perspectives",
+      "tags": [
+        "lesson",
+        "enzyme"
+      ],
+      "url": "https://biology.entelloq.com/#lessons/enzyme",
+      "route": "#lessons/enzyme"
+    },
+    {
+      "id": "biology-lesson-population",
+      "title": "Population Growth",
+      "subject": "biology",
+      "kind": "lesson",
+      "description": "Interactive lesson through six perspectives",
+      "tags": [
+        "lesson",
+        "population"
+      ],
+      "url": "https://biology.entelloq.com/#lessons/population",
+      "route": "#lessons/population"
+    },
+    {
+      "id": "biology-lesson-photosynthesis",
+      "title": "Photosynthesis",
+      "subject": "biology",
+      "kind": "lesson",
+      "description": "Interactive lesson through six perspectives",
+      "tags": [
+        "lesson",
+        "photosynthesis"
+      ],
+      "url": "https://biology.entelloq.com/#lessons/photosynthesis",
+      "route": "#lessons/photosynthesis"
+    },
+    {
+      "id": "biology-lesson-respiration",
+      "title": "Cellular Respiration",
+      "subject": "biology",
+      "kind": "lesson",
+      "description": "Interactive lesson through six perspectives",
+      "tags": [
+        "lesson",
+        "respiration"
+      ],
+      "url": "https://biology.entelloq.com/#lessons/respiration",
+      "route": "#lessons/respiration"
+    },
+    {
+      "id": "biology-lesson-replication",
+      "title": "DNA Replication",
+      "subject": "biology",
+      "kind": "lesson",
+      "description": "Interactive lesson through six perspectives",
+      "tags": [
+        "lesson",
+        "replication"
+      ],
+      "url": "https://biology.entelloq.com/#lessons/replication",
+      "route": "#lessons/replication"
+    },
+    {
+      "id": "biology-lesson-selection",
+      "title": "Natural Selection",
+      "subject": "biology",
+      "kind": "lesson",
+      "description": "Interactive lesson through six perspectives",
+      "tags": [
+        "lesson",
+        "selection"
+      ],
+      "url": "https://biology.entelloq.com/#lessons/selection",
+      "route": "#lessons/selection"
+    },
+    {
+      "id": "biology-lesson-actionpotential",
+      "title": "The Action Potential",
+      "subject": "biology",
+      "kind": "lesson",
+      "description": "Interactive lesson through six perspectives",
+      "tags": [
+        "lesson",
+        "actionpotential"
+      ],
+      "url": "https://biology.entelloq.com/#lessons/actionpotential",
+      "route": "#lessons/actionpotential"
+    },
+    {
+      "id": "biology-lesson-cardiac",
+      "title": "The Cardiac Cycle",
+      "subject": "biology",
+      "kind": "lesson",
+      "description": "Interactive lesson through six perspectives",
+      "tags": [
+        "lesson",
+        "cardiac"
+      ],
+      "url": "https://biology.entelloq.com/#lessons/cardiac",
+      "route": "#lessons/cardiac"
+    },
+    {
+      "id": "biology-section-home",
+      "title": "Explore Biology",
+      "subject": "biology",
+      "kind": "workspace",
+      "description": "Existing Biology workspace",
+      "tags": [
+        "home"
+      ],
+      "url": "https://biology.entelloq.com/#home",
+      "route": "#home"
+    },
+    {
+      "id": "biology-section-learn",
+      "title": "Biology concept library",
+      "subject": "biology",
+      "kind": "workspace",
+      "description": "Existing Biology workspace",
+      "tags": [
+        "learn"
+      ],
+      "url": "https://biology.entelloq.com/#learn",
+      "route": "#learn"
+    },
+    {
+      "id": "biology-section-labs",
+      "title": "Virtual Labs",
+      "subject": "biology",
+      "kind": "workspace",
+      "description": "Existing Biology workspace",
+      "tags": [
+        "labs"
+      ],
+      "url": "https://biology.entelloq.com/#labs",
+      "route": "#labs"
+    },
+    {
+      "id": "biology-section-explore",
+      "title": "Investigate Biology",
+      "subject": "biology",
+      "kind": "workspace",
+      "description": "Existing Biology workspace",
+      "tags": [
+        "explore"
+      ],
+      "url": "https://biology.entelloq.com/#explore",
+      "route": "#explore"
+    },
+    {
+      "id": "biology-section-me",
+      "title": "My Workspace",
+      "subject": "biology",
+      "kind": "workspace",
+      "description": "Existing Biology workspace",
+      "tags": [
+        "me"
+      ],
+      "url": "https://biology.entelloq.com/#me",
+      "route": "#me"
+    },
+    {
+      "id": "biology-section-reason",
+      "title": "Biological reasoning",
+      "subject": "biology",
+      "kind": "workspace",
+      "description": "Existing Biology workspace",
+      "tags": [
+        "reason"
+      ],
+      "url": "https://biology.entelloq.com/#reason",
+      "route": "#reason"
+    },
+    {
+      "id": "biology-section-solve",
+      "title": "Biology practice",
+      "subject": "biology",
+      "kind": "workspace",
+      "description": "Existing Biology workspace",
+      "tags": [
+        "solve"
+      ],
+      "url": "https://biology.entelloq.com/#solve",
+      "route": "#solve"
+    },
+    {
+      "id": "biology-section-lab",
+      "title": "Dissection Theatre",
+      "subject": "biology",
+      "kind": "workspace",
+      "description": "Existing Biology workspace",
+      "tags": [
+        "lab"
+      ],
+      "url": "https://biology.entelloq.com/#lab",
+      "route": "#lab"
+    },
+    {
+      "id": "biology-section-universe",
+      "title": "Biology Universe",
+      "subject": "biology",
+      "kind": "workspace",
+      "description": "Existing Biology workspace",
+      "tags": [
+        "universe"
+      ],
+      "url": "https://biology.entelloq.com/#universe",
+      "route": "#universe"
+    },
+    {
+      "id": "biology-section-about",
+      "title": "About Biology Entelloq",
+      "subject": "biology",
+      "kind": "workspace",
+      "description": "Existing Biology workspace",
+      "tags": [
+        "about"
+      ],
+      "url": "https://biology.entelloq.com/#about",
+      "route": "#about"
+    },
+    {
+      "id": "biology-tool-labs-kinetics",
+      "title": "Biochemical kinetics",
+      "subject": "biology",
+      "kind": "tool",
+      "description": "Existing labs tool; source and capability boundaries are displayed inside.",
+      "tags": [
+        "kinetics",
+        "labs"
+      ],
+      "url": "https://biology.entelloq.com/#labs/learning-kinetics",
+      "route": "#labs/learning-kinetics"
+    },
+    {
+      "id": "biology-tool-labs-notebook",
+      "title": "Experiment notebook",
+      "subject": "biology",
+      "kind": "tool",
+      "description": "Existing labs tool; source and capability boundaries are displayed inside.",
+      "tags": [
+        "notebook",
+        "labs"
+      ],
+      "url": "https://biology.entelloq.com/#labs/learning-notebook",
+      "route": "#labs/learning-notebook"
+    },
+    {
+      "id": "biology-tool-labs-sketches",
+      "title": "Scientific sketchbook",
+      "subject": "biology",
+      "kind": "tool",
+      "description": "Existing labs tool; source and capability boundaries are displayed inside.",
+      "tags": [
+        "sketches",
+        "labs"
+      ],
+      "url": "https://biology.entelloq.com/#labs/learning-sketches",
+      "route": "#labs/learning-sketches"
+    },
+    {
+      "id": "biology-tool-reason-notebook",
+      "title": "Experiment notebook",
+      "subject": "biology",
+      "kind": "tool",
+      "description": "Existing reason tool; source and capability boundaries are displayed inside.",
+      "tags": [
+        "notebook",
+        "reason"
+      ],
+      "url": "https://biology.entelloq.com/#reason/learning-notebook",
+      "route": "#reason/learning-notebook"
+    },
+    {
+      "id": "biology-tool-reason-sketches",
+      "title": "Scientific sketchbook",
+      "subject": "biology",
+      "kind": "tool",
+      "description": "Existing reason tool; source and capability boundaries are displayed inside.",
+      "tags": [
+        "sketches",
+        "reason"
+      ],
+      "url": "https://biology.entelloq.com/#reason/learning-sketches",
+      "route": "#reason/learning-sketches"
+    },
+    {
+      "id": "biology-tool-learn-search",
+      "title": "Concept search",
+      "subject": "biology",
+      "kind": "tool",
+      "description": "Existing learn tool; source and capability boundaries are displayed inside.",
+      "tags": [
+        "search",
+        "learn"
+      ],
+      "url": "https://biology.entelloq.com/#learn/learning-search",
+      "route": "#learn/learning-search"
+    },
+    {
+      "id": "biology-tool-learn-animations",
+      "title": "Animated explanations",
+      "subject": "biology",
+      "kind": "tool",
+      "description": "Existing learn tool; source and capability boundaries are displayed inside.",
+      "tags": [
+        "animations",
+        "learn"
+      ],
+      "url": "https://biology.entelloq.com/#learn/learning-animations",
+      "route": "#learn/learning-animations"
+    },
+    {
+      "id": "biology-tool-solve-review",
+      "title": "Retrieval review",
+      "subject": "biology",
+      "kind": "tool",
+      "description": "Existing solve tool; source and capability boundaries are displayed inside.",
+      "tags": [
+        "review",
+        "solve"
+      ],
+      "url": "https://biology.entelloq.com/#solve/learning-review",
+      "route": "#solve/learning-review"
+    },
+    {
+      "id": "biology-tool-solve-sketches",
+      "title": "Scientific sketchbook",
+      "subject": "biology",
+      "kind": "tool",
+      "description": "Existing solve tool; source and capability boundaries are displayed inside.",
+      "tags": [
+        "sketches",
+        "solve"
+      ],
+      "url": "https://biology.entelloq.com/#solve/learning-sketches",
+      "route": "#solve/learning-sketches"
+    },
+    {
+      "id": "biology-tool-me-review",
+      "title": "Retrieval review",
+      "subject": "biology",
+      "kind": "tool",
+      "description": "Existing me tool; source and capability boundaries are displayed inside.",
+      "tags": [
+        "review",
+        "me"
+      ],
+      "url": "https://biology.entelloq.com/#me/learning-review",
+      "route": "#me/learning-review"
+    },
+    {
+      "id": "biology-tool-explore-volume",
+      "title": "Real microscopy volume",
+      "subject": "biology",
+      "kind": "tool",
+      "description": "Existing explore tool; source and capability boundaries are displayed inside.",
+      "tags": [
+        "volume",
+        "explore"
+      ],
+      "url": "https://biology.entelloq.com/#explore/learning-volume",
+      "route": "#explore/learning-volume"
+    },
+    {
+      "id": "biology-practical-s9-e04",
+      "title": "Plant and cheek cells: stained mounts",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 9",
+        "s9-e04"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:9/practicals/s9-e04",
+      "route": "#cbse:9/practicals/s9-e04"
+    },
+    {
+      "id": "biology-practical-s9-e05",
+      "title": "Six plant and muscle tissues",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 9",
+        "s9-e05"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:9/practicals/s9-e05",
+      "route": "#cbse:9/practicals/s9-e05"
+    },
+    {
+      "id": "biology-practical-s9-e06",
+      "title": "Budding and bread-mould spores",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 9",
+        "s9-e06"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:9/practicals/s9-e06",
+      "route": "#cbse:9/practicals/s9-e06"
+    },
+    {
+      "id": "biology-practical-s9-e07",
+      "title": "Structure of a bisexual flower",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 9",
+        "s9-e07"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:9/practicals/s9-e07",
+      "route": "#cbse:9/practicals/s9-e07"
+    },
+    {
+      "id": "biology-practical-s9-e08",
+      "title": "Diversity specimen identification",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 9",
+        "s9-e08"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:9/practicals/s9-e08",
+      "route": "#cbse:9/practicals/s9-e08"
+    },
+    {
+      "id": "biology-practical-s10-e06",
+      "title": "Temporary leaf-peel mount: stomata",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 10",
+        "s10-e06"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:10/practicals/s10-e06",
+      "route": "#cbse:10/practicals/s10-e06"
+    },
+    {
+      "id": "biology-practical-s10-e07",
+      "title": "Carbon dioxide from respiration",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 10",
+        "s10-e07"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:10/practicals/s10-e07",
+      "route": "#cbse:10/practicals/s10-e07"
+    },
+    {
+      "id": "biology-practical-s10-e12",
+      "title": "Amoeba fission and yeast/Hydra budding",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 10",
+        "s10-e12"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:10/practicals/s10-e12",
+      "route": "#cbse:10/practicals/s10-e12"
+    },
+    {
+      "id": "biology-practical-s10-e14",
+      "title": "Embryo of a dicot seed",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 10",
+        "s10-e14"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:10/practicals/s10-e14",
+      "route": "#cbse:10/practicals/s10-e14"
+    },
+    {
+      "id": "biology-practical-b11-a-e01",
+      "title": "Flowering-plant morphology and floral dissection",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 11",
+        "b11-a-e01"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:11/practicals/b11-a-e01",
+      "route": "#cbse:11/practicals/b11-a-e01"
+    },
+    {
+      "id": "biology-practical-b11-a-e02",
+      "title": "Primary monocot/dicot roots and stems in section",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 11",
+        "b11-a-e02"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:11/practicals/b11-a-e02",
+      "route": "#cbse:11/practicals/b11-a-e02"
+    },
+    {
+      "id": "biology-practical-b11-a-e03",
+      "title": "Potato osmometer",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 11",
+        "b11-a-e03"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:11/practicals/b11-a-e03",
+      "route": "#cbse:11/practicals/b11-a-e03"
+    },
+    {
+      "id": "biology-practical-b11-a-e04",
+      "title": "Plasmolysis and reversal in an epidermal peel",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 11",
+        "b11-a-e04"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:11/practicals/b11-a-e04",
+      "route": "#cbse:11/practicals/b11-a-e04"
+    },
+    {
+      "id": "biology-practical-b11-a-e05",
+      "title": "Stomatal distribution on upper and lower surfaces",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 11",
+        "b11-a-e05"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:11/practicals/b11-a-e05",
+      "route": "#cbse:11/practicals/b11-a-e05"
+    },
+    {
+      "id": "biology-practical-b11-a-e06",
+      "title": "Relative transpiration from two leaf surfaces",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 11",
+        "b11-a-e06"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:11/practicals/b11-a-e06",
+      "route": "#cbse:11/practicals/b11-a-e06"
+    },
+    {
+      "id": "biology-practical-b11-a-e07",
+      "title": "Qualitative food tests: sugar, starch, protein and fat",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 11",
+        "b11-a-e07"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:11/practicals/b11-a-e07",
+      "route": "#cbse:11/practicals/b11-a-e07"
+    },
+    {
+      "id": "biology-practical-b11-a-e08",
+      "title": "Leaf-pigment paper chromatography",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 11",
+        "b11-a-e08"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:11/practicals/b11-a-e08",
+      "route": "#cbse:11/practicals/b11-a-e08"
+    },
+    {
+      "id": "biology-practical-b11-a-e09",
+      "title": "Respiration rate in plant material",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 11",
+        "b11-a-e09"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:11/practicals/b11-a-e09",
+      "route": "#cbse:11/practicals/b11-a-e09"
+    },
+    {
+      "id": "biology-practical-b11-a-e10",
+      "title": "Urea test: synthetic teaching sample",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 11",
+        "b11-a-e10"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:11/practicals/b11-a-e10",
+      "route": "#cbse:11/practicals/b11-a-e10"
+    },
+    {
+      "id": "biology-practical-b11-a-e11",
+      "title": "Reducing-sugar test: synthetic urine sample",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 11",
+        "b11-a-e11"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:11/practicals/b11-a-e11",
+      "route": "#cbse:11/practicals/b11-a-e11"
+    },
+    {
+      "id": "biology-practical-b11-a-e12",
+      "title": "Albumin demonstration: synthetic sample",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 11",
+        "b11-a-e12"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:11/practicals/b11-a-e12",
+      "route": "#cbse:11/practicals/b11-a-e12"
+    },
+    {
+      "id": "biology-practical-b11-a-e13",
+      "title": "Bile-salt surface-tension demonstration",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 11",
+        "b11-a-e13"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:11/practicals/b11-a-e13",
+      "route": "#cbse:11/practicals/b11-a-e13"
+    },
+    {
+      "id": "biology-practical-b11-b-s01",
+      "title": "Compound microscope: parts and safe sequence",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 11",
+        "b11-b-s01"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:11/practicals/b11-b-s01",
+      "route": "#cbse:11/practicals/b11-b-s01"
+    },
+    {
+      "id": "biology-practical-b11-b-s02",
+      "title": "Plant, fungal and microbial spotting",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 11",
+        "b11-b-s02"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:11/practicals/b11-b-s02",
+      "route": "#cbse:11/practicals/b11-b-s02"
+    },
+    {
+      "id": "biology-practical-b11-b-s03",
+      "title": "Animal spotting: 17 virtual examples",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 11",
+        "b11-b-s03"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:11/practicals/b11-b-s03",
+      "route": "#cbse:11/practicals/b11-b-s03"
+    },
+    {
+      "id": "biology-practical-b11-b-s04",
+      "title": "Mitosis in prepared plant and animal slides",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 11",
+        "b11-b-s04"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:11/practicals/b11-b-s04",
+      "route": "#cbse:11/practicals/b11-b-s04"
+    },
+    {
+      "id": "biology-practical-b11-b-s05",
+      "title": "Racemose and cymose inflorescences",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 11",
+        "b11-b-s05"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:11/practicals/b11-b-s05",
+      "route": "#cbse:11/practicals/b11-b-s05"
+    },
+    {
+      "id": "biology-practical-b11-b-s06",
+      "title": "Human skeleton and joints: virtual spotting",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 11",
+        "b11-b-s06"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:11/practicals/b11-b-s06",
+      "route": "#cbse:11/practicals/b11-b-s06"
+    },
+    {
+      "id": "biology-practical-b12-a-e01",
+      "title": "Pollen germination: temporary mount",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 12",
+        "b12-a-e01"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:12/practicals/b12-a-e01",
+      "route": "#cbse:12/practicals/b12-a-e01"
+    },
+    {
+      "id": "biology-practical-b12-a-e02",
+      "title": "Quadrat sampling: population density",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 12",
+        "b12-a-e02"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:12/practicals/b12-a-e02",
+      "route": "#cbse:12/practicals/b12-a-e02"
+    },
+    {
+      "id": "biology-practical-b12-a-e03",
+      "title": "Quadrat sampling: population frequency",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 12",
+        "b12-a-e03"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:12/practicals/b12-a-e03",
+      "route": "#cbse:12/practicals/b12-a-e03"
+    },
+    {
+      "id": "biology-practical-b12-a-e04",
+      "title": "Onion root-tip squash: mitosis",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 12",
+        "b12-a-e04"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:12/practicals/b12-a-e04",
+      "route": "#cbse:12/practicals/b12-a-e04"
+    },
+    {
+      "id": "biology-practical-b12-a-e05",
+      "title": "DNA isolation from plant material",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 12",
+        "b12-a-e05"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:12/practicals/b12-a-e05",
+      "route": "#cbse:12/practicals/b12-a-e05"
+    },
+    {
+      "id": "biology-practical-b12-b-s01",
+      "title": "Flower adaptations: wind, insects and birds",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 12",
+        "b12-b-s01"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:12/practicals/b12-b-s01",
+      "route": "#cbse:12/practicals/b12-b-s01"
+    },
+    {
+      "id": "biology-practical-b12-b-s02",
+      "title": "Pollen germination on a stigma",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 12",
+        "b12-b-s02"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:12/practicals/b12-b-s02",
+      "route": "#cbse:12/practicals/b12-b-s02"
+    },
+    {
+      "id": "biology-practical-b12-b-s03",
+      "title": "Gametogenesis in testis and ovary sections",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 12",
+        "b12-b-s03"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:12/practicals/b12-b-s03",
+      "route": "#cbse:12/practicals/b12-b-s03"
+    },
+    {
+      "id": "biology-practical-b12-b-s04",
+      "title": "Meiosis: prepared onion-bud or grasshopper-testis slides",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 12",
+        "b12-b-s04"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:12/practicals/b12-b-s04",
+      "route": "#cbse:12/practicals/b12-b-s04"
+    },
+    {
+      "id": "biology-practical-b12-b-s05",
+      "title": "Mammalian blastula: blastocyst organisation",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 12",
+        "b12-b-s05"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:12/practicals/b12-b-s05",
+      "route": "#cbse:12/practicals/b12-b-s05"
+    },
+    {
+      "id": "biology-practical-b12-b-s06",
+      "title": "Mendelian seed traits: counts and expectation",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 12",
+        "b12-b-s06"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:12/practicals/b12-b-s06",
+      "route": "#cbse:12/practicals/b12-b-s06"
+    },
+    {
+      "id": "biology-practical-b12-b-s07",
+      "title": "Prepared pedigrees: model-based inference",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 12",
+        "b12-b-s07"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:12/practicals/b12-b-s07",
+      "route": "#cbse:12/practicals/b12-b-s07"
+    },
+    {
+      "id": "biology-practical-b12-b-s08",
+      "title": "Controlled pollination: emasculation, bagging and tagging",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 12",
+        "b12-b-s08"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:12/practicals/b12-b-s08",
+      "route": "#cbse:12/practicals/b12-b-s08"
+    },
+    {
+      "id": "biology-practical-b12-b-s09",
+      "title": "Pathogen spotting and educational symptom links",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 12",
+        "b12-b-s09"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:12/practicals/b12-b-s09",
+      "route": "#cbse:12/practicals/b12-b-s09"
+    },
+    {
+      "id": "biology-practical-b12-b-s10",
+      "title": "Lichens, root nodules and Cuscuta",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 12",
+        "b12-b-s10"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:12/practicals/b12-b-s10",
+      "route": "#cbse:12/practicals/b12-b-s10"
+    },
+    {
+      "id": "biology-practical-b12-b-s11",
+      "title": "Homologous and analogous structures",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 12",
+        "b12-b-s11"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:12/practicals/b12-b-s11",
+      "route": "#cbse:12/practicals/b12-b-s11"
+    },
+    {
+      "id": "biology-practical-b11-vi-e01",
+      "title": "Accessible plant stem and leaf form",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 11",
+        "b11-vi-e01"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:11/practicals/b11-vi-e01",
+      "route": "#cbse:11/practicals/b11-vi-e01"
+    },
+    {
+      "id": "biology-practical-b11-vi-e02",
+      "title": "Accessible microscope part identification",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 11",
+        "b11-vi-e02"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:11/practicals/b11-vi-e02",
+      "route": "#cbse:11/practicals/b11-vi-e02"
+    },
+    {
+      "id": "biology-practical-b11-vi-e03",
+      "title": "Accessible leaf venation comparison",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 11",
+        "b11-vi-e03"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:11/practicals/b11-vi-e03",
+      "route": "#cbse:11/practicals/b11-vi-e03"
+    },
+    {
+      "id": "biology-practical-b11-vi-e04",
+      "title": "Accessible shoulder and hip joints",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 11",
+        "b11-vi-e04"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:11/practicals/b11-vi-e04",
+      "route": "#cbse:11/practicals/b11-vi-e04"
+    },
+    {
+      "id": "biology-practical-b11-vi-e05",
+      "title": "Accessible rib-cage identification",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 11",
+        "b11-vi-e05"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:11/practicals/b11-vi-e05",
+      "route": "#cbse:11/practicals/b11-vi-e05"
+    },
+    {
+      "id": "biology-practical-b11-vi-e06",
+      "title": "Accessible animal-model identification",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 11",
+        "b11-vi-e06"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:11/practicals/b11-vi-e06",
+      "route": "#cbse:11/practicals/b11-vi-e06"
+    },
+    {
+      "id": "biology-practical-b11-vi-e07",
+      "title": "Accessible mushroom and pine-cone comparison",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 11",
+        "b11-vi-e07"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:11/practicals/b11-vi-e07",
+      "route": "#cbse:11/practicals/b11-vi-e07"
+    },
+    {
+      "id": "biology-practical-b11-vi-e08",
+      "title": "Accessible osmosis setup",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 11",
+        "b11-vi-e08"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:11/practicals/b11-vi-e08",
+      "route": "#cbse:11/practicals/b11-vi-e08"
+    },
+    {
+      "id": "biology-practical-b12-vi-e01",
+      "title": "Accessible wind/insect pollination traits",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 12",
+        "b12-vi-e01"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:12/practicals/b12-vi-e01",
+      "route": "#cbse:12/practicals/b12-vi-e01"
+    },
+    {
+      "id": "biology-practical-b12-vi-e02",
+      "title": "Accessible frog morula or blastula",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 12",
+        "b12-vi-e02"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:12/practicals/b12-vi-e02",
+      "route": "#cbse:12/practicals/b12-vi-e02"
+    },
+    {
+      "id": "biology-practical-b12-vi-e03",
+      "title": "Accessible Mendelian bead/seed outcomes",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 12",
+        "b12-vi-e03"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:12/practicals/b12-vi-e03",
+      "route": "#cbse:12/practicals/b12-vi-e03"
+    },
+    {
+      "id": "biology-practical-b12-vi-e04",
+      "title": "Accessible pedigree construction",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 12",
+        "b12-vi-e04"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:12/practicals/b12-vi-e04",
+      "route": "#cbse:12/practicals/b12-vi-e04"
+    },
+    {
+      "id": "biology-practical-b12-vi-e05",
+      "title": "Accessible controlled-pollination sequence",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 12",
+        "b12-vi-e05"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:12/practicals/b12-vi-e05",
+      "route": "#cbse:12/practicals/b12-vi-e05"
+    },
+    {
+      "id": "biology-practical-b12-vi-e06",
+      "title": "Accessible Ascaris model",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 12",
+        "b12-vi-e06"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:12/practicals/b12-vi-e06",
+      "route": "#cbse:12/practicals/b12-vi-e06"
+    },
+    {
+      "id": "biology-practical-b12-vi-e07",
+      "title": "Accessible xerophyte adaptations",
+      "subject": "biology",
+      "kind": "practical guide",
+      "description": "School practical preparation; not a completed supervised practical.",
+      "tags": [
+        "CBSE",
+        "Class 12",
+        "b12-vi-e07"
+      ],
+      "url": "https://biology.entelloq.com/#cbse:12/practicals/b12-vi-e07",
+      "route": "#cbse:12/practicals/b12-vi-e07"
+    }
+  ]
+}

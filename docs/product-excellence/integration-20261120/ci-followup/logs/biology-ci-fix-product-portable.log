@@ -1,0 +1,8 @@
+page.reload: net::ERR_NETWORK_IO_SUSPENDED
+Call log:
+  - waiting for navigation until "domcontentloaded"
+
+    at C:\Users\darsh\Documents\Codex\2026-10-29\entelloq-product-excellence\biology\scripts\check-product-excellence-browser.cjs:31:14 {
+  log: [ '  - waiting for navigation until "domcontentloaded"' ],
+  name: 'Error'
+}

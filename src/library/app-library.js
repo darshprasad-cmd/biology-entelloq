@@ -25,7 +25,7 @@
     } catch (_) { return; } // A replaced or foreign child cannot report our route.
     window.BioAppContext?.remember(section,sub);
     if(location.hash!=='#'+section+'/'+sub)history.replaceState({k:section,sub},'','#'+section+'/'+sub);
-    const crumb=document.getElementById('routeLabel');if(crumb)crumb.textContent=({learn:'Learn',labs:'Lab',reason:'Reason',solve:'Solve'}[section])+' / '+(c.title||id)+(c.subtopic?' / '+c.subtopic:'');
+    const crumb=document.getElementById('routeLabel');if(crumb)crumb.textContent=({learn:'Learn',labs:window.EntelloqScience?.enabled?.()?'Virtual Labs':'Lab',reason:'Reason',solve:'Solve'}[section])+' / '+(c.title||id)+(c.subtopic?' / '+c.subtopic:'');
   });
   window.BioAppContext?.refreshHome();
   // Add a curriculum entry without changing the existing launcher or routes.

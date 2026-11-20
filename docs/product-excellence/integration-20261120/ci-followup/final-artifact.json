@@ -1,0 +1,48 @@
+{
+  "runtimeSourceCommit": "8a765df09f986b9690a9208d1e9de93be1dc1c1e",
+  "artifactBytes": 44990635,
+  "artifactSha256": "69a5bbefe8d12eeff7e535385b3248504f9ea0995324487fb7846a98895f3a6f",
+  "buildRuntime": {
+    "python": "3.14.5",
+    "zlib": "1.3.1.zlib-ng"
+  },
+  "catalogues": [
+    {
+      "subject": "biology",
+      "sha256": "ec4b29416152058f5ce9191a725c0b9a5c61b60e9bb3c83943b9c675c99bcd5d",
+      "entries": 221
+    },
+    {
+      "subject": "physics",
+      "entries": 343,
+      "sha256": "bb7f7f89342441e65de2fdfd6a8ea0bd691d7103db74db27274368c566d39bb9"
+    }
+  ],
+  "protectedGitObjects": [
+    {
+      "path": "lab.html",
+      "previous": "91e84e8429db457f6238fd70087556dd51239de3",
+      "current": "91e84e8429db457f6238fd70087556dd51239de3"
+    },
+    {
+      "path": "src/lab",
+      "previous": "c4cb1e9d6a41ea7555c634c24a36b2102f26ad6e",
+      "current": "c4cb1e9d6a41ea7555c634c24a36b2102f26ad6e"
+    },
+    {
+      "path": "src/library/experiments.js",
+      "previous": "64470e40702f76a594ddfd4168d7b05fa36e9503",
+      "current": "64470e40702f76a594ddfd4168d7b05fa36e9503"
+    },
+    {
+      "path": "src/library/notebook.js",
+      "previous": "06cd6fd9597e83ae88a502e0633c911b96442255",
+      "current": "06cd6fd9597e83ae88a502e0633c911b96442255"
+    },
+    {
+      "path": "assets/specimens",
+      "previous": "c6d07e6be19e703080628cb17fc3a24f3d0851a7",
+      "current": "c6d07e6be19e703080628cb17fc3a24f3d0851a7"
+    }
+  ]
+}

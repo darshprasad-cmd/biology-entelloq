@@ -10,7 +10,8 @@ async function checkAppSearch(page,shell){
  const stable=async()=>{assert.equal(page.url(),before.url,'Search does not rewrite the outer route');assert.equal(await shell.evaluate(()=>location.hash),before.hash,'Search does not rewrite the shell route');assert.deepEqual(await shell.evaluate(keys=>Object.fromEntries(keys.map(key=>[key,localStorage.getItem(key)])),Object.keys(before.storage)),before.storage,'Search preserves practice history and notes');};
  try{
   await trigger.waitFor({state:'visible'});
-  assert.equal(await trigger.getAttribute('aria-label'),'Search Biology Entelloq');
+  const universalSearch=await shell.evaluate(()=>!!window.EntelloqScience?.enabled?.());
+  assert.equal(await trigger.getAttribute('aria-label'),universalSearch?'Search Physics and Biology':'Search Biology Entelloq');
   assert.equal(await trigger.getAttribute('aria-haspopup'),'dialog');assert.equal(await trigger.getAttribute('aria-controls'),'cmdk');
   const dimensions=await trigger.evaluate(el=>{const r=el.getBoundingClientRect(),bar=el.closest('.topbar').getBoundingClientRect(),explore=document.getElementById('exploreBtn').getBoundingClientRect();return {width:r.width,height:r.height,x:r.x,right:r.right,y:r.y,bottom:r.bottom,viewport:innerWidth,bar:{y:bar.y,bottom:bar.bottom},explore:{x:explore.x,right:explore.right}};});
   assert(dimensions.width>=44&&dimensions.height>=44,'Search is at least44px in both dimensions');assert(dimensions.x>=0&&dimensions.right<=dimensions.viewport+1,'Search stays inside the viewport');assert(dimensions.y>=dimensions.bar.y&&dimensions.bottom<=dimensions.bar.bottom+1,'Search stays inside its header');assert(dimensions.x>=dimensions.explore.right-1||dimensions.right<=dimensions.explore.x+1,'Search does not overlap Explore');

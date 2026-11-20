@@ -1,0 +1,14 @@
+✔ accepts editable shapes, text, frames and finite stroke points (0.9069ms)
+✔ rejects unsupported or remotely linked content (0.7331ms)
+✔ rejects numeric, coordinate and ID corruption (0.2338ms)
+✔ enforces element, input byte, depth and field bounds (2.6034ms)
+✔ unknown font IDs normalize to the shipped drawing font; app state and custom data are bounded (0.2081ms)
+✔ original starters identify assumptions and scientific limitations (0.3086ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 68.3152

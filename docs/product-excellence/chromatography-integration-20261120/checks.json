@@ -1,0 +1,156 @@
+[
+  {
+    "exitCode": 0,
+    "startedAt": "2026-11-20T15:52:52.3671397+05:30",
+    "command": "npm.cmd ci --prefix learning-tools-source/learning --no-audit --no-fund",
+    "name": "install-learning",
+    "durationSeconds": 4.59
+  },
+  {
+    "exitCode": 0,
+    "startedAt": "2026-11-20T15:52:56.9855089+05:30",
+    "command": "npm.cmd test --prefix learning-tools-source/learning",
+    "name": "learning-unit",
+    "durationSeconds": 0.5
+  },
+  {
+    "exitCode": 0,
+    "startedAt": "2026-11-20T15:52:57.4905653+05:30",
+    "command": "node --test learning-tools-source/sketches/tests/core.test.mjs",
+    "name": "sketch-unit",
+    "durationSeconds": 0.12
+  },
+  {
+    "exitCode": 0,
+    "startedAt": "2026-11-20T15:52:57.6125460+05:30",
+    "command": "python scripts/build-learning-tools.py --check",
+    "name": "learning-tools-parity",
+    "durationSeconds": 0.21
+  },
+  {
+    "exitCode": 0,
+    "startedAt": "2026-11-20T15:52:57.8260085+05:30",
+    "command": "python scripts/sync-learning-tools.py --check",
+    "name": "learning-assets-parity",
+    "durationSeconds": 0.23
+  },
+  {
+    "exitCode": 0,
+    "startedAt": "2026-11-20T15:52:58.0565566+05:30",
+    "command": "node scripts/check-learning.cjs",
+    "name": "static",
+    "durationSeconds": 33.65
+  },
+  {
+    "exitCode": 0,
+    "startedAt": "2026-11-20T15:53:31.7222767+05:30",
+    "command": "node scripts/check-chromatography-browser.cjs",
+    "name": "chromatography",
+    "durationSeconds": 29.21
+  },
+  {
+    "exitCode": 0,
+    "startedAt": "2026-11-20T15:54:00.9322638+05:30",
+    "command": "node scripts/check-product-excellence-browser.cjs",
+    "name": "product-source",
+    "durationSeconds": 36.17
+  },
+  {
+    "exitCode": 0,
+    "startedAt": "2026-11-20T15:54:37.1047652+05:30",
+    "command": "node scripts/check-product-excellence-browser.cjs --portable",
+    "name": "product-portable",
+    "durationSeconds": 44.4
+  },
+  {
+    "exitCode": 0,
+    "startedAt": "2026-11-20T15:55:21.5098651+05:30",
+    "command": "node scripts/check-product-excellence-browser.cjs --file",
+    "name": "product-file",
+    "durationSeconds": 36.28
+  },
+  {
+    "exitCode": 0,
+    "startedAt": "2026-11-20T15:55:57.7925237+05:30",
+    "command": "node scripts/check-single-file-browser.cjs",
+    "name": "single-file",
+    "durationSeconds": 202.87
+  },
+  {
+    "exitCode": 0,
+    "startedAt": "2026-11-20T15:59:20.6687284+05:30",
+    "command": "node scripts/check-opening-browser.cjs",
+    "name": "opening",
+    "durationSeconds": 61.78
+  },
+  {
+    "exitCode": 0,
+    "startedAt": "2026-11-20T16:00:22.4485878+05:30",
+    "command": "node scripts/check-exam-answers-browser.cjs",
+    "name": "exam-answers",
+    "durationSeconds": 138.45
+  },
+  {
+    "exitCode": 0,
+    "startedAt": "2026-11-20T16:02:40.9062085+05:30",
+    "command": "node tests/check-ai-answer-formatting.cjs",
+    "name": "ai-formatting",
+    "durationSeconds": 0.77
+  },
+  {
+    "exitCode": 0,
+    "startedAt": "2026-11-20T16:02:41.6768959+05:30",
+    "command": "node scripts/check-learning-tools-browser.cjs",
+    "name": "learning-source",
+    "durationSeconds": 13.69
+  },
+  {
+    "exitCode": 0,
+    "startedAt": "2026-11-20T16:02:55.3712318+05:30",
+    "command": "node scripts/check-learning-tools-browser.cjs --portable",
+    "name": "learning-portable",
+    "durationSeconds": 6.56
+  },
+  {
+    "exitCode": 0,
+    "startedAt": "2026-11-20T16:03:01.9347099+05:30",
+    "command": "node scripts/check-visual-tools-browser.cjs",
+    "name": "visual-source",
+    "durationSeconds": 8.28
+  },
+  {
+    "exitCode": 0,
+    "startedAt": "2026-11-20T16:03:10.2140556+05:30",
+    "command": "node scripts/check-visual-tools-browser.cjs --portable",
+    "name": "visual-portable",
+    "durationSeconds": 11.45
+  },
+  {
+    "exitCode": 0,
+    "startedAt": "2026-11-20T16:03:21.6704220+05:30",
+    "command": "node scripts/check-learning-host-quality.cjs",
+    "name": "host-source",
+    "durationSeconds": 4.29
+  },
+  {
+    "exitCode": 0,
+    "startedAt": "2026-11-20T16:03:25.9645999+05:30",
+    "command": "node scripts/check-learning-host-quality.cjs --portable",
+    "name": "host-portable",
+    "durationSeconds": 5.65
+  },
+  {
+    "exitCode": 0,
+    "startedAt": "2026-11-20T16:03:31.6241352+05:30",
+    "command": "node scripts/check-protein-browser.cjs",
+    "name": "protein",
+    "durationSeconds": 26.17
+  },
+  {
+    "exitCode": 0,
+    "startedAt": "2026-11-20T16:03:57.8074544+05:30",
+    "command": "node scripts/check-model-resume-browser.cjs",
+    "name": "model-resume",
+    "durationSeconds": 0.93
+  }
+]

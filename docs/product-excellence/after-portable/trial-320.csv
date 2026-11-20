@@ -1,0 +1,3 @@
+"Trial","Recorded at","Variable: Cell type","Variable: External nonpenetrating solute (mOsm/L)","Measurement: Cell volume (% initial)","Measurement: Internal solute (mOsm/L)","Measurement: Wall pressure (MPa)","Measurement: Net water flow (% volume/s)","Measurement: Elapsed time (s)","Stage","Observation"
+"1","2026-11-02T19:02:47.205Z","plant","400","92.37","324.78","0","-0.652","10","Initially hypertonic. Net water movement out of the cell. The cell is flaccid.",""
+"2","2026-11-02T19:02:58.580Z","plant","400","92.37","324.78","0","-0.652","10","Initially hypertonic. Net water movement out of the cell. The cell is flaccid.",""

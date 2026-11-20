@@ -1,0 +1,45 @@
+html[data-excellence=true] .bpe-tools{position:sticky;top:0;z-index:5;background:var(--bg,#081016);padding:12px 0;border-block:1px solid var(--hair,#344a40);margin:12px 0 18px}
+html[data-excellence=true] .bpe-actions{display:flex;gap:8px;flex-wrap:wrap}
+html[data-excellence=true] .bpe-actions button{min-height:44px;padding:8px 14px;font:inherit}
+html[data-excellence=true] .bpe-state,html[data-excellence=true] .bpe-context{font-size:13px;line-height:1.55;color:var(--dim);margin:10px 0}
+html[data-excellence=true] .bpe-model summary{min-height:36px;cursor:pointer;font-size:13px;display:list-item;padding:8px 0;color:var(--ink)}
+html[data-excellence=true] .bpe-model p{max-width:75ch;line-height:1.65;font-size:14px}
+html[data-excellence=true] .bpe-focus #lab-workflow,html[data-excellence=true] .bpe-focus #lab-notebook,html[data-excellence=true] .bpe-focus .bpe-context{display:none}
+html[data-excellence=true] .bpe-workspace{max-width:1100px;padding:28px;margin:20px auto;border:1px solid var(--hair);border-radius:12px;background:var(--bg)}
+html[data-excellence=true] .bpe-workspace article{padding:16px 0;border-top:1px solid var(--hair)}
+html[data-excellence=true] .bpe-workspace p{line-height:1.65;max-width:75ch}html[data-excellence=true] .bpe-workspace small{display:block;margin:8px 0}
+html[data-excellence=true] .bpe-hero-hint{font-size:14px;line-height:1.65;max-width:35ch;color:var(--dim)}
+html[data-excellence=true] #nav [hidden]{display:none!important}
+html[data-excellence=true] #topSearch{display:flex!important;min-height:44px}
+html[data-excellence=true] #routeLabel{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+html[data-excellence=true] .ln-workflow-hint{line-height:1.7}
+html[data-excellence=true] #labStage{scroll-margin-top:170px}
+@media(max-width:850px){html[data-excellence=true] #topSearch{width:44px;min-width:44px;justify-content:center;padding:8px}html[data-excellence=true] #topSearch kbd{display:none}html[data-excellence=true] .bpe-tools{position:relative}html[data-excellence=true] .bpe-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}html[data-excellence=true] .bpe-actions button{font-size:12px}html[data-excellence=true] .mtab span{font-size:10px}html[data-excellence=true] #labStage{scroll-margin-top:8px}html[data-excellence=true] .bpe-workspace{padding:18px;margin:12px}html[data-excellence=true] .lb-hd .lead{font-size:14px}html[data-excellence=true] .lb-page{padding-top:16px}}
+@media print{.bpe-actions,.bpe-tools button{display:none!important}}
+
+@media(max-width:850px){html[data-excellence=true] .bpe-search-label{display:none}}
+@media(max-width:850px){
+ html[data-excellence=true] #bioq-ai{bottom:calc(80px + env(safe-area-inset-bottom,0px))}
+ html[data-excellence=true] .eqx-fab,html[data-excellence=true] .eqx-panel{bottom:calc(80px + env(safe-area-inset-bottom,0px))}
+ html[data-excellence=true] .ex-control,html[data-excellence=true] .ln-fields label,html[data-excellence=true] .ln-filters label{font-size:14px;line-height:1.5}
+ html[data-excellence=true] .ex-control select,html[data-excellence=true] .ex-control input,html[data-excellence=true] .ln-fields input,html[data-excellence=true] .ln-fields textarea,html[data-excellence=true] .ln-filters input,html[data-excellence=true] .ln-filters select{min-height:44px;font-size:16px}
+ html[data-excellence=true] .bx-btn,html[data-excellence=true] .ln-modes button,html[data-excellence=true] .lc-workspace-nav button{min-height:44px;font-size:14px}
+ html[data-excellence=true] .ex-status,html[data-excellence=true] .ex-readings,html[data-excellence=true] .ln-count{font-size:14px;line-height:1.6}
+ html[data-excellence=true] .ex-canvas{max-height:320px;object-fit:contain}
+ html[data-excellence=true] .cc-hero-copy .btn{min-height:44px;font-size:14px}
+}
+@media(max-width:480px){html[data-excellence=true] .home .cc-head h1{font-size:28px}html[data-excellence=true] .cc-hero{min-height:0}html[data-excellence=true] .cc-hero-copy{padding:20px}html[data-excellence=true] .cc-hero .cc-art{max-height:170px}html[data-excellence=true] .home-in{padding-top:20px}html[data-excellence=true] .topbar{gap:8px}}
+html[data-excellence=true] .bpe-inline-actions{display:flex;flex-wrap:wrap;gap:8px;margin-block:12px}
+html[data-excellence=true] .bpe-inline-actions button{min-height:44px}
+html[data-excellence=true] .bpe-inline-actions p{flex-basis:100%;font-size:13px;line-height:1.5;color:var(--dim);margin:0}
+html[data-excellence=true] .bpe-context-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+html[data-excellence=true] .bpe-context-actions button{min-height:44px}
+html[data-excellence=true] .bpe-secondary>summary{min-height:44px;padding-block:12px;cursor:pointer;font-size:14px}
+html[data-excellence=true] .bpe-secondary-note{font-size:13px;line-height:1.5;color:var(--dim)}
+@media(min-width:601px){html[data-excellence=true] .bpe-secondary>summary{display:none}}
+@media(max-width:600px){html[data-excellence=true] .lb-page{display:flex;flex-direction:column}html[data-excellence=true] .lb-page>*{min-width:0}html[data-excellence=true] .lb-page>.ln-breadcrumb{order:0}html[data-excellence=true] .lb-page>.lb-hd{order:1}html[data-excellence=true] .lb-page>.bpe-tools{order:2}html[data-excellence=true] .lb-page>.bpe-context{order:3;margin-block:0 12px}html[data-excellence=true] #labStage{order:4}html[data-excellence=true] #lab-workflow{order:5}html[data-excellence=true] #lab-notebook{order:6}html[data-excellence=true] .bpe-tools{margin-top:0;padding-bottom:0}html[data-excellence=true] .bpe-model summary{min-height:44px}html[data-excellence=true] .bpe-state{font-size:14px;line-height:1.5;margin-block:8px}}
+html[data-excellence=true] #lab-plot{max-width:100%;overflow:auto;border-radius:8px}
+html[data-excellence=true] #lab-plot:focus-visible{outline:2px solid var(--em);outline-offset:4px}
+html[data-excellence=true] .ex-graph{max-width:100%;overflow:auto}
+html[data-excellence=true] .ex-graph:focus-visible{outline:2px solid var(--em);outline-offset:-2px}
+@media(max-width:700px){html[data-excellence=true] #lab-plot svg{min-width:710px}html[data-excellence=true] .ex-graph svg{min-width:640px}html[data-excellence=true] :is(#lab-plot,.ex-graph) svg text{font-size:14px}html[data-excellence=true] .ln-table{min-width:650px;font-size:14px}html[data-excellence=true] .ln-table-wrap{overflow:auto}}

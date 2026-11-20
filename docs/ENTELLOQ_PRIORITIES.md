@@ -1,0 +1,26 @@
+# Ten highest-impact UX problems
+
+Ranked before major code changes on 29 October 2026, after inspecting current main sources and the actual applications. Source findings are verified unless noted; student impact/effort are engineering estimates. The ranking prioritizes shared navigation, discoverability and workspaces as requested, followed by persistence/reliability. Impact scale: 1 (limited) to 5 (core journey).
+
+| Rank | Problem | Impact | Risk | Effort | Baseline evidence | Improvement contract |
+|---|---|---:|---|---|---|---|
+| 1 | Different desktop/mobile navigation labels and destinations | 5 | Medium | Medium | Physics desktop has ten destinations, mobile Home/Universe/Learn/Lab/Me; Biology singular Lab opens dissection while the investigation catalog lives elsewhere | Same five intent groups at every breakpoint, secondary routes retained, subject switch, legacy links preserved |
+| 2 | Fragmented, literal/fuzzy search misses experiments, saved work and other subject | 5 | Medium | Medium | Physics “pendulum” returns fuzzy lessons but no experiment; both search indexes omit important registry types | Registry-backed deterministic search across both subjects; curated aliases, question-word removal, keyboard/direct navigation, local notebook records |
+| 3 | No coherent scientific workspace entry/control/save conventions | 5 | Medium | Large | Legacy Physics fullscreen controls have no common save action; optional Biology tool cards precede the experiment | Live viewport first, contextual guide, scoped controls, observation/save actions, actual engine-backed resume where supported |
+| 4 | First-run questions interrupt the first experiment | 5 | Low | Small | Both have skippable questionnaires before the workspace; featured interactions are indirect | Guest featured launch, optional personalization, first-use contextual guidance; measure 30-second target without claiming student proof |
+| 5 | Saves are fragmented and resume support is unclear | 5 | High | Large | Physics legacy save failures can be silent; Biology notebook has good failure handling but lacks general model-state restore | Confirmed local saves, preserve drafts on failure, revision conflicts, explicit resume capability, CSV/report export and local/cloud status |
+| 6 | Mobile experiment space is consumed by headers/cards/panels | 5 | Medium | Large | Before screenshots show no running experiment in initial mobile Labs view; Physics scientific host begins y347 | Compact workspace header, progressive controls, useful viewport and 44px controls, inspect 320/390/768/1440 widths |
+| 7 | Model classification, unit-bearing evidence and assumptions are uneven | 4 | Medium | Medium | Existing models range from validated SI engines to pixel/frame illustrations; scientific coverage varies | Per-adapter analytical/numerical/illustrative metadata, known validation limits, unit/provenance-preserving notebook records, existing model tests |
+| 8 | Keyboard/focus/touch behavior varies by surface | 4 | Medium | Medium | Independent shells/dialogs and canvas engines; not all navigation conventions match | Predictable dialog focus/escape, accessible named controls, visible focus, reduced motion, touch alternatives; retain complex-engine limitations honestly |
+| 9 | No coherent teacher assignment and review flow | 3 | High | Large | No authenticated classroom backend in either subject repository | Flagged local assignment/worksheet/submission/review workflow; no invented roster, cloud inbox or automatic grading; anonymous codes |
+| 10 | Offline availability, interrupted loading and recovery are unclear | 4 | High | Large | Biology portable core works offline but optional providers do not; embedded tools and native origin constraints differ | Explicit local-only/online states and errors, preserve existing portable packaging, native compatibility contract and versioned package handoff |
+
+## Evidence and execution boundaries
+
+Each repository keeps before screenshots under `docs/product-excellence/before`, after evidence/tests under the corresponding product-quality path, and its audit/test/release report. Compare equivalent subject, viewport and route, not source diffs alone.
+
+No engine rewrite or new UI framework is required. Biology dissection and both camera systems are protected. Existing unmerged work in other checkouts is not overwritten or silently packaged. Dedicated branches start from fetched Physics `63a86b4` and Biology `a8c303c`; exact current heads must be recorded when finalizing.
+
+The unified native app is owned by the user-authorized **Prepare Entelloq app store launch** chat in `../entelloq-mobile`, with an explicit shared contract in `../ENTELLOQ-MOBILE-UX-HANDOFF.md`. This workstream supplies subject code, catalogs and web validation. Xcode/native/device/store gates are separate and cannot be passed with Chromium screenshots.
+
+Real-student sessions, hardware camera testing, server-enforced AI budgets and authenticated cloud/classroom synchronization require external resources not available in these subject checkouts. See the real-student protocol, AI cost architecture, native compatibility notes and final test reports for exact unresolved gates. No production merge/deployment or store submission is authorized by this implementation.

@@ -159,10 +159,26 @@
     if(spec.controls)spec.controls(b);
     b.render();
     const resizeObserver=new ResizeObserver(()=>b.render());resizeObserver.observe(canvas);
+    const themeObserver=new MutationObserver(()=>b.render());themeObserver.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
     // Observation time is independent of screen refresh rate. No animation runs
     // until the student asks; the manual step is available with reduced motion.
     const timer=spec.step?setInterval(()=>{if(!b.running||document.hidden||(window.frameElement&&!window.frameElement.getClientRects().length))return;advance(.5);b.render();},100):null;
-    return {dispose(){if(timer)clearInterval(timer);resizeObserver.disconnect();b.running=false;},snapshot(){return {
+    const resumable=['osmosis','photosynthesis-rate','cellular-respiration','heart-physiology','gas-exchange','mitosis'].includes(spec.id);
+    function serialize(){return resumable?JSON.parse(JSON.stringify({version:1,experimentId:spec.id,variables:b.v,state:b.s,time:b.time,history:b.history})):null;}
+    function restore(value){
+      if(!resumable||!value||value.version!==1||value.experimentId!==spec.id||!value.variables||!value.state)return false;
+      const vars={},state={},defaults=spec.state();
+      for(const d of spec.vars||[]){const v=value.variables[d.key];if(d.options){if(!d.options.some(o=>(typeof o==='string'?o:o[0])===v))return false;}else if(!Number.isFinite(v)||v<d.min||v>d.max)return false;vars[d.key]=v;}
+      for(const [key,initial]of Object.entries(defaults)){const v=value.state[key];if(typeof v!==typeof initial||(typeof v==='number'&&(!Number.isFinite(v)||Math.abs(v)>1e12)))return false;state[key]=v;}
+      if(spec.id==='osmosis'&&(state.volume<.2||state.volume>1.7))return false;
+      if(spec.id==='mitosis'&&(!Number.isInteger(state.stage)||state.stage<0||state.stage>5))return false;
+      if(!Number.isFinite(value.time)||value.time<0||value.time>300||!Array.isArray(value.history)||value.history.length>600)return false;
+      if(value.history.some(p=>!p||!Number.isFinite(p.x)||!Number.isFinite(p.y)||p.x<0||p.x>value.time||Math.abs(p.y)>1e12))return false;
+      b.running=false;b.v=vars;b.s=state;b.time=value.time;b.history=value.history.map(p=>({x:p.x,y:p.y}));
+      for(const d of spec.vars||[]){const input=b.controls[d.key];input.value=vars[d.key];const output=input.closest('label').querySelector('output');if(output)output.textContent=String(vars[d.key]);}
+      action('Restored saved experiment; playback paused');b.render();return true;
+    }
+    return {serialize,restore,dispose(){if(timer)clearInterval(timer);resizeObserver.disconnect();themeObserver.disconnect();b.running=false;},snapshot(){return {
       variables:Object.fromEntries((spec.vars||[]).map(d=>[d.label,b.v[d.key]])),
       measurements:b.measure(),stage:spec.story?spec.story(b):'Observing',actions:b.actions.slice()
     };}};

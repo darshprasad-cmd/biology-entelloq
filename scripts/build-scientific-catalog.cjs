@@ -1,0 +1,19 @@
+/* Deterministic export from the existing authored registries; no network. */
+'use strict';
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
+const root=path.resolve(__dirname,'..'),context={document:{getElementById(){return null;}},matchMedia(){return {matches:true};}};context.window=context;vm.createContext(context);
+for(const file of ['src/library/topics.js','src/library/extended-core.js','src/library/extended-systems.js','src/library/labs.js','src/_lab_bench.js','src/_lab_molecular.js','src/_lab_physiology.js','src/_lab_ecology.js','src/library/experiments.js','src/library/investigations.js','src/library/lab-metadata.js','src/cbse/practicals-data.js'])vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),context,{filename:file});
+const labs=vm.runInContext('LABS.all()',context),items=[],base='https://biology.entelloq.com/';
+function add(id,title,kind,description,tags,route){items.push({id:'biology-'+id,title,subject:'biology',kind,description,tags,url:base+route,route});}
+for(const topic of context.BIO_LIBRARY.topics)add('concept-'+topic.id,topic.title,'concept',topic.summary||'',topic.aliases||[],'#learn/topic/'+topic.id+'/intuition');
+for(const lab of labs)add('lab-'+lab.id,lab.title,'lab',lab.question||lab.blurb||'', [...(lab.aliases||[]),...(lab.relatedTopics||[])],'#labs/'+lab.id);
+const lessons=[['diffusion','Diffusion & Osmosis'],['enzyme','Enzyme Action'],['population','Population Growth'],['photosynthesis','Photosynthesis'],['respiration','Cellular Respiration'],['replication','DNA Replication'],['selection','Natural Selection'],['actionpotential','The Action Potential'],['cardiac','The Cardiac Cycle']];
+for(const [id,title]of lessons)add('lesson-'+id,title,'lesson','Interactive lesson through six perspectives',['lesson',id],'#lessons/'+id);
+for(const [id,title]of [['home','Explore Biology'],['learn','Biology concept library'],['labs','Virtual Labs'],['explore','Investigate Biology'],['me','My Workspace'],['reason','Biological reasoning'],['solve','Biology practice'],['lab','Dissection Theatre'],['universe','Biology Universe'],['about','About Biology Entelloq']])add('section-'+id,title,'workspace','Existing Biology workspace',[id],'#'+id);
+const tools={labs:['kinetics','notebook','sketches'],reason:['notebook','sketches'],learn:['search','animations'],solve:['review','sketches'],me:['review'],explore:['volume']};
+const names={kinetics:'Biochemical kinetics',notebook:'Experiment notebook',sketches:'Scientific sketchbook',search:'Concept search',animations:'Animated explanations',review:'Retrieval review',volume:'Real microscopy volume'};
+for(const [section,ids]of Object.entries(tools))for(const id of ids)add('tool-'+section+'-'+id,names[id],'tool','Existing '+section+' tool; source and capability boundaries are displayed inside.',[id,section],'#'+section+'/learning-'+id);
+for(const guide of [...context.BIO_CBSE_PRACTICALS.guides,...context.BIO_CBSE_PRACTICALS.alternatives]){const year=guide.classYear;add('practical-'+guide.id,guide.title,'practical guide','School practical preparation; not a completed supervised practical.', ['CBSE','Class '+year,guide.id],'#cbse:'+year+'/practicals/'+guide.id);}
+const output=JSON.stringify({version:1,subject:'biology',source:'Authored Biology Entelloq registries',items},null,2)+'\n',file=path.join(root,'assets/entelloq-biology-catalog.json');
+if(process.argv.includes('--check')){if(!fs.existsSync(file)||fs.readFileSync(file,'utf8')!==output)throw Error('Scientific catalogue drift; run node scripts/build-scientific-catalog.cjs');}else fs.writeFileSync(file,output);
+console.log(items.length+' Biology catalogue entries: '+context.BIO_LIBRARY.topics.length+' concepts, '+labs.length+' labs, '+lessons.length+' lessons, 59 practical guides and existing workspaces/tools.');

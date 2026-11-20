@@ -1,0 +1,24 @@
+{
+  "complete": true,
+  "initialBytes": 9482225,
+  "totalBytes": 44990635,
+  "checks": [
+    "A reading document that genuinely exceeds the 15-second deadline first shows recovery, then late validated completion dismisses it and restores real keyboard/pointer quiz answers and retries.",
+    "Learn answers and retries remain usable beyond the unchanged 15-second deadline while a noncritical image deliberately withholds native iframe load.",
+    "A withheld reading document still shows the 15-second recovery screen; restoring its loader and choosing Retry opens the real Learn page.",
+    "A retained About frame cannot rewrite Home; selecting About again works. Its queued history/navigation callback after replacement cannot rewrite the Labs kinetics route or revive the outgoing document; the current Labs document completes normally.",
+    "The exact #solve route is interactive before the model tail or parent DOMContentLoaded.",
+    "Cancellation and a stalled-download deadline reject promptly; a later fetch returns the exact original frog bytes after the same response continues.",
+    "truncated model data rejects with an actionable error and retry; exiting the error returns to working Solve.",
+    "corrupt model data rejects with an actionable error and retry; exiting the error returns to working Solve.",
+    "The copied-alone HTML opens Solve and serves identical deferred model bytes with external requests blocked.",
+    "A browser without DecompressionStream shows a clear compatibility message and retry instead of an uncaught startup exception."
+  ],
+  "errors": [],
+  "unexpectedRequests": [],
+  "solveReadyMs": 2614,
+  "frog": {
+    "hash": "64ccc2056475153d70b5f68a2b3b94ff075f0491c63c76a65b7157e7f7c349bc",
+    "bytes": 6142084
+  }
+}

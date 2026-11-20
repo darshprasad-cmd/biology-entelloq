@@ -1,0 +1,41 @@
+FAIL Python contracts (17013 ms)
+.........FF........................
+======================================================================
+FAIL: test_launch_background_is_shared_with_no_changes_to_immersive_worlds (test_library_build.LibraryBuild.test_launch_background_is_shared_with_no_changes_to_immersive_worlds)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\darsh\Documents\Codex\2026-10-29\entelloq-product-excellence\biology\tests\test_library_build.py", line 23, in test_launch_background_is_shared_with_no_changes_to_immersive_worlds
+    _,before,after=builder.render(page);self.assertEqual(before,after,'Run python scripts/build-background.py')
+                                        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: b'<!doctype html>\r\n<html lang="en" data-theme="dark">\r\n[718615 chars]\r\n' != b'<!doctype html>\n<html lang="en" data-theme="dark">\n<hea[711323 chars]l>\n' : Run python scripts/build-background.py
+
+======================================================================
+FAIL: test_library_slots_are_complete_and_idempotent (test_library_build.LibraryBuild.test_library_slots_are_complete_and_idempotent)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\darsh\Documents\Codex\2026-10-29\entelloq-product-excellence\biology\tests\test_library_build.py", line 15, in test_library_slots_are_complete_and_idempotent
+    self.assertEqual(before,after,'Run python scripts/build-library.py')
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: b'<!doctype html>\r\n<html lang="en" data-theme="dark">\r\n[1226979 chars]\r\n' != b'<!doctype html>\n<html lang="en" data-theme="dark">\n<hea[1213231 chars]l>\n' : Run python scripts/build-library.py
+
+----------------------------------------------------------------------
+Ran 35 tests in 16.582s
+
+FAILED (failures=2)
+PASS Dissection boundaries (1755 ms)
+PASS Shared navigation (309 ms)
+PASS Tutorial contract (300 ms)
+PASS Non-lab syntax (290 ms)
+PASS Diff hygiene (279 ms)
+PASS Learning unit tests (35930 ms)
+PASS Targeted build drift (273 ms)
+PASS Physics shell style drift (228 ms)
+PASS Physics pillar style drift (267 ms)
+FAIL Library source drift (418 ms)
+Library build drift: learn.html, labs.html, reason.html, solve.html, app.html
+FAIL Shared launch background drift (275 ms)
+Background drift: app.html, learn.html, lessons.html, reason.html, labs.html, solve.html, explore.html, me.html, about.html
+FAIL Visual preview source drift (335 ms)
+Visual preview source drift: app.html, learn.html, lessons.html, reason.html, labs.html, solve.html, explore.html, me.html, about.html
+PASS Protein Atlas source drift (259 ms)
+10/14 groups passed in 36092 ms.

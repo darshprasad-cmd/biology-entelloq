@@ -16,13 +16,20 @@ const report={cases:[],limitations:'Chromium emulation and original schematic/co
 let server,browser;
 async function open(page,base,action='Skip for now'){
  await page.goto(base.replace(/#.*$/,'')+route,{waitUntil:'domcontentloaded',timeout:90000});
- await page.getByRole('heading',{name:'Let’s make this workspace yours.'}).waitFor();
- assert.equal(await page.locator('.pollen-bench').count(),0,'questionnaire must precede the new bench');
- assert.equal(await page.locator('input[name=classYear]:checked').inputValue(),'12');
- await page.getByRole('button',{name:action,exact:true}).click();
+ await page.waitForFunction(()=>!!window.BioCBSE);
+ const experimentFirst=await page.evaluate(()=>!!window.EntelloqScience?.enabled?.());
+ if(experimentFirst){
+  assert.equal(await page.getByRole('heading',{name:'Let’s make this workspace yours.'}).count(),0,'guest deep links reach the practical without compulsory preferences');
+ }else{
+  await page.getByRole('heading',{name:'Let’s make this workspace yours.'}).waitFor();
+  assert.equal(await page.locator('.pollen-bench').count(),0,'legacy questionnaire precedes the new bench');
+  assert.equal(await page.locator('input[name=classYear]:checked').inputValue(),'12');
+  await page.getByRole('button',{name:action,exact:true}).click();
+ }
  await page.locator('.pollen-bench').waitFor();assert.equal(new URL(page.url()).hash,route);
  await page.getByRole('button',{name:'Interactive pollen bench',exact:true}).click();
  assert.equal(await page.evaluate(()=>document.activeElement.id),'cbsep-pollen-bench');
+ return experimentFirst;
 }
 async function count(page,n){assert.equal(Number((await page.locator('[data-pollen-count]').innerText()).match(/\d+/)?.[0]),n);}
 async function select(page,id,value){await page.locator('#pollen-'+id).selectOption(String(value));}
@@ -70,7 +77,7 @@ async function responsiveCase(base,width){
  const context=await contextFor(base,{viewport:{width,height:900}}),page=await context.newPage(),errors=[],requests=[];
  page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(!/^(blob:|data:)/.test(r.url()))requests.push(r.url());});
  try{
-  await open(page,base,width===1440?'Build my study space':'Skip for now');await layout(page,width);
+  const experimentFirst=await open(page,base,width===1440?'Build my study space':'Skip for now');await layout(page,width);
   await page.screenshot({path:path.join(out,'setup-'+width+'.png')});await accessibility(page,width,'setup');
   await page.evaluate(()=>{localStorage.setItem('bioq.notes','existing lesson');localStorage.setItem('bioq.cbse.microscopy.v1','preserve microscope');localStorage.setItem('bioq.cbse.potato-osmosis.v1','preserve potato');});
   const note='Original pollen preparation notes remain independent of the simulated count notebook.';
@@ -120,7 +127,7 @@ async function responsiveCase(base,width){
   await page.getByRole('button',{name:'Interactive pollen bench',exact:true}).click();await page.keyboard.press('Tab');assert.equal(await page.evaluate(()=>Boolean(document.activeElement.closest('.pollen-bench'))),true);
   await page.keyboard.press('Escape');await page.getByRole('heading',{name:'Class 12 · Biology',exact:true}).waitFor();assert.equal(await page.evaluate(()=>document.activeElement.tagName),'H1');
   assert.equal(await page.evaluate(()=>window.__cameraCalls),0);assert.deepEqual(errors,[]);
-  report.cases.push({width,firstScreen:true,questionnaireAction:width===1440?'complete':'skip',deepLinkPreserved:true,independentRenderedGeometry:true,equivalentDimensionsTable:true,inspectorEqualLengthBoundary:true,totalIncludesRecognizableRupturedGrains:true,results,incorrectCountsAndPercentageRejected:true,preparationFaults:true,dedup:true,rawCountPoolingByTime:true,retrievalAndApplicationFeedback:true,csvExact:true,reload:true,notesPreserved:true,resetPreservesNotebook:true,keyboardAndEscapeFocus:true,noBenchNetworkRequests:true,cameraCalls:0});
+  report.cases.push({width,firstScreen:true,experimentFirst,questionnaireAction:experimentFirst?'not required':width===1440?'complete':'skip',deepLinkPreserved:true,independentRenderedGeometry:true,equivalentDimensionsTable:true,inspectorEqualLengthBoundary:true,totalIncludesRecognizableRupturedGrains:true,results,incorrectCountsAndPercentageRejected:true,preparationFaults:true,dedup:true,rawCountPoolingByTime:true,retrievalAndApplicationFeedback:true,csvExact:true,reload:true,notesPreserved:true,resetPreservesNotebook:true,keyboardAndEscapeFocus:true,noBenchNetworkRequests:true,cameraCalls:0});
  }finally{await context.close();}
 }
 async function persistenceCases(base){

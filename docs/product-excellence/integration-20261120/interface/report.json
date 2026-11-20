@@ -1,0 +1,995 @@
+{
+  "mode": "local distributable",
+  "startedAt": "2026-11-20T08:23:19.048Z",
+  "complete": true,
+  "runs": [
+    {
+      "width": 1440,
+      "height": 1000,
+      "complete": true,
+      "checks": [
+        "Search: accessible touch target, typing/empty recovery, focus trap/shortcuts and preserved route/storage",
+        "Labs: submit/filter/recovery, focus-safe return, real route shim and preserved notebook marker",
+        "Me: eight readable topic cards, contained status and original desktop layout"
+      ],
+      "errors": [],
+      "cameraRequests": 0,
+      "requests": [
+        {
+          "url": "http://127.0.0.1:59778/",
+          "action": "actual network document"
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "blocked",
+          "optional": true
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "blocked",
+          "optional": true
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "blocked",
+          "optional": true
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "blocked",
+          "optional": true
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "blocked",
+          "optional": true
+        }
+      ],
+      "unexpectedRequests": [],
+      "document": {
+        "status": 200,
+        "url": "http://127.0.0.1:59778/",
+        "loadMs": 313
+      },
+      "search": {
+        "dimensions": {
+          "width": 190,
+          "height": 44,
+          "x": 1202.484375,
+          "right": 1392.484375,
+          "y": 9.5,
+          "bottom": 53.5,
+          "viewport": 1440,
+          "bar": {
+            "y": 0,
+            "bottom": 64
+          },
+          "explore": {
+            "x": 1117.453125,
+            "right": 1184.484375
+          }
+        },
+        "checks": "Visible44px search; accessible close; escaped empty recovery; native input and arrows; forward/reverse focus trap; Escape/Ctrl K; exact trigger and unchanged route/history/notebook."
+      },
+      "catalogue": "Native/explicit submit; persistent result nodes; focus-safe filters; complete empty reset; card return/fallback; invalid-route recovery; route/storage preservation; visible touch target; no horizontal overflow.",
+      "labsLayout": [
+        {
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "name": "section",
+          "width": 1228,
+          "scroll": 1228
+        }
+      ],
+      "progress": {
+        "width": 1440,
+        "theme": "dark",
+        "viewport": 1228,
+        "geometry": [
+          {
+            "title": "Cell Biology",
+            "display": "flex",
+            "topic": {
+              "x": 88.109375,
+              "right": 582,
+              "width": 493.890625
+            },
+            "meta": {
+              "x": 146.109375,
+              "right": 447.515625,
+              "y": 1487.546875,
+              "bottom": 1538.6875,
+              "width": 301.40625,
+              "scroll": 301,
+              "client": 301
+            },
+            "status": {
+              "x": 465.515625,
+              "right": 582,
+              "y": 1499.859375,
+              "bottom": 1526.359375,
+              "width": 116.484375,
+              "scroll": 114,
+              "client": 114
+            }
+          },
+          {
+            "title": "Genetics & DNA",
+            "display": "flex",
+            "topic": {
+              "x": 646,
+              "right": 1139.890625,
+              "width": 493.890625
+            },
+            "meta": {
+              "x": 704,
+              "right": 1005.40625,
+              "y": 1487.546875,
+              "bottom": 1538.6875,
+              "width": 301.40625,
+              "scroll": 301,
+              "client": 301
+            },
+            "status": {
+              "x": 1023.40625,
+              "right": 1139.890625,
+              "y": 1499.859375,
+              "bottom": 1526.359375,
+              "width": 116.484375,
+              "scroll": 114,
+              "client": 114
+            }
+          },
+          {
+            "title": "Evolution",
+            "display": "flex",
+            "topic": {
+              "x": 88.109375,
+              "right": 582,
+              "width": 493.890625
+            },
+            "meta": {
+              "x": 146.109375,
+              "right": 447.515625,
+              "y": 1602.6875,
+              "bottom": 1653.828125,
+              "width": 301.40625,
+              "scroll": 301,
+              "client": 301
+            },
+            "status": {
+              "x": 465.515625,
+              "right": 582,
+              "y": 1615,
+              "bottom": 1641.5,
+              "width": 116.484375,
+              "scroll": 114,
+              "client": 114
+            }
+          },
+          {
+            "title": "Human Physiology",
+            "display": "flex",
+            "topic": {
+              "x": 646,
+              "right": 1139.890625,
+              "width": 493.890625
+            },
+            "meta": {
+              "x": 704,
+              "right": 1005.40625,
+              "y": 1602.6875,
+              "bottom": 1653.828125,
+              "width": 301.40625,
+              "scroll": 301,
+              "client": 301
+            },
+            "status": {
+              "x": 1023.40625,
+              "right": 1139.890625,
+              "y": 1615,
+              "bottom": 1641.5,
+              "width": 116.484375,
+              "scroll": 114,
+              "client": 114
+            }
+          },
+          {
+            "title": "Ecology",
+            "display": "flex",
+            "topic": {
+              "x": 88.109375,
+              "right": 582,
+              "width": 493.890625
+            },
+            "meta": {
+              "x": 146.109375,
+              "right": 447.515625,
+              "y": 1717.828125,
+              "bottom": 1768.96875,
+              "width": 301.40625,
+              "scroll": 301,
+              "client": 301
+            },
+            "status": {
+              "x": 465.515625,
+              "right": 582,
+              "y": 1730.140625,
+              "bottom": 1756.640625,
+              "width": 116.484375,
+              "scroll": 114,
+              "client": 114
+            }
+          },
+          {
+            "title": "Molecular Biology",
+            "display": "flex",
+            "topic": {
+              "x": 646,
+              "right": 1139.890625,
+              "width": 493.890625
+            },
+            "meta": {
+              "x": 704,
+              "right": 1005.40625,
+              "y": 1717.828125,
+              "bottom": 1768.96875,
+              "width": 301.40625,
+              "scroll": 301,
+              "client": 301
+            },
+            "status": {
+              "x": 1023.40625,
+              "right": 1139.890625,
+              "y": 1730.140625,
+              "bottom": 1756.640625,
+              "width": 116.484375,
+              "scroll": 114,
+              "client": 114
+            }
+          },
+          {
+            "title": "Neuroscience",
+            "display": "flex",
+            "topic": {
+              "x": 88.109375,
+              "right": 582,
+              "width": 493.890625
+            },
+            "meta": {
+              "x": 146.109375,
+              "right": 447.515625,
+              "y": 1832.96875,
+              "bottom": 1884.109375,
+              "width": 301.40625,
+              "scroll": 301,
+              "client": 301
+            },
+            "status": {
+              "x": 465.515625,
+              "right": 582,
+              "y": 1845.28125,
+              "bottom": 1871.78125,
+              "width": 116.484375,
+              "scroll": 114,
+              "client": 114
+            }
+          },
+          {
+            "title": "Microbiology",
+            "display": "flex",
+            "topic": {
+              "x": 646,
+              "right": 1139.890625,
+              "width": 493.890625
+            },
+            "meta": {
+              "x": 704,
+              "right": 1005.40625,
+              "y": 1832.96875,
+              "bottom": 1884.109375,
+              "width": 301.40625,
+              "scroll": 301,
+              "client": 301
+            },
+            "status": {
+              "x": 1023.40625,
+              "right": 1139.890625,
+              "y": 1845.28125,
+              "bottom": 1871.78125,
+              "width": 116.484375,
+              "scroll": 114,
+              "client": 114
+            }
+          }
+        ]
+      },
+      "meLayout": [
+        {
+          "name": "wrapper",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "name": "shell",
+          "width": 1440,
+          "scroll": 1440
+        },
+        {
+          "name": "section",
+          "width": 1228,
+          "scroll": 1228
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "complete": true,
+      "checks": [
+        "Search: accessible touch target, typing/empty recovery, focus trap/shortcuts and preserved route/storage",
+        "Labs: submit/filter/recovery, focus-safe return, real route shim and preserved notebook marker",
+        "Me: eight readable topic cards, contained status and original desktop layout"
+      ],
+      "errors": [],
+      "cameraRequests": 0,
+      "requests": [
+        {
+          "url": "http://127.0.0.1:59778/",
+          "action": "actual network document"
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "blocked",
+          "optional": true
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "blocked",
+          "optional": true
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "blocked",
+          "optional": true
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "blocked",
+          "optional": true
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "blocked",
+          "optional": true
+        }
+      ],
+      "unexpectedRequests": [],
+      "document": {
+        "status": 200,
+        "url": "http://127.0.0.1:59778/",
+        "loadMs": 303
+      },
+      "search": {
+        "dimensions": {
+          "width": 44,
+          "height": 44,
+          "x": 326,
+          "right": 370,
+          "y": 6.5,
+          "bottom": 50.5,
+          "viewport": 390,
+          "bar": {
+            "y": 0,
+            "bottom": 58
+          },
+          "explore": {
+            "x": 254.21875,
+            "right": 318
+          }
+        },
+        "checks": "Visible44px search; accessible close; escaped empty recovery; native input and arrows; forward/reverse focus trap; Escape/Ctrl K; exact trigger and unchanged route/history/notebook."
+      },
+      "catalogue": "Native/explicit submit; persistent result nodes; focus-safe filters; complete empty reset; card return/fallback; invalid-route recovery; route/storage preservation; visible touch target; no horizontal overflow.",
+      "labsLayout": [
+        {
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "name": "section",
+          "width": 390,
+          "scroll": 390
+        }
+      ],
+      "progress": {
+        "width": 390,
+        "theme": "dark",
+        "viewport": 390,
+        "geometry": [
+          {
+            "title": "Cell Biology",
+            "display": "grid",
+            "topic": {
+              "x": 45,
+              "right": 345,
+              "width": 300
+            },
+            "meta": {
+              "x": 103,
+              "right": 345,
+              "y": 1623.640625,
+              "bottom": 1674.78125,
+              "width": 242,
+              "scroll": 242,
+              "client": 242
+            },
+            "status": {
+              "x": 103,
+              "right": 219.484375,
+              "y": 1686.78125,
+              "bottom": 1713.28125,
+              "width": 116.484375,
+              "scroll": 114,
+              "client": 114
+            }
+          },
+          {
+            "title": "Genetics & DNA",
+            "display": "grid",
+            "topic": {
+              "x": 45,
+              "right": 345,
+              "width": 300
+            },
+            "meta": {
+              "x": 103,
+              "right": 345,
+              "y": 1773.28125,
+              "bottom": 1824.421875,
+              "width": 242,
+              "scroll": 242,
+              "client": 242
+            },
+            "status": {
+              "x": 103,
+              "right": 219.484375,
+              "y": 1836.421875,
+              "bottom": 1862.921875,
+              "width": 116.484375,
+              "scroll": 114,
+              "client": 114
+            }
+          },
+          {
+            "title": "Evolution",
+            "display": "grid",
+            "topic": {
+              "x": 45,
+              "right": 345,
+              "width": 300
+            },
+            "meta": {
+              "x": 103,
+              "right": 345,
+              "y": 1922.921875,
+              "bottom": 1974.0625,
+              "width": 242,
+              "scroll": 242,
+              "client": 242
+            },
+            "status": {
+              "x": 103,
+              "right": 219.484375,
+              "y": 1986.0625,
+              "bottom": 2012.5625,
+              "width": 116.484375,
+              "scroll": 114,
+              "client": 114
+            }
+          },
+          {
+            "title": "Human Physiology",
+            "display": "grid",
+            "topic": {
+              "x": 45,
+              "right": 345,
+              "width": 300
+            },
+            "meta": {
+              "x": 103,
+              "right": 345,
+              "y": 2072.5625,
+              "bottom": 2123.703125,
+              "width": 242,
+              "scroll": 242,
+              "client": 242
+            },
+            "status": {
+              "x": 103,
+              "right": 219.484375,
+              "y": 2135.703125,
+              "bottom": 2162.203125,
+              "width": 116.484375,
+              "scroll": 114,
+              "client": 114
+            }
+          },
+          {
+            "title": "Ecology",
+            "display": "grid",
+            "topic": {
+              "x": 45,
+              "right": 345,
+              "width": 300
+            },
+            "meta": {
+              "x": 103,
+              "right": 345,
+              "y": 2222.203125,
+              "bottom": 2273.34375,
+              "width": 242,
+              "scroll": 242,
+              "client": 242
+            },
+            "status": {
+              "x": 103,
+              "right": 219.484375,
+              "y": 2285.34375,
+              "bottom": 2311.84375,
+              "width": 116.484375,
+              "scroll": 114,
+              "client": 114
+            }
+          },
+          {
+            "title": "Molecular Biology",
+            "display": "grid",
+            "topic": {
+              "x": 45,
+              "right": 345,
+              "width": 300
+            },
+            "meta": {
+              "x": 103,
+              "right": 345,
+              "y": 2371.84375,
+              "bottom": 2422.984375,
+              "width": 242,
+              "scroll": 242,
+              "client": 242
+            },
+            "status": {
+              "x": 103,
+              "right": 219.484375,
+              "y": 2434.984375,
+              "bottom": 2461.484375,
+              "width": 116.484375,
+              "scroll": 114,
+              "client": 114
+            }
+          },
+          {
+            "title": "Neuroscience",
+            "display": "grid",
+            "topic": {
+              "x": 45,
+              "right": 345,
+              "width": 300
+            },
+            "meta": {
+              "x": 103,
+              "right": 345,
+              "y": 2521.484375,
+              "bottom": 2572.625,
+              "width": 242,
+              "scroll": 242,
+              "client": 242
+            },
+            "status": {
+              "x": 103,
+              "right": 219.484375,
+              "y": 2584.625,
+              "bottom": 2611.125,
+              "width": 116.484375,
+              "scroll": 114,
+              "client": 114
+            }
+          },
+          {
+            "title": "Microbiology",
+            "display": "grid",
+            "topic": {
+              "x": 45,
+              "right": 345,
+              "width": 300
+            },
+            "meta": {
+              "x": 103,
+              "right": 345,
+              "y": 2671.125,
+              "bottom": 2722.265625,
+              "width": 242,
+              "scroll": 242,
+              "client": 242
+            },
+            "status": {
+              "x": 103,
+              "right": 219.484375,
+              "y": 2734.265625,
+              "bottom": 2760.765625,
+              "width": 116.484375,
+              "scroll": 114,
+              "client": 114
+            }
+          }
+        ]
+      },
+      "meLayout": [
+        {
+          "name": "wrapper",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "name": "shell",
+          "width": 390,
+          "scroll": 390
+        },
+        {
+          "name": "section",
+          "width": 390,
+          "scroll": 390
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 844,
+      "complete": true,
+      "checks": [
+        "Search: accessible touch target, typing/empty recovery, focus trap/shortcuts and preserved route/storage",
+        "Labs: submit/filter/recovery, focus-safe return, real route shim and preserved notebook marker",
+        "Me: eight readable topic cards, contained status and original desktop layout"
+      ],
+      "errors": [],
+      "cameraRequests": 0,
+      "requests": [
+        {
+          "url": "http://127.0.0.1:59778/",
+          "action": "actual network document"
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;800&family=Space+Grotesk:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "blocked",
+          "optional": true
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "blocked",
+          "optional": true
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "blocked",
+          "optional": true
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap",
+          "action": "blocked",
+          "optional": true
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap",
+          "action": "blocked",
+          "optional": true
+        }
+      ],
+      "unexpectedRequests": [],
+      "document": {
+        "status": 200,
+        "url": "http://127.0.0.1:59778/",
+        "loadMs": 310
+      },
+      "search": {
+        "dimensions": {
+          "width": 44,
+          "height": 44,
+          "x": 256,
+          "right": 300,
+          "y": 6.5,
+          "bottom": 50.5,
+          "viewport": 320,
+          "bar": {
+            "y": 0,
+            "bottom": 58
+          },
+          "explore": {
+            "x": 184.21875,
+            "right": 248
+          }
+        },
+        "checks": "Visible44px search; accessible close; escaped empty recovery; native input and arrows; forward/reverse focus trap; Escape/Ctrl K; exact trigger and unchanged route/history/notebook."
+      },
+      "catalogue": "Native/explicit submit; persistent result nodes; focus-safe filters; complete empty reset; card return/fallback; invalid-route recovery; route/storage preservation; visible touch target; no horizontal overflow.",
+      "labsLayout": [
+        {
+          "name": "wrapper",
+          "width": 320,
+          "scroll": 320
+        },
+        {
+          "name": "shell",
+          "width": 320,
+          "scroll": 320
+        },
+        {
+          "name": "section",
+          "width": 320,
+          "scroll": 320
+        }
+      ],
+      "progress": {
+        "width": 320,
+        "theme": "dark",
+        "viewport": 320,
+        "geometry": [
+          {
+            "title": "Cell Biology",
+            "display": "grid",
+            "topic": {
+              "x": 45,
+              "right": 275,
+              "width": 230
+            },
+            "meta": {
+              "x": 103,
+              "right": 275,
+              "y": 1809.78125,
+              "bottom": 1887.3125,
+              "width": 172,
+              "scroll": 172,
+              "client": 172
+            },
+            "status": {
+              "x": 103,
+              "right": 219.484375,
+              "y": 1899.3125,
+              "bottom": 1925.8125,
+              "width": 116.484375,
+              "scroll": 114,
+              "client": 114
+            }
+          },
+          {
+            "title": "Genetics & DNA",
+            "display": "grid",
+            "topic": {
+              "x": 45,
+              "right": 275,
+              "width": 230
+            },
+            "meta": {
+              "x": 103,
+              "right": 275,
+              "y": 1985.8125,
+              "bottom": 2063.34375,
+              "width": 172,
+              "scroll": 172,
+              "client": 172
+            },
+            "status": {
+              "x": 103,
+              "right": 219.484375,
+              "y": 2075.34375,
+              "bottom": 2101.84375,
+              "width": 116.484375,
+              "scroll": 114,
+              "client": 114
+            }
+          },
+          {
+            "title": "Evolution",
+            "display": "grid",
+            "topic": {
+              "x": 45,
+              "right": 275,
+              "width": 230
+            },
+            "meta": {
+              "x": 103,
+              "right": 275,
+              "y": 2161.84375,
+              "bottom": 2239.375,
+              "width": 172,
+              "scroll": 172,
+              "client": 172
+            },
+            "status": {
+              "x": 103,
+              "right": 219.484375,
+              "y": 2251.375,
+              "bottom": 2277.875,
+              "width": 116.484375,
+              "scroll": 114,
+              "client": 114
+            }
+          },
+          {
+            "title": "Human Physiology",
+            "display": "grid",
+            "topic": {
+              "x": 45,
+              "right": 275,
+              "width": 230
+            },
+            "meta": {
+              "x": 103,
+              "right": 275,
+              "y": 2337.875,
+              "bottom": 2389.015625,
+              "width": 172,
+              "scroll": 172,
+              "client": 172
+            },
+            "status": {
+              "x": 103,
+              "right": 219.484375,
+              "y": 2401.015625,
+              "bottom": 2427.515625,
+              "width": 116.484375,
+              "scroll": 114,
+              "client": 114
+            }
+          },
+          {
+            "title": "Ecology",
+            "display": "grid",
+            "topic": {
+              "x": 45,
+              "right": 275,
+              "width": 230
+            },
+            "meta": {
+              "x": 103,
+              "right": 275,
+              "y": 2487.515625,
+              "bottom": 2538.65625,
+              "width": 172,
+              "scroll": 172,
+              "client": 172
+            },
+            "status": {
+              "x": 103,
+              "right": 219.484375,
+              "y": 2550.65625,
+              "bottom": 2577.15625,
+              "width": 116.484375,
+              "scroll": 114,
+              "client": 114
+            }
+          },
+          {
+            "title": "Molecular Biology",
+            "display": "grid",
+            "topic": {
+              "x": 45,
+              "right": 275,
+              "width": 230
+            },
+            "meta": {
+              "x": 103,
+              "right": 275,
+              "y": 2637.15625,
+              "bottom": 2688.296875,
+              "width": 172,
+              "scroll": 172,
+              "client": 172
+            },
+            "status": {
+              "x": 103,
+              "right": 219.484375,
+              "y": 2700.296875,
+              "bottom": 2726.796875,
+              "width": 116.484375,
+              "scroll": 114,
+              "client": 114
+            }
+          },
+          {
+            "title": "Neuroscience",
+            "display": "grid",
+            "topic": {
+              "x": 45,
+              "right": 275,
+              "width": 230
+            },
+            "meta": {
+              "x": 103,
+              "right": 275,
+              "y": 2786.796875,
+              "bottom": 2837.9375,
+              "width": 172,
+              "scroll": 172,
+              "client": 172
+            },
+            "status": {
+              "x": 103,
+              "right": 219.484375,
+              "y": 2849.9375,
+              "bottom": 2876.4375,
+              "width": 116.484375,
+              "scroll": 114,
+              "client": 114
+            }
+          },
+          {
+            "title": "Microbiology",
+            "display": "grid",
+            "topic": {
+              "x": 45,
+              "right": 275,
+              "width": 230
+            },
+            "meta": {
+              "x": 103,
+              "right": 275,
+              "y": 2936.4375,
+              "bottom": 2987.578125,
+              "width": 172,
+              "scroll": 172,
+              "client": 172
+            },
+            "status": {
+              "x": 103,
+              "right": 219.484375,
+              "y": 2999.578125,
+              "bottom": 3026.078125,
+              "width": 116.484375,
+              "scroll": 114,
+              "client": 114
+            }
+          }
+        ]
+      },
+      "meLayout": [
+        {
+          "name": "wrapper",
+          "width": 320,
+          "scroll": 320
+        },
+        {
+          "name": "shell",
+          "width": 320,
+          "scroll": 320
+        },
+        {
+          "name": "section",
+          "width": 320,
+          "scroll": 320
+        }
+      ]
+    }
+  ],
+  "limitations": "Isolated desktop Chromium at CSS widths1440/390/320 with reduced motion. Optional services blocked; no camera, accounts, AI requests, physical touch devices or scientific-model validation.",
+  "localArtifact": {
+    "bytes": 44988000,
+    "sha256": "e8bf0a8e9da95eaef7459de726f544daa26a41d1a938319d19b096a9a72e644e"
+  },
+  "url": "http://127.0.0.1:59778/",
+  "completedAt": "2026-11-20T08:23:27.873Z"
+}

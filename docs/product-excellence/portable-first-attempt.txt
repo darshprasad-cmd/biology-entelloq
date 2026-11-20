@@ -1,0 +1,102 @@
+{
+  "complete": true,
+  "portable": true,
+  "checks": [
+    {
+      "width": 1440,
+      "firstMeaningfulInteractionMs": 4100
+    },
+    {
+      "width": 1440,
+      "passed": [
+        "guest launch",
+        "manipulate",
+        "record",
+        "save",
+        "reset",
+        "resume",
+        "reload",
+        "CSV download",
+        "natural query",
+        "keyboard search",
+        "classroom assignment export",
+        "submission import",
+        "teacher review",
+        "mobile width"
+      ]
+    },
+    {
+      "width": 768,
+      "firstMeaningfulInteractionMs": 2364
+    },
+    {
+      "width": 768,
+      "passed": [
+        "guest launch",
+        "manipulate",
+        "record",
+        "save",
+        "reset",
+        "resume",
+        "reload",
+        "CSV download",
+        "natural query",
+        "keyboard search",
+        "classroom assignment export",
+        "submission import",
+        "teacher review",
+        "mobile width"
+      ]
+    },
+    {
+      "width": 390,
+      "firstMeaningfulInteractionMs": 2201
+    },
+    {
+      "width": 390,
+      "passed": [
+        "guest launch",
+        "manipulate",
+        "record",
+        "save",
+        "reset",
+        "resume",
+        "reload",
+        "CSV download",
+        "natural query",
+        "keyboard search",
+        "classroom assignment export",
+        "submission import",
+        "teacher review",
+        "mobile width"
+      ]
+    },
+    {
+      "width": 320,
+      "firstMeaningfulInteractionMs": 2468
+    },
+    {
+      "width": 320,
+      "passed": [
+        "guest launch",
+        "manipulate",
+        "record",
+        "save",
+        "reset",
+        "resume",
+        "reload",
+        "CSV download",
+        "natural query",
+        "keyboard search",
+        "classroom assignment export",
+        "submission import",
+        "teacher review",
+        "mobile width"
+      ]
+    },
+    "Blocked persistent storage never reports saved.",
+    "Feature flag off retains original entry and navigation."
+  ],
+  "errors": [],
+  "cameraRequests": 0
+}

@@ -1,0 +1,4 @@
+sample,solvent_front_mm,band,band_distance_mm,rf,provenance
+leaf-a,40,B1,10,0.25,synthetic_chromatogram
+leaf-a,60,B1,15,0.25,synthetic_chromatogram
+leaf-a,80,B1,20,0.25,synthetic_chromatogram

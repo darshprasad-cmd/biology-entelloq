@@ -38,9 +38,10 @@ const LABS = (function () {
     document.getElementById('lab-filters').addEventListener('submit', event => { event.preventDefault(); focusResults(); });
     function paint() {
       const query=filters.query.trim().toLowerCase();
+      const matches=window.EntelloqScience?.enabled()?new Set(window.EntelloqScience.search(all.map(l=>({...l,description:l.blurb,tags:[...(l.aliases||[]),...(l.relatedTopics||[])]})),query,100).map(l=>l.id)):null;
       const shown=all.filter(l=>{
         const searchable=[l.title,l.blurb,l.category,l.tag,...(l.aliases||[]),...(l.relatedTopics||[])].join(' ').toLowerCase();
-        return (!query || query.split(/\s+/).every(w=>searchable.includes(w))) && (!filters.category || (l.category||l.tag)===filters.category) && (!filters.difficulty || l.difficulty===filters.difficulty) && (!filters.duration || (l.minutes||15)<=Number(filters.duration)) && (!filters.type || (l.type||'simulation')===filters.type);
+        return (matches?matches.has(l.id):(!query || query.split(/\s+/).every(w=>searchable.includes(w)))) && (!filters.category || (l.category||l.tag)===filters.category) && (!filters.difficulty || l.difficulty===filters.difficulty) && (!filters.duration || (l.minutes||15)<=Number(filters.duration)) && (!filters.type || (l.type||'simulation')===filters.type);
       });
       const context = [filters.category, filters.difficulty, filters.duration ? 'up to '+filters.duration+' min' : '', filters.type].filter(Boolean);
       document.getElementById('lab-count').textContent=shown.length+' of '+all.length+' investigations'+(context.length?' · '+context.join(' · '):'');
@@ -60,6 +61,7 @@ const LABS = (function () {
     try {
       live=l.build(host)||{};
       notebook=window.BioNotebook?.mount(l,host,live,document.getElementById('lab-workflow'),document.getElementById('lab-notebook'));
+      window.BioProduct?.mountLab(l,host,live,notebook);
     } catch(e) {
       host.innerHTML='<div class="lb-err">This bench could not start. <button class="bx-btn" id="lab-retry">Try again</button><a href="#">Choose another lab</a></div>';
       document.getElementById('lab-retry').onclick=route;

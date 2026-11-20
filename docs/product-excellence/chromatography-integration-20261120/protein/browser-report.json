@@ -1,0 +1,32 @@
+{
+  "complete": true,
+  "checks": [
+    "no separate local resource needed",
+    "viewer stays lazy on Explore",
+    "actual bundled crambin parsed into 327 atoms",
+    "real WebGL canvas exists",
+    "crambin requires no remote coordinate request",
+    "desktop fits viewport",
+    "shared Biology light theme reaches the loaded viewer",
+    "actual atom representation completes",
+    "actual molecular surface completes",
+    "keyboard reset works",
+    "actual remote streptavidin parses",
+    "actual ligand select/focus completes",
+    "actual remote oxyhaemoglobin parses",
+    "network failure gives recovery and no false loaded state",
+    "offline structure recovers from remote failure",
+    "mobile fits viewport",
+    "existing Learn deep route remains available",
+    "direct Protein Atlas route reloads in Biology shell",
+    "zero uncaught errors or unexpected network"
+  ],
+  "errors": [],
+  "requests": [
+    "https://files.rcsb.org/download/1STP.pdb",
+    "https://files.rcsb.org/download/1HHO.pdb",
+    "https://files.rcsb.org/download/1STP.pdb"
+  ],
+  "artifactSha256": "88e2ad8c082d75176220878e5d0c00ae6d9af85a79da3961c5fa9932a1ea64fe",
+  "rendering": "Chromium SwiftShader; no camera or live AI tested"
+}

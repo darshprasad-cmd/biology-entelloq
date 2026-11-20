@@ -6,9 +6,25 @@ sources, never Downloads; --check reports drift without writing.
 import argparse
 from pathlib import Path
 import re
+import json
 
 ROOT = Path(__file__).resolve().parents[1]
 LIB = ROOT / 'src/library'
+
+
+def product_slot(text):
+    catalog = []
+    for subject in ('biology', 'physics'):
+        file = ROOT / 'assets' / ('entelloq-' + subject + '-catalog.json')
+        if file.exists():
+            payload = json.loads(file.read_text(encoding='utf-8'))
+            catalog.extend(payload if isinstance(payload, list) else payload.get('items', []))
+    body = '<link rel="stylesheet" href="assets/entelloq-science.css">\n'
+    body += '<style>\n' + (ROOT / 'src/product-excellence/biology.css').read_text(encoding='utf-8') + '\n</style>\n'
+    body += '<script src="assets/entelloq-science.js"></script>\n<script src="assets/entelloq-classroom.js"></script>\n'
+    body += '<script id="entelloq-shared-catalog" type="application/json">' + json.dumps(catalog, ensure_ascii=False).replace('<', '\\u003c') + '</script>\n'
+    body += '<script>\n' + (ROOT / 'src/product-excellence/biology.js').read_text(encoding='utf-8') + '\n</script>\n'
+    return slot(text, 'product-excellence', body, '</body>')
 
 
 def source(name):
@@ -38,7 +54,9 @@ def render(page):
     text = before.decode('utf-8').replace('\r\n', '\n')
     if page == 'app':
         text = slot(text, 'app-script', '<script>\n' + source('topics.js') + extensions() + source('visuals.js') + source('app-library.js') + '</script>\n', '</body>')
-        return path, before, text.encode('utf-8')
+        return path, before, product_slot(text).encode('utf-8')
+    if page == 'me':
+        return path, before, product_slot(text).encode('utf-8')
     styles = source('shared.css')
     scripts = source('context.js')
     if page == 'learn':
@@ -72,6 +90,8 @@ def render(page):
         raise ValueError('Unsupported library build target')
     text = slot(text, page + '-style', '<style>\n' + styles + '</style>\n', '</head>')
     text = slot(text, page + '-script', '<script>\n' + scripts + '</script>\n', '</body>')
+    if page == 'labs':
+        text = product_slot(text)
     return path, before, text.encode('utf-8')
 
 
@@ -79,7 +99,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true')
     args = parser.parse_args()
-    results = [render(page) for page in ('learn', 'labs', 'reason', 'solve', 'app')]
+    results = [render(page) for page in ('learn', 'labs', 'reason', 'solve', 'app', 'me')]
     stale = [p.name for p, before, after in results if before != after]
     if args.check and stale:
         parser.exit(1, 'Library build drift: ' + ', '.join(stale) + '\n')

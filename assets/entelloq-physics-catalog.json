@@ -1,0 +1,5770 @@
+[
+  {
+    "id": "physics:sim:superpose",
+    "title": "Quantum Superposition",
+    "subject": "physics",
+    "kind": "Experiment",
+    "description": "A state living in both wells at once — click to force the choice; your own clicks build the Born rule.",
+    "tags": [
+      "simulation",
+      "interactive",
+      "superpose"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:sim:superpose",
+    "route": "#science:sim:superpose",
+    "type": "sim",
+    "target": "superpose",
+    "model": {
+      "classification": "illustrative",
+      "assumptions": [
+        "Educational model; consult the experiment-specific equations and assumptions."
+      ],
+      "limitations": [
+        "Not a physical measurement. This catalog classification is conservative until a per-model numerical review is complete."
+      ]
+    }
+  },
+  {
+    "id": "physics:sim:entangle",
+    "title": "Entanglement · CHSH",
+    "subject": "physics",
+    "kind": "Experiment",
+    "description": "Spin pairs fly apart; correlations pile past the classical bound S = 2 — no local story survives.",
+    "tags": [
+      "simulation",
+      "interactive",
+      "entangle"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:sim:entangle",
+    "route": "#science:sim:entangle",
+    "type": "sim",
+    "target": "entangle",
+    "model": {
+      "classification": "illustrative",
+      "assumptions": [
+        "Educational model; consult the experiment-specific equations and assumptions."
+      ],
+      "limitations": [
+        "Not a physical measurement. This catalog classification is conservative until a per-model numerical review is complete."
+      ]
+    }
+  },
+  {
+    "id": "physics:sim:photonslit",
+    "title": "Single-Photon Double Slit",
+    "subject": "physics",
+    "kind": "Experiment",
+    "description": "One photon at a time; pure chance builds interference — until you watch the slits.",
+    "tags": [
+      "simulation",
+      "interactive",
+      "photonslit"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:sim:photonslit",
+    "route": "#science:sim:photonslit",
+    "type": "sim",
+    "target": "photonslit",
+    "model": {
+      "classification": "illustrative",
+      "assumptions": [
+        "Educational model; consult the experiment-specific equations and assumptions."
+      ],
+      "limitations": [
+        "Not a physical measurement. This catalog classification is conservative until a per-model numerical review is complete."
+      ]
+    }
+  },
+  {
+    "id": "physics:sim:sterngerlach",
+    "title": "Stern–Gerlach Chain",
+    "subject": "physics",
+    "kind": "Experiment",
+    "description": "Measure Z, then X, then Z — and watch the X measurement erase the first answer.",
+    "tags": [
+      "simulation",
+      "interactive",
+      "sterngerlach"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:sim:sterngerlach",
+    "route": "#science:sim:sterngerlach",
+    "type": "sim",
+    "target": "sterngerlach",
+    "model": {
+      "classification": "illustrative",
+      "assumptions": [
+        "Educational model; consult the experiment-specific equations and assumptions."
+      ],
+      "limitations": [
+        "Not a physical measurement. This catalog classification is conservative until a per-model numerical review is complete."
+      ]
+    }
+  },
+  {
+    "id": "physics:sim:orbit3d",
+    "title": "Orbital Mechanics 3D",
+    "subject": "physics",
+    "kind": "Experiment",
+    "description": "A glowing star, a tilted orbit and a planet sweeping past — real-time WebGL.",
+    "tags": [
+      "simulation",
+      "interactive",
+      "orbit3d"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:sim:orbit3d",
+    "route": "#science:sim:orbit3d",
+    "type": "sim",
+    "target": "orbit3d",
+    "model": {
+      "classification": "illustrative",
+      "assumptions": [
+        "Educational model; consult the experiment-specific equations and assumptions."
+      ],
+      "limitations": [
+        "Not a physical measurement. This catalog classification is conservative until a per-model numerical review is complete."
+      ]
+    }
+  },
+  {
+    "id": "physics:sim:fields3d",
+    "title": "EM Field 3D",
+    "subject": "physics",
+    "kind": "Experiment",
+    "description": "Two charges and their living electric field — flowing field lines in real-time WebGL.",
+    "tags": [
+      "simulation",
+      "interactive",
+      "fields3d"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:sim:fields3d",
+    "route": "#science:sim:fields3d",
+    "type": "sim",
+    "target": "fields3d",
+    "model": {
+      "classification": "illustrative",
+      "assumptions": [
+        "Educational model; consult the experiment-specific equations and assumptions."
+      ],
+      "limitations": [
+        "Not a physical measurement. This catalog classification is conservative until a per-model numerical review is complete."
+      ]
+    }
+  },
+  {
+    "id": "physics:sim:orbit",
+    "title": "Orbital Mechanics",
+    "subject": "physics",
+    "kind": "Experiment",
+    "description": "Watch a planet trace an ellipse — fast at perihelion, slow at aphelion.",
+    "tags": [
+      "simulation",
+      "interactive",
+      "orbit"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:sim:orbit",
+    "route": "#science:sim:orbit",
+    "type": "sim",
+    "target": "orbit",
+    "model": {
+      "classification": "illustrative",
+      "assumptions": [
+        "An ellipse is drawn with adjustable eccentricity."
+      ],
+      "limitations": [
+        "This legacy preview advances its angle uniformly; it does not establish Kepler timing or orbital energy conservation. Use the numerical Sandbox for dynamics."
+      ]
+    }
+  },
+  {
+    "id": "physics:sim:blackhole",
+    "title": "Black Hole",
+    "subject": "physics",
+    "kind": "Experiment",
+    "description": "Gravitational lensing, an accretion disk and the photon ring. Drag the mass.",
+    "tags": [
+      "simulation",
+      "interactive",
+      "blackhole"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:sim:blackhole",
+    "route": "#science:sim:blackhole",
+    "type": "sim",
+    "target": "blackhole",
+    "model": {
+      "classification": "illustrative",
+      "assumptions": [
+        "Educational model; consult the experiment-specific equations and assumptions."
+      ],
+      "limitations": [
+        "Not a physical measurement. This catalog classification is conservative until a per-model numerical review is complete."
+      ]
+    }
+  },
+  {
+    "id": "physics:sim:sandbox",
+    "title": "Universe Sandbox",
+    "subject": "physics",
+    "kind": "Experiment",
+    "description": "Slingshot bodies into orbit and watch gravity choreograph the rest.",
+    "tags": [
+      "simulation",
+      "interactive",
+      "sandbox"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:sim:sandbox",
+    "route": "#science:sim:sandbox",
+    "type": "sim",
+    "target": "sandbox",
+    "model": {
+      "classification": "illustrative",
+      "assumptions": [
+        "Educational model; consult the experiment-specific equations and assumptions."
+      ],
+      "limitations": [
+        "Not a physical measurement. This catalog classification is conservative until a per-model numerical review is complete."
+      ]
+    }
+  },
+  {
+    "id": "physics:sim:wave",
+    "title": "Wave Interference",
+    "subject": "physics",
+    "kind": "Experiment",
+    "description": "Two coherent sources — change the frequency and watch the pattern shift.",
+    "tags": [
+      "simulation",
+      "interactive",
+      "wave"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:sim:wave",
+    "route": "#science:sim:wave",
+    "type": "sim",
+    "target": "wave",
+    "model": {
+      "classification": "illustrative",
+      "assumptions": [
+        "Educational model; consult the experiment-specific equations and assumptions."
+      ],
+      "limitations": [
+        "Not a physical measurement. This catalog classification is conservative until a per-model numerical review is complete."
+      ]
+    }
+  },
+  {
+    "id": "physics:sim:fields",
+    "title": "Electric Field Lines",
+    "subject": "physics",
+    "kind": "Experiment",
+    "description": "Drag the charges. Field lines always run from + to −.",
+    "tags": [
+      "simulation",
+      "interactive",
+      "fields"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:sim:fields",
+    "route": "#science:sim:fields",
+    "type": "sim",
+    "target": "fields",
+    "model": {
+      "classification": "illustrative",
+      "assumptions": [
+        "Educational model; consult the experiment-specific equations and assumptions."
+      ],
+      "limitations": [
+        "Not a physical measurement. This catalog classification is conservative until a per-model numerical review is complete."
+      ]
+    }
+  },
+  {
+    "id": "physics:sim:pendulum",
+    "title": "Double Pendulum",
+    "subject": "physics",
+    "kind": "Experiment",
+    "description": "Two near-identical starts diverge into chaos.",
+    "tags": [
+      "simulation",
+      "interactive",
+      "pendulum"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:sim:pendulum",
+    "route": "#science:sim:pendulum",
+    "type": "sim",
+    "target": "pendulum",
+    "model": {
+      "classification": "numerical",
+      "assumptions": [
+        "Coupled planar double pendulum with stated idealized parameters."
+      ],
+      "limitations": [
+        "Chaotic trajectories are sensitive to initial conditions and numerical error."
+      ]
+    }
+  },
+  {
+    "id": "physics:sim:fourier",
+    "title": "Fourier Series",
+    "subject": "physics",
+    "kind": "Experiment",
+    "description": "A square wave built from spinning harmonic circles.",
+    "tags": [
+      "simulation",
+      "interactive",
+      "fourier"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:sim:fourier",
+    "route": "#science:sim:fourier",
+    "type": "sim",
+    "target": "fourier",
+    "model": {
+      "classification": "illustrative",
+      "assumptions": [
+        "Educational model; consult the experiment-specific equations and assumptions."
+      ],
+      "limitations": [
+        "Not a physical measurement. This catalog classification is conservative until a per-model numerical review is complete."
+      ]
+    }
+  },
+  {
+    "id": "physics:sim:projectile",
+    "title": "Projectile Motion",
+    "subject": "physics",
+    "kind": "Experiment",
+    "description": "Launch at any angle and speed — watch the parabola and range.",
+    "tags": [
+      "simulation",
+      "interactive",
+      "projectile"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:sim:projectile",
+    "route": "#science:sim:projectile",
+    "type": "sim",
+    "target": "projectile",
+    "model": {
+      "classification": "illustrative",
+      "assumptions": [
+        "Screen-scaled point projectile with constant downward acceleration; drag and wind omitted."
+      ],
+      "limitations": [
+        "The speed slider and elapsed frames are not SI measurements. Saved controls do not save elapsed time or trajectories."
+      ]
+    }
+  },
+  {
+    "id": "physics:sim:refraction",
+    "title": "Refraction & TIR",
+    "subject": "physics",
+    "kind": "Experiment",
+    "description": "Bend light across a boundary; past the critical angle it reflects totally.",
+    "tags": [
+      "simulation",
+      "interactive",
+      "refraction"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:sim:refraction",
+    "route": "#science:sim:refraction",
+    "type": "sim",
+    "target": "refraction",
+    "model": {
+      "classification": "analytical",
+      "assumptions": [
+        "Snell’s law at a planar boundary from an adjustable refractive index into air (n = 1).",
+        "Homogeneous, isotropic media; ray-optics approximation."
+      ],
+      "limitations": [
+        "Ray lengths are illustrative. Diffraction, wavelength dispersion and Fresnel reflection intensity are omitted."
+      ]
+    }
+  },
+  {
+    "id": "physics:sim:gas",
+    "title": "Kinetic Theory",
+    "subject": "physics",
+    "kind": "Experiment",
+    "description": "Particles in a box. Raise the temperature and watch them race.",
+    "tags": [
+      "simulation",
+      "interactive",
+      "gas"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:sim:gas",
+    "route": "#science:sim:gas",
+    "type": "sim",
+    "target": "gas",
+    "model": {
+      "classification": "illustrative",
+      "assumptions": [
+        "Educational model; consult the experiment-specific equations and assumptions."
+      ],
+      "limitations": [
+        "Not a physical measurement. This catalog classification is conservative until a per-model numerical review is complete."
+      ]
+    }
+  },
+  {
+    "id": "physics:sim:magnetic",
+    "title": "Charge in a Magnetic Field",
+    "subject": "physics",
+    "kind": "Experiment",
+    "description": "A moving charge curves into a circle — r = mv/qB.",
+    "tags": [
+      "simulation",
+      "interactive",
+      "magnetic"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:sim:magnetic",
+    "route": "#science:sim:magnetic",
+    "type": "sim",
+    "target": "magnetic",
+    "model": {
+      "classification": "illustrative",
+      "assumptions": [
+        "Educational model; consult the experiment-specific equations and assumptions."
+      ],
+      "limitations": [
+        "Not a physical measurement. This catalog classification is conservative until a per-model numerical review is complete."
+      ]
+    }
+  },
+  {
+    "id": "physics:sim:spring",
+    "title": "Mass on a Spring",
+    "subject": "physics",
+    "kind": "Experiment",
+    "description": "Simple harmonic motion with live kinetic and potential energy bars.",
+    "tags": [
+      "simulation",
+      "interactive",
+      "spring"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:sim:spring",
+    "route": "#science:sim:spring",
+    "type": "sim",
+    "target": "spring",
+    "model": {
+      "classification": "analytical",
+      "assumptions": [
+        "Linear spring, ideal mass, harmonic motion."
+      ],
+      "limitations": [
+        "No physical apparatus measurement; displayed motion is a model."
+      ]
+    }
+  },
+  {
+    "id": "physics:sim:standing",
+    "title": "Standing Waves",
+    "subject": "physics",
+    "kind": "Experiment",
+    "description": "Nodes, antinodes and harmonics on a vibrating string.",
+    "tags": [
+      "simulation",
+      "interactive",
+      "standing"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:sim:standing",
+    "route": "#science:sim:standing",
+    "type": "sim",
+    "target": "standing",
+    "model": {
+      "classification": "illustrative",
+      "assumptions": [
+        "Educational model; consult the experiment-specific equations and assumptions."
+      ],
+      "limitations": [
+        "Not a physical measurement. This catalog classification is conservative until a per-model numerical review is complete."
+      ]
+    }
+  },
+  {
+    "id": "physics:sim:tunneling",
+    "title": "Quantum Tunneling",
+    "subject": "physics",
+    "kind": "Experiment",
+    "description": "A wave packet hits a wall it cannot classically cross — and part leaks through.",
+    "tags": [
+      "simulation",
+      "interactive",
+      "tunneling"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:sim:tunneling",
+    "route": "#science:sim:tunneling",
+    "type": "sim",
+    "target": "tunneling",
+    "model": {
+      "classification": "illustrative",
+      "assumptions": [
+        "Educational model; consult the experiment-specific equations and assumptions."
+      ],
+      "limitations": [
+        "Not a physical measurement. This catalog classification is conservative until a per-model numerical review is complete."
+      ]
+    }
+  },
+  {
+    "id": "physics:sim:doubleslit",
+    "title": "Double-Slit Experiment",
+    "subject": "physics",
+    "kind": "Experiment",
+    "description": "Fire particles one at a time; an interference pattern builds itself.",
+    "tags": [
+      "simulation",
+      "interactive",
+      "doubleslit"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:sim:doubleslit",
+    "route": "#science:sim:doubleslit",
+    "type": "sim",
+    "target": "doubleslit",
+    "model": {
+      "classification": "illustrative",
+      "assumptions": [
+        "Educational model; consult the experiment-specific equations and assumptions."
+      ],
+      "limitations": [
+        "Not a physical measurement. This catalog classification is conservative until a per-model numerical review is complete."
+      ]
+    }
+  },
+  {
+    "id": "physics:sim:bloch",
+    "title": "Qubit · Bloch Sphere",
+    "subject": "physics",
+    "kind": "Experiment",
+    "description": "A quantum bit as a vector on a sphere. Apply H and X gates.",
+    "tags": [
+      "simulation",
+      "interactive",
+      "bloch"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:sim:bloch",
+    "route": "#science:sim:bloch",
+    "type": "sim",
+    "target": "bloch",
+    "model": {
+      "classification": "illustrative",
+      "assumptions": [
+        "Educational model; consult the experiment-specific equations and assumptions."
+      ],
+      "limitations": [
+        "Not a physical measurement. This catalog classification is conservative until a per-model numerical review is complete."
+      ]
+    }
+  },
+  {
+    "id": "physics:sim:rlc",
+    "title": "RLC Resonance",
+    "subject": "physics",
+    "kind": "Experiment",
+    "description": "Drive a circuit near its natural frequency and watch the amplitude spike.",
+    "tags": [
+      "simulation",
+      "interactive",
+      "rlc"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:sim:rlc",
+    "route": "#science:sim:rlc",
+    "type": "sim",
+    "target": "rlc",
+    "model": {
+      "classification": "illustrative",
+      "assumptions": [
+        "Educational model; consult the experiment-specific equations and assumptions."
+      ],
+      "limitations": [
+        "Not a physical measurement. This catalog classification is conservative until a per-model numerical review is complete."
+      ]
+    }
+  },
+  {
+    "id": "physics:sim:carnot",
+    "title": "Carnot Engine",
+    "subject": "physics",
+    "kind": "Experiment",
+    "description": "The most efficient heat engine — trace its cycle on a P–V diagram.",
+    "tags": [
+      "simulation",
+      "interactive",
+      "carnot"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:sim:carnot",
+    "route": "#science:sim:carnot",
+    "type": "sim",
+    "target": "carnot",
+    "model": {
+      "classification": "illustrative",
+      "assumptions": [
+        "Educational model; consult the experiment-specific equations and assumptions."
+      ],
+      "limitations": [
+        "Not a physical measurement. This catalog classification is conservative until a per-model numerical review is complete."
+      ]
+    }
+  },
+  {
+    "id": "physics:sim:lens",
+    "title": "Lens & Imaging",
+    "subject": "physics",
+    "kind": "Experiment",
+    "description": "Move an object across the focal point: real, inverted, then virtual & magnified.",
+    "tags": [
+      "simulation",
+      "interactive",
+      "lens"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:sim:lens",
+    "route": "#science:sim:lens",
+    "type": "sim",
+    "target": "lens",
+    "model": {
+      "classification": "illustrative",
+      "assumptions": [
+        "Educational model; consult the experiment-specific equations and assumptions."
+      ],
+      "limitations": [
+        "Not a physical measurement. This catalog classification is conservative until a per-model numerical review is complete."
+      ]
+    }
+  },
+  {
+    "id": "physics:lesson:kinematics",
+    "title": "Kinematics (1D & 2D)",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "The description of motion — position, velocity and acceleration — without reference to its cause. The kinematic equations hold for constant acceleration.",
+    "tags": [
+      "mechanics",
+      "concept",
+      "kinematics"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:kinematics",
+    "route": "#science:lesson:kinematics",
+    "type": "lesson",
+    "target": "kinematics"
+  },
+  {
+    "id": "physics:lesson:projectile",
+    "title": "Projectile Motion",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Motion under gravity alone after launch. Horizontal velocity is constant; vertical motion is uniformly accelerated at g.",
+    "tags": [
+      "mechanics",
+      "concept",
+      "projectile"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:projectile",
+    "route": "#science:lesson:projectile",
+    "type": "lesson",
+    "target": "projectile"
+  },
+  {
+    "id": "physics:lesson:newton-laws",
+    "title": "Newton's Laws of Motion",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "The three laws linking force and motion: inertia, F = ma, and action–reaction. The foundation of classical dynamics.",
+    "tags": [
+      "mechanics",
+      "concept",
+      "newton-laws"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:newton-laws",
+    "route": "#science:lesson:newton-laws",
+    "type": "lesson",
+    "target": "newton-laws"
+  },
+  {
+    "id": "physics:lesson:friction",
+    "title": "Friction",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "The contact force opposing relative sliding (kinetic) or the tendency to slide (static). Static friction is self-adjusting up to a maximum.",
+    "tags": [
+      "mechanics",
+      "concept",
+      "friction"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:friction",
+    "route": "#science:lesson:friction",
+    "type": "lesson",
+    "target": "friction"
+  },
+  {
+    "id": "physics:lesson:work-energy",
+    "title": "Work, Energy & Power",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Work transfers energy; the work–energy theorem links net work to change in kinetic energy. Conservative forces define potential energy.",
+    "tags": [
+      "mechanics",
+      "concept",
+      "work-energy"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:work-energy",
+    "route": "#science:lesson:work-energy",
+    "type": "lesson",
+    "target": "work-energy"
+  },
+  {
+    "id": "physics:lesson:momentum",
+    "title": "Momentum & Collisions",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Linear momentum is conserved for an isolated system. Collisions are elastic (KE conserved) or inelastic (KE lost); impulse changes momentum.",
+    "tags": [
+      "mechanics",
+      "concept",
+      "momentum"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:momentum",
+    "route": "#science:lesson:momentum",
+    "type": "lesson",
+    "target": "momentum"
+  },
+  {
+    "id": "physics:lesson:circular-motion",
+    "title": "Uniform Circular Motion",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Motion on a circular path at constant speed requires a centripetal force directed toward the centre, continuously changing the velocity's direction.",
+    "tags": [
+      "mechanics",
+      "concept",
+      "circular-motion"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:circular-motion",
+    "route": "#science:lesson:circular-motion",
+    "type": "lesson",
+    "target": "circular-motion"
+  },
+  {
+    "id": "physics:lesson:gravitation",
+    "title": "Gravitation",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Every mass attracts every other with a force along the line joining them. Governs orbits, tides and the structure of the cosmos.",
+    "tags": [
+      "mechanics",
+      "concept",
+      "gravitation"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:gravitation",
+    "route": "#science:lesson:gravitation",
+    "type": "lesson",
+    "target": "gravitation"
+  },
+  {
+    "id": "physics:lesson:rotational",
+    "title": "Rotational Dynamics",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "The rotational analogue of translation: torque produces angular acceleration through the moment of inertia; angular momentum is conserved without external torque.",
+    "tags": [
+      "mechanics",
+      "concept",
+      "rotational"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:rotational",
+    "route": "#science:lesson:rotational",
+    "type": "lesson",
+    "target": "rotational"
+  },
+  {
+    "id": "physics:lesson:shm",
+    "title": "Simple Harmonic Motion",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Oscillation where restoring force is proportional to displacement and directed toward equilibrium, giving sinusoidal motion with a fixed period.",
+    "tags": [
+      "mechanics",
+      "concept",
+      "shm"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:shm",
+    "route": "#science:lesson:shm",
+    "type": "lesson",
+    "target": "shm"
+  },
+  {
+    "id": "physics:lesson:fluids",
+    "title": "Fluid Mechanics",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Statics and dynamics of fluids: pressure, buoyancy, and the conservation of mass and energy in flow (continuity and Bernoulli).",
+    "tags": [
+      "mechanics",
+      "concept",
+      "fluids"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:fluids",
+    "route": "#science:lesson:fluids",
+    "type": "lesson",
+    "target": "fluids"
+  },
+  {
+    "id": "physics:lesson:elasticity",
+    "title": "Elasticity & Stress",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "How solids deform under load and recover. Within the elastic limit, stress is proportional to strain (Hooke's law for materials).",
+    "tags": [
+      "mechanics",
+      "concept",
+      "elasticity"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:elasticity",
+    "route": "#science:lesson:elasticity",
+    "type": "lesson",
+    "target": "elasticity"
+  },
+  {
+    "id": "physics:lesson:wave-basics",
+    "title": "Wave Motion",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "A wave transfers energy and momentum through a medium (or field) without net transport of matter. Transverse vs longitudinal.",
+    "tags": [
+      "waves",
+      "concept",
+      "wave-basics"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:wave-basics",
+    "route": "#science:lesson:wave-basics",
+    "type": "lesson",
+    "target": "wave-basics"
+  },
+  {
+    "id": "physics:lesson:superposition",
+    "title": "Superposition & Interference",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Overlapping waves add displacement-by-displacement. Coherent sources produce stable constructive and destructive interference patterns.",
+    "tags": [
+      "waves",
+      "concept",
+      "superposition"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:superposition",
+    "route": "#science:lesson:superposition",
+    "type": "lesson",
+    "target": "superposition"
+  },
+  {
+    "id": "physics:lesson:standing-waves",
+    "title": "Standing Waves & Resonance",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Two identical waves travelling in opposite directions form a stationary pattern of nodes and antinodes — the basis of musical instruments.",
+    "tags": [
+      "waves",
+      "concept",
+      "standing-waves"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:standing-waves",
+    "route": "#science:lesson:standing-waves",
+    "type": "lesson",
+    "target": "standing-waves"
+  },
+  {
+    "id": "physics:lesson:doppler",
+    "title": "Doppler Effect",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "The change in observed frequency when source and observer move relative to each other — heard in passing sirens, seen as redshift in galaxies.",
+    "tags": [
+      "waves",
+      "concept",
+      "doppler"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:doppler",
+    "route": "#science:lesson:doppler",
+    "type": "lesson",
+    "target": "doppler"
+  },
+  {
+    "id": "physics:lesson:sound-intensity",
+    "title": "Sound & Intensity Level",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Sound is a longitudinal pressure wave. Loudness is perceived on a logarithmic decibel scale of intensity.",
+    "tags": [
+      "waves",
+      "concept",
+      "sound-intensity"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:sound-intensity",
+    "route": "#science:lesson:sound-intensity",
+    "type": "lesson",
+    "target": "sound-intensity"
+  },
+  {
+    "id": "physics:lesson:beats",
+    "title": "Beats",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Two waves of slightly different frequency superpose to give a slow periodic rise and fall in loudness at the beat frequency.",
+    "tags": [
+      "waves",
+      "concept",
+      "beats"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:beats",
+    "route": "#science:lesson:beats",
+    "type": "lesson",
+    "target": "beats"
+  },
+  {
+    "id": "physics:lesson:temp-heat",
+    "title": "Temperature & Heat",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Temperature measures average molecular kinetic energy; heat is energy transferred due to a temperature difference. The zeroth law defines thermal equilibrium.",
+    "tags": [
+      "thermo",
+      "concept",
+      "temp-heat"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:temp-heat",
+    "route": "#science:lesson:temp-heat",
+    "type": "lesson",
+    "target": "temp-heat"
+  },
+  {
+    "id": "physics:lesson:kinetic-theory",
+    "title": "Kinetic Theory of Gases",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Gases are many tiny particles in random motion; macroscopic pressure and temperature emerge statistically from molecular collisions.",
+    "tags": [
+      "thermo",
+      "concept",
+      "kinetic-theory"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:kinetic-theory",
+    "route": "#science:lesson:kinetic-theory",
+    "type": "lesson",
+    "target": "kinetic-theory"
+  },
+  {
+    "id": "physics:lesson:first-law",
+    "title": "First Law of Thermodynamics",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Energy conservation for thermal systems: heat added to a system goes into internal energy and work done by the system.",
+    "tags": [
+      "thermo",
+      "concept",
+      "first-law"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:first-law",
+    "route": "#science:lesson:first-law",
+    "type": "lesson",
+    "target": "first-law"
+  },
+  {
+    "id": "physics:lesson:second-law",
+    "title": "Second Law & Entropy",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Heat flows spontaneously from hot to cold; total entropy of an isolated system never decreases. Sets the arrow of time and limits engines.",
+    "tags": [
+      "thermo",
+      "concept",
+      "second-law"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:second-law",
+    "route": "#science:lesson:second-law",
+    "type": "lesson",
+    "target": "second-law"
+  },
+  {
+    "id": "physics:lesson:heat-engines",
+    "title": "Heat Engines & Carnot",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "A heat engine converts thermal energy into work by operating between a hot and cold reservoir. The Carnot cycle sets the maximum possible efficiency.",
+    "tags": [
+      "thermo",
+      "concept",
+      "heat-engines"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:heat-engines",
+    "route": "#science:lesson:heat-engines",
+    "type": "lesson",
+    "target": "heat-engines"
+  },
+  {
+    "id": "physics:lesson:thermal-expansion",
+    "title": "Thermal Expansion",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Most materials expand when heated as atoms vibrate with larger amplitude. Quantified by linear, area and volume expansion coefficients.",
+    "tags": [
+      "thermo",
+      "concept",
+      "thermal-expansion"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:thermal-expansion",
+    "route": "#science:lesson:thermal-expansion",
+    "type": "lesson",
+    "target": "thermal-expansion"
+  },
+  {
+    "id": "physics:lesson:heat-transfer",
+    "title": "Heat Transfer",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Three mechanisms move thermal energy: conduction through contact, convection by fluid motion, and radiation by electromagnetic waves.",
+    "tags": [
+      "thermo",
+      "concept",
+      "heat-transfer"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:heat-transfer",
+    "route": "#science:lesson:heat-transfer",
+    "type": "lesson",
+    "target": "heat-transfer"
+  },
+  {
+    "id": "physics:lesson:reflection",
+    "title": "Reflection & Mirrors",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Light bounces off surfaces with the angle of reflection equal to the angle of incidence. Curved mirrors form images governed by the mirror equation.",
+    "tags": [
+      "optics",
+      "concept",
+      "reflection"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:reflection",
+    "route": "#science:lesson:reflection",
+    "type": "lesson",
+    "target": "reflection"
+  },
+  {
+    "id": "physics:lesson:refraction",
+    "title": "Refraction & Snell's Law",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Light bends when changing medium because its speed changes. Snell's law relates the angles to refractive indices.",
+    "tags": [
+      "optics",
+      "concept",
+      "refraction"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:refraction",
+    "route": "#science:lesson:refraction",
+    "type": "lesson",
+    "target": "refraction"
+  },
+  {
+    "id": "physics:lesson:lenses",
+    "title": "Thin Lenses",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Lenses refract light to form images. The lens equation and ray diagrams predict image position, size and nature.",
+    "tags": [
+      "optics",
+      "concept",
+      "lenses"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:lenses",
+    "route": "#science:lesson:lenses",
+    "type": "lesson",
+    "target": "lenses"
+  },
+  {
+    "id": "physics:lesson:interference-optics",
+    "title": "Young's Double Slit",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Two coherent slits create alternating bright and dark fringes — the classic demonstration of the wave nature of light.",
+    "tags": [
+      "optics",
+      "concept",
+      "interference-optics"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:interference-optics",
+    "route": "#science:lesson:interference-optics",
+    "type": "lesson",
+    "target": "interference-optics"
+  },
+  {
+    "id": "physics:lesson:diffraction",
+    "title": "Diffraction",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Waves bend around obstacles and spread through apertures. Diffraction sets the ultimate resolution limit of optical instruments.",
+    "tags": [
+      "optics",
+      "concept",
+      "diffraction"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:diffraction",
+    "route": "#science:lesson:diffraction",
+    "type": "lesson",
+    "target": "diffraction"
+  },
+  {
+    "id": "physics:lesson:polarization",
+    "title": "Polarization",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Light is a transverse wave, so its electric field can be restricted to one plane. Only transverse waves can be polarized.",
+    "tags": [
+      "optics",
+      "concept",
+      "polarization"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:polarization",
+    "route": "#science:lesson:polarization",
+    "type": "lesson",
+    "target": "polarization"
+  },
+  {
+    "id": "physics:lesson:optical-instruments",
+    "title": "Optical Instruments",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Microscopes, telescopes and the eye combine lenses to magnify or resolve. Angular magnification is the key performance measure.",
+    "tags": [
+      "optics",
+      "concept",
+      "optical-instruments"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:optical-instruments",
+    "route": "#science:lesson:optical-instruments",
+    "type": "lesson",
+    "target": "optical-instruments"
+  },
+  {
+    "id": "physics:lesson:charge",
+    "title": "Electric Charge",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Charge is a conserved, quantized property of matter. Like charges repel, unlike attract — the origin of all electrical phenomena.",
+    "tags": [
+      "electrostatics",
+      "concept",
+      "charge"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:charge",
+    "route": "#science:lesson:charge",
+    "type": "lesson",
+    "target": "charge"
+  },
+  {
+    "id": "physics:lesson:coulomb",
+    "title": "Coulomb's Law",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "The electrostatic force between two point charges varies inversely with the square of their separation — analogous in form to gravitation.",
+    "tags": [
+      "electrostatics",
+      "concept",
+      "coulomb"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:coulomb",
+    "route": "#science:lesson:coulomb",
+    "type": "lesson",
+    "target": "coulomb"
+  },
+  {
+    "id": "physics:lesson:e-field",
+    "title": "Electric Field",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "A charge creates a field that exerts force on other charges. Field lines visualize direction and strength.",
+    "tags": [
+      "electrostatics",
+      "concept",
+      "e-field"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:e-field",
+    "route": "#science:lesson:e-field",
+    "type": "lesson",
+    "target": "e-field"
+  },
+  {
+    "id": "physics:lesson:potential",
+    "title": "Electric Potential",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Potential is the electrostatic potential energy per unit charge. Differences in potential drive currents and store energy.",
+    "tags": [
+      "electrostatics",
+      "concept",
+      "potential"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:potential",
+    "route": "#science:lesson:potential",
+    "type": "lesson",
+    "target": "potential"
+  },
+  {
+    "id": "physics:lesson:capacitance",
+    "title": "Capacitance",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "A capacitor stores charge and energy in the electric field between conductors. Central to electronics and energy storage.",
+    "tags": [
+      "electrostatics",
+      "concept",
+      "capacitance"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:capacitance",
+    "route": "#science:lesson:capacitance",
+    "type": "lesson",
+    "target": "capacitance"
+  },
+  {
+    "id": "physics:lesson:gauss",
+    "title": "Gauss's Law",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "The electric flux through a closed surface equals the enclosed charge divided by ε₀ — a powerful shortcut for symmetric charge distributions.",
+    "tags": [
+      "electrostatics",
+      "concept",
+      "gauss"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:gauss",
+    "route": "#science:lesson:gauss",
+    "type": "lesson",
+    "target": "gauss"
+  },
+  {
+    "id": "physics:lesson:dielectrics",
+    "title": "Dielectrics & Polarization",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Insulators polarize in a field, reducing the net field inside and increasing capacitance. Quantified by the dielectric constant.",
+    "tags": [
+      "electrostatics",
+      "concept",
+      "dielectrics"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:dielectrics",
+    "route": "#science:lesson:dielectrics",
+    "type": "lesson",
+    "target": "dielectrics"
+  },
+  {
+    "id": "physics:lesson:ohms-law",
+    "title": "Ohm's Law & Resistance",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "For ohmic conductors, current is proportional to voltage. Resistance opposes flow and depends on material and geometry.",
+    "tags": [
+      "current",
+      "concept",
+      "ohms-law"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:ohms-law",
+    "route": "#science:lesson:ohms-law",
+    "type": "lesson",
+    "target": "ohms-law"
+  },
+  {
+    "id": "physics:lesson:resistor-networks",
+    "title": "Resistor Networks",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Resistors combine in series and parallel; complex circuits reduce step-by-step or yield to Kirchhoff's laws.",
+    "tags": [
+      "current",
+      "concept",
+      "resistor-networks"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:resistor-networks",
+    "route": "#science:lesson:resistor-networks",
+    "type": "lesson",
+    "target": "resistor-networks"
+  },
+  {
+    "id": "physics:lesson:kirchhoff",
+    "title": "Kirchhoff's Laws",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Two rules from conservation of charge and energy that solve any circuit: the junction rule and the loop rule.",
+    "tags": [
+      "current",
+      "concept",
+      "kirchhoff"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:kirchhoff",
+    "route": "#science:lesson:kirchhoff",
+    "type": "lesson",
+    "target": "kirchhoff"
+  },
+  {
+    "id": "physics:lesson:power-electrical",
+    "title": "Electrical Power & Energy",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Electrical energy converts to heat, light or work. Power is the rate of energy transfer in a circuit.",
+    "tags": [
+      "current",
+      "concept",
+      "power-electrical"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:power-electrical",
+    "route": "#science:lesson:power-electrical",
+    "type": "lesson",
+    "target": "power-electrical"
+  },
+  {
+    "id": "physics:lesson:emf-internal",
+    "title": "EMF & Internal Resistance",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "A real cell has internal resistance, so its terminal voltage drops under load below its EMF.",
+    "tags": [
+      "current",
+      "concept",
+      "emf-internal"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:emf-internal",
+    "route": "#science:lesson:emf-internal",
+    "type": "lesson",
+    "target": "emf-internal"
+  },
+  {
+    "id": "physics:lesson:rc-circuits",
+    "title": "RC Circuits",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Charging and discharging a capacitor through a resistor gives exponential time behaviour set by the time constant.",
+    "tags": [
+      "current",
+      "concept",
+      "rc-circuits"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:rc-circuits",
+    "route": "#science:lesson:rc-circuits",
+    "type": "lesson",
+    "target": "rc-circuits"
+  },
+  {
+    "id": "physics:lesson:magnetic-field",
+    "title": "Magnetic Fields & Force",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Moving charges and currents create magnetic fields and feel magnetic forces. The force is perpendicular to both velocity and field.",
+    "tags": [
+      "magnetism",
+      "concept",
+      "magnetic-field"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:magnetic-field",
+    "route": "#science:lesson:magnetic-field",
+    "type": "lesson",
+    "target": "magnetic-field"
+  },
+  {
+    "id": "physics:lesson:biot-savart",
+    "title": "Biot–Savart & Ampère",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Two laws give the magnetic field of currents: Biot–Savart for any element, Ampère's law for symmetric configurations.",
+    "tags": [
+      "magnetism",
+      "concept",
+      "biot-savart"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:biot-savart",
+    "route": "#science:lesson:biot-savart",
+    "type": "lesson",
+    "target": "biot-savart"
+  },
+  {
+    "id": "physics:lesson:em-induction",
+    "title": "Electromagnetic Induction",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "A changing magnetic flux induces an EMF (Faraday); the induced current opposes the change (Lenz) — the principle behind generators.",
+    "tags": [
+      "magnetism",
+      "concept",
+      "em-induction"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:em-induction",
+    "route": "#science:lesson:em-induction",
+    "type": "lesson",
+    "target": "em-induction"
+  },
+  {
+    "id": "physics:lesson:inductance",
+    "title": "Inductance",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "An inductor opposes changes in current by storing energy in its magnetic field; mutual inductance couples two coils.",
+    "tags": [
+      "magnetism",
+      "concept",
+      "inductance"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:inductance",
+    "route": "#science:lesson:inductance",
+    "type": "lesson",
+    "target": "inductance"
+  },
+  {
+    "id": "physics:lesson:ac-circuits",
+    "title": "Alternating Current",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "AC voltage and current vary sinusoidally. Reactance, impedance and resonance govern AC circuit behaviour.",
+    "tags": [
+      "magnetism",
+      "concept",
+      "ac-circuits"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:ac-circuits",
+    "route": "#science:lesson:ac-circuits",
+    "type": "lesson",
+    "target": "ac-circuits"
+  },
+  {
+    "id": "physics:lesson:transformers",
+    "title": "Transformers",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Transformers change AC voltage via mutual induction between coils sharing an iron core, conserving power ideally.",
+    "tags": [
+      "magnetism",
+      "concept",
+      "transformers"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:transformers",
+    "route": "#science:lesson:transformers",
+    "type": "lesson",
+    "target": "transformers"
+  },
+  {
+    "id": "physics:lesson:em-waves",
+    "title": "Electromagnetic Waves",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Oscillating electric and magnetic fields propagate as waves at the speed of light, spanning the EM spectrum from radio to gamma.",
+    "tags": [
+      "magnetism",
+      "concept",
+      "em-waves"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:em-waves",
+    "route": "#science:lesson:em-waves",
+    "type": "lesson",
+    "target": "em-waves"
+  },
+  {
+    "id": "physics:lesson:photoelectric",
+    "title": "Photoelectric Effect",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Light ejects electrons from a metal only above a threshold frequency — evidence that light is quantized into photons.",
+    "tags": [
+      "modern",
+      "concept",
+      "photoelectric"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:photoelectric",
+    "route": "#science:lesson:photoelectric",
+    "type": "lesson",
+    "target": "photoelectric"
+  },
+  {
+    "id": "physics:lesson:bohr-model",
+    "title": "Bohr Model of the Atom",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Electrons orbit the nucleus only in quantized energy levels; jumps between levels emit or absorb photons of definite energy.",
+    "tags": [
+      "modern",
+      "concept",
+      "bohr-model"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:bohr-model",
+    "route": "#science:lesson:bohr-model",
+    "type": "lesson",
+    "target": "bohr-model"
+  },
+  {
+    "id": "physics:lesson:matter-waves",
+    "title": "Matter Waves (de Broglie)",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Every particle has an associated wavelength; matter shows wave behaviour, confirmed by electron diffraction.",
+    "tags": [
+      "modern",
+      "concept",
+      "matter-waves"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:matter-waves",
+    "route": "#science:lesson:matter-waves",
+    "type": "lesson",
+    "target": "matter-waves"
+  },
+  {
+    "id": "physics:lesson:uncertainty",
+    "title": "Heisenberg Uncertainty",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "There is a fundamental limit on simultaneously knowing complementary quantities such as position and momentum.",
+    "tags": [
+      "modern",
+      "concept",
+      "uncertainty"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:uncertainty",
+    "route": "#science:lesson:uncertainty",
+    "type": "lesson",
+    "target": "uncertainty"
+  },
+  {
+    "id": "physics:lesson:atomic-spectra",
+    "title": "Atomic Spectra & X-rays",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Atoms emit and absorb characteristic wavelengths; X-rays arise from inner-shell transitions and rapid electron deceleration.",
+    "tags": [
+      "modern",
+      "concept",
+      "atomic-spectra"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:atomic-spectra",
+    "route": "#science:lesson:atomic-spectra",
+    "type": "lesson",
+    "target": "atomic-spectra"
+  },
+  {
+    "id": "physics:lesson:wavefunction",
+    "title": "Wavefunction & Schrödinger",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "A quantum system is described by a wavefunction whose squared magnitude gives the probability of finding the particle. It evolves via the Schrödinger equation.",
+    "tags": [
+      "quantum",
+      "concept",
+      "wavefunction"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:wavefunction",
+    "route": "#science:lesson:wavefunction",
+    "type": "lesson",
+    "target": "wavefunction"
+  },
+  {
+    "id": "physics:lesson:tunneling",
+    "title": "Quantum Tunnelling",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "A particle can pass through a potential barrier it classically could not surmount — because its wavefunction extends into and beyond the barrier.",
+    "tags": [
+      "quantum",
+      "concept",
+      "tunneling"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:tunneling",
+    "route": "#science:lesson:tunneling",
+    "type": "lesson",
+    "target": "tunneling"
+  },
+  {
+    "id": "physics:lesson:radioactivity",
+    "title": "Radioactivity & Decay",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Unstable nuclei spontaneously emit radiation (α, β, γ), decaying exponentially with a characteristic half-life.",
+    "tags": [
+      "quantum",
+      "concept",
+      "radioactivity"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:radioactivity",
+    "route": "#science:lesson:radioactivity",
+    "type": "lesson",
+    "target": "radioactivity"
+  },
+  {
+    "id": "physics:lesson:nuclear-binding",
+    "title": "Nuclear Binding Energy",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "The mass of a nucleus is less than its parts; the missing mass is the binding energy that holds it together (mass–energy equivalence).",
+    "tags": [
+      "quantum",
+      "concept",
+      "nuclear-binding"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:nuclear-binding",
+    "route": "#science:lesson:nuclear-binding",
+    "type": "lesson",
+    "target": "nuclear-binding"
+  },
+  {
+    "id": "physics:lesson:fission-fusion",
+    "title": "Fission & Fusion",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Splitting heavy nuclei (fission) or joining light ones (fusion) converts mass to energy — powering reactors, bombs and stars.",
+    "tags": [
+      "quantum",
+      "concept",
+      "fission-fusion"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:fission-fusion",
+    "route": "#science:lesson:fission-fusion",
+    "type": "lesson",
+    "target": "fission-fusion"
+  },
+  {
+    "id": "physics:lesson:particle-physics",
+    "title": "Particle Physics (Standard Model)",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "All matter is built from quarks and leptons interacting via force-carrying bosons. The Standard Model is our best theory of fundamental particles.",
+    "tags": [
+      "quantum",
+      "concept",
+      "particle-physics"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:particle-physics",
+    "route": "#science:lesson:particle-physics",
+    "type": "lesson",
+    "target": "particle-physics"
+  },
+  {
+    "id": "physics:lesson:special-relativity",
+    "title": "Special Relativity",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "At speeds near light, space and time are relative. The laws of physics and the speed of light are the same for all inertial observers.",
+    "tags": [
+      "relativity",
+      "concept",
+      "special-relativity"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:special-relativity",
+    "route": "#science:lesson:special-relativity",
+    "type": "lesson",
+    "target": "special-relativity"
+  },
+  {
+    "id": "physics:lesson:mass-energy",
+    "title": "Mass–Energy & Relativistic Momentum",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Mass is a form of energy; momentum and energy take relativistic forms that reduce to Newtonian ones at low speed.",
+    "tags": [
+      "relativity",
+      "concept",
+      "mass-energy"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:mass-energy",
+    "route": "#science:lesson:mass-energy",
+    "type": "lesson",
+    "target": "mass-energy"
+  },
+  {
+    "id": "physics:lesson:general-relativity",
+    "title": "General Relativity (Intro)",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Gravity is the curvature of spacetime by mass and energy. Massive objects bend the paths of light and slow time.",
+    "tags": [
+      "relativity",
+      "concept",
+      "general-relativity"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:general-relativity",
+    "route": "#science:lesson:general-relativity",
+    "type": "lesson",
+    "target": "general-relativity"
+  },
+  {
+    "id": "physics:lesson:stars",
+    "title": "Stellar Physics",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Stars are self-gravitating fusion reactors balancing gravity against outward gas pressure; their fate depends on mass.",
+    "tags": [
+      "relativity",
+      "concept",
+      "stars"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:stars",
+    "route": "#science:lesson:stars",
+    "type": "lesson",
+    "target": "stars"
+  },
+  {
+    "id": "physics:lesson:black-holes",
+    "title": "Black Holes",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "A region where gravity is so strong that nothing, not even light, can escape past the event horizon.",
+    "tags": [
+      "relativity",
+      "concept",
+      "black-holes"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:black-holes",
+    "route": "#science:lesson:black-holes",
+    "type": "lesson",
+    "target": "black-holes"
+  },
+  {
+    "id": "physics:lesson:cosmology",
+    "title": "Cosmology & the Big Bang",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "The universe is expanding from a hot, dense beginning ~13.8 billion years ago, leaving observable relics like the cosmic microwave background.",
+    "tags": [
+      "relativity",
+      "concept",
+      "cosmology"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:cosmology",
+    "route": "#science:lesson:cosmology",
+    "type": "lesson",
+    "target": "cosmology"
+  },
+  {
+    "id": "physics:lesson:center-of-mass",
+    "title": "Centre of Mass",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "The mass-weighted average position of a system. External forces move the centre of mass as if all mass were concentrated there.",
+    "tags": [
+      "mechanics",
+      "concept",
+      "center-of-mass"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:center-of-mass",
+    "route": "#science:lesson:center-of-mass",
+    "type": "lesson",
+    "target": "center-of-mass"
+  },
+  {
+    "id": "physics:lesson:terminal-velocity",
+    "title": "Drag & Terminal Velocity",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "As a falling body speeds up, drag grows until it balances gravity — the body then falls at a constant terminal velocity.",
+    "tags": [
+      "mechanics",
+      "concept",
+      "terminal-velocity"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:terminal-velocity",
+    "route": "#science:lesson:terminal-velocity",
+    "type": "lesson",
+    "target": "terminal-velocity"
+  },
+  {
+    "id": "physics:lesson:resonance",
+    "title": "Resonance & Forced Oscillation",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "When a driving frequency matches a system's natural frequency, energy transfer peaks and amplitude grows dramatically.",
+    "tags": [
+      "waves",
+      "concept",
+      "resonance"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:resonance",
+    "route": "#science:lesson:resonance",
+    "type": "lesson",
+    "target": "resonance"
+  },
+  {
+    "id": "physics:lesson:damped-oscillation",
+    "title": "Damped Oscillation",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Real oscillators lose energy to friction, so their amplitude decays exponentially over time.",
+    "tags": [
+      "waves",
+      "concept",
+      "damped-oscillation"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:damped-oscillation",
+    "route": "#science:lesson:damped-oscillation",
+    "type": "lesson",
+    "target": "damped-oscillation"
+  },
+  {
+    "id": "physics:lesson:degrees-of-freedom",
+    "title": "Degrees of Freedom & Cv",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Each independent way a molecule can store energy carries ½kT — fixing a gas's internal energy and heat capacities.",
+    "tags": [
+      "thermo",
+      "concept",
+      "degrees-of-freedom"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:degrees-of-freedom",
+    "route": "#science:lesson:degrees-of-freedom",
+    "type": "lesson",
+    "target": "degrees-of-freedom"
+  },
+  {
+    "id": "physics:lesson:maxwell-boltzmann",
+    "title": "Maxwell–Boltzmann Distribution",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "In a gas, molecular speeds follow a characteristic distribution that broadens and shifts to higher speeds as temperature rises.",
+    "tags": [
+      "thermo",
+      "concept",
+      "maxwell-boltzmann"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:maxwell-boltzmann",
+    "route": "#science:lesson:maxwell-boltzmann",
+    "type": "lesson",
+    "target": "maxwell-boltzmann"
+  },
+  {
+    "id": "physics:lesson:dispersion-prisms",
+    "title": "Dispersion & Prisms",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Refractive index depends on wavelength, so a prism bends violet more than red — splitting white light into a spectrum.",
+    "tags": [
+      "optics",
+      "concept",
+      "dispersion-prisms"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:dispersion-prisms",
+    "route": "#science:lesson:dispersion-prisms",
+    "type": "lesson",
+    "target": "dispersion-prisms"
+  },
+  {
+    "id": "physics:lesson:human-eye",
+    "title": "The Human Eye & Defects",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "The eye focuses light onto the retina by changing its lens shape — and common defects are corrected with simple lenses.",
+    "tags": [
+      "optics",
+      "concept",
+      "human-eye"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:human-eye",
+    "route": "#science:lesson:human-eye",
+    "type": "lesson",
+    "target": "human-eye"
+  },
+  {
+    "id": "physics:lesson:electric-dipole",
+    "title": "Electric Dipole",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Two equal and opposite charges a small distance apart — the basic model for polar molecules and antennas.",
+    "tags": [
+      "electrostatics",
+      "concept",
+      "electric-dipole"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:electric-dipole",
+    "route": "#science:lesson:electric-dipole",
+    "type": "lesson",
+    "target": "electric-dipole"
+  },
+  {
+    "id": "physics:lesson:van-de-graaff",
+    "title": "Van de Graaff & Breakdown",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "A moving belt carries charge onto a hollow sphere, building enormous potentials until the surrounding air breaks down.",
+    "tags": [
+      "electrostatics",
+      "concept",
+      "van-de-graaff"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:van-de-graaff",
+    "route": "#science:lesson:van-de-graaff",
+    "type": "lesson",
+    "target": "van-de-graaff"
+  },
+  {
+    "id": "physics:lesson:wheatstone",
+    "title": "Wheatstone Bridge",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "A four-resistor diamond that measures an unknown resistance precisely by balancing two voltage dividers.",
+    "tags": [
+      "current",
+      "concept",
+      "wheatstone"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:wheatstone",
+    "route": "#science:lesson:wheatstone",
+    "type": "lesson",
+    "target": "wheatstone"
+  },
+  {
+    "id": "physics:lesson:drift-velocity",
+    "title": "Drift Velocity & Mobility",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Electrons drift slowly through a conductor under an applied field, yet the current signal travels near light speed.",
+    "tags": [
+      "current",
+      "concept",
+      "drift-velocity"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:drift-velocity",
+    "route": "#science:lesson:drift-velocity",
+    "type": "lesson",
+    "target": "drift-velocity"
+  },
+  {
+    "id": "physics:lesson:cyclotron",
+    "title": "The Cyclotron",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Charged particles spiral outward in a magnetic field, kicked to higher energy each half-turn by an alternating voltage.",
+    "tags": [
+      "magnetism",
+      "concept",
+      "cyclotron"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:cyclotron",
+    "route": "#science:lesson:cyclotron",
+    "type": "lesson",
+    "target": "cyclotron"
+  },
+  {
+    "id": "physics:lesson:lc-oscillations",
+    "title": "LC Oscillations",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Energy sloshes back and forth between a capacitor's electric field and an inductor's magnetic field — an electrical oscillator.",
+    "tags": [
+      "magnetism",
+      "concept",
+      "lc-oscillations"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:lc-oscillations",
+    "route": "#science:lesson:lc-oscillations",
+    "type": "lesson",
+    "target": "lc-oscillations"
+  },
+  {
+    "id": "physics:lesson:lasers",
+    "title": "Lasers & Stimulated Emission",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "A laser produces an intense, coherent beam by stimulated emission — photons cloning themselves in a population-inverted medium.",
+    "tags": [
+      "modern",
+      "concept",
+      "lasers"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:lasers",
+    "route": "#science:lesson:lasers",
+    "type": "lesson",
+    "target": "lasers"
+  },
+  {
+    "id": "physics:lesson:semiconductors",
+    "title": "Semiconductors & Diodes",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Doping a pure semiconductor with impurities controls its conductivity — the basis of diodes, solar cells and all of modern electronics.",
+    "tags": [
+      "modern",
+      "concept",
+      "semiconductors"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:semiconductors",
+    "route": "#science:lesson:semiconductors",
+    "type": "lesson",
+    "target": "semiconductors"
+  },
+  {
+    "id": "physics:lesson:carbon-dating",
+    "title": "Radiocarbon Dating",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Living things absorb carbon-14 at a steady rate; after death it decays with a known half-life, acting as a radioactive clock.",
+    "tags": [
+      "quantum",
+      "concept",
+      "carbon-dating"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:carbon-dating",
+    "route": "#science:lesson:carbon-dating",
+    "type": "lesson",
+    "target": "carbon-dating"
+  },
+  {
+    "id": "physics:lesson:entanglement",
+    "title": "Quantum Entanglement",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Two particles can share a single quantum state, so measuring one instantly determines the other — however far apart they are.",
+    "tags": [
+      "quantum",
+      "concept",
+      "entanglement"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:entanglement",
+    "route": "#science:lesson:entanglement",
+    "type": "lesson",
+    "target": "entanglement"
+  },
+  {
+    "id": "physics:lesson:twin-paradox",
+    "title": "The Twin Paradox",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "A twin who travels near light speed and returns has aged less than the one who stayed — a real, measured consequence of relativity.",
+    "tags": [
+      "relativity",
+      "concept",
+      "twin-paradox"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:twin-paradox",
+    "route": "#science:lesson:twin-paradox",
+    "type": "lesson",
+    "target": "twin-paradox"
+  },
+  {
+    "id": "physics:lesson:gravitational-waves",
+    "title": "Gravitational Waves",
+    "subject": "physics",
+    "kind": "Lesson",
+    "description": "Accelerating masses ripple spacetime itself; these waves travel at light speed and were finally detected from merging black holes.",
+    "tags": [
+      "relativity",
+      "concept",
+      "gravitational-waves"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:lesson:gravitational-waves",
+    "route": "#science:lesson:gravitational-waves",
+    "type": "lesson",
+    "target": "gravitational-waves"
+  },
+  {
+    "id": "physics:domain:mechanics",
+    "title": "Mechanics",
+    "subject": "physics",
+    "kind": "Concept collection",
+    "description": "14 connected lessons",
+    "tags": [
+      "mechanics"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:domain:mechanics",
+    "route": "#science:domain:mechanics",
+    "type": "domain",
+    "target": "mechanics"
+  },
+  {
+    "id": "physics:domain:waves",
+    "title": "Waves & Sound",
+    "subject": "physics",
+    "kind": "Concept collection",
+    "description": "8 connected lessons",
+    "tags": [
+      "waves"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:domain:waves",
+    "route": "#science:domain:waves",
+    "type": "domain",
+    "target": "waves"
+  },
+  {
+    "id": "physics:domain:thermo",
+    "title": "Thermodynamics",
+    "subject": "physics",
+    "kind": "Concept collection",
+    "description": "9 connected lessons",
+    "tags": [
+      "thermo"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:domain:thermo",
+    "route": "#science:domain:thermo",
+    "type": "domain",
+    "target": "thermo"
+  },
+  {
+    "id": "physics:domain:optics",
+    "title": "Optics",
+    "subject": "physics",
+    "kind": "Concept collection",
+    "description": "9 connected lessons",
+    "tags": [
+      "optics"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:domain:optics",
+    "route": "#science:domain:optics",
+    "type": "domain",
+    "target": "optics"
+  },
+  {
+    "id": "physics:domain:electrostatics",
+    "title": "Electrostatics",
+    "subject": "physics",
+    "kind": "Concept collection",
+    "description": "9 connected lessons",
+    "tags": [
+      "electrostatics"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:domain:electrostatics",
+    "route": "#science:domain:electrostatics",
+    "type": "domain",
+    "target": "electrostatics"
+  },
+  {
+    "id": "physics:domain:current",
+    "title": "Current Electricity",
+    "subject": "physics",
+    "kind": "Concept collection",
+    "description": "8 connected lessons",
+    "tags": [
+      "current"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:domain:current",
+    "route": "#science:domain:current",
+    "type": "domain",
+    "target": "current"
+  },
+  {
+    "id": "physics:domain:magnetism",
+    "title": "Magnetism & EMI",
+    "subject": "physics",
+    "kind": "Concept collection",
+    "description": "9 connected lessons",
+    "tags": [
+      "magnetism"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:domain:magnetism",
+    "route": "#science:domain:magnetism",
+    "type": "domain",
+    "target": "magnetism"
+  },
+  {
+    "id": "physics:domain:modern",
+    "title": "Modern Physics",
+    "subject": "physics",
+    "kind": "Concept collection",
+    "description": "7 connected lessons",
+    "tags": [
+      "modern"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:domain:modern",
+    "route": "#science:domain:modern",
+    "type": "domain",
+    "target": "modern"
+  },
+  {
+    "id": "physics:domain:quantum",
+    "title": "Quantum & Nuclear",
+    "subject": "physics",
+    "kind": "Concept collection",
+    "description": "8 connected lessons",
+    "tags": [
+      "quantum"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:domain:quantum",
+    "route": "#science:domain:quantum",
+    "type": "domain",
+    "target": "quantum"
+  },
+  {
+    "id": "physics:domain:relativity",
+    "title": "Relativity & Astro",
+    "subject": "physics",
+    "kind": "Concept collection",
+    "description": "8 connected lessons",
+    "tags": [
+      "relativity"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:domain:relativity",
+    "route": "#science:domain:relativity",
+    "type": "domain",
+    "target": "relativity"
+  },
+  {
+    "id": "physics:theory:numerical-methods",
+    "title": "Numerical Methods Lab",
+    "subject": "physics",
+    "kind": "Numerical workspace",
+    "description": "",
+    "tags": [
+      "",
+      "theory",
+      "numerical-methods"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:theory:numerical-methods",
+    "route": "#science:theory:numerical-methods",
+    "type": "theory",
+    "target": "numerical-methods"
+  },
+  {
+    "id": "physics:theory:reaction-diffusion",
+    "title": "Reaction–Diffusion Lab",
+    "subject": "physics",
+    "kind": "Numerical workspace",
+    "description": "",
+    "tags": [
+      "",
+      "theory",
+      "reaction-diffusion"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:theory:reaction-diffusion",
+    "route": "#science:theory:reaction-diffusion",
+    "type": "theory",
+    "target": "reaction-diffusion"
+  },
+  {
+    "id": "physics:theory:chladni",
+    "title": "Chladni Plates — Sound Made Visible",
+    "subject": "physics",
+    "kind": "Numerical workspace",
+    "description": "",
+    "tags": [
+      "",
+      "theory",
+      "chladni"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:theory:chladni",
+    "route": "#science:theory:chladni",
+    "type": "theory",
+    "target": "chladni"
+  },
+  {
+    "id": "physics:theory:soft-body",
+    "title": "Soft Bodies — Squish, Pressure & Constraints",
+    "subject": "physics",
+    "kind": "Numerical workspace",
+    "description": "",
+    "tags": [
+      "",
+      "theory",
+      "soft-body"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:theory:soft-body",
+    "route": "#science:theory:soft-body",
+    "type": "theory",
+    "target": "soft-body"
+  },
+  {
+    "id": "physics:theory:stable-fluids",
+    "title": "Stable Fluids — Navier–Stokes Live",
+    "subject": "physics",
+    "kind": "Numerical workspace",
+    "description": "",
+    "tags": [
+      "",
+      "theory",
+      "stable-fluids"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:theory:stable-fluids",
+    "route": "#science:theory:stable-fluids",
+    "type": "theory",
+    "target": "stable-fluids"
+  },
+  {
+    "id": "physics:theory:boids",
+    "title": "Boids — Flocking & Swarm Intelligence",
+    "subject": "physics",
+    "kind": "Numerical workspace",
+    "description": "",
+    "tags": [
+      "",
+      "theory",
+      "boids"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:theory:boids",
+    "route": "#science:theory:boids",
+    "type": "theory",
+    "target": "boids"
+  },
+  {
+    "id": "physics:theory:particle-life",
+    "title": "Particle Life — Emergent Ecosystems",
+    "subject": "physics",
+    "kind": "Numerical workspace",
+    "description": "",
+    "tags": [
+      "",
+      "theory",
+      "particle-life"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:theory:particle-life",
+    "route": "#science:theory:particle-life",
+    "type": "theory",
+    "target": "particle-life"
+  },
+  {
+    "id": "physics:theory:phase-space",
+    "title": "Phase Space & the Hamiltonian",
+    "subject": "physics",
+    "kind": "Numerical workspace",
+    "description": "",
+    "tags": [
+      "",
+      "theory",
+      "phase-space"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:theory:phase-space",
+    "route": "#science:theory:phase-space",
+    "type": "theory",
+    "target": "phase-space"
+  },
+  {
+    "id": "physics:theory:least-action",
+    "title": "The Principle of Least Action",
+    "subject": "physics",
+    "kind": "Numerical workspace",
+    "description": "",
+    "tags": [
+      "",
+      "theory",
+      "least-action"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:theory:least-action",
+    "route": "#science:theory:least-action",
+    "type": "theory",
+    "target": "least-action"
+  },
+  {
+    "id": "physics:theory:lorenz",
+    "title": "The Lorenz Attractor",
+    "subject": "physics",
+    "kind": "Numerical workspace",
+    "description": "",
+    "tags": [
+      "",
+      "theory",
+      "lorenz"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:theory:lorenz",
+    "route": "#science:theory:lorenz",
+    "type": "theory",
+    "target": "lorenz"
+  },
+  {
+    "id": "physics:theory:bifurcation",
+    "title": "Bifurcation & the Route to Chaos",
+    "subject": "physics",
+    "kind": "Numerical workspace",
+    "description": "",
+    "tags": [
+      "",
+      "theory",
+      "bifurcation"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:theory:bifurcation",
+    "route": "#science:theory:bifurcation",
+    "type": "theory",
+    "target": "bifurcation"
+  },
+  {
+    "id": "physics:theory:double-pendulum",
+    "title": "The Chaotic Double Pendulum",
+    "subject": "physics",
+    "kind": "Numerical workspace",
+    "description": "",
+    "tags": [
+      "",
+      "theory",
+      "double-pendulum"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:theory:double-pendulum",
+    "route": "#science:theory:double-pendulum",
+    "type": "theory",
+    "target": "double-pendulum"
+  },
+  {
+    "id": "physics:theory:integrators",
+    "title": "Euler vs RK4 vs Verlet",
+    "subject": "physics",
+    "kind": "Numerical workspace",
+    "description": "",
+    "tags": [
+      "",
+      "theory",
+      "integrators"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:theory:integrators",
+    "route": "#science:theory:integrators",
+    "type": "theory",
+    "target": "integrators"
+  },
+  {
+    "id": "physics:theory:relativity",
+    "title": "Special Relativity & Spacetime",
+    "subject": "physics",
+    "kind": "Numerical workspace",
+    "description": "",
+    "tags": [
+      "",
+      "theory",
+      "relativity"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:theory:relativity",
+    "route": "#science:theory:relativity",
+    "type": "theory",
+    "target": "relativity"
+  },
+  {
+    "id": "physics:theory:schrodinger",
+    "title": "The Schrödinger Equation",
+    "subject": "physics",
+    "kind": "Numerical workspace",
+    "description": "",
+    "tags": [
+      "",
+      "theory",
+      "schrodinger"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:theory:schrodinger",
+    "route": "#science:theory:schrodinger",
+    "type": "theory",
+    "target": "schrodinger"
+  },
+  {
+    "id": "physics:theory:maxwell-boltzmann",
+    "title": "How Temperature Emerges",
+    "subject": "physics",
+    "kind": "Numerical workspace",
+    "description": "",
+    "tags": [
+      "",
+      "theory",
+      "maxwell-boltzmann"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:theory:maxwell-boltzmann",
+    "route": "#science:theory:maxwell-boltzmann",
+    "type": "theory",
+    "target": "maxwell-boltzmann"
+  },
+  {
+    "id": "physics:theory:gr-precession",
+    "title": "General Relativity: Precessing Orbits",
+    "subject": "physics",
+    "kind": "Numerical workspace",
+    "description": "",
+    "tags": [
+      "",
+      "theory",
+      "gr-precession"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:theory:gr-precession",
+    "route": "#science:theory:gr-precession",
+    "type": "theory",
+    "target": "gr-precession"
+  },
+  {
+    "id": "physics:theory:vector-calculus",
+    "title": "Divergence, Curl & Gradient",
+    "subject": "physics",
+    "kind": "Numerical workspace",
+    "description": "",
+    "tags": [
+      "",
+      "theory",
+      "vector-calculus"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:theory:vector-calculus",
+    "route": "#science:theory:vector-calculus",
+    "type": "theory",
+    "target": "vector-calculus"
+  },
+  {
+    "id": "physics:theory:standard-model",
+    "title": "The Standard Model & Conservation Laws",
+    "subject": "physics",
+    "kind": "Numerical workspace",
+    "description": "",
+    "tags": [
+      "",
+      "theory",
+      "standard-model"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:theory:standard-model",
+    "route": "#science:theory:standard-model",
+    "type": "theory",
+    "target": "standard-model"
+  },
+  {
+    "id": "physics:theory:stellar-evolution",
+    "title": "Stellar Evolution & the Fate of Stars",
+    "subject": "physics",
+    "kind": "Numerical workspace",
+    "description": "",
+    "tags": [
+      "",
+      "theory",
+      "stellar-evolution"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:theory:stellar-evolution",
+    "route": "#science:theory:stellar-evolution",
+    "type": "theory",
+    "target": "stellar-evolution"
+  },
+  {
+    "id": "physics:theory:optics-bench",
+    "title": "Optical Bench — Lenses & Rays",
+    "subject": "physics",
+    "kind": "Numerical workspace",
+    "description": "",
+    "tags": [
+      "",
+      "theory",
+      "optics-bench"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:theory:optics-bench",
+    "route": "#science:theory:optics-bench",
+    "type": "theory",
+    "target": "optics-bench"
+  },
+  {
+    "id": "physics:research:specific-heat",
+    "title": "Specific Heat of Water",
+    "subject": "physics",
+    "kind": "Measurement bench",
+    "description": "Heating exactly 1 kg of water, the energy needed is Q = m·c·ΔT. Plot the energy you supply against the temperature rise — a straight line whose slope is the specific heat capacity c (since m = 1 kg).",
+    "tags": [
+      "thermodynamics",
+      "research",
+      "specific-heat"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:research:specific-heat",
+    "route": "#science:research:specific-heat",
+    "type": "research",
+    "target": "specific-heat"
+  },
+  {
+    "id": "physics:research:resistivity",
+    "title": "Resistivity of a Wire",
+    "subject": "physics",
+    "kind": "Measurement bench",
+    "description": "A uniform wire obeys R = ρL/A. Keeping the cross-section fixed at A = 1×10⁻⁷ m², plot resistance against length. The slope is ρ/A, so the resistivity ρ = slope × A.",
+    "tags": [
+      "current",
+      "research",
+      "resistivity"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:research:resistivity",
+    "route": "#science:research:resistivity",
+    "type": "research",
+    "target": "resistivity"
+  },
+  {
+    "id": "physics:research:newton-mass",
+    "title": "Newton's 2nd Law — find a Mass",
+    "subject": "physics",
+    "kind": "Measurement bench",
+    "description": "Newton’s second law says a = F/m. Pull a cart with measured forces and record its acceleration, then plot a against F. The slope is 1/m, so the mass m = 1 / slope.",
+    "tags": [
+      "mechanics",
+      "research",
+      "newton-mass"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:research:newton-mass",
+    "route": "#science:research:newton-mass",
+    "type": "research",
+    "target": "newton-mass"
+  },
+  {
+    "id": "physics:research:pendulum-g",
+    "title": "Measure g with a Pendulum",
+    "subject": "physics",
+    "kind": "Measurement bench",
+    "description": "A simple pendulum obeys T = 2π·√(L/g). Squaring: T² = (4π²/g)·L — a straight line whose slope is 4π²/g. Take T at several lengths, plot T² vs L, and the slope hands you g.",
+    "tags": [
+      "mechanics",
+      "research",
+      "pendulum-g"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:research:pendulum-g",
+    "route": "#science:research:pendulum-g",
+    "type": "research",
+    "target": "pendulum-g"
+  },
+  {
+    "id": "physics:research:hooke-k",
+    "title": "Hooke's Law — find a Spring Constant",
+    "subject": "physics",
+    "kind": "Measurement bench",
+    "description": "A spring obeys F = k·x. Plot F (the load you hang) against the extension x it produces — a straight line through the origin whose slope is the spring constant k.",
+    "tags": [
+      "mechanics",
+      "research",
+      "hooke-k"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:research:hooke-k",
+    "route": "#science:research:hooke-k",
+    "type": "research",
+    "target": "hooke-k"
+  },
+  {
+    "id": "physics:research:ohm-R",
+    "title": "Ohm's Law — measure a Resistance",
+    "subject": "physics",
+    "kind": "Measurement bench",
+    "description": "For an ohmic conductor, V = I·R. Vary the supply voltage, read the current, and plot V vs I. The graph is a straight line and its slope is the resistance R.",
+    "tags": [
+      "current",
+      "research",
+      "ohm-R"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:research:ohm-R",
+    "route": "#science:research:ohm-R",
+    "type": "research",
+    "target": "ohm-R"
+  },
+  {
+    "id": "physics:research:wave-v",
+    "title": "Wave Speed on a String",
+    "subject": "physics",
+    "kind": "Measurement bench",
+    "description": "For a wave, v = f·λ, so λ = v·(1/f). Drive a string at several frequencies, measure the standing-wave wavelength, and plot λ vs 1/f — the slope is the wave speed v.",
+    "tags": [
+      "waves",
+      "research",
+      "wave-v"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:research:wave-v",
+    "route": "#science:research:wave-v",
+    "type": "research",
+    "target": "wave-v"
+  },
+  {
+    "id": "physics:research:refraction-n",
+    "title": "Refractive Index of a Medium",
+    "subject": "physics",
+    "kind": "Measurement bench",
+    "description": "Snell's law: sin θ₁ = n·sin θ₂. Shine light into the glass at several angles, measure the refracted angle, and plot sin θ₁ against sin θ₂. The slope is the refractive index n.",
+    "tags": [
+      "optics",
+      "research",
+      "refraction-n"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:research:refraction-n",
+    "route": "#science:research:refraction-n",
+    "type": "research",
+    "target": "refraction-n"
+  },
+  {
+    "id": "physics:investigate:pendulum-amplitude",
+    "title": "Pendulum: period vs amplitude",
+    "subject": "physics",
+    "kind": "Investigation",
+    "description": "How does a pendulum's period depend on its amplitude?",
+    "tags": [
+      "mechanics",
+      "investigate",
+      "pendulum-amplitude"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:investigate:pendulum-amplitude",
+    "route": "#science:investigate:pendulum-amplitude",
+    "type": "investigate",
+    "target": "pendulum-amplitude"
+  },
+  {
+    "id": "physics:investigate:projectile-angle",
+    "title": "Projectile: range vs angle",
+    "subject": "physics",
+    "kind": "Investigation",
+    "description": "Which launch angle makes a projectile travel farthest?",
+    "tags": [
+      "mechanics",
+      "investigate",
+      "projectile-angle"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:investigate:projectile-angle",
+    "route": "#science:investigate:projectile-angle",
+    "type": "investigate",
+    "target": "projectile-angle"
+  },
+  {
+    "id": "physics:investigate:projectile-speed",
+    "title": "Projectile: range vs speed",
+    "subject": "physics",
+    "kind": "Investigation",
+    "description": "How does range scale with launch speed?",
+    "tags": [
+      "mechanics",
+      "investigate",
+      "projectile-speed"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:investigate:projectile-speed",
+    "route": "#science:investigate:projectile-speed",
+    "type": "investigate",
+    "target": "projectile-speed"
+  },
+  {
+    "id": "physics:investigate:pendulum-mass",
+    "title": "Pendulum: period vs mass",
+    "subject": "physics",
+    "kind": "Investigation",
+    "description": "Does the mass of the bob change a pendulum's period?",
+    "tags": [
+      "mechanics",
+      "investigate",
+      "pendulum-mass"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:investigate:pendulum-mass",
+    "route": "#science:investigate:pendulum-mass",
+    "type": "investigate",
+    "target": "pendulum-mass"
+  },
+  {
+    "id": "physics:investigate:damping-decay",
+    "title": "Oscillator: surviving amplitude vs damping",
+    "subject": "physics",
+    "kind": "Investigation",
+    "description": "How does damping change an oscillation?",
+    "tags": [
+      "waves",
+      "investigate",
+      "damping-decay"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:investigate:damping-decay",
+    "route": "#science:investigate:damping-decay",
+    "type": "investigate",
+    "target": "damping-decay"
+  },
+  {
+    "id": "physics:investigate:rc-charging",
+    "title": "RC circuit: time constant vs R",
+    "subject": "physics",
+    "kind": "Investigation",
+    "description": "How does resistance affect how fast a capacitor charges?",
+    "tags": [
+      "current",
+      "investigate",
+      "rc-charging"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:investigate:rc-charging",
+    "route": "#science:investigate:rc-charging",
+    "type": "investigate",
+    "target": "rc-charging"
+  },
+  {
+    "id": "physics:investigate:kepler-third",
+    "title": "Orbits: period vs radius",
+    "subject": "physics",
+    "kind": "Investigation",
+    "description": "Does orbital period obey Kepler's third law?",
+    "tags": [
+      "mechanics",
+      "investigate",
+      "kepler-third"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:investigate:kepler-third",
+    "route": "#science:investigate:kepler-third",
+    "type": "investigate",
+    "target": "kepler-third"
+  },
+  {
+    "id": "physics:investigate:resonance-curve",
+    "title": "Resonance: response vs drive frequency",
+    "subject": "physics",
+    "kind": "Investigation",
+    "description": "What happens when you drive an oscillator at different frequencies?",
+    "tags": [
+      "waves",
+      "investigate",
+      "resonance-curve"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:investigate:resonance-curve",
+    "route": "#science:investigate:resonance-curve",
+    "type": "investigate",
+    "target": "resonance-curve"
+  },
+  {
+    "id": "physics:deep:newton-laws",
+    "title": "Newton's Second Law",
+    "subject": "physics",
+    "kind": "Course",
+    "description": "",
+    "tags": [
+      "mechanics",
+      "deep",
+      "newton-laws"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:deep:newton-laws",
+    "route": "#science:deep:newton-laws",
+    "type": "deep",
+    "target": "newton-laws"
+  },
+  {
+    "id": "physics:deep:work-energy",
+    "title": "Energy & Its Conservation",
+    "subject": "physics",
+    "kind": "Course",
+    "description": "",
+    "tags": [
+      "mechanics",
+      "deep",
+      "work-energy"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:deep:work-energy",
+    "route": "#science:deep:work-energy",
+    "type": "deep",
+    "target": "work-energy"
+  },
+  {
+    "id": "physics:deep:wavefunction",
+    "title": "The Schrödinger Equation",
+    "subject": "physics",
+    "kind": "Course",
+    "description": "",
+    "tags": [
+      "quantum",
+      "deep",
+      "wavefunction"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:deep:wavefunction",
+    "route": "#science:deep:wavefunction",
+    "type": "deep",
+    "target": "wavefunction"
+  },
+  {
+    "id": "physics:deep:special-relativity",
+    "title": "Special Relativity",
+    "subject": "physics",
+    "kind": "Course",
+    "description": "",
+    "tags": [
+      "relativity",
+      "deep",
+      "special-relativity"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:deep:special-relativity",
+    "route": "#science:deep:special-relativity",
+    "type": "deep",
+    "target": "special-relativity"
+  },
+  {
+    "id": "physics:deep:momentum",
+    "title": "Momentum & Its Conservation",
+    "subject": "physics",
+    "kind": "Course",
+    "description": "",
+    "tags": [
+      "mechanics",
+      "deep",
+      "momentum"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:deep:momentum",
+    "route": "#science:deep:momentum",
+    "type": "deep",
+    "target": "momentum"
+  },
+  {
+    "id": "physics:deep:gravitation",
+    "title": "Gravitation",
+    "subject": "physics",
+    "kind": "Course",
+    "description": "",
+    "tags": [
+      "mechanics",
+      "deep",
+      "gravitation"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:deep:gravitation",
+    "route": "#science:deep:gravitation",
+    "type": "deep",
+    "target": "gravitation"
+  },
+  {
+    "id": "physics:deep:heat-engines",
+    "title": "Heat Engines & the Second Law",
+    "subject": "physics",
+    "kind": "Course",
+    "description": "",
+    "tags": [
+      "thermodynamics",
+      "deep",
+      "heat-engines"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:deep:heat-engines",
+    "route": "#science:deep:heat-engines",
+    "type": "deep",
+    "target": "heat-engines"
+  },
+  {
+    "id": "physics:deep:shm",
+    "title": "Simple Harmonic Motion",
+    "subject": "physics",
+    "kind": "Course",
+    "description": "",
+    "tags": [
+      "mechanics",
+      "deep",
+      "shm"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:deep:shm",
+    "route": "#science:deep:shm",
+    "type": "deep",
+    "target": "shm"
+  },
+  {
+    "id": "physics:deep:rotational",
+    "title": "Rotational Dynamics",
+    "subject": "physics",
+    "kind": "Course",
+    "description": "",
+    "tags": [
+      "mechanics",
+      "deep",
+      "rotational"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:deep:rotational",
+    "route": "#science:deep:rotational",
+    "type": "deep",
+    "target": "rotational"
+  },
+  {
+    "id": "physics:deep:gauss",
+    "title": "Gauss's Law & the Inverse Square",
+    "subject": "physics",
+    "kind": "Course",
+    "description": "",
+    "tags": [
+      "electrostatics",
+      "deep",
+      "gauss"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:deep:gauss",
+    "route": "#science:deep:gauss",
+    "type": "deep",
+    "target": "gauss"
+  },
+  {
+    "id": "physics:deep:kinetic-theory",
+    "title": "Kinetic Theory of Gases",
+    "subject": "physics",
+    "kind": "Course",
+    "description": "",
+    "tags": [
+      "thermodynamics",
+      "deep",
+      "kinetic-theory"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:deep:kinetic-theory",
+    "route": "#science:deep:kinetic-theory",
+    "type": "deep",
+    "target": "kinetic-theory"
+  },
+  {
+    "id": "physics:deep:wave-basics",
+    "title": "Wave Motion",
+    "subject": "physics",
+    "kind": "Course",
+    "description": "",
+    "tags": [
+      "waves",
+      "deep",
+      "wave-basics"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:deep:wave-basics",
+    "route": "#science:deep:wave-basics",
+    "type": "deep",
+    "target": "wave-basics"
+  },
+  {
+    "id": "physics:deep:circular-motion",
+    "title": "Uniform Circular Motion",
+    "subject": "physics",
+    "kind": "Course",
+    "description": "",
+    "tags": [
+      "mechanics",
+      "deep",
+      "circular-motion"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:deep:circular-motion",
+    "route": "#science:deep:circular-motion",
+    "type": "deep",
+    "target": "circular-motion"
+  },
+  {
+    "id": "physics:deep:projectile",
+    "title": "Projectile Motion",
+    "subject": "physics",
+    "kind": "Course",
+    "description": "",
+    "tags": [
+      "mechanics",
+      "deep",
+      "projectile"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:deep:projectile",
+    "route": "#science:deep:projectile",
+    "type": "deep",
+    "target": "projectile"
+  },
+  {
+    "id": "physics:deep:lagrangian",
+    "title": "Lagrangian Mechanics",
+    "subject": "physics",
+    "kind": "Course",
+    "description": "",
+    "tags": [
+      "mechanics",
+      "deep",
+      "lagrangian"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:deep:lagrangian",
+    "route": "#science:deep:lagrangian",
+    "type": "deep",
+    "target": "lagrangian"
+  },
+  {
+    "id": "physics:deep:hamiltonian",
+    "title": "Hamiltonian Mechanics",
+    "subject": "physics",
+    "kind": "Course",
+    "description": "",
+    "tags": [
+      "mechanics",
+      "deep",
+      "hamiltonian"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:deep:hamiltonian",
+    "route": "#science:deep:hamiltonian",
+    "type": "deep",
+    "target": "hamiltonian"
+  },
+  {
+    "id": "physics:deep:noether",
+    "title": "Noether's Theorem",
+    "subject": "physics",
+    "kind": "Course",
+    "description": "",
+    "tags": [
+      "mechanics",
+      "deep",
+      "noether"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:deep:noether",
+    "route": "#science:deep:noether",
+    "type": "deep",
+    "target": "noether"
+  },
+  {
+    "id": "physics:deep:chaos",
+    "title": "Chaos Theory",
+    "subject": "physics",
+    "kind": "Course",
+    "description": "",
+    "tags": [
+      "mechanics",
+      "deep",
+      "chaos"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:deep:chaos",
+    "route": "#science:deep:chaos",
+    "type": "deep",
+    "target": "chaos"
+  },
+  {
+    "id": "physics:deep:statistical-mechanics",
+    "title": "Statistical Mechanics",
+    "subject": "physics",
+    "kind": "Course",
+    "description": "",
+    "tags": [
+      "thermodynamics",
+      "deep",
+      "statistical-mechanics"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:deep:statistical-mechanics",
+    "route": "#science:deep:statistical-mechanics",
+    "type": "deep",
+    "target": "statistical-mechanics"
+  },
+  {
+    "id": "physics:deep:quantum-mechanics",
+    "title": "Quantum Mechanics",
+    "subject": "physics",
+    "kind": "Course",
+    "description": "",
+    "tags": [
+      "quantum",
+      "deep",
+      "quantum-mechanics"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:deep:quantum-mechanics",
+    "route": "#science:deep:quantum-mechanics",
+    "type": "deep",
+    "target": "quantum-mechanics"
+  },
+  {
+    "id": "physics:deep:maxwell",
+    "title": "Maxwell's Equations",
+    "subject": "physics",
+    "kind": "Course",
+    "description": "",
+    "tags": [
+      "electrostatics",
+      "deep",
+      "maxwell"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:deep:maxwell",
+    "route": "#science:deep:maxwell",
+    "type": "deep",
+    "target": "maxwell"
+  },
+  {
+    "id": "physics:deep:computational",
+    "title": "Computational Physics",
+    "subject": "physics",
+    "kind": "Course",
+    "description": "",
+    "tags": [
+      "mechanics",
+      "deep",
+      "computational"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:deep:computational",
+    "route": "#science:deep:computational",
+    "type": "deep",
+    "target": "computational"
+  },
+  {
+    "id": "physics:adv:lagrangian",
+    "title": "Lagrangian and Hamiltonian mechanics",
+    "subject": "physics",
+    "kind": "Advanced treatment",
+    "description": "",
+    "tags": [
+      "",
+      "adv",
+      "lagrangian"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:adv:lagrangian",
+    "route": "#science:adv:lagrangian",
+    "type": "adv",
+    "target": "lagrangian"
+  },
+  {
+    "id": "physics:adv:lorentz",
+    "title": "Special relativity and the Lorentz transformation",
+    "subject": "physics",
+    "kind": "Advanced treatment",
+    "description": "",
+    "tags": [
+      "",
+      "adv",
+      "lorentz"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:adv:lorentz",
+    "route": "#science:adv:lorentz",
+    "type": "adv",
+    "target": "lorentz"
+  },
+  {
+    "id": "physics:adv:maxwell-waves",
+    "title": "Maxwell's Equations and Electromagnetic Wave Propagation",
+    "subject": "physics",
+    "kind": "Advanced treatment",
+    "description": "",
+    "tags": [
+      "",
+      "adv",
+      "maxwell-waves"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:adv:maxwell-waves",
+    "route": "#science:adv:maxwell-waves",
+    "type": "adv",
+    "target": "maxwell-waves"
+  },
+  {
+    "id": "physics:adv:schrodinger-1d",
+    "title": "The one-dimensional Schrödinger equation and bound states",
+    "subject": "physics",
+    "kind": "Advanced treatment",
+    "description": "",
+    "tags": [
+      "",
+      "adv",
+      "schrodinger-1d"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:adv:schrodinger-1d",
+    "route": "#science:adv:schrodinger-1d",
+    "type": "adv",
+    "target": "schrodinger-1d"
+  },
+  {
+    "id": "physics:adv:partition-function",
+    "title": "Statistical mechanics and the partition function",
+    "subject": "physics",
+    "kind": "Advanced treatment",
+    "description": "",
+    "tags": [
+      "",
+      "adv",
+      "partition-function"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:adv:partition-function",
+    "route": "#science:adv:partition-function",
+    "type": "adv",
+    "target": "partition-function"
+  },
+  {
+    "id": "physics:adv:chaos",
+    "title": "Nonlinear Dynamics and Deterministic Chaos",
+    "subject": "physics",
+    "kind": "Advanced treatment",
+    "description": "",
+    "tags": [
+      "",
+      "adv",
+      "chaos"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:adv:chaos",
+    "route": "#science:adv:chaos",
+    "type": "adv",
+    "target": "chaos"
+  },
+  {
+    "id": "physics:journey:projectile",
+    "title": "Projectile Motion",
+    "subject": "physics",
+    "kind": "Learning journey",
+    "description": "",
+    "tags": [
+      "guided learning"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:journey:projectile",
+    "route": "#science:journey:projectile",
+    "type": "journey",
+    "target": "projectile"
+  },
+  {
+    "id": "physics:journey:work-energy",
+    "title": "Energy & Its Conservation",
+    "subject": "physics",
+    "kind": "Learning journey",
+    "description": "",
+    "tags": [
+      "guided learning"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:journey:work-energy",
+    "route": "#science:journey:work-energy",
+    "type": "journey",
+    "target": "work-energy"
+  },
+  {
+    "id": "physics:journey:gravitation",
+    "title": "Gravitation",
+    "subject": "physics",
+    "kind": "Learning journey",
+    "description": "",
+    "tags": [
+      "guided learning"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:journey:gravitation",
+    "route": "#science:journey:gravitation",
+    "type": "journey",
+    "target": "gravitation"
+  },
+  {
+    "id": "physics:journey:shm",
+    "title": "Simple Harmonic Motion",
+    "subject": "physics",
+    "kind": "Learning journey",
+    "description": "",
+    "tags": [
+      "guided learning"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:journey:shm",
+    "route": "#science:journey:shm",
+    "type": "journey",
+    "target": "shm"
+  },
+  {
+    "id": "physics:journey:quantum-mechanics",
+    "title": "Quantum Mechanics",
+    "subject": "physics",
+    "kind": "Learning journey",
+    "description": "",
+    "tags": [
+      "guided learning"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:journey:quantum-mechanics",
+    "route": "#science:journey:quantum-mechanics",
+    "type": "journey",
+    "target": "quantum-mechanics"
+  },
+  {
+    "id": "physics:scene:solar",
+    "title": "Solar system",
+    "subject": "physics",
+    "kind": "Sandbox scene",
+    "description": "Build and manipulate this existing Sandbox scene. Mouse, touch and keyboard controls; camera remains optional.",
+    "tags": [
+      "sandbox",
+      "build",
+      "solar"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:scene:solar",
+    "route": "#science:scene:solar",
+    "type": "scene",
+    "target": "solar"
+  },
+  {
+    "id": "physics:scene:binary",
+    "title": "Binary stars",
+    "subject": "physics",
+    "kind": "Sandbox scene",
+    "description": "Build and manipulate this existing Sandbox scene. Mouse, touch and keyboard controls; camera remains optional.",
+    "tags": [
+      "sandbox",
+      "build",
+      "binary"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:scene:binary",
+    "route": "#science:scene:binary",
+    "type": "scene",
+    "target": "binary"
+  },
+  {
+    "id": "physics:scene:figure8",
+    "title": "Three-body figure eight",
+    "subject": "physics",
+    "kind": "Sandbox scene",
+    "description": "Build and manipulate this existing Sandbox scene. Mouse, touch and keyboard controls; camera remains optional.",
+    "tags": [
+      "sandbox",
+      "build",
+      "figure8"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:scene:figure8",
+    "route": "#science:scene:figure8",
+    "type": "scene",
+    "target": "figure8"
+  },
+  {
+    "id": "physics:scene:springs",
+    "title": "Spring chain",
+    "subject": "physics",
+    "kind": "Sandbox scene",
+    "description": "Build and manipulate this existing Sandbox scene. Mouse, touch and keyboard controls; camera remains optional.",
+    "tags": [
+      "sandbox",
+      "build",
+      "springs"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:scene:springs",
+    "route": "#science:scene:springs",
+    "type": "scene",
+    "target": "springs"
+  },
+  {
+    "id": "physics:scene:dpendulum",
+    "title": "Double pendulum",
+    "subject": "physics",
+    "kind": "Sandbox scene",
+    "description": "Build and manipulate this existing Sandbox scene. Mouse, touch and keyboard controls; camera remains optional.",
+    "tags": [
+      "sandbox",
+      "build",
+      "dpendulum"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:scene:dpendulum",
+    "route": "#science:scene:dpendulum",
+    "type": "scene",
+    "target": "dpendulum"
+  },
+  {
+    "id": "physics:scene:cradle",
+    "title": "Newton’s cradle",
+    "subject": "physics",
+    "kind": "Sandbox scene",
+    "description": "Build and manipulate this existing Sandbox scene. Mouse, touch and keyboard controls; camera remains optional.",
+    "tags": [
+      "sandbox",
+      "build",
+      "cradle"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:scene:cradle",
+    "route": "#science:scene:cradle",
+    "type": "scene",
+    "target": "cradle"
+  },
+  {
+    "id": "physics:scene:atwood",
+    "title": "Atwood machine",
+    "subject": "physics",
+    "kind": "Sandbox scene",
+    "description": "Build and manipulate this existing Sandbox scene. Mouse, touch and keyboard controls; camera remains optional.",
+    "tags": [
+      "sandbox",
+      "build",
+      "atwood"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:scene:atwood",
+    "route": "#science:scene:atwood",
+    "type": "scene",
+    "target": "atwood"
+  },
+  {
+    "id": "physics:scene:wavestring",
+    "title": "Wave string",
+    "subject": "physics",
+    "kind": "Sandbox scene",
+    "description": "Build and manipulate this existing Sandbox scene. Mouse, touch and keyboard controls; camera remains optional.",
+    "tags": [
+      "sandbox",
+      "build",
+      "wavestring"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:scene:wavestring",
+    "route": "#science:scene:wavestring",
+    "type": "scene",
+    "target": "wavestring"
+  },
+  {
+    "id": "physics:scene:hangrope",
+    "title": "Hanging rope",
+    "subject": "physics",
+    "kind": "Sandbox scene",
+    "description": "Build and manipulate this existing Sandbox scene. Mouse, touch and keyboard controls; camera remains optional.",
+    "tags": [
+      "sandbox",
+      "build",
+      "hangrope"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:scene:hangrope",
+    "route": "#science:scene:hangrope",
+    "type": "scene",
+    "target": "hangrope"
+  },
+  {
+    "id": "physics:scene:catcradle",
+    "title": "Cat’s cradle",
+    "subject": "physics",
+    "kind": "Sandbox scene",
+    "description": "Build and manipulate this existing Sandbox scene. Mouse, touch and keyboard controls; camera remains optional.",
+    "tags": [
+      "sandbox",
+      "build",
+      "catcradle"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:scene:catcradle",
+    "route": "#science:scene:catcradle",
+    "type": "scene",
+    "target": "catcradle"
+  },
+  {
+    "id": "physics:scene:gas",
+    "title": "Gas in a box",
+    "subject": "physics",
+    "kind": "Sandbox scene",
+    "description": "Build and manipulate this existing Sandbox scene. Mouse, touch and keyboard controls; camera remains optional.",
+    "tags": [
+      "sandbox",
+      "build",
+      "gas"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:scene:gas",
+    "route": "#science:scene:gas",
+    "type": "scene",
+    "target": "gas"
+  },
+  {
+    "id": "physics:scene:dipole",
+    "title": "Charges and field",
+    "subject": "physics",
+    "kind": "Sandbox scene",
+    "description": "Build and manipulate this existing Sandbox scene. Mouse, touch and keyboard controls; camera remains optional.",
+    "tags": [
+      "sandbox",
+      "build",
+      "dipole"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:scene:dipole",
+    "route": "#science:scene:dipole",
+    "type": "scene",
+    "target": "dipole"
+  },
+  {
+    "id": "physics:scene:cyclotron",
+    "title": "Cyclotron",
+    "subject": "physics",
+    "kind": "Sandbox scene",
+    "description": "Build and manipulate this existing Sandbox scene. Mouse, touch and keyboard controls; camera remains optional.",
+    "tags": [
+      "sandbox",
+      "build",
+      "cyclotron"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:scene:cyclotron",
+    "route": "#science:scene:cyclotron",
+    "type": "scene",
+    "target": "cyclotron"
+  },
+  {
+    "id": "physics:scene:velselect",
+    "title": "Velocity selector",
+    "subject": "physics",
+    "kind": "Sandbox scene",
+    "description": "Build and manipulate this existing Sandbox scene. Mouse, touch and keyboard controls; camera remains optional.",
+    "tags": [
+      "sandbox",
+      "build",
+      "velselect"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:scene:velselect",
+    "route": "#science:scene:velselect",
+    "type": "scene",
+    "target": "velselect"
+  },
+  {
+    "id": "physics:scene:massspec",
+    "title": "Mass spectrometer",
+    "subject": "physics",
+    "kind": "Sandbox scene",
+    "description": "Build and manipulate this existing Sandbox scene. Mouse, touch and keyboard controls; camera remains optional.",
+    "tags": [
+      "sandbox",
+      "build",
+      "massspec"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:scene:massspec",
+    "route": "#science:scene:massspec",
+    "type": "scene",
+    "target": "massspec"
+  },
+  {
+    "id": "physics:scene:cycloid",
+    "title": "Charge in gravity and magnetic field",
+    "subject": "physics",
+    "kind": "Sandbox scene",
+    "description": "Build and manipulate this existing Sandbox scene. Mouse, touch and keyboard controls; camera remains optional.",
+    "tags": [
+      "sandbox",
+      "build",
+      "cycloid"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:scene:cycloid",
+    "route": "#science:scene:cycloid",
+    "type": "scene",
+    "target": "cycloid"
+  },
+  {
+    "id": "physics:scene:magorbit",
+    "title": "Magnetized orbit",
+    "subject": "physics",
+    "kind": "Sandbox scene",
+    "description": "Build and manipulate this existing Sandbox scene. Mouse, touch and keyboard controls; camera remains optional.",
+    "tags": [
+      "sandbox",
+      "build",
+      "magorbit"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:scene:magorbit",
+    "route": "#science:scene:magorbit",
+    "type": "scene",
+    "target": "magorbit"
+  },
+  {
+    "id": "physics:scene:exbdrift",
+    "title": "E × B drift",
+    "subject": "physics",
+    "kind": "Sandbox scene",
+    "description": "Build and manipulate this existing Sandbox scene. Mouse, touch and keyboard controls; camera remains optional.",
+    "tags": [
+      "sandbox",
+      "build",
+      "exbdrift"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:scene:exbdrift",
+    "route": "#science:scene:exbdrift",
+    "type": "scene",
+    "target": "exbdrift"
+  },
+  {
+    "id": "physics:scene:counter",
+    "title": "Counterfactual gravity",
+    "subject": "physics",
+    "kind": "Sandbox scene",
+    "description": "Build and manipulate this existing Sandbox scene. Mouse, touch and keyboard controls; camera remains optional.",
+    "tags": [
+      "sandbox",
+      "build",
+      "counter"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:scene:counter",
+    "route": "#science:scene:counter",
+    "type": "scene",
+    "target": "counter"
+  },
+  {
+    "id": "physics:scene:clear",
+    "title": "Empty sandbox",
+    "subject": "physics",
+    "kind": "Sandbox scene",
+    "description": "Build and manipulate this existing Sandbox scene. Mouse, touch and keyboard controls; camera remains optional.",
+    "tags": [
+      "sandbox",
+      "build",
+      "clear"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:scene:clear",
+    "route": "#science:scene:clear",
+    "type": "scene",
+    "target": "clear"
+  },
+  {
+    "id": "physics:scientific:reality",
+    "title": "Reality Lab",
+    "subject": "physics",
+    "kind": "Scientific tool",
+    "description": "Measure a moving object in your own video, calibrate its scale, and compare it with a physical model. Video stays in this browser. Tracking is approximate; calibration and model assumptions matter.",
+    "tags": [
+      "reality",
+      "Video & models"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:scientific:reality",
+    "route": "#science:scientific:reality",
+    "type": "scientific",
+    "target": "reality"
+  },
+  {
+    "id": "physics:scientific:discovery",
+    "title": "Discovery Notebook",
+    "subject": "physics",
+    "kind": "Scientific tool",
+    "description": "Fit a pendulum or projectile model, inspect uncertainty, and explore what sampling can hide. Python runs in this browser. First launch downloads its runtime and may take 10–120 seconds or longer. Synthetic examples are labelled.",
+    "tags": [
+      "discovery",
+      "Reactive investigations"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:scientific:discovery",
+    "route": "#science:scientific:discovery",
+    "type": "scientific",
+    "target": "discovery"
+  },
+  {
+    "id": "physics:scientific:robotics",
+    "title": "Robotics Workbench",
+    "subject": "physics",
+    "kind": "Scientific tool",
+    "description": "Place a two-link arm, explore inverse kinematics, and inspect a recorded Genesis dynamics run. Geometry and the recorded run work here. New Genesis dynamics require the local companion service.",
+    "tags": [
+      "robotics",
+      "Advanced · control & motion"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:scientific:robotics",
+    "route": "#science:scientific:robotics",
+    "type": "scientific",
+    "target": "robotics"
+  },
+  {
+    "id": "physics:scientific:reason",
+    "title": "Symbolic Workbench",
+    "subject": "physics",
+    "kind": "Scientific tool",
+    "description": "Simplify, differentiate, integrate, solve equations, and compare expressions with explicit assumptions. SymPy runs in your browser after a runtime download. An expression comparison does not prove an entire argument.",
+    "tags": [
+      "reason",
+      "Exact mathematics"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:scientific:reason",
+    "route": "#science:scientific:reason",
+    "type": "scientific",
+    "target": "reason"
+  },
+  {
+    "id": "physics:scientific:proof",
+    "title": "Proof Studio",
+    "subject": "physics",
+    "kind": "Scientific tool",
+    "description": "Build an argument, inspect its Lean source, and learn which steps establish the conclusion. Drafting works here. Verified results require the local Lean checker; an offline draft is never marked verified.",
+    "tags": [
+      "proof",
+      "Formal reasoning"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:scientific:proof",
+    "route": "#science:scientific:proof",
+    "type": "scientific",
+    "target": "proof"
+  },
+  {
+    "id": "physics:learning:equations",
+    "title": "Equation studio",
+    "subject": "physics",
+    "kind": "Learning tool",
+    "description": "Build a structured equation, inspect its notation and carry it into a worked solution. Notation is not a correctness check. Check units, domains and assumptions when solving.",
+    "tags": [
+      "equations",
+      "Write mathematics"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:learning:equations",
+    "route": "#science:learning:equations",
+    "type": "learning",
+    "target": "equations"
+  },
+  {
+    "id": "physics:learning:graphs",
+    "title": "Vectors & graphs",
+    "subject": "physics",
+    "kind": "Learning tool",
+    "description": "Move vectors and graph controls while their numerical relationships stay connected. Coordinates and equations describe an ideal mathematical model. Numerical controls also work without dragging.",
+    "tags": [
+      "graphs",
+      "Make the relationship visible"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:learning:graphs",
+    "route": "#science:learning:graphs",
+    "type": "learning",
+    "target": "graphs"
+  },
+  {
+    "id": "physics:learning:circuits",
+    "title": "Circuit workbench",
+    "subject": "physics",
+    "kind": "Learning tool",
+    "description": "Explore circuits with the CircuitJS simulator and inspect current, voltage and waveforms. The CircuitJS engine loads from its official online host. Component models are idealized and do not certify a real circuit.",
+    "tags": [
+      "circuits",
+      "Build & measure"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:learning:circuits",
+    "route": "#science:learning:circuits",
+    "type": "learning",
+    "target": "circuits"
+  },
+  {
+    "id": "physics:learning:sketches",
+    "title": "Visual notebook",
+    "subject": "physics",
+    "kind": "Learning tool",
+    "description": "Sketch a force diagram, annotate an experiment and keep an editable visual explanation. A sketch records your reasoning. Shapes and arrows are drawings, not computed forces or a validated physical model.",
+    "tags": [
+      "sketches",
+      "Draw your reasoning"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:learning:sketches",
+    "route": "#science:learning:sketches",
+    "type": "learning",
+    "target": "sketches"
+  },
+  {
+    "id": "physics:learning:animations",
+    "title": "Motion explained",
+    "subject": "physics",
+    "kind": "Learning tool",
+    "description": "Watch authored explanations, pause at each step and follow the captions and transcript. These are authored educational animations rendered with Manim. They illustrate stated models and assumptions; playback does not run a live simulation.",
+    "tags": [
+      "animations",
+      "See the steps"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:learning:animations",
+    "route": "#science:learning:animations",
+    "type": "learning",
+    "target": "animations"
+  },
+  {
+    "id": "physics:learning:review",
+    "title": "Review queue",
+    "subject": "physics",
+    "kind": "Learning tool",
+    "description": "Answer a concept prompt from memory, reveal the explanation and schedule its next review. Review timing follows your explicit retrieval ratings. It is separate from marks or a claim of mastery.",
+    "tags": [
+      "review",
+      "Recall, then rate"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:learning:review",
+    "route": "#science:learning:review",
+    "type": "learning",
+    "target": "review"
+  },
+  {
+    "id": "physics:learning:notebook",
+    "title": "Shared experiment notes",
+    "subject": "physics",
+    "kind": "Learning tool",
+    "description": "Write an investigation, preserve edits and exchange a shared notebook document. The notebook explains its sharing boundary. Export important notes before clearing browser data.",
+    "tags": [
+      "notebook",
+      "Keep the evidence"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:learning:notebook",
+    "route": "#science:learning:notebook",
+    "type": "learning",
+    "target": "notebook"
+  },
+  {
+    "id": "physics:learning:search",
+    "title": "Concept search",
+    "subject": "physics",
+    "kind": "Learning tool",
+    "description": "Search a curated lesson collection; optionally enable an on-device semantic model. Semantic search is optional and downloads a model only when enabled. Results are retrieval suggestions, not generated answers.",
+    "tags": [
+      "search",
+      "Find the connection"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:learning:search",
+    "route": "#science:learning:search",
+    "type": "learning",
+    "target": "search"
+  },
+  {
+    "id": "physics:practical-guide:s9-e09",
+    "title": "Energy changes in a simple pendulum",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 9 · Experiment. At the turning point energy is mainly gravitational; near the bottom it is mainly kinetic. A real pendulum loses mechanical energy.",
+    "tags": [
+      "CBSE",
+      "9",
+      "practical",
+      "Bob, light string, clamp, ruler and video or timing support"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:s9-e09",
+    "route": "#science:practical-guide:s9-e09",
+    "type": "practical-guide",
+    "target": "s9-e09"
+  },
+  {
+    "id": "physics:practical-guide:s9-e10",
+    "title": "Speed of a pulse on a string or slinky",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 9 · Experiment. Pulse speed is travel distance divided by travel time for fixed tension and linear density.",
+    "tags": [
+      "CBSE",
+      "9",
+      "practical",
+      "Slinky or string, metre scale, stopwatch and two supports"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:s9-e10",
+    "route": "#science:practical-guide:s9-e10",
+    "type": "practical-guide",
+    "target": "s9-e10"
+  },
+  {
+    "id": "physics:practical-guide:s9-e11",
+    "title": "Mechanical advantage of a lever",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 9 · Experiment. Torque balance relates force to perpendicular distance from the pivot.",
+    "tags": [
+      "CBSE",
+      "9",
+      "practical",
+      "Lever, pivot, known load, force meter and ruler"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:s9-e11",
+    "route": "#science:practical-guide:s9-e11",
+    "type": "practical-guide",
+    "target": "s9-e11"
+  },
+  {
+    "id": "physics:practical-guide:s9-e12",
+    "title": "Trolley investigation of Newton’s second law",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 9 · Experiment. For constant total moving mass, acceleration should increase with net driving force.",
+    "tags": [
+      "CBSE",
+      "9",
+      "practical",
+      "Trolley, low-friction track, pulley, string, masses and motion timer"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:s9-e12",
+    "route": "#science:practical-guide:s9-e12",
+    "type": "practical-guide",
+    "target": "s9-e12"
+  },
+  {
+    "id": "physics:practical-guide:s9-e13",
+    "title": "Motion graphs on an inclined plane",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 9 · Experiment. Position-time slope gives velocity; velocity-time slope gives acceleration.",
+    "tags": [
+      "CBSE",
+      "9",
+      "practical",
+      "Low ramp, trolley, ruler and motion sensor or timestamped video"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:s9-e13",
+    "route": "#science:practical-guide:s9-e13",
+    "type": "practical-guide",
+    "target": "s9-e13"
+  },
+  {
+    "id": "physics:practical-guide:s10-e04",
+    "title": "Resistance from a V–I graph",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 10 · Experiment. At approximately fixed temperature an ohmic conductor has V proportional to I.",
+    "tags": [
+      "CBSE",
+      "10",
+      "practical",
+      "Low-voltage DC supply, resistor, rheostat, ammeter, voltmeter and switch"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:s10-e04",
+    "route": "#science:practical-guide:s10-e04",
+    "type": "practical-guide",
+    "target": "s10-e04"
+  },
+  {
+    "id": "physics:practical-guide:s10-e05",
+    "title": "Series and parallel resistor combinations",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 10 · Experiment. Series elements share current; parallel branches share potential difference.",
+    "tags": [
+      "CBSE",
+      "10",
+      "practical",
+      "Two resistors and the low-voltage V–I setup"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:s10-e05",
+    "route": "#science:practical-guide:s10-e05",
+    "type": "practical-guide",
+    "target": "s10-e05"
+  },
+  {
+    "id": "physics:practical-guide:s10-e10",
+    "title": "Focal lengths from distant images",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 10 · Experiment. Nearly parallel incoming rays form a real image near the focal plane of a converging element.",
+    "tags": [
+      "CBSE",
+      "10",
+      "practical",
+      "Concave mirror, convex lens, stands, screen and ruler"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:s10-e10",
+    "route": "#science:practical-guide:s10-e10",
+    "type": "practical-guide",
+    "target": "s10-e10"
+  },
+  {
+    "id": "physics:practical-guide:s10-e11",
+    "title": "Refraction through a glass slab",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 10 · Experiment. At parallel faces the emerging ray is parallel to the incident ray in the same surrounding medium, but laterally displaced.",
+    "tags": [
+      "CBSE",
+      "10",
+      "practical",
+      "Rectangular slab, paper, optical pins or ray box, ruler and protractor"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:s10-e11",
+    "route": "#science:practical-guide:s10-e11",
+    "type": "practical-guide",
+    "target": "s10-e11"
+  },
+  {
+    "id": "physics:practical-guide:s10-e13",
+    "title": "Ray tracing through a prism",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 10 · Experiment. Two nonparallel refracting faces generally produce a net angular deviation.",
+    "tags": [
+      "CBSE",
+      "10",
+      "practical",
+      "Glass prism, paper, ray box or pins, ruler and protractor"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:s10-e13",
+    "route": "#science:practical-guide:s10-e13",
+    "type": "practical-guide",
+    "target": "s10-e13"
+  },
+  {
+    "id": "physics:practical-guide:p11-a-e01",
+    "title": "Vernier calipers: diameter, depth and volume",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Experiment. The vernier resolves fractions of a main-scale division by comparing two slightly different scales.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Vernier calipers, sphere or cylinder and beaker"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-a-e01",
+    "route": "#science:practical-guide:p11-a-e01",
+    "type": "practical-guide",
+    "target": "p11-a-e01"
+  },
+  {
+    "id": "physics:practical-guide:p11-a-e02",
+    "title": "Screw gauge: wire diameter and sheet thickness",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Experiment. A screw converts rotation into a small axial displacement. Least count = pitch / circular divisions.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Micrometer screw gauge, wire and sheet"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-a-e02",
+    "route": "#science:practical-guide:p11-a-e02",
+    "type": "practical-guide",
+    "target": "p11-a-e02"
+  },
+  {
+    "id": "physics:practical-guide:p11-a-e03",
+    "title": "Volume of an irregular thin lamina",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Experiment. For a sheet of nearly uniform thickness, volume is plan area times mean thickness.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Screw gauge, thin lamina and graph paper"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-a-e03",
+    "route": "#science:practical-guide:p11-a-e03",
+    "type": "practical-guide",
+    "target": "p11-a-e03"
+  },
+  {
+    "id": "physics:practical-guide:p11-a-e04",
+    "title": "Spherometer: radius of curvature",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Experiment. Three feet define a plane; the central screw measures the sagitta relative to that plane.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Spherometer, plane glass, spherical surface and ruler"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-a-e04",
+    "route": "#science:practical-guide:p11-a-e04",
+    "type": "practical-guide",
+    "target": "p11-a-e04"
+  },
+  {
+    "id": "physics:practical-guide:p11-a-e05",
+    "title": "Mass using a beam balance",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Experiment. Equal torques at equal arms compare masses without needing a local value of g.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Beam balance, two objects, standard masses and forceps"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-a-e05",
+    "route": "#science:practical-guide:p11-a-e05",
+    "type": "practical-guide",
+    "target": "p11-a-e05"
+  },
+  {
+    "id": "physics:practical-guide:p11-a-e06",
+    "title": "Weight by the parallelogram of forces",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Experiment. At equilibrium the vector sum of three concurrent forces is zero.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Force board, pulleys, strings, mass pans and protractor"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-a-e06",
+    "route": "#science:practical-guide:p11-a-e06",
+    "type": "practical-guide",
+    "target": "p11-a-e06"
+  },
+  {
+    "id": "physics:practical-guide:p11-a-e07",
+    "title": "Seconds pendulum from length–period graphs",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Experiment. For small angles T²=4π²L/g; effective length is pivot to bob centre.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Simple pendulum, metre scale and stopwatch"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-a-e07",
+    "route": "#science:practical-guide:p11-a-e07",
+    "type": "practical-guide",
+    "target": "p11-a-e07"
+  },
+  {
+    "id": "physics:practical-guide:p11-a-e08",
+    "title": "Pendulum period and bob mass",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Experiment. The ideal small-angle period depends on length and g, not bob mass.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Same-size bobs of different masses, string, clamp and stopwatch"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-a-e08",
+    "route": "#science:practical-guide:p11-a-e08",
+    "type": "practical-guide",
+    "target": "p11-a-e08"
+  },
+  {
+    "id": "physics:practical-guide:p11-a-e09",
+    "title": "Limiting friction and normal reaction",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Experiment. At impending sliding, limiting friction is approximately μsN for a fixed pair of surfaces.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Block, horizontal surface, spring balance and added masses"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-a-e09",
+    "route": "#science:practical-guide:p11-a-e09",
+    "type": "practical-guide",
+    "target": "p11-a-e09"
+  },
+  {
+    "id": "physics:practical-guide:p11-a-e10",
+    "title": "Down-slope force on a roller",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Experiment. The component of weight parallel to an incline is mg sin θ.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Inclined board, roller, force meter and angle scale"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-a-e10",
+    "route": "#science:practical-guide:p11-a-e10",
+    "type": "practical-guide",
+    "target": "p11-a-e10"
+  },
+  {
+    "id": "physics:practical-guide:p11-a-a01",
+    "title": "Build a paper measuring scale",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Activity. A scale’s least count is its smallest marked interval, not the precision of every possible measurement.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Paper strip, reference ruler and fine pencil"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-a-a01",
+    "route": "#science:practical-guide:p11-a-a01",
+    "type": "practical-guide",
+    "target": "p11-a-a01"
+  },
+  {
+    "id": "physics:practical-guide:p11-a-a02",
+    "title": "Mass by the principle of moments",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Activity. For equilibrium, clockwise and anticlockwise torques about the pivot balance.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Metre rule, pivot, known mass, unknown body and thread"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-a-a02",
+    "route": "#science:practical-guide:p11-a-a02",
+    "type": "practical-guide",
+    "target": "p11-a-a02"
+  },
+  {
+    "id": "physics:practical-guide:p11-a-a03",
+    "title": "Plot measurements with error bars",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Activity. A graph should show both the trend and how accurately points are known.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "A measured dataset, graph paper or plotting tool and uncertainty estimates"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-a-a03",
+    "route": "#science:practical-guide:p11-a-a03",
+    "type": "practical-guide",
+    "target": "p11-a-a03"
+  },
+  {
+    "id": "physics:practical-guide:p11-a-a04",
+    "title": "Threshold force for rolling",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Activity. Rolling resistance and the force needed to start motion differ from sliding friction.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Roller, horizontal board and sensitive force meter"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-a-a04",
+    "route": "#science:practical-guide:p11-a-a04",
+    "type": "practical-guide",
+    "target": "p11-a-a04"
+  },
+  {
+    "id": "physics:practical-guide:p11-a-a05",
+    "title": "Projectile range and launch angle",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Activity. For equal launch and landing heights with negligible drag, R=u² sin(2θ)/g.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "School low-energy launcher, soft projectile, tape measure and angle scale"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-a-a05",
+    "route": "#science:practical-guide:p11-a-a05",
+    "type": "practical-guide",
+    "target": "p11-a-a05"
+  },
+  {
+    "id": "physics:practical-guide:p11-a-a06",
+    "title": "Energy on a double inclined plane",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Activity. A ball ideally regains its initial vertical height; real rolling losses lower the return height.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Two joined ramps, rolling ball and ruler"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-a-a06",
+    "route": "#science:practical-guide:p11-a-a06",
+    "type": "practical-guide",
+    "target": "p11-a-a06"
+  },
+  {
+    "id": "physics:practical-guide:p11-a-a07",
+    "title": "Damping of a pendulum",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Activity. For small oscillations, energy is approximately proportional to amplitude squared.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Pendulum, fixed background ruler, timer or video"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-a-a07",
+    "route": "#science:practical-guide:p11-a-a07",
+    "type": "practical-guide",
+    "target": "p11-a-a07"
+  },
+  {
+    "id": "physics:practical-guide:p11-b-e01",
+    "title": "Young’s modulus of a wire",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Experiment. Within the elastic range, stress is proportional to strain: Y=FL/(AΔL).",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Wire-extension apparatus, masses, micrometer and metre scale"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-b-e01",
+    "route": "#science:practical-guide:p11-b-e01",
+    "type": "practical-guide",
+    "target": "p11-b-e01"
+  },
+  {
+    "id": "physics:practical-guide:p11-b-e02",
+    "title": "Spring constant from load–extension",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Experiment. Within the linear range F=kx, where x is extension from a consistent reference.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Helical spring, stand, masses and ruler"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-b-e02",
+    "route": "#science:practical-guide:p11-b-e02",
+    "type": "practical-guide",
+    "target": "p11-b-e02"
+  },
+  {
+    "id": "physics:practical-guide:p11-b-e03",
+    "title": "Pressure–volume relation of trapped air",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Experiment. For fixed gas amount at constant temperature, absolute pressure times volume is approximately constant.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Approved Boyle-law apparatus with pressure gauge and volume scale"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-b-e03",
+    "route": "#science:practical-guide:p11-b-e03",
+    "type": "practical-guide",
+    "target": "p11-b-e03"
+  },
+  {
+    "id": "physics:practical-guide:p11-b-e04",
+    "title": "Surface tension from capillary rise",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Experiment. For a wetting liquid in a narrow tube, surface tension supports the raised column.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Clean capillary tube, water, beaker and travelling microscope"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-b-e04",
+    "route": "#science:practical-guide:p11-b-e04",
+    "type": "practical-guide",
+    "target": "p11-b-e04"
+  },
+  {
+    "id": "physics:practical-guide:p11-b-e05",
+    "title": "Viscosity from terminal fall",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Experiment. At low Reynolds number, viscous drag on a sphere is6πηrv.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Tall cylinder, viscous liquid, small spheres, scale and timer"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-b-e05",
+    "route": "#science:practical-guide:p11-b-e05",
+    "type": "practical-guide",
+    "target": "p11-b-e05"
+  },
+  {
+    "id": "physics:practical-guide:p11-b-e06",
+    "title": "Cooling curve",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Experiment. Cooling depends on temperature difference and heat-transfer conditions.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Approved warm-water container, thermometer and timer"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-b-e06",
+    "route": "#science:practical-guide:p11-b-e06",
+    "type": "practical-guide",
+    "target": "p11-b-e06"
+  },
+  {
+    "id": "physics:practical-guide:p11-b-e07",
+    "title": "Specific heat by mixtures",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Experiment. Energy lost by the hot solid approximately equals energy gained by water and calorimeter.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Calorimeter, thermometer, balance, water and heated solid"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-b-e07",
+    "route": "#science:practical-guide:p11-b-e07",
+    "type": "practical-guide",
+    "target": "p11-b-e07"
+  },
+  {
+    "id": "physics:practical-guide:p11-b-e08",
+    "title": "Sonometer: frequency and vibrating length",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Experiment. For fixed tension and linear density, fundamental frequency is inversely proportional to vibrating length.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Sonometer, tuning forks, bridges, load pan and ruler"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-b-e08",
+    "route": "#science:practical-guide:p11-b-e08",
+    "type": "practical-guide",
+    "target": "p11-b-e08"
+  },
+  {
+    "id": "physics:practical-guide:p11-b-e09",
+    "title": "Sonometer: tension and resonant length",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Experiment. At fixed frequency and linear density, L² is proportional to tension.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Sonometer, one tuning fork, masses and ruler"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-b-e09",
+    "route": "#science:practical-guide:p11-b-e09",
+    "type": "practical-guide",
+    "target": "p11-b-e09"
+  },
+  {
+    "id": "physics:practical-guide:p11-b-e10",
+    "title": "Speed of sound from two resonances",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Experiment. Adjacent resonances of an open–closed air column differ by half a wavelength.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Resonance tube, water reservoir, tuning fork, scale and thermometer"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-b-e10",
+    "route": "#science:practical-guide:p11-b-e10",
+    "type": "practical-guide",
+    "target": "p11-b-e10"
+  },
+  {
+    "id": "physics:practical-guide:p11-b-a01",
+    "title": "Cooling through a phase change",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Activity. Latent heat release can produce a slower temperature decline during solidification.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Teacher-prepared wax sample, water bath, thermometer and timer"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-b-a01",
+    "route": "#science:practical-guide:p11-b-a01",
+    "type": "practical-guide",
+    "target": "p11-b-a01"
+  },
+  {
+    "id": "physics:practical-guide:p11-b-a02",
+    "title": "Heating a bimetallic strip",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Activity. Bonded metals with different expansion coefficients bend when heated.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Teacher-approved bimetal strip and controlled heating setup"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-b-a02",
+    "route": "#science:practical-guide:p11-b-a02",
+    "type": "practical-guide",
+    "target": "p11-b-a02"
+  },
+  {
+    "id": "physics:practical-guide:p11-b-a03",
+    "title": "Liquid level during heating",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Activity. The container and liquid both expand; their rates and thermal response differ.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Flask with narrow tube and teacher-controlled warm-water bath"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-b-a03",
+    "route": "#science:practical-guide:p11-b-a03",
+    "type": "practical-guide",
+    "target": "p11-b-a03"
+  },
+  {
+    "id": "physics:practical-guide:p11-b-a04",
+    "title": "Detergent and capillary rise",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Activity. Detergent changes surface tension and may also affect contact angle.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Clean capillary, water, dilute detergent and ruler"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-b-a04",
+    "route": "#science:practical-guide:p11-b-a04",
+    "type": "practical-guide",
+    "target": "p11-b-a04"
+  },
+  {
+    "id": "physics:practical-guide:p11-b-a05",
+    "title": "Factors controlling cooling rate",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Activity. Area, temperature excess, airflow and surface properties influence heat loss.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Matched vessels, warm water, thermometers and timer"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-b-a05",
+    "route": "#science:practical-guide:p11-b-a05",
+    "type": "practical-guide",
+    "target": "p11-b-a05"
+  },
+  {
+    "id": "physics:practical-guide:p11-b-a06",
+    "title": "Deflection of a loaded metre rule",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Activity. Elastic bending depends strongly on load location and support geometry.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Rule, secure clamps/supports, small masses and pointer"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-b-a06",
+    "route": "#science:practical-guide:p11-b-a06",
+    "type": "practical-guide",
+    "target": "p11-b-a06"
+  },
+  {
+    "id": "physics:practical-guide:p11-b-a07",
+    "title": "Pressure and fluid speed",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Activity. For steady nearly inviscid flow at equal height, faster flow can accompany lower static pressure.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Teacher-approved low-pressure Venturi demonstration and pressure taps"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-b-a07",
+    "route": "#science:practical-guide:p11-b-a07",
+    "type": "practical-guide",
+    "target": "p11-b-a07"
+  },
+  {
+    "id": "physics:practical-guide:p12-a-e01",
+    "title": "Resistivity of wires from V–I measurements",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Experiment. Resistance depends on geometry as well as material: ρ=RA/L.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Two or three wires, low-voltage supply, meters, screw gauge and ruler"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-a-e01",
+    "route": "#science:practical-guide:p12-a-e01",
+    "type": "practical-guide",
+    "target": "p12-a-e01"
+  },
+  {
+    "id": "physics:practical-guide:p12-a-e02",
+    "title": "Resistance with a metre bridge",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Experiment. At balance X/R=l/(100−l) when X occupies the left gap and l is measured from the left end.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Metre bridge, unknown X, resistance box R, galvanometer, jockey and cell"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-a-e02",
+    "route": "#science:practical-guide:p12-a-e02",
+    "type": "practical-guide",
+    "target": "p12-a-e02"
+  },
+  {
+    "id": "physics:practical-guide:p12-a-e03",
+    "title": "Combination laws using a metre bridge",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Experiment. The bridge measures an equivalent resistance independently of the ideal combination prediction.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Metre bridge, two resistors, resistance box and cell"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-a-e03",
+    "route": "#science:practical-guide:p12-a-e03",
+    "type": "practical-guide",
+    "target": "p12-a-e03"
+  },
+  {
+    "id": "physics:practical-guide:p12-a-e04",
+    "title": "Galvanometer resistance and figure of merit",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Experiment. Deflection is proportional to galvanometer current over its calibrated range.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Sensitive galvanometer, high series R, adjustable shunt S, cell and keys"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-a-e04",
+    "route": "#science:practical-guide:p12-a-e04",
+    "type": "practical-guide",
+    "target": "p12-a-e04"
+  },
+  {
+    "id": "physics:practical-guide:p12-a-e05",
+    "title": "Convert a galvanometer into a meter",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Experiment. A high series resistance makes a voltmeter; a low parallel shunt diverts current for an ammeter.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Galvanometer with known G and full-scale Ig, resistors and reference meter"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-a-e05",
+    "route": "#science:practical-guide:p12-a-e05",
+    "type": "practical-guide",
+    "target": "p12-a-e05"
+  },
+  {
+    "id": "physics:practical-guide:p12-a-e06",
+    "title": "AC frequency with a sonometer",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Experiment. A resonant wire frequency can be related to electrical drive, but the coupling determines whether the force repeats once or twice per electrical cycle.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "School sonometer, electromagnet, known linear density and isolated low-voltage AC supply"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-a-e06",
+    "route": "#science:practical-guide:p12-a-e06",
+    "type": "practical-guide",
+    "target": "p12-a-e06"
+  },
+  {
+    "id": "physics:practical-guide:p12-a-a01",
+    "title": "Resistance and impedance of an inductor",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Activity. DC resistance and AC impedance differ because inductance opposes changing current.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Inductor, meters and teacher-approved isolated AC/DC low-voltage supplies"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-a-a01",
+    "route": "#science:practical-guide:p12-a-a01",
+    "type": "practical-guide",
+    "target": "p12-a-a01"
+  },
+  {
+    "id": "physics:practical-guide:p12-a-a02",
+    "title": "Multimeter measurement skills",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Activity. The selected mode, socket and connection determine what a meter measures.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Multimeter, safe low-voltage AC/DC sources, resistor and continuity sample"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-a-a02",
+    "route": "#science:practical-guide:p12-a-a02",
+    "type": "practical-guide",
+    "target": "p12-a-a02"
+  },
+  {
+    "id": "physics:practical-guide:p12-a-a03",
+    "title": "Model of a household lighting circuit",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Activity. Parallel branches allow independent switching while each lamp receives the supply voltage.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Three low-voltage lamps, three switches, fuse and isolated supply"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-a-a03",
+    "route": "#science:practical-guide:p12-a-a03",
+    "type": "practical-guide",
+    "target": "p12-a-a03"
+  },
+  {
+    "id": "physics:practical-guide:p12-a-a04",
+    "title": "Assemble a circuit from a diagram",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Activity. A circuit diagram specifies electrical nodes, not the physical appearance of wire routing.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Approved low-voltage components, leads and supplied circuit diagram"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-a-a04",
+    "route": "#science:practical-guide:p12-a-a04",
+    "type": "practical-guide",
+    "target": "p12-a-a04"
+  },
+  {
+    "id": "physics:practical-guide:p12-a-a05",
+    "title": "Potential drop along a uniform wire",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Activity. At steady current in a uniform wire, potential drop is proportional to length.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Uniform wire, steady low-voltage source, rheostat and voltmeter"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-a-a05",
+    "route": "#science:practical-guide:p12-a-a05",
+    "type": "practical-guide",
+    "target": "p12-a-a05"
+  },
+  {
+    "id": "physics:practical-guide:p12-a-a06",
+    "title": "Find and correct circuit errors",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Activity. An ammeter belongs in series; a voltmeter measures across the intended component.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "An unpowered circuit, diagram, meters, resistor and key"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-a-a06",
+    "route": "#science:practical-guide:p12-a-a06",
+    "type": "practical-guide",
+    "target": "p12-a-a06"
+  },
+  {
+    "id": "physics:practical-guide:p12-b-e01",
+    "title": "Concave mirror: u–v and focal length",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Experiment. For paraxial rays a spherical mirror obeys1/f=1/u+1/v with consistent signed distances.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Concave mirror, object, screen and optical bench"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-b-e01",
+    "route": "#science:practical-guide:p12-b-e01",
+    "type": "practical-guide",
+    "target": "p12-b-e01"
+  },
+  {
+    "id": "physics:practical-guide:p12-b-e02",
+    "title": "Convex mirror focal length with a convex lens",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Experiment. A lens supplies converging rays; rays directed toward the mirror’s centre of curvature retrace their paths.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Convex lens, convex mirror, object pin and optical bench"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-b-e02",
+    "route": "#science:practical-guide:p12-b-e02",
+    "type": "practical-guide",
+    "target": "p12-b-e02"
+  },
+  {
+    "id": "physics:practical-guide:p12-b-e03",
+    "title": "Convex lens focal length from graphs",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Experiment. For a real object and image, positive distances satisfy1/F=1/U+1/V.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Convex lens, illuminated object, screen and bench"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-b-e03",
+    "route": "#science:practical-guide:p12-b-e03",
+    "type": "practical-guide",
+    "target": "p12-b-e03"
+  },
+  {
+    "id": "physics:practical-guide:p12-b-e04",
+    "title": "Concave lens focal length using a convex lens",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Experiment. The diverging lens delays convergence of rays that would otherwise meet at a known point.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Convex lens, concave lens, object and screen"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-b-e04",
+    "route": "#science:practical-guide:p12-b-e04",
+    "type": "practical-guide",
+    "target": "p12-b-e04"
+  },
+  {
+    "id": "physics:practical-guide:p12-b-e05",
+    "title": "Minimum deviation of a prism",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Experiment. At minimum deviation the ray path is symmetric for a prism in the same external medium on both sides.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Prism, ray-tracing tools and protractor"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-b-e05",
+    "route": "#science:practical-guide:p12-b-e05",
+    "type": "practical-guide",
+    "target": "p12-b-e05"
+  },
+  {
+    "id": "physics:practical-guide:p12-b-e06",
+    "title": "Glass refractive index with a travelling microscope",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Experiment. Near normal viewing, apparent depth is smaller than real depth in a transparent denser medium.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Travelling microscope, glass slab and fine reference mark"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-b-e06",
+    "route": "#science:practical-guide:p12-b-e06",
+    "type": "practical-guide",
+    "target": "p12-b-e06"
+  },
+  {
+    "id": "physics:practical-guide:p12-b-e07",
+    "title": "Liquid index with lens and plane mirror",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Experiment. A thin liquid layer against the lens acts approximately as a plano-concave lens and changes the combination focal length.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Thin convex lens, plane mirror, adjustable pin, liquid and curvature measurement"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-b-e07",
+    "route": "#science:practical-guide:p12-b-e07",
+    "type": "practical-guide",
+    "target": "p12-b-e07"
+  },
+  {
+    "id": "physics:practical-guide:p12-b-e08",
+    "title": "Liquid index with concave and plane mirrors",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Experiment. Refraction at the liquid surface changes the apparent location of the concave mirror’s centre-of-curvature condition.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Concave mirror, plane mirror, adjustable pin, approved liquid and scale"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-b-e08",
+    "route": "#science:practical-guide:p12-b-e08",
+    "type": "practical-guide",
+    "target": "p12-b-e08"
+  },
+  {
+    "id": "physics:practical-guide:p12-b-e09",
+    "title": "Forward and reverse diode characteristics",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Experiment. A junction diode has a strongly asymmetric nonlinear current-voltage response.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Diode, current-limiting resistor, low-voltage supply and suitable meters"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-b-e09",
+    "route": "#science:practical-guide:p12-b-e09",
+    "type": "practical-guide",
+    "target": "p12-b-e09"
+  },
+  {
+    "id": "physics:practical-guide:p12-b-a01",
+    "title": "Identify common electronic components",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Activity. Shape, markings and simple safe tests together identify a component and its polarity where applicable.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Unpowered diode, LED, resistor, capacitor and reference markings"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-b-a01",
+    "route": "#science:practical-guide:p12-b-a01",
+    "type": "practical-guide",
+    "target": "p12-b-a01"
+  },
+  {
+    "id": "physics:practical-guide:p12-b-a02",
+    "title": "Check a diode or LED with a meter",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Activity. A healthy junction usually conducts much more readily in one direction than the other.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Multimeter diode mode and unpowered components"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-b-a02",
+    "route": "#science:practical-guide:p12-b-a02",
+    "type": "practical-guide",
+    "target": "p12-b-a02"
+  },
+  {
+    "id": "physics:practical-guide:p12-b-a03",
+    "title": "Light level and LDR resistance",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Activity. An LDR’s resistance typically decreases with stronger illumination, but its response is not generally linear.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "LDR, meter, fixed lamp and distance scale"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-b-a03",
+    "route": "#science:practical-guide:p12-b-a03",
+    "type": "practical-guide",
+    "target": "p12-b-a03"
+  },
+  {
+    "id": "physics:practical-guide:p12-b-a04",
+    "title": "Refraction and lateral displacement",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Activity. Parallel slab faces restore the outgoing direction but shift the beam.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Slab, ray box, paper and ruler"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-b-a04",
+    "route": "#science:practical-guide:p12-b-a04",
+    "type": "practical-guide",
+    "target": "p12-b-a04"
+  },
+  {
+    "id": "physics:practical-guide:p12-b-a05",
+    "title": "Diffraction at a narrow slit",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Activity. Waves spread after an aperture; a narrower slit produces a wider central diffraction pattern.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Teacher-approved low-power light source, adjustable slit and screen"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-b-a05",
+    "route": "#science:practical-guide:p12-b-a05",
+    "type": "practical-guide",
+    "target": "p12-b-a05"
+  },
+  {
+    "id": "physics:practical-guide:p12-b-a06",
+    "title": "Image nature and size across object positions",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Activity. Image distance, orientation and magnification change systematically with object position.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Convex lens or concave mirror, object, screen and bench"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-b-a06",
+    "route": "#science:practical-guide:p12-b-a06",
+    "type": "practical-guide",
+    "target": "p12-b-a06"
+  },
+  {
+    "id": "physics:practical-guide:p12-b-a07",
+    "title": "Choose a lens combination",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Activity. For thin lenses in contact, powers add:1/F=1/f1+1/f2.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Thin lenses of known focal lengths, holders, object and screen"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-b-a07",
+    "route": "#science:practical-guide:p12-b-a07",
+    "type": "practical-guide",
+    "target": "p12-b-a07"
+  },
+  {
+    "id": "physics:practical-guide:p12-project01",
+    "title": "Project: factors affecting a cell",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Project. Terminal voltage follows approximately V=E−Ir for a cell with stable emf and internal resistance.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Teacher-approved cell, low-voltage meters and variable external load"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-project01",
+    "route": "#science:practical-guide:p12-project01",
+    "type": "practical-guide",
+    "target": "p12-project01"
+  },
+  {
+    "id": "physics:practical-guide:p12-project02",
+    "title": "Project: illumination and LDR current",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Project. Circuit current depends on the sensor and all other circuit resistances, not illumination alone.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "LDR, protective resistor, fixed DC supply, approved lamp and ruler"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-project02",
+    "route": "#science:practical-guide:p12-project02",
+    "type": "practical-guide",
+    "target": "p12-project02"
+  },
+  {
+    "id": "physics:practical-guide:p12-project03",
+    "title": "Project: compare water and oil optically",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Project. The liquid lens changes optical power; comparing two liquids requires unchanged geometry and temperature.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Known-glass equiconvex lens, plane mirror, pin, water and approved transparent oil"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-project03",
+    "route": "#science:practical-guide:p12-project03",
+    "type": "practical-guide",
+    "target": "p12-project03"
+  },
+  {
+    "id": "physics:practical-guide:p12-project04",
+    "title": "Project: transformer turns and voltage",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Project. For an approximately ideal transformer, Vs/Vp≈Ns/Np; output power does not increase without input.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "School transformer core, insulated coils and isolated low-voltage AC source"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-project04",
+    "route": "#science:practical-guide:p12-project04",
+    "type": "practical-guide",
+    "target": "p12-project04"
+  },
+  {
+    "id": "physics:practical-guide:p12-project05",
+    "title": "Project: liquid-filled prism",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Project. Deviation depends on both geometry and refractive index.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Hollow prism, approved transparent liquids and ray-tracing setup"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-project05",
+    "route": "#science:practical-guide:p12-project05",
+    "type": "practical-guide",
+    "target": "p12-project05"
+  },
+  {
+    "id": "physics:practical-guide:p12-project06",
+    "title": "Project: charge on suspended light balls",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Project. Electrostatic repulsion is balanced by the horizontal components of string tensions.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Two light identical balls, insulating threads, ruler and safe school electrostatic source"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-project06",
+    "route": "#science:practical-guide:p12-project06",
+    "type": "practical-guide",
+    "target": "p12-project06"
+  },
+  {
+    "id": "physics:practical-guide:p12-project07",
+    "title": "Project: coil inductance factors",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Project. Ideal long-solenoid inductance scales approximately with permeability, turn count squared and area divided by length.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Insulated coil, resistor, interchangeable core and isolated variable-frequency low-voltage source"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-project07",
+    "route": "#science:practical-guide:p12-project07",
+    "type": "practical-guide",
+    "target": "p12-project07"
+  },
+  {
+    "id": "physics:practical-guide:p12-project08",
+    "title": "Project: Earth’s magnetic field",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Project. A compass responds to the vector sum of Earth’s horizontal field and nearby fields.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Compass, bar magnet, paper and school tangent galvanometer"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-project08",
+    "route": "#science:practical-guide:p12-project08",
+    "type": "practical-guide",
+    "target": "p12-project08"
+  },
+  {
+    "id": "physics:practical-guide:p11-vi-e01",
+    "title": "Accessible: external diameter with vernier calipers",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Accessible alternative. The vernier resolves fractions of a main-scale division by comparing two slightly different scales.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Vernier calipers, sphere or cylinder and beaker"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-vi-e01",
+    "route": "#science:practical-guide:p11-vi-e01",
+    "type": "practical-guide",
+    "target": "p11-vi-e01"
+  },
+  {
+    "id": "physics:practical-guide:p11-vi-e02",
+    "title": "Accessible: container dimensions and capacity",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Accessible alternative. The vernier resolves fractions of a main-scale division by comparing two slightly different scales.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Vernier calipers, sphere or cylinder and beaker"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-vi-e02",
+    "route": "#science:practical-guide:p11-vi-e02",
+    "type": "practical-guide",
+    "target": "p11-vi-e02"
+  },
+  {
+    "id": "physics:practical-guide:p11-vi-e03",
+    "title": "Accessible: wire diameter",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Accessible alternative. A screw converts rotation into a small axial displacement. Least count = pitch / circular divisions.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Micrometer screw gauge, wire and sheet"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-vi-e03",
+    "route": "#science:practical-guide:p11-vi-e03",
+    "type": "practical-guide",
+    "target": "p11-vi-e03"
+  },
+  {
+    "id": "physics:practical-guide:p11-vi-e04",
+    "title": "Accessible: sheet thickness",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Accessible alternative. A screw converts rotation into a small axial displacement. Least count = pitch / circular divisions.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Micrometer screw gauge, wire and sheet"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-vi-e04",
+    "route": "#science:practical-guide:p11-vi-e04",
+    "type": "practical-guide",
+    "target": "p11-vi-e04"
+  },
+  {
+    "id": "physics:practical-guide:p11-vi-e05",
+    "title": "Accessible: mass comparison",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Accessible alternative. Equal torques at equal arms compare masses without needing a local value of g.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Beam balance, two objects, standard masses and forceps"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-vi-e05",
+    "route": "#science:practical-guide:p11-vi-e05",
+    "type": "practical-guide",
+    "target": "p11-vi-e05"
+  },
+  {
+    "id": "physics:practical-guide:p11-vi-e06",
+    "title": "Accessible: equilibrium of forces",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Accessible alternative. At equilibrium the vector sum of three concurrent forces is zero.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Force board, pulleys, strings, mass pans and protractor"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-vi-e06",
+    "route": "#science:practical-guide:p11-vi-e06",
+    "type": "practical-guide",
+    "target": "p11-vi-e06"
+  },
+  {
+    "id": "physics:practical-guide:p11-vi-e07",
+    "title": "Accessible: seconds-pendulum length",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Accessible alternative. For small angles T²=4π²L/g; effective length is pivot to bob centre.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Simple pendulum, metre scale and stopwatch"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-vi-e07",
+    "route": "#science:practical-guide:p11-vi-e07",
+    "type": "practical-guide",
+    "target": "p11-vi-e07"
+  },
+  {
+    "id": "physics:practical-guide:p11-vi-e08",
+    "title": "Accessible: spring stiffness",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Accessible alternative. Within the linear range F=kx, where x is extension from a consistent reference.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Helical spring, stand, masses and ruler"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-vi-e08",
+    "route": "#science:practical-guide:p11-vi-e08",
+    "type": "practical-guide",
+    "target": "p11-vi-e08"
+  },
+  {
+    "id": "physics:practical-guide:p11-vi-e09",
+    "title": "Accessible: both sonometer relations",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Accessible alternative. For fixed tension and linear density, fundamental frequency is inversely proportional to vibrating length. At fixed frequency and linear density, L² is proportional to tension.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Sonometer, tuning forks, bridges, load pan and ruler; Sonometer, one tuning fork, masses and ruler"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-vi-e09",
+    "route": "#science:practical-guide:p11-vi-e09",
+    "type": "practical-guide",
+    "target": "p11-vi-e09"
+  },
+  {
+    "id": "physics:practical-guide:p11-vi-e10",
+    "title": "Accessible: resonance-tube sound speed",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 11 · Accessible alternative. Adjacent resonances of an open–closed air column differ by half a wavelength.",
+    "tags": [
+      "CBSE",
+      "11",
+      "practical",
+      "Resonance tube, water reservoir, tuning fork, scale and thermometer"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p11-vi-e10",
+    "route": "#science:practical-guide:p11-vi-e10",
+    "type": "practical-guide",
+    "target": "p11-vi-e10"
+  },
+  {
+    "id": "physics:practical-guide:p12-vi-e01",
+    "title": "Accessible: resistance per centimetre",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Accessible alternative. At approximately fixed temperature the V–I slope gives resistance; dividing by wire length gives resistance per unit length.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Known-length wire, accessible low-voltage and current readouts, ruler and safe DC supply"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-vi-e01",
+    "route": "#science:practical-guide:p12-vi-e01",
+    "type": "practical-guide",
+    "target": "p12-vi-e01"
+  },
+  {
+    "id": "physics:practical-guide:p12-vi-e02",
+    "title": "Accessible: combination laws by Ohm’s law",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Accessible alternative. Series elements share current; parallel branches share potential difference.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Two resistors and the low-voltage V–I setup"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-vi-e02",
+    "route": "#science:practical-guide:p12-vi-e02",
+    "type": "practical-guide",
+    "target": "p12-vi-e02"
+  },
+  {
+    "id": "physics:practical-guide:p12-vi-e03",
+    "title": "Accessible: metre-bridge resistance",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Accessible alternative. At balance X/R=l/(100−l) when X occupies the left gap and l is measured from the left end.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Metre bridge, unknown X, resistance box R, galvanometer, jockey and cell"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-vi-e03",
+    "route": "#science:practical-guide:p12-vi-e03",
+    "type": "practical-guide",
+    "target": "p12-vi-e03"
+  },
+  {
+    "id": "physics:practical-guide:p12-vi-e04",
+    "title": "Accessible: half-deflection resistance",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Accessible alternative. Deflection is proportional to galvanometer current over its calibrated range.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Sensitive galvanometer, high series R, adjustable shunt S, cell and keys"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-vi-e04",
+    "route": "#science:practical-guide:p12-vi-e04",
+    "type": "practical-guide",
+    "target": "p12-vi-e04"
+  },
+  {
+    "id": "physics:practical-guide:p12-vi-e05",
+    "title": "Accessible: resistor, capacitor, inductor and diode",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Accessible alternative. Component function, terminals and safe electrical behaviour support identification; tactile shape alone is not always conclusive.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Unpowered resistor, safely discharged capacitor, inductor and diode; accessible labels and suitable meter"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-vi-e05",
+    "route": "#science:practical-guide:p12-vi-e05",
+    "type": "practical-guide",
+    "target": "p12-vi-e05"
+  },
+  {
+    "id": "physics:practical-guide:p12-vi-e06",
+    "title": "Accessible: lens and mirror shapes and powers",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Accessible alternative. Lens centre thickness and reflecting-surface curvature help distinguish the four component types. Lens power P=1/f in metres carries a sign; its magnitude is larger for shorter focal length magnitude.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Safe convex/concave lens and convex/concave mirror specimens or tactile models; accessible focal-length information for two same-type lenses"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-vi-e06",
+    "route": "#science:practical-guide:p12-vi-e06",
+    "type": "practical-guide",
+    "target": "p12-vi-e06"
+  },
+  {
+    "id": "physics:practical-guide:p12-vi-e07",
+    "title": "Accessible: design an inductor",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Accessible alternative. Ideal long-solenoid inductance scales approximately with permeability, turn count squared and area divided by length.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "Insulated coil, resistor, interchangeable core and isolated variable-frequency low-voltage source"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-vi-e07",
+    "route": "#science:practical-guide:p12-vi-e07",
+    "type": "practical-guide",
+    "target": "p12-vi-e07"
+  },
+  {
+    "id": "physics:practical-guide:p12-vi-e08",
+    "title": "Accessible: step-up and step-down transformers",
+    "subject": "physics",
+    "kind": "Preparation guide",
+    "description": "Class 12 · Accessible alternative. For an approximately ideal transformer, Vs/Vp≈Ns/Np; output power does not increase without input.",
+    "tags": [
+      "CBSE",
+      "12",
+      "practical",
+      "School transformer core, insulated coils and isolated low-voltage AC source"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:practical-guide:p12-vi-e08",
+    "route": "#science:practical-guide:p12-vi-e08",
+    "type": "practical-guide",
+    "target": "p12-vi-e08"
+  },
+  {
+    "id": "physics:bench:vernier-calipers",
+    "title": "Vernier calipers",
+    "subject": "physics",
+    "kind": "Interactive practical",
+    "description": "Simulated apparatus, checked observations and the existing dedicated measurement notebook.",
+    "tags": [
+      "CBSE",
+      "measurement",
+      "vernier-calipers",
+      "measurement"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:bench:vernier-calipers",
+    "route": "#science:bench:vernier-calipers",
+    "type": "bench",
+    "target": "vernier-calipers"
+  },
+  {
+    "id": "physics:bench:screw-gauge",
+    "title": "Screw gauge",
+    "subject": "physics",
+    "kind": "Interactive practical",
+    "description": "Simulated apparatus, checked observations and the existing dedicated measurement notebook.",
+    "tags": [
+      "CBSE",
+      "measurement",
+      "screw-gauge",
+      "measurement"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:bench:screw-gauge",
+    "route": "#science:bench:screw-gauge",
+    "type": "bench",
+    "target": "screw-gauge"
+  },
+  {
+    "id": "physics:bench:spherometer",
+    "title": "Spherometer",
+    "subject": "physics",
+    "kind": "Interactive practical",
+    "description": "Simulated apparatus, checked observations and the existing dedicated measurement notebook.",
+    "tags": [
+      "CBSE",
+      "measurement",
+      "spherometer",
+      "spherometer"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:bench:spherometer",
+    "route": "#science:bench:spherometer",
+    "type": "bench",
+    "target": "spherometer"
+  },
+  {
+    "id": "physics:bench:lamina",
+    "title": "Irregular lamina",
+    "subject": "physics",
+    "kind": "Interactive practical",
+    "description": "Simulated apparatus, checked observations and the existing dedicated measurement notebook.",
+    "tags": [
+      "CBSE",
+      "measurement",
+      "lamina",
+      "lamina"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:bench:lamina",
+    "route": "#science:bench:lamina",
+    "type": "bench",
+    "target": "lamina"
+  },
+  {
+    "id": "physics:bench:pulse",
+    "title": "Pulse speed on a string",
+    "subject": "physics",
+    "kind": "Interactive practical",
+    "description": "Simulated apparatus, checked observations and the existing dedicated measurement notebook.",
+    "tags": [
+      "CBSE",
+      "measurement",
+      "pulse",
+      "pulse"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:bench:pulse",
+    "route": "#science:bench:pulse",
+    "type": "bench",
+    "target": "pulse"
+  },
+  {
+    "id": "physics:bench:lever",
+    "title": "Lever measurement bench",
+    "subject": "physics",
+    "kind": "Interactive practical",
+    "description": "Ideal first-class lever: vary load and effort about a fulcrum, compare moments (torque), and measure mechanical advantage with zero-corrected simulated force readings.",
+    "tags": [
+      "CBSE",
+      "Class 9",
+      "lever",
+      "first class",
+      "fulcrum",
+      "mechanical advantage",
+      "moment",
+      "torque",
+      "load",
+      "effort"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:bench:lever",
+    "route": "#science:bench:lever",
+    "type": "bench",
+    "target": "lever",
+    "model": {
+      "classification": "analytical",
+      "assumptions": [
+        "Held-horizontal, weightless first-class lever with a frictionless fulcrum and perpendicular downward forces.",
+        "Balance follows effort × effort arm = load × load arm; moment calculations use metres and newtons."
+      ],
+      "limitations": [
+        "Ideal apparatus rehearsal, not a calibrated instrument or a dynamics simulation.",
+        "Effort is rounded to 0.01 N; the residual moment is disclosed. Simulated observations do not replace supervised school measurements."
+      ]
+    }
+  },
+  {
+    "id": "physics:view:home",
+    "title": "Explore",
+    "subject": "physics",
+    "kind": "Workspace",
+    "description": "Open Explore.",
+    "tags": [
+      "home"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:view:home",
+    "route": "#science:view:home",
+    "type": "view",
+    "target": "home"
+  },
+  {
+    "id": "physics:view:learn",
+    "title": "Learn",
+    "subject": "physics",
+    "kind": "Workspace",
+    "description": "Open Learn.",
+    "tags": [
+      "learn"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:view:learn",
+    "route": "#science:view:learn",
+    "type": "view",
+    "target": "learn"
+  },
+  {
+    "id": "physics:view:lab",
+    "title": "Labs",
+    "subject": "physics",
+    "kind": "Workspace",
+    "description": "Open Labs.",
+    "tags": [
+      "lab"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:view:lab",
+    "route": "#science:view:lab",
+    "type": "view",
+    "target": "lab"
+  },
+  {
+    "id": "physics:view:sandbox",
+    "title": "Sandbox",
+    "subject": "physics",
+    "kind": "Workspace",
+    "description": "Open Sandbox.",
+    "tags": [
+      "sandbox"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:view:sandbox",
+    "route": "#science:view:sandbox",
+    "type": "view",
+    "target": "sandbox"
+  },
+  {
+    "id": "physics:view:adv",
+    "title": "Advanced Studio",
+    "subject": "physics",
+    "kind": "Workspace",
+    "description": "Open Advanced Studio.",
+    "tags": [
+      "adv"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:view:adv",
+    "route": "#science:view:adv",
+    "type": "view",
+    "target": "adv"
+  },
+  {
+    "id": "physics:view:universe",
+    "title": "Concept universe",
+    "subject": "physics",
+    "kind": "Workspace",
+    "description": "Open Concept universe.",
+    "tags": [
+      "universe"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:view:universe",
+    "route": "#science:view:universe",
+    "type": "view",
+    "target": "universe"
+  },
+  {
+    "id": "physics:view:solve",
+    "title": "Solve",
+    "subject": "physics",
+    "kind": "Workspace",
+    "description": "Open Solve.",
+    "tags": [
+      "solve"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:view:solve",
+    "route": "#science:view:solve",
+    "type": "view",
+    "target": "solve"
+  },
+  {
+    "id": "physics:view:practice",
+    "title": "Practice",
+    "subject": "physics",
+    "kind": "Workspace",
+    "description": "Open Practice.",
+    "tags": [
+      "practice"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:view:practice",
+    "route": "#science:view:practice",
+    "type": "view",
+    "target": "practice"
+  },
+  {
+    "id": "physics:view:research",
+    "title": "Research",
+    "subject": "physics",
+    "kind": "Workspace",
+    "description": "Open Research.",
+    "tags": [
+      "research"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:view:research",
+    "route": "#science:view:research",
+    "type": "view",
+    "target": "research"
+  },
+  {
+    "id": "physics:view:progress",
+    "title": "Your Physics Map",
+    "subject": "physics",
+    "kind": "Workspace",
+    "description": "Open Your Physics Map.",
+    "tags": [
+      "progress"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:view:progress",
+    "route": "#science:view:progress",
+    "type": "view",
+    "target": "progress"
+  },
+  {
+    "id": "physics:view:settings",
+    "title": "Settings",
+    "subject": "physics",
+    "kind": "Workspace",
+    "description": "Open Settings.",
+    "tags": [
+      "settings"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:view:settings",
+    "route": "#science:view:settings",
+    "type": "view",
+    "target": "settings"
+  },
+  {
+    "id": "physics:view:cbse",
+    "title": "CBSE sections",
+    "subject": "physics",
+    "kind": "Workspace",
+    "description": "Open CBSE sections.",
+    "tags": [
+      "cbse"
+    ],
+    "url": "https://physics.entelloq.com/?excellence=1#science:view:cbse",
+    "route": "#science:view:cbse",
+    "type": "view",
+    "target": "cbse"
+  }
+]
