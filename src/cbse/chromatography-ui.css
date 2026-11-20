@@ -1,0 +1,56 @@
+/* Isolated apparatus styling; preserve the Biology shell and learning surfaces. */
+.chromatography-bench{margin:28px 0;padding:clamp(16px,3vw,32px);border:1px solid #355348;border-radius:20px;background:#101c18;color:#e1eee7;line-height:1.6;overflow-wrap:anywhere;color-scheme:dark}
+.chromatography-bench *{box-sizing:border-box}
+.chrom-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:24px}
+.chromatography-bench h2{font-size:clamp(1.8rem,4vw,2.8rem);line-height:1.12;letter-spacing:-.04em;margin:8px 0 12px}
+.chromatography-bench h3{font-size:1.1rem;line-height:1.4;margin:0 0 10px}
+.chromatography-bench p{max-width:76ch}
+.chrom-kicker{font-size:.72rem;letter-spacing:.1em;color:#9bd8b8}
+.chrom-badge{border:1px solid #456657;color:#bbdccb;font-size:.75rem;padding:7px 12px;border-radius:40px;white-space:nowrap}
+.chrom-boundary{font-size:.9rem;color:#b5c9bd;border-left:2px solid #82c8a1;padding-left:14px}
+.chrom-workspace{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(240px,.9fr);gap:28px;margin:26px 0}
+.chrom-apparatus,.chrom-controls{min-width:0}
+.chrom-view{background:#09110e;border-radius:18px;padding:8px;border:1px solid #334c40;max-width:100%;overflow-x:auto;overscroll-behavior-x:contain}
+.chrom-view svg{display:block;width:100%;min-width:380px;height:auto}
+.chrom-view svg text{font-family:inherit;font-size:15px;fill:#cfe1d4;letter-spacing:normal}
+.chrom-view .chrom-svg-kicker{font-size:11px;fill:#a8c9b8;letter-spacing:.8px}
+.chrom-view .chrom-svg-footer{font-size:12px;fill:#a8c9b8}
+.chrom-ruler path{stroke:#adc8b5;stroke-width:1.25}
+.chrom-ruler text{fill:#d8eadf;font-variant-numeric:tabular-nums}
+.chromatography-bench #chrom-status{min-height:4.8em;color:#d6dfc1;font-size:.9rem}
+.chromatography-bench fieldset{border:0;padding:0;margin:0 0 22px;min-width:0}
+.chromatography-bench legend{font-weight:600;margin-bottom:12px}
+.chrom-controls legend span{font-size:.76rem;color:#9bd8b8;margin-right:10px}
+.chromatography-bench label{display:block;font-size:.87rem;color:#c8dcd0;margin:12px 0 6px}
+.chromatography-bench select,.chromatography-bench input[type=number]{width:100%;max-width:100%;min-height:46px;border:1px solid #587565;border-radius:9px;background:#142b20;color:#eef6f1;padding:10px 12px;font:inherit;font-size:16px;font-variant-numeric:tabular-nums}
+.chromatography-bench input[type=range]{display:block;width:100%;min-height:44px;accent-color:#91d7ad;cursor:ew-resize}
+.chromatography-bench output{display:block;font-size:.9rem;color:#efd2a5;font-variant-numeric:tabular-nums;margin:4px 0 12px}
+.chromatography-bench .chrom-check{display:flex;gap:10px;align-items:center;min-height:44px;cursor:pointer}
+.chrom-check input{width:20px;height:20px;flex-shrink:0;accent-color:#91d7ad}
+.chrom-help{font-size:.82rem;color:#a9c1b3}
+.chrom-rule{padding:18px;border:1px solid #3e5b4b;border-radius:12px;background:#182a20;font-size:.87rem}
+.chrom-form{border-top:1px solid #365043;padding-top:24px}
+.chrom-inputs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.chromatography-bench button{min-height:44px;padding:10px 16px;border-radius:9px;border:1px solid #568468;background:#244d35;color:#f1fff7;font:inherit;cursor:pointer;touch-action:manipulation;margin:12px 0}
+.chromatography-bench button:disabled,.chromatography-bench input:disabled,.chromatography-bench select:disabled{opacity:.55;cursor:default}
+.chromatography-bench button:active:not(:disabled){background:#326747}
+.chromatography-bench :focus-visible{outline:3px solid #b5edcb;outline-offset:3px}
+.chromatography-bench :is(input,select,button,summary,a,[tabindex]){scroll-margin-block:100px}
+.chrom-actions{display:flex;gap:10px;flex-wrap:wrap}
+.chrom-actions button{flex:1;min-width:150px}
+#chrom-dry,#chrom-clear{background:#27352a;border-color:#75806b}
+#chrom-feedback,#chrom-storage,.chrom-practice [role=status]{color:#c6e4ac;min-height:1.6em}
+.chromatography-bench details{border-top:1px solid #365043;padding:12px 0}
+.chromatography-bench summary{font-weight:600;min-height:44px;padding:10px 0;cursor:pointer}
+.chromatography-bench a{color:#b5e4c7;text-decoration:underline;text-underline-offset:3px}
+.chrom-sources a{display:inline-flex;align-items:center;min-height:44px}
+#chrom-records{padding-left:22px;font-variant-numeric:tabular-nums}
+#chrom-records li{padding:7px 0}
+#chrom-summary p{padding:14px 16px;border:1px solid #3f5d4a;border-radius:10px;font-size:.88rem}
+#chrom-dimensions{font-size:.87rem;font-variant-numeric:tabular-nums}
+#chrom-dimensions li{padding:4px 0}
+.chrom-practice form{padding:16px 0;border-bottom:1px solid #365043}
+@media(hover:hover) and (pointer:fine){.chromatography-bench button:hover:not(:disabled){background:#315d40}}
+@media(max-width:800px){.chrom-workspace{grid-template-columns:1fr;gap:22px}.chrom-heading{display:block}.chrom-badge{display:inline-block;margin:8px 0}.chromatography-bench #chrom-status{min-height:0}}
+@media(max-width:480px){.chrom-inputs{grid-template-columns:1fr;gap:0}.chromatography-bench{padding:16px}.chrom-view{padding:0}.chrom-actions{display:block}.chrom-actions button{width:100%}}
+@media(prefers-reduced-motion:reduce){.chromatography-bench *{animation:none;transition:none;scroll-behavior:auto}}

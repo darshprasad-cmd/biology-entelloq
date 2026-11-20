@@ -58,17 +58,34 @@
     {
       "id": "b12-a-e01",
       "name": "Synthetic pollen field-counting rehearsal",
-      "status": "verified-local",
+      "status": "released-live-verified",
       "route": "#cbse:12/practicals/b12-a-e01",
       "capability": "synthetic-interactive-observation-with-practical-preparation",
       "sourcePage": 12,
       "source": "https://cbseacademic.nic.in/web_material/CurriculumMain27/SecPart2/Biology_SecP2_2026-27.pdf",
       "releaseEvidence": "POLLEN-RELEASE.md",
+      "productionEvidence": "https://github.com/darshprasad-cmd/biology-entelloq/pull/51#issuecomment-6602827166",
+      "releaseCommit": "80627914949666b93f90e0c0eb840dd25dacd658",
       "releaseStatusAuthority": "Check the linked release evidence and subsequent PR conversation for CI, merge and exact live-artifact parity. Implementation is not a production-release claim.",
       "schoolPracticalCompleted": false,
       "educatorReviewed": false,
       "physicalCalibration": false,
       "speciesMorphologyValidated": false
+    },
+    {
+      "id": "b11-a-e08",
+      "name": "Synthetic leaf-pigment chromatography measurement rehearsal",
+      "status": "verified-local",
+      "route": "#cbse:11/practicals/b11-a-e08",
+      "capability": "synthetic-interactive-apparatus-with-practical-preparation",
+      "sourcePage": 7,
+      "source": "https://cbseacademic.nic.in/web_material/CurriculumMain27/SecPart2/Biology_SecP2_2026-27.pdf",
+      "releaseEvidence": "CHROMATOGRAPHY-RELEASE.md",
+      "releaseStatusAuthority": "The subsequent PR conversation records required checks, merge, deployment and actual public artifact parity; local implementation alone is not a released capability.",
+      "schoolPracticalCompleted": false,
+      "educatorReviewed": false,
+      "physicalCalibration": false,
+      "pigmentIdentityValidated": false
     }
   ],
   "siblingPracticalBaseline": {
@@ -76,9 +93,9 @@
     "standardGuides": 72,
     "accessibleAlternatives": 18,
     "projectOptions": 8,
-    "interactiveInstruments": ["vernier-calipers", "screw-gauge", "spherometer", "irregular-lamina-volume", "transverse-string-pulse-speed"],
-    "latestReleaseCommit": "61427fbcdf37d7b6f6bbeabd9fea482862e3df2d",
-    "evidence": "https://github.com/darshprasad-cmd/PhysicsEntelloq/pull/45#issuecomment-6461195962"
+    "interactiveInstruments": ["vernier-calipers", "screw-gauge", "spherometer", "irregular-lamina-volume", "transverse-string-pulse-speed", "first-class-lever"],
+    "latestReleaseCommit": "c8e50cdb45728f96c42385afb8e5b4235f9d987a",
+    "evidence": "https://github.com/darshprasad-cmd/PhysicsEntelloq/pull/49#issuecomment-7034616281"
   },
   "tracks": [
     {
